@@ -1,0 +1,489 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.component.page.AuthFrame" contentType="text/html;charset=UTF-8"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<style>
+.__div_auth{
+	width:400px;
+	float:left;
+}
+
+ul.default-pagging-class {list-style: none; margin: 0; padding: 0; display: inline}
+.default-pagging-class li {float: left;}
+.default-pagging-class li a {display: block; text-decoration: none; color: black; background-color: white; border: 1px solid #CCC; padding: 3px;  margin: 0 3px 0 0 }
+.default-pagging-class li a:hover {background-color: #CCC }
+.default-pagging-class li a.pagging-current {font-weight: bold ; background-color: #369; cursor: default; color: white; border:1px solid #369}
+.default-pagging-class li a.pagging-dot {cursor: default; }
+.default-pagging-class li a.pagging-dot:hover {background-color: white;}
+.default-pagging-left {float: left; padding: 3px; margin: 0 3px 0 0;}
+.default-pagging-right {float: right;}
+.default-pagging-clear {clear: both;}
+</style>
+
+<c:ajaxmanager name="auth" />
+<script type="text/javascript">
+<!--
+__AUTH_SEQ_SUFFIX = <%#seqsu%>;//[{"suffix":"u", "name":"用户"}, {"suffix":"g", "name":"数据角色"}];//["u", "g"], ["g", "r"]
+
+__AUTH_BIND_LIST = <%#bind%>;//{"u,r":{"id":, "l_id": , "r_id": , "lname":, "rname":,  "l_hidden": , "r_hidden": }};
+
+__AUTH_U_SELECT = {};//{id:{"id": , "name": , "checked": false}}
+
+__AUTH_R_SELECT = {};
+
+__AUTH_G_SELECT = {};
+
+__AUTH_U_QUERY = true;
+
+__AUTH_R_QUERY = true;
+
+__AUTH_G_QUERY = true;
+
+__AUTH_L = null;
+
+__AUTH_R = null;
+
+__AUTH_SRC = "<%#limit%>";
+
+__AUTH_ADMIN = <%#admin%>;
+
+__AUTH_UID		= "<%#uId%>";
+__AUTH_PID		= "<%#pageId%>";
+__AUTH_BID		= "<%#buttonId%>";
+
+__TEMPLATE_AUTH_LIST_INITED 	= false;
+__TEMPLATE_AUTH_LIST 			= null;
+
+__TEMPLATE_SELECT_LIST_INITED 	= false;
+__TEMPLATE_SELECT_LIST 			= null;
+
+function __auth_on_query(o, val){
+	eval(o["query"] + " = " + val + ";");
+}
+
+function __auth_init_lr(){
+	for(var i = 0; i < __AUTH_SEQ_SUFFIX.length; i++){
+		if(i == 0){
+			__AUTH_L = __AUTH_SEQ_SUFFIX[i]["suffix"];
+		}else{
+			__AUTH_R = __AUTH_SEQ_SUFFIX[i]["suffix"];
+		}
+	}
+}
+
+function __sel(name, checked){
+	if(checked)
+		jQuery("input[name=" + name + "]").attr("checked", "true");
+	else
+		jQuery("input[name=" + name + "]").removeAttr("checked");
+}
+
+function __sp_sel(name, checked, var_name, suffix){
+	__sel(name, checked);
+	
+	var so 		= eval(var_name);
+	
+	var ch = checked;
+	jQuery("input[name=" + name + "]").each(function(){
+		var k = this.value;
+		so[k]["checked"] = ch;
+	});
+	
+	__click_after(suffix);
+}
+
+function __click_tr(var_name, tr, suffix){
+	var chk		= jQuery(tr).find("input");
+	var checked = chk[0].checked;
+	var curr = !checked;
+	chk[0].checked = curr;
+	var so 		= eval(var_name);
+	
+	var v		= chk.val();
+	so[v]["checked"] = curr;
+	
+	__click_after(suffix);
+}
+
+function __click_chk(var_name, self, suffix){
+	var so 		= eval(var_name);
+	var curr = self.checked;
+	var v		= self.value;
+	so[v]["checked"] = curr;
+	
+	__click_after(suffix);
+}
+
+function __click_after(suffix){
+	if(__AUTH_R == suffix)return;
+	if(!__AUTH_ADMIN && suffix == "g"){
+		__auth_cmd_query("r", "");
+	}
+}
+
+function __auth_stopBubble(e) {  
+    var e = e ? e : window.event;  
+    if (window.event) { // IE  
+        e.cancelBubble = true;   
+    } else { // FF  
+        e.stopPropagation();   
+    }   
+}  
+
+function __getObj(suffix){
+	var obj = {};
+	obj["source"]	= ("(__AUTH_" + suffix + "_SELECT)").toUpperCase();
+	obj["search"]	= suffix + "_search";
+	obj["chkname"]	= suffix + "_chk";
+	obj["sel"]		= suffix + "_sel";
+	obj["hidden"]	= suffix + "_hidden";
+	obj["query"]	= ("(__AUTH_" + suffix + "_QUERY)").toUpperCase();
+	return obj;
+}
+
+/**
+ * 打开新增权限页面;
+ */
+function __auth_cmd_add(){
+	for(var i = 0; i < __AUTH_SEQ_SUFFIX.length; i++){
+		var suffix = __AUTH_SEQ_SUFFIX[i]["suffix"];
+		__auth_cmd_query(suffix, "");
+	}
+	//show
+	jQuery.blockUI({bindEvents:false, "message":jQuery("#__div_auth_new"), "css":{border:"none", width:'', "top":"5%", left:"18%"}});
+}
+
+/**
+ * 删除已经存在的权限;
+ */
+function __auth_cmd_del(){
+	var s = jQuery("input[name=__auth_bind]:checked");
+	if(s.length <= 0){
+		alert(message.error.select_target);
+		return;
+	}
+	if(confirm(message.confirm.del_msg)){
+		s.each(function(){
+			var id = this.value;
+			delete __AUTH_BIND_LIST[id];
+		});
+		
+		__auth_compose_list();
+	}
+}
+ 
+jQuery(document).ready(function(){
+	__auth_compose_list();
+	
+	__auth_init_lr();
+});
+
+/**
+ * 组装绑定list;
+ */
+function __auth_compose_list(){
+	//初始化模板;
+	if(!__TEMPLATE_AUTH_LIST_INITED){
+		__TEMPLATE_AUTH_LIST 		= TrimPath.parseDOMTemplate("__template_auth_list");	
+		__TEMPLATE_AUTH_LIST_INITED = true;
+	}
+	
+	var result = {"left":__AUTH_SEQ_SUFFIX[0]["name"], "right":__AUTH_SEQ_SUFFIX[1]["name"], "nodata": "无数据", "data":[]};
+	for(var el in __AUTH_BIND_LIST){
+		result["data"].push(__AUTH_BIND_LIST[el]);
+	}
+	var html = __TEMPLATE_AUTH_LIST.process(result);
+		
+	jQuery("#__div_auth_bind").html(html);
+}
+
+/**
+ * 取消打开的权限页面;
+ */
+function __auth_cmd_cancel(){
+	jQuery.unblockUI();
+}
+
+/**
+ * 保存确定;
+ */
+function __auth_cmd_confirm(){
+	 var os = [];
+	 var ts = [];
+	 var cs = [[],[]];
+	 var ks = [];
+	 for(var i = 0; i < __AUTH_SEQ_SUFFIX.length; i++){
+		 var suffix = __AUTH_SEQ_SUFFIX[i]["suffix"];
+		 os[i] = __getObj(suffix);
+		 ts[i] = __AUTH_SEQ_SUFFIX[i]["name"];
+	 }
+	 
+	 for(var i = 0; i < os.length; i ++){
+		 var to = eval(os[i]["source"]);
+		 var f = false;
+		 for(var key in to){
+			 if( to[key]["checked"] == true ){
+				 f = true;
+				 cs[i].push(key);
+			 }
+		 }
+		 if(f == false){
+			 alert("请至少选择一个" + ts[i] + "!" );
+			 return;
+		 }
+	 }
+	 
+	 for(var i = 0; i < cs[0].length; i ++){
+		 var l = cs[0][i];
+		 for(var k = 0; k < cs[1].length; k ++){
+			 var r = cs[1][k];
+			 
+			 var key = l + "," + r;
+			 ks.push({"key":key, "l":l, "r":r});
+		 }
+	 }
+	 
+	 var lo = eval(os[0]["source"]);
+	 var ro = eval(os[1]["source"]);
+	 for(var i = 0; i < ks.length; i ++){
+		 var el = ks[i];
+		 var l	= el["l"];
+		 var r	= el["r"];
+		 __AUTH_BIND_LIST[el["key"]] = {"id":el["key"], 
+				 						"l_id":l, 
+				 						"r_id":r, 
+				 						"lname":lo[l]["name"], 
+				 						"rname":ro[r]["name"], 
+				 						"l_hidden":os[0]["hidden"], 
+				 						"r_hidden":os[1]["hidden"]};
+	 }
+	 
+	 __auth_compose_list();
+	 
+	 __auth_cmd_cancel();
+}
+
+/**
+ * 过滤;
+ */
+function __auth_cmd_query(suffix, val){
+	if(!__TEMPLATE_SELECT_LIST_INITED){
+		__TEMPLATE_SELECT_LIST = TrimPath.parseDOMTemplate("__template_select_list");
+		__TEMPLATE_SELECT_LIST_INITED = true;
+	}
+	
+	var o1 		= __getObj(suffix);
+	 if(val != undefined )
+	 	jQuery("input[name=" + o1["search"] + "]").val(val);
+	
+	__auth_on_query(o1, true);
+	 
+	if( _Pag[suffix] ){
+    	_Pag[suffix].start();
+    }else{
+	    new Pagging(suffix,1,10,10,function(pageNo,pageSize,self){
+	    	var o 		= __getObj(suffix);
+	    	var title = "";
+	    	for(var i = 0; i < __AUTH_SEQ_SUFFIX.length; i++){
+	    		var su = 	__AUTH_SEQ_SUFFIX[i]["suffix"];
+	    		if(su == suffix){
+	    			title = __AUTH_SEQ_SUFFIX[i]["name"];
+	    			break;			
+	    		}
+	    	}
+	    	
+	    	var result = {"suffix":suffix, "chkname":o["chkname"], "source":o["source"], "title1": title + "编码","title2": title + "名称" , "nodata": "无数据!", "data":[]};
+	    	
+	    	var v 		= jQuery("input[name=" + o["search"] + "]").val();
+	    	v 			= jQuery.trim(v).toLowerCase();
+	    	jQuery("." + o["sel"]).html("loading...");
+	    	
+	    	var limit = "";
+	    	if(!__AUTH_ADMIN){
+	    		if(__AUTH_L == "u" ){
+		    		limit = __AUTH_SRC;
+		    	}
+		    	if(__AUTH_L == "g" && suffix == "r"){
+		    		var o2 		= __getObj("g");
+		    		var ls = jQuery("input[name=" + o2["chkname"] + "]:checked");
+		    		if(ls.length <= 0){
+		    			jQuery("." + o["sel"]).html("");
+		    			return;
+		    		}
+		    		var ar = [];
+		    		ls.each(function(){
+		    			ar.push(this.value);
+		    		})
+		    		limit = ar.join(",");
+		    	}
+	    	}
+	    	auth[suffix+"_query"].call(window, __AUTH_UID, v, limit, __AUTH_PID, __AUTH_BID, pageNo, pageSize,function(res){
+				var data = eval(res.responseText);
+				if( data.succ ){
+					self.setTotal(data.content.total);
+					
+					var ad = false;
+					if(!__AUTH_ADMIN){
+				    	if(__AUTH_L == "g" && suffix == "g"){
+				    		ad = true;
+				    	}
+			    	}
+					
+					var q = eval(o["query"]);
+					if(ad== true || q == true){
+						eval(o["source"] +" = {};");
+					}
+					__auth_on_query(o, false);
+					
+					var obj = eval(o["source"]);
+					
+					/**var arr = [];
+					for(var r in obj){
+						arr.push(r)
+					}
+					for(var i=0;i < arr.length; i++){
+						delete obj[arr[i]];
+					}**/
+					for(var key in data.content.data){
+						if(obj[key]){
+							data.content.data[key]["checked"] = obj[key]["checked"];
+							continue;
+						}
+						obj[key] = data.content.data[key];
+					}
+					result.pagging = self;
+					result.data = data.content.data;
+					
+					var html = __TEMPLATE_SELECT_LIST.process(result);
+					jQuery("." + o["sel"]).html(html);
+					
+					if(!__AUTH_ADMIN && __AUTH_L == "g" && suffix == "g"){
+						__auth_cmd_query(__AUTH_R, "");
+					}
+				}else{
+					alert(data.msg);
+				}
+			});
+		});
+    }
+}
+
+
+function __auth_cmd_clear(suffix){
+	var o = __getObj(suffix);
+	jQuery("input[name=" + o["search"] + "]").val("");
+	
+	__auth_cmd_query(suffix);
+}
+
+//-->
+</script>
+<div>
+	<div>
+		<!--span>已绑定列表</span-->
+		<div id="__div_auth_bind" style="height:345px;overflow-y:auto">
+		</div>
+	</div>
+	<div class="zuzhi_add" visible="<%#edit%>">
+		<a href="javascript:void(0)" onclick="__auth_cmd_add();" class="zuzhi_addbtn" style="float:left">新增</a><a href="javascript:void(0)" onclick="__auth_cmd_del();" class="zuzhi_addbtn" style="float:left">删除</a>
+	</div>
+</div>
+<div id="__div_auth_new" style="width:800px" class="hide">
+	<div>
+		<div id="__div_auth_u" runat="server" class="__div_auth">
+			<div>
+				<table class="quanxian_tables_left" border="0" cellpadding="0px" cellspacing="0px" width="100%">
+	                  <tr>
+	                    <td class="quanxian_tables_left_td1" colspan="3">
+	                    	<input  name="u_search" class="newquanxian_txt1" />
+	                    <a href="javascript:void(0)" onclick="__auth_cmd_query('u');" class="function_role_serachss">查询</a>
+	                    <a href="javascript:void(0)" onclick="__auth_cmd_clear('u');" class="function_role_serachss">清空</a>
+	                    </td>
+	                    </tr>
+	             </table>
+             </div>
+			<div class="u_sel"></div>
+		</div>
+		<div id="__div_auth_g" runat="server" class="__div_auth">
+			<div>
+				<table class="quanxian_tables_left" border="0" cellpadding="0px" cellspacing="0px" width="100%">
+	                  <tr>
+	                    <td class="quanxian_tables_left_td1" colspan="3">
+	                    	<input  name="g_search" class="newquanxian_txt1" />
+	                    <a href="javascript:void(0)" onclick="__auth_cmd_query('g');" class="function_role_serachss">查询</a>
+	                    <a href="javascript:void(0)" onclick="__auth_cmd_clear('g');" class="function_role_serachss">清空</a>
+	                    </td>
+	                    </tr>
+	             </table>
+             </div>
+			<div class="g_sel"></div>
+		</div>
+		<div id="__div_auth_r" runat="server" class="__div_auth">
+			<div>
+				<table class="quanxian_tables_left" border="0" cellpadding="0px" cellspacing="0px" width="100%">
+	                  <tr>
+	                    <td class="quanxian_tables_left_td1" colspan="3">
+	                    	<input  name="r_search" class="newquanxian_txt1" />
+	                    <a href="javascript:void(0)" onclick="__auth_cmd_query('r');" class="function_role_serachss">查询</a>
+	                    <a href="javascript:void(0)" onclick="__auth_cmd_clear('r');" class="function_role_serachss">清空</a>
+	                    </td>
+	                    </tr>
+	             </table>
+             </div>
+			<div class="r_sel"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="zuzhijiagou_li2_info">  
+		<div class="zuzhijiagou_li2_info_left">
+			<a href="javascript:void(0)" onclick="__auth_cmd_confirm()" class="zuzhi_link3 btn_save">确定</a>
+		</div>
+		  <div class="zuzhijiagou_li2_info_right">
+		  	<a href="javascript:void(0)" onclick="__auth_cmd_cancel()" class="zuzhi_link3 btn_cancel">取消</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<textarea id="__template_auth_list" class="hide">
+<table class="function_role_table" border="0" cellpadding="0px" cellspacing="1px" style="width:680px">
+	<tr class="function_role_tr">
+		<th visible="<%#edit%>" style="width:40px"><input type="checkbox" onclick="__sel('__auth_bind', this.checked)"/></th>
+		<th style="width:45%">\$\{left}</th>
+		<th>\$\{right}</th>
+	</tr>
+	{for el in data}
+	<tr class="function_role_tr1">
+		<td visible="<%#edit%>"><input type="checkbox" name="__auth_bind" value="\$\{el.id}"/></td>
+		<td title="\$\{el.lname}">\$\{el.lname}<input type="hidden" name="\$\{el.l_hidden}" value="\$\{el.l_id}"/></td>
+		<td title="\$\{el.rname}">\$\{el.rname}<input type="hidden" name="\$\{el.r_hidden}" value="\$\{el.r_id}"/></td>
+	</tr>
+	{forelse}
+	<tr class="function_role_tr1">
+		<td colspan='<%#edit ? "3":"2"%>'>\$\{nodata}</td>
+	</tr>
+	{/for}
+</table>
+</textarea>
+<textarea id="__template_select_list" class="hide" runat="sever">
+<![CDATA[
+<div>
+<table class="function_role_table"  border="0" cellpadding="0px" cellspacing="1px" style="width:400px">
+	<tr class="function_role_tr">
+		<th style="width:40px;height:25px;"><input type="checkbox" onclick="__sp_sel('\$\{chkname}', this.checked, '\$\{source}', '\$\{suffix}')" /></th>
+		<th style="width:45%;height:25px;">\$\{title1}</th>
+		<th style="height:25px;">\$\{title2}</th>
+	</tr>
+	{for el in data}
+	<tr class="function_role_tr1" onclick="__click_tr('\$\{source}', this, '\$\{suffix}');" title="点击选中!" style="cursor:pointer">
+		<td style="height:25px;">
+			<input type="checkbox" onclick="__click_chk('\$\{source}', this, '\$\{suffix}');__auth_stopBubble(event);" name="\$\{chkname}" value="\$\{el.id}" {if el.checked}checked{/if}/>
+		</td>
+		<td style="height:25px;" title="\$\{el.code}">\$\{el.code}</td>
+		<td style="height:25px;" title="\$\{el.name}">\$\{el.name}</td>
+	</tr>
+	{/for}
+	<tr class="function_role_tr1">
+	  <td style="height:25px;" colspan="3">\$\{pagging.show()}</td>
+	 </tr>
+</table>
+</div>
+]]>
+</textarea>

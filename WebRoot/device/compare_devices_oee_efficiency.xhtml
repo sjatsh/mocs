@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:outputScript library="js" name="jquery-1.9.1.min.js"></h:outputScript>
+<h:outputScript library="js" name="compare_devices_oee_efficiency.js"></h:outputScript>
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+<style type="text/css">
+input[type="reset"]:hover, input[type="submit"]:hover, input[type="button"]:hover {
+ background-image:url('./images/submitBotton01.png') !important;
+}
+input[type="submit"], input[type="button"]  {
+background-image: url('./images/submitBotton01.png') !important; 
+}
+*{margin:0px;}
+
+</style>
+<h:form id="myform">
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+<h:inputHidden id="nodeStr" value="#{compareDevicesOEEEfficiencyBean.nodeStr}" />
+<table style="width: 100%" id="table" border="0" cellpadding="0" cellspacing="0">
+	<tr id="headtr">
+		<td style="width: 20%">
+			<div style="width:20%;background-image: url('/mocs/images/frstTab.png');
+    				cursor: pointer;position: absolute;" onclick="javascript:window.location.href='/mocs/home.faces'" id="home"></div>
+    			<img src="/mocs/images/profile_top_logo.png"
+    			style="position: absolute;z-Index: -1; border: 0px solid blue"
+    			 id="img1" />
+			 	<script type="text/javascript">
+				document.getElementById("img1").style.top = hjb51* 30 / 1080 + "px";
+				document.getElementById("img1").style.left = wjb51* 50 / 1920 + "px";
+				</script>
+		</td>
+		<td style="width: 20%;font-weight:bold;" id="biaoti">
+			<h:outputLabel value="设备产量趋势" ></h:outputLabel>
+		</td>
+		<td style="width: 20%;font-weight:bold;" id="shijian">
+			<h:outputLabel value="开始时间" styleClass="common_condition_spacing_first" /><br/>
+			<rich:calendar id="startTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en" value="#{compareDevicesOEEEfficiencyBean.startTime}" cellWidth="10px"
+				cellHeight="20px" datePattern="yyyy-MM-dd"  /><br/>
+			<h:outputLabel value="结束时间" styleClass="common_condition_spacing_label" /><br/>
+			<rich:calendar inputClass="common_calendar" styleClass="common_condition_spacing" id="endTime" popup="true" locale="en" value="#{compareDevicesOEEEfficiencyBean.endTime}" cellWidth="10px"
+				cellHeight="20px" datePattern="yyyy-MM-dd" />
+		</td>
+		<td style="width: 20%;font-weight:bold;" id="tiaojian">
+			<h:selectOneMenu  value="#{compareDevicesOEEEfficiencyBean.otBy}" id="xlk" 
+			styleClass="common_condition_spacing" style="width: 140px;"  >
+				<f:selectItems  value="#{compareDevicesOEEEfficiencyBean.otByList}"  />
+			</h:selectOneMenu>
+		</td>
+		<td>
+			<a4j:commandButton value="查询" id="button1" style="cursor: pointer;color:#FFFFFF;background-color: #088B00;"   render=":myform"
+			actionListener="#{compareDevicesOEEEfficiencyBean.getDevicesCompareAction}" onclick="showMascot();"/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" id="tubiao" align="center">
+			<img id="centerbg"
+					style="position: absolute; left: 0px; z-Index: -1;"
+					src="images/device_time_tubiao_bg.png" />
+			<div id="chart" style="width: 100%;height: 100% "></div>	
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" id="liebiao" > 
+			<table id="tophead" style="width: 100%; text-align:center;" border="0" cellpadding="0" cellspacing="0">
+				<tr style="text-align:center;color:#FFFFFF;background-color: #088B00;" >
+					<td style="text-align: left; border-right:1px #FFFFFF solid;width: 20%">
+						<h:outputText value="比较对象(机床序列号)" style="margin-left:10px;"/></td>
+					<td style=" text-align: center; border-right:1px #FFFFFF solid;width: 40%"><h:outputText value="" /></td>
+					<td style="text-align: center;width: 20%"><h:outputText value="时间单位" /></td>
+					<td style="text-align: left;width: 20%">
+						<div class="" style="margin-bottom: 3px;">
+							<h:selectOneMenu style="width: 50px; height: 20px;" value="#{compareDevicesOEEEfficiencyBean.dateTime}">
+								<f:selectItems value="#{compareDevicesOEEEfficiencyBean.dateTimeList}" />
+							</h:selectOneMenu>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:100%;overFlow: auto;padding-left: 20px;" id="tabledonw" colspan="4">
+						<img id="centerbg1" style="position: absolute; left: 0px; z-Index: -1;width: 100%"
+							src="images/equlist.png" />
+						<h:selectManyCheckbox id="serName"  value="#{compareDevicesOEEEfficiencyBean.serNames}"  >
+							<f:selectItems value="#{compareDevicesOEEEfficiencyBean.serNamesList}"/>
+						</h:selectManyCheckbox>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<h:inputHidden id="devicesOeeChart" value="#{compareDevicesOEEEfficiencyBean.chartData}" />
+<script type="text/javascript">
+//<![CDATA[
+var imgPercent = hjb51/1080; //比例 
+    document.getElementById("table").style.width=wjb51;
+	document.getElementById("table").style.height=990/1080*hjb51;
+	document.getElementById("table").style.color="#5a5a5a";
+	document.getElementById("table").style.fontFamily="微软雅黑";
+    var home=document.getElementById("home");
+    home.width=hjb51*380/1080+"px";
+    home.height=hjb51*260/1080+"px"; //变化连接区域的home大小
+
+
+    var new_image = new Image();
+    new_image.src = document.getElementById("img1").src;
+    var wjbimg= new_image.width;
+    var hjbimg= new_image.height;
+    document.getElementById("img1").style.width=wjbimg*imgPercent+"px";
+    document.getElementById("img1").style.height=hjbimg*imgPercent+"px";//变化图片大小
+    
+    document.getElementById("headtr").style.height=265/1080*hjb51+"px";
+    
+    document.getElementById("biaoti").style.fontSize=hjb51*40/1080+"px";
+	document.getElementById("shijian").style.fontSize=hjb51*30/1080+"px";
+	document.getElementById("tiaojian").style.fontSize=hjb51*30/1080+"px";//变化字体大小
+
+	document.getElementById("tubiao").style.height=620/1080*hjb51+"px";//变化图表大小
+	document.getElementById("centerbg").style.width = wjb51+ "px";
+	document.getElementById("centerbg").style.height = 620/1080*hjb51+ "px";
+	
+	document.getElementById("liebiao").style.height=100/1080*hjb51+"px";//变化列表大小
+	document.getElementById("liebiao").style.width=wjb51+"px";//变化列表大小
+	document.getElementById("liebiao").style.fontSize=25/1080*hjb51+"px";//变化列表字体大小
+	
+	document.getElementById("myform:button1").style.width=  wjb51*180/1920 +"px";
+	document.getElementById("myform:button1").style.height= hjb51*65/1080 +"px";
+	document.getElementById("myform:button1").style.lineHeight= hjb51*65/1080 +"px";
+	document.getElementById("myform:button1").style.fontSize= hjb51*50/1080 +"px";
+	loadData();
+//]]>
+</script>
+</h:form>
+</ui:composition>

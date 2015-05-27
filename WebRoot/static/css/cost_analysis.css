@@ -1,0 +1,104 @@
+
+
+.pro_content{
+	width: 1920px;
+	height:725px;
+	background-image: url("/mocs/images/cost_analysis_bg.png");
+	
+}
+.top_li_fx{
+	width:384px;
+	font-size:75px;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:middle;
+	color:#505050;
+	line-height: 264px;
+}
+.top_li_type{
+	width:384px;
+	font-size:40px;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:middle;
+	color:#505050;
+	line-height: 45px;
+	margin-top: 70px;
+}
+.top_li_type2{
+	width:384px;
+	font-size:30px;
+	text-align:left;
+	vertical-align:middle;
+	line-height: 45px;
+	color:#505050;
+}
+.btn{
+	width: 59px;
+	height: 53px;
+	margin-left: 40px;
+	border: 0px;
+}
+.selectWen{
+	font-size:40px;
+	color:#444444;
+	background-image: url('/mocs/images/cost_select_bg.png');
+	background-repeat:repeat-x;
+	font-family:"微软雅黑";
+	height: 53px;
+	line-height:40px;
+	margin-top:3px;
+	position: absolute;
+	width: 258px;
+	border: 0px;
+}
+.selectWen2{
+	font-size:27px;
+	color:#444444;
+	background-repeat:repeat-x;
+	font-family:"微软雅黑";
+	height: 530px;
+	line-height:40px;
+	margin-top:0px;
+	position: absolute;
+	margin-left:99px;
+	width: 350px;
+	border: 0px;
+	z-index: 100;
+	display: none;
+}
+.selectWen3{
+	height: 53px;
+	line-height:40px;
+	margin-top:3px;
+	position: absolute;
+	width: 258px;
+	border:0px;
+}
+.selectWen4{
+	height: 53px;
+	line-height:40px;
+	margin-top:3px;
+	position: absolute;
+	width: 350px;
+	border:0px;
+}
+
+input[type="text"]{
+	font-family:"微软雅黑";
+    border-width: 0px;
+    border-style: solid;
+    color:#444444;
+    font-size: 27px;
+    /*background-image: url('/mocs/images/cost_select_bg.png');*/
+    background-position: -1px 1px;
+    height:53px;
+}
+    
+.rf-p-b{
+	padding: 0px;
+} 
+.rf-p{
+	padding: 0px;
+	border: 0px;
+}

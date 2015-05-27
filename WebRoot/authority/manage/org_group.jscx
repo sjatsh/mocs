@@ -1,0 +1,34 @@
+﻿<%@page language="java" contentType="text/html;charset=UTF-8" extends="smtcl.mocs.beans.authority.org.page.OrgGroupControl" resource="org_group"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+
+ <tr class="function_role_tr">
+        <th style="width:40px"  visible="<%#manage%>"><input type="checkBox" id="group" onclick="toggleAllClick('<%#getId()==null?"":getId()+"_"%>group', '<%#getId()==null?"":getId()%>_group_ck')"/></th>
+        <th style="width:15%">数据角色代码</th>
+        <th style="width:20%">数据角色名称</th>
+        <th style="width:25%">数据角色描述</th>
+        <!--th visible="<%#isList%>">${org.group.state}</th-->
+        <!--th visible="<%#isList%>">${org.group.updateuser}</th>
+        <th visible="<%#isList%>">${org.group.updatetime}</th-->
+        <th style="width:15%" visible="<%#isList%>">${role.creater}</th>
+        <th visible="<%#isList%>">${org.group.op}</th>
+    </tr>
+    <c:hidden id="saveIds"/>
+    <c:hidden id="delIds"/>
+    <c:repeater datasource="<%#data%>" ViewStateEnabled="false">
+        <tr class="function_role_tr<%#(container.dataIndex % 2) + 1%>">
+            <td visible="<%#manage%>"><input name='<%#getId()==null?"":getId()%>_group_ck' type="checkBox" value="<%#DataBinder.eval(container.dataItem, "orgGroupId")%>" onclick='<%#getId()!=null?"cboxClick(this)":"divBoxClick(this)"%>'/></td>
+            <td title='<%#DataBinder.eval(container.dataItem, "code")%>'><%#DataBinder.eval(container.dataItem, "code")%></td>
+            <td title='<%#DataBinder.eval(container.dataItem, "groupName")%>'><%#DataBinder.eval(container.dataItem, "groupName")%></td>
+            <td title='<%#DataBinder.eval(container.dataItem, "description")%>'><%#DataBinder.eval(container.dataItem, "description")%></td>
+            <!--td visible="<%#isList%>"><%#((Integer)DataBinder.eval(container.dataItem, "state"))==0? "${disable}":"${enable}"%></td-->
+            <!--td visible="<%#isList%>"><%#DataBinder.eval(container.dataItem, "updateUser.loginName")%></td>
+            <td visible="<%#isList%>"><%#DataBinder.eval(container.dataItem, "updateTime", "yyyy-MM-dd HH:mm:ss")%></td-->
+            <td title='<%#DataBinder.eval(container.dataItem, "createUser.nickName", "yyyy-MM-dd HH:mm:ss")%>' visible="<%#isList%>"><%#DataBinder.eval(container.dataItem, "createUser.nickName", "yyyy-MM-dd HH:mm:ss")%></td>
+            <td visible="<%#isList%>">
+                <a href="org_group_detail.jasmine?view=true&groupId=<%#DataBinder.eval(container.dataItem, "orgGroupId")%>">${button.label.view}</a>
+                <a visible="<%#manage%>" href="org_group_detail.jasmine?groupId=<%#DataBinder.eval(container.dataItem, "orgGroupId")%>">&nbsp;&nbsp;|&nbsp;&nbsp;${button.label.edit}</a>
+            </td>
+        </tr>
+    </c:repeater>
+
+

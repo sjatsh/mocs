@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<div class="left_info">
+	<rich:panelMenu style="width:170px;" groupMode="ajax" itemMode="ajax">
+		<c:choose> 
+	  		<c:when test="#{MenuHeadBean.position=='设备查询'}">
+	  			<rich:panelMenuItem label="节点设备概况" actionListener="#{MenuHeadBean.clickMenu('/onlinefactory/device/factory_profile.faces','节点设备概况')}"
+					render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe"  ></rich:panelMenuItem>
+					<rich:panelMenuGroup label="单台设备查询">
+						<rich:panelMenuItem label="设备概览" 
+							actionListener="#{MenuHeadBean.clickMenu('/onlinefactory/device/view_device_information.faces','单台设备查询,设备概览')}"
+							render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+					 	<rich:panelMenuItem label="实时状态" 
+					    	actionListener="#{MenuHeadBean.clickMenu('/onlinefactory/device/view_device_real_information.faces','单台设备查询,实时状态')}"
+							render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+						 <rich:panelMenuItem label="历史分析" 
+					 	 	actionListener="#{MenuHeadBean.clickMenu('/onlinefactory/device/stat_device_time.faces','单台设备查询,历史分析')}"
+						 	render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+					</rich:panelMenuGroup>
+					<rich:panelMenuGroup label="多台设备比较">
+						 <rich:panelMenuItem label="时间比较" 
+							 actionListener="#{MenuHeadBean.clickMenu('/onlinefactory/device/compare_devices_time.faces','多台设备比较,时间比较')}"
+						  	render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+						<rich:panelMenuItem label="OEE趋势比较" 
+						 	actionListener="#{MenuHeadBean.clickMenu('/onlinefactory/device/compare_devices_oee.faces','多台设备比较,OEE趋势比较')}"
+						 	 render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+					</rich:panelMenuGroup>
+	  			</c:when>
+	  	<c:when test="#{MenuHeadBean.position=='产品管理'}">
+	  		<c:forEach items="#{MenuHeadBean.menuPage}" var="menu">
+	  			<rich:panelMenuItem label="#{menu.label}"  actionListener="#{MenuHeadBean.clickMenu(menu.url,menu.label)}"
+					render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+			</c:forEach>
+	  	</c:when>
+	  	<c:when test="#{MenuHeadBean.position=='资源查询'}">
+	  		<c:forEach items="#{MenuHeadBean.menuPage}" var="menu">
+	  			<rich:panelMenuItem label="#{menu.label}"   actionListener="#{MenuHeadBean.clickMenu(menu.url,menu.label)}"
+					render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+			</c:forEach>
+	  	</c:when>
+	  	<c:otherwise>
+	  		<c:forEach items="#{MenuHeadBean.menuPage}" var="menu">
+	  			<rich:panelMenuItem label="#{menu.label}"  actionListener="#{MenuHeadBean.clickMenu(menu.url,menu.label)}"
+					render=":myform:top_info_head_left_path :myform:tree2 :myform:rightiframe" />
+			</c:forEach>
+	  	</c:otherwise>
+	  </c:choose>
+	</rich:panelMenu>
+</div>
+</ui:composition>

@@ -1,0 +1,624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<link rel="stylesheet" href="/mocs/css/jobdispatchlist_add.css" type="text/css"></link>
+	<style type="text/css">
+	*{
+		padding: 0px;
+		margin: 0px;
+		font-family:"微软雅黑";
+		color: #595959;
+		font-weight:bold;
+	}
+	</style>
+</h:head>		
+
+<h:body>
+<h:form id="myform">
+	<table id="jobtable">
+		<tr>
+			<td width="100%" align="center">
+		 		<h:outputText value="工单编辑" id="bianji" style="font-weight: bold;"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table id="waibu">
+		 			<tr>
+		 				<td id="job1">
+		 					<h:outputText value="工单名称" styleClass=""/>
+		 					<h:inputText id="jobdispatchlistName" value="#{JobdispatchlistUpdata.jobdispatchlistName}" styleClass="input"/><br/>
+							<h:message for="jobdispatchlistName" style="color:red" /><br/>
+							<h:outputText value="工单编号" styleClass="" />
+							<h:inputText id="jobdispatchlistNo" value="#{JobdispatchlistUpdata.jobdispatchlistNo}" styleClass="input"  /> 
+		 					<h:message for="jobdispatchlistNo" style="color:red" />	
+		 				</td>
+		 				<td id="job2">
+		 					<table id="job3">
+								<tr>
+									<td>
+										<h:outputText value="作业名称" styleClass=""/>
+			 							<h:selectOneMenu id="jobplanId" value="#{JobdispatchlistUpdata.jobplanId}" required="true"
+											requiredMessage="不能为空" styleClass="selectChang">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{JobdispatchlistUpdata.jobplanMap}"></f:selectItems>
+											<a4j:ajax event="change" listener="#{JobdispatchlistUpdata.getJobInfoSub}" execute="@this" />
+										</h:selectOneMenu> 
+										<h:message for="jobplanId" style="color:red"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h:outputText value="数量" id="num1" styleClass="" style="float:left;"/>
+										<h:inputText id="jobdispatchlistNum" value="#{JobdispatchlistUpdata.jobdispatchlistNum}" onblur="datatest();" styleClass="inputduan" 
+											style="float:left;"/> 
+										<h:message for="jobdispatchlistNum" style="color:red" />
+										<h:outputText value="数量应小于" id="num2" styleClass="" style="float:left;"/>
+				                        <h:inputText id="area_jobnum" value="#{JobdispatchlistAdd.jobNum}" styleClass="inputduan" />
+									</td>
+								</tr>
+							</table>
+		 				</td>
+		 			</tr>
+
+		 			<!-- 设备信息-->
+		 			<tr>
+		 				<td valign="top">
+		 					<img id="imgtab1" style="position:absolute;z-Index:-1; border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="设备信息" id="fontsize1" style="color:white;"/>
+							<rich:panel id="area_three_one" style="border:0px;padding: 0px;margin: 0px;">
+								<table id="shebeixinxi">
+									<tr>
+										<td>
+											<h:outputText value="设备类型" styleClass=""/>
+										</td>
+										<td>
+											<h:selectOneMenu id="equipmentTypeId" value="#{JobdispatchlistUpdata.equipmentTypeId}" styleClass="selectduan">
+												<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+												<f:selectItems value="#{JobdispatchlistUpdata.equipmentTypeMap}"></f:selectItems>
+												<a4j:ajax event="change" listener="#{JobdispatchlistUpdata.getEquipmentTypeSub}" execute="@this" />
+											</h:selectOneMenu> 
+											<h:message for="equipmentTypeId" style="color:red" />	
+										</td>
+										<td id="fixture1">
+											<h:commandButton value="检查刀夹具计划" id="fixture2" styleClass="botton" style="color: white;
+											background-color: rgb(0,160,64);background-position: 0px -10px;" />		
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<h:outputText value="设备名称" styleClass=""/>
+										</td>
+										<td>
+											<h:selectOneMenu id="equipmentId" value="#{JobdispatchlistUpdata.equipmentId}" styleClass="selectduan">
+												<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+												<f:selectItems value="#{JobdispatchlistUpdata.equipmentMap}"></f:selectItems>
+											</h:selectOneMenu> 
+											<h:message for="equipmentId" style="color:red" />
+										</td>
+										<td id="fixture3">
+											<h:commandButton value="检查设备计划" id="fixture4" styleClass="botton" style="color: white;
+											background-color: rgb(0,160,64);background-position: 0px -10px;" />	
+							    		</td>
+									</tr>
+								</table>
+							</rich:panel>
+						</td>
+						
+						<!-- 物料信息 -->
+						<td>
+		 					<img id="imgtab2" style="position:absolute;z-Index:-1;border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="物料信息" id="fontsize2" style="color:white;"/>
+							<rich:panel id="area_two" style="border:0px;">   
+								<div id="area_div" style="border:1px black solid;">
+								     <h:dataTable id="materailType" value="#{JobdispatchlistUpdata.materailTypelist}" rows="10"	cellpadding="0" cellspacing="0"
+										 columnClasses="datatable_column" headerClass="hdts1" rowClasses="datatable_row"  var="record" style="border:1px black solid;">
+							             <h:column>
+											<f:facet name="header">
+												<h:outputText value="序号" />
+											</f:facet>
+											<h:outputText value="#{record.tid}"></h:outputText>
+										</h:column>
+										<h:column >
+											<f:facet name="header">
+												<h:outputText value="需求物料编号" />
+											</f:facet>
+											<h:outputText value="#{record.tno}"></h:outputText>
+										<ui:remove>	
+											<h:commandLink value="#{record.no}" style="font-size: 24px;font-weight: bold;text-decoration:none;"> 
+												<a4j:ajax listener="#{JobdispatchlistUpdata.searNoVal(record.jobNo)}" 
+													event="click" render=":myform" />
+											</h:commandLink>
+										</ui:remove>	
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="需求物料名称" />
+											</f:facet>
+											<h:outputText value="#{record.tname}"></h:outputText>
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="数量" />
+											</f:facet>
+											<h:outputText value="#{record.requirementNum}"></h:outputText>
+										</h:column>
+									</h:dataTable>
+								</div>
+								<div id="checkbox">
+									<p:selectManyCheckbox value="#{JobdispatchlistUpdata.checkBoxValue}" id="itemlabel" style="float:left;">  
+						            	<f:selectItem itemLabel="依赖前工单" itemValue="依赖前工单"/>  
+						           	 	<f:selectItem itemLabel="流转下道工序" itemValue="流转下道工序" />   
+						       		</p:selectManyCheckbox> 
+							     	<h:commandButton value="检查物料计划" id="fixture5" styleClass="botton" style="float:left;color: white; 
+							     	background-color: rgb(0,160,64);background-position: 0px -10px;"/>	
+								</div>
+						   </rich:panel>
+		 				</td>
+					</tr>
+
+					<!-- 零件类型详情 -->
+					<tr>
+		 				<td style="vertical-align: top;">
+		 					<img id="imgtab3" style="position:absolute;z-Index:-1; border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="零件类型详情" id="fontsize3" style="color:white;"/>
+							<rich:panel id="area_three_four" style="border:0px;padding: 0px;margin: 0px;">
+								<table id="lingjian">
+									<tr>
+										<td>
+											<h:outputText value="零件编号" styleClass=""/>
+											<h:inputText id="partId" value="#{JobdispatchlistUpdata.partId}" styleClass="inputzhong"/> 
+											<h:message for="partId" style="color:red" />
+											<br/>	
+											<h:outputText value="零件名称" styleClass=""/>
+											<h:inputText id="partName" value="#{JobdispatchlistUpdata.partName}" styleClass="inputzhong"/> 
+											<h:message for="partName" style="color:red" />
+											<h:commandButton value="跳转" id="fixture6" style="color: white; background-color: rgb(0,160,64);background-position: 0px -10px;"/>
+										</td>
+									</tr>
+								</table>
+							</rich:panel>
+		 				</td>
+		 				
+		 				<!-- 智能分配 -->
+		 				<td style="vertical-align: top;">
+		 					<img id="imgtab4" style="position:absolute;z-Index:-1; 
+								 border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="始末时间" id="fontsize4" style="color:white;"/>
+							<rich:panel id="startdispatchtime" style="border:0px;">
+							    <rich:calendar id="jobdispatchlistStartDate" popup="true" required="true" requiredMessage="不能为空" styleClass="calendar_start" locale="en"
+									inputClass="time" value="#{JobdispatchlistUpdata.jobdispatchlistStartDate}" datePattern="yyyy-MM-dd" />
+								<h:message for="jobdispatchlistStartDate" style="color:red"  />	
+								<rich:calendar id="jobdispatchlistEndDate" popup="true" required="true" requiredMessage="不能为空" styleClass="calendar_start" locale="en"
+									inputClass="time" value="#{JobdispatchlistUpdata.jobdispatchlistEndDate}" datePattern="yyyy-MM-dd" />
+								<h:message for="jobdispatchlistEndDate" style="color:red"  /><br/>
+							    <h:commandButton value="智能分配" id="fixture7" styleClass="botton" style="color: white;background-color: rgb(0,160,64);background-position: 0px -10px;"/>	
+							</rich:panel>
+		 				</td>
+		 			</tr>
+		 			
+		 			<!-- 工艺详情 -->
+		 			<tr>
+		 				<td style="vertical-align: top;">
+		 					<img id="imgtab5" style="position:absolute;z-Index:-1; border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="工艺详情" id="fontsize5" style="color:white;"/>
+							<rich:panel id="area_three_three" style="border:0px;padding: 0px;margin: 0px;">
+								<table id="gyxq">
+			 						<tr>
+			 							<td>
+			 							    <h:outputText value="设备名称" styleClass="font"/>
+											<h:inputText id="processplanName" value="#{JobdispatchlistUpdata.processplanName}" styleClass="inputzhong"/> 
+											<h:message for="processplanName" style="color:red" />
+			 							    <h:outputText value="默认方案" id="moren" styleClass="font"/>
+											<h:inputText id="processplanDefault" value="#{JobdispatchlistUpdata.processplanDefault}" styleClass="inputzhong"/> 
+											<h:message for="processplanDefault" style="color:red" />
+			 							</td>
+			 						</tr>
+			 						<tr>
+			 							<td>
+			 								<h:outputText value="节拍时间" styleClass="font"/>
+											<h:inputText id="processplanTheoryWorktime" value="#{JobdispatchlistUpdata.processplanTheoryWorktime}" styleClass="inputzhong"/>
+											<h:message for="processplanTheoryWorktime" style="color:red"  />
+			 							</td>
+			 						</tr>
+			 					</table>
+							</rich:panel>
+		 
+		 				</td>
+		 				
+		 				<!-- 生产作业详情 -->
+		 				<td style="vertical-align: top;">
+		 					<img id="imgtab6" style="position:absolute;z-Index:-1; border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="生产作业详情" id="fontsize6" style="color:white;"/>
+							<rich:panel id="area_four" style="border:0px;padding: 0px;margin: 0px;">
+								<table id="sczyxq">
+									<tr>
+										<td>
+				      						<h:outputText value="生产数量" styleClass="font"/>
+											<h:inputText id="subjobplanNum" value="#{JobdispatchlistUpdata.subjobplanNum}" styleClass="inputzhong"/> 
+											<h:message for="subjobplanNum" style="color:red" />        
+									        <p:selectBooleanCheckbox value="#{JobdispatchlistUpdata.booleanValue}" id="selectcheck"/> 
+									        <h:outputText value="禁止拆分" styleClass="font"/> 	
+									        <br/><br/>
+											<h:outputText value="始末时间" styleClass="font" />	
+										    <rich:calendar id="subjobplanStartDate" popup="true" styleClass="calendar_start" locale="en"
+												inputClass="timezhong" value="#{JobdispatchlistUpdata.subjobplanStartDate}" datePattern="yyyy-MM-dd" 
+												cellWidth="10px" cellHeight="20px"/>
+												<h:message for="subjobplanStartDate" style="color:red"  />	
+											<h:outputText value="至" styleClass="font" id="zhi"/>
+											<rich:calendar id="subjobplanEndDate" popup="true" styleClass="calendar_start" locale="en"
+												inputClass="timezhong" value="#{JobdispatchlistUpdata.subjobplanEndDate}" datePattern="yyyy-MM-dd" 
+												cellWidth="10px" cellHeight="20px"/>
+												<h:message for="subjobplanEndDate" style="color:red"  />			
+										</td>
+									</tr>
+								</table>
+							</rich:panel>
+		 				</td>
+		 			</tr>
+		 			
+		 			<tr>
+		 				<td valign="top">
+		 					<table>
+		 						<tr>
+		 							<td>
+			 							<h:outputText value="指导文件" id="zhidaowenjian" styleClass="font"/>
+										<h:inputText id="processplanFile" value="#{JobdispatchlistUpdata.processplanFile}" styleClass="inputzhong"/> 
+										<h:message for="processplanFile" style="color:red" />	
+										<h:commandButton value="跳转" id="fixture8" styleClass="botton" style="color:white; background-color:rgb(0,160,64);background-position:0px -10px;"/>
+		 							</td>
+		 						</tr>
+		 						<tr>
+		 							<td>
+		 								<h:commandButton id="tubiao1" value="" style="float:left;background-image: url(../images/daying.png);background-color:white;border:0px;"/>
+										<ui:remove>
+											<h:commandButton value="" id="jobdispatchlist_bottom_button" style="background-image: url(../images/zyjhkz_save.png);
+												background-color:white;border:0px;" onclick="window.opener.location.href=window.opener.location.href;window.close();" >
+												<a4j:ajax listener="#{JobdispatchlistUpdata.updataJobdispatchlist}" event="click" execute="@all" render=":myform" />
+											</h:commandButton>
+										</ui:remove>
+										<p:commandButton id="tubiao2" oncomplete="window.opener.location.href=window.opener.location.href;window.close();"
+											value="" actionListener="#{JobdispatchlistUpdata.updataJobdispatchlist}" style="border:0; float:left;
+											background-image: url('../images/zyjhkz_save.png');background-color: white;" />
+										<h:commandButton id="tubiao3" value="" immediate="true" onclick="window.close();" style=" float:left;
+											background-image: url(../images/zyjhkz_qx.png); background-color:white;border:0px;"/>
+		 							</td>
+		 						</tr>
+		 					</table>
+						</td>
+						<td>
+							<!-- 细节说明 -->
+							<img id="imgtab7" style="position:absolute;z-Index:-1; border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="细节说明" id="fontsize7" style="color:white;"/>
+							<rich:panel id="area" style="border:0px;padding: 0px;margin: 0px;">
+								<h:inputTextarea id="jobdispatchlistDec" value="#{JobdispatchlistUpdata.jobdispatchlistDec}" style=""></h:inputTextarea>	
+							</rich:panel>
+						</td>
+					</tr>
+		 		</table>
+			</td>
+		</tr>
+	</table>
+	
+	<script type="text/javascript">
+		var wjb51 = 0;
+		var hjb51 = 0;
+		hjb51 = document.body.clientHeight-50;
+		wjb51 = document.body.clientWidth;
+		if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
+				hjb51 = wjb51*1080/1920; 
+			}
+		if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
+			   hjb51 = 600; 
+			   wjb51 = 800;
+			   document.body.style.overflow="scroll";
+		   }
+		if(800>wjb51){
+			   hjb51 = 600;
+			   wjb51 = 800;
+			   document.body.style.overflow="scroll";
+		}
+		
+		//整个布局的宽和高(table)
+		document.getElementById("jobtable").style.marginLeft=wjb51*100/1500+"px";
+		document.getElementById("jobtable").style.height=hjb51*700/900+"px";
+		
+		//编辑标题
+		document.getElementById("myform:bianji").style.fontSize=wjb51*26/1500+"px";
+		
+		//整体宽高
+		document.getElementById("waibu").style.height=hjb51*700/900+"px";
+		
+//----------------------------------------------------------------------------------------------------------
+		
+		//工单名称字体的大小
+		document.getElementById("job1").style.width=wjb51*500/1500+"px";
+		document.getElementById("job1").style.height=hjb51*140/900+"px";
+		document.getElementById("job1").style.fontSize=wjb51*18/1500+"px";
+		 
+		//工单名称 边框的大小
+		document.getElementById("myform:jobdispatchlistName").style.width=wjb51*510/1500+"px";
+		document.getElementById("myform:jobdispatchlistName").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistName").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchlistName").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:jobdispatchlistName").style.marginTop=wjb51*6/1500+"px";
+		 
+		//工单编号 边框的大小
+		document.getElementById("myform:jobdispatchlistNo").style.width=wjb51*510/1500+"px";
+	    document.getElementById("myform:jobdispatchlistNo").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistNo").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchlistNo").style.marginLeft=wjb51*16/1500+"px";
+		 
+		//作业名称
+		document.getElementById("job2").style.width=wjb51*500/1500+"px";
+		document.getElementById("job2").style.height=hjb51*140/900+"px";
+		document.getElementById("job3").style.fontSize=wjb51*18/1500+"px";
+		
+		//作业名称边框
+		document.getElementById("myform:jobplanId").style.width=wjb51*380/1500+"px";
+		document.getElementById("myform:jobplanId").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobplanId").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobplanId").style.marginLeft=wjb51*26/1500+"px";
+		 
+		//数量
+		document.getElementById("myform:num1").style.marginTop=wjb51*18/1500+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.width=wjb51*140/1500+"px";
+	    document.getElementById("myform:jobdispatchlistNum").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.marginLeft=wjb51*40/1500+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.marginTop=wjb51*18/1500+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.marginRight=wjb51*40/1500+"px";
+		
+		//数量应小于
+		document.getElementById("myform:num2").style.marginTop=wjb51*18/1500+"px";
+		document.getElementById("myform:area_jobnum").style.width=wjb51*140/1500+"px";
+	    document.getElementById("myform:area_jobnum").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:area_jobnum").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:area_jobnum").style.marginLeft=wjb51*20/1500+"px";
+		document.getElementById("myform:area_jobnum").style.marginTop=wjb51*18/1500+"px";
+		
+//--------------------------------------------------------------------------------------------------------
+		
+		//设备信息
+		document.getElementById("myform:fontsize1").style.fontSize=wjb51*18/1500+"px";
+	    
+		document.getElementById("shebeixinxi").style.height=hjb51*120/900+"px";
+		document.getElementById("shebeixinxi").style.width=wjb51*650/1500+"px";
+	    document.getElementById("shebeixinxi").style.fontSize=wjb51*18/1500+"px";
+	    document.getElementById("shebeixinxi").style.marginTop=wjb51*30/1500+"px";
+		
+	    //设备类型  边框的大小
+	    document.getElementById("myform:equipmentTypeId").style.width=wjb51*240/1500+"px";
+	    document.getElementById("myform:equipmentTypeId").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:equipmentTypeId").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:equipmentTypeId").style.marginLeft=wjb51*12/1500+"px";
+		
+		//设备名称  边框的大小
+	    document.getElementById("myform:equipmentId").style.width=wjb51*240/1500+"px";
+	    document.getElementById("myform:equipmentId").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:equipmentId").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:equipmentId").style.marginLeft=wjb51*12/1500+"px";
+		document.getElementById("myform:equipmentId").style.marginTop=wjb51*20/1500+"px";
+		
+		//检查刀夹具计划
+		document.getElementById("fixture1").style.width=wjb51*300/1500+"px";
+		document.getElementById("myform:fixture2").style.width=wjb51*175/1500+"px";
+	    document.getElementById("myform:fixture2").style.height=hjb51*40/900+"px";
+		document.getElementById("myform:fixture2").style.fontSize=wjb51*20/1500+"px";
+		document.getElementById("myform:fixture2").style.marginLeft=wjb51*70/1500+"px";
+		
+		//检查设备计划
+		document.getElementById("fixture3").style.width=wjb51*300/1500+"px";
+		document.getElementById("myform:fixture4").style.width=wjb51*175/1500+"px";
+	    document.getElementById("myform:fixture4").style.height=hjb51*40/900+"px";
+		document.getElementById("myform:fixture4").style.fontSize=wjb51*20/1500+"px";
+		document.getElementById("myform:fixture4").style.marginLeft=wjb51*70/1500+"px";
+		document.getElementById("myform:fixture4").style.marginTop=wjb51*20/1500+"px";
+	
+//------------------------------------------------------------------------------------------------------------------
+		
+		//物料信息
+		document.getElementById("myform:fontsize2").style.fontSize=wjb51*18/1500+"px";
+		
+		document.getElementById("myform:area_two").style.width=wjb51*650/1500+"px";
+	    document.getElementById("myform:area_two").style.height=hjb51*164/900+"px";
+		 
+		document.getElementById("area_div").style.width=wjb51*533/1500+"px";
+	    document.getElementById("area_div").style.height=hjb51*183/900+"px";
+	    
+	    //物料信息的框框
+	    document.getElementById("myform:materailType").style.width=wjb51*533/1500+"px";
+	    document.getElementById("myform:materailType").style.fontSize=wjb51*18/1500+"px";
+	    
+	    document.getElementById("checkbox").style.width=wjb51*600/1500+"px";
+		document.getElementById("checkbox").style.marginTop=hjb51*10/900+"px";
+		
+		document.getElementById("myform:itemlabel").style.fontSize=wjb51*14/1500+"px";
+		document.getElementById("myform:itemlabel").style.marginLeft=hjb51*10/900+"px";
+		
+		//检查物料计划
+		document.getElementById("myform:fixture5").style.width=wjb51*165/1500+"px";
+		document.getElementById("myform:fixture5").style.height=hjb51*40/900+"px";
+		document.getElementById("myform:fixture5").style.fontSize=wjb51*20/1500+"px";
+		document.getElementById("myform:fixture5").style.marginLeft=hjb51*120/900+"px";
+		
+//-------------------------------------------------------------------------------------------------------------
+		
+		//零件类型详情
+		document.getElementById("myform:fontsize3").style.fontSize=wjb51*18/1500+"px";
+		
+		document.getElementById("lingjian").style.width=wjb51*610/1500+"px";
+		document.getElementById("lingjian").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("lingjian").style.marginLeft="-"+wjb51*8/1500+"px";
+		
+		//零件编号
+		document.getElementById("myform:partId").style.width=wjb51*240/1500+"px";
+		document.getElementById("myform:partId").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:partId").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:partId").style.fontSize=wjb51*18/1500+"px";
+		
+		//零件名称
+		document.getElementById("myform:partName").style.width=wjb51*240/1500+"px";
+		document.getElementById("myform:partName").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:partName").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:partName").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("myform:partName").style.marginTop=wjb51*12/1500+"px";
+		
+		//跳转
+		document.getElementById("myform:fixture6").style.width=wjb51*120/1500+"px";
+		document.getElementById("myform:fixture6").style.height=hjb51*40/900+"px";
+		document.getElementById("myform:fixture6").style.fontSize=wjb51*20/1500+"px";
+		document.getElementById("myform:fixture6").style.marginLeft=wjb51*90/1500+"px";
+		
+//----------------------------------------------------------------------------------------------------------
+		
+		document.getElementById("myform:fontsize4").style.fontSize=wjb51*18/1500+"px";
+		
+		//始末时间  jobdispatchlistStartDate
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.width=wjb51*220/1500+"px";
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.marginTop=wjb51*5/1500+"px";
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.width=wjb51*240/1500+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.marginTop=wjb51*5/1500+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.marginLeft=wjb51*20/1500+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.fontSize=hjb51*18/900+"px";
+		
+		//智能分配
+		document.getElementById("myform:fixture7").style.width=wjb51*120/1500+"px";
+		document.getElementById("myform:fixture7").style.height=hjb51*40/900+"px";
+		document.getElementById("myform:fixture7").style.fontSize=wjb51*20/1500+"px";
+		document.getElementById("myform:fixture7").style.marginLeft=wjb51*355/1500+"px";
+		document.getElementById("myform:fixture7").style.marginTop=wjb51*10/1500+"px";
+		
+//-------------------------------------------------------------------------------------------------------------
+		
+		//工艺详情
+		document.getElementById("myform:fontsize5").style.fontSize=wjb51*18/1500+"px";
+		
+		document.getElementById("gyxq").style.width=wjb51*610/1500+"px";
+		document.getElementById("gyxq").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("gyxq").style.marginTop=wjb51*18/1500+"px";
+		
+		// 工艺详情里面的 设备名称
+		document.getElementById("myform:processplanName").style.width=wjb51*200/1500+"px";
+		document.getElementById("myform:processplanName").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:processplanName").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("myform:processplanName").style.marginLeft=wjb51*16/1500+"px";
+		
+		//默认方案
+		document.getElementById("myform:moren").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:processplanDefault").style.width=wjb51*200/1500+"px";
+		document.getElementById("myform:processplanDefault").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:processplanDefault").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("myform:processplanDefault").style.marginLeft=wjb51*16/1500+"px";
+		
+		//节拍时间
+		document.getElementById("myform:processplanTheoryWorktime").style.width=wjb51*240/1500+"px";
+		document.getElementById("myform:processplanTheoryWorktime").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:processplanTheoryWorktime").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("myform:processplanTheoryWorktime").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:processplanTheoryWorktime").style.marginTop=wjb51*22/1500+"px";
+		
+		//指导文件
+		document.getElementById("myform:zhidaowenjian").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("myform:zhidaowenjian").style.marginLeft=wjb51*10/1500+"px";
+		document.getElementById("myform:processplanFile").style.width=wjb51*240/1500+"px";
+		document.getElementById("myform:processplanFile").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:processplanFile").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("myform:processplanFile").style.marginLeft=wjb51*16/1500+"px";
+		
+		//工艺详情   跳转
+		document.getElementById("myform:fixture8").style.width=wjb51*120/1500+"px";
+		document.getElementById("myform:fixture8").style.height=hjb51*40/900+"px";
+		document.getElementById("myform:fixture8").style.fontSize=wjb51*20/1500+"px";
+		document.getElementById("myform:fixture8").style.marginLeft=wjb51*90/1500+"px";
+		
+		//图标
+		document.getElementById("myform:tubiao1").style.width=58+"px";
+		document.getElementById("myform:tubiao1").style.height=70+"px";
+		document.getElementById("myform:tubiao1").style.marginTop=wjb51*40/1500+"px";
+		document.getElementById("myform:tubiao1").style.marginLeft=wjb51*40/1500+"px";
+		
+		document.getElementById("myform:tubiao2").style.width=55+"px";
+		document.getElementById("myform:tubiao2").style.height=55+"px";
+		document.getElementById("myform:tubiao2").style.marginTop=wjb51*40/1500+"px";
+		document.getElementById("myform:tubiao2").style.marginLeft=wjb51*120/1500+"px";
+		
+		document.getElementById("myform:tubiao3").style.width=55+"px";
+		document.getElementById("myform:tubiao3").style.height=55+"px";
+		document.getElementById("myform:tubiao3").style.marginTop=wjb51*40/1500+"px";
+		document.getElementById("myform:tubiao3").style.marginLeft=wjb51*120/1500+"px";
+		
+//----------------------------------------------------------------------------------------------------------------
+		
+		//生产计划详情
+		document.getElementById("myform:fontsize6").style.fontSize=wjb51*18/1500+"px";
+		
+		document.getElementById("sczyxq").style.fontSize=wjb51*18/1500+"px";
+		
+		//生产数量 边框的大小
+		document.getElementById("myform:subjobplanNum").style.width=wjb51*190/1500+"px";
+		document.getElementById("myform:subjobplanNum").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:subjobplanNum").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("myform:subjobplanNum").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:subjobplanNum").style.marginTop=wjb51*10/1500+"px";
+		
+		document.getElementById("myform:selectcheck").style.marginLeft=wjb51*95/1500+"px";
+		
+		//始末时间 边框的大小
+		document.getElementById("myform:subjobplanStartDateInputDate").style.width=wjb51*190/1500+"px";
+		document.getElementById("myform:subjobplanStartDateInputDate").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:subjobplanStartDateInputDate").style.marginLeft=wjb51*15/1500+"px";
+		document.getElementById("myform:subjobplanStartDateInputDate").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:subjobplanEndDateInputDate").style.width=wjb51*190/1500+"px";
+		document.getElementById("myform:subjobplanEndDateInputDate").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:subjobplanEndDateInputDate").style.fontSize=hjb51*18/900+"px";
+		
+		document.getElementById("myform:zhi").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:zhi").style.marginRight=wjb51*16/1500+"px";
+		
+		//---------------------------------------------------------------------------------
+		
+		//细节说明
+		document.getElementById("myform:fontsize7").style.fontSize=wjb51*18/1500+"px";
+		
+		document.getElementById("myform:jobdispatchlistDec").style.width=wjb51*560/1500+"px";
+		document.getElementById("myform:jobdispatchlistDec").style.height=hjb51*160/900+"px";
+		document.getElementById("myform:jobdispatchlistDec").style.fontSize=wjb51*14/1500+"px";
+		document.getElementById("myform:jobdispatchlistDec").style.marginTop=wjb51*15/1500+"px";
+		
+	</script>
+	 		
+	<script type="text/javascript" src="/mocs/js/ext-base.js"></script>
+	<script type="text/javascript" src="/mocs/js/ext-all.js"></script>			
+	<script type="text/javascript">
+	//<![CDATA[ 
+		function datatest(){
+		  var jobdispatchlistNum = Ext.getDom("myform:jobdispatchlistNum").value;
+		  var jobNum = Ext.getDom("myform:jobNum").value;
+		  if(jobdispatchlistNum > jobNum ){
+		   alert("工单数量应小于等于作业的计划数量!");
+		   Ext.get("myform:jobdispatchlistNum").focus(true);
+		  }
+		}							 
+		document.getElementById("myform:jobdispatchlistStartDatePopupButton").style.display="none";
+		document.getElementById("myform:jobdispatchlistEndDatePopupButton").style.display="none";
+		document.getElementById("myform:subjobplanStartDatePopupButton").style.display="none";
+		document.getElementById("myform:subjobplanEndDatePopupButton").style.display="none";
+	//]]> 
+	</script>
+			
+</h:form>
+</h:body>
+	
+</ui:composition>

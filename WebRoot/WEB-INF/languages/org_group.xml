@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource-set name="org_group">
+	<import file="application.xml" />
+    <bundle language="zh_CN">
+        <item key="org.group.name" value="组织架构组名称" />
+        <item key="org.group.code" value="组织架构组代码" />
+        <item key="org.group.description" value="组织架构组描述" />
+        <item key="org.group.state" value="是 否 禁用" />
+        <item key="org.group.updateuser" value="维护人员" />
+        <item key="org.group.updatetime" value="维护时间" />
+        <item key="org.group.op" value="操作" />
+    </bundle>
+</resource-set>

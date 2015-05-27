@@ -1,0 +1,26 @@
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family:"Î¢ÈíÑÅºÚ";
+	color: #595959;
+	font-weight:bold;
+}
+
+.container{
+	border: solid 1px red ;
+	width:1024px;
+	margin-left:200px;
+}
+
+.top{
+	border: solid 1px red ;
+	margin-left:400px;
+}
+
+.center{
+
+}
+
+.bottom{
+
+}

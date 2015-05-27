@@ -1,0 +1,11 @@
+<%@page language="java" contentType="text/html;charset=utf-8" %>
+<%@taglib prefix="u" uri="menu/menu.jscx" name="menu"%>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../authority/css/global.css" charset="utf-8" rel="stylesheet" />
+</head>
+<body>
+    <u:menu target="workArea"/>
+</body>
+</html>

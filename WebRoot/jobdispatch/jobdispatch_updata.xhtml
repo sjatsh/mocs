@@ -1,0 +1,475 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<link rel="stylesheet" href="../css/jobdispatch_updata.css" type="text/css"></link>
+	<style type="text/css">
+	*{
+		padding: 0px;
+		margin: 0px;
+		font-family:"微软雅黑";
+		color: #595959;
+		font-weight:bold;
+	}
+	.even-row {
+	background-image: url('images/table_row1.png') !important;
+	border-bottom: none;
+}
+
+.odd-row {
+	background-image: url('images/table_row2.png') !important;
+	border-bottom: none;
+}
+	</style>
+</h:head>		
+
+<h:body>
+<h:form id="myform">
+<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+var wjb51 = 0;
+var hjb51 = 0;
+hjb51 = document.body.clientHeight;
+wjb51 = document.body.clientWidth;
+if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
+		hjb51 = wjb51*1080/1920; 
+	}
+if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
+	   hjb51 = 600; 
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+   }
+if(800>wjb51){
+	   hjb51 = 600;
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+}
+	document.getElementById("maskw").style.height = hjb51 + "px";
+	document.getElementById("maskw").style.width = wjb51 + "px";
+</script>
+	<h:inputHidden value="#{JobdispatchUpdata.jobdispatchlistId}" id="jobdispatchlistId"></h:inputHidden>
+	<table id="jobtable" align="center">
+		<tr>
+			<td width="100%" align="center">
+		 		<h:outputText value="工单编辑" id="bianji" style="font-weight: bold;"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table id="waibu" >
+					<!-- 基本信息 -->
+					<tr>
+		 				<td style="vertical-align: top;">
+		 					<img id="imgtab1" style="position:absolute;z-Index:-1; border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="基本信息" id="fontsize1" style="color:white;"/>
+		 				</td>
+		 			</tr>
+		 			<tr>
+		 				<td id="job1">
+		 					<h:outputText value="工单名称" styleClass=""/>
+		 					<h:inputText id="jobdispatchlistName" value="#{JobdispatchUpdata.jobdispatchlistName}" styleClass="input"/>
+							<h:graphicImage id="img1" value="../images/jobplan/add/toBig.png" style="cursor:pointer;" > 
+								<f:ajax event="click" listener="#{JobdispatchUpdata.getDispatchNameRepeat}"
+										render=":myform:showMsg" execute="jobdispatchlistName" />
+							</h:graphicImage>
+							<h:outputText id="showMsg" value="#{JobdispatchUpdata.showMsg}" style="color:red;" />
+		 				</td>
+		 				<td id="job2">
+							<h:outputText value="数量" id="num1" style="float:left;width: 65px;"/>
+							<h:inputText id="jobdispatchlistNum" value="#{JobdispatchUpdata.jobdispatchlistNum}" onblur="datatest();" styleClass="inputduan" 
+								style="float:left;"/>
+						 	<h:outputText />
+		 				</td>
+		 			</tr>
+		 			<tr>
+		 				<td id="job3">
+		 					<h:outputText value="零件名称" id="partName" style="float:left;"/>
+							<h:inputText id="jobdispatchpartName" value="#{JobdispatchUpdata.jobdispatchpartName}" styleClass="inputduan" 
+								style="float:left;"/>
+						 	<h:outputText /> 
+		 				</td>
+		 				<td id="job4">
+		 				</td>
+		 			</tr>
+		 			<tr>
+		 				<td><h:outputText value="开始时间" id="startTime"></h:outputText>
+		 					<rich:calendar id="jobdispatchlistStartDate" popup="true" required="true" requiredMessage="不能为空" styleClass="calendar_start" locale="en"
+									inputClass="time" value="#{JobdispatchUpdata.jobdispatchlistStartDate}" datePattern="yyyy-MM-dd" />
+							<h:message for="jobdispatchlistStartDate" style="color:red"  />	
+		 				</td>
+		 				<td><h:outputText value="结束时间" id="endTime"></h:outputText>
+		 					<rich:calendar id="jobdispatchlistEndDate" popup="true" required="true" requiredMessage="不能为空" styleClass="calendar_start" locale="en"
+									inputClass="time" value="#{JobdispatchUpdata.jobdispatchlistEndDate}" datePattern="yyyy-MM-dd" />
+							<h:message for="jobdispatchlistEndDate" style="color:red"  />
+		 				</td>
+		 			</tr>
+		 			<!-- 设备信息 -->
+					<tr>
+		 				<td style="vertical-align: top;">
+		 					<img id="imgtab1" style="position:absolute;z-Index:-1; border:0px solid blue" src="../images/row_bg.png" />
+							<h:outputText value="设备信息" id="fontsize2" style="color:white;"/>
+		 				</td>
+		 			</tr>
+		 			<tr>
+		 				<td>
+		 				<div id="divid">
+		 					<rich:panel id="area_three_one" style="border:0px;padding: 0px;margin: 0px;overflow-y:auto;">
+								<table id="shebeixinxi">
+									<tr>
+										<td>
+											<h:outputText value="设备类型" styleClass=""/>
+										</td>
+										<td>
+											<h:selectOneMenu id="equipmentTypeId" value="#{JobdispatchUpdata.equipmentTypeId}" styleClass="selectduan" disabled="true">
+					                             <f:selectItems value="#{JobdispatchUpdata.equipmentTypeMap}"></f:selectItems>
+				                            </h:selectOneMenu> 
+											<h:message for="equipmentTypeId" style="color:red" />	
+										</td>								
+									</tr>
+									<tr>
+										<td id="addtitle" style="width:30%;"><h:outputText value="设备序列号"></h:outputText></td>
+										<td id="job_dispatch_td_1" style="width:30%;"><h:inputText id="job_dispatch_add" value="#{JobdispatchUpdata.serailNo}" style="width:100%;height:100%;"></h:inputText></td>
+										<td align="left">
+											<h:commandLink value="[增加]" onclick="return checkData()">
+												<f:ajax listener="#{JobdispatchUpdata.save}" execute="job_dispatch_add" render=":myform:dataTable_1"></f:ajax>
+											</h:commandLink>
+										</td>
+									</tr>
+								</table>
+							</rich:panel>
+							<rich:panel id="area_three_one_one" style="border:0px;padding: 0px;margin: 0px;overflow-y:auto;">
+								<h:dataTable id="dataTable_1" style="border:1px;width:80%" value="#{JobdispatchUpdata.tequJobDispatchList}"
+									var="jobdispatch" rowClasses="even-row, odd-row" cellpadding="0"
+									cellspacing="0" >
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="设备序列号" />
+										</f:facet>
+										<h:outputText value="#{jobdispatch.SerialNo}"></h:outputText>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="状态" />
+										</f:facet>
+										<h:outputText value="#{jobdispatch.Status}"></h:outputText>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="操作" />
+										</f:facet>
+										<h:commandLink value="[删除]">
+											<f:ajax listener="#{JobdispatchUpdata.updataJobDispatch(jobdispatch.SerialNo,'delete')}" event="click" render=":myform:area_three_one_one">
+											</f:ajax>
+										</h:commandLink>
+										<h:commandLink value="[恢复]">
+											<f:ajax listener="#{JobdispatchUpdata.updataJobDispatch(jobdispatch.SerialNo,'recover')}" event="click" render=":myform:area_three_one_one">
+											</f:ajax>
+										</h:commandLink>
+									</h:column>
+								</h:dataTable>
+							</rich:panel>
+		 				</div>
+		 				</td>
+		 			</tr>
+		 			<tr>
+		 				<td>
+		 					<table>
+		 						<tr>
+		 						<td style="width:25%">
+							<h:commandButton id="tubiao1" value="派工" onclick="return dispatchJob()"
+								style="font-size:14px;border-radius: 3px;float:left;border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;">
+							</h:commandButton>
+						</td>
+						<td style="width:25%">
+							<h:commandButton id="tubiao4" value="启动" onclick="return checkStatus()" 
+								style="font-size:14px;border-radius: 3px;float:left;border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;">
+								<a4j:ajax listener="#{JobdispatchUpdata.startJob}" oncomplete="tishi();"></a4j:ajax>
+							</h:commandButton>
+						</td>
+		 				
+		 						</tr>
+		 					</table>
+		 				</td>
+		 				<td>
+		 					<table align="center">
+		 					<tr>
+		 					<td style="width:25%">
+							<h:commandButton id="tubiao2" onclick="return checkEquSerialNum()" title="保存" value="保存"  
+								style="font-size:14px;border-radius: 3px;border-radius: 3px;float:left;border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;" >
+								<a4j:ajax listener="#{JobdispatchUpdata.updataJobdispatchlist}"  execute="@all"
+									event="click" render="" oncomplete="window.opener.location.reload();window.close();"/>
+							</h:commandButton>
+						</td>
+						<td style="width:25%">
+							<h:commandButton id="tubiao3" value="取消" immediate="true" onclick="closefun();" title="取消"
+								style="font-size:14px;border-radius: 3px;float:left;border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;">
+							</h:commandButton>
+		 				</td>
+		 					</tr></table>
+		 				</td>
+		 			</tr>
+		 		</table>
+			</td>
+		</tr>
+	</table>
+	
+	<script type="text/javascript">
+		
+		//整个布局的宽和高(table)
+		document.getElementById("jobtable").style.marginLeft=wjb51*100/1500+"px";
+		document.getElementById("jobtable").style.height=hjb51*700/900+"px";
+		
+		//编辑标题
+		document.getElementById("myform:bianji").style.fontSize=wjb51*26/1500+"px";
+		
+		//整体宽高
+		document.getElementById("waibu").style.height=hjb51*700/900+"px";
+		
+//----------------------------------------------------------------------------------------------------------
+		
+		//工单名称 边框的大小
+		document.getElementById("myform:jobdispatchlistName").style.width=wjb51*330/1500+"px";
+		document.getElementById("myform:jobdispatchlistName").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistName").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchlistName").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:jobdispatchlistName").style.marginTop=wjb51*6/1500+"px";
+
+		//数量
+		document.getElementById("myform:jobdispatchlistNum").style.width=wjb51*140/1500+"px";
+	    document.getElementById("myform:jobdispatchlistNum").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:jobdispatchlistNum").style.marginRight=wjb51*40/1500+"px";
+		
+		//零件名称
+		document.getElementById("myform:jobdispatchpartName").style.width=wjb51*330/1500+"px";
+	    document.getElementById("myform:jobdispatchpartName").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchpartName").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchpartName").style.marginLeft=wjb51*16/1500+"px";
+		
+//--------------------------------------------------------------------------------------------------------
+		
+		//基本信息
+		document.getElementById("myform:fontsize1").style.fontSize=wjb51*18/1500+"px";
+	    
+	    //设备信息
+		document.getElementById("myform:fontsize2").style.fontSize=wjb51*18/1500+"px";
+		document.getElementById("shebeixinxi").style.height=hjb51*60/900+"px";
+		document.getElementById("shebeixinxi").style.width=wjb51*650/1500+"px";
+	    document.getElementById("shebeixinxi").style.fontSize=wjb51*18/1500+"px";
+	    document.getElementById("shebeixinxi").style.marginTop=wjb51*15/1500+"px";
+	    
+	    document.getElementById("myform:job_dispatch_add").style.width=wjb51*240/1500+"px";
+		document.getElementById("myform:job_dispatch_add").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:job_dispatch_add").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:job_dispatch_add").style.marginLeft=wjb51*12.5/1500+"px";
+		
+	    //设备类型  边框的大小
+	    document.getElementById("myform:equipmentTypeId").style.width=wjb51*240/1500+"px";
+	    document.getElementById("myform:equipmentTypeId").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:equipmentTypeId").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:equipmentTypeId").style.marginLeft=wjb51*12/1500+"px";
+		
+//----------------------------------------------------------------------------------------------------------
+		
+		//始末时间  jobdispatchlistStartDate
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.width=wjb51*330/1500+"px";
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.marginTop=wjb51*5/1500+"px";
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.fontSize=hjb51*18/900+"px";
+		document.getElementById("myform:jobdispatchlistStartDateInputDate").style.marginLeft=wjb51*16/1500+"px";
+		
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.width=wjb51*140/1500+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.height=hjb51*30/900+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.marginTop=wjb51*5/1500+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.marginLeft=wjb51*16/1500+"px";
+		document.getElementById("myform:jobdispatchlistEndDateInputDate").style.fontSize=hjb51*18/900+"px";
+
+		
+//-------------------------------------------------------------------------------------------------------------
+		//派工按钮
+		document.getElementById("myform:tubiao1").style.width=wjb51*110/1500+"px";
+		document.getElementById("myform:tubiao1").style.height=hjb51*50/900+"px";
+		//保存按钮
+		document.getElementById("myform:tubiao2").style.width=wjb51*110/1500+"px";
+		document.getElementById("myform:tubiao2").style.height=hjb51*50/900+"px";
+		//取消按钮
+		document.getElementById("myform:tubiao3").style.width=wjb51*110/1500+"px";
+		document.getElementById("myform:tubiao3").style.height=hjb51*50/900+"px";
+		document.getElementById("myform:tubiao3").style.marginLeft=wjb51*120/1500+"px";
+		//启动工单按钮
+		document.getElementById("myform:tubiao4").style.width=wjb51*110/1500+"px";
+		document.getElementById("myform:tubiao4").style.height=hjb51*50/900+"px";
+//----------------------------------------------------------------------------------------------------------------
+
+		
+		function init() {
+			for(i in document.images){
+				disableDraggingFor(document.images[i]);
+			}
+		}
+		 
+		function disableDraggingFor(element) {
+		  element.draggable = false;
+		  element.onmousedown = function(event) {
+		                event.preventDefault();
+		                return false;
+		              };
+		}
+		init();
+	</script>
+	 		
+	<script type="text/javascript" src="../js/ext-base.js"></script>
+	<script type="text/javascript" src="../js/ext-all.js"></script>			
+	<script type="text/javascript">
+	//<![CDATA[ 
+		function tishi(){
+			alert("工单启动成功！");
+		}	           
+	           
+		function datatest(){
+		  var jobdispatchlistNum = Ext.getDom("myform:jobdispatchlistNum").value;
+		  var jobNum = Ext.getDom("myform:jobNum").value;
+		  if(jobdispatchlistNum > jobNum ){
+		   alert("工单数量应小于等于作业的计划数量!");
+		   Ext.get("myform:jobdispatchlistNum").focus(true);
+		  }
+		}							 
+		document.getElementById("myform:jobdispatchlistStartDatePopupButton").style.display="none";
+		document.getElementById("myform:jobdispatchlistEndDatePopupButton").style.display="none";
+		
+		function checkEquSerialNum(){
+		    var jobdispatchlistId = document.getElementById("myform:jobdispatchlistId").value;
+		    var flag;
+			$.ajax({
+ 				url:"../jobdispatch/checkEquSerialNum.action",
+				method:"post",
+				dataType: "json",//返回json格式的数据
+				async:false,
+ 				data:{
+ 					jobdispatchlistId:jobdispatchlistId
+ 				},
+ 				success:function(response){
+					var obj=response;
+ 					if(!obj.flag){
+ 						alert("工单必须至少发送到一台设备");
+ 					}
+ 					flag = obj.flag;
+ 				},
+ 				error:function(){
+					alert("操作失败！");
+				}
+ 			});
+			return flag;
+		}
+		//点击取消操作
+		function closefun(){
+			if(checkEquSerialNum())
+				window.close();
+		}
+		//检测工单状态
+		function checkStatus(){
+			if(window.confirm("是否启动工单？")){
+				var jobdispatchlistId = document.getElementById("myform:jobdispatchlistId").value;
+				var flag;
+				$.ajax({
+	 				url:"../jobdispatch/checkJobDispatchStatus.action",
+					method:"post",
+					dataType: "json",//返回json格式的数据
+					async:false,
+	 				data:{
+	 					jobdispatchlistId:jobdispatchlistId
+	 				},
+	 				success:function(response){
+						var obj=response;
+	 					if(!obj.flag){
+	 						alert("请先点击[派工]按钮,在点击启动工单按钮");
+	 					}
+	 					flag = obj.flag;
+	 				},
+					failure:function(response,opts){
+						alert("操作失败！");
+					}
+	 			});
+				return flag;
+			}
+			
+		}
+		//更改工单状态
+		function changeStatus(jobdispatchlistId,status){
+			Ext.Ajax.request({
+ 				url:"../jobdispatch/changeJobDispatchStatus.action",
+				method:"post",
+ 				params:{
+ 					jobdispatchlistId:jobdispatchlistId,
+ 					status:status
+ 				},
+ 				success:function(response){
+					var obj=Ext.decode(response.responseText);
+ 					if(obj.flag){
+ 						if(status==40)
+ 							alert("工单启动成功！");
+ 						else
+ 							alert("工单派工成功");
+ 					}
+ 				},
+				failure:function(response,opts){
+					if(status==40)
+						alert("工单启动成功！");
+					else
+						alert("派工失败");
+				}
+ 			});
+		}
+		
+		function dispatchJob(){
+			if(window.confirm("是否派工？")){
+				var jobdispatchlistId = document.getElementById("myform:jobdispatchlistId").value;
+				changeStatus(jobdispatchlistId,30);
+			}
+			return false;
+		}
+		//检测添加的设备是否存在
+		function checkData(){
+			var serialNo = document.getElementById("myform:job_dispatch_add").value;
+			var jobdispatchlistId = document.getElementById("myform:jobdispatchlistId").value;
+			var flag;
+			$.ajax({
+ 				url:"../jobdispatch/checkEquSerailNo.action",
+				method:"post",
+				dataType: "json",//返回json格式的数据
+				async:false,
+ 				data:{
+ 					jobdispatchlistId:jobdispatchlistId,
+ 					serialNo:serialNo
+ 				},
+ 				success:function(response){
+					var obj=response;
+					if(obj.flag){
+						alert("添加设备已存在");
+					}
+					flag = !obj.flag;
+ 				}
+ 			});
+			return flag;
+		}
+	//]]> 
+	</script>
+			
+		<script type="text/javascript">
+				setTimeout(function(){
+				$("#maskw").fadeOut(500);
+				},100);
+     	</script>
+</h:form>
+</h:body>
+	
+</ui:composition>

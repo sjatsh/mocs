@@ -1,0 +1,271 @@
+@CHARSET "UTF-8";
+/*搜索框背景*/
+.device_searcharea {
+	width: 854px;
+	margin-top: 0px;
+	color: #4D4D4D;
+	background-image: url(../img/common_info_img/common_center_top_bg.png);
+	font-size: 12px;
+	height: 43px;
+}
+
+.searcharea_tab {
+	width: 854px;
+	margin-top: 0px;
+	color: #4D4D4D;
+	background-image: url(../img/product_searcharea.png);
+	font-size: 12px;
+	height: 39px;
+}
+
+.history_searcharea {
+	width: 854px;
+	color: #4D4D4D;
+	background-image: url(../img/history_searcharea.png);
+	font-size: 12px;
+	height: 45px;
+	vertical-align: middle;
+}
+/*end of 搜索框背景*/
+/*查询按钮*/
+input[type="submit"] {
+	width: 58px;
+	height: 25px;
+	border-radius: 5px 5px 5px 5px;
+	background-image: url(../img/searchbutton.png);
+	background-position: -4px -4px;
+	cursor: pointer;
+	font-size: 12px;
+	padding-bottom: 2px;
+}
+
+input[type="submit"]:HOVER {
+	width: 58px;
+	height: 25px;
+	border-radius: 5px 5px 5px 5px;
+	background-image: url(../img/searchbutton.png);
+	background-position: -4px -4px;
+	cursor: pointer;
+	font-size: 12px;
+	padding-bottom: 2px;
+}
+/*end of 查询按钮*/
+/*下拉框样式*/
+select {
+	width: 115px;
+	height: 22px;
+	font-size: 12px;
+	background: rgb(227, 227, 227);
+	text-align: middle;
+	border: 1px solid rgb(149, 155, 163);
+	border-radius: 4px;
+}
+/*end of 下拉框样式*/
+/*时间选择框*/
+input[type="text"] {
+	color: #404040;
+	font-size: 12px;
+	background: transparent;
+	border: 0px;
+	height: 25px;
+	border: none;
+	text-indent: 1em;
+}
+
+.common_calendar {
+	width: 105px;
+	background-image: url(../img/common_info_img/calendar.png) !important;
+	line-height: 25px;
+}
+.common_calendartwo{
+	width: 288px;
+	background-image: url(../images/devict_time_select.png) !important;
+	height: 46px !important;	
+}
+.common_calendarthree{
+	width: 288px;
+	background-image: url(../images/devict_time_select2.png) !important;
+	height: 46px !important;	
+}
+.common_calendarfour{
+	width: 288px;
+	height: 46px !important;	
+}
+.common_input {
+	margin-left: 10px;
+	width: 106px;
+	background-image: url(../img/common_info_img/input.png) !important;
+	line-height: 25px;
+}
+
+/*控制日期控件的显示*/
+.rf-cal-extr {
+	z-index: 5 !important;
+}
+/*end of 时间选择框*/
+
+/*没有数据提示层*/
+.nodatacss {
+	font-size: 30px;
+	text-align: center;
+	margin-left:auto; 
+	margin-right:auto;
+	color: rgb(150, 150, 150);
+	background-image: url("../images/order/nodata.gif");
+	background-repeat: no-repeat;
+	height: 260px;
+	padding-top:80px;
+}
+
+.nodatacsstwo {
+	padding-top:80px;
+	font-size:30px;
+	text-align:center;
+	margin-left:auto; 
+	margin-right:auto;
+	color: rgb(150, 150, 150);
+	background-image: url("../images/order/nodata.gif");
+	background-repeat: no-repeat;
+	height: 260px;
+}
+.nodatacssthree{
+	font-size:30px;
+	text-align:center;
+	padding-top:80px;
+	color:rgb(150,150,150);
+	height: 160px;
+	background-position: -65px, -75px;
+}
+
+.nodatacss1 {
+	font-size: 30px;
+	text-align: center;
+	margin-top:-1px;
+	margin-left: auto;
+	margin-right: auto;
+	color: rgb(150, 150, 150);
+	background-image: url("../images/order/nodata.gif");
+	background-repeat: no-repeat;
+	height: 2520px;
+	padding-top:80px;
+}
+
+.nodatacss2 {
+	font-size: 30px;
+	text-align: center;
+	margin-top:-1px;
+	margin-left: auto;
+	margin-right: auto;
+	color: rgb(150, 150, 150);
+	background-image: url("../images/order/nodata.gif");
+	background-repeat: no-repeat;
+	height: 260px;
+	padding-top:80px;
+}
+
+.nodatacss3 {
+	font-size: 30px;
+	text-align: center;
+	margin-top:-1px;
+	margin-left: auto;
+	margin-right: auto;
+	color: rgb(150, 150, 150);
+	background-image: url("../images/order/nodata.gif");
+	background-repeat: no-repeat;
+	height: 260px;
+	padding-top:80px;
+}
+
+.nodatacss4 {
+	font-size: 30px;
+	text-align: center; 
+	margin-top:-1px;
+	margin-left : auto; 
+	margin-right : auto;
+	color: rgb(150, 150, 150);
+	background-image: url("../images/order/nodata.gif");
+	background-repeat: no-repeat;
+	height: 260px;
+	padding-top:80px;
+}
+/*end of 没有数据提示层*/
+
+
+
+/*.styled-select select {
+	background: transparent;
+	width: 75px;
+	padding-left: 12px;
+	font-size: 12px;
+	height: 21px;
+}
+
+.styled-select {
+	width: 55px;
+	height: 21px;
+	overflow: hidden;
+	text-align: center;
+	background: url(../img/compare_device_oee_select_bg.png) no-repeat right #ddd;
+}*/
+
+.rf-p {
+	background-color: #FFFFFF;
+	border-radius: 0 0 0 0;
+	border-style: solid;
+	border-width: 0px;
+	color: #C4C0B9;
+	padding: 0px;
+}
+
+.rf-p-b {
+	font-size: 11px;
+	color: rgb(0, 0, 0);
+	font-family: Arial, Verdana, sans-serif;
+	padding: 0px;
+}
+
+.searcharea {
+	width: 854px;
+	margin-top: 0px;
+	color: #4D4D4D;
+	background-image: url(../img/product_searcharea.png);
+	font-size: 12px;
+}
+
+
+/*搜索条件间距调整样式*/
+.common_condition_spacing_first{
+	margin-left: 10px;
+}
+
+.common_condition_spacing_label{
+	margin-left: 5px;
+}
+
+.common_condition_spacing{
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.common_condition_spacing_end{
+	margin-left: 10px;
+}
+
+/*查询按钮样式
+.chaxunanniu{
+	width:50px;
+	height:25px;
+	background-image: url(../img/searchbutton.png);
+}
+
+.stat-select{
+	padding-left: 10px;
+}
+.stat-starttime{
+	
+}
+
+.stat-name{
+	padding-left: 10px;
+	padding-right: 10px;
+}*/

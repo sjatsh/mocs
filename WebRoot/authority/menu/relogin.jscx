@@ -1,0 +1,93 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.menu.LoginStatusUC" contentType="text/html;charset=UTF-8"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<div clientId="login-dialog"  class="datarole_alert_info hide" visible="<%# !loggedIn%>">
+  <div class="datarole_alert_info_top">
+  <div class="datarole_alert_info_top_left">
+  <p class="datarole_alert_info_top_p1">${button.label.login}</p>
+  </div>
+  <!--datarole_alert_info_top_left-->
+  <div class="datarole_alert_info_top_right">
+  <a href="javascript:void(null)" onclick="$.unblockUI ()" class="datarole_close"></a>
+  </div>
+  <!--datarole_alert_info_top_right-->
+  <div class="clear"></div>
+  </div>
+  <!--datarole_alert_info_top-->
+  <div class="datarole_alert_info_middle">
+	  <div>
+		  <table class="usermanage_table" border="0" cellpadding="0px" cellspacing="1px" >
+	        <tr>
+	            <th style="width:30%">${user.loginName}：</th>
+	            <td><input type="text" name="userName" clientId="userName"/></td>
+	        </tr>
+	        <tr>
+	            <th>${user.password}：</th>
+	            <td><input type="password" name="password" clientId="password"/></td>
+	        </tr>
+	        <tr>
+	            <td style="color: red" colspan="2" clientId='message-holder'></td>
+	        </tr>
+	    	</table>
+		</div> 
+<!--dumascroll-->
+<div class="datarole_alert_sure_btn">
+<a href="javascript:void(null)" class="datarole_alert_sure_btn_link1" clientId="btnLogin" class="button" onclick="login()">${button.label.login}</a>
+<a href="javascript:void(null)" class="datarole_alert_sure_btn_link1" onclick="$.unblockUI ()" class="button">${button.label.cancel}</a>
+ </div>
+ <!--datarole_alert_sure_btn-->
+
+ </div>
+ <!--datarole_alert_info_middle-->
+ <div class="datarole_alert_info_bottom">
+ 
+ </div>
+ <!--datarole_alert_info_bottom-->
+ </div>
+
+<div clientId="change-password-dialog"  class="datarole_alert_info hide" visible="<%#loggedIn%>">
+  <div class="datarole_alert_info_top">
+  <div class="datarole_alert_info_top_left">
+  <p class="datarole_alert_info_top_p1">${button.label.chpwd}</p>
+  </div>
+  <!--datarole_alert_info_top_left-->
+  <div class="datarole_alert_info_top_right">
+  <a href="javascript:void(null)" onclick="$.unblockUI ()" class="datarole_close"></a>
+  </div>
+  <!--datarole_alert_info_top_right-->
+  <div class="clear"></div>
+  </div>
+  <!--datarole_alert_info_top-->
+  <div class="datarole_alert_info_middle">
+	  <div>
+		  <table class="usermanage_table" border="0" cellpadding="0px" cellspacing="1px" >
+	        <tr>
+	            <th style="width:30%">${label.chpwd.old}：</th>
+	            <td><input type="password" clientId="oldPwd"/></td>
+	        </tr>
+	        <tr>
+	            <th>${label.chpwd.new}：</th>
+	            <td><input type="password" clientId="newPwd"/></td>
+	        </tr>
+	        <tr>
+	            <th>${label.password.confirm}：</th>
+	            <td><input type="password" clientId="chkPwd"/></td>
+	        </tr>
+	        <tr>
+	            <td style="color: red" colspan="2" clientId='message-holder'></td>
+	        </tr>
+	    	</table>
+		</div> 
+<!--dumascroll-->
+<div class="datarole_alert_sure_btn">
+<a href="javascript:void(null)" class="datarole_alert_sure_btn_link1" onclick="$.unblockUI ()">${button.label.cancel}</a>
+<a href="javascript:void(null)" clientId="btnChpwd" class="datarole_alert_sure_btn_link1" onclick="changePassword()">${button.label.chpwd}</a>
+  </div>
+  <!--datarole_alert_sure_btn-->
+
+  </div>
+  <!--datarole_alert_info_middle-->
+  <div class="datarole_alert_info_bottom">
+  
+  </div>
+  <!--datarole_alert_info_bottom-->
+  </div>

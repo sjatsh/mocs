@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jasmine-ajax-list>
+	<package>smtcl.mocs.beans.authority.org.ajax</package>
+	<package>smtcl.mocs.beans.authority.user.ajax</package>
+	<package>smtcl.mocs.beans.authority.role.ajax</package>
+    <package>smtcl.mocs.common.authority.i18n.ajax</package>
+    <package>smtcl.mocs.beans.authority.login.ajax</package>
+    <package>smtcl.mocs.beans.authority.component.ajax</package>
+</jasmine-ajax-list>

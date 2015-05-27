@@ -1,0 +1,450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+	<h:outputScript library="js" name="imgView.js"></h:outputScript>
+	<style type="text/css">
+		.ui-datatable th{
+			background-image: url(../images/equ/table_head_line.png) !important;
+		}
+		.rf-fu {
+     		background: none repeat scroll 0% 0% rgb(255, 255, 255);
+  		    border-color: rgb(196, 192, 185);
+ 		    border-style: solid;
+   		    border-width: 0px;
+   			border-radius: 0px 0px 0px 0px;
+    		width: 400px;
+		}
+		.mwui-switch-btn{
+		    width:84px;  
+		    display:block;
+/* 		    padding:1px; */
+		    background:none repeat scroll 0% 0% rgba(60, 204, 32, 1);;
+		    overflow:hidden;
+		    margin-bottom:5px;
+		    border:1px solid #2E58C1;
+		    border-radius:18px;
+		    cursor: pointer;
+		}
+		.mwui-switch-btn span{
+		    width:32px;
+		    font-size:14px;
+		    height:18px;
+		    padding:4px 5px 2px 5px;
+		    display:block; 
+		    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#f6f6f6,endColorstr=#eeeeee,grandientType=1);
+		    background:-webkit-gradient(linear, 0 0, 0 100%, from(#f6f6f6), to(#eeeeee));
+		    background:-moz-linear-gradient(top, #f6f6f6, #eeeeee);
+		    border-radius:18px;
+		    color:#3B75FD;
+		    text-align:center; 
+		}
+		.mwui-switch-btn:hover span{
+		    background:#fff;
+		}
+		.mwui-switch-btn span.off{
+			float:right;
+		}
+		button:hover, input[type="reset"]:hover, input[type="submit"]:hover, input[type="button"]:hover {
+			background-image: none;
+		}
+		.btn-bg-off{
+			background:#D4CFC7;
+		}
+	</style>
+	<div class="headDiv">
+		
+		<h:inputText id="txt" value="#{partTypeConfigBean.query}" styleClass="textBg" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 
+		<p:commandButton value="查询" actionListener="#{partTypeConfigBean.queryData}" update=":myform:carList" oncomplete="bgReposition($('.table'));" styleClass="delete"></p:commandButton>
+		
+		<div class="button-split"></div>
+		 
+		<p:commandButton id="add" value="新建" update=":myform:apart " oncomplete="addPartTypelog.show();bgReposition($('.table'));"   styleClass="delete"/> 
+		
+		<p:commandButton  value="删除" styleClass="delete"  actionListener="#{partTypeConfigBean.onSelected}" oncomplete="ondelete();bgReposition($('.table'));" update=":myform:sed"/> 
+		<p:commandButton id="delete" value="删除" update=":myform:carList :myform:displayMulti :myform:messages"  actionListener="#{partTypeConfigBean.onDelete}" style="display:none;"/> 
+		
+		<ui:remove>	
+		<p:commandButton  value="停用" styleClass="delete"  actionListener="#{partTypeConfigBean.onSelected}" oncomplete="onStop()" update=":myform:sed"/>
+		<p:commandButton id="disabled" value="停用" update=":myform:carList :myform:displayMulti :myform:messages"  actionListener="#{partTypeConfigBean.onDisabled}"  style="display:none;"/>
+		</ui:remove>
+		<p:commandButton id="resume" value="恢复" update=":myform:carList :myform:displayMulti :myform:messages" oncomplete="multiCarDialog;bgReposition($('.table'));"  actionListener="#{partTypeConfigBean.onResume}" styleClass="delete"/>
+		
+		<h:selectOneMenu value="#{partTypeConfigBean.selectOption}" styleClass="select">
+		   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
+	       <f:selectItems value="#{partTypeConfigBean.options}"  
+	           var="option"  itemLabel="#{option}"  itemValue="#{option}" />  
+	           <a4j:ajax event="valueChange" listener="#{partTypeConfigBean.selectChange}" render=":myform:carList :myform:displayMulti" oncomplete="bgReposition($('.table'));"></a4j:ajax>
+	    </h:selectOneMenu> 
+	   
+         <h:inputHidden value="#{partTypeConfigBean.partNo}" id="partNo"></h:inputHidden>                
+	     <div style="position: absolute;border:1px black solid;width: 402px;height: 200px;display: none;background-color: white;margin-left: 100px;margin-top: 100px;z-index: 10" id="shangchuan">
+	    	<rich:fileUpload doneLabel="文件上传成功"
+			        noDuplicate="true"
+		 			serverErrorLabel="文件过大,导致文件上传失败"
+					fileUploadListener="#{partTypeConfigBean.Upload}"
+					id="upload" acceptedTypes="jpg,pdf,png"
+					ontyperejected="alert('添加文件格式为jpg,pdf,png');" maxFilesQuantity="1"
+					clearLabel="clear" deleteLabel="删除" addLabel="添加文件"
+					uploadLabel="上传文件" 
+					style="width:400px;height:80px;border-right: 1px solid silver;border-right-color: white;">
+					<f:ajax event="uploadcomplete" execute="@none" render=":myform:messages"></f:ajax>
+			</rich:fileUpload>
+			<div style="width: 100px;height: 90px;"></div>
+			<h:commandButton value="关闭" onclick="onBlock()"  styleClass="delete"></h:commandButton>
+	    </div>
+	    
+	</div>	
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+	
+    <p:dataTable var="part" value="#{partTypeConfigBean.mediumPartModel}" id="carList" editable="true" 
+    	  sortMode="multiple" dynamic="true" selection="#{partTypeConfigBean.selectedPart}" paginator="true" rows="20" 
+    	  paginatorPosition="bottom" styleClass="table" style="width: auto; left: 170px; right: 0;">
+        
+        <p:ajax event="rowEdit" listener="#{partTypeConfigBean.onEdit}" update=":myform:carList :myform:messages" />
+        <p:ajax event="rowEditCancel" listener="#{partTypeConfigBean.onCancel}" update=":myform:carList" />
+ 
+		<p:column selectionMode="multiple"  style="width:3%;word-break: break-all;"/>
+        <p:column headerText="零件编号" style="width:10%;word-break: break-all;" >
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.no}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{part.no}"  style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="零件名称" style="width:6%;word-break: break-all;" >
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.name}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{part.name}" style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="零件类别编号"   style="width:8%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.typeNo}" />
+                </f:facet>
+                <f:facet name="input">
+                	 <h:selectOneMenu value="#{part.typeNo}" style="width:100%;">  
+                        <f:selectItems value="#{partTypeConfigBean.typeNoList}"  
+                            var="typeNo"   
+                            itemLabel="#{typeNo}"  
+                            itemValue="#{typeNo}" />  
+                    </h:selectOneMenu>  
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <!-- 
+        <p:column headerText="图纸编号"   style="width:6%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.drawingno}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{part.drawingno}" style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="图文件名"   style="width:6%;word-break: break-all;" >
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.filename}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{part.filename}" style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="来源"   style="width:8%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.source}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{part.source}" style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+         <p:column headerText="零件版本"   style="width:5%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.version}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{part.version}" style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+         -->
+         <p:column headerText="状态"  style="width:4%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.status}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:outputText value="#{part.status}" rendered="true" style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+         <p:column headerText="描述" style="width:13%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.description}" />
+                </f:facet>
+                <f:facet name="input">
+               	 	<p:inputText value="#{part.description}" style="width:100%;"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="创建时间" style="width:10%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                   <h:outputText value="#{part.createDate}" readonly="true">
+                   	<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
+                   </h:outputText>
+                </f:facet>
+                <f:facet name="input">
+               	 	<p:inputText value="#{part.createDate}" readonly="true" style="width:100%;">
+               	 		 	<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
+               	 	</p:inputText>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="最后更新时间" style="width:10%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{part.updateDate}" rendered="true">
+                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
+                    </h:outputText>
+                </f:facet>
+                <f:facet name="input">
+               	 	<p:inputText value="#{part.updateDate}" readonly="true" style="width:100%;">
+               	 		 <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
+               	 	</p:inputText>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="上传图片" style="width:8%;word-break: break-all;">
+        	<h:inputHidden id="no" value="#{part.no}"></h:inputHidden>
+            <p:commandLink actionListener="#{partTypeConfigBean.setPart}" value="上传" update=":myform:partNo " oncomplete="ondisplay()"><f:attribute name="no" value="#{part.no}"></f:attribute></p:commandLink>
+       		<h:outputText value=" | "></h:outputText>
+        	<h:inputHidden id="url" value="#{part.path}"></h:inputHidden>
+       		<p:commandLink actionListener="#{partTypeConfigBean.getImgUrlAddress}" value="预览" oncomplete="imageUrl.show()" 
+       		update=":myform:partImgUrl :myform:img1"><f:attribute name="url" value="#{part.path}"></f:attribute></p:commandLink>
+        </p:column>
+		<p:column headerText="操作" style="width:3%;word-break: break-all;">
+            <p:rowEditor />
+        </p:column>
+    </p:dataTable>
+    
+    <h:inputHidden value="#{partTypeConfigBean.partImgUrl}" id="partImgUrl"></h:inputHidden>
+    
+    <p:dialog widgetVar="imageUrl" width="460" height="310" style="z-index:91">
+    	<div id="image1">
+    		<h:graphicImage value="#{partTypeConfigBean.imgUrl1}" id="img1"></h:graphicImage>
+    	</div>
+    </p:dialog>
+  
+    <p:dialog id="addlog" widgetVar="addPartTypelog" resizable="false">
+      <h:panelGroup id="apart">
+      	<table>
+      		<tr>
+      			<td>零件编号：<font style="color:red;">*</font></td>
+      			<td><h:inputText value="#{partTypeConfigBean.addPart.no}" id="addno" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：li_ceshi_001</div></td>
+      		</tr>
+      		<tr>
+      			<td>零件名称：<font style="color:red;">*</font></td>
+      			<td><h:inputText value="#{partTypeConfigBean.addPart.name}" id="addname" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：螺丝</div></td>
+      		</tr>
+      		<tr>
+      			<td>零件类别编号：<font style="color:red;">*</font></td>
+      			<td>
+      				<h:selectOneMenu value="#{partTypeConfigBean.addPart.typeNo}" id="addtypeno" styleClass="" style="border:0px;">  
+                         <f:selectItems value="#{partTypeConfigBean.typeNoList}"  
+                         var="color"   
+                         itemLabel="#{color}"  
+                         itemValue="#{color}" />    
+                    </h:selectOneMenu>  
+      			</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>图纸编号：</td>
+      			<td><h:inputText value="#{partTypeConfigBean.addPart.drawingno}" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：ls_001</div></td>
+      		</tr>
+      		<tr>
+      			<td>图文件名：</td>
+      			<td><h:inputText value="#{partTypeConfigBean.addPart.filename}" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：ls_2013</div></td>
+      		</tr>
+      		<tr>
+      			<td>来源：</td>
+      			<td><h:inputText value="#{partTypeConfigBean.addPart.source}" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：f:/ls/ls</div></td>
+      		</tr>
+      		<tr>
+      			<td>零件版本：</td>
+      			<td><h:inputText value="#{partTypeConfigBean.addPart.version}" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：V1.0</div></td>
+      		</tr>
+      		<tr>
+      			<td>描述：</td>
+      			<td colspan="2">
+      				<h:inputTextarea value="#{partTypeConfigBean.addPart.description}" cols="40"></h:inputTextarea>
+      			</td>
+      		</tr>
+      	</table>
+    	<div class="headDivduan">
+			<p:commandButton onclick="onAdd()" value="增加" styleClass="delete"></p:commandButton>
+			<p:commandButton actionListener="#{partTypeConfigBean.addPartTypeInfo}" value="增加" 
+			 	update=":myform:carList :myform:apart :myform:messages" style="display:none;" id="addPartType" 
+			 	oncomplete="addPartTypelog.hide()">
+			</p:commandButton>
+    	</div>
+    </h:panelGroup>
+    </p:dialog>
+     <p:dialog id="multiDialog"  widgetVar="multiCarDialog"  height="200" showEffect="fade" hideEffect="explode" >  
+        <p:dataList id="displayMulti" value="#{partTypeConfigBean.selectedPart}" var="part"> 
+        </p:dataList>  
+    </p:dialog>
+    <p:growl id="messages" showDetail="true"/> 
+    <h:inputHidden value="#{partTypeConfigBean.selected}" id="sed"></h:inputHidden>
+     <script type="text/javascript">
+     	loadErpConfig();
+     	function loadErpConfig(){
+     		var value = document.getElementById("myform:erpReturn").value;
+     		document.getElementById("erp").value=value;
+     		var btn = $('#spanId');
+     		var button = $('.mwui-switch-btn');
+     		var change = btn.attr("change");
+     		if(value=="0"){
+                btn.attr("change", btn.html()); 
+                btn.html(change);
+                btn.addClass('off'); 
+    	    	button.addClass('btn-bg-off');
+     		}
+
+     	}
+	    $(function() { 
+	        $('.mwui-switch-btn').each(function() {
+	            $(this).bind("click", function() { 
+	                var btn = $(this).find("span");
+	                var change = btn.attr("change");
+	                btn.toggleClass('off'); 
+	 
+	                if(btn.attr("class") == 'off') { 
+	                    $(this).find("input").val("0");
+	                    btn.attr("change", btn.html()); 
+	                    btn.html(change);
+	                } else { 
+	                    $(this).find("input").val("1");
+	                    btn.attr("change", btn.html()); 
+	                    btn.html(change);
+	                }  
+	 
+	                return false;
+	            });
+	        });
+	    });
+	    
+	    function changeValue(){
+	    	var value = $('#erp').val();//获取当前值
+	    	var button = $('.mwui-switch-btn');
+	    	if(value=="1"){//设置要变为的值
+	    		value="0";
+	    		button.addClass('btn-bg-off');
+	    	}else{
+	    		value="1";
+	    		button.removeClass('btn-bg-off');
+	    	}
+	    	document.getElementById("myform:erpReturn").value=value;
+	    	document.getElementById("myform:erpButton").click();
+	    }
+	</script> 
+     <script type="text/javascript">
+	//<![CDATA[
+	       function ondelete(){
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认删除此数据！")){
+		    		   document.getElementById("myform:delete").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行删除！");
+	    	   }
+	       }
+	       
+	       function onClear(){
+	    	   if(confirm("是否确认要清空数据,请慎重选择！")){
+	    		   document.getElementById("myform:clear").click();
+	    	   }
+	       }
+	       function onStop(){
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认停用这些数据！")){
+		    		   document.getElementById("myform:disabled").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行停用！");
+	    	   }
+	       }
+	       function onAdd(){
+	    	   var addno=document.getElementById("myform:addno").value;
+	    	   var addName=document.getElementById("myform:addname").value;
+	    	   var addtypeno=document.getElementById("myform:addtypeno").value;
+	    	   if(null==addno||""==addno){
+	    		   alert("请输入零件编号");
+	    		   return false;
+	    	   }else  if(null==addName||""==addName){
+	    		   alert("请输入零件名称");
+	    		   return false;
+	    	   }else if(null==addtypeno||""==addtypeno||"请选择"==addtypeno){
+	    		   alert("请选择零件类别编号");
+	    		   return false;
+	    	   }else{
+	    		   document.getElementById("myform:addPartType").click();
+	    		   
+	    	   }
+	       }
+	       function ondisplay(){
+	    	   document.getElementById("shangchuan").style.display="block";
+	       }
+	       function onBlock(){
+	    	   document.getElementById("shangchuan").style.display="none";
+	       }
+	       
+	       function searchFocus(id){
+				if(document.getElementById(id).value=="输入ID/编号/名称")
+					document.getElementById(id).value=""
+			}
+			
+			function searchBlur(id){
+				if(document.getElementById(id).value=="")
+					document.getElementById(id).value="输入ID/编号/名称"
+			}
+			document.getElementById("myform:txt").value="输入ID/编号/名称";
+
+	//]]>
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+</ui:composition>

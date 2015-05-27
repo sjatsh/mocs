@@ -1,0 +1,588 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.role.page.RoleDetailPage" contentType="text/html;charset=UTF-8" resource="role"%>
+<%@page import="smtcl.mocs.utils.authority.SessionHelper" %>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="a" uri="auth.jscx" name="auth" %>
+<%@taglib prefix="u" uri="../menu/top.jscx" name="top"%>
+<%@taglib prefix="u" uri="../menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../menu/menu.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="../menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><c:Out value="<%#smtcl.mocs.utils.authority.HelperUtil.title()%>" /></title>
+<link rel="stylesheet" type="text/css" href="../../authority/css/css.css">
+<link href="../../authority/javascript/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" charset="utf-8" />
+<u:js/>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/tree/js/jquery.ztree.all-3.4.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/pagging.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/template.js"></script>
+<script type="text/javascript" charset="UTF-8" language="javascript">
+jQuery(document).ready(function(){
+    initPage();
+    
+    init_1();
+});
+
+function init_1(){
+	var g = $("input[name=roleId]").val();
+	g = $.trim(g);
+	if(g == ""){
+		$("._auth").hide();
+	}
+}
+
+function initPage(){
+	var pageNo = document.getElementById('pageNo').value;
+	if(pageNo!=""){
+		doPageOn('#'+pageNo);
+	}
+}
+
+function init_tree(){
+	role.getPageList(function(response){
+    	var ret = eval(response.responseText);
+    	jQuery.fn.zTree.reinit("pageTree","",zNodes);
+    });
+}
+
+function checkForm () {
+	if (!$_tl (document.getElementById('role_Name').value, 1, 255)) {
+		alert ("${role.nameInvalidMessage}");
+		return false
+	}
+	if (!$_tl (document.getElementById('roleCode').value, 1, 255)) {
+		alert ("${role.codeInvalidMessage}");
+		return false
+	}
+	if (!$_s (document.getElementById('roleType'))) {
+		alert ("${role.typeInvalidMessage}");
+	    return false;
+	}
+	//checkButtons();
+	setTimeout(function(){},1000); 
+	if(!checkRolePage()){
+		alert("${role.pageNullMessage}");
+		return false;
+	}
+	jQuery("#btnSave").attr("disabled",true);
+	return true;
+}
+
+//角色名称验证
+function checkRoleName(obj){
+    var roleName =obj.value;
+    if(obj.value!=obj.defaultValue){
+    	role.validateRoleName(roleName,function(response){
+        	var ret = eval(response.responseText);
+        	if (!ret.succ) {
+        		alert("${role.nameExistMessage}");
+        		obj.value = "";
+    		}
+        });
+    }
+}
+//角色代码验证
+function checkRoleCode(obj){
+    var roleCode =obj.value;
+    if(obj.value!=obj.defaultValue){
+    	role.validateRoleCode(roleCode,function(response){
+        	var ret = eval(response.responseText);
+        	if (!ret.succ) {
+        		alert("${role.codeExistMessage}");
+        		obj.value = "";
+    		}
+        });
+    }
+}
+
+//检查是否添加角色功能
+function checkRolePage(){
+	var pageId_ck = document.getElementsByName("pageId");
+	if(pageId_ck.length==0){
+		return false;
+	}else{
+		return true;
+	}
+}
+
+
+function doPageOn(id){
+	pageOffAll();
+	//jQuery('#pageNo').val(jQuery(id).attr("id"));
+	//jQuery(id).attr("class","page-on");
+	var tid = "#"+jQuery(id).attr("id")+"_table";
+	jQuery(tid).show();
+	
+	var p2_table_addon = document.getElementById("p2_table_addon");
+	if(tid=="#p2_table")
+		p2_table_addon.style.display = "block";
+	else
+		p2_table_addon.style.display = "none";
+}
+function pageOffAll(){
+	var sel =jQuery("#page_bar");
+	jQuery("a",sel).each(function(index){
+		var p = jQuery(this);
+		//p.attr("class","page-off");
+		var t = "#"+p.attr("id")+"_table";
+		jQuery(t).hide();
+	});
+}
+
+function query_user() {
+	jQuery.post('userInfo.jscx', {loginName:jQuery('#loginName').val(),fieldName:"loginName,nickName"},function(res){
+		jQuery("#userData").html(res);
+		});
+}
+
+function cmd_new_user(){
+    query_user();
+    jQuery.blockUI({ message: jQuery('#userDiv') });
+}
+
+function cmd_new_page(){
+	var t = jQuery.fn.zTree.findTreeByTxtId("pageTree");
+    if(t != null){
+    	t.checkAllNodes(false);
+    }
+    var l = ($(window).width() - 607) / 2 + 'px';
+	/**jQuery.blockUI({ message: jQuery('#treeDiv'),
+		css:{ border:"none",position:'absolute',
+			  left: l,
+       		  top: "5%"} });*/
+    jQuery.blockUI({ message: "",css:{ border:"none"}});
+    jQuery("#treeDiv").center({"z-index":1120, "display":"block", "top":"-80px", "left":"-50px"});  	
+	//init_tree();
+}
+
+/**
+ * 确定(用户);
+ */
+function cmd_confirm_user(){
+	 var roleId = document.getElementById('roleId').value;
+	 var userId = '';
+	 var selectedItems = getSelectedItems ('userId');
+	 if (!selectedItems || !selectedItems.length) {
+         alert ("${role.userInvalidMessage}");
+         return;
+     }
+	 for (var i = 0; i < selectedItems.length; i ++) {
+	        if (i != 0) userId += ',';
+	        userId += selectedItems [i].value;
+	 }
+	 role.saveUser(roleId,userId, function(res){
+			var result = eval(res.responseText);
+			if(!result.succ){
+				alert(result.msg);
+			}
+			cmd_cancel();
+			window.location.replace("roleDetail.jasmine?roleId="+roleId+"&pageNo="+jQuery('#pageNo').val());
+		 });	
+}
+ 
+ /**
+  * 确定(功能);
+  */
+ function cmd_confirm_page(){
+ 	 //var roleId = document.getElementById('roleId').value;
+     var pageId_ck = document.getElementsByName("pageId");
+//     var button_ck = document.getElementsByName("button");
+     var pageIds = []/*, buttons = []*/;
+     for (var i = 0; i < pageId_ck.length; i++) {
+         pageIds[i] = pageId_ck[i].value;
+     }
+     /*for (var i = 0; i < button_ck.length; i++) {
+         buttons[button_ck[i].value] = button_ck[i];
+     }*/
+ 	 var nodeIds = document.getElementById('pageTree').value;
+     var ns = nodeIds.split(",");
+     var f_table = document.getElementById("f_table");
+     var pages = [],btns=[];
+     for (var i = 0; i < ns.length; i ++) {
+         var pn = ns[i].split("_B$_");
+         if (pn.length != 2) continue;
+         var pageId = pn[0].substring(4);
+         var pb = ns[i].substring(4);
+         if (jQuery.inArray(pageId, pageIds) > -1) {
+             var button = document.getElementById(pb);
+             if (button)button.checked = true;
+         } else {
+             if (jQuery.inArray(pageId, pages) == -1)pages.push(pageId);
+             if (jQuery.inArray(pb, btns) == -1)btns.push(pb);
+             /*role.getPageInfo(pageId, function(response) {
+                 var tr = f_table.createRow();
+             });*/
+
+         }
+     }
+     if (pages.length > 0)role.getPageInfo(pages.join("_-_"), function(response) {
+         var result = eval(response.responseText);
+         var ps = result.pages;
+         
+         if(ps.length>0){
+         	var tr = f_table.insertRow(-1);
+         	var td = tr.insertCell(0);
+         	td.setAttribute("colSpan","5");
+         }
+         
+         var divInnerHTML = "<div class=\"fun_menu_table_inner_info\">";
+         
+         for (var i=0; i<ps.length; i++) {             
+             divInnerHTML = divInnerHTML + 
+         				   "<div id=\"" + ps[i].pageId + "_top\" class=\"fun_menu_table_inner_info1\">" +
+         				   "<ul class=\"fun_menu_ul1\">" + 
+         				   "<li class=\"fun_menu_li1\">" + 
+         				   "	<div class=\"fun_menu_li1_info\">" + 
+         				   "		<div class=\"fun_menu_li1_info_left\">" +
+         				   "			<div class=\"function_role_ck1\">" +
+         				   "				<input type=\"hidden\" name=\"pid\" value=\""+ps[i].pageId+"\"/><input name = \"pageId\" type=\"checkbox\" value=\""+ps[i].pageId+"\"/>" + 
+         				   "			</div>" +
+         				   "		</div>" +
+         				   "		<div class=\"fun_menu_li1_info_right\">" +
+                  		   				ps[i].pageName +
+                  		   "		</div>" +
+                  		   "	</div>" +
+                  		   "</li>" +
+                  		   "<li class=\"fun_menu_li1\">" +
+                  		   		ps[i].moduleName +
+                  		   "</li>" +
+                  		   "<li class=\"fun_menu_li1\">" +
+                  		   		ps[i].appName +
+                  		   "</li>" +
+                  		   "</ul><div class=\"clear\"></div>" +
+                  		   "</div>" +
+                  		   "<div id=\"" + ps[i].pageId + "_bottom\" class=\"fun_menu_table_inner_info2\">" +                  		   
+                  		   	ps[i].btn +                  		   
+                  		   "<div class=\"clear\"></div>" +
+              			   "</div>";
+         	
+             /*
+             var tr = f_table.insertRow(-1);
+             var td = tr.insertCell(0);
+             td.className = "pk-selection";
+             td.innerHTML = "<input type=\"hidden\" name=\"pid\" value=\""+ps[i].pageId+"\"/><input name = \"pageId\" type=\"checkbox\" value=\""+ps[i].pageId+"\"/>";
+             td = tr.insertCell(1);
+             td.innerHTML = ps[i].pageName;
+             td = tr.insertCell(2);
+             td.innerHTML = ps[i].moduleName;
+             td = tr.insertCell(3);
+             td.innerHTML = ps[i].appName;
+             td = tr.insertCell(4);
+             td.innerHTML = ps[i].btn;
+             td = tr.insertCell(5);
+             td.innerHTML = ps[i].remark;
+             */
+         }
+         td.innerHTML = divInnerHTML + "</div>";
+         for (var i = 0; i < btns.length; i++ ) {
+             var button = document.getElementById(btns[i]);
+             if (button)button.checked = true;
+         }
+     });
+     cmd_cancel();
+ 	 /*role.savePermission(roleId,nodeIds, function(res){
+ 			var result = eval(res.responseText);
+ 			if(!result.succ){
+ 				alert(result.msg);
+ 			}
+ 			cmd_cancel();
+ 			window.location.replace("roleDetail.jasmine?roleId="+roleId+"&pageNo="+jQuery('#pageNo').val());
+ 		 });*/
+ }
+
+/**
+ * 取消;
+ */
+function cmd_cancel(){
+	jQuery("#treeDiv").hide();
+	jQuery.unblockUI();
+	//jQuery("#userDiv").hide();
+}
+ 
+ /**
+  * 删除选中的条目;
+  * @param name
+  */
+ function removeItemsTemp (name) {
+     selectedItems = getSelectedItems (name);
+     if (!selectedItems || !selectedItems.length) {
+         alert ("${role.deleteInvalidMessage}");
+         return;
+     }
+     if(confirm("${role.deleteConfirmMessage}")){
+     	doRemoveTemp(name);
+     }
+ }
+ /**
+  * 删除选中的条目;
+  */
+ function doRemoveTemp (name) {
+     if (!selectedItems) return;
+     var s = '';
+     for (var i = 0; i < selectedItems.length; i ++) {
+         if (i != 0) s += ',';
+         s += selectedItems [i].value;
+     }
+     var bname ='';
+     if(name == 'id2'){
+     	bname = 'btnDelete2';
+     }else{
+     	bname = 'btnDelete';
+     }
+     if (window._prefix) {
+         document.getElementById(_prefix + '_items').value = s;
+         document.getElementById(_prefix + '_' + bname ).click();
+     } else {
+         document.getElementById('items').value = s;
+         document.getElementById(bname).click();
+     }
+ }
+  
+  /**
+   * 获取勾选的按钮信息;
+   */
+/*function checkButtons () {
+	var checkButtons = getSelectedItems ("id3");
+	var s = '';
+    for (var i = 0; i < checkButtons.length; i ++) {
+        if (i != 0) s += ',';
+        s += checkButtons [i].value;
+    }
+    if (window._prefix) {
+        document.getElementById(_prefix + 'buttons').value = s;
+    } else {
+        document.getElementById('buttons').value = s;
+    }
+}*/
+function removeItems (){
+    var pages = jQuery("input[name=pageId]:checked");
+    if (pages.length == 0) {
+        alert(message.error.select_target);
+    } else {
+        var table = document.getElementById("f_table");
+        for (var i = pages.length -1; i >= 0; i --) {
+            if (!pages[i].checked)continue;
+            var divChild_1 = document.getElementById(pages[i].value+"_top");
+            var divChild_2 = document.getElementById(pages[i].value+"_bottom");
+            divChild_1.parentNode.removeChild(document.getElementById(pages[i].value+"_top"));
+            divChild_2.parentNode.removeChild(document.getElementById(pages[i].value+"_bottom"));
+            
+            /*
+            table.deleteRow(tr.rowIndex);
+            */
+        }
+        $_('ck').checked = false;
+    }
+}
+   
+</script>
+</head>
+<body>
+<c:ajaxmanager name="role" />
+<!--container-->
+<div class="container">
+    <!--header-->
+	<div id="header">
+	<u:top/>
+	</div>
+	<!--main-->
+	<div class="main">
+		<!--main_left-->
+		<div class="main_left">
+		 <u:menu/>
+		</div>
+	 
+	 	<!--main_right-->
+	 	<form runat="server" onsubmit="checkForm()">
+		<c:hidden id="roleId" datasource="<%#roleInfo%>" valuefield="id" />
+		<c:hidden id="pageNo" />
+		<c:hidden id="items"/>
+		<c:button id="btnSave" text="save" runat="server" class="button" style="display:none"/>
+		<c:button id="btnDelete" text="delete" runat="server" style="display:none"/>
+		<c:button id="btnDelete2" text="delete" runat="server" style="display:none"/>
+		<c:button id="btnQuery" style="display:none" text="query" runat="server"/>
+		<div class="main_right">
+			<div class="main_rightss">
+		      <div class="function_p2" id="page_bar">
+		      	 <a style="cursor:pointer" id="p1" class="function_role" onclick="javascript:doPageOn(this);">${role.title}</a>
+		      	 <a style="cursor:pointer" id="p2" class="function_role" onclick="javascript:doPageOn(this);">${role.funcTab}</a>
+		      	 <a style="cursor:pointer" id="p3" class="function_role _auth" onclick="javascript:doPageOn(this);">${passport.module.manage}</a>
+		      </div>
+		      <p class="<%#!hasManageRight ? "function_p3_view" : "function_p3"%>"  >
+		      <a visible="<%#hasManageRight%>" href="javascript:save();" style="cursor:hand"><font color="#4884AF" >${button.label.save }</font></a>
+		      </p>
+		      
+		      <div id="data_table" class="fun_menu_info" >
+		      	<!-- 基础信息 -->
+		      	<div id="p1_table" class="usermanage_info" >
+		      	<table class="usermanage_table" border="0" cellpadding="0px" cellspacing="1px">
+                            <tr>
+                                <th>${role.code}<font class="function_span2">&nbsp;*</font>：</th>
+                                <td style="text-align:left">
+                                	<c:textbox id="roleCode" datasource="<%#roleInfo%>" valuefield="code" onblur="javascript:checkRoleCode(this);"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>${role.name}<font class="function_span2">&nbsp;*</font>：</th>
+                                <td style="text-align:left">
+                                    <c:textbox id="role_Name" datasource="<%#roleInfo%>" valuefield="name" onblur="javascript:checkRoleName(this);"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>${role.type}<font class="function_span2">&nbsp;*</font>：</th>
+                                <td style="text-align:left">
+                                    <c:dropdownlist id="roleType">
+			                            <c:listitem value="-999">${role.type0}</c:listitem>
+			                            <%--c:listitem value="1">${role.type1}</c:listitem>
+			                            <c:listitem value="2">${role.type2}</c:listitem>
+			                            <c:listitem value="3">${role.type3}</c:listitem--%>
+			                        </c:dropdownlist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>${role.remark}：</th>
+                                <td style="text-align:left">
+                                    <c:textbox id="remark" datasource="<%#roleInfo%>" valuefield="remark" Multiline="true"/>
+                                </td>
+                            </tr>
+                        </table>
+		      	</div>
+		      	<!-- 功能 -->
+							<div id="p2_table" class="fun_menu_info" class="hide" style="height:380px;overflow-x:hidden;overflow-y:auto">
+									<table class="fun_menu_table" border="0" cellpadding="0px" cellspacing="0px" width="702">
+										<tr>
+											<td>
+												<table class="fun_menu_table_inner" border="0"
+													cellpadding="0px" cellspacing="1px" width="702" id="f_table">
+													<tr class="fun_menu_table_inner_tr1">
+														<td style="width:40px" class="fun_menu_td1"><input id="ck" type="checkbox" onclick="toggleAll ('ck', 'pageId')"/></td>
+														<td style="width:25%">${role.funcName}</td>
+														<td style="width:25%">${role.moduleName}</td>
+														<td style="width:25%">${role.appName}</td>
+														<td>${role.funcDesc}</td>
+													</tr>
+						                             	<c:repeater id="repeater2" ViewStateEnabled="false" datasource="<%#pageList%>">
+						                             	<tr>
+														<td colspan="5">
+															<div clientid="<%#DataBinder.eval(container.dataItem, "page.pageId")%>_top" class="fun_menu_table_inner_info1">
+																<ul class="fun_menu_ul1">
+																	<li class="fun_menu_li1">
+																		<div class="fun_menu_li1_info">
+																			<div class="fun_menu_li1_info_left">
+																				<div class="function_role_ck1">
+																					<input type="hidden" name="pid" value="<%#DataBinder.eval(container.dataItem, "page.pageId")%>"/>
+																					<input name = "pageId" type="checkbox" value="<%#DataBinder.eval(container.dataItem, "page.pageId")%>"/>
+																				</div>
+																			</div>
+																			<div class="fun_menu_li1_info_right">
+																				<%#SessionHelper.getTextByKey(resourceName, session, (String)DataBinder.eval(container.dataItem, "page.pageName")) %>
+																			</div>
+																		</div>
+																	</li>
+																	<li class="fun_menu_li1">
+																		<%#SessionHelper.getTextByKey(resourceName, session, (String)DataBinder.eval(container.dataItem, "page.module.moduleName"))%>
+																	</li>
+																	<li class="fun_menu_li1">
+																		<%#SessionHelper.getTextByKey(resourceName, session, (String)DataBinder.eval(container.dataItem, "page.module.app.appName"))%>
+																	</li>
+																</ul><div class="clear"></div>
+															</div>
+															<div clientid="<%#DataBinder.eval(container.dataItem, "page.pageId")%>_bottom" class="fun_menu_table_inner_info2">
+																<table  class="fun_menu_table_four_info_table" style="padding-top:7px;" border="0" cellpadding="0px" cellspacing="0px" width="100%">
+																	<tbody>
+																		<tr class="fun_menu_table_four_info_table_tr1">
+																			<td class="fun_menu_table_two_info_table_three_td1">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+																			<c:repeater id="repeater3" ViewStateEnabled="false" datasource="<%#DataBinder.eval(container.dataItem, "page.buttons")%>">
+										                                    <td class="fun_menu_table_two_info_table_three_td1">
+											                                    	<input name="button" type="checkbox" clientId="<%#DataBinder.eval(container.parent.dataItem, "page.pageId")%>_B$_<%#DataBinder.eval(container.dataItem, "buttonId")%>"
+																                           value="<%#DataBinder.eval(container.parent.dataItem, "page.pageId")%>_B$_<%#DataBinder.eval(container.dataItem, "buttonId")%>"
+																                           checked="<%#DataBinder.eval(container.dataItem, "isChecked")%>"/>
+											              							&nbsp;&nbsp;&nbsp;&nbsp;
+											              							<%#SessionHelper.getTextByKey(resourceName, session, (String)DataBinder.eval(container.dataItem, "buttonName"))%>
+										              						</td> 										                                    
+										                                    </c:repeater>
+										                                  	<td class="fun_menu_table_two_info_table_three_td1">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										                                  </tr>
+										                             </tbody>
+																</table>
+																<div class="clear"></div>
+															</div>
+						                             	</td>
+						                          </tr>
+						                             	</c:repeater>
+						                        <!--fun_menu_table_two_info-->
+													
+												</table></td>
+										</tr>
+									</table>
+									<div visible="<%#hasPageEditRight%>" class="function_btn function_btn_pad_top_42 function_btn_pad_bottom_40"> 										
+									</div>
+							</div>
+							<br>
+							<!-- 权限 -->
+							<div id="p3_table" class="fun_menu_info" class="hide">
+			       				<a:auth type="r" view="<%#hasManageRight%>" value='<%#roleId.getText()%>' pageId="passport.page.role.list" buttonId="button.view"/>
+			       			</div>
+							<br>
+					        <!--function_info_text-->
+					        <div class="function_btn">
+								<a href="javascript:void(0)" onclick="javascript:history.go(-1)" class="function_back">${button.label.back }</a>
+								<div id="p2_table_addon" style="display:none;">
+									<a  visible="<%#hasPageEditRight%>" href="javascript:removeItems ()" class="function_sure">${button.label.delete}</a> 
+									<a  visible="<%#hasPageEditRight%>" href="javascript:cmd_new_page()" class="function_sure">${button.label.new}</a> 	
+								</div>
+							</div>
+					        <!--function_btn-->
+							
+					      </div>
+					      </div>
+					</div>
+					</form>
+					<div class="clear"></div>
+					</div>
+				<div class="footer"><u:foot/></div>
+			</div>
+	<div id="treeDiv" class="hide" style="position:absolute;">
+		<div class="datarole_alert_info">
+			<div class="datarole_alert_info_top">
+				<div class="datarole_alert_info_top_left">
+					<p class="datarole_alert_info_top_p1">功能菜单配置</p>
+				</div>
+				<!--datarole_alert_info_top_left-->
+				<div class="datarole_alert_info_top_right">
+					<a href="javascript:cmd_cancel();" class="datarole_close"></a>
+				</div>
+				<!--datarole_alert_info_top_right-->
+				<div class="clear"></div>
+			</div>
+			<!--datarole_alert_info_top-->
+			<div class="datarole_alert_info_middle">
+				<p class="datarole_alert_info_p1">选择功能菜单</p>
+					<div class="treebox" align="center">
+						<c:tree id="pageTree" yps="s" nps="s" pop="false" twidth="450" theight="300" type="checkbox" datasource="<%#list%>" />
+						<div class="clear"></div>
+					</div>
+					<!--treebox-->
+				<!--dumascroll-->
+				<div class="datarole_alert_sure_btn">
+					<a href="javascript:cmd_confirm_page()"
+						class="datarole_alert_sure_btn_link1">${button.label.ok}</a> 
+				</div>
+				<!--datarole_alert_sure_btn-->
+
+			</div>
+			<!--datarole_alert_info_middle-->
+			<div class="datarole_alert_info_bottom"></div>
+			<!--datarole_alert_info_bottom-->
+		</div>
+		<!--datarole_alert_info-->
+		<div class="backG"></div>
+		<!--backG-->
+	</div>
+
+<u:relogin/>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<div class="left_info">
+	<rich:panelMenu style="width:170px;" groupMode="ajax" itemMode="ajax">
+		<c:choose> 
+		  	<c:when test="#{MenuHeadBean.position=='工厂建模'}">
+		  		<rich:panelMenuGroup label="人员配置">
+					<rich:panelMenuItem label="人员维护" 
+						actionListener="#{MenuHeadBean.clickMenu('/mocs/member/member_setting.faces','人员配置,人员维护')}"
+						render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<ui:remove>
+				 	<rich:panelMenuItem label="部门职位维护" 
+				    	actionListener="#{MenuHeadBean.clickMenu('/mocs/member/member_position.faces','人员配置,部门职位维护')}"
+						render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<rich:panelMenuItem label="部门人员维护" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/member/part_member.faces','人员配置,部门人员维护')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<rich:panelMenuItem label="班组维护" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/member/team_setting.faces','人员配置,班组维护')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<rich:panelMenuItem label="班组人员维护" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/member/team.faces','人员配置,班组人员维护')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					 </ui:remove>
+				</rich:panelMenuGroup>
+				
+				<rich:panelMenuGroup label="资源配置">
+					
+					<rich:panelMenuItem label="物料类别维护"                            
+							actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/materail_class_config.faces','资源配置,物料类别维护')}"
+							render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<rich:panelMenuItem label="物料明细维护"                             
+							actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/materail_detail_config.faces','资源配置,物料明细维护')}"
+							render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<rich:panelMenuItem label="夹具类型配置" 
+						actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/tfixture_config.faces','资源配置,夹具类型配置')}"
+						render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+				 	<rich:panelMenuItem label="刀具类型配置" 
+				    	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/cutter_class_config.faces','资源配置,刀具类型配置')}"
+						render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					 <rich:panelMenuItem label="程序配置" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_info.faces','资源配置,程序配置')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+				</rich:panelMenuGroup>
+				
+				<rich:panelMenuGroup label="设备配置">
+					 <rich:panelMenuItem label="设备类型维护" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/equipment/equipment_type_maintain.faces','设备配置,设备类型维护')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					 <rich:panelMenuItem label="设备台账维护" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/equipment/equipment_accounting_maintain.faces','设备配置,设备台账维护')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					 <rich:panelMenuItem label="设备成本维护" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/equipment/equipment_cost_maintain.faces','设备配置,设备成本维护')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+				</rich:panelMenuGroup>
+				
+				<rich:panelMenuGroup label="零件配置">
+					<rich:panelMenuItem label="零件类别配置" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/parts/part_class_config.faces','零件配置,零件类别配置')}"
+					 	render=":myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<rich:panelMenuItem label="零件类型配置" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/parts/part_type_config.faces','零件配置,零件类型配置')}"
+					 	render=":myform:topiframe :myform:tree2 :myform:rightiframe" />
+				   <rich:panelMenuItem label="零件工序配置" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/parts/part_process_config.faces','零件配置,零件工序配置')}"
+					 	render=":myform:topiframe :myform:tree2 :myform:rightiframe" />
+				</rich:panelMenuGroup>
+				<ui:remove>
+				 <rich:panelMenuGroup label="产品管理">
+					<rich:panelMenuItem label="产品基础数据" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/product/product_basic_list.faces','产品管理,产品基础数据')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+					<rich:panelMenuItem label="产品过程数据" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/product/product_process_list.faces','产品管理,产品过程数据')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+				   <rich:panelMenuItem label="过程质量数据" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/product/process_quality_list.faces','零产品管理,过程质量数据')}"
+					 	render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+				</rich:panelMenuGroup> 
+				</ui:remove>
+		  	</c:when>
+
+		  	<c:otherwise>
+		  		<c:forEach items="#{MenuHeadBean.menuPage}" var="menu">
+		  			<rich:panelMenuItem label="#{menu.label}"  actionListener="#{MenuHeadBean.clickMenu(menu.url,menu.label)}"
+						render="  :myform:topiframe :myform:tree2 :myform:rightiframe" />
+				</c:forEach>
+		  	</c:otherwise>
+	  </c:choose>
+	</rich:panelMenu>
+</div>
+<div class="div-left-nav-shadow">
+	<img src="../images/demo/left_nav_shadow.png" />
+</div>
+</ui:composition>

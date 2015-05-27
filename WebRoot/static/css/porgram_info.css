@@ -1,0 +1,36 @@
+	
+	.delete{
+		margin-left: 20px;		
+		width: 90px;
+		height:30px;	
+		text-align: center;		
+		background-color: #D8DCDD !important;
+ 		border:1px solid #D8DCDD !important;
+ 
+	}
+	
+	.border{
+		border: 1px white solid !important;
+		height: 25px !important;
+		margin-left: 20px;
+		background-color: rgb(255, 255, 255) !important;
+	}
+
+	.input{
+		width: 100%;
+		margin-left: -5px;
+	}
+	
+	.ui-state-default {
+ 		border: 1px solid rgb(64,186,235);
+ 		background-color: rgb(64,186,235);
+ 		font-size: 12px;
+ 	}
+	
+	.ui-chkbox-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 2px 2px 2px 2px;
+    background-color: white;
+	}
+	

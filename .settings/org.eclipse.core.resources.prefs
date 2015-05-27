@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+encoding//WebRoot/resources/js/common.js=UTF-8
+encoding//WebRoot/resources/js/common_page.js=UTF-8
+encoding//WebRoot/resources/js/exporting.js=UTF-8
+encoding//WebRoot/resources/js/tree.js=UTF-8
+encoding//WebRoot/static/css/factory_profile.css=UTF-8
+encoding//WebRoot/static/css/jobdispatch.css=UTF-8
+encoding//WebRoot/static/ext/js/jobplan_ext.js=UTF-8
+encoding//WebRoot/static/js/pick.js=UTF-8
+encoding//src/com/smtcl/iplatform/onlinefactory/webservice/client/DBHelper02.java=UTF-8
+encoding//src/smtcl/mocs/common/device/LoginVerifyFilter.java=GBK
+encoding//src/smtcl/mocs/common/device/SsoChanelLoginServlet.java=GBK
+encoding//src/smtcl/mocs/pojos/authority/Application.java=UTF-8
+encoding//src/smtcl/mocs/pojos/authority/Page.java=UTF-8
+encoding//src/smtcl/mocs/pojos/device/TDispatchInfo.java=UTF-8
+encoding/<project>=UTF-8

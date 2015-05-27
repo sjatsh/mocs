@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+   
+	 <bean id="abstractDaoTarget1" abstract="true"
+	          class="smtcl.mocs.dao.authority.impl.FilterGenericDaoHibernateImpl2">
+	 <!--class="org.dreamwork.persistence.hibernate.dao.impl.GenericHibernateDaoImpl">-->
+	        <property name="sessionFactory" ref="sessionFactory"/>
+	    </bean>
+	
+	    <bean id="abstractFilterDaoTarget" abstract="true"
+	          class="smtcl.mocs.dao.authority.impl.FilterGenericDaoHibernateImpl2">
+	        <property name="sessionFactory" ref="sessionFactory"/>
+	    </bean>
+ 
+ 
+   <bean id="commonDao1"
+		class="smtcl.mocs.dao.authority.impl.CommonDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="commonService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.authority.impl.CommonServiceImpl">
+				<property name="commonDao" ref="commonDao1" />
+				<property name="dao">
+					<bean parent="abstractDaoTarget1">
+						<constructor-arg value="java.lang.Object" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+  <!-- i18n start processor -->
+	    <bean id="i18nStarter" class="smtcl.mocs.common.authority.i18n.DatabaseResourceProcessor">
+	        <property name="sessionFactory" ref="sessionFactory" />
+	        <property name="tableName" value="T_LABEL" />
+	    </bean>
+	    
+	     <bean id="irxpertBeanFactory" class="org.dreamwork.persistence.ServiceFactory"/>
+
+       <bean id="orgGroupService" parent="baseService">
+        <property name="target">
+            <bean class="smtcl.mocs.services.authority.impl.OrgGroupServiceImpl">
+                <property name="dao">
+                    <bean parent="genericDao">
+                        <property name="target">
+                            <bean parent="abstractDaoTarget1">
+                                <constructor-arg value="smtcl.mocs.pojos.authority.OrgGroup" />
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="userService" parent="baseService">
+        <property name="target">
+            <bean class="smtcl.mocs.services.authority.impl.UserServiceImpl">
+                <property name="dao">
+					<bean parent="abstractDaoTarget1">
+						<constructor-arg value="smtcl.mocs.pojos.authority.User" />
+					</bean>
+				</property>
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="treeService" parent="baseService">
+        <property name="target">
+            <bean class="smtcl.mocs.services.authority.impl.TreeService">
+                <property name="dao">
+					<bean parent="abstractDaoTarget1">
+						<constructor-arg value="java.lang.Object" />
+					</bean>
+				</property>
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id = "roleService" parent="baseService">
+        <property name="target">
+            <bean class="smtcl.mocs.services.authority.impl.RoleServiceImpl">
+                <property name="commonDao" ref="commonDao1" />
+                <property name="dao">
+					<bean parent="abstractDaoTarget1">
+						<constructor-arg value="smtcl.mocs.pojos.authority.Role" />
+					</bean>
+				</property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="menuService" parent="baseService">
+        <property name="target">
+            <bean class="smtcl.mocs.services.authority.impl.MenuServiceImpl">
+                <property name="commonDao" ref="commonDao1" />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="authService" parent="baseService">
+        <property name="target">
+            <bean class="smtcl.mocs.services.authority.impl.AuthServiceImpl">
+                <property name="dao">
+					<bean parent="abstractDaoTarget1">
+						<constructor-arg value="java.lang.Object" />
+					</bean>
+				</property>
+            </bean>
+        </property>
+    </bean>
+    <bean id="onlineService" class="smtcl.mocs.services.authority.impl.OnLineServiceImp">
+    </bean>
+    <!-- start log -->
+    <bean id="AsynchronousHibernateAppender" class="smtcl.mocs.common.authority.log.log4j.appender.hibernate.AsynchronousHibernateAppender" init-method="initialize" destroy-method="shutdown">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="transactionTemplate" ref="transactionTemplate" />
+        <property name="commonDao" ref="commonDao1" />
+        <property name="loggingEventClass" value="smtcl.mocs.pojos.authority.Log"/>
+    </bean>
+    
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"> 
+      <property name="transactionManager"> 
+        <ref bean="transactionManager"/> 
+      </property> 
+    </bean>
+	
+</beans>

@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<style type="text/css">
+		td{
+			word-break: break-all;
+		}
+	</style>
+<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+<h:inputHidden value="#{materailClassConfigBean.currentTreeNode}" id="currentTreeNode"></h:inputHidden>
+<div style="width: 100%;height: 100%; position:relative;">
+	<div class="headDiv">
+		<h:inputText id="txt" value="#{materailClassConfigBean.search}" styleClass="textBg" onfocus="searchFocus('myform:txt');" 
+			onblur="searchBlur('myform:txt');"></h:inputText> 
+		<p:commandButton value="查询" actionListener="#{materailClassConfigBean.MaterailSearch}" update=":myform:treeSingle" 
+			oncomplete="	bgReposition($('.table'));" styleClass="delete"></p:commandButton>
+		<div class="button-split"></div>
+		<p:commandButton value="新建" oncomplete="addMC.show();bgReposition($('.table'));" styleClass="delete"></p:commandButton>
+		<p:commandButton value="删除" actionListener="#{materailClassConfigBean.deleteMaterial}" update=":myform:carList  :myform:treeSingle :myform:messages" 
+			oncomplete="bgReposition($('.table'));" styleClass="delete"></p:commandButton>
+	</div>
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+	<div class="materail_class_treeDiv">
+		<div class="tree-head"></div>
+		<div class="tree-body">
+			<p:tree id="treeSingle" value="#{materailClassConfigBean.root}" var="node"  
+		            selection="#{materailClassConfigBean.selectedNode}"   selectionMode="single" style="width:150px;"> 
+		        <p:ajax event="select" listener="#{materailClassConfigBean.onNodeSelect}" update=":myform:carList :myform:currentTreeNode 
+		        	:myform:messages" oncomplete="bgReposition($('.table'));" />  
+		        <p:treeNode>  
+		            <h:outputText value="#{node.MClassname}" />  
+		        </p:treeNode>  
+		    </p:tree>  
+		</div>
+		<div class="tree-foot"></div>
+		<div class="div_tree_border_shadow">
+			<img src="../images/demo/tree_border_shadow.png" />
+		</div>
+		<div id="tree_move_btn" class="btn_tree_show"></div>
+	</div>
+	<div class="materail_class_rightDiv hidden">
+		<p:dataTable var="material" value="#{materailClassConfigBean.mediumMaterialModel}" id="carList" editable="true" 
+    	   dynamic="true" selection="#{materailClassConfigBean.selectedMaterial}" paginator="true" rows="10" paginatorPosition="bottom" 
+    	   	styleClass="table">
+    	<p:ajax event="rowEdit" listener="#{materailClassConfigBean.onEdit}" update=":myform:carList :myform:messages :myform:treeSingle" />
+    	
+    	<p:column headerText="" style="width:2%" />
+	   <p:column selectionMode="multiple" style="width:2%" />
+       <p:column headerText="名称"  style="width:10%" >
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{material.name}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{material.name}" style="width:100%" readonly="true"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+  		<p:column headerText="编码"  style="width:10%">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{material.no}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{material.no}" style="width:100%"  />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+		 <p:column headerText="所属类别"   style="width:8%">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{material.parentName}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu value="#{material.parentName}" >  
+                       <f:selectItem itemLabel="请选择" itemValue="请选择"/>
+                       <f:selectItems value="#{materailClassConfigBean.materialSelect}"  
+		           		var="pp"  itemLabel="#{pp.MClassname}"  itemValue="#{pp.MClassname}" /> 
+                    </h:selectOneMenu>  
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+         <p:column headerText="备注" style="width:10%">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{material.memo}" />
+                </f:facet>
+                <f:facet name="input">
+               	 	<p:inputText value="#{material.memo}" style="width:100%" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="操作" style="width:5%">
+            <p:rowEditor />
+        </p:column>
+    </p:dataTable>
+    <p:dialog widgetVar="addMC" resizable="false">
+    	<p:panel id="xj">
+    	<table>
+    		<tr>
+    			<td>名称：<font style="color:red;">*</font></td>
+    			<td><h:inputText value="#{materailClassConfigBean.addPojo.MClassname}" id="addname" style="border:1px solid black;"></h:inputText></td>
+    			<td><div style="color: gray;">例：五金模类</div></td>
+    		</tr>
+    		<tr>
+    			<td>编码：<font style="color:red;">*</font></td>
+    			<td><h:inputText value="#{materailClassConfigBean.addPojo.MClassno}" id="addno" style="border:1px solid black;"></h:inputText></td>
+    			<td><div style="color: gray;">例：SL</div></td>
+    		</tr>
+    		<tr>
+    			<td>型号/牌号：<font style="color:red;">*</font></td>
+    			<td><h:inputText value="#{materailClassConfigBean.addPojo.MClasstype}" id="addtype" style="border:1px solid black;"></h:inputText></td>
+    			<td><div style="color: gray;">例：Test</div></td>
+    		</tr>
+    		<tr>
+    			<td>备注：</td>
+    			<td colspan="2">
+    				<h:inputTextarea value="#{materailClassConfigBean.addPojo.MMemo}"></h:inputTextarea>
+    			</td>
+    		</tr>
+    	</table>
+    	<div class="headDivduan">
+			<p:commandButton value="新增" onclick="yinc()"  styleClass="delete" ></p:commandButton>
+			<p:commandButton value="新增" actionListener="#{materailClassConfigBean.addMaterailClass}" 
+				update=":myform:carList :myform:messages :myform:xj :myform:treeSingle" id="addbutton" style="display:none"
+				oncomplete="addMC.hide()"></p:commandButton>
+    	</div>
+    	</p:panel>
+    	
+    </p:dialog>
+    <div id="xj">
+    </div>
+	</div>
+	<p:growl id="messages" showDetail="true"/> 
+</div>
+ <script type="text/javascript">
+	//<![CDATA[
+       function yinc(){
+    	   var addname=document.getElementById("myform:addname").value;
+    	   var addno=document.getElementById("myform:addno").value;
+    	   var addtype=document.getElementById("myform:addtype").value;
+    	   var currentTreeNode=document.getElementById("myform:currentTreeNode").value;
+    	   if(null==currentTreeNode||""==currentTreeNode){
+    		   alert("请选着一个节点！");
+    	   }else if(null==addname||""==addname){
+    		   alert("请输入名称");
+    	   }else if(null==addno||""==addno){
+    		   alert("请输入编号");
+    	   }else if(null==addtype||""==addtype){
+    		   alert("请输入型号/牌号");
+    	   }else{
+    		   document.getElementById("myform:addbutton").click();
+    	   }
+    	   
+       }
+       function addData(){
+    	 document.getElementById("xj").style.display="block";
+       }
+       function closeDiv(){
+    	   document.getElementById("xj").style.display="none";
+       }
+       function searchFocus(id){
+			if(document.getElementById(id).value=="输入物料名称")
+				document.getElementById(id).value=""
+		}
+		
+		function searchBlur(id){
+			if(document.getElementById(id).value=="")
+				document.getElementById(id).value="输入物料名称"
+		}
+		document.getElementById("myform:txt").value="输入物料名称";
+		
+	//]]>
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+
+</ui:composition>

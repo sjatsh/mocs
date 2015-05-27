@@ -1,0 +1,28 @@
+<%@page language="java" extends="smtcl.mocs.beans.authority.user.page.UserCon" contentType="text/html;charset=UTF-8" resource="user"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<c:hidden id="saveUserIds" value=""/>
+<table id = "userTab" cellpadding="0" cellspacing="0" class="data-table">
+<tr><th class="pk-selection"><input type="checkbox" id="selectAll" onclick="toggleAllClick ('<%#getId()==null?"":getId()+"_"%>selectAll', '<%#getId()==null?"":getId()+"_"%>userId')"/></th>
+<th visible="<%#loginNameVisible%>">${user.loginName}</th>
+<th visible="<%#nickNameVisible%>">${user.nickName}</th>
+<th visible="<%#emailVisible%>">${user.email}</th>
+<th visible="<%#statusVisible%>">${user.status}</th>
+<th class="editor" visible="<%#modifyVisible%>"></th>
+</tr>
+<c:repeater id="repeater" ViewStateEnabled="false" datasource="<%#data%>">
+<tr class="row<%#(container.dataIndex % 2) + 1%>">
+<td class="pk-selection">
+<input onchange="<%#getId()==null?"divCboxClick(this)":"cboxClick(this)"%>" name = "<%#getId()==null?"":getId()+"_"%>userId" type="checkbox" value="<%#DataBinder.eval(container.dataItem, "userId")%>"/>
+</td>
+<td visible="<%#loginNameVisible%>"><%#DataBinder.eval(container.dataItem, "loginName")%></td>
+<td visible="<%#nickNameVisible%>"><%#DataBinder.eval(container.dataItem, "nickName")%></td>
+<td visible="<%#emailVisible%>"><%#DataBinder.eval(container.dataItem, "email")%></td>
+<td visible="<%#statusVisible%>"><%#"1".equals(String.valueOf(DataBinder.eval(container.dataItem, "status")))?"有效":"无效"%></td>
+
+<td class="editor" visible="<%#modifyVisible%>">
+<a href="userInfoDetail.jasmine?userId=<%#DataBinder.eval(container.dataItem, "userId")%>">编辑</a>
+</td>
+</tr>
+</c:repeater>
+
+</table>

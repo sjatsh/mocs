@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<div id="top_info_head" class="top_info">
+	<!--start top head-->
+	<div class="top_info_head">
+		<div class="top_info_head_link">
+			<a href="#{MenuHeadBean.authorityPath}" class="top_info_head_link_a">
+				<img src="img/common_info_img/top_info_head_link.png" />
+			</a>
+		</div>
+		
+		<div class="top_info_head_left" >
+		<a4j:outputPanel ajaxRendered="true"  >
+				<div class="top_info_head_left_path" id="top_info_head_left_path">
+					<ul class="top_info_head_path_ui">
+						<li class="top_info_head_path_li_olf"><span class="top_info_head_path_a_olf">A3车间管理</span></li>
+
+						<ui:repeat var="te" value="#{MenuHeadBean.thisPosition}">
+							<li class="top_info_head_path_li">
+								<span class="top_info_head_path_a"><h:outputText value="> " style="font-size: 14px;" /><h:outputText value="#{te}" /></span>
+							</li>
+						</ui:repeat>
+					</ul>
+				</div>
+				</a4j:outputPanel>
+		</div>
+
+		<div class="top_info_head_right">
+			<div class="top_info_head_right_time">
+				<span class="thisTimeShow" id="thisTime"></span>
+			</div>
+			<div class="top_info_head_right_inform">
+			    <a href="authority/index.jasmine" class="top_info_head_right_inform_a" style="color:#FFFFFF;">权限管理&#160;&#160;&#160;&#160;&#160;</a>
+				<a href="#" class="top_info_head_right_inform_a" style="color:#FFFFFF;">通知中心</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear_top"></div>
+
+	<!--start top menu-->
+	<div class="top_info_foot">
+	<a4j:outputPanel ajaxRendered="true"  >
+		<div class="top_info_foot_down_list" id="top_info_foot_down_list">
+			<a href="javascript:;" class="top_info_foot_down_list_a" onclick="showMenu()" id="tre">
+				 <h:outputText id="nodeName" value="#{MenuHeadBean.thisNodeName}" /> 
+			</a>
+		</div>
+		</a4j:outputPanel>
+			<div id="DropdownMenuBackground" style="left:192px;top:83px;">
+				<p:tree value="#{MenuHeadBean.root}" var="node" selectionMode="single"  id="tree2" styleClass="tree" >
+					<a4j:ajax event="select" render=":myform:rightiframe :myform:footiframe :top_info_foot_down_list" 
+						listener="#{MenuHeadBean.onNodeSelect}" />
+					<p:treeNode styleClass="spanhover">
+						<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+					</p:treeNode>
+				</p:tree>
+				<a4j:outputPanel ajaxRendered="true"  >
+<script type="text/javascript" >
+//<![CDATA[
+	checked();
+	closeTreeDiv();
+	function checked(){	
+		$(".usercheck").parents("span").addClass("spanhover");	
+	}
+	$(".usernocheck").click(function(){
+		document.getElementById("DropdownMenuBackground").style.display = "none";
+	});
+//]]>
+</script>
+				</a4j:outputPanel>
+			</div>
+		<div class="top_info_foot_menu">
+			<ul class="top_info_foot_menu_ul">
+				<c:forEach items="#{MenuHeadBean.menuList}" var="menu">
+					<c:if test="#{menu.label=='生产状态查询'}">
+						<li class="top_info_foot_menu_ul_li" onclick="headHavigation(1)">
+							<h:outputLabel value="生产状态" id="top_info_foot_menui_ul_li_a1" 
+								styleClass="#{('生产状态查询'==MenuHeadBean.position) ? 'top_info_foot_menui_ul_li_a1' : 'top_info_foot_menui_ul_li_a1_change'}">
+								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":myform:leftiframe :top_info_head_left_path" />
+							</h:outputLabel>
+						</li>
+					</c:if>
+
+					<c:if test="#{menu.label=='设备查询'}">
+						<li class="top_info_foot_menu_ul_li" onclick="headHavigation(2)">
+							<h:outputLabel value="设备查询" id="top_info_foot_menui_ul_li_a2" 
+								styleClass="#{('设备查询'==MenuHeadBean.position) ? 'top_info_foot_menui_ul_li_a2_click' : 'top_info_foot_menui_ul_li_a2'}">
+								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":myform:leftiframe :top_info_head_left_path" />
+							</h:outputLabel>
+						</li>
+					</c:if>
+
+					<c:if test="#{menu.label=='资源查询'}">
+						<li class="top_info_foot_menu_ul_li" onclick="headHavigation(3)">
+							<h:outputLabel value="资源查询" id="top_info_foot_menui_ul_li_a3" 
+								styleClass="#{('资源查询'==MenuHeadBean.position)?'top_info_foot_menui_ul_li_a3_click':'top_info_foot_menui_ul_li_a3'}">
+								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":myform:leftiframe :top_info_head_left_path" />
+							</h:outputLabel>
+						</li>
+					</c:if>
+
+					<c:if test="#{menu.label=='产品管理'}">
+						<li class="top_info_foot_menu_ul_li" onclick="headHavigation(4)">
+							<h:outputLabel value="产品查询" id="top_info_foot_menui_ul_li_a4" 
+								styleClass="#{('产品管理'==MenuHeadBean.position) ? 'top_info_foot_menui_ul_li_a4_click' : 'top_info_foot_menui_ul_li_a4'}">
+								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":myform:leftiframe :top_info_head_left_path" />
+							</h:outputLabel>
+						</li>
+					</c:if>
+				</c:forEach>
+			</ul>
+		</div>
+	</div>
+</div>
+</ui:composition>

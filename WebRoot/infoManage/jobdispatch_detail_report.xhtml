@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:form id="myform">
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+<link rel="stylesheet" href="css/com_richfaces_overwrite.css" type="text/css"></link>
+<style type="text/css">
+	*{margin:0px;}
+</style>
+<link rel="stylesheet" href="css/jobdispatch_detail_report.css" type="text/css"></link>
+<div class="title-bar">
+	<div class="logo-img">
+		<img src="images/profile_top_logo.png" />
+	</div>
+	<div class="title-text">工单明细报表</div>
+	<div class="filter-frame">
+		<div class="filter-bar">
+			<div class="filter-label">批次状态:</div>
+			<div class="filter-input">
+				<h:selectOneMenu id="jobplanStatus" value="#{jobdispatchDetailBean.jobplanStatus}" styleClass="filter-select">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{jobdispatchDetailBean.statusList}" var="job" itemLabel="#{job.Name}" itemValue="#{job.Id}"></f:selectItems>
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">零件名称:</div>
+			<div class="filter-input">
+				<h:selectOneMenu id="partName" value="#{jobdispatchDetailBean.partName}" styleClass="filter-select">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{jobdispatchDetailBean.partList}" var="part" itemLabel="#{part.partName}" itemValue="#{part.Id}"></f:selectItems>
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">工单建立时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="jobCreateDate" popup="true" locale="en" cellWidth="10px" cellHeight="20px" value="#{jobdispatchDetailBean.jobCreateDate}" datePattern="yyyy-MM-dd" />
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">工单开始时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="jobStartTime" popup="true" locale="en" cellWidth="10px" cellHeight="20px" value="#{jobdispatchDetailBean.jobStartTime}" datePattern="yyyy-MM-dd" />
+			</div>
+		</div>
+	</div>
+	<div class="filter-frame2">
+		<div class="filter-bar">
+			<div class="filter-label">设备:</div>
+			<div class="filter-input">
+				<h:selectOneMenu id="equSerialNo" value="#{jobdispatchDetailBean.equSerialNo}" styleClass="filter-select">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{jobdispatchDetailBean.equSerialNoList}" var="equ" itemLabel="#{equ.Name}" itemValue="#{equ.Name}"></f:selectItems>
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">人员:</div>
+			<div class="filter-input">
+				<h:selectOneMenu value="#{jobdispatchDetailBean.person}" styleClass="filter-select">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{jobdispatchDetailBean.personList}" var="person" itemLabel="#{person.personName}" itemValue="#{person.personValue}"></f:selectItems>
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">~</div>
+			<div class="filter-input">
+				<rich:calendar id="jobCreateDateEnd" popup="true" locale="en" cellWidth="10px" cellHeight="20px" value="#{jobdispatchDetailBean.jobCreateDateEnd}" datePattern="yyyy-MM-dd" />
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">~</div>
+			<div class="filter-input">
+				<rich:calendar id="jobStartTimeEnd" popup="true" locale="en" cellWidth="10px" cellHeight="20px" value="#{jobdispatchDetailBean.jobStartTimeEnd}" datePattern="yyyy-MM-dd" />
+			</div>
+		</div>
+	</div>
+	<div class="filter-submit">
+		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
+			<a4j:ajax listener="#{jobdispatchDetailBean.SubmitSearch}" event="click" execute="jobplanStatus partName jobCreateDate equSerialNo jobStartTime" render=":myform:datatable :myform:ds" oncomplete="resizeTable();searchBtn();"></a4j:ajax>
+		</h:graphicImage>
+	</div>
+	<div class="filter-export">
+		<h:commandLink id="export_data_excel" value="导出数据" action="#{jobdispatchDetailBean.downloadFile}" type="button"></h:commandLink>
+	</div>
+</div>
+<script language="javascript">
+	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
+	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080);
+	$(".title-text").css("left", wjb51 * 300 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
+	$(".filter-frame").css("left", wjb51 * 750 / 1920 + "px").css("top", hjb51 * 0 / 1080 + "px");
+	$(".filter-frame2").css("left", wjb51 * 1200 / 1920 + "px").css("top", hjb51 * 0 / 1080 + "px");
+	$(".filter-bar").css("width", wjb51 * 400 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 *14 / 1080 + "px");
+	$(".filter-frame2 .filter-bar").css("width", wjb51 * 280 / 1920 + "px");
+	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
+	$(".filter-input").css("width", wjb51 * 150 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
+	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
+	$(".filter-input .rf-cal-extr").css("width", wjb51 * 150 / 1920 + "px");
+	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 27 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
+	$(".filter-export").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 200 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
+</script>
+
+<div class="content-frame">
+	<div id="list-frame">
+		<div class="table-frame" id="tab1" >
+			<rich:dataTable value="#{jobdispatchDetailBean.outData}" var="pip" id="datatable"
+				rows="10" cellpadding="0" rowClasses="even-row, odd-row" 
+				rowIndexVar="index" cellspacing="0" style="width:100%;"  border="0">
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						批次号
+					</f:facet>
+					<h:outputText value="#{pip.taskNum}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						零件编号
+					</f:facet>
+					<h:outputText value="#{pip.partNo}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						零件名称
+					</f:facet>
+					<h:outputText value="#{pip.partName}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						工单号
+					</f:facet>
+					<h:outputText value="#{pip.jobNo}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						工序
+					</f:facet>
+					<h:outputText value="#{pip.processNo}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						工序名称
+					</f:facet>
+					<h:outputText value="#{pip.processName}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						工单数量
+					</f:facet>
+					<h:outputText value="#{pip.planNum}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						分配数量
+					</f:facet>
+					<h:outputText value="#{pip.finishNum}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						完成数量
+					</f:facet>
+					<h:outputText value="#{pip.finishNum}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						报废数量
+					</f:facet>
+					<h:outputText value="#{pip.scrapNum}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						设备号
+					</f:facet>
+					<h:outputText value="#{pip.equSerialNo}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						计划开始
+					</f:facet>
+					<h:outputText value="#{pip.planStartTime}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						计划完成
+					</f:facet>
+					<h:outputText value="#{pip.planEndTime}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						实际开始
+					</f:facet>
+					<h:outputText value="#{pip.realStartTime}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						实际完成
+					</f:facet>
+					<h:outputText value="#{pip.realEndTime}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						工单状态
+					</f:facet>
+					<h:outputText value="#{pip.jobst}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						批次状态
+					</f:facet>
+					<h:outputText value="#{pip.jobplanst}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						ERP
+					</f:facet>
+					<h:outputText value="#{pip.erp}" />
+				</rich:column>
+				<rich:column style="white-space: nowrap;">
+					<f:facet name="header">
+						人员
+					</f:facet>
+					<h:outputText value="#{pip.person}" />
+				</rich:column>
+			</rich:dataTable>
+		</div>
+		<div id="scroller_div">
+			<rich:dataScroller for="datatable" id="ds" renderIfSinglePage="true"
+				render=":myform:datatable">
+					<f:facet name="first">
+						<h:outputText value="|◄◄" />
+					</f:facet>
+					<f:facet name="last">
+						<h:outputText value="►►|" />
+					</f:facet>
+
+					<f:facet name="fastForward">
+						<h:outputText value="►►" />
+					</f:facet>
+					<f:facet name="fastRewind">
+						<h:outputText value="◄◄" />
+					</f:facet>
+
+					<f:facet name="next">
+						<h:outputText value="►" />
+					</f:facet>
+					<f:facet name="previous">
+						<h:outputText value="◄" />
+					</f:facet>
+		   </rich:dataScroller>
+		</div>
+	</div>
+</div>
+<script language="javascript">
+	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
+	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
+	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
+	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px").css("font-size", hjb51 * 30 / 1080 + "px");
+	$(".table-frame").css("height", hjb51 * 711 / 1080 - 23 + "px")
+	function resizeTable() {
+		$("#list-frame th").css("height", hjb51 * 44 / 1080 + "px");
+	}
+	resizeTable();
+	searchBtn();
+</script>
+</h:form>
+</ui:composition>

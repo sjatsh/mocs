@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<h:outputScript library="js" name="view_productplan_information.js"></h:outputScript>
+<!-- 头部图表层 -->
+<h:inputHidden value="#{ProductPlanBean.nodeID}" />
+<div style="width: 854px; height: 303px;">
+	<div class="productsearcharea">
+		<div style="height:6px;width:854px;"></div>
+		<h:outputLabel value="计划编号/批次编号"  styleClass="common_condition_spacing_first"></h:outputLabel>
+		<h:selectOneMenu value="#{ProductPlanBean.uplanNo}" id="planNo" styleClass="common_condition_spacing" >
+			<f:selectItems value="#{ProductPlanBean.uplanNoList}"></f:selectItems>
+		</h:selectOneMenu>
+		<h:outputLabel value="计划类型"  styleClass="common_condition_spacing_label"></h:outputLabel>
+		<h:selectOneMenu value="#{ProductPlanBean.planType}" styleClass="common_condition_spacing" >
+			<f:selectItems value="#{ProductPlanBean.planTypeList}"></f:selectItems>
+		</h:selectOneMenu>
+		<h:outputLabel value="时间范围"  styleClass="common_condition_spacing_label"></h:outputLabel>
+		<h:selectOneMenu value="#{ProductPlanBean.planTime}" styleClass="common_condition_spacing" >
+			<f:selectItems value="#{ProductPlanBean.planTimeList}"></f:selectItems>
+		</h:selectOneMenu>
+		<a4j:commandButton id="button1" styleClass="common_condition_spacing_end" actionListener="#{ProductPlanBean.getProductionPlanAction}" value="查询"
+			render=":myform:rightiframe" onclick="showMascot();"/>
+	</div>
+	<div class="shadowdiv"></div>
+	<div id="highchartChart" class="highChart"></div> 
+</div>
+<!-- <div style="clear:both; font-size:0px; height:10px; overflow:hidden;"></div> -->
+
+<!-- 数据显示或分页层 -->
+<div style="width: 100%;  height:150px;">
+	<div style="background-image:url('img/common_info_img/common_allTable_bg.png'); height:146px;width:100%;">
+		<rich:dataTable id="datatable1" value="#{ProductPlanBean.defaultDataModel}" rows="5"
+			rowClasses="even-row, odd-row" cellpadding="0" styleClass="dataTableEx" cellspacing="0" style="width:850px;"
+			border="0" var="record">
+			<rich:column id="column1" styeClass="width:78px;padding-left-value: 0px;">
+				<f:facet name="header">
+					<h:outputText value="计划/批次编号" />
+				</f:facet>
+				<h:outputText value="#{record.uplanNo}"></h:outputText>
+			</rich:column>
+			<rich:column id="column2" styeClass="width:79px;">
+				<f:facet name="header">
+					<h:outputText value="产品型号" />
+				</f:facet>
+				<h:outputText value="#{record.uprodType}"></h:outputText>
+			</rich:column>
+			<!-- 	
+			<rich:column id="column3">
+				<f:facet name="header">
+					<h:outputText value="短码" />
+				</f:facet>
+				<h:outputText value="#{record.uprodShortCode}"></h:outputText>
+			</rich:column>
+			 -->
+			<rich:column id="column4" styeClass="width:100px;">
+				<f:facet name="header">
+					<h:outputText value="计划名称" />
+				</f:facet>
+				<h:outputText value="#{record.uplanName}"></h:outputText>
+			</rich:column>
+			<rich:column id="column5" styeClass="width:50px;">
+				<f:facet name="header">
+					<h:outputText value="计划状态" />
+				</f:facet>
+				<h:outputText value="#{record.uplanStatus}"></h:outputText>
+			</rich:column>
+			<!-- 	
+			<rich:column id="column6">
+				<f:facet name="header">
+					<h:outputText value="主生产计划" />
+				</f:facet>
+				<h:outputText value="#{record.uplanMasterPlanNo}"></h:outputText>
+			</rich:column>
+			 -->
+			<rich:column id="column7" styeClass="width:50px;">
+				<f:facet name="header">
+					<h:outputText value="计划产量" />
+				</f:facet>
+				<h:outputText value="#{record.uplanNum}"></h:outputText>
+			</rich:column>
+			<rich:column id="column8" styeClass="width:50px;">
+				<f:facet name="header">
+					<h:outputText value="完成产量" />
+				</f:facet>
+				<h:outputText value="#{record.uplanActualQuantity}"></h:outputText>
+			</rich:column>
+			<rich:column id="column9" styeClass="width:37px;">
+				<f:facet name="header">
+					<h:outputText value="合格品" />
+				</f:facet>
+				<h:outputText value="#{record.uplanGoodQuantity}"></h:outputText>
+			</rich:column>
+			<rich:column id="column10" styeClass="width:38px;">
+				<f:facet name="header">
+					<h:outputText value="负责人" />
+				</f:facet>
+				<h:outputText value="#{record.uplanInchargePerson}"></h:outputText>
+			</rich:column>
+			<!-- 		
+			<rich:column id="column11" styeClass="width:111px;">
+				<f:facet name="header">
+					<h:outputText value="预计开始时间" />
+				</f:facet>
+				<h:outputText value="#{record.uplanOnlineDate}"></h:outputText>
+			</rich:column>
+			<rich:column id="column12" styeClass="width:112px;">
+				<f:facet name="header">
+					<h:outputText value="预计结束时间" />
+				</f:facet>
+				<h:outputText value="#{record.uplanFinishDate}"></h:outputText>
+			</rich:column> 
+		  -->
+			<rich:column id="column13" styeClass="width:111px;">
+				<f:facet name="header">
+					<h:outputText value="实际开始时间" />
+				</f:facet>
+				<h:outputText value="#{record.uplanBeginTime}"></h:outputText>
+			</rich:column>
+			<rich:column id="column14" styeClass="width:112px;">
+				<f:facet name="header">
+					<h:outputText value="实际结束时间" />
+				</f:facet>
+				<h:outputText value="#{record.uplanActualFinishTime}"></h:outputText>
+			</rich:column>
+			<rich:column id="column15">
+				<f:facet name="header">
+					<h:outputText value="计划类型" />
+				</f:facet>
+				<h:outputText value="#{record.uplanType}"></h:outputText>
+			</rich:column>
+		</rich:dataTable>
+	</div>
+	<div style=" height:32px; text-align: center; background-image:url('img/common_info_img/common_number_bg.png') ;">
+		<rich:dataScroller for="datatable1" id="ds" maxPages="10"
+			page="#{ProductPlanBean.scrollerPage}" renderIfSinglePage="true"
+			render=":myform:rightiframe">
+			<f:facet name="first">
+				<h:outputText value="|◄◄" />
+			</f:facet>
+			<f:facet name="last">
+				<h:outputText value="►►|" />
+			</f:facet>
+			<f:facet name="fastForward">
+				<h:outputText value="►►" />
+			</f:facet>
+			<f:facet name="fastRewind">
+				<h:outputText value="◄◄" />
+			</f:facet>
+			<f:facet name="next">
+				<h:outputText value="►" />
+			</f:facet>
+			<f:facet name="previous">
+				<h:outputText value="◄" />
+			</f:facet>
+		</rich:dataScroller>
+	</div>
+	<h:inputHidden value="#{ProductPlanBean.chartData}" id="beanvalue" />
+</div>
+<script type="text/javascript">
+	loadData();
+</script>
+</ui:composition>

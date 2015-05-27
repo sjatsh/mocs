@@ -1,0 +1,275 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.org.page.OrgGroupDetailPage" contentType="text/html;charset=UTF-8" resource="org_group"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="a" uri="auth.jscx" name="auth" %>
+<%@taglib prefix="u" uri="../menu/top.jscx" name="top"%>
+<%@taglib prefix="u" uri="../menu/menu.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="../menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html>
+<head>
+<title><c:Out value="<%#smtcl.mocs.utils.authority.HelperUtil.title()%>" /></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link rel="stylesheet" type="text/css" href="../../authority/css/css.css">
+<link href="../../authority/javascript/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" charset="utf-8" />
+<u:js/>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/tree/js/jquery.ztree.all-3.4.min.js"></script>
+<script type="text/javascript" charset="utf-8" language="javascript" src="../../authority/javascript/pagging.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/user-jscx.js"></script>
+<script type="text/javascript" src="../../authority/javascript/org-group.js"></script>
+<script type="text/javascript" src="../../authority/javascript/template.js"></script>
+<c:ajaxmanager name="orgGroup" />
+<script type="text/javascript">
+
+    function reInitTree(selNodes) {
+        //jQuery.fn.zTree.reinit("tree", selNodes);
+//        initUserIds("users_");
+    }
+
+    function openTree(){
+    	jQuery.blockUI({bindEvents:false, message:"",  "css":{"border":"none"} });
+    	var t = jQuery.fn.zTree.findTreeByTxtId("tree");
+        if(t != null){
+        	t.reAsyncChildNodes(null, "refresh");
+        }
+    	jQuery('#treeDiv').center({"z-index":1800,"display":"block"});
+    }
+
+    function btn_confirm() {
+        var tree = document.getElementById("tree").value;
+        if(jQuery.trim(tree) == ""){
+        	cmd_cancel();
+        	return
+        }
+        var nodeId = [];
+        var treeND = tree.split(",");
+        for (var i = 0; i < treeND.length; i++) {
+            var tr = document.getElementById("tr_"+treeND[i]);
+            if (!tr) nodeId.push(treeND[i]);
+        }
+        /*if (nodeId.length>0)orgGroup.getOrg("["+nodeId+"]", function(response) {
+            var result = eval(response.responseText);
+            var orgs = result.data;
+            var table = document.getElementById("f_table");
+            for (var i=0; i<orgs.length;i++) {
+                var tr = table.insertRow(-1);
+                tr.setAttribute("id", "tr_" + orgs[i].orgId);
+                var td  = tr.insertCell(0);
+                td.innerHTML="<input type=\"hidden\" name=\"orgId\" value=\""+orgs[i].orgId+"\"/>\n" +
+                             "<input name = \"nodeId\" type=\"checkbox\" value=\""+orgs[i].orgId+"\"/>"
+                td = tr.insertCell(1);
+                td.innerHTML=orgs[i].name;
+            }
+        });*/
+        if (nodeId.length>0) {
+            var table = document.getElementById("f_table");
+            for (var i=0;i<nodeId.length;i++) {
+                var tr = table.insertRow(-1);
+                tr.setAttribute("id", "tr_" + nodeId[i]);
+                var td  = tr.insertCell(0);
+                td.innerHTML="<input type=\"hidden\" name=\"orgId\" value=\""+nodeId[i]+"\"/>\n" +
+                             "<input name = \"nodeId\" type=\"checkbox\" value=\""+nodeId[i]+"\"/>"
+                td = tr.insertCell(1);
+                td.innerHTML=jQuery.fn.zTree.getFullNodeTxtById("tree", nodeId[i]);
+            }
+        }
+        cmd_cancel();
+    }
+
+    function deleteRow() {
+        var table = document.getElementById("f_table");
+        var items = document.getElementById("items").value;
+        var item = items.split(",");
+        for (var i=0; i < item.length; i++) {
+            var tr = document.getElementById("tr_" + item[i]);
+            table.deleteRow(tr.rowIndex);
+        }
+    }
+    
+    function cmd_cancel(){
+    	jQuery('#treeDiv').hide();
+    	jQuery.unblockUI();
+    }
+
+    $(document).ready(function(){
+    	init();
+    	
+    	init_1();
+    });
+    
+    function init() {
+        /**var uhid = document.getElementsByName("u_hidden");
+        var addBtn = document.getElementById("addBtn");
+        var delBtn = document.getElementById("delBtn");
+        if (addBtn) addBtn.disabled = uhid.length>0;
+        if (delBtn) delBtn.disabled = uhid.length>0;*/
+    }
+    
+    function init_1(){
+    	var g = $("input[name=groupId]").val();
+    	g = $.trim(g);
+    	if(g == ""){
+    		$("._auth").hide();
+    	}
+    }
+    
+    function changeDiv1(showDiv, hidenDiv, hidenDiv1) {
+    	jQuery("#"+hidenDiv +",#"+hidenDiv1).hide();
+    	jQuery("#"+showDiv).show();
+        if("tree_div" == showDiv){
+        	jQuery("#addBtn,#delBtn").show();
+        }else{
+        	jQuery("#addBtn,#delBtn").hide();
+        }
+    }
+</script>
+</head>
+<body>
+<div class="container">
+    <!--header-->
+    <div id="header">
+        <u:top/>
+    </div>
+    <!--main-->
+    <div class="main">
+        <!--main_left-->
+        <div class="main_left">
+            <u:menu/>
+        </div>
+        <div class="main_right">
+            <div class="main_rightss">
+                <form runat="server">
+                    <c:hidden id="groupId" value=""/>
+                    <div class="function_p2" id="page_bar">
+                        <a style="cursor:pointer" class="function_role" onclick="changeDiv1('base_div', 'tree_div', 'user_div')">数据角色维护</a>
+                        <a style="cursor:pointer" class="function_role" onclick="changeDiv1('tree_div', 'base_div', 'user_div')">${user.org}</a>
+                        <a style="cursor:pointer" class="function_role _auth" onclick="changeDiv1('user_div', 'base_div', 'tree_div')">${passport.module.manage}</a>
+                    </div>
+                    <p class='<%#!view ? "function_p3" : "function_p3_view"%>' id="save_btn"><a href="javascript:check();"><font color="#4884AF" visible="<%#!view%>">${button.label.save }</font></a></p>
+                    <c:button id="btnSave" runat="server" style="display:none"/>
+<!-- 数据角色维护 -->
+                    <div id="base_div" class="fun_menu_info" >
+                    		<div id="p1_table" class="usermanage_info" >
+		                    		<table class="usermanage_table" border="0" cellpadding="0px" cellspacing="1px">
+		                    				<tr>
+		                    						<th width="22%" align="right">数据角色代码<font class="function_span2">&nbsp;*</font>：&nbsp;&nbsp;</th>
+		                    						<td width="78%" style="text-align:left">
+		                                		<c:textBox id="code" datasource="<%#group%>" valuefield="code" visible="<%#!view%>" onblur="checkCode(this)" /><!--span id="errorCodeInfo" style="color: red"></span-->
+		                            				<c:label datasource="<%#group%>" valuefield="code" viewStateEnabled="false" visible="<%#view%>"/>
+		                                </td>
+		                    				</tr>
+		                    				<tr>
+		                    						<th align="right">数据角色名称<font class="function_span2">&nbsp;*</font>：&nbsp;&nbsp;</th>
+		                    						<td style="text-align:left">
+		                                		<c:textBox id="groupName" datasource="<%#group%>" valuefield="groupName" onblur="checkName(this)" visible="<%#!view%>" />
+		                            				<c:label datasource="<%#group%>" valuefield="groupName" viewStateEnabled="false" visible="<%#view%>"/>
+		                                </td>
+		                    				</tr>
+		                    				<tr>
+		                    						<th align="right">数据角色描述：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		                    						<td style="text-align:left">
+		                                		<c:textBox id="description" multiLine="true" cols="30" rows="8" datasource="<%#group%>" valuefield="description" visible="<%#!view%>"/>
+		                            				<c:label datasource="<%#group%>" valuefield="description" viewStateEnabled="false" visible="<%#view%>"/>
+		                                </td>
+		                    				</tr>
+		                    		</table>
+                    		</div>
+                    </div>
+<!-- 数据角色维护 end -->
+
+<!-- 组织架构 -->
+                    <div id="tree_div"  style="display:none">
+                        <div class="datarole_info" style="height:380px;overflow-x:hidden;overflow-y:auto">
+                            <table border="0" cellpadding="0px" cellspacing="0px" width="100%" class="datarole_table" id="f_table">
+                                <tr>
+                                    <th visible="<%#!view%>" width="36px"><input id="ck" type="checkbox" onclick="toggleAll ('ck', 'nodeId')"/></th>
+                                    <th>${user.org}</th>
+                                </tr>
+                                <c:repeater id="repeater2" ViewStateEnabled="false" datasource="<%#nodeList%>">
+                                <tr clientId="tr_<%#DataBinder.eval(container.dataItem, "orgId")%>">
+                                    <td visible="<%#!view%>" class="pk-selection"><input type="hidden" name="orgId" value="<%#DataBinder.eval(container.dataItem, "orgId")%>"/>
+                                    <input name = "nodeId" type="checkbox" value="<%#DataBinder.eval(container.dataItem, "orgId")%>"/>
+                                    </td>
+                                    <!--td><%#DataBinder.eval(container.dataItem, "name") %></td-->
+                                    <td><%#smtcl.mocs.utils.authority.AuthorityUtil.getNodeTxt((String)DataBinder.eval(container.dataItem, "orgId")) %></td>
+                                </tr>
+                                </c:repeater>
+                            </table>
+                        </div>
+                    </div>
+<!-- 组织架构 end -->
+<!-- 权限管理 -->
+                    <div id = "user_div" class="fun_menu_info"  style="display:none">
+                        <a:auth type="g" view="<%#!view%>" value='<%#group == null?null:group.getOrgGroupId()%>' pageId="passport.page.org.group.list" buttonId="button.view"/>
+                    </div>
+<!-- 权限管理 end -->
+                <div class="clear"></div>
+                <div class="function_btn function_btn_pad_top_42">
+                   <a style="cursor:pointer" onclick="javascript:history.go(-1)" class="function_back">${button.label.back }</a>
+                   <a style="cursor:pointer" class="function_sure hide" clientId="delBtn" onclick="removeItems ('nodeId')" visible="<%#!view%>">${button.label.delete}</a>
+                   <a style="cursor:pointer" clientId="addBtn" class="function_sure hide" visible="<%#!view%>" onclick="openTree()">${button.label.new}</a>
+                   <input type="button" onclick="deleteRow()" id="btnDelete" style="display:none"/>
+                   <input type="hidden" id="items"/>
+               </div>
+               </form>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="footer"><u:foot/></div>
+  <%--div id="userDiv" style="display:none">
+      <div class="query-form">
+          <table class="query-form-table">
+              <tr>
+                  <td>${user.loginName }：</td>
+                  <td><c:textbox id="loginName" value=""/></td>
+                  <td><c:button value="${button.label.search }" onclick="query_user()"/></td>
+              </tr>
+          </table>
+      </div>
+  	  <div id="userData"></div>
+      <div id="pagingDiv">
+          <c:pagging2 id = "userPaging" max="10" dataSource="<%#data%>"  totalRows="<%#DataBinder.eval(data, "totalRows")%>" handler="paggin_click" autoPostback="false"/>
+      </div>
+      <div>
+  			<input type="button" onclick="cmd_confirm_user()" value="${button.label.ok}"/><input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>
+      </div>
+  </div--%>
+<div id="treeDiv"  class="datarole_alert_info" style="display:none">
+    <div class="datarole_alert_info_top">
+        <div class="datarole_alert_info_top_left">
+            <p class="datarole_alert_info_top_p1">组织架构配置</p>
+        </div>
+        <!--datarole_alert_info_top_left-->
+        <div class="datarole_alert_info_top_right">
+            <a href="#" onclick="cmd_cancel()" class="datarole_close"></a>
+        </div>
+        <!--datarole_alert_info_top_right-->
+        <div class="clear"></div>
+    </div>
+
+    <div class="datarole_alert_info_middle">
+        <p class="datarole_alert_info_p1">${app.select}${user.org}</p>
+        <div class="treebox" align="center">
+<!--table cellpadding="0" cellspacing="0" border="1" class="data-table">
+    <tr>
+        <td>
+            <input type="button" onclick="btn_confirm()" value="${button.label.ok}"/>
+            <input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>
+        </td>
+    </tr>
+</table-->
+           <c:popasyntree id="tree" pageId="passport.page.org.group.list" pop="false" type='checkbox'  yps="" nps = "" twidth="450" theight="300"/>
+           <div class="clear"></div>
+        </div>
+        <div class="datarole_alert_sure_btn">
+            <a href="#" class="datarole_alert_sure_btn_link1" onclick="cmd_cancel()">${button.label.cancel}</a>
+            <a href="#" class="datarole_alert_sure_btn_link1" style="margin-right:10px" onclick="btn_confirm()">${button.label.ok}</a>
+        </div>
+    </div>
+    <div class="datarole_alert_info_bottom"></div>
+ </div>
+ <u:relogin/>
+</body>

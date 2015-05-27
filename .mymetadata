@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="mocs"
+  id="myeclipse.1351833892797"
+  context-root="/mocs"
+  j2ee-spec="6.0"
+  archive="mocs.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

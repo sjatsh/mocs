@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:form id="myform">
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+<h:outputScript library="js" name="stat_device_machine_event.js"></h:outputScript>
+<h:outputScript library="js" name="mystack.js"></h:outputScript>
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+<h:inputHidden id="nodeStr" value="#{StatDeviceMachineEventBean.nodeStr}" />
+<style type="text/css">
+.rf-dt-shdr-c {
+	background-image: url("images/device_oee_trend_table_head.png") !important;
+	background-color: null !important;
+	color: white !important;
+}
+.even-row {
+	background-image: url('images/table_row1.png') !important;
+	border-bottom: none;
+}
+
+.odd-row {
+	background-image: url('images/table_row2.png') !important;
+	border-bottom: none;
+}
+input[type="reset"]:hover, input[type="submit"]:hover, input[type="button"]:hover {
+ background-image:url('./images/submitBotton01.png') !important;
+}
+input[type="submit"], input[type="button"]  {
+background-image: url('./images/submitBotton01.png') !important; 
+}
+*{margin:0px;}
+</style>
+
+<table style="width: 100%;" id="table" cellpadding="0" cellspacing="0" border="0">
+	<tr id="headtr">
+		<td  style="width: 20%">
+			<div style="width:20%;background-image: url('/mocs/images/frstTab.png');
+    				cursor: pointer;position: absolute;" onclick="javascript:window.location.href='/mocs/home.faces'" id="home"></div>
+    			<img src="./images/profile_top_logo.png"
+    			style="position: absolute;z-Index: -1; border: 0px solid blue"
+    			 id="img1" />
+			 	<script type="text/javascript">
+				document.getElementById("img1").style.top = hjb51* 30 / 1080 + "px";
+				document.getElementById("img1").style.left = wjb51* 50 / 1920 + "px";
+				</script>
+		</td>
+		<td  style="width: 20%;font-weight:bold;" id="biaoti">
+			<h:outputText value="机床事件分析"  /><br/><br/>
+		</td>
+		<td style="width: 20%;font-weight:bold;" id="shijian">
+			<h:outputText value="开始时间" /><br/>
+			<rich:calendar id="startTime" inputClass="common_calendar" popup="true" locale="en" styleClass="common_condition_spacing"
+				value="#{StatDeviceMachineEventBean.startTime}" cellWidth="10px"
+				cellHeight="20px" datePattern="yyyy-MM-dd" /><br/><br/>
+			<h:outputText value="结束时间"  /><br/>
+			<rich:calendar id="finishTime" inputClass="common_calendar" popup="true" locale="en" styleClass="common_condition_spacing"
+				value="#{StatDeviceMachineEventBean.endTime}" cellWidth="10px"
+				cellHeight="20px" datePattern="yyyy-MM-dd">
+			</rich:calendar>
+		</td>
+		<td style="width: 20%;font-weight:bold;" id="tiaojian">
+			<h:outputLabel value="机床名称" /><br/>
+			<h:selectOneMenu  id="machineNo" style=" width:140px;" styleClass="common_condition_spacing"
+				value="#{StatDeviceMachineEventBean.machineName}">
+				<f:selectItems value="#{StatDeviceMachineEventBean.machineNameList}" />
+			</h:selectOneMenu><br/><br/>
+			<h:outputLabel value="事件名称" /><br/>
+			<h:selectOneMenu id="eventName" value="#{StatDeviceMachineEventBean.eventName}" styleClass="common_condition_spacing"
+				style="width:65px;">
+				<f:selectItems value="#{StatDeviceMachineEventBean.eventNameList}" />
+			</h:selectOneMenu>
+		</td>
+		<td style="width: 20%">
+			<h:commandButton id="button1" style="cursor: pointer;color:#FFFFFF;background-color: #088B00;"  value="查询">
+			    <a4j:ajax event="click" listener="#{StatDeviceMachineEventBean.getDeviceMachineEventStatAction}"
+											render=":myform:rightiframe :myform:stable" execute="machineNo eventName startTime finishTime"></a4j:ajax>
+			</h:commandButton>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" id="tubiao"  align="center">	
+			<img src="images/device_time_tubiao_bg.png" style="z-index: -1;height: 100%;position: absolute;padding: 0px;left:0px;" id="tubiaobg"/>
+			<h:panelGroup id="rightiframe"> 
+			<h:inputHidden id="machineEvent" value="#{StatDeviceMachineEventBean.machineEvent}" />
+			<div style="width: 848px;height: 100%;">
+			<div style="text-align: center; position: absolute; width: 848px; margin-top: 10px; font-weight: 700; color:#3E576F;  ">机床事件时间段分析图</div>
+			<div style="width: 100%; height:220px;">
+				<div id="divcolor"
+					style="width:675px; height:30px; overflow:hidden; position:absolute;z-index:3; padding-left:112px;top:218px; font-size:13px;">
+					<table>
+						<tr>
+							<td width="20px" align="right" class="scolor" ddvalue="1" id="td1"><img src="images/zhunbei.png" /></td>
+							<td>准备</td>
+							<td width="20px" align="right" class="scolor" ddvalue="2" id="td2"><img src="images/jiagong.png" /></td>
+							<td>运行</td>
+							<td width="20px" align="right" class="scolor" ddvalue="3" id="td3"><img src="images/kongxian.png" /></td>
+							<td>空闲</td>
+							<td width="20px" align="right" class="scolor" ddvalue="4" id="td4"><img src="images/guanji.png" /></td>
+							<td>关机</td>
+							<td width="20px" align="right" class="scolor" ddvalue="5" id="td5"><img src="images/kaiji.png" /></td>
+							<td>开机</td>
+							<td width="20px" align="right" class="scolor" ddvalue="6" id="td6"><img src="images/guzhang.png" /></td>
+							<td>故障</td>
+							<td width="20px" align="right" class="scolor" ddvalue="7" id="td7"><img src="images/kongyunxing.png" /></td>
+							<td>空运行</td>
+							<td width="20px" align="right" class="scolor" ddvalue="8" id="td8"><img src="images/qiexiao.png" /></td>
+							<td>切削</td>
+							<td width="20px" align="right" class="scolor" ddvalue="9" id="td9"><img src="images/shoudongyunxing.png" /></td>
+							<td>手动运行</td>
+							<td width="20px" align="right" class="scolor" ddvalue="10" id="td10"><img src="images/shangxialiao.png" /></td>
+							<td>上下料</td>
+							<td width="20px" align="right" class="scolor" ddvalue="11" id="td11"><img src="images/huandao.png" /></td>
+							<td>换刀</td>
+						</tr>
+					</table>
+				</div>
+				<div style="width: 100%; height: 219px;">
+					<div id="divbase" style="width:854px; height:200px; overflow:hidden; position:absolute;z-index:2; top:211px; background-image:url(images/zuobiao.png)"></div>
+					<div id="divdate" style="width:90px; height:20px; overflow:hidden; position:absolute; padding-left:20px;z-index:3;  top:284px;"></div>
+	
+					<div id="container" style="width:664px; height:80px; background-color:transparent; overflow:hidden; position:absolute;z-index:3; margin-left:109px; top:254px;"></div>
+	
+					<div id="divprevious" style="width:90px; height:20px; overflow:hidden; position:absolute;z-index:3; padding-left:180px; top:370px; cursor:pointer;"></div>
+					<div id="divnext" style="width:90px; height:20px; overflow:hidden; position:absolute;z-index:3; padding-left:580px; top:370px; cursor:pointer;"></div>
+				</div>
+			</div>
+			</div>
+			   <script type="text/javascript">
+			   machine();
+	           </script>
+		</h:panelGroup>	
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" id="liebiao" >
+			<div style="width:100%;overflow:auto;" id="liebiaodiv">
+				<img src="images/device_oee_table_content.png" style="z-index: -1;position: absolute;height: 100%" id="img2"/>
+				<rich:dataTable id="stable"
+					value="#{StatDeviceMachineEventBean.defaultDataModel}" rows="5"
+					rowClasses="even-row, odd-row" cellpadding="0" styleClass="stables" cellspacing="0" style="width:100%;
+				    text-align:center;" border="0" var="mac">
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="设备机床ID" />
+						</f:facet>
+						<h:outputText value="#{mac.	equSerialNo}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="事件ID" />
+						</f:facet>
+						<h:outputText value="#{mac.eventId}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="事件时间" />
+						</f:facet>
+						<h:outputText value="#{mac.eventTime}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="事件名" />
+						</f:facet>
+						<h:outputText value="#{mac.eventName}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<f:facet name="header">
+							<h:outputText value="程序名" />
+						</f:facet>
+						<h:outputText value="#{mac.programmname}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="操作人员" />
+						</f:facet>
+						<h:outputText value="" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="备注" />
+						</f:facet>
+						<h:outputText value="#{mac.eventMemo}" />
+					</rich:column>
+				</rich:dataTable>
+			</div>
+			<div style="text-align: center;height: 32" id="pageheight">
+				<rich:dataScroller for="stable" id="ds" maxPages="10"
+					page="#{StatDeviceMachineEventBean.scrollerPage}"
+					renderIfSinglePage="true" >
+					<f:facet name="first">
+						<h:outputText value="|◄◄" />
+					</f:facet>
+					<f:facet name="last">
+						<h:outputText value="►►|" />
+					</f:facet>
+					<f:facet name="fastForward">
+						<h:outputText value="►►" />
+					</f:facet>
+					<f:facet name="fastRewind">
+						<h:outputText value="◄◄" />
+					</f:facet>
+					<f:facet name="next">
+						<h:outputText value="►" />
+					</f:facet>
+					<f:facet name="previous">
+						<h:outputText value="◄" />
+					</f:facet>
+				</rich:dataScroller>
+			</div>
+		</td>
+	</tr>
+</table>
+<div>
+
+	
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    var imgPercent = hjb51/1080; //比例 
+    
+    document.getElementById("table").style.width=wjb51;
+	document.getElementById("table").style.height=990/1080*hjb51;
+	document.getElementById("table").style.color="#5a5a5a";
+	document.getElementById("table").style.fontFamily="微软雅黑";
+	
+	var home=document.getElementById("home");
+	home.width=380/1080*hjb51+"px";
+	home.height=260/1080*hjb51+"px"; //变化连接区域的home大小
+	
+
+	var new_image = new Image();
+	new_image.src = document.getElementById("img1").src;
+	var wjbimg= new_image.width;
+	var hjbimg= new_image.height;
+	document.getElementById("img1").style.width=wjbimg*imgPercent+"px";
+	document.getElementById("img1").style.height=hjbimg*imgPercent+"px";//变化图片大小
+	
+	document.getElementById("headtr").style.height=hjb51*265/1080+"px";
+	
+	document.getElementById("biaoti").style.fontSize=32/1080*hjb51+"px";
+	document.getElementById("shijian").style.fontSize=25/1080*hjb51+"px";
+	document.getElementById("tiaojian").style.fontSize=25/1080*hjb51+"px";//变化字体大小      
+	
+	document.getElementById("myform:button1").style.width=  wjb51*180/1920 +"px";
+	document.getElementById("myform:button1").style.height= hjb51*65/1080 +"px";
+	document.getElementById("myform:button1").style.lineHeight= hjb51*65/1080 +"px";
+	document.getElementById("myform:button1").style.fontSize= hjb51*50/1080 +"px";
+	
+	document.getElementById("tubiao").style.height=475/1080*hjb51+"px";//变化图标大小
+	document.getElementById("tubiao").style.width=wjb51+"px";//变化列表大小
+	document.getElementById("tubiaobg").style.width=wjb51+"px";//变化列表大小
+	
+	document.getElementById("liebiao").style.height=250/1080*hjb51+"px";//变化列表大小
+	document.getElementById("liebiao").style.width=wjb51+"px";//变化列表大小
+	document.getElementById("liebiaodiv").style.height=218/1080*hjb51+"px";//变化列表大小
+	document.getElementById("img2").style.height=218/1080*hjb51+"px";//变化列表大小
+	document.getElementById("img2").style.width=wjb51+"px";//变化列表大小
+	$(".rf-dt-c").css("font-size",15/1080*hjb51+"px");
+	$(".rf-dt-c").css("color","#5a5a5a");
+	$(".rf-dt-c").css("font-family","微软雅黑");
+	$(".rf-dt-shdr-c").css("font-size",18/1080*hjb51+"px");
+	$(".rf-dt-shdr-c").css("font-family","微软雅黑");
+	
+	$().ready(function(){
+		machine();
+	});
+	function MoveLeft(width) {
+		var w = $("#tb").css('left');
+		$("#tb").css("left", parseInt(w) + width);
+		currentdate--;
+		$('#divdate').html(dates[currentdate]);
+		if (currentdate - 1 >= 0) {
+			$('#divprevious').html(dates[currentdate - 1]);
+		}
+		if (dates.length - 1 >= currentdate + 1) {
+			$('#divnext').html(dates[currentdate + 1]);
+		}
+		if ((parseInt(w) + width + width) >= 0) {
+			$("#divprevious").html("");
+			return 0;
+		}
+	}
+	function MoveRight(width) {
+		var w = $("#tb").css("left");
+		$("#tb").css("left", parseInt(w) - width);
+		currentdate++;
+		$("#divdate").html(dates[currentdate]);
+		if (currentdate - 1 >= 0) {
+			$("#divprevious").html(dates[currentdate - 1]);
+		}
+		if (dates.length - 1 >= currentdate + 1) {
+			$("#divnext").html(dates[currentdate + 1]);
+		}
+		if ((parseInt(w) - width - width) < (-totalwidth)) {
+			$("#divnext").html("");
+			return 0;
+		}
+	}
+	function machine() {
+		var machine = document.getElementById("myform:machineEvent").value;
+		//alert(machine);
+		AppendChart('single', 40, 668, machine, 'container');
+		$("#divprevious").click(function() {
+			if ($("#divprevious").html() != "") {
+				MoveLeft(movewidth + 2);
+			}
+		});
+		$("#divnext").click(function() {
+			if ($("#divnext").html() != "") {
+				MoveRight(movewidth + 2);
+			}
+		});
+		for ( var i = 1; 11 >= i; i++) {
+			(function(i) {
+				$("#td" + i).click(
+					function() {
+						if ($("." + totalcolors[i]).css( "background-color").replace( /\s/ig, '') == "rgb(255,255,255)") {
+							$("." + totalcolors[i]).css( "background-color", "#" + totalcolors[i]);
+						} else {
+							$("." + totalcolors[i]).css( "background-color", "rgb(255, 255, 255)");
+						}
+					});
+			})(i);
+		}
+		//            AppendChart('multi', 25, 800, 'red,20|green,50|blue,100|gray,200|pink,30+red,20|green,50|blue,100|gray,200|pink,30+red,20|green,50|blue,100|gray,200|pink,30+red,20|green,50|blue,100|gray,200|pink,30+red,20|green,50|blue,100|gray,200|pink,30', 'container');
+	}
+//]]>
+</script>
+</h:form>
+</ui:composition>

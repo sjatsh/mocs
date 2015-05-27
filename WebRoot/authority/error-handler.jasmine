@@ -1,0 +1,17 @@
+<%@page language="java" contentType="text/html;charset=UTF-8" %>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<head>
+<title>${app.passport}</title>
+<link href="../authority/css/css.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body style="background-color:#BFD6E7">
+<div id="content" class="container container_error_two_bg">
+
+<div style="padding:350px 280px 0px 42px;">
+	
+	<a href="javascript:history.go(-1)" class="function_back">${button.label.back}</a></div>
+</div>
+</body>
+</html>

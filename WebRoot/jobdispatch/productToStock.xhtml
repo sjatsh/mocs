@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link rel="stylesheet" href="./css/jobplan_add.css" type="text/css"></link>
+		<style type="text/css">   
+		/* 保存按钮 */
+		.btn-save {
+			width: 53px;
+			height: 53px;
+			cursor: pointer;
+		}
+		.imagebtn {
+			cursor: pointer;
+       }
+       *{
+       font-weight: normal;
+       font-size:inherit;
+       font-family: "微软雅黑" !important;
+       }
+       .inputText{
+		width:100%;
+		height:100%;
+		line_height:100%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		font-weight: normal;
+	   }
+	   .inputTextNoChange{
+		width:100%;
+		height:100%;
+		line_height:100%;
+		font-size:100% ;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		background-color: #F0F0F0 !important;
+		background-image: url("") !important;
+	    }
+	    .ui-state-default{
+	      background:#00a040;
+	      
+	    }
+        .ui-dt-c{
+		   font-weight: normal;
+		   color:#333333;
+		}
+		.ui-state-default .ui-dt-c span{
+		   text-shadow:none;
+		   color:white;
+		   font-weight: bold;
+		}
+		.ui-button-text{
+		   color: white;
+		}
+       </style>
+
+	</h:head>
+
+	<h:body>
+		<h:form id="myform">
+			<div id="maskw"
+				style="position: absolute; z-index: 1000000; top: 0px; left: 0px; background-color: white;"></div>
+
+			<div style="width: 100%;" align="center" id ="content">
+
+				<table id="ProductToStock" style="width: 80%">
+					    <tr>
+					         <td id="title" align="center">
+					         <div style="padding-top: 30px"><h:outputText value="产品成套入库"/></div>
+					         
+					          <div id="instockNo" style="float: right; margin-left: 80px; padding-top: 50px"><h:outputText value="入库单号      "/><h:outputText value="#{ProductToStock.instockNo}"></h:outputText></div>
+					         </td>
+					    </tr>
+					    <tr>
+					    <td align="center">
+					    <table style="font-weight: normal;">
+						     
+							  <tr>
+							          <td style="padding-top: 10px" >
+										<h:outputText id="txtpartName" value="产品名称" />
+									 </td>
+									 <td>
+							          <div id ="divPartTypeId">
+										<h:selectOneMenu id="partTypeId" styleClass="inputText"
+											value="#{ProductToStock.partTpyeId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{ProductToStock.partTypeList}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"></f:selectItems>
+											<f:ajax event="change" listener="#{ProductToStock.getJobPlanInfo}" execute="@this" render=":myform:tb :myform:instockNum"/>
+										</h:selectOneMenu><br/>
+										<h:message for="partTypeId" style="color:red" />
+									  </div> 
+							       </td>
+							       <td><h:outputText id="txtinventoryCode" value="库房编号" /></td>
+							       <td>
+							            <div id ="divInventoryCode">
+										  <h:inputText id="inventoryCode" styleClass="inputText"
+										 value="#{ProductToStock.inventoryCode}" style="color:#595959" />
+									  </div> 
+							       </td>
+							  </tr>
+							  
+							  <tr><td>
+							       <h:outputText id="txtinstockNum" value="本次入库数" />
+							  </td>
+							  <td>
+							      <div id="divInstockNum">
+										<h:inputText id="instockNum" styleClass="inputText" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+										 value="#{ProductToStock.instockNum}" style="color:#595959" />
+									</div>
+									
+							  </td>
+							  <td>
+							      <p:commandButton id="js" value="计算 " style="border:0;background-color: #00A040;background-image: url('');color:white;
+									text-shadow:none;" action="#{ProductToStock.maxInStockNum}" update=":myform:instockNum" >
+									</p:commandButton>
+							  </td>
+							  <td></td>
+							  </tr>
+						    </table>
+					    </td>
+					    </tr>
+					    <tr>
+					      <td>
+								<div id="equipment" style="overflow:auto;padding-top: 20px">
+								    <p:dataTable id="tb" style="width:100%;" editable="true"
+								value="#{ProductToStock.dataList}" var="record"
+								paginator="true" paginatorPosition="bottom" rows="3"
+								selectionMode="single" rowKey="#{record.id}">
+											<p:column headerText="物料编号"
+												style="width:15%;word-break:break-all;text-align: center;">  
+						            #{record.materailNo}  
+						        </p:column>
+											<p:column headerText="物料名称"
+												style="width:20%;word-break:break-all;text-align: center;">  
+						            #{record.materailName}  
+						        </p:column>
+						          <p:column headerText="BOM属性" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.type}  
+						        </p:column>
+						        <p:column headerText="BOM数" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.num}  
+						        </p:column>
+						        <p:column headerText="批次号" 
+												style="width:20%;word-break:break-all;text-align: center;">  
+						            #{record.jobplanNo}  
+						        </p:column>
+						        <p:column headerText="可入库数量" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.leftNum}  
+						        </p:column>
+						         <p:column headerText="已配套入库数量" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.instockNum}  
+						        </p:column>
+						         <p:column headerText="操作" style="width:15%;word-break:break-all" >
+						           <p:commandButton value="操作" action="#{ProductToStock.getInfo(record.materailNo,record.type)}"
+						            style="border:0;background-color: #00A040;text-shadow:none;"  update=":myform:isSuccess :myform:jobplanId :myform:jobplanFinishNum :myform:jobplanInStockNum" oncomplete="check()">
+						             
+						           </p:commandButton>
+							       </p:column> 
+							    </p:dataTable>
+								</div>
+					      </td> 
+					    </tr>
+					    <tr>
+					    <td colspan="2" align="center">
+						    <div id="divPrev2" style="position: relative;">
+								    <p:commandButton value="入库 " style="border:0;background-color: #00A040;background-image: url('');color:white;
+										text-shadow:none;" onclick="onYZ()" 
+										>
+									</p:commandButton>
+									<p:commandButton id="submit" value="确认 " style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
+										text-shadow:none;" action="#{ProductToStock.saveDataInfo}" oncomplete="onZZ()" update=":myform:isSuccess :myform:tb">
+									</p:commandButton>
+					        </div>
+					    </td>
+					    </tr>
+			   </table>
+			   <img src="./images/profile_top_logo.png"
+					style="position: absolute; z-Index: -1; border: 0px solid blue" id="img1" />
+				<p:commandButton id="show" style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
+									text-shadow:none;" onclick="dlg1.show()">
+								</p:commandButton>
+				<h:inputHidden value="#{ProductToStock.isSuccess}" id="isSuccess"></h:inputHidden>
+				<p:dialog header="批次选择" widgetVar="dlg1" id="dlg1" modal="true" resizable="false">
+				  <table width="100%">
+				  <tr>
+				  <td width="40%" align="right">批次号：</td>
+				  <td>
+				    <div id="divJobplanId">
+						<h:selectOneMenu id="jobplanId" styleClass="inputText"
+							value="#{ProductToStock.jobplanId}" 
+							style="color:#595959;">
+							<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+							<f:selectItems value="#{ProductToStock.jobPlanNoList}" var="jobplan" itemLabel="#{jobplan.no}" itemValue="#{jobplan.id}"></f:selectItems>
+							<f:ajax event="change" listener="#{ProductToStock.showInfo}" execute="@this" render=":myform:jobplanFinishNum :myform:jobplanInStockNum :myform:inventoryCode"/>
+						</h:selectOneMenu><br/>
+					</div>
+                  </td>
+				  </tr>
+				   <tr>
+				  <td width="40%" align="right">完成数量：</td>
+				  <td><h:outputLabel id="jobplanFinishNum" value ="#{ProductToStock.jobplanFinishNum}" style="font-weight:normal"></h:outputLabel></td>
+				  </tr>
+				   <tr >
+				  <td width="40%" align="right">已入库数量：</td>
+				  <td><h:outputLabel id="jobplanInStockNum" value ="#{ProductToStock.jobplanInStockNum}" style="font-weight:normal"></h:outputLabel></td>
+				  </tr>
+				  
+				    <tr><td colspan="2" align="center">
+				     <p:commandButton value="确认" style="border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;" action="#{ProductToStock.editDataListInfo}" update=":myform:tb" oncomplete="onXZ()">
+				</p:commandButton>
+				 <h:commandButton id="result" value="result" style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;" onclick="dlg1.hide()">
+				</h:commandButton>
+				 <p:commandButton value="关闭" style="border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;" onclick="dlg1.hide()" >
+				</p:commandButton>
+				     </td>
+				    </tr>
+				  </table>
+				</p:dialog>
+				<p:growl id="messages" showDetail="true" />
+			</div>
+			<script type="text/javascript">
+				//<![CDATA[ 
+				 //var wjb51 = 0;
+				 //var hjb51 = 0;
+				// hjb51 = document.body.clientHeight;
+				// wjb51 = document.body.clientWidth;
+				var imgPercent = hjb51 / 1080; //比例 
+				//i5图片的大小
+				var new_image2 = new Image();
+				new_image2.src = document.getElementById("img1").src;
+				var wjbimg2 = new_image2.width;
+				var hjbimg2 = new_image2.height;
+				document.getElementById("img1").style.width = wjbimg2
+						* imgPercent + "px";
+				document.getElementById("img1").style.height = hjbimg2
+						* imgPercent + "px";
+				document.getElementById("img1").style.left = wjb51 * 20 / 1920
+						+ "px";
+				document.getElementById("img1").style.top = wjb51 * 40 / 1920
+						+ "px";
+				//内容高度
+				document.getElementById("title").style.height=hjb51*200/900+"px";
+                document.getElementById("title").style.fontSize=hjb51*45/900+"px";
+                
+                document.getElementById("instockNo").style.fontSize=hjb51*20/900+"px";
+                
+                document.getElementById("equipment").style.width = wjb51*1200/1500+"px";
+                document.getElementById("equipment").style.height = hjb51*400/900+"px";
+                document.getElementById("equipment").style.align = "center";
+                document.getElementById("equipment").style.fontSize = hjb51*20/900+"px";
+              
+                document.getElementById("myform:txtpartName").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtinstockNum").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtinventoryCode").style.fontSize=hjb51*20/900+"px";
+                document.getElementById("myform:txtinventoryCode").style.marginLeft="15px";
+                
+                document.getElementById("myform:js").style.height = hjb51*50/900+"px";
+                document.getElementById("myform:js").style.fontSize=hjb51*20/900+"px";
+                document.getElementById("myform:js").style.marginLeft="15px";
+                //输入控件 
+               
+                
+                document.getElementById("divPartTypeId").style.width = wjb51*228/1500+"px";  //是270和36大小 
+                document.getElementById("divPartTypeId").style.height = hjb51*40/900+"px";
+                document.getElementById("divPartTypeId").style.marginLeft = "30px"; 
+                document.getElementById("divPartTypeId").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divInventoryCode").style.width = wjb51*228/1500+"px";  //是270和36大小 
+                document.getElementById("divInventoryCode").style.height = hjb51*40/900+"px";
+                document.getElementById("divInventoryCode").style.marginLeft = "30px"; 
+                document.getElementById("divInventoryCode").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divInstockNum").style.width = wjb51*228/1500+"px";  //是270和36大小 
+                document.getElementById("divInstockNum").style.height = hjb51*40/900+"px";
+                document.getElementById("divInstockNum").style.marginLeft = "30px"; 
+                document.getElementById("divInstockNum").style.fontSize = hjb51*20/900+"px";
+                document.getElementById("myform:instockNum").style.fontSize = hjb51*20/900+"px";
+                document.getElementById("myform:inventoryCode").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divPrev2").style.fontSize = hjb51*20/900+"px";
+                document.getElementById("myform:dlg1").style.fontSize = hjb51*25/900+"px";
+                
+                document.getElementById("divJobplanId").style.width = wjb51*228/1500+"px";
+                document.getElementById("divJobplanId").style.height = hjb51*40/900+"px";
+                document.getElementById("divJobplanId").style.align = "center";
+                document.getElementById("divJobplanId").style.fontSize = hjb51*20/900+"px";
+                
+				function onYZ() {
+				
+					var partTypeId = document.getElementById("myform:partTypeId").value;
+					var num = document.getElementById("myform:instockNum").value;
+					var code = document.getElementById("myform:inventoryCode").value;
+					if(null == partTypeId || "" == partTypeId) {
+						alert("请选择产品名称！");
+					}
+					else if(null == code || "" == code){
+						alert("请输入库房号！");
+					}
+					else if(null == num || "" == num){
+						alert("请输入本次入库数量！");
+					}
+					else{
+						document.getElementById("myform:submit").click();
+					}
+				}
+
+				function onXZ()  {
+					
+				    document.getElementById("myform:result").click();
+					
+				}
+				function onZZ()  {
+					var msg = document.getElementById("myform:isSuccess").value;
+					alert(msg);
+				}
+				function check(){
+					var msg = document.getElementById("myform:isSuccess").value;
+					if(msg =="允许"){
+						document.getElementById("myform:show").click();
+					}else {
+					}
+				}
+
+				//]]>
+			</script>
+		</h:form>
+	</h:body>
+</ui:composition>

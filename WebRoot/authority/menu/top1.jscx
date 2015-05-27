@@ -1,0 +1,60 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.menu.LoginStatusUC" contentType="text/html;charset=UTF-8"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<script type="text/javascript">
+function cmd_logout(url){
+	window.location.assign( url );
+}
+</script>
+
+<div id="headleft">
+      <div id="headleft_left"> <a href="<%#application.getAttribute(smtcl.mocs.utils.authority.IConsant.INDEX_HOME)%>"><img src="../authority/images/new_z_logo.jpg" /></a> </div>
+      <!--headleft_left-->
+      <div id="headleft_right">
+        <ul class="new_header_ul1">
+          <li class="new_header_li1"><a href="#" class="new_header_link1">权限管理系统</a></li>
+          <%#path%>
+        </ul>
+      </div>
+      <!--headleft_right-->
+      <div class="clear"></div>
+    </div>
+    <!--headleft-->
+    <div id="headright">
+      <div id="headright_left"> <p>
+      <span visible="<%# loggedIn%>">
+      <table style="table-layout: fixed;width:127px;text-align: left">
+      <tr>
+      <td title="${label.hello, user.nickName}" style="color:white;font-size:14px;word-break:keep-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">${label.hello, user.nickName} </td>
+      </tr>
+      </table>
+    </span>
+    <span visible="<%# !loggedIn%>">
+        <a href="#" onclick="showBlockedDialog ('login-dialog')">${button.label.login}</a>
+    </span>
+    </p> </div>
+      <!--headright_left-->
+      <div id="headright_right">
+        <div id="headright_right_left">
+        <span visible="<%# loggedIn%>">
+<a href="#" class="index_link1" onclick="showBlockedDialog ('change-password-dialog')">${button.label.chpwd}</a>
+</span>
+        </div>
+        <!--headright_right_left-->
+        <div id="headright_right_right"> 
+        <span visible="<%# loggedIn%>">
+<a href="#" class="index_link2" onclick="cmd_logout ('<%=application.getAttribute(smtcl.mocs.utils.authority.IConsant.RETURN_HOME) %>')"  >返回</a>
+</span>
+         </div>
+        <!--headright_right_right-->
+        <div class="clear"></div>
+      </div>
+      <!--headright_right-->
+      <div class="clear"></div>
+    </div>
+    <!--headright-->
+    <div class="clear"></div>
+    
+    
+    
+    
+

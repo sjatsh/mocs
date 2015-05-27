@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource-set name="role">
+	<import file="application.xml" />
+	<bundle language="zh_CN">
+    	<item key="role.title" value="角色维护" />
+        <item key="role.code" value="角色代码" />
+        <item key="role.name" value="角色名称" />
+        <item key="role.creater" value="创建人" />
+        <item key="role.type" value="类型" />
+        <item key="role.type0" value="--请选择--" />
+        <item key="role.type1" value="职位" />
+        <item key="role.type2" value="角色" />
+        <item key="role.type3" value="组" />
+        <item key="role.remark" value="描述" />
+        <item key="role.state" value="状态" />
+        <item key="role.state_valid" value="有效" />
+        <item key="role.state_invalid" value="失效" />
+        <item key="role.userTab" value="用户" />
+        <item key="role.funcTab" value="功能" />
+        <item key="role.funcName" value="功能名称" />
+        <item key="role.funcDesc" value="功能描述" />
+        <item key="role.moduleName" value="所属模块" />
+        <item key="role.appName" value="所属系统" />
+        <item key="role.buttonName" value="功能按钮" />
+        <item key="role.nameInvalidMessage" value="角色名称 的长度必须在 1 和 255 之间!" />
+        <item key="role.nameExistMessage" value="您输入的角色名称已存在!" />
+        <item key="role.codeInvalidMessage" value="角色代码 的长度必须在 1 和 255 之间!" />
+        <item key="role.typeInvalidMessage" value="请选择 类型!" />
+        <item key="role.userInvalidMessage" value="请选择用户!" />
+        <item key="role.treeTitle" value="请勾选权限" />
+        <item key="role.treeRoot" value="所有权限" />
+        <item key="role.deleteInvalidMessage" value="请选择要删除的项目!" />
+        <item key="role.deleteConfirmMessage" value="您确定要删除所选的项目吗？" />
+        <item key="user.code" value="工号" />
+        <item key="user.loginName" value="用户登陆名称" />
+        <item key="user.nickName" value="用户昵称" />  
+    </bundle>
+    <bundle language="en_US">
+       	<item key="role.title" value="Role Config" />
+        <item key="role.code" value="Role Code" />
+        <item key="role.name" value="Role Name" />
+        <item key="role.type" value="Type" />
+        <item key="role.type0" value="--Please Select--" />
+        <item key="role.type1" value="Position" />
+        <item key="role.type2" value="Role" />
+        <item key="role.type3" value="Group" />
+        <item key="role.remark" value="Remark" />
+        <item key="role.state" value="State" />
+        <item key="role.state_valid" value="Valid" />
+        <item key="role.state_invalid" value="Invalid" />
+        <item key="role.edit" value="Edit" />
+        <item key="role.userTab" value="User" />
+        <item key="role.funcTab" value="Function" />
+        <item key="role.funcName" value="Function Name" />
+        <item key="role.funcDesc" value="Description" />
+        <item key="role.moduleName" value="Module Name" />
+        <item key="role.appName" value="Application Name" />
+        <item key="role.buttonName" value="Button Name" />
+        <item key="role.treeTitle" value="Please Select Permission" />
+    </bundle>
+</resource-set>

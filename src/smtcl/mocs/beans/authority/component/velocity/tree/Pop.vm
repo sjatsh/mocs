@@ -1,0 +1,9 @@
+<div> 
+<input id="___tree_txt_${id}" value="#if($txt)$txt#end" style="width:${iwidth}px" readonly="true"/>
+<a id="___menuBtn_$id" href="#" onclick="___showMenu_$id(); return false;">${select}</a>
+<a href="#" onclick="___clear_$id(); return false;">${clear}</a>
+<input id="$id"  name="$id" type="hidden" value="#if($value)$value#end"/>
+</div> 
+<div id="___menuContent_$id" style="display:none;z-index:8000; position: absolute;width:${twidth}px;height:${theight}px;"> 
+	<div id="___treeControl_$id" class="ztree" style="margin-top:0;width:${twidth}px;"></div> 
+</div>

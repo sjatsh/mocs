@@ -1,0 +1,33 @@
+function ___showMenu_${id}() {
+	var cityObj = jQuery("#___tree_txt_${id}");
+	var cityOffset = cityObj.position();
+	jQuery("#___menuContent_${id}").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+	jQuery("body").bind("mousedown", ___onBodyDown_${id});
+	
+#if ($asyn)
+	var treeId = "___treeControl_${id}";
+	var tree	  = jQuery.fn.zTree.getZTreeObj(treeId);
+	if(tree != null){
+		#if (${exclude})
+		tree.setting.async.otherParam["exclude"] = jQuery("#${exclude}").val();
+		#end
+		tree.reAsyncChildNodes(null, "refresh");
+	}
+#end
+}
+function ___hideMenu_${id}() {
+	jQuery("#___menuContent_${id}").fadeOut("fast");
+	jQuery("body").unbind("mousedown", ___onBodyDown_${id});
+}
+function ___onBodyDown_${id}(event) {
+	if (!(event.target.id == "___menuBtn_${id}" || event.target.id == "___menuContent_${id}" || jQuery(event.target).parents("#___menuContent_${id}").length>0)) {
+		___hideMenu_${id}();
+	}
+}
+function ___clear_$id(){
+	___set_common("$id", null, jQuery("#___tree_txt_${id}"));
+	var tree	  = jQuery.fn.zTree.getZTreeObj("___treeControl_$id");
+	if(tree != null) tree.cancelSelectedNode();
+	___hideMenu_${id}();
+}
+

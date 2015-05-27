@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource-set name="user">
+	<import file="application.xml" />	
+    <bundle language="zh_CN">
+        <item key="user.title" value="用户维护" />
+        <item key="user.code" value="工号" />
+        <item key="user.loginName" value="用户登陆名称" />
+        <item key="user.nickName" value="用户昵称" />        
+        <item key="user.status" value="状态" />
+        <item key="user.sSelect" value="请选择状态" /> 
+        <item key="user.loginNameCheckMsg" value="错误：用户登录名 不能为空！" />
+        <item key="user.loginNameValidMsg" value="错误:您输入的用户登录名已存在！" />
+        <item key="user.passwordCheckMsg" value="错误：密码只能包含字母或者数字。" />
+        <item key="user.emailCheckMsg" value="错误：邮箱地址信息输入错误。邮箱地址格式：xxx@163.com" />   
+        <item key="user.nickNameValidMsg" value="错误:您输入的用户昵称已存在！" /> 
+        <item key="user.select.msg" value="请选择选项" />  
+        <item key="user.email" value="邮箱地址" />
+        <item key="user.org" value="组织架构" />  
+        <item key="user.roles" value="隶属角色" />  
+        <item key="user.orgs" value="隶属数据组" />  
+        <item key="user.password" value="密码" />
+    </bundle>
+    <bundle language="en_US">
+    	<item key="user.title" value="USER INFORMATION" />
+    	<item key="user.code" value="USER CODE" />
+    	<item key="user.loginName" value="LOGIN NAME" />
+    	<item key="user.nickName" value="NICK NAME" />
+    	<item key="user.status" value="STATUS" />
+    	<item key="user.sSelect" value="-- PLEASE SELECT STATUS --" /> 
+    </bundle>
+</resource-set>

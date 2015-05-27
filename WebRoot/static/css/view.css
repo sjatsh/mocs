@@ -1,0 +1,210 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*查看生产概况 */
+.xixi1 {
+	width: 850px;
+	height: 40px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/select1.png);
+	cursor: pointer;
+}
+.xixi2 {
+	width: 850px;
+	height: 40px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/select2.png);
+	cursor: pointer;
+}
+.xixi3 {
+	width: 850px;
+	height: 40px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/select3.png);
+	cursor: pointer;
+}
+.xixi4 {
+	width: 850px;
+	height: 40px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/select4.png);
+	cursor: pointer;
+}
+.tab1 {
+	width: 123px;
+	height: 43px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.8em;
+	cursor: pointer;
+}
+.tab2 {
+	width: 110px;
+	height: 43px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.4em;
+	cursor: pointer;
+	color:#707070;
+}
+.tab3 {
+	width: 110px;
+	height: 43px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.4em;
+	cursor: pointer;
+	color:#707070;
+}
+.tab4 {
+	width: 110px;
+	height: 43px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.4em;
+	cursor: pointer;
+	color:#707070;
+}
+.leftshadow{
+	float:left;
+	background-image:url(../img/productoutput_leftshadow.png);
+	width:4px;
+	height:449px;
+}
+
+/*查看生产计划*/
+.searchdown{
+	height:3px;
+	width:854px;
+	background-image:url(../img/productplan.png);
+}
+.shadowdiv{
+	float:left;
+	background-image:url(../img/product_tabled.png);
+	width:4px;
+	height:406px;
+}
+.productsearcharea{
+	width:854px;
+	margin-top:0px;
+	color:#4D4D4D;
+	background-image: url(../img/productplan_searcharea.png);
+	font-size:12px;
+	height:43px;
+}
+
+/*查看组织节点排班计划*/
+.shadowdiv{
+	float:left;
+	background-image:url(../img/product_tabled.png);
+	width:4px;
+	height:406px;
+}
+.productsearcharea{
+	width:854px;
+	margin-top:0px;
+	color:#4D4D4D;
+	background-image: url(../img/productplan_searcharea.png);
+	font-size:12px;
+	height:43px;
+}
+
+/*实时状态页面样式*/
+.sszt {
+	width: 83px;
+	height: 26px;
+	background-image: url(../images/sszt.png);
+}
+
+/*.sszt {
+	width: 74px;
+	height: 24px;
+	background-image: url();
+	margin-right: 100px;
+	border-radius: 6px;
+}*/
+
+.sszt:HOVER {
+	width: 74px;
+	height: 24px;
+	background-image: url(../images/sszt.png);
+	background-color: white;
+	background-position: -2px -2.5px;
+}
+.realtable {
+	border: 0;
+	width: 848px;
+	text-align: left;
+	font-size: 12px;
+	height: 123px;
+	background-image: url(../img/common_info_img/common_table_bg_01.png);
+	background-repeat: repeat-x;
+}
+.realtable td {
+	padding-left: 5px;
+	border-right: 1px solid white;
+}
+
+/*节点设备概览*/
+.chartWidth {
+	float: left;
+	background-color: white;
+	margin-top: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	width: 400px;
+	height: 230px;
+}
+
+/*节点设备概况*/
+#cmenu {
+	font-size: 14px;
+	border: 0px;
+	background-image: url(../images/menuyoubg.png);
+	color: white;
+	padding: 2px;
+	position: absolute;
+	display: none;
+	top: 0px;
+	left: 0px;
+	width: 96px;
+	height: 112px;
+	z-index: 10000;
+}
+
+.cinema {
+	color: White;
+	position: absolute;
+	width: 4000px;
+	height: 2500px;
+	background-image: url(../images/bg.png);
+	background-attachment: scroll;
+	font-size: 12px;
+	left: -1500px;
+	top: -1900px;
+}
+
+.sc:HOVER {
+	width: 50px;
+	height: 25px;
+	background-image: url(../images/btde.png);
+	border-radius: 0px 0px 0px 0px;
+	background-position: 0px 0px;
+	cursor: pointer;
+	padding-bottom: 3px;
+	font-size: 12px;
+}
+
+.dMenu {
+	height: 180px;
+	width: 190px;
+	position: absolute;
+	margin-left: 0px;
+	margin-top: 10px;
+}
+
+

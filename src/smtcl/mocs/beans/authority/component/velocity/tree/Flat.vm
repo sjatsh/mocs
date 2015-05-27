@@ -1,0 +1,2 @@
+<input id="$id"  name="$id" type="hidden" value="#if($value)$value#end"/>
+<div id="___treeControl_$id" class="ztree" style="z-index:8000;width:${twidth}px;height:${theight}px;"></div>

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<div style="width: 855px;">
+	<div align="center" style="margin-top: 10px;margin-bottom: 10px;"><font style="font-size: 18px;font-weight: bold;">产品过程数据管理</font></div>
+	<div  style="width: 855px;height: 38px;background-color: #D6E9E9">
+		<div style="width: 779px;height: 5px;"></div>
+		<h:outputText value="产品序列号:" style="margin-left:10px;"/>
+		<h:inputText value="#{productProcessListBean.productSerial}" styleClass="textBg" style="width:256px;height:24px;"></h:inputText>
+		<p:commandButton value=" 查  询  " actionListener="#{productProcessListBean.Search}" styleClass="delete" 
+			update=":myform:productProcess">
+		</p:commandButton>
+		<p:commandButton value="过程质量数据" style="margin-left:10px;width:110px;" styleClass="delete" 
+		oncomplete="menuClick('myform:menuClick2')" actionListener="#{productProcessListBean.GoProcessQualityBean}"></p:commandButton>
+		<p:commandButton value=" " actionListener="#{MenuHeadBean.onClick(productProcessListBean.pram,'0')}" id="menuClick2" 
+		update=":myform:rightiframe" style="display:none;"></p:commandButton>
+	</div>
+</div>
+<div style="width: 855px;">
+	<div style="width: 845px;font-size: 16px;height: 25px;padding-top: 5px;background-color: #9ABDC4;padding-left: 10px;"><b>产品过程数据列表</b></div>
+	<p:dataTable var="product" value="#{productProcessListBean.ppdm}" id="productProcess" editable="true" 
+	    	  sortMode="multiple" dynamic="true" selection="#{productProcessListBean.ppm}" paginator="true" rows="10"   
+	    	  paginatorPosition="bottom" >
+			<p:column selectionMode="multiple"  />
+	        <p:column headerText="工序号" >
+               <h:outputText value="#{product.processNo}" />
+	        </p:column>
+	       <p:column headerText="工序名称" >
+               <h:outputText value="#{product.processName}" />
+	        </p:column>
+	       <p:column headerText="工单编号" >
+               <h:outputText value="#{product.dispatchNo}" />
+	        </p:column>
+	       <p:column headerText="生产人员" >
+                <h:outputText value="#{product.operator}" >
+                	
+                </h:outputText>
+	        </p:column>
+	        <p:column headerText="上线时间" >
+                <h:outputText value="#{product.starttime}" >
+                </h:outputText>
+	        </p:column>
+	         <p:column headerText="下线时间" >
+                <h:outputText value="#{product.finishtime}" >
+                </h:outputText>
+	        </p:column>
+	        <p:column headerText="加工状态" >
+               <h:outputText value="#{product.status}" />
+	        </p:column>
+	    </p:dataTable> 
+	
+</div>
+<script type="text/javascript">
+	//<![CDATA[
+	      function menuClick(id){
+	    	  document.getElementById(id).click();
+	      }
+	    
+	     
+	//]]>
+	</script>
+
+</ui:composition>

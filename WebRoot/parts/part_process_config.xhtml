@@ -1,0 +1,632 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<style type="text/css">
+		
+		.ui-datatable th{
+			background-image: url(../images/equ/table_head_line.png) !important;
+		}
+		.buttonBlack{
+		text-align: center;
+		margin-left: 10px;
+		background-color: #D8DCDD !important;
+ 		border:1px solid #D8DCDD !important;
+ 		background-image:url("../images/buttonBlack.png");
+ 		width: 85px;
+ 		font-size: 12px;	
+ 		color: white;
+ 	}
+ 	/*
+ 	.ui-state-hover{
+    border: 0px !important;
+    background:"" !important;
+    font-weight: bold !important;
+    color: "" !important;
+    box-shadow: 0px 0px 0px !important;
+	}
+	*/
+	td{
+		word-break: break-all;
+	}
+	</style>
+<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+	<h:inputHidden value="#{partProcessConfigBean.loadprocess}"></h:inputHidden>
+	<div class="div-content-table">
+		<div class="div-content-table-title">
+			<div class="div-content-table-title-process-select">
+				<p:commandButton value=" " update=":myform:tree" actionListener="#{partProcessConfigBean.queryData}" styleClass="process_config_select"></p:commandButton>	
+				<h:inputText id="txt" value="#{partProcessConfigBean.query}" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');" styleClass="process_config_select_input"/> 
+			</div>
+		    <div id="divtree">
+		        <p:tree value="#{partProcessConfigBean.root}" var="node" id="tree" selectionMode="single"  
+		           selection="#{partProcessConfigBean.selectedPart}" style="background-image: url('../images/equ/process_config_bg.png');">  
+		           <p:ajax event="select" update=":myform:toAddGuide :myform:selectGY :myform:carList :myform:gyxl :myform:selectProcessIsNull 
+		            :myform:txt" listener="#{partProcessConfigBean.getPartProcessList}" oncomplete="closeDiv()"/> 
+			        <p:treeNode id="treeNode">  
+			            <h:outputText value="#{node}" id="lblNode"/>  
+			        </p:treeNode>  
+		   	 	</p:tree>
+		     </div>
+		     <h:selectOneMenu value="#{partProcessConfigBean.selectProcessPlan}"  id="selectGY" style="margin-left:2%;float: left">
+		           <f:selectItem itemLabel="请选择工艺方案" itemValue="" ></f:selectItem>
+			       <f:selectItems value="#{partProcessConfigBean.processPlan}"  
+			           var="pp"  itemLabel="#{pp.name}"  itemValue="#{pp.id}" /> 
+			           <f:ajax event="valueChange" listener="#{partProcessConfigBean.selectChange}" 
+			           	render=":myform:toAddGuide :myform:selectGY :myform:carList  :myform:gyxl"></f:ajax> 
+			    </h:selectOneMenu> 
+			    <div class="button-split2"></div>
+			    <p:commandButton value="工艺方案维护" onclick="onGyfawh()" styleClass="deleteprocess">
+			    </p:commandButton>
+			     <p:commandButton value="工艺方案维护" actionListener="#{partProcessConfigBean.processPlanData}" id="toAddProcessPlantwo" 
+			      oncomplete="plandis(); bgReposition($('.table'));" update=":myform:planList" style="display:none;" >
+			    </p:commandButton>
+			    
+			     <p:commandButton value="新建工序向导"  onclick="onXjGxxd()" styleClass="deleteprocess"></p:commandButton>
+			    <p:commandButton value="新建工序向导"  action="#{MenuHeadBean.onClick(partProcessConfigBean.path.ljgxxd,'0')}" id="toAddGuide"
+			     update=":myform:rightiframe :myform:displayMulti" style="display:none;" >
+			     
+			    </p:commandButton>
+			    
+			    <p:commandButton value="删除工序" update=":myform:carList " actionListener="#{partProcessConfigBean.onDelete}" 
+			    styleClass="deleteprocess"></p:commandButton>
+		   </div>
+			<div class="div-content-top-shadow">
+				<img src="../images/demo/right_top_shadow.png" />
+			</div>
+	    <div class="tableprocess">
+		    	<p:dataTable var="part" value="#{partProcessConfigBean.mediumPartModel}" id="carList" editable="true" 
+		    	  sortMode="multiple" dynamic="true" selection="#{partProcessConfigBean.selectedRowPart}" paginator="false" 
+		    	  paginatorPosition="bottom">
+		        
+		        <p:ajax event="rowEdit" listener="#{partProcessConfigBean.onEdit}" update=":myform:carList" />
+		        <p:ajax event="rowEditCancel" listener="#{partProcessConfigBean.onCancel}" update=":myform:carList" />
+		 
+				<p:column selectionMode="multiple"  style="widht:6%;word-break: break-all;"/>
+		        <p:column headerText="工序序号"   style="widht:19%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{part.processOrder}" />
+		                </f:facet>
+		                <f:facet name="input">
+		                    <h:outputText value="OOP-" style="width: 20%;"/><p:inputText value="#{part.processOrder}" style="width:80%" readonly="true"/>
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		        <p:column headerText="工序名称" style="widht:24%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{part.name}" />
+		                </f:facet>
+		                <f:facet name="input">
+		                    <p:inputText value="#{part.name}"  />
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		
+		        <p:column headerText="英文名称" style="widht:11%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{part.engName}" />
+		                </f:facet>
+		                <f:facet name="input">
+		                	<p:inputText value="#{part.engName}"  />
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		        <p:column headerText="工序描述" style="widht:30%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{part.description}" />
+		                </f:facet>
+		                <f:facet name="input">
+		                	<p:inputText value="#{part.description}" />
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		         <p:column headerText="配置" style="width:5%;word-break: break-all;">
+		             <h:commandLink value="配置" action="#{MenuHeadBean.onClick(partProcessConfigBean.path.ljgxxdup,part.id)}" >	      		
+		            </h:commandLink>
+		        </p:column>
+		        <p:column headerText="操作" style="width:5%">
+		            <p:rowEditor /> 
+		        </p:column>
+				
+		    </p:dataTable>   
+		</div>
+	</div>
+	<div class="process_config_ljgyfa" id="planDiv">
+     	<div class="headDiv" style="overflow: hidden;">
+	      	<h:inputText value="#{partProcessConfigBean.processPlanSearch}" styleClass="textBg"></h:inputText>  
+	      	<p:commandButton value="查询" actionListener="#{partProcessConfigBean.searchTProcessplanInfo}" update=":myform:planList" oncomplete="bgReposition($('.process_config_ljgyfa .table'));" styleClass="delete"></p:commandButton>
+			<div class="button-split"></div>
+	      	<p:commandButton value="新建"  styleClass="delete" oncomplete="addPlanYu.show();bgReposition($('.process_config_ljgyfa .table'));" actionListener="#{partProcessConfigBean.onShowAddPanl}" 
+	      		update=":myform:addPlalName"></p:commandButton>
+	      	<p:commandButton value="删除" actionListener="#{partProcessConfigBean.onDeletePlan}" update=":myform:planList" oncomplete=";bgReposition($('.process_config_ljgyfa .table'));" styleClass="delete"></p:commandButton>
+	      	<p:commandButton value="设为默认" actionListener="#{partProcessConfigBean.onDefault}" update=":myform:planList :myform:messages" styleClass="deleteprocess"></p:commandButton>
+	      	<p:commandButton value="关闭" onclick="onyc()" style="float: right; margin-right: 2%; margin-top: 8px;" styleClass="delete"></p:commandButton>
+      	</div>
+		<div class="div-content-top-shadow">
+			<img src="../images/demo/right_top_shadow.png" />
+		</div>
+		<div class="table">
+	      	<p:dataTable var="plan" value="#{partProcessConfigBean.processPlanModel}" id="planList" editable="true" 
+		    	  sortMode="multiple" dynamic="true" selection="#{partProcessConfigBean.selectedRowPlan}" paginator="true" rows="20"   
+		    	  paginatorPosition="bottom">
+		        
+		        <p:ajax event="rowEdit" listener="#{partProcessConfigBean.onPlanEdit}" update=":myform:planList " />
+		        <p:ajax event="rowEditCancel" listener="#{partProcessConfigBean.onCancel}" update=":myform:planList" />
+		 
+				<p:column selectionMode="multiple" style="widht:6%;word-break: break-all;"/>
+		        <p:column headerText="零件工艺方案名称" style="widht:24%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{plan.name}" />
+		                    <h:inputHidden value="#{plan.id}"></h:inputHidden>
+		                </f:facet>
+		                <f:facet name="input">
+		                    <p:inputText value="#{plan.name}"  />
+		                    <h:inputHidden value="#{plan.id}"></h:inputHidden>
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		        <p:column headerText="创建人" style="widht:14%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{plan.operator}" />
+		                </f:facet>
+		                <f:facet name="input">
+		                	<p:inputText value="#{plan.operator}"/>
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		         <p:column headerText="创建时间" style="widht:20%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{plan.createDate}" />
+		                </f:facet>
+		                <f:facet name="input">
+		                	 <h:outputText value="#{plan.createDate}" />
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		        <p:column headerText="说明" style="widht:24%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{plan.description}" />
+		                </f:facet>
+		                <f:facet name="input">
+		                	<p:inputText value="#{plan.description}" style="width:100%"/>
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		         <p:column headerText="是否默认" style="widht:7%;word-break: break-all;">
+		            <p:cellEditor>
+		                <f:facet name="output">
+		                    <h:outputText value="#{plan.defaultSelected}" >
+		                    	<f:converter converterId="YesOrNo"> </f:converter>
+		                    </h:outputText>
+		                </f:facet>
+		                <f:facet name="input">
+		                	<h:selectOneMenu value="#{plan.defaultSelected}">
+		                       	   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
+						           <f:selectItem itemLabel="是" itemValue="1" ></f:selectItem>
+						           <f:selectItem itemLabel="否" itemValue="0" ></f:selectItem>
+							    </h:selectOneMenu> 
+		                </f:facet>
+		            </p:cellEditor>
+		        </p:column>
+		        <p:column headerText="操作" style="width:5%">
+		            <p:rowEditor /> 
+		        </p:column>
+		    </p:dataTable> 
+		</div>
+	    <p:dialog widgetVar="addPlanYu" resizable="false">
+	    	<table>
+	    		<tr>
+	    			<td style="height: 30px;">工艺方案名称：<font style="color:red;">*</font></td>
+	    			<td><h:inputText value="#{partProcessConfigBean.addPlal.name}" style="border:1px black solid;" id="addPlalName" readonly="true"></h:inputText></td>
+	    			<td></td>
+	    		</tr>
+	    		<tr>
+	    			<td style="height: 30px;">说明：</td>
+	    			<td><h:inputText value="#{partProcessConfigBean.addPlal.description}" style="border:1px black solid;"></h:inputText></td>
+	    			<td></td>
+	    		</tr>
+	    	</table>
+      		<div class="headDivduan">
+   				<p:commandButton value="新增" onclick="addPlanData()" styleClass="delete" ></p:commandButton>
+   				<p:commandButton actionListener="#{partProcessConfigBean.addPlanData}" value="新增" 
+   					update="myform:messages myform:planList" style="display:none;" id="addplanDataButton" oncomplete="addPlanYu.hide()"></p:commandButton>
+      		</div>
+	    </p:dialog>
+     </div>
+	<div class="process_config_xiaDiv">
+		<div class="headDiv2">
+		 	<div class="process_config_menuDiv active" id="btngyxl" style="margin-left: 2%" onclick="menuClick('myform:btngyxl')"><span>工艺线路</span></div>
+		 	<div class="process_config_menuDiv" id="btncb" onclick="menuClick('myform:btncb')"><span>成 本 </span></div>
+		 	<div class="process_config_menuDiv" id="btnwl" onclick="menuClick('myform:btnwl')"><span>物 料 </span></div>
+		 	<div class="process_config_menuDiv" id="btnjj" onclick="menuClick('myform:btnjj')"><span>夹 具</span></div>
+		 	<div class="process_config_menuDiv" id="btndj" onclick="menuClick('myform:btndj')"><span>刀 具 </span></div>
+		 	<div class="process_config_menuDiv" id="btnjt" onclick="menuClick('myform:btnjt')"><span>机 台  </span></div>
+		 	<div class="process_config_menuDiv" id="btnzj" onclick="menuClick('myform:btnzj')"><span>质 检 </span></div><br/>
+			<p:commandButton value="工艺线路" actionListener="#{partProcessConfigBean.getGYXLData}" oncomplete="displaygyxl()" update=":myform:gyxl" style="display:none;" id="btngyxl"></p:commandButton>
+			<p:commandButton value=" 成 本  " actionListener="#{partProcessConfigBean.getCBData}" oncomplete="displaycb()" update=":myform:cb" style="display:none;" id="btncb"></p:commandButton>
+			<p:commandButton value=" 物 料  " actionListener="#{partProcessConfigBean.getWLData}" oncomplete="displaywl()" update=":myform:wl" style="display:none;" id="btnwl"></p:commandButton>
+			<p:commandButton value=" 夹 具  " actionListener="#{partProcessConfigBean.getJJData}" oncomplete="displayjj()" update=":myform:jj" style="display:none;" id="btnjj"></p:commandButton>
+			<p:commandButton value=" 刀 具  " actionListener="#{partProcessConfigBean.getDJData}" oncomplete="displaydj()" update=":myform:dj" style="display:none;" id="btndj"></p:commandButton>
+			<p:commandButton value=" 机 台  " actionListener="#{partProcessConfigBean.getJTData}" oncomplete="displayjt()" update=":myform:jt" style="display:none;" id="btnjt"></p:commandButton>
+			<p:commandButton value=" 质 检  " actionListener="#{partProcessConfigBean.getZJData}" oncomplete="displayzj()" update=":myform:zj" style="display:none;" id="btnzj"></p:commandButton>
+		</div>
+		<div class="porcess_config_menu_bottom"></div>
+		  <div class="process_config_content" style="display: block;" id="gyxl">
+		  	<h:panelGroup id="gyxl" >
+		  		<c:forEach items="#{partProcessConfigBean.gyxllist}" var="part" varStatus="spart">
+		  			<c:choose>  
+					   <c:when test="${spart.first}"> 
+					        <div class="process_config_content_gyxl_first">
+					         	<div style="width: 100%;height: 19px;"></div>
+		  						<h:outputText value="#{part.name}" style="font-size:12px; margin-left: -1em; width:73%; display: inline-block;"></h:outputText>
+		  					</div>
+					   </c:when>  
+					   <c:otherwise> 
+					    <div class="process_config_content_gyxl_arrow"></div>  
+					   	<div class="process_config_content_gyxl_other">
+					        <div style="width: 100%;height: 19px;"></div>
+		  					<h:outputText value="#{part.name}" style="font-size:12px; margin-left: -1em; width:73%; display: inline-block;"></h:outputText>
+			  			</div>
+					   </c:otherwise>  
+					</c:choose>  
+		  		</c:forEach>
+		  	</h:panelGroup>
+		  	
+		  </div>
+		  <div class="process_config_content" id="cb">
+		  	<p:dataTable var="part" value="#{partProcessConfigBean.cblist}" id="cb" styleClass="table" paginator="false" paginatorPosition="bottom" style="height: 100%; top: 0;">
+		  		 <p:column headerText="工序编号" >
+	           		 <h:outputText value="#{part.no}" />
+	        	</p:column>
+	        	 <p:column headerText="工序名称" >
+	           		 <h:outputText value="#{part.name}" />
+	        	</p:column>
+	        	 <p:column headerText="主料成本" >
+	           		 <h:outputText value="#{part.mainMaterialCost}" />
+	        	</p:column>
+	        	 <p:column headerText="辅料成本" >
+	           		 <h:outputText value="#{part.subsidiaryMaterialCost}" />
+	        	</p:column>
+	        	 <p:column headerText="人员成本" >
+	           		 <h:outputText value="#{part.peopleCost}" />
+	        	</p:column>
+	        	 <p:column headerText="能源成本" >
+	           		 <h:outputText value="#{part.energyCost}" />
+	        	</p:column>
+	        	 <p:column headerText="设备折旧" >
+	           		 <h:outputText value="#{part.deviceCost}" />
+	        	</p:column>
+	        	 <p:column headerText="资源消耗">
+	           		 <h:outputText value="#{part.resourceCost}" />
+	        	</p:column>
+	        	 <p:column headerText="合计" >
+	           		 <h:outputText value="#{part.total}" />
+	        	</p:column>
+		  	</p:dataTable>
+		  </div>
+		  
+		   <div class="process_config_content" id="wl">
+		  	<p:dataTable var="part" value="#{partProcessConfigBean.wllist}" id="wl" styleClass="table" paginator="false" paginatorPosition="bottom" style="height: 100%; top: 0;">
+		  		 <p:column headerText="工序编号">
+	           		 <h:outputText value="#{part.no}" />
+	        	</p:column>
+	        	 <p:column headerText="工序名称" >
+	           		 <h:outputText value="#{part.name}" />
+	        	</p:column>
+	        	 <p:column headerText="物料编号" >
+	           		 <h:outputText value="#{part.wlno}" />
+	        	</p:column>
+	        	 <p:column headerText="物料名称" >
+	           		 <h:outputText value="#{part.wlname}" />
+	        	</p:column>
+	        	 <p:column headerText="物料规格" >
+	           		 <h:outputText value="#{part.wlnorm}" />
+	        	</p:column>
+	        	 <p:column headerText="需求数量" >
+	           		 <h:outputText value="#{part.requirementNum}" />
+	        	</p:column>
+	        	 <p:column headerText="物料类型" >
+	           		 <h:outputText value="#{part.requirementType}" />
+	        	</p:column>
+		  	</p:dataTable>
+		  </div>
+		 
+		  <div class="process_config_content" id="jj">
+		  	<p:dataTable var="part" value="#{partProcessConfigBean.jjlist}" id="jj" styleClass="table" paginator="false" paginatorPosition="bottom" style="height: 100%; top: 0;">
+		  		 <p:column headerText="工序编号">
+	           		 <h:outputText value="#{part.no}" />
+	        	</p:column>
+	        	 <p:column headerText="工序名称" >
+	           		 <h:outputText value="#{part.name}" />
+	        	</p:column>
+	        	 <p:column headerText="夹具类型编号" >
+	           		 <h:outputText value="#{part.fixturesNo}" />
+	        	</p:column>
+	        	 <p:column headerText="夹具名称" >
+	           		 <h:outputText value="#{part.fixturesName}" />
+	        	</p:column>
+	        	 <p:column headerText="装夹时间" >
+	           		 <h:outputText value="#{part.installTime}" />
+	        	</p:column>
+	        	 <p:column headerText="卸料时间" >
+	           		 <h:outputText value="#{part.uninstallTime}" />
+	        	</p:column>
+		  	</p:dataTable>
+		  </div>
+		  
+		  <div class="process_config_content" id="dj">
+		  	<p:dataTable var="part" value="#{partProcessConfigBean.djlist}" id="dj" styleClass="table" paginator="false" paginatorPosition="bottom" style="height: 100%; top: 0;">
+		  		 <p:column headerText="工序编号">
+	           		 <h:outputText value="#{part.no}" />
+	        	</p:column>
+	        	 <p:column headerText="工序名称" >
+	           		 <h:outputText value="#{part.name}" />
+	        	</p:column>
+	        	 <p:column headerText="刀具类型编号" >
+	           		 <h:outputText value="#{part.djno}" />
+	        	</p:column>
+	        	 <p:column headerText="刀具名称" >
+	           		 <h:outputText value="#{part.djname}" />
+	        	</p:column>
+	        	<p:column headerText="数量" >
+	           		 <h:outputText value="#{part.num}" />
+	        	</p:column>
+		  	</p:dataTable>
+		  </div>
+		  
+		  <div class="process_config_content" id="jt" >
+		  	<p:dataTable var="part" value="#{partProcessConfigBean.jtlist}" id="jt" styleClass="table" paginator="false" paginatorPosition="bottom" style="height: 100%; top: 0;">
+		  		 <p:column headerText="工序编号">
+	           		 <h:outputText value="#{part.no}" />
+	        	</p:column>
+	        	 <p:column headerText="工序名称" >
+	           		 <h:outputText value="#{part.name}" />
+	        	</p:column>
+	        	 <p:column headerText="加工设备类型" >
+	           		 <h:outputText value="#{part.equipmentType}" />
+	        	</p:column>
+	        	 <p:column headerText="加工程序" >
+	           		 <h:outputText value="#{part.programmfile}" />
+	        	</p:column>
+	        	 <p:column headerText="加工时间" >
+	           		 <h:outputText value="#{part.processing_time}" />
+	        	</p:column>
+	        	 <p:column headerText="节拍时间" >
+	           		 <h:outputText value="#{part.theorywork_time}" />
+	        	</p:column>
+	        	 <p:column headerText="预计产能(件/小时)" >
+	           		 <h:outputText value="#{part.capacity}" />
+	        	</p:column>
+		  	</p:dataTable>
+		  </div>
+		  <div class="process_config_content" id="zj" >
+		  	<p:dataTable var="part" value="#{partProcessConfigBean.zjlist}" id="zj" styleClass="table" paginator="false" paginatorPosition="bottom" style="height: 100%; top: 0;">
+		  		 <p:column headerText="工序编号">
+	           		 <h:outputText value="#{part.no}" />
+	        	</p:column>
+	        	 <p:column headerText="质检编号" >
+	           		 <h:outputText value="#{part.qualityNo}" />
+	        	</p:column>
+	        	 <p:column headerText="质检名称" >
+	           		 <h:outputText value="#{part.qualityName}" />
+	        	</p:column>
+	        	 <p:column headerText="检验类型" >
+	           		 <h:outputText value="#{part.checkType}" />
+	        	</p:column>
+	        	 <p:column headerText="是否关键检验项" >
+	           		 <h:outputText value="#{part.isKey}" />
+	        	</p:column>
+	        	 <p:column headerText="标准值" >
+	           		 <h:outputText value="#{part.standardValue}" />
+	        	</p:column>
+	        	 <p:column headerText="上限值" >
+	           		 <h:outputText value="#{part.maxValue}" />
+	        	</p:column>
+	        	<p:column headerText="下限值" >
+	           		 <h:outputText value="#{part.minValue}" />
+	        	</p:column>
+	        	<p:column headerText="单位" >
+	           		 <h:outputText value="#{part.unit}" />
+	        	</p:column>
+	        	<p:column headerText="允差上限" >
+	           		 <h:outputText value="#{part.mintolerance}" />
+	        	</p:column>
+	        	<p:column headerText="下限" >
+	           		 <h:outputText value="#{part.max_tolerance}" />
+	        	</p:column>
+	        	<p:column headerText="检验描述" >
+	           		 <h:outputText value="#{part.description}" />
+	        	</p:column>
+		  	</p:dataTable>
+		  </div>
+	</div>
+	     <p:dialog id="multiDialog"  widgetVar="multiCarDialog"  height="200" showEffect="fade" hideEffect="explode" >  
+        	<p:dataList id="displayMulti" value="#{partProcessConfigBean.selectedRowPart}" var="part"> 
+        	</p:dataList>  
+    	</p:dialog> 
+	<p:growl id="messages" showDetail="true"/>  
+	<h:inputHidden value="#{partProcessConfigBean.selectProcess}"  id="selectProcessIsNull"></h:inputHidden>
+    <script type="text/javascript">
+	//<![CDATA[
+	      function menuClick(id){
+	    	  var arr=new Array("btngyxl","btncb","btnwl","btnjj","btndj","btnjt","btnzj");
+	    	  var tt=id.substring(7,id.length);
+	    	  for(var i=0;i<arr.length;i++){
+	    		  /*
+	    		   * menu change to tabs btn 
+	    		   * by god.tang
+	    		   * 2014-04-21
+	    		   */
+	    		  /*
+	    		  if(arr[i]==tt){
+	    			  document.getElementById(arr[i]).style.backgroundColor="#78797A";
+	    			  document.getElementById(arr[i]).style.color="white";
+	    		  }else{
+	    			  document.getElementById(arr[i]).style.backgroundColor="";
+	    			  document.getElementById(arr[i]).style.color="";
+	    		  }
+	    		  */
+	    		  if(arr[i] == tt) {
+	    			  document.getElementById(arr[i]).className = "process_config_menuDiv active";
+	    		  } else {
+	    			  document.getElementById(arr[i]).className = "process_config_menuDiv";
+	    		  }
+	    		  
+	    	  }
+	    	  document.getElementById(id).click();
+	      }
+	      function displaygyxl(){
+	    	  document.getElementById("cb").style.display="none";
+	    	  document.getElementById("gyxl").style.display="block";
+	    	  document.getElementById("wl").style.display="none";
+	    	  document.getElementById("jj").style.display="none";
+	    	  document.getElementById("dj").style.display="none";
+	    	  document.getElementById("jt").style.display="none";
+	    	  document.getElementById("zj").style.display="none";
+	    	  bgReposition(document.getElementById("gyxl").firstChild);
+	      }
+	      function displaycb(){
+	    	  document.getElementById("cb").style.display="block";
+	    	  document.getElementById("gyxl").style.display="none";
+	    	  document.getElementById("wl").style.display="none";
+	    	  document.getElementById("jj").style.display="none";
+	    	  document.getElementById("dj").style.display="none";
+	    	  document.getElementById("jt").style.display="none";
+	    	  document.getElementById("zj").style.display="none";
+	    	  bgReposition(document.getElementById("cb").firstChild);
+	      }
+	      function displaywl(){
+	    	  document.getElementById("cb").style.display="none";
+	    	  document.getElementById("gyxl").style.display="none";
+	    	  document.getElementById("wl").style.display="block";
+	    	  document.getElementById("jj").style.display="none";
+	    	  document.getElementById("dj").style.display="none";
+	    	  document.getElementById("jt").style.display="none";
+	    	  document.getElementById("zj").style.display="none";
+	    	  bgReposition(document.getElementById("wl").firstChild);
+	      }
+	      function displayjj(){
+	    	  document.getElementById("cb").style.display="none";
+	    	  document.getElementById("gyxl").style.display="none";
+	    	  document.getElementById("wl").style.display="none";
+	    	  document.getElementById("jj").style.display="block";
+	    	  document.getElementById("dj").style.display="none";
+	    	  document.getElementById("jt").style.display="none";
+	    	  document.getElementById("zj").style.display="none";
+	    	  bgReposition(document.getElementById("jj").firstChild);
+	      } 
+	      function displaydj(){
+	    	  document.getElementById("cb").style.display="none";
+	    	  document.getElementById("gyxl").style.display="none";
+	    	  document.getElementById("wl").style.display="none";
+	    	  document.getElementById("jj").style.display="none";
+	    	  document.getElementById("dj").style.display="block";
+	    	  document.getElementById("jt").style.display="none";
+	    	  document.getElementById("zj").style.display="none";
+	    	  bgReposition(document.getElementById("dj").firstChild);
+	      }   
+	      function displayjt(){
+	    	  document.getElementById("cb").style.display="none";
+	    	  document.getElementById("gyxl").style.display="none";
+	    	  document.getElementById("wl").style.display="none";
+	    	  document.getElementById("jj").style.display="none";
+	    	  document.getElementById("dj").style.display="none";
+	    	  document.getElementById("jt").style.display="block";
+	    	  document.getElementById("zj").style.display="none";
+	    	  bgReposition(document.getElementById("jt").firstChild);
+	      }
+	      function displayzj(){
+	    	  document.getElementById("cb").style.display="none";
+	    	  document.getElementById("gyxl").style.display="none";
+	    	  document.getElementById("wl").style.display="none";
+	    	  document.getElementById("jj").style.display="none";
+	    	  document.getElementById("dj").style.display="none";
+	    	  document.getElementById("jt").style.display="none";
+	    	  document.getElementById("zj").style.display="block";
+	    	  bgReposition(document.getElementById("zj").firstChild);
+	      }
+	      function plandis(){
+	    	  document.getElementById("planDiv").style.display="block";
+	      }
+	      
+	      function onaddplan(){
+	    	  document.getElementById("xzPlan").style.display="block";
+	      }
+	      function onyc(){
+	    	  document.getElementById("planDiv").style.display="none";
+	    	  document.getElementById("xzPlan").style.display="none";
+	      }
+	      function addPlanData(){
+	    	 var addPlalName=document.getElementById("myform:addPlalName").value;
+	    	 if(null==addPlalName||""==addPlalName){
+	    		 alert("零件工艺方案名称必填");
+	    	 }else{
+	    		 document.getElementById("myform:addplanDataButton").click();
+	    		 //document.getElementById("xzPlan").style.display="none";
+	    	 }
+	      }
+	      function onGyfawh(){
+	    	  var selectProcessIsNull=document.getElementById("myform:selectProcessIsNull").value;
+	    	  if(null==selectProcessIsNull||""==selectProcessIsNull){
+	    		  alert("请选择一个零件");
+	    	  }else{
+	    		  document.getElementById("myform:toAddProcessPlantwo").click(); 
+	    	  }
+	      }
+	      function onXjGxxd(){
+	    	  var selectProcessIsNull=document.getElementById("myform:selectProcessIsNull").value;
+	    	  if(null==selectProcessIsNull||""==selectProcessIsNull){
+	    		  alert("请选择一个零件");
+	    	  }else{
+	    		  var selectGY=document.getElementById("myform:selectGY").value;
+	    		  if(null==selectGY||""==selectGY){
+	    			  alert("请选择或者创建一个工艺方案!");
+	    		  }else{
+	    			  document.getElementById("myform:toAddGuide").click();  
+	    		  }
+	    		   
+	    	  }
+	      }
+	      
+	      function searchFocus(id){
+				if(document.getElementById(id).value=="输入ID/编号/名称"){
+					document.getElementById(id).value=""
+				}
+				document.getElementById("divtree").style.display="block";	
+			}
+	      document.getElementById("divtree").onmouseout=function(event){
+				var s =event.relatedTarget;
+				if (!this.contains(s)) {
+					this.style.display="none";
+					document.getElementById("myform:txt").blur();
+				}            
+			};
+			function closeDiv(){
+				  document.getElementById("divtree").style.display="none";
+			}   
+			function searchBlur(id){
+				if(document.getElementById(id).value=="")
+					document.getElementById(id).value="输入ID/编号/名称"
+			}
+			document.getElementById("myform:txt").value="输入ID/编号/名称";
+			document.getElementById("divtree").style.display="none";
+			
+	//]]>
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+
+</ui:composition>

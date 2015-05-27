@@ -1,0 +1,63 @@
+
+.pro_content{
+	width: 1920px;
+	height:725px;
+	/*background-image: url("/mocs/images/machin_cost_bg.png");*/
+	
+}
+.top_li_fx{
+	width:384px;
+	font-size:75px;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:middle;
+	color:#505050;
+	line-height: 264px;
+}
+.top_li_type{
+	width:384px;
+	font-size:40px;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:middle;
+	color:#505050;
+	line-height: 45px;
+	margin-top: 70px;
+}
+.top_li_type2{
+	width:384px;
+	font-size:30px;
+	text-align:center;
+	vertical-align:middle;
+	line-height: 25px;
+	color:#505050;
+}
+
+.common_calendar{
+	height: 40px;
+	width: 260px;
+}
+input[type="text"]{
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(196, 192, 185);
+    text-align:center;
+    font-size: 30px;
+    font-family: 微软雅黑;
+    color: rgb(0, 0, 0);
+    background-repeat: no-repeat;
+    background-position: 1px 1px;
+    background-color: rgb(255, 255, 255);
+    background-image: url("");
+    color:#595959;
+}
+.rf-cal-btn {
+   
+}
+
+.rf-cal-extr{
+	width: 260px;
+}
+
+
+

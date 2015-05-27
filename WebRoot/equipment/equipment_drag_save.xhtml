@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+<h:outputScript library="js" name="common.js"></h:outputScript>
+<h:outputScript library="js" name="jquery-1.9.1.min.js"></h:outputScript>
+<link rel="stylesheet" href="../css/common_page_info.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+	<script>
+	//<![CDATA[
+	    var wjb51 = 0;
+		var hjb51 = 0;
+		hjb51 = document.documentElement.clientHeight;
+		wjb51 = document.documentElement.clientWidth;
+		if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
+			hjb51 = wjb51*1080/1920; 
+		}
+		if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
+		   hjb51 = 600; 
+		   wjb51 = 800;
+		   document.body.style.overflow="scroll";
+	   }
+	   if(800>wjb51){
+		   hjb51 = 600;
+		   wjb51 = 800;
+		   document.body.style.overflow="scroll";
+	   }
+	   var definedscreenx = wjb51;//定义窗口的宽高
+       var definedscreeny = hjb51;       
+
+       
+	//]]>
+	</script>
+	<style type="text/css">
+		*{
+			color: #6C6C6C;
+		}
+		.btn{
+			width:81px;
+			height: 21px;
+			border: 1px solid #6c6c6c;
+			margin-left: 20px;
+			font-size: 12px !important;
+			font-family: 微软雅黑  !important;
+		}
+	</style>
+</h:head>
+<h:body style="padding: 0px;margin: 0px;">
+	<h:form id="myform">
+		<h:inputHidden value="#{equipmentDragSaveBean.equData}" id="equData"></h:inputHidden>
+		<h:inputHidden value="#{equipmentDragSaveBean.xyAxisNull}" id="xyAxisNull"></h:inputHidden>
+		<h:inputHidden value="#{equipmentDragSaveBean.bgpath}" id="bgpath"></h:inputHidden>
+		<div style="font-size: 30px;width: 100%;height: 10%;margin-top: 20px;margin-bottom: 20px;color: #6C6C6C;" align="center">设备坐标调整</div>
+		<div style="width:100%;height:35px;border: 0px solid red;" id="xyAxis" class="headDiv">
+			&nbsp;&nbsp;设备序列号:<input type="text" id="xlh"/>
+			X轴坐标:<input type="text" id="xzb"/>
+			Y轴坐标:<input type="text" id="yzb"/>
+			<input type="button" onclick="updateZB()" value="更改坐标" class="btn"/>
+			<input type="button" onclick="getposition();" value="保存设备坐标" class="btn"/> 
+    		<h:commandButton  id="save" style="display:none;">
+    			<f:ajax event="click" listener="#{equipmentDragSaveBean.saveEquipment}" execute="equData" render=":myform:shuaxin"></f:ajax>
+    		</h:commandButton>
+		</div>
+		<div style="border: 0px;padding: 0px;margin: 0px;">
+			<img id="centerbg" style="position: absolute; left: 0px; z-Index: -1;" src="../images/WIS2_content_bg.png" />
+			<div id="mybox" style="border: red solid 0px;position: relative;padding: 0px;margin: 0px;">
+			
+	    	</div>
+    	</div>
+    	
+    	<div style="width:100%;" class="headDiv" >
+    		<font style="font-size: 25px;font-weight: bold;margin-left: 20px;">
+    			<h:outputText value="#{equipmentDragSaveBean.nodeName}" />
+    		</font>
+    	</div>
+    	<div style="width: 100%;padding-bottom: 10px;" id="nobox" >
+    	
+    	</div>
+    	<h:panelGrid id="shuaxin">
+		<h:inputHidden value="#{equipmentDragSaveBean.showMsg}" id="showMsg" />
+		<script type="text/javascript">
+		   var showMsg = document.getElementById("myform:showMsg").value;
+		   if(showMsg!=null &amp;&amp;showMsg!=""){
+	             alert(showMsg);	   
+		   }
+		</script>
+	   </h:panelGrid>
+	<script type="text/javascript">
+	//<![CDATA[
+	     //定义可拖动范围大小
+	    document.getElementById("mybox").style.height = hjb51* 703 / 1080 + "px";
+		document.getElementById("mybox").style.width = wjb51 + "px";
+		
+		var bgpath=document.getElementById("myform:bgpath").value;
+		document.getElementById("centerbg").src="../images/"+bgpath;
+		document.getElementById("centerbg").style.width = wjb51+"px";
+		document.getElementById("centerbg").style.height = hjb51* 703 / 1080 + "px";
+
+	     ///////////////////////////////////////////////////////////
+	    var equ=document.getElementById("myform:equData").value;
+	    var noPutBox=document.getElementById("myform:xyAxisNull").value;
+	    //alert("noPutBox:"+noPutBox);
+	    var mydata=eval('(' + equ + ')');
+	    var nobox=eval('(' + noPutBox + ')');
+	    
+        var isIE = (document.all) ? true : false;
+        var money = function (id) {
+            return "string" == typeof id ? document.getElementById(id) : id;
+        };
+        var Class = {
+            create: function () {
+                return function () { this.initialize.apply(this, arguments); }
+            }
+        }
+        var Extend = function (destination, source) {
+            for (var property in source) {
+                destination[property] = source[property];
+            }
+        }
+
+        var Bind = function (object, fun) {
+            return function () {
+                return fun.apply(object, arguments);
+            }
+        }
+
+        var BindAsEventListener = function (object, fun) {
+            return function (event) {
+                return fun.call(object, (event || window.event));
+            }
+        }
+
+        function addEventHandler(oTarget, sEventType, fnHandler) {
+            if (oTarget.addEventListener) {
+                oTarget.addEventListener(sEventType, fnHandler, false);
+            } else if (oTarget.attachEvent) {
+                oTarget.attachEvent("on" + sEventType, fnHandler);
+            } else {
+                oTarget["on" + sEventType] = fnHandler;
+            }
+        };
+
+        function removeEventHandler(oTarget, sEventType, fnHandler) {
+            if (oTarget.removeEventListener) {
+                oTarget.removeEventListener(sEventType, fnHandler, false);
+            } else if (oTarget.detachEvent) {
+                oTarget.detachEvent("on" + sEventType, fnHandler);
+            } else {
+                oTarget["on" + sEventType] = null;
+            }
+        };
+
+        //拖放程序
+        var SimpleDrag = Class.create();
+        SimpleDrag.prototype = {
+            //拖放对象,触发对象
+            initialize: function (drag) {
+                this.Drag = money(drag);
+                this._x = this._y = 0;
+                this._fM = BindAsEventListener(this, this.Move);
+                this._fS = Bind(this, this.Stop);
+                this.Drag.style.position = "absolute";
+                addEventHandler(this.Drag, "mousedown", BindAsEventListener(this, this.Start));
+            },
+            //准备拖动
+            Start: function (oEvent) {
+            	var xPercent = wjb51/2050;
+      			var yPercent = hjb51/1080;
+            	var nv=this.Drag.id.substring(3,this.Drag.id.length);
+            	var xv= parseFloat(this.Drag.style.left.substring(0, this.Drag.style.left.length - 2)) / parseFloat(xPercent);
+            	var yv=parseFloat(this.Drag.style.top.substring(0, this.Drag.style.top.length - 2)) / parseFloat(yPercent);
+            	document.getElementById("xlh").value=nv;
+            	document.getElementById("xzb").value=xv;
+            	document.getElementById("yzb").value=yv;
+            	//document.getElementById("xyAxis").innerHTML ="equSerialNo:"+nv+" , xAxis:"+xv+ "px , yAxis:"+yv + "px";
+
+                this._x = oEvent.clientX - this.Drag.offsetLeft;
+                this._y = oEvent.clientY - this.Drag.offsetTop;
+                addEventHandler(document, "mousemove", this._fM);
+                addEventHandler(document, "mouseup", this._fS);
+            },
+            //拖动
+            Move: function (oEvent) {
+            	var mybox=document.getElementById("mybox");
+            	
+            	//正常情况下的x y值
+            	var lx=oEvent.clientX - this._x;
+            	var ty=oEvent.clientY - this._y;
+            	
+            	var myh=mybox.style.height;
+	        		myh=myh.substring(0,myh.length-2);//获取边框的高
+	        	var myw=mybox.style.width;
+	        		myw=myw.substring(0,myw.length-2);//获取边框的高
+	        		
+	        	var	imgId=this.Drag.id.substring(3,this.Drag.id.length);//获取图片的 id
+	        	var img=document.getElementById(imgId);
+	        	var imgh=img.style.height;//获取图片的高
+	        		imgh=imgh.substring(0,imgh.length-2);
+	        	var imgw=img.style.width;//获取图片的宽
+	        		imgw=imgw.substring(0,imgw.length-2);
+            	//设置最小值
+            	var minL=0;
+            	var minT=0;
+            	//设置最大值
+            	var maxL=parseFloat(myw)-parseFloat(imgw);
+            	var maxT=parseFloat(myh)-parseFloat(imgh);
+            	
+            	var cx=lx<minL?minL:lx;//设值   
+            		cx=cx>maxL?maxL:cx; 
+	        	var cy=ty<minT?minT:ty;//设值  
+	        		cy=cy>maxT?maxT:cy;
+	        		
+	        	var xPercent = wjb51/2050;
+	  			var yPercent = hjb51/1080;
+	        	var nv=this.Drag.id.substring(3,this.Drag.id.length);
+	        	var xv= parseFloat(this.Drag.style.left.substring(0, this.Drag.style.left.length - 2)) / parseFloat(xPercent);
+	        	var yv=parseFloat(this.Drag.style.top.substring(0, this.Drag.style.top.length - 2)) / parseFloat(yPercent);
+	        	
+	        	document.getElementById("xlh").value=nv;
+            	document.getElementById("xzb").value=xv;
+            	document.getElementById("yzb").value=yv;
+	            
+	            this.Drag.style.left = cx + "px";
+	            this.Drag.style.top =  cy + "px";
+            },
+            //停止拖动
+            Stop: function () {
+                removeEventHandler(document, "mousemove", this._fM);
+                removeEventHandler(document, "mouseup", this._fS);
+            }
+        };
+
+        /////////////////////////////////////////////////////////
+		var ii=[];
+       //可拖动区域内的设备加载
+        for (var i = 0; i < mydata.content.length; i++) {
+        	 var htmlstring = "";
+        	//alert(mydata.content[i].path);
+        	var xPercent = wjb51/2050;
+			var yPercent = hjb51/1080;
+			var actualx=parseFloat(mydata.content[i].xAxis*xPercent);
+			var actualy=parseFloat(mydata.content[i].yAxis*yPercent);
+            htmlstring  = '<div id="mb_' + mydata.content[i].equSerialNo + '" style="position:absolute; left:' + actualx + 'px; top:' + actualy + 'px;">'
+			            + '	 <img src="../images/device/tj'+mydata.content[i].path+'" style="z-index: 9;" '
+			            + '	 	id="'+mydata.content[i].equSerialNo+'" />' 
+			            + '</div>';
+			document.getElementById("mybox").innerHTML += htmlstring;
+			document.getElementById("nobox").innerHTML +="<input type='checkbox' DISABLED  checked='checked'   name='boxlist' value="+
+				mydata.content[i].equSerialNo+" />"+mydata.content[i].equSerialNo+"&nbsp;&nbsp;&nbsp;";
+		ii[i]=mydata.content[i].path;
+          //先获取原图片的大小，不是屏幕大小，然后用原图片大小来等比例缩小或者放大。
+			imgReady('../images/device/tj'+mydata.content[i].path, function () {
+				for(i = 0; i < ii.length; i++) {
+					if(this.src.indexOf(ii[i]) > -1) {
+						break;
+					}
+				}
+				  var imgwjb51=this.width;
+			   	  var imghjb51=this.height;
+			   	  var imgPercent = wjb51/2150; //缩小比例为浏览器宽度/1920. 用高的比例来缩小 
+			   	  //alert("1232:"+mydata.content[i].equSerialNo);
+				  document.getElementById(mydata.content[i].equSerialNo).style.width=parseFloat(imgwjb51*imgPercent)+"px";
+				  document.getElementById(mydata.content[i].equSerialNo).style.height=parseFloat(imghjb51*imgPercent)+"px";
+			}); 
+        }
+        //显示 xy 轴为空的设备序列号
+        for (var i = 0; i < nobox.content.length; i++) {
+       	 	var htmlstring = "";
+	       	//alert("testss");
+	       	var xPercent = wjb51/2050;
+			var yPercent = hjb51/1080;
+	           htmlstring  ='<input type="checkbox" name="boxlist" '+nobox.content[i].equSerialNo
+	           	+' onclick="addEqu(\''+nobox.content[i].equSerialNo+'\')" id="is_'+nobox.content[i].equSerialNo+'" />'
+	           	+ nobox.content[i].equSerialNo;
+				document.getElementById("nobox").innerHTML += htmlstring; 
+
+         }
+        
+        //禁止图片拖动到新窗口打开
+        for (i in document.images) document.images[i].ondragstart = imgdragstart;
+        function imgdragstart() { return false; } 
+        
+
+        for (var i = 0; i < mydata.content.length; i++) {
+            new SimpleDrag("mb_" + mydata.content[i].equSerialNo);
+        }
+		
+        //获取所有图片坐标 并提交到后台
+        function getposition() {
+            var mbb = $("div[id^='mb_']");
+            var b = "";
+            var xPercent = wjb51/2050;
+			var yPercent = hjb51/1080;
+            for (var i = 0; i < mbb.length; i++) {
+                var nowx = document.getElementById(mbb[i].id).style.left;
+                var nowy = document.getElementById(mbb[i].id).style.top;
+                var storedx = parseFloat(nowx.substring(0, nowx.length - 2)) / parseFloat(xPercent);
+                var storedy = parseFloat(nowy.substring(0, nowy.length - 2)) / parseFloat(yPercent);
+                b += "," + mbb[i].id.substring(3, mbb[i].id.length) + ":" + storedx + ":" + storedy;
+            } 
+            //alert(b.substring(1,b.length));
+            document.getElementById("myform:equData").value=b.substring(1,b.length);
+            document.getElementById("myform:save").click();
+            
+        }
+        //更改坐标
+        function updateZB(){
+        	var xlh=document.getElementById("xlh").value;
+        	var xzb=document.getElementById("xzb").value;
+        	var yzb=document.getElementById("yzb").value;
+        	var thebox=document.getElementById("mb_"+xlh);
+        	var xPercent = wjb51/2050;
+			var yPercent = hjb51/1080;
+        	thebox.style.left=parseFloat(xzb*xPercent)+"px";
+        	thebox.style.top=parseFloat(yzb*yPercent)+"0px";
+        	
+        }
+        function addEqu(equSerialNo){
+        	//alert(1);
+			document.getElementById("is_"+equSerialNo).onclick=function(){return false;};
+			document.getElementById("is_"+equSerialNo).disabled=true;
+			
+        	var xPercent = wjb51/2050;
+			var yPercent = hjb51/1080;
+            var htmlstring  = '<div id="mb_' +equSerialNo + '" style="position:absolute; left:0px; top:0px;">'
+			            + '	 <img src="../images/device/tjA31321298.png" style="z-index: 9;" '
+			            + '	 	id="'+equSerialNo+'" />' 
+			            + '</div>';
+			document.getElementById("mybox").innerHTML += htmlstring;
+
+			//先获取原图片的大小，不是屏幕大小，然后用原图片大小来等比例缩小或者放大。
+			imgReady('../images/device/tjA31321298.png', function () { 
+				  var imgwjb51=this.width;
+			   	  var imghjb51=this.height;
+			   	  var imgPercent = wjb51/2150; //缩小比例为浏览器宽度/1920. 用高的比例来缩小 
+			   	  //alert("1232:"+mydata.content[i].equSerialNo);
+				  document.getElementById(equSerialNo).style.width=parseFloat(imgwjb51*imgPercent)+"px";
+				  document.getElementById(equSerialNo).style.height=parseFloat(imghjb51*imgPercent)+"px";
+			}); 
+			
+			 //禁止图片拖动到新窗口打开
+	        for (i in document.images) document.images[i].ondragstart = imgdragstart;
+	        function imgdragstart() { return false; } 
+	        
+
+	       
+	        new SimpleDrag("mb_" + equSerialNo);
+	       
+        }
+	//]]>
+	</script>
+	</h:form>
+</h:body>
+</html>

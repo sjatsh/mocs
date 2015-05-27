@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:form id="myform">
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+<h:outputScript library="js" name="mystack.js"></h:outputScript>
+<h:outputScript library="js" name="common.js"></h:outputScript>
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+<link rel="stylesheet" href="css/rich_table_ds.css" type="text/css"></link>
+<h:inputHidden id="nodeStr" value="#{StatDeviceMachineEventBean.nodeStr}" />
+<style type="text/css">
+*{margin:0px;}
+ .show
+     {
+         text-align: center;
+         position: absolute;
+         z-index: 1;
+         left: 00px;
+         top: 00px;
+      }
+  .show input
+  {
+      width: 100px;
+  }
+  .inputText{
+		width:50%;
+		height:65%;
+		line_height:65%;
+		font-family: "微软雅黑" !important;
+		border:1px solid #AAAAAA !important;
+}
+.rf-ds
+{
+	left:0px;
+}
+</style>
+<link rel="stylesheet" href="css/stat_device_machine_event.css" type="text/css"></link>
+
+<div class="title-bar">
+	<div class="logo-img">
+		<img src="images/profile_top_logo.png" />
+	</div>
+	<div class="title-text">机床事件分析</div>
+	<div class="filter-frame">
+		<div class="filter-bar">
+			<div class="filter-label">机床名称:</div>
+			<div class="filter-input">
+				<h:selectOneMenu  id="machineNo" styleClass="filter-select" value="#{StatDeviceMachineEventBean.machineName}">
+					<f:selectItems value="#{StatDeviceMachineEventBean.machineNameList}" />
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">事件名称:</div>
+			<div class="filter-input">
+				<h:selectOneMenu id="eventName" value="#{StatDeviceMachineEventBean.eventName}" styleClass="filter-select">
+					<f:selectItems value="#{StatDeviceMachineEventBean.eventNameList}" />
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">开始时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="start" tabindex="3" popup="true" inputClass="inputText" locale="en" value="#{StatDeviceMachineEventBean.startTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">结束时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="end"   tabindex="3"  popup="true" inputClass="inputText"	locale="en" value="#{StatDeviceMachineEventBean.endTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" />
+			</div>
+		</div>
+	</div>
+	<div class="filter-submit">
+		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
+			<a4j:ajax event="click" listener="#{StatDeviceMachineEventBean.getDeviceMachineEventStatAction}" 
+			render=":myform:machineEvent :myform:dataconte :myform:stable :myform:ds :myform:foot" 
+			execute="machineNo eventName start end" oncomplete="searchBtn()"></a4j:ajax>
+		</h:graphicImage>
+	</div>
+</div>
+<script language="javascript">
+	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
+	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080 + "px");
+	$(".title-text").css("left", wjb51 * 500 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
+	$(".filter-frame").css("left", wjb51 * 968 / 1920 + "px").css("top", hjb51 * 19 / 1080 + "px");
+	$(".filter-bar").css("width", wjb51 * 484 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 10 / 1080 + "px");
+	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
+	$(".filter-input").css("width", wjb51 * 246 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
+	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
+	$(".filter-input .rf-cal-extr").css("width", wjb51 * 246 / 1920 + "px");
+	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 47 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
+</script>
+
+<div class="content-frame">
+	<div class="tab-bar">
+		<div id="tab-list" class="tab-btn">列表</div>
+		<div id="tab-chart" class="tab-btn active">图表</div>
+	</div>
+	<div id="list-frame">
+		<rich:dataTable id="stable"
+			value="#{StatDeviceMachineEventBean.defaultDataModel}" rows="10"
+			rowClasses="even-row, odd-row" cellpadding="0" styleClass="stables" cellspacing="0" style="width:100%;
+		    text-align:center;" border="0" var="mac">
+			<rich:column >
+				<f:facet name="header">
+					<h:outputText value="设备机床ID" />
+				</f:facet>
+				<h:outputText value="#{mac.	equSerialNo}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="事件ID" />
+				</f:facet>
+				<h:outputText value="#{mac.eventId}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="事件时间" />
+				</f:facet>
+				<h:outputText value="#{mac.eventTime}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="事件名" />
+				</f:facet>
+				<h:outputText value="#{mac.eventName}" />
+			</rich:column>
+			<rich:column style="text-align:left;">
+				<f:facet name="header">
+					<h:outputText value="程序名" />
+				</f:facet>
+				<h:outputText value="#{mac.programmname}" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="操作人员" />
+				</f:facet>
+				<h:outputText value="" />
+			</rich:column>
+			<rich:column>
+				<f:facet name="header">
+					<h:outputText value="备注" />
+				</f:facet>
+				<h:outputText value="#{mac.eventMemo}" />
+			</rich:column>
+		</rich:dataTable>
+		
+		<rich:dataScroller for="stable" id="ds" maxPages="10"
+			page="#{StatDeviceMachineEventBean.scrollerPage}"
+			renderIfSinglePage="true" >
+			<f:facet name="first">
+				<h:outputText value="|◄◄" />
+			</f:facet>
+			<f:facet name="last">
+				<h:outputText value="►►|" />
+			</f:facet>
+			<f:facet name="fastForward">
+				<h:outputText value="►►" />
+			</f:facet>
+			<f:facet name="fastRewind">
+				<h:outputText value="◄◄" />
+			</f:facet>
+			<f:facet name="next">
+				<h:outputText value="►" />
+			</f:facet>
+			<f:facet name="previous">
+				<h:outputText value="◄" />
+			</f:facet>
+		</rich:dataScroller>
+	</div>
+	<div id="chart-frame">
+		<div style="width: 100%;position: absolute;font-size: 14px;z-index: 10;color: #333333;bottom:9%;left: 1%;" align="center">
+		<table style="width: 80%;height: 100%;" id="fontsizeone" border="0">
+			<tr>
+				<td style="width: 2%">
+					<div id="yanse1" style="background-color:#a776e3;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 7%;">
+					准备时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div id="yanse1" style="background-color:#41e23d;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 7%;">
+					运行时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div  id="yanse4" style="background-color:#f6ec58;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 7%;">
+					空闲时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div id="yanse2" style="background-color:#d2d2d2;width: 100%;">&#160;</div>	
+				</td>
+				<td style="width: 7%;">
+					关机时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div id="yanse2" style="background-color:#44bbe9;width: 100%;">&#160;</div>	
+				</td>
+				<td style="width: 7%;">
+					开机时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div  id="yanse3" style="background-color:#db3636;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 7%;">
+					故障时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div  id="yanse3" style="background-color:#b9f04b;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 7%;">
+					加工时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div  id="yanse3" style="background-color:#e944e7;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 7%;">
+					中断时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div  id="yanse3" style="background-color:#4e7ce5;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 7%;">
+					急停时间
+				</td>
+				<td style="width: 1%;"></td>
+				<td style="width: 2%">
+					<div  id="yanse3" style="background-color:#51f6c2;width: 100%;">&#160;</div>
+				</td>
+				<td style="width: 8%">
+					复位时间
+				</td>
+			</tr>
+		</table>
+		</div>
+		<h:commandButton id="black" style="display:none;"  value="查询">
+		    <a4j:ajax event="click" listener="#{StatDeviceMachineEventBean.black}" render=":myform:machineEvent :myform:dataconte :myform:stable " execute="machineNo eventName startTime finishTime"></a4j:ajax>
+		</h:commandButton>
+		<h:commandButton id="next" style="display:none;"  value="查询">
+		    <a4j:ajax event="click" listener="#{StatDeviceMachineEventBean.next}" render=":myform:machineEvent :myform:dataconte :myform:stable " execute="machineNo eventName startTime finishTime"></a4j:ajax>
+		</h:commandButton>
+		<h:panelGroup id="dataconte"> 
+			<h:inputHidden id="machineEvent" value="#{StatDeviceMachineEventBean.machineEvent}" />
+			<div id="Div1">
+				<div class="show" id="stackpanelcontainer">
+					<div id="stachchartcontainer">
+					</div>
+				</div>
+				<div class="prev" onclick="preday();" style="font-size:70%;font-weight: normal;color: #595959;">
+				                               前一天
+				</div>
+				<div id="bili"></div>
+				<div class="next" onclick="nexday();" style="font-size: 70%;font-weight: normal;color: #595959;">
+			        	后一天
+			    </div>
+			</div>
+			<script type="text/javascript">
+				// machine();
+				stackdochart();
+			</script>
+		</h:panelGroup>	
+	</div>
+</div>
+<script language="javascript">
+	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
+	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
+	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
+	$("#list-frame").css("top", "0px").css("left", "0px").css("width", wjb51 * 168 / 1920 + "px").css("height", hjb51 * 56 / 1080 + "px").css("font-size", hjb51 * 30 / 1080 + "px");
+	//$("#chart-frame").css("left", wjb51 * 168 / 1920 + "px").css("top", "0px").css("width", wjb51 * 168 / 1920 + "px").css("height", hjb51 * 56 / 1080 + "px");
+	$("#chart-frame").css("top", hjb51 * 56 / 1080 + "px").css("width", wjb51 + "px").css("height", hjb51 * 656 / 1080 + "px");
+	$("#chart-frame .prev").css("left", wjb51 * 20 / 1920 + "px").css("top", hjb51 * 15 / 1080 + "px");
+	$("#chart-frame #bili").css("left", wjb51 * 120 / 1920 + "px").css("top", hjb51 * 15 / 1080 + "px");
+	$("#chart-frame .next").css("right", wjb51 * 20 / 1920 + "px").css("top", hjb51 * 15 / 1080 + "px");
+	
+	
+	var smallWidth = wjb51 * 168 / 1920;
+	var smallHeight = hjb51 * 56 / 1080;
+	var bigTop = hjb51 * 60 / 1080;
+	var bigWidth = wjb51;
+	var bigHeight = hjb51 * 656 / 1080;
+	$("#tab-list").click(function() {
+		if($("#tab-list").attr("class") == "tab-btn active") {return;}
+		
+		$("#tab-list").addClass("active");
+		$("#tab-chart").removeClass("active");
+
+		$("#list-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
+		$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 200);
+	});
+	$("#tab-chart").click(function() {
+		if($("#tab-chart").attr("class") == "tab-btn active") {return;}
+		
+		$("#tab-list").removeClass("active");
+		$("#tab-chart").addClass("active");
+		
+		$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 200);
+		$("#chart-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
+		
+		//resize chart
+		$("#stackpanelcontainer").css("width", "100%"); 
+		$('#stachchartcontainer').highcharts().setSize($("#list-frame").width(), $("#stachchartcontainer").height())
+
+	});
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+           /*
+    var imgPercent = hjb51/1080; //比例 
+    
+    document.getElementById("table").style.width=wjb51;
+	document.getElementById("table").style.height=990/1080*hjb51;
+	document.getElementById("table").style.color="#5a5a5a";
+	document.getElementById("table").style.fontFamily="微软雅黑";
+	
+	var home=document.getElementById("home");
+	home.width=380/1080*hjb51+"px";
+	home.height=260/1080*hjb51+"px"; //变化连接区域的home大小
+	
+
+	var new_image = new Image();
+	new_image.src = document.getElementById("img1").src;
+	var wjbimg= new_image.width;
+	var hjbimg= new_image.height;
+	document.getElementById("img1").style.width=wjbimg*imgPercent+"px";
+	document.getElementById("img1").style.height=hjbimg*imgPercent+"px";//变化图片大小
+	
+	document.getElementById("headtr").style.height=hjb51*265/1080+"px";
+	
+	document.getElementById("biaoti").style.fontSize=32/1080*hjb51+"px";
+	document.getElementById("shijian").style.fontSize=25/1080*hjb51+"px";
+	document.getElementById("tiaojian").style.fontSize=25/1080*hjb51+"px";//变化字体大小      
+	
+	document.getElementById("myform:button1").style.width=  wjb51*180/1920 +"px";
+	document.getElementById("myform:button1").style.height= hjb51*65/1080 +"px";
+	document.getElementById("myform:button1").style.lineHeight= hjb51*65/1080 +"px";
+	document.getElementById("myform:button1").style.fontSize= hjb51*50/1080 +"px";
+	
+	document.getElementById("tubiao").style.height=475/1080*hjb51+"px";//变化图标大小
+	document.getElementById("tubiao").style.width=wjb51+"px";//变化列表大小
+	document.getElementById("tubiaobg").style.width=wjb51+"px";//变化列表大小
+	
+	document.getElementById("liebiao").style.height=250/1080*hjb51+"px";//变化列表大小
+	document.getElementById("liebiao").style.width=wjb51+"px";//变化列表大小
+	document.getElementById("liebiaodiv").style.height=218/1080*hjb51+"px";//变化列表大小
+	document.getElementById("img2").style.height=218/1080*hjb51+"px";//变化列表大小
+	document.getElementById("img2").style.width=wjb51+"px";//变化列表大小
+	$(".rf-dt-c").css("font-size",15/1080*hjb51+"px");
+	$(".rf-dt-c").css("color","#5a5a5a");
+	$(".rf-dt-c").css("font-family","微软雅黑");
+	$(".rf-dt-shdr-c").css("font-size",18/1080*hjb51+"px");
+	$(".rf-dt-shdr-c").css("font-family","微软雅黑");
+	*/
+
+	function machine() {
+		var machine = document.getElementById("myform:machineEvent").value;
+		//alert(machine);
+		
+	}
+	searchBtn();
+//]]>
+</script>
+</h:form>
+</ui:composition>

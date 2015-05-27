@@ -1,0 +1,176 @@
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family:"Î¢ÈíÑÅºÚ";
+	color: #595959;
+	font-weight:bold;
+}
+
+.hdts1{
+	height:20%;
+}
+
+.datatable_column{
+	
+}
+
+.jobdispatchlist_container {
+	border: solid 1px red ;
+	width:1024px;
+	margin-left:200px;
+}
+
+.jobdispatchlist_top{
+border: solid 1px red ;
+width:1024px;
+
+}
+
+.jobdispatchlist_center{
+border: solid 1px red ;
+height:500px;
+
+}
+
+.jobdispatchlist_center_left{
+border: solid 1px red ;
+float:left;
+width:585px;
+
+}
+
+.jobdispatchlist_center_left_one{
+border: solid 1px red ;
+
+}
+.jobdispatchlist_center_left_two{
+border: solid 1px red ;
+
+}
+.jobdispatchlist_center_left_three{
+border: solid 1px red ;
+height:300px;
+}
+.jobdispatchlist_center_left_four{
+border: solid 1px red ;
+
+}
+
+.jobdispatchlist_center_right{
+border: solid 1px red ;
+float:left;
+width:432px;
+
+
+}
+
+.jobdispatchlist_center_right_one{
+border: solid 1px red ;
+height:120px;
+
+}
+
+.jobdispatchlist_center_right_two{
+border: solid 1px red ;
+height:120px;
+
+}
+
+.jobdispatchlist_center_right_three{
+border: solid 1px red ;
+height:120px;
+
+}
+
+.jobdispatchlist_bottom{
+border: solid 1px red ;
+clear:both;
+width:1024px;
+
+
+}
+
+
+
+.input_style{
+ 	margin-left: 10px;
+	width:150px ;
+	
+}
+
+.input_button_style{
+
+}
+
+
+.input_time_style{
+    color:#595959 !important;  
+   	margin-left: 10px;
+	width:150px ;
+}
+
+.select_style{
+    color:#595959;
+  	margin-left: 10px;
+	width:150px ;
+ 	font-weight: bold;
+}
+/************************************************************/
+.font{
+	font-weight:bold;
+	font-size: 26px;
+}
+.input{
+	width: 550px;
+	height: 40px;
+	color: #595959 !important;
+}
+.inputduan{
+	width: 183px;
+	height: 40px;
+	color: #595959 !important;
+}
+.inputzhong{
+	width:240px;
+	height: 40px;
+	color: #595959 !important;
+}
+.selectChang{
+	width: 551px;
+	height: 40px;
+	font-size: 24px;
+	color: #595959 !important;
+}
+.selectduan{
+	width: 254px;
+	height: 40px;
+	font-size: 28px;
+	color: #595959 !important;
+}
+.botton{
+	width: 180px;
+	height: 40px;
+}
+.time{
+	width: 324px;
+	height: 40px;
+	color: #595959 !important;
+}
+.timezhong{
+	width:240px;
+	height: 40px;
+	font-size:26px !important;
+	color: #595959 !important;
+}
+.menuleft{
+	width: 780px;
+	height: 35px;
+	background-image: url('/mocs/images/row_bg.png');
+	background-repeat: no-repeat;
+}
+.menuright{
+	width: 740px;
+	height: 35px;
+	background-image: url('/mocs/images/row_bg.png');
+	background-repeat: no-repeat;
+}

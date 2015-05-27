@@ -1,0 +1,57 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.user.page.UserList" contentType="text/html;charset=UTF-8" resource="user"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+
+<c:ajaxmanager name="auth" />
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+	var AUTH_VIEW_INITED = false;
+	var AUTH_VIEW_TEMPLATE = null;
+	function auth_view(userId){
+		if(!AUTH_VIEW_INITED){
+			AUTH_VIEW_TEMPLATE = TrimPath.parseDOMTemplate("template_auth_view");	
+			AUTH_VIEW_INITED = true;
+		}
+		
+		auth.auth_view(userId, function(res){
+			var result = eval(res.responseText);
+	 		if(result.succ){
+	 			var o = result.content;
+	 			var html = AUTH_VIEW_TEMPLATE.process({"data":o});
+	 			$.blockUI({"message":html, "css":{"left":"10%","top":"5%","width":"620px"}});
+	 		}else{
+	 			alert(result.msg);
+	 		}
+		});
+	}
+	
+	
+
+//-->
+</SCRIPT>
+
+
+<tr class="function_role_tr">	
+	<th style="width:15%"  visible="<%#loginNameVisible%>">${user.loginName}</th>
+	<th style="width:20%"  visible="<%#nickNameVisible%>">${user.nickName}</th>
+	<th style="width:25%"  visible="<%#emailVisible%>">${user.email}</th>
+	<th style="width:10%"  visible="<%#statusVisible%>">${user.status}</th>
+	<th visible="<%#modifyVisible%>">操作</th>
+</tr>
+<c:repeater id="repeater" ViewStateEnabled="false" datasource="<%#data%>">
+<tr class="function_role_tr<%#(container.dataIndex % 2) + 1%>">
+	<td  visible="<%#loginNameVisible%>" title='<%#DataBinder.eval(container.dataItem, "loginName")%>'><%#DataBinder.eval(container.dataItem, "loginName")%></td>
+	<td  visible="<%#nickNameVisible%>" title='<%#DataBinder.eval(container.dataItem, "nickName")%>'><%#DataBinder.eval(container.dataItem, "nickName")%></td>
+	<td  visible="<%#emailVisible%>" title='<%#DataBinder.eval(container.dataItem, "email")%>'><%#DataBinder.eval(container.dataItem, "email")%></td>
+	<td  visible="<%#statusVisible%>"><%#"1".equals(String.valueOf(DataBinder.eval(container.dataItem, "status")))?"${role.state_valid}":"${role.state_invalid}"%></td>
+	
+	<td class="function_role_td44" visible="<%#modifyVisible%>">
+		<a href="userInfoDetail.jasmine?view=true&userId=<%#DataBinder.eval(container.dataItem, "userId")%>"><%#"0".equals(String.valueOf(DataBinder.eval(container.dataItem, "status")))?"":"${button.label.view}"%></a>		
+		<a visible="<%#DataBinder.eval(container.dataItem, "manageVisible")%>" href="userInfoDetail.jasmine?userId=<%#DataBinder.eval(container.dataItem, "userId")%>"> | ${button.label.edit}</a>
+		<a visible="<%#DataBinder.eval(container.dataItem, "manageVisible")%>" href="javascript:void(0)" onclick="doRemove ('<%#DataBinder.eval(container.dataItem, "userId")%>')"> | ${button.label.delete}</a>
+		<a href="javascript:void(0)" onclick="auth_view('<%#DataBinder.eval(container.dataItem, "userId")%>')"> | ${button.label.authView}</a>
+		
+	
+	</td>
+</tr>
+</c:repeater>
+

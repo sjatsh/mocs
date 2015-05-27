@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<h:outputScript library="js" name="view_shiftplan_information.js"></h:outputScript>
+<!-- 头部图表层 -->
+<div style="width: 854px; height: 303px;">
+	<h:inputHidden value="#{ShiftPlanBean.nodeID}" />
+	<div class="productsearcharea">
+		<div style="height:6px;width:854px;"></div>
+		<h:outputLabel value="开始时间"  styleClass="common_condition_spacing_first"/>
+		<rich:calendar id="startTime" popup="true" locale="en" inputClass="common_calendar" 
+			value="#{ShiftPlanBean.startTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="false"
+			requiredMessage="必须填写时间" styleClass="common_condition_spacing_label" />
+		<h:message for="startTime" style="color:red" />
+		<h:outputLabel value="结束时间" styleClass="common_condition_spacing_label"/>
+		<rich:calendar id="endTime" popup="true" locale="en" inputClass="common_calendar"
+			value="#{ShiftPlanBean.endTime}" cellWidth="10px" cellHeight="20px" styleClass="common_condition_spacing_label"
+			datePattern="yyyy-MM-dd" required="false" requiredMessage="必须填写时间" />
+		<h:message for="endTime" style="color:red" />
+		<a4j:commandButton id="button1" styleClass="common_condition_spacing_end"
+			actionListener="#{ShiftPlanBean.getShiftPlanAction}" value="查询" 
+			render=":myform:rightiframe" onclick="showMascot();">
+		</a4j:commandButton>
+	</div>
+	<div class="shadowdiv"></div>
+	<div id="highchartChart" class="highChart"></div>
+</div>
+<!-- <div style="clear:both; font-size:0px; height:10px; overflow:hidden;"></div> -->
+
+
+<!-- 数据显示或分页层 -->
+<div style="width: 100%;  height:150px;">
+	<div style="background-image:url('img/common_info_img/common_allTable_bg.png'); height:146px;width:100%;">
+		<rich:dataTable id="datatable1"
+			value="#{ShiftPlanBean.defaultDataModel}" rows="5"
+			rowClasses="even-row, odd-row" cellpadding="0"
+			styleClass="dataTableEx" cellspacing="0" style="width:850px;"
+			border="0" var="record">
+			<h:column id="column1" >
+				<f:facet name="header">
+					<h:outputText value="班次名" />
+				</f:facet>
+				<h:outputText value="#{record.userShiftid}"></h:outputText>
+			</h:column>
+			<h:column id="column2">
+				<f:facet name="header">
+					<h:outputText value="班次线路" />
+				</f:facet>
+				<h:outputText value="#{record.userShiftName}"></h:outputText>
+			</h:column>
+			<h:column id="column3" >
+				<f:facet name="header">
+					<h:outputText value="负责组" />
+				</f:facet>
+				<h:outputText value="#{record.userShiftGroup}"></h:outputText>
+			</h:column>
+			<h:column id="column4" >
+				<f:facet name="header">
+					<h:outputText value="开始时间" />
+				</f:facet>
+				<h:outputText value="#{record.startworkTime}"></h:outputText>
+			</h:column>
+			<h:column id="column5" >
+				<f:facet name="header">
+					<h:outputText value="结束时间" />
+				</f:facet>
+				<h:outputText value="#{record.endworkTime}"></h:outputText>
+			</h:column>
+			<h:column id="column6">
+				<f:facet name="header">
+					<h:outputText value="实际产量" />
+				</f:facet>
+				<h:outputText value="#{record.actualQuantity}"></h:outputText>
+			</h:column>
+		</rich:dataTable>
+	</div>
+	<div style=" height:32px; text-align: center; background-image:url('img/common_info_img/common_number_bg.png') ;">
+		<rich:dataScroller for="datatable1" id="ds" maxPages="10" 
+			page="#{ShiftPlanBean.scrollerPage}" renderIfSinglePage="true"
+			scrollerListener="#{ShiftPlanBean.createshiftPlanChart}" render=":myform:rightiframe" >
+			<f:facet name="first">
+				<h:outputText value="|◄◄" />
+			</f:facet>
+			<f:facet name="last">
+				<h:outputText value="►►|" />
+			</f:facet>
+			<f:facet name="fastForward">
+				<h:outputText value="►►" />
+			</f:facet>
+			<f:facet name="fastRewind">
+				<h:outputText value="◄◄" />
+			</f:facet>
+			<f:facet name="next">
+				<h:outputText value="►" />
+			</f:facet>
+			<f:facet name="previous">
+				<h:outputText value="◄" />
+			</f:facet>
+		</rich:dataScroller>
+	</div>
+	<h:inputHidden value="#{ShiftPlanBean.chartData}" id="beanvalue" />
+	<script type="text/javascript">
+		loadData();
+	</script>
+</div>
+</ui:composition>

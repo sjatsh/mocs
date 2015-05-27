@@ -1,0 +1,25 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.user.page.RoleOfUserList" contentType="text/html;charset=UTF-8" %>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+
+
+
+<c:button id="btnDelete" style="display:none" text="delete" runat="server"/>
+
+<table cellpadding="0" cellspacing="0" class="data-table">
+<tr><th class="pk-selection"><input type="checkbox" id="selectAll" onclick="toggleAll (this, 'roleUserId')"/></th>
+<th visible="<%#roleCodeVisible%>">角色代码</th>
+<th visible="<%#roleNameVisible%>">角色名称</th>
+</tr>
+<c:repeater id="repeater" ViewStateEnabled="false" datasource="<%#data%>">
+<tr class="row<%#(container.dataIndex % 2) + 1%>">
+<td class="pk-selection">
+<input name = "roleUserId" type="checkbox" value="<%#DataBinder.eval(container.dataItem, "roleUserId")%>"/>
+</td>
+<td visible="<%#roleCodeVisible%>"><%#DataBinder.eval(container.dataItem, "roleCode")%></td>
+<td visible="<%#roleNameVisible%>"><%#DataBinder.eval(container.dataItem, "roleName")%></td>
+</tr>
+</c:repeater>
+<tr><td colspan="6"><c:pagging2 id="pagging" pagesize="15" max="10" totalRows="<%#DataBinder.eval(data, "totalRows")%>" /></td></tr>
+</table>
+
+

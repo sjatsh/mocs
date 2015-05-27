@@ -1,0 +1,407 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>	
+	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>	
+	<style type="text/css">
+	</style>
+
+<div style="position:relative; width: 100%;height: 100%;">
+	<div class="headDiv" id="equipment_type_center_right_top">
+		<div style="width: 100%;height: 5px;"></div>
+			<h:outputText value="类型: " class="selecttext" id="equipment_cost_text1" style="margin-left: 2%"/>
+							<h:selectOneMenu id="equTypeId" value="#{EquipmentCost.equTypeId}"
+								styleClass="select" style="font-size:10px; margin-left: 0;">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{EquipmentCost.equTypeMap}"></f:selectItems>
+							</h:selectOneMenu>
+		<h:outputText value="名称: " class="selecttext" id="equipment_cost_text2" style="margin-left:2%;"/>
+									<h:selectOneMenu id="equId" value="#{EquipmentCost.equId}"
+								styleClass="select" style="font-size:10px; margin-left: 0;">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{EquipmentCost.equMap}"></f:selectItems>
+							</h:selectOneMenu>
+        <h:outputText value="编码: " class="selecttext" id="equipment_cost_text3" style="margin-left:2%;" />
+        							<h:selectOneMenu id="code" value="#{EquipmentCost.code}"
+								styleClass="select" style="font-size:10px; margin-left: 0;">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{EquipmentCost.codeMap}"></f:selectItems>
+							</h:selectOneMenu>
+																    
+	<p:commandButton value="查询" actionListener="#{EquipmentCost.searchList}" update=":myform:carList" styleClass="delete"></p:commandButton> 
+    <p:commandButton id="add" value="新建" update=":myform:apart " oncomplete="addPartTypelog.show()"   styleClass="delete"/> 
+    <p:commandButton  value="删除" styleClass="delete"  actionListener="#{EquipmentCost.onSelected}" oncomplete="ondelete()" update=":myform:sed"/> 
+    <p:commandButton id="delete" value="删除(D)" update=":myform:carList :myform:displayMulti"  actionListener="#{EquipmentCost.onDelete}" style="display:none;"/> 
+ </div>
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+ 
+	<div class="table">
+	   <p:dataTable id="carList" var="record" value="#{EquipmentCost.mediumEquipmentCostInfoModel}" paginator="true" rows="10"   paginatorPosition="bottom"
+	    editable="true"  selection="#{EquipmentCost.selectedEquipment}">  
+	        <p:ajax event="rowEdit" listener="#{EquipmentCost.onEdit}" update=":myform:carList :myform:messages" />
+	        <p:ajax event="rowEditCancel" listener="#{EquipmentCost.onCancel}" update=":myform:carList" />
+	  
+	        <p:column selectionMode="multiple"  style="width:2%;word-break: break-all;" />
+	        <p:column headerText="设备编码" style="width:8%;word-break: break-all;" >  
+	           <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.equSerialNo}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.equSerialNo}" disabled="true" />
+	                    <ui:remove>
+	                    <p:inputText value="#{record.equSerialNo}"   />
+	                    </ui:remove>
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>  
+	        
+	  
+	        <p:column headerText="设备类型" style="width:8%;word-break: break-all;" >   
+	             
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.equipmentType}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.equipmentType}" disabled="true" />
+	                    <ui:remove>
+	                    <p:inputText value="#{record.equipmentType}"   />
+	                    </ui:remove>
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>  
+	  
+	        <p:column headerText="设备名称" style="width:8%;word-break: break-all;" >   
+	             
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.equName}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.equName}" disabled="true" />
+	                    <ui:remove>
+	                    <p:inputText value="#{record.equName}"   />
+	                    </ui:remove>
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>  
+	  
+	        <p:column headerText="设备采购全额" style="width:8%;word-break: break-all;" >  
+	             
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.equPrice}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.equPrice}"   />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>  
+	        
+	        <p:column headerText="折旧年限" style="width:8%;word-break: break-all;" >  
+	             
+	             <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.periodDepreciation}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.periodDepreciation}"   />
+	                </f:facet>
+	            </p:cellEditor>  
+	        </p:column>
+	        
+	        <p:column headerText="加工能耗因数" style="width:8%;word-break: break-all;" >     
+	             
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.processCost}" >
+	                    <f:convertNumber type="number" maxFractionDigits="10" maxIntegerDigits="10" ></f:convertNumber>
+	                    </h:outputText>
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.processCost}"   />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	        <p:column headerText="准备能耗因数" style="width:8%;word-break: break-all;" >  
+	             
+	           <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.prepareCost}" >
+	                    <f:convertNumber type="number" maxFractionDigits="10" maxIntegerDigits="10" ></f:convertNumber>
+	                    </h:outputText>
+	                    
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.prepareCost}"   />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	        <p:column headerText="空运行能耗因数 " style="width:8%;word-break: break-all;" >   
+	             
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.dryRunningCost}" >
+	                    <f:convertNumber type="number" maxFractionDigits="10" maxIntegerDigits="10" ></f:convertNumber>
+	                    </h:outputText>
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.dryRunningCost}"   />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	        <p:column headerText="切削能耗因数 " style="width:8%;word-break: break-all;" >                  
+	             <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.cuttingCost}" >
+	                    <f:convertNumber type="number" maxFractionDigits="10" maxIntegerDigits="10" ></f:convertNumber>
+	                    </h:outputText>
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.cuttingCost}"   />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	         <p:column headerText="空闲能耗因数 " style="width:8%;word-break: break-all;" >                  
+	             <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.idleCost}" >
+	                    <f:convertNumber type="number" maxFractionDigits="10" maxIntegerDigits="10" ></f:convertNumber>
+	                    </h:outputText>
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.idleCost}"   />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	         <p:column headerText="加工时间辅料因数" style="width:8%;word-break: break-all;" >                  
+	             <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.processAccessoriesCost}" >
+	                    <f:convertNumber type="number" maxFractionDigits="10" maxIntegerDigits="10" ></f:convertNumber>
+	                    </h:outputText>
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.processAccessoriesCost}" />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	         <p:column headerText="准备时间辅料因数" style="width:8%;word-break: break-all;" >                  
+	             <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{record.prepareAccessoriesCost}" >
+	                    <f:convertNumber type="number" maxFractionDigits="10" maxIntegerDigits="10" ></f:convertNumber>
+	                    </h:outputText>
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{record.prepareAccessoriesCost}"  />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        <p:column headerText="操作" style="width:2%;word-break: break-all;" >
+	            <p:rowEditor />
+	            
+	        </p:column>
+	
+	    </p:dataTable> 
+    </div>
+	<p:dialog id="addlog" widgetVar="addPartTypelog" resizable="false">
+      <h:panelGroup id="apart">
+      	<table>
+      		<tr>
+      			<td> 
+      				<h:outputText value="设备"  /><h:outputText style="color:red;" value="*" />
+		    	</td>
+      			<td>
+      				<h:selectOneMenu id="addequId"  
+						value="#{EquipmentCost.equCostObj.equSerialNo}" styleClass="" style="border:0px;">
+						<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<f:selectItems value="#{EquipmentCost.equIdMap}"></f:selectItems>
+					</h:selectOneMenu>
+					<h:message for="addequId" style="color:red" />
+      			</td>
+      			<td></td>
+      			<td></td>
+      		</tr>
+      		<tr>
+			    <td height="40px" width="100px">设备采购金额<h:outputText style="color:red;" value="*" /></td>
+			    <td width="200px"><h:inputText id="equPrice" value="#{EquipmentCost.equCostObj.equPrice}"  styleClass=""/></td>
+			    <td width="80px">元</td>
+			    <td width="80px"></td>
+		    </tr>
+      		<tr>
+      			<td>折旧年限<h:outputText style="color:red;" value="*" /></td>
+      			<td><h:inputText id="periodDepreciation" value="#{EquipmentCost.equCostObj.periodDepreciation}"  styleClass=""/></td>
+      			<td>年</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>加工能耗因数</td>
+      			<td><h:inputText value="#{EquipmentCost.equCostObj.processCost}"  styleClass="" id="processCost"/></td>
+      			<td>元/秒</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>准备能耗因数</td>
+      			<td><h:inputText value="#{EquipmentCost.equCostObj.prepareCost}"  styleClass="" id="prepareCost"/></td>
+      			<td>元/秒</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>空运行能耗因数</td>
+      			<td><h:inputText value="#{EquipmentCost.equCostObj.dryRunningCost}"  styleClass="" id="dryRunningCost"/></td>
+      			<td>元/秒</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>切削能耗因数</td>
+      			<td><h:inputText value="#{EquipmentCost.equCostObj.cuttingCost}"  styleClass="" id="cuttingCost"/></td>
+      			<td>元/秒</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>空闲能耗因数</td>
+      			<td><h:inputText value="#{EquipmentCost.equCostObj.idleCost}"  styleClass="" id="idleCost"/></td>
+      			<td>元/秒</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>加工时间辅料因数</td>
+      			<td><h:inputText value="#{EquipmentCost.equCostObj.processAccessoriesCost}"  styleClass="" id="processAccessoriesCost"/></td>
+      			<td>元/秒</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td>准备时间辅料时间</td>
+      			<td><h:inputText value="#{EquipmentCost.equCostObj.prepareAccessoriesCost}" styleClass="" id="prepareAccessoriesCost"/></td>
+      			<td>元/秒</td>
+      			<td></td>
+      		</tr>
+      	</table>
+      	<div class="headDivduan">
+			<p:commandButton onclick="onAdd()" value="增加"></p:commandButton>
+			<p:commandButton actionListener="#{EquipmentCost.addEquCost}"  oncomplete="addPartTypelog.hide()" 
+			 value="增加" update=":myform:carList :myform:apart :myform:messages :myform:dialogshow" style="display:none;" id="addPartType">
+			</p:commandButton>
+      	</div>
+    </h:panelGroup>
+    </p:dialog>
+     <p:dialog id="multiDialog"  widgetVar="multiCarDialog"  height="200" showEffect="fade" hideEffect="explode" >  
+        <p:dataList id="displayMulti" value="#{EquipmentCost.selectedEquipment}" var="part"> 
+        </p:dataList>  
+    </p:dialog>
+    <p:growl id="messages" showDetail="true"/> 
+     <h:inputHidden value="#{EquipmentCost.selected}" id="sed"></h:inputHidden>
+ </div>
+
+    
+       <script type="text/javascript">
+	//<![CDATA[
+	       function ondelete(){
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认删除此数据！")){
+		    		   document.getElementById("myform:delete").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行删除！");
+	    	   }
+	       }
+	       
+	       function onClear(){
+	    	   if(confirm("是否确认要清空数据,请慎重选择！")){
+	    		   document.getElementById("myform:clear").click();
+	    	   }
+	       }
+	       function onStop(){
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认停用这些数据！")){
+		    		   document.getElementById("myform:disabled").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行停用！");
+	    	   }
+	       }
+	       function onAdd(){
+	    	   var addequId=document.getElementById("myform:addequId").value;
+	    	   var equPrice=document.getElementById("myform:equPrice").value;
+	    	   var periodDepreciation=document.getElementById("myform:periodDepreciation").value;
+	    	   var processCost=document.getElementById("myform:processCost").value;
+	    	   var prepareCost=document.getElementById("myform:prepareCost").value;
+	    	   var dryRunningCost=document.getElementById("myform:dryRunningCost").value;
+	    	   var cuttingCost=document.getElementById("myform:cuttingCost").value;
+	    	   var idleCost=document.getElementById("myform:idleCost").value;
+	    	   var processAccessoriesCost=document.getElementById("myform:processAccessoriesCost").value;
+	    	   var prepareAccessoriesCost=document.getElementById("myform:prepareAccessoriesCost").value;
+	    	   if(null==addequId||""==addequId){
+	    		   alert("请选择设备");
+	    		   return false;
+	    	   }else  if(null==equPrice||""==equPrice){
+	    		   alert("请输入设备采购金额");
+	    		   return false;
+	    	   }else  if(isNaN(equPrice)){
+	    		   alert("设备采购金额只能为数字！");
+	    		   return false;
+	    	   }else if(null==periodDepreciation||""==periodDepreciation){
+	    		   alert("请输入折旧年限！");
+	    		   return false;
+	    	   }else  if(isNaN(periodDepreciation)){
+	    		   alert("折旧年限只能为数字！");
+	    		   return false;
+	    	   }else  if(isNaN(processCost)){
+	    		   alert("加工能耗因数只能为数字！");
+	    		   return false;
+	    	   }else  if(isNaN(prepareCost)){
+	    		   alert("准备能耗因数只能为数字！");
+	    		   return false;
+	    	   }else  if(isNaN(dryRunningCost)){
+	    		   alert("空运行能耗因数只能为数字！");
+	    		   return false;
+	    	   }else  if(isNaN(cuttingCost)){
+	    		   alert("切削能耗因数只能为数字！");
+	    		   return false;
+	    	   }else  if(isNaN(idleCost)){
+	    		   alert("空闲能耗因数只能为数字！");
+	    		   return false;
+	    	   }else  if(isNaN(processAccessoriesCost)){
+	    		   alert("加工时间辅料因数只能为数字！");
+	    		   return false;
+	    	   }else  if(isNaN(prepareAccessoriesCost)){
+	    		   alert("准备时间辅料时间只能为数字！");
+	    		   return false;
+	    	   }else{	   	   
+	    		   document.getElementById("myform:addPartType").click();
+	    	   }
+	       }
+	       document.getElementById("myform:dialog").value = null; //清空值
+	//]]>
+	</script>
+	<rich:panel id="dialogshow">
+     <h:inputHidden value="#{EquipmentCost.dialog}" id="dialog"></h:inputHidden>
+     <script type="text/javascript">
+	//<![CDATA[
+	      var temp=document.getElementById("myform:dialog").value;
+	    	   if(null!=temp&&"show"==temp){
+               alert("成本已存在，不要重复添加!");
+	    	   }
+	 //]]>
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+   </rich:panel>
+</ui:composition>

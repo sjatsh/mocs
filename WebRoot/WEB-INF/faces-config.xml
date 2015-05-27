@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+
+ <application>  
+ 	<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+</application> 
+ 
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>success</from-outcome> 
+		<to-view-id>jsf-demo.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>jobplanupdata</from-outcome> 
+		<to-view-id>/jobplan/jobplan_detail.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>jobplanadd</from-outcome> 
+		<to-view-id>/jobplan/jobplan_detail.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>jobplancontrol</from-outcome> 
+		<to-view-id>/jobplan/jobplan_detail.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>jobplanstatistics</from-outcome> 
+		<to-view-id>/jobplan/jobplan_detail.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>jobplancontroljobadd</from-outcome> 
+		<to-view-id>/jobplan/jobplan_control.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>UserResource</from-outcome> 
+		<to-view-id>/resource/view_consume_storage.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>realInformation</from-outcome> 
+		<to-view-id>/device/view_device_real_information.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>statDeviceTimePath</from-outcome> 
+		<to-view-id>/device/stat_device_time.xhtml</to-view-id> 
+	</navigation-case> 
+	<navigation-case>
+		<from-outcome>statDeviceOEETrendPath</from-outcome> 
+		<to-view-id>/device/stat_device_oee_trend.xhtml</to-view-id> 
+	</navigation-case>
+	<navigation-case>
+		<from-outcome>statDeviceMachineEventPath</from-outcome> 
+		<to-view-id>/device/stat_device_machine_event.xhtml</to-view-id> 
+	</navigation-case>
+	<navigation-case>
+		<from-outcome>statDeviceOEEBeanPath</from-outcome> 
+		<to-view-id>/device/stat_device_oee.xhtml</to-view-id> 
+	</navigation-case>
+	<navigation-case>
+		<from-outcome>statDeviceProcessEventBeanPath</from-outcome> 
+		<to-view-id>/device/stat_device_process_event.xhtml</to-view-id> 
+	</navigation-case>
+	<navigation-case>
+		<from-outcome>StatDeviceProFrequencyBeanPath</from-outcome> 
+		<to-view-id>/device/stat_device_processfrequency.xhtml</to-view-id> 
+	</navigation-case>
+</navigation-rule>
+
+<navigation-rule>
+	<navigation-case> 
+		<from-outcome>PartProcessGuide</from-outcome> 
+		<to-view-id>/parts/part_process_guide.xhtml</to-view-id> 
+	</navigation-case> 
+	<navigation-case> 
+		<from-outcome>PartProcessGuideUpdatePath</from-outcome> 
+		<to-view-id>/parts/part_process_guide_update.xhtml</to-view-id> 
+	</navigation-case> 
+	<navigation-case> 
+		<from-outcome>ProcessPlanInfoPath</from-outcome> 
+		<to-view-id>/parts/process_plan_info.xhtml</to-view-id> 
+	</navigation-case> 
+</navigation-rule>
+<validator>
+		<validator-id>yidongMobileValidator</validator-id>
+		<validator-class>smtcl.mocs.utils.device.YidongMobileValidator</validator-class>
+	</validator>
+</faces-config>

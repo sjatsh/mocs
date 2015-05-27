@@ -1,0 +1,73 @@
+	.rightDiv{
+		width: 663px;
+		height: 260px;
+		float: left;
+	}
+	
+	.treeDiv{
+		width: 180px;
+		height: 260px;
+		float: left;
+		font-size: 12px;
+		overflow: scroll;
+		margin-left: 10px;
+	}
+
+	.deletechang:hover{
+		background-color: #D8DCDD ;
+		background-image: url('') !important;
+	}
+	.ui-state-default {
+ 		border: 1px solid rgb(64,186,235);
+ 		background-color: rgb(64,186,235);
+ 		font-size: 12px;
+ 	}
+ 	.ui-chkbox-box {
+	    width: 16px;
+	    height: 16px;
+	    border-radius: 2px 2px 2px 2px;
+	    background-color: white;
+	}
+	.table{
+		font-size: 12px;
+		text-align: center;
+	}
+	.headDiv{
+		width:854px;
+		height: 39px;
+		background-image: url('/mocs/images/equ/head_bg_line.png');
+	}
+
+	.select{
+		margin-left:10px;
+		font-size:14px;
+		font-weight: bold;
+		color:#595959;
+	}
+	
+	.search{
+		background-color: #D8DCDD !important;
+ 		width: 26px !important;
+ 		height:24px !important;
+ 		background-image: url('/mocs/images/equ/head_sear_button.png') !important;
+
+	}	
+	
+	.textBg{
+		border:1px white solid !important;
+		margin-left:10px;
+		background-color: rgb(255, 255, 255) !important;
+		
+	}
+
+	.delete{
+		text-align: center;
+		margin-left: 10px;
+		background-color: #D8DCDD !important;
+ 		border:1px solid #D8DCDD !important;
+ 		width: 75px;		
+ 		font-size: 12px;
+	}
+
+
+ 

@@ -1,0 +1,197 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.user.page.UserInfoListPage" contentType="text/html;charset=UTF-8" resource="user"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="u" uri="userInfo.jscx" name="user" %>
+<%@taglib prefix="u" uri="../menu/top.jscx" name="top"%>
+<%@taglib prefix="u" uri="../menu/menu.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="../menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html><head>
+<title><c:Out value="<%#smtcl.mocs.utils.authority.HelperUtil.title()%>" /></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link href="../../authority/css/css.css" rel="stylesheet" type="text/css" />
+<u:js/>
+<script charset="utf-8" i18n = "true" type="text/javascript" src="../../authority/javascript/resource/resource.js"></script>
+<script type="text/javascript" charset="utf-8" language="javascript" src="../../authority/javascript/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/template.js"></script>
+
+<script type="text/javascript" language="javascript" >
+	function doRemove (id) {
+	    //if (!selectedItems) return;
+	
+	    //var s = '';
+	    //for (var i = 0; i < selectedItems.length; i ++) {
+	    //    if (i != 0) s += ',';
+	    //    s += selectedItems [i].value;
+	    //}
+	    jQuery("#items").val(id);
+	    if(confirm("${role.deleteConfirmMessage}")){
+	    	jQuery("#btnDelete").click();
+	    }
+	    
+	}
+	
+	$(document).ready(function(){
+		$("td[title=null]").attr("title","");
+		
+	});
+	
+</script>
+<style>
+.__div_auth{
+	width:400px;
+	float:left;
+}
+
+ul.default-pagging-class {list-style: none; margin: 0; padding: 0; display: inline}
+.default-pagging-class li {float: left;}
+.default-pagging-class li a {display: block; text-decoration: none; color: black; background-color: white; border: 1px solid #CCC; padding: 3px;  margin: 0 3px 0 0 }
+.default-pagging-class li a:hover {background-color: #CCC }
+.default-pagging-class li a.pagging-current {font-weight: bold ; background-color: #369; cursor: default; color: white; border:1px solid #369}
+.default-pagging-class li a.pagging-dot {cursor: default; }
+.default-pagging-class li a.pagging-dot:hover {background-color: white;}
+.default-pagging-left {float: left; padding: 3px; margin: 0 3px 0 0;}
+.default-pagging-right {float: right;}
+.default-pagging-clear {clear: both;}
+</style>
+</head>
+<body>
+<form runat="server" >
+<div class="container">
+    <!--header-->
+	<div id="header"><u:top/></div>
+	
+	<!--main-->
+	<div class="main">
+		<!--main_left-->
+		<div class="main_left"><u:menu/></div>
+	 
+	 	<!--main_right-->
+		<div class="main_rightss">
+		<div class="function_role_info">
+        <div class="user_info">
+        	<ul class="user_info_list">
+        		<li class="user_info_list_li1">
+        			<div class="user_info_list_message">
+        				<div class="user_info_list_message_left">
+       						 ${user.loginName}：
+        				</div>
+		        		<!--user_info_list_message_left-->
+				        <div class="user_info_list_message_right">
+				        <c:textbox id="loginName" class="function_role_txt2"/>
+				        </div>
+				        <!--user_info_list_message_right-->
+				        <div class="clear"></div>
+        			</div>
+        		<!--user_info_list_message-->
+        		</li>
+        		<li class="user_info_list_li1">
+			        <div class="user_info_list_message">
+			        <div class="user_info_list_message_left">
+			        ${user.nickName}：
+			        </div>
+			        <!--user_info_list_message_left-->
+			        <div class="user_info_list_message_right">
+			        <c:textbox id="nickName" class="function_role_txt3"/>
+			        </div>
+			        <!--user_info_list_message_right-->
+			        <div class="clear"></div>
+			        </div>
+			        <!--user_info_list_message-->
+		        </li>
+		        <li class="user_info_list_li2">
+			        <div class="user_info_list_message">
+			        <div class="user_info_list_message_left">
+			        ${user.status}：
+			        </div>
+			        <!--user_info_list_message_left-->
+			        <div class="user_info_list_message_right">
+			        	<div >
+				            <c:dropdownlist id="status" datasource="<%#statusList%>" valuefield="value" textfield="display">
+				    			<c:listitem value='-999'>${user.sSelect}</c:listitem>
+				    		</c:dropdownlist>
+				            <!--box-->           
+			          	</div>
+			          <!--search-->
+			        </div>
+			        <!--user_info_list_message_right-->
+			        <div class="clear"></div>
+			        </div>
+		        <!--user_info_list_message-->
+		        </li>
+		        <li class="user_info_list_li3">
+		        <a visible="<%#btnVisible%>"  href="userInfoDetail.jasmine" class="function_role_serachs">${button.label.new}</a> 
+		        <c:button id="btnQuery" style="display:none" text="query" runat="server"/>   
+		        </li>	
+		        
+		         <li class="user_info_list_li3">
+		        <a href="javascript:jQuery('#btnQuery').click()" class="function_role_serachs">${button.label.search }</a> 
+		        </li>		             
+        	</ul>
+         <div class="clear"></div>
+        </div>
+		
+		<c:hidden id="items" />		
+		<c:button id="btnDelete" style="display:none" text="delete" runat="server"/>
+
+		<table width="100%" class="function_role_table" border="0" cellpadding="0px" cellspacing="1px">
+										<u:user id="userList" loginName='loginName' nickName='nickName' status = 'status' fieldName= 'loginName,nickName,email,status,modify'/>
+										<tr class="function_role_tr5">
+												<td colspan="5">
+								    				<c:pagging2 id = "pagging" pagesize="10" max="10" totalRows="<%#userList.getTotal()%>"/>
+								   			</td>
+										</tr>
+		</table>								
+		</div>
+		</div>
+			<div class="clear"></div>
+		</div>
+		<div class="footer"><u:foot/></div>
+</div>
+</form>
+
+		<textarea clientid="template_auth_view" style="display:none;">
+		<div>
+			<div style="overflow-x:hidden;overflow-y:auto;height:380px">
+				<table class="function_role_table" border="0" cellpadding="0px" cellspacing="1px" style="width:600px">
+					<tr class="function_role_tr">
+						<th width="40%">区域</th>
+						<th width="60%">功能</th>
+					</tr>
+					{for el in data}
+					<tr class="function_role_tr2">
+						<td>
+						\$\{el.data}
+						</td>
+						<td>
+							<table class="function_role_table" border="0" cellpadding="0px" cellspacing="1px" style="width:360px">
+							{for e in el["role"]}
+								<tr class="function_role_tr" >
+									<td style="width:40%" title="\$\{e['app']}" class="function_role_td2" >
+										\$\{e["app"]}
+									</td>
+									<td style="width:60%" class="function_role_td3" style="text-align:left">
+										{for m in e["detail"]}
+										\$\{m},<br>
+										{/for}
+									</td>
+									
+								</tr>
+							{/for}
+							</table>
+						</td>
+					</tr>
+					{forelse}
+					<tr><td colspan="2">${app.non-date.info}</td></tr>
+					 {/for}
+				</table>
+			</div>
+			<div class="usermanage_btn" style="padding-top:5px;">
+				<a href="javascript:jQuery.unblockUI();" class="function_sures">${button.label.back}</a>
+			</div>
+		</div>
+		</textarea>
+<u:relogin/>
+</body>
+</html>

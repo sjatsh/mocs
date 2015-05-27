@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jasmine-control-config>
+    <jasmine-controls uri="http://www.dreamwork.com/jasmine2/web/ui">
+        <control name="Out" class="smtcl.mocs.beans.authority.component.Out"/>
+        <control name="Tree" class="smtcl.mocs.beans.authority.component.TreeControl"/>
+        <control name="popasyntree" class="smtcl.mocs.beans.authority.component.PopAsynTreeControl"/>
+        </jasmine-controls>
+</jasmine-control-config>

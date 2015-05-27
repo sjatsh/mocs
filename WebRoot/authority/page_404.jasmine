@@ -1,0 +1,16 @@
+﻿<%@page language="java" contentType="text/html;charset=UTF-8" %>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>${app.passport}</title>
+<link href="../authority/css/css.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body style="background-color:#BFD6E7"><%#request.getContextPath()%>
+<div id="content" class="container_1 container_error_bg_2">
+
+<div style="padding:25% 25%;">
+	
+	<a href="~/authority/index.jasmine" class="function_back">回到首页</a></div>
+</div>
+</body>
+</html>

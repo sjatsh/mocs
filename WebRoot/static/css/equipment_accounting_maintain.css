@@ -1,0 +1,121 @@
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family:"Î¢ÈíÑÅºÚ";
+	color: #595959;
+	font-weight:bold;
+}
+
+.equipment_accounting_contant {
+	width:1024px;
+}
+
+.equipment_accounting_top {
+}
+
+.equipment_accounting_text{
+    margin-left:400px;
+}
+
+.equipment_accounting_center {
+	height:600px;
+}
+
+.equipment_accounting_center_left {
+	float:left;
+	width:200px;
+	height:560px;
+}
+
+.ui-tree{
+     width:190px;
+}
+
+.equipmentInfotable{
+ height:100%;
+}
+
+.equipment_accounting_center_right {
+	float:left;
+	width:817px;
+}
+
+.equipment_accounting_center_right_top {
+    height:50px; 
+    width:100%;
+	margin-top:20px;
+}
+
+.equipment_accounting_center_right_center{
+    height:460px;
+}
+
+.equipment_accounting_center_right_bottom{
+    margin-top:20px;
+}
+
+
+.equipment_accounting_button1{
+   margin-left: 20px;
+   height:30px;
+   width:80px;
+}
+
+.equipment_accounting_button2{
+   margin-left: 10px;
+   height:30px;
+   width:80px;
+}
+.equipment_accounting_button3{
+   margin-left: 10px;
+   height:30px;
+   width:80px;
+}
+.equipment_accounting_button4{
+   margin-left: 10px;
+   height:30px;
+   width:80px;
+}
+.equipment_accounting_button5{
+   margin-left: 10px;
+   height:30px;
+   width:80px;
+}
+
+.equipment_accounting_text4{
+    margin-left: 20px;
+    background-color: #fff;
+}
+
+.equipment_accounting_text5{
+   border: solid 1px red ;
+   background-color: #fff;
+}
+
+.equipment_accounting_text6{
+  margin-left: 100px;
+}
+
+.input_style{
+ 	margin-left: 10px;
+	width:150px ;
+
+}
+
+.input_button_style{
+
+}
+
+
+.input_time_style{
+    color:#595959 !important;  
+   	margin-left: 10px;
+	width:150px ;
+}
+
+.select_style{
+    color:#595959;
+  	margin-left: 10px;
+	width:150px ;
+ 
+}

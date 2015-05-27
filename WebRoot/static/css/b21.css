@@ -1,0 +1,257 @@
+   .delete{
+		text-align: center;
+		margin-left: 10px;
+		background-color: #D8DCDD !important;
+ 		border:1px solid #D8DCDD !important;
+ 		width: 75px;
+ 		font-size: 12px !important;
+	}
+	.delete:hover{
+		background-color: white !important;
+		background-image: url('') !important;
+	}
+
+	.deletechang{
+		text-align: center;
+		margin-left: 10px;
+		background-color: #D8DCDD !important;
+ 		border:1px solid #D8DCDD !important;
+ 		width: 85px;
+ 		font-size: 12px;	
+ 	}
+	.deletechang:hover{
+		background-color: #D8DCDD !important;
+		background-image: url('') !important;
+	}
+	.btnMenu{
+		text-align: center;
+		background-color: #D8DCDD !important;
+ 		border:1px solid #D8DCDD !important;
+ 		width: 106px;
+ 		font-size: 12px;
+	}
+	.btnMenu:hover{
+		background-color: #D8DCDD !important;
+		background-image: url('') !important;
+	}
+	.ui-state-default {
+ 		border: 1px solid rgb(64,186,235) ;
+ 		background-color: rgb(63,186,234) ;
+ 		font-size: 12px;
+ 	}
+ 	.ui-chkbox-box {
+    background-color: white !important;
+	}
+	.table{
+		font-size: 12px;
+		text-align: center;
+	}
+	.headDiv{
+		width:854px;
+		height: 34px;
+		background-image: url('../images/equ/head_bg_line.png');
+	}
+	.headDiv2{
+		width:854px;
+		height: 34px;
+		background-image: url('../images/equ/process_config_menu.png');
+	}
+	.headDivduan{
+		width:608px;
+		height: 34px;
+		background-image: url('../images/equ/head_bg_line.png');
+	}
+	.textBg{
+		border:1px white solid !important;
+		margin-left:10px;
+		background-color: rgb(255, 255, 255) !important;
+		
+	}
+	.textBg2{
+		border:1px black solid !important;
+	}
+	.selecttext{
+	  font-size:12px;
+	  font-weight: bold;
+	  color: #595959;
+	}
+	.select{
+		margin-left:10px;
+		font-size:14px;
+		color:#595959;
+	}
+	.search{
+		background-color: #D8DCDD !important;
+ 		width: 26px !important;
+ 		height:24px !important;
+ 		background-image: url('../images/equ/head_sear_button.png') !important;
+
+	}
+	.search:hover{
+		background-image: url('../images/equ/head_sear_button.png') !important;
+	}
+	.ui-widget-content{
+ 		font-size: 12px; 
+
+	}
+	.ui-datatable-even{
+		background-color:RGB(246,250,251);
+		border:0px white solid !important;
+
+	}
+	.ui-datatable-odd{
+		background-color:RGB(201,229,241);
+		border:0px white solid !important;
+	}
+	.ui-dt-c{
+
+	}
+	.process_config_menuDiv{
+		padding-top:7px;
+	    text-align: center;
+ 		font-size: 12px;
+ 		height: 23px;
+ 		float: left;
+	}
+	.process_config_xiaDiv{
+		width: 854px;
+		height: 210px;
+		margin-top: 0px;
+		position: absolute;
+		
+		
+	}
+	.process_config_ljgyfa{
+		 width:854px;
+		 position: absolute;
+		 z-index:10;
+		 border:1px white solid;
+		 display: none;
+		 background-color: white;
+		 height: 482px;
+	}
+	.process_config_select{
+		background-image: url("../images/equ/process_config_select.png") !important;
+		width: 20px;
+		height: 20px;
+		background-color: white !important;
+		margin-left: 5px;
+		margin-top: 4px;
+	}
+	.materail_class_treeDiv{
+		width: 180px;
+		height: 300px;
+		float: left;
+		font-size: 12px;
+		margin-left: 10px;
+	}
+	.materail_class_rightDiv{
+		width: 663px;
+		height: 260px;
+		float: left;
+	}
+	.materail_class_Add{
+		display: none;
+		position: absolute;
+		z-index: 10;
+		border:1px black solid;
+	}
+	.materail_detail_Add{
+		position:absolute;
+		display: none;
+		position: absolute;
+		z-index: 10;
+		border:1px black solid;
+		margin-left: -180px;
+		width: 888px;
+	}
+	.tfixture_conig_add{
+		display:none;
+		position: absolute;
+		margin-left:180px;
+		border:1px solid black;
+		background-color: white
+	}
+	.guide_kuangDiv{
+		width: 854px;
+		height:474px;
+		background-color: white;
+	}
+	
+	.guide_kuangDiv_head{
+		width: 610px;
+		margin-top: 10px;
+	}
+	.guide_text{
+		width: 186px;
+		height: 30px !important;
+		background-image: url("../images/equ/guide_text_bg.png") !important;
+	}
+	.guide_ljbh_head{
+		width:610px;margin-top: 10px;
+	}
+	.guide_xd{
+		width:610px;
+		margin-top: 10px;
+		border:1px #D8DCDD solid;
+	}
+	.guide_xd_head{
+		width: 608px;
+		background-image: url('../images/equ/guide_menu_bg.png');
+		height: 36px;
+	}
+	.guide_xd_head_div{
+		padding-top:7px;
+		height: 26px;
+		font-size: 16px;
+		text-align: center;
+	}
+	
+	.guide_xd_head_div_selected{
+		height: 36px;
+		background-image: url('../images/equ/guide_menu_selected.png');
+		width: 115px;
+	}
+.lmove{
+		background-image: url('../images/equ/toleft.png') !important;
+		width:28px;
+		height:31px;
+		border:0 !important;
+	}
+	.rmove{
+		background-image: url('../images/equ/toright.png') !important;
+		width:28px;
+		height:31px;
+		border:0 !important;
+	}
+	.new_input_style{
+		background-image: url('../images/equ/input.png') !important;
+		width:186px !important;
+		height:31px !important;
+		border:0 !important;
+		font-size:18px !important;
+		text-indent: 5px ;
+	}
+	.new_select_style{
+		background-image: url('../images/equ/input.png') !important;
+		width:186px !important;
+		height:31px !important;
+		border:0 !important;
+		font-size:18px !important;
+		vertical-align: middle !important;
+	}
+	.new_btn{
+		background-image: url('../images/equ/divbtn.png') !important;
+		width:92px !important;
+		height:28px !important;
+		border:1px !important;
+	
+	}	
+	/*#tree,tree2{
+		width:200px !important;
+		height:300px !important;
+		overflow-y:scroll !important;
+		overflow:hidden;
+	}*/
+
+	

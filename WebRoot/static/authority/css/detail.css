@@ -1,0 +1,39 @@
+.tabs { margin:10px 0 0 10px;width:100%; position:relative;}
+.tabs h3 { font-size:12px; background-color:blue; width:95px; height:25px; line-height:25px; text-align:center; float:left; margin-right:5px;cursor:hand}
+		h3.active { background-position:0 -25px; color:#fff;}
+		#userTabs, #authTabs { position:absolute; top:25px; left:0; width:100%; padding:10px; border:1px solid #ace; }
+		#authTabs { display:none;}
+		
+.roleDiv { position:absolute;width:100%;margin:10px 0 0 10px;display:none;background-color:#ffffff;}
+
+
+* {font-family:Verdana, Geneva, sans-serif; font-size:12px; padding:0; margin:0}
+#main_form {border:1px solid #999; border-collapse:collapse}
+#main_form td {padding:5px;}
+#main_form #button_row {text-align:right}
+#main_form th { padding: 5px; background-color:#99F; font-weight:bold;text-align:left; background-image:url(../images/prompt_header.gif)}
+
+#width_form {width:100%; _width:98%;border:1px solid #999; border-collapse:collapse}
+#width_form td {padding:5px;}
+#width_form th { padding: 5px; background-color:#99F; font-weight:bold;text-align:left; background-image:url(../images/prompt_header.gif)}
+
+.button {display:none}
+.query-form {background-color:#ffefda; border:1px solid #999; padding:5px}
+.title, h1, .data-table th {background:url(../images/prompt_header.gif); height:24px; line-height:24px; }
+.button-panel {float:left;margin:5px 0}
+.query-form-table td  {padding:2px 5px;}
+.clear {clear:both; width:0;height:0; font-size:0;line-height:0;}
+.container {border:1px solid #999; border-top:none; padding:10px;}
+.button-list {list-style:none; margin:5px 0;float:right;}
+.button-list li { float:left; margin-left:5px; border:1px solid #999;height:20px; line-height:20px;}
+.button-list li a {background-image:url(../images/subtbheadergray.gif); display:block; text-decoration:none; color:#000;width:100px;text-align:center}
+.button-panel input:hover,  .button-list li a:hover, .button:hover { background-image:url(../images/subtbheadergray.gif)}
+.button-panel input:active, .button-list li a:active, .button:active {background-image:url(../images/subtbheadergray_down.gif);}
+.data-table {width:100%; _width:98%;border-collapse:collapse; border:1px solid #999; margin:5px 0;height:500px}
+.data-table td, .data-table th {border:1px solid #999;padding:5px;_padding:3px;}
+.data-table th {/*background-image:url(../images/prompt_header.gif);*/height:23px; padding:0}
+.data-table td a {text-decoration:none; color:#C60;}
+.data-table .row1 { background-color:#fff;}
+.data-table .row2 { background-color:#efefef;}
+.data-table .editor {width:80px; text-align:center}
+.data-table .pk-selection {width:10px;}

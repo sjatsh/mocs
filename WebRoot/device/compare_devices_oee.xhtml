@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:form id="myform">	
+<h:outputScript library="js" name="compare_devices_oee.js"></h:outputScript>
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+<h:outputScript library="js" name="common_page.js"></h:outputScript>
+
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+
+<style type="text/css">
+*{margin:0px;}
+</style>
+<link rel="stylesheet" href="css/compare_devices_oee.css" type="text/css"></link>
+
+<h:inputHidden id="nodeStr" value="#{CompareDevicesOEEBean.nodeStr}" />
+<div class="title-bar">
+	<div class="logo-img">
+		<img src="images/profile_top_logo.png" />
+	</div>
+	<div class="title-text">OEE比较</div>
+	<div class="filter-frame">
+		<div class="filter-bar">
+			<div class="filter-label">比较容量:</div>
+			<div class="filter-input">
+				<h:selectOneMenu id="r" value="#{CompareDevicesOEEBean.otBy}" styleClass="filter-select" >
+					<f:selectItems value="#{CompareDevicesOEEBean.otByList}" />
+				</h:selectOneMenu> 
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">时间单位:</div>
+			<div class="filter-input">
+				<h:selectOneMenu id="dateTime" value="#{CompareDevicesOEEBean.dateTime}" styleClass="filter-select" >
+					<f:selectItems value="#{CompareDevicesOEEBean.dateTimeList}" />
+				</h:selectOneMenu> 
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">开始时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="start" tabindex="3" popup="true" inputClass="inputText" locale="en" value="#{CompareDevicesOEEBean.startTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">结束时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="end" tabindex="3"  popup="true" inputClass="inputText"	locale="en" value="#{CompareDevicesOEEBean.endTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" />
+			</div>
+		</div>
+	</div>
+	<div class="filter-submit">
+		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
+			<a4j:ajax event="click" listener="#{CompareDevicesOEEBean.getDevicesCompareAction}" render=":myform:rightiframe" execute="serName startTime endTime dateTime"></a4j:ajax>
+		</h:graphicImage>
+	</div>
+</div>
+<script language="javascript">
+	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
+	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080 + "px");
+	$(".title-text").css("left", wjb51 * 500 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
+	$(".filter-frame").css("left", wjb51 * 968 / 1920 + "px").css("top", hjb51 * 19 / 1080 + "px");
+	$(".filter-bar").css("width", wjb51 * 484 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 10 / 1080 + "px");
+	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
+	$(".filter-input").css("width", wjb51 * 246 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
+	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
+	$(".filter-input .rf-cal-extr").css("width", wjb51 * 246 / 1920 + "px");
+	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 47 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
+</script>
+<div class="content-frame">
+	<div id="list-frame">
+		<h:panelGroup id="rightiframe"> 
+			<h:inputHidden id="devicesOeeChart" value="#{CompareDevicesOEEBean.chartData}" />
+			<div id="chart" style="height: 100%;"/>	
+			<script type="text/javascript">
+				loadData();
+			</script>
+		</h:panelGroup>
+	</div>
+	<div class="select-frame">
+		<div class="select-title">比较对象(机床序列号)</div>
+		<div class="select-list">
+			<h:selectManyCheckbox id="serName" value="#{CompareDevicesOEEBean.serNames}" >
+				<f:selectItems value="#{CompareDevicesOEEBean.serNamesList}"/>
+				<a4j:ajax listener="#{CompareDevicesOEEBean.selectNo}" render="myform:rightiframe" oncomplete="selectCheck()" />
+			</h:selectManyCheckbox>
+		</div>
+	</div>
+</div>
+<script language="javascript">
+	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
+	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
+	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
+	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 611 / 1080 + "px");
+	$(".select-frame").css("top", hjb51 * 611 / 1080 + "px").css("height", hjb51 * 30 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px").css("line-height", hjb51 * 30 / 1080 + "px");
+	$(".select-list").css("top", hjb51 * 641 / 1080 + "px").css("height", hjb51* 75 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
+	
+	var smallWidth = wjb51 * 168 / 1920;
+	var smallHeight = hjb51 * 56 / 1080;
+	var bigTop = hjb51 * 60 / 1080;
+	var bigWidth = wjb51;
+	var bigHeight = hjb51 * 656 / 1080;
+	$("#tab-list").click(function() {
+		if($("#tab-list").attr("class") == "tab-btn active") {return;}
+		
+		$("#tab-list").addClass("active");
+		$("#tab-chart").removeClass("active");
+
+		$("#list-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
+		$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 200);
+	});
+	$("#tab-chart").click(function() {
+		if($("#tab-chart").attr("class") == "tab-btn active") {return;}
+		
+		$("#tab-list").removeClass("active");
+		$("#tab-chart").addClass("active");
+		
+		$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 200);
+		$("#chart-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
+	});
+	
+	//选项分栏
+	$(document).ready(function() {
+		if($(".select-list td").length > 10 ) {
+			var trStr = $(".select-list tr")[0].outerHTML;
+			var trSplit = "&lt;\/tr&gt;&lt;tr&gt;";
+			$(".select-list td").each(function() {
+				if(($(this).index(".select-list td") + 1) % 10 == 0) {
+					trStr = trStr.replace(this.outerHTML, this.outerHTML + trSplit);
+				}
+			});
+			$(".select-list tbody").html(trStr);
+		}
+	});
+	
+	//最多选择5项
+	function selectCheck() {
+		if($(".select-list :checkbox:checked").length > 5) {
+			alert("最多选择5台机床");
+		}
+	}
+</script>
+</h:form>
+</ui:composition>

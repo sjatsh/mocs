@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<script type="text/javascript" src="./js/jquery-1.9.1.min.js" ></script>
+	
+	机床:<input id="mac" type="text" />
+	<!-- <input type="button" value="查询错误信息" onclick="send();"/> -->
+	
+	手机号:<input id="phone" type="text" />
+	<input type="button" value="定时发送短信" onclick="send();"/>
+	<input type="button" value="停止" onclick="stop();"/>
+	
+ 	<br /><label id="showText"></label> 
+ 	
+ 	<br /><br />历史记录:
+ 	<ol>
+
+	</ol>
+	<script>
+	//<![CDATA[ 
+		$(document).ready(function(){
+			//document.write("aa");
+			//alert(date2str(new Date(),"yyyy-MM-dd hh:mm:ss"));
+		});
+		var info="";
+		var mac;
+		var timer;
+		
+		function send(){
+			timer=setInterval(getInfo,15000);
+		}
+		function stop(){
+			clearInterval(timer);
+		}
+		
+		
+		function getInfo(){
+			//mac=$("#mac").val();
+			var macTemp=$("#mac").val();
+			var infoTemp="";
+			
+			
+		    $.ajax({
+                url: './WSBZService/Portal.json?method=DiagnosticMessage',
+                data: 'parms='+macTemp,
+               	cache: false,
+                dataType: 'text',
+                success: function (xml) {
+
+ 					var a=JSON.parse(xml)
+ 					
+ 					if(a.data!=undefined){				
+ 						var xmldoc=loadXML(a.data);
+ 					
+				 	
+						x=xmldoc.documentElement.childNodes;
+						for (i=0;i<x.length;i++)
+						{ 
+							if (x[i].nodeType==1)
+							{
+								  x[i].getAttribute("alertInfo");
+								  infoTemp=x[i].getAttribute("alertInfo");
+								  break;
+							} 
+						}
+						
+						if(macTemp==""||macTemp==undefined){
+							alert("请输入手机号！");
+						}
+						else if(infoTemp!=""&&info!=infoTemp){
+							
+							
+							info=infoTemp;
+							mac=macTemp;
+							//if(type==1){ //定时发送短信
+								//timer=setInterval("sendMsg",15000);
+								sendMsg();
+							//}
+							//else if(type==2) //显示错误信息
+								$("#showText").html(info);
+								$("ol").append("<li>"+ info +": "+date2str(new Date(),"yyyy-MM-dd hh:mm:ss")+"</li>");
+								//document.write(info);
+						}
+ 					}
+					else{
+						info="";
+						$("#showText").html("当前无报警");
+						//$("ol").append("<li>当前无报警: "+date2str(new Date(),"yyyy-MM-dd hh:mm:ss")+"</li>");
+					}
+                }
+            });
+		}
+		
+		
+	 	function sendMsg() {
+	        var c = '你好，机床' + mac + '发生故障，故障内容为：'+info+'【沈阳机床】';
+	        
+	        $.ajax({
+	            url: 'http://www.stongnet.com/sdkhttp/sendsms.aspx',
+	            data: 'reg=101100-WEB-HUAX-501347&pwd=DCKMYJUZ&sourceadd=&phone=' + $("#phone").val() + '&content=' + c,
+	            cache: false,
+	            dataType: 'text',
+	            type: 'POST',
+	            success: function (returnData) {
+	                //alert("发送成功！");
+	            }
+	        });
+	        //alert("发送成功！");
+	        
+	    }
+		
+	 	function showMsg(){
+	 		$("#showText").html();
+	 		
+	 	}
+	 	
+	
+	    loadXML = function(xmlString){
+	        var xmlDoc=null;
+	        //判断浏览器的类型
+	        //支持IE浏览器 
+	        if(!window.DOMParser && window.ActiveXObject){   //window.DOMParser 判断是否是非ie浏览器
+	            var xmlDomVersions = ['MSXML.2.DOMDocument.6.0','MSXML.2.DOMDocument.3.0','Microsoft.XMLDOM'];
+	            for(var i=0;i<xmlDomVersions.length;i++){
+	                try{
+	                    xmlDoc = new ActiveXObject(xmlDomVersions[i]);
+	                    xmlDoc.async = false;
+	                    xmlDoc.loadXML(xmlString); //loadXML方法载入xml字符串
+	                    break;
+	                }catch(e){
+	                }
+	            }
+	        }
+	        //支持Mozilla浏览器
+	        else if(window.DOMParser && document.implementation && document.implementation.createDocument){
+	            try{
+	                /* DOMParser 对象解析 XML 文本并返回一个 XML Document 对象。
+	                 * 要使用 DOMParser，使用不带参数的构造函数来实例化它，然后调用其 parseFromString() 方法
+	                 * parseFromString(text, contentType) 参数text:要解析的 XML 标记 参数contentType文本的内容类型
+	                 * 可能是 "text/xml" 、"application/xml" 或 "application/xhtml+xml" 中的一个。注意，不支持 "text/html"。
+	                 */
+	                domParser = new  DOMParser();
+	                xmlDoc = domParser.parseFromString(xmlString, 'text/xml');
+	            }catch(e){
+	            }
+	        }
+	        else{
+	            return null;
+	        }
+
+	        return xmlDoc;
+	    }
+
+	    
+	    function date2str(x,y) {
+	    	var z ={y:x.getFullYear(),M:x.getMonth()+1,d:x.getDate(),h:x.getHours(),m:x.getMinutes(),s:x.getSeconds()};
+	    	return y.replace(/(y+|M+|d+|h+|m+|s+)/g,function(v) {return ((v.length>1?"0":"")+eval('z.'+v.slice(-1))).slice(-(v.length>2?v.length:2))});
+	    } 
+	 //]]> 	
+	</script>
+</ui:composition>

@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<!-- Mimic Internet Explorer 8 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<title>在线工厂管理系统</title>
+	
+<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="js/jquery.blockUI.js" ></script>
+<h:outputScript library="js" name="common_page.js"></h:outputScript>
+<h:outputScript library="js" name="common.js"></h:outputScript>
+<!-- hightChart JS加载 -->
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+
+<link rel="stylesheet" href="css/com_richfaces_overwrite.css" type="text/css"></link>
+<link rel="stylesheet" href="css/common_page_info.css" type="text/css"></link>
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" type="text/css"></link>
+<link rel="stylesheet" href="css/other.css" type="text/css"></link>
+<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+<link rel="stylesheet" href="css/view.css" type="text/css"></link>
+<link rel="stylesheet" href="css/compare.css" type="text/css"></link>
+</h:head>
+
+<h:body onload="showClock()">
+	<h:form id="myform">
+		<div style="width: 1024px; margin: 0 auto; height: 600px;">
+			<div style="width:1024px; margin: 0 auto; height: 100%;display: none;z-index:20;
+				position: absolute;" id="loadbtjpg" onclick="javascript:alert('请不要重复点击');">
+				<div style="position: absolute;width: 300px;height: 300px;
+					 margin-left: -70px;margin-top: 310px;" >
+					<img src="images/order/loading.gif" alt="请等待!" />
+				 </div>
+			</div>
+			<div style="height: 600px; ">
+				<div style="height: 89px;">
+					<h:panelGroup id="topiframe">
+						<ui:include src="pager/menu_top.xhtml" />
+					</h:panelGroup>
+				</div>  
+				<div style="height: 481px;">
+					<div style=" float:left; z-index:11; position:relative; height: 481px;background-image:url('img/common_info_img/common_left_bg.png');  width: 170px;">
+						<a4j:outputPanel ajaxRendered="true" >
+							<div id="leftiframe">
+								<ui:include src="pager/menu_left.xhtml" />
+							</div>
+						</a4j:outputPanel>
+					</div>
+
+					<div style="width: 854px ;  float: right ; height: 481px; ">
+						<h:panelGroup id="rightiframe">
+							<c:if test="#{not empty MenuHeadBean.urlPath}">
+							 	<ui:include src="#{MenuHeadBean.urlPath}" /> 
+							</c:if>
+						</h:panelGroup>
+					</div>
+				</div>
+				<div style="height: 30px; background-image: url('img/common_info_img/common_foot_bg.png');">
+					<h:panelGroup id="footiframe">
+						<ui:include src="pager/menu_foot.xhtml" />
+					</h:panelGroup>
+				</div>
+			</div>
+		</div>
+		<!-- 初始化RICHFACES部分组件 -->
+		<div style="display:none;">
+			<rich:calendar  popup="true" locale="en" cellWidth="10px"
+				cellHeight="20px" datePattern="yyyy-MM-dd" required="false"></rich:calendar>
+			<rich:popupPanel id="popup"></rich:popupPanel>
+			<rich:dataTable id="dataTab"></rich:dataTable>
+			<rich:dataScroller for="dataTab" id="indexDs"></rich:dataScroller>
+			 <h:commandLink value="[详细]">
+				<f:ajax render=":myform" ></f:ajax>
+				<a4j:ajax></a4j:ajax>
+	       			<rich:componentControl target="show" operation="show">
+	        			<a4j:param noEscape="true" value="event" />
+						<rich:hashParam>
+							<f:param name="width" value="850" />
+							<f:param name="height" value="400" />
+				        </rich:hashParam>
+	       		   </rich:componentControl>
+		 	   </h:commandLink> 		
+	    	 <a4j:poll interval="100000000"></a4j:poll>
+       	 </div>	
+	</h:form>
+</h:body>
+</html>

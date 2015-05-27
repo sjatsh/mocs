@@ -1,0 +1,62 @@
+.icon-user {
+    background-image: url(../images/user.png) !important;
+}
+
+.icon-user-add {
+    background-image: url(../images/user_add.gif) !important;
+}
+
+.icon-save {
+    background-image: url(../images/save.gif) !important;
+}
+
+.icon-reset {
+    background-image: url(../images/stop.png) !important;
+}
+
+.icon-grid {
+    background-image: url(../images/grid.png) !important;
+}
+
+.icon-add {
+    background-image: url(../images/add.png) !important;
+}
+
+.icon-delete {
+    background-image: url(../images/delete.png) !important;
+}
+
+.delete
+{
+    height      : 16px;
+    width       : 16px;
+    background  : transparent url(../images/cross.png) no-repeat center center !important;
+    cursor:pointer;
+}
+
+.icon-prev,
+.icon-previous
+{
+    background: url(../images/arrow_left.png) no-repeat left center !important;
+}
+
+.icon-next
+{
+    background: url(../images/arrow_right.png) no-repeat left center !important;
+}
+
+.icon-calendar
+{
+    background: url(../images/calendar.png) no-repeat left center !important;
+}
+
+/* .icon-horizontal
+{
+    background:url(../images/horizontal.png) no-repeat left center;
+}
+
+.icon-vertical
+{
+    background:url(../images/vertical.png) no-repeat left center;
+} 
+*/

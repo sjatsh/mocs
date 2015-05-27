@@ -1,0 +1,31 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.role.page.RoleListControl" contentType="text/html;charset=UTF-8" resource="role"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+
+<c:hidden clientId="items" id="items"/>
+<c:button clientId="btnDelete" id="btnDelete" text="delete" runat="server" style="display:none"/>
+<tr class="function_role_tr">
+<th style="width:40px" class="function_role_td1"><div class="function_role_ck1">
+<input type="checkbox" class="cursor_bnt" id="selectAll" onclick="toggleAll (this, 'roleId')"/></div>
+</th>
+<th style="width:15%" class="function_role_td2" visible="<%#codeVisable%>">${role.code}</th>
+<th style="width:20%" class="function_role_td3" visible="<%#nameVisable%>">${role.name}</th>
+<th style="width:25%" class="function_role_td4" visible="<%#remarkVisable%>">${role.remark}</th>
+<th style="width:15%" class="function_role_td5 function_role_td5s" visible="<%#createrVisable%>">${role.creater}</th>
+<th class="function_role_td6 function_role_td6s">操作</td>
+</tr>
+<c:repeater id="repeater" ViewStateEnabled="false" datasource="<%#data%>">
+<tr  class="function_role_tr<%#(container.dataIndex % 2) + 1%>">
+<td class="function_role_td11"><div class="function_role_ck1">
+	<input name = "roleId" type="checkbox" value="<%#DataBinder.eval(container.dataItem, "id")%>"/>
+</div>
+</td>
+<td title='<%#DataBinder.eval(container.dataItem, "code")%>' class="function_role_td22" visible="<%#codeVisable%>"><%#DataBinder.eval(container.dataItem, "code")%></td>
+<td title='<%#DataBinder.eval(container.dataItem, "name")%>' class="function_role_td33" visible="<%#nameVisable%>"><%#DataBinder.eval(container.dataItem, "name")%></td>
+<td title='<%#DataBinder.eval(container.dataItem, "remark")%>' class="function_role_td44" visible="<%#remarkVisable%>"><%#DataBinder.eval(container.dataItem, "remark")%></td>
+<td title='<%#DataBinder.eval(container.dataItem, "creater.nickName")%>' class="function_role_td55" visible="<%#createrVisable%>"><%#DataBinder.eval(container.dataItem, "creater.nickName")%></td>
+<td class="function_role_td66">
+<a visible="<%#hasViewRight%>" href="roleDetail.jasmine?mode=view&roleId=<%#DataBinder.eval(container.dataItem, "id")%>">${button.label.view}</a>
+<a visible="<%#hasManageRight%>" href="roleDetail.jasmine?roleId=<%#DataBinder.eval(container.dataItem, "id")%>">&nbsp;&nbsp;|&nbsp;&nbsp;${button.label.edit}</a>
+</td>
+</tr>
+</c:repeater>

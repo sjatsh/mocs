@@ -1,0 +1,98 @@
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family:"Î¢ÈíÑÅºÚ";
+	color: #595959;
+	font-weight:bold;
+}	
+
+.container{
+	/*border: solid 1px red ;*/
+	width:200px;
+	margin-left:-50px;
+}
+
+.jobplan_statistics_top{
+/*border: solid 1px red ;*/
+
+}
+
+.jobplan_statistics_top_text{
+/*border: solid 1px red ;*/
+margin-left:400px;
+
+}
+
+.jobplan_statistics_center{
+/*border: solid 1px red ;*/
+
+}
+
+.jobplan_statistics_center_one{
+/*border: solid 1px red ;*/
+height:50px;
+line-height: 50px;
+}
+
+.jobplan_statistics_center_two{
+/*border: solid 1px red ;*/
+margin-left:-20px;
+margin-top:50px;
+height:400px;
+}
+
+.jobplan_statistics_center_three{
+
+height:300px;
+}
+
+.jobplan_statistics_center_three_left{
+
+
+}
+
+.jobplan_statistics_center_three_right{
+
+float: left;
+
+}
+
+
+.jobplan_statistics_buttom{
+
+}
+
+.jobplan_statistics_buttom_b{
+margin-left: 400px;
+
+}
+
+.common_condition_spacing{
+
+
+}
+
+input[type="text"]{
+
+}
+
+.common_calendar{
+
+	margin-left: 15px;
+	width:160px ;
+	height:39px;
+	background-image:url(/mocs/images/jbp02.png);
+	/*border-left:0px;border-top:0px;border-right:0px;border-bottom:1px;*/
+}
+
+.calendar_start{
+
+
+}
+
+.select_style{
+    color:#595959;
+  	margin-left: 10px;
+	width:247px ;
+ 
+}

@@ -1,0 +1,1000 @@
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family:"微软雅黑";
+	color: #595959;
+	font-weight:bold;
+}
+
+ul{
+	list-style-type:none;
+}
+
+.jobplan_main{
+	width: 1920px;
+	background:url("/mocs/images/jobplan/dw.png");
+}
+.jobplan_main2{
+	width: 1920px;
+}
+
+.jobplan_top{
+	width:1920px;
+	height:264px;
+}
+
+.jobplan_top_left{
+	float:left;
+	width:384px;
+	margin:0 auto;
+}
+
+.jobplan_top_right{
+	float:left;
+	width: 1536px;
+}
+
+
+.jobplan_top_right_title{
+	width: 1536px;
+	height:80px;
+}
+.jobplan_top_right_title ul li{
+	width:384px;
+	height:80px;
+	float:left;
+	font-size:40px;
+	font-weight:bold;
+	text-align:center;
+	line-height:84px;
+	vertical-align:middle;
+}
+.jobplan_top_right_title_xiangqing{
+	
+}
+.jobplan_top_right_title_qingdan{
+
+}
+.jobplan_top_right_first{
+
+}
+.jobplan_top_right_first ul li{
+	width:384px;
+	float:left;
+}
+.jobplan_top_right_first_ID{
+	
+}
+.jobplan_top_right_first_startTime{
+	
+}
+.jobplan_top_right_first_jindu{
+	
+}
+.jobplan_top_right_first_jihua{
+	
+}
+.jobplan_top_right_second{
+
+}
+.jobplan_top_right_second ul li{
+	width:384px;
+	float:left;
+}
+.jobplan_top_right_second_name{
+	
+}
+.jobplan_top_right_second_endTime{
+	
+}
+.jobplan_top_right_second_leixing{
+	
+}
+.jobplan_top_right_third{
+	width: 1536px;
+	height:60px;
+	font-size: 30px;
+}
+
+.jobplan_top_right_third_shuliang{
+	
+}
+.jobplan_top_right_third_youxianji{
+	
+}
+.jobplan_top_right_third_qiwang{
+	
+}
+.jobplan_top_right_third_jiaohuo{
+	
+}
+.jobplan_content{
+	width: 1920px;
+	height:725px;
+	background-color: rgb(244, 246, 245);
+}
+.example-container{
+	width: 1894px;
+	height:685px;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+.eventTip{
+	width: 250px;
+	htight:250px;
+}
+
+.x-grid-tree-node-expanded .x-tree-icon-parent {
+    background-image: url("../images/zTreeStandard.png");
+    background-position:-96px -59px;
+    width:9px;
+    height:9px;
+    margin-top:5px;
+    margin-left:5px;
+}
+
+.x-tree-icon-parent {
+    background-image: url("../images/zTreeStandard.png");
+    background-position:-78px -59px;
+    width:9px;
+    height:9px;
+    margin-top:5px;
+    margin-left:5px;
+}
+
+#ext-gen1067{
+	display: none!important;
+}
+#ext-gen1060{
+	display: none!important;
+}
+#ext-gen1065{
+	display: none!important;
+}
+.x-panel-header-default-top{
+	box-shadow:none;
+}
+
+.x-panel-header-default{
+	background-color: rgb(215,239,217);
+	background-image: none;
+	border: 0px;
+}
+
+.x-box-inner{
+	background-color: rgb(215,239,217);
+}
+.x-toolbar{
+	padding:0px;
+}
+
+.x-toolbar-default{
+	border-width: 0px;
+}
+
+.x-panel-header-text-container{
+	height: 120px;
+	font-size: 40px;
+	line-height: 120px;
+	vertical-align: middle;
+}
+.x-component-default{
+	height: 80px;
+	font-size: 20px;
+	line-height: 80px;
+	vertical-align: middle;
+}
+.x-column-header-inner{
+	height: 80px;
+	font-size: 40px;
+	line-height: 80px;
+	vertical-align: middle;
+}
+
+.sch-header-row {
+	height: 40px;
+	font-size: 20px;
+	line-height: 40px;
+	vertical-align: middle;
+}
+
+.sch-column-header{
+	font-size: 18px;
+}
+
+.x-grid-cell-inner{
+	font-size: 13px;
+	vertical-align: middle;
+	/* height:30px !important; */
+}
+
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:30px;
+}
+
+.tabmenu{
+  height:80px;
+}
+
+.tab_info_tab1{
+ float: left;
+ font-size:40px;
+ margin-left:90px;
+ cursor:pointer;
+ height: 82px;
+ line-height:82px;
+}
+
+.tab_info_tab2{
+float: left;
+font-size:40px;
+color:#bababa;
+margin-left:200px;
+cursor:pointer;
+ height: 82px;
+ line-height:82px;
+}
+
+.tab_info_tab3{
+float: left;
+font-size:40px;
+color:#bababa;
+margin-left:200px;
+cursor:pointer;
+ height: 82px;
+ line-height:82px;
+}
+
+.tab1{
+  display:none;
+  background-image: url('/mocs/images/jobplan/list/job_bg.png');
+  background-repeat: no-repeat;
+  margin-left:388px;
+}
+.tab12{
+  display:block;
+}
+.tab2{
+  display:block;
+  background-image: url('/mocs/images/jobplan/list/dis_bg1.png');
+  background-repeat: no-repeat;
+  margin-left:388px;
+}
+.tab22{
+  display:none;
+  background-image: url('/mocs/images/jobplan/list/job_bg.png');
+  background-repeat: no-repeat;
+  margin-left:388px;
+}
+.tab3{
+  display:none;
+}
+
+.datable_table{
+width:100%;
+}
+.tdc_1{
+font-size:20px;
+color:#525252;
+border: solid 1px #525252 ;
+}
+.datatable_tr{
+}
+.jobplanA
+{
+    font-size:300px;
+}
+.jobplan_top_b{
+ height:80px;
+ line-height:80px;
+}
+.sch-percent-allocated-bar
+{
+    background: url("../ext/images/graytexture.png") repeat-x scroll 0 0 transparent;
+    bottom:0;
+    left:0;
+    position:absolute;
+    overflow:hidden;
+    height:100%;
+    z-index:-1; 
+    
+}
+
+/*
+.sch-percent-allocated-text
+{
+    display:block;
+    font-weight:bold;
+    font-size:15px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-4px;
+}
+*/
+
+.ext_jobplan{
+    background-color: rgb(255,244,177);
+	/* border:2px solid rgb(14,173,255); */
+    /* -moz-border-radius:20px;    
+       border-radius:20px; */
+    /* background : rgb(255,244,177)  url(../images/jobplan/zuoye.png) no-repeat 4px center; */
+	/* height:25px !important;  */
+}
+.ext_jobplan_maxId{
+	 background-color: rgb(255,244,177);
+	 border:1px solid red;
+     border-radius:20px; 
+}
+.ext_defult{
+	 background-color: rgb(14,173,255); 
+	 height:3px !important;
+	 margin-top:16px;
+}
+.ext_chuangjian{
+	 background-color: rgb(14,173,255);
+	 height:3px !important;
+	 margin-top:16px;
+	
+}
+.ext_chuangjian_maxId{
+	background-color:rgb(14,173,255);
+	border:1px solid red;
+	margin-top:16px;
+	height:3px !important;
+}
+.ext_daipaigong{
+	background-color: rgb(255,220,0);
+	margin-top:16px;
+	height:3px !important;
+}
+.ext_yipaigong{
+	background-color: rgb(255,244,177);
+	margin-top:16px;
+	height:3px !important;
+}
+.ext_shangxian{
+	background-color: rgb(255,244,177);
+	margin-top:16px;
+	height:3px !important;
+}
+.ext_jiagong{
+	background-color: rgb(255,244,177);
+	margin-top:16px;
+	height:3px !important;
+}
+.ext_jieshu{
+	background-color:rgb(89,89,89);
+	margin-top:16px;
+	height:3px !important;
+}
+
+.ext_wancheng{
+	background-color: rgb(191,191,191);
+	margin-top:16px;
+	height:3px !important;
+}
+
+.ext_pause{
+	background-color:rgb(255,0,0);
+	margin-top:16px;
+	height:3px !important;
+}
+
+.input_time_style{
+   border: 0px solid white;
+   background-image: url("../images/jobplan/list/t_time.png")!important;
+   height:53px;
+   width:364px;   
+   float:left;
+   margin-left:50px;
+   margin-top:12px;
+}
+.selectWen2{
+	font-size:20px;
+	color:#444444;
+	background-repeat:repeat-x;
+	font-family:"微软雅黑";
+	height: 200px;
+	line-height:40px;
+	margin-top:50px;
+	position: absolute;
+	margin-left:10px;
+	width: 362px;
+	border: 0px;
+	z-index: 100;
+	display: none;
+}
+.selectWen3{
+font-size:30px;
+	height: 53px;
+	line-height:40px;
+	margin-top: 12px;
+	margin-left:10px;
+	width: 364px;
+	border:0px;
+	float:left;
+}
+
+.tdc_2{
+}
+.tdc_3{
+}
+.thsc1{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:140px;
+text-align:center;
+}
+.thsc12{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:290px;
+text-align:center;
+}
+.thsc2{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:140px;
+text-align:center;
+}
+.thsc22{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:150px;
+text-align:center;
+}
+.thsc3{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:140px;
+text-align:center;
+}
+.thsc32{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:145px;
+text-align:center;
+}
+.thsc4{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:140px;
+text-align:center;
+}
+.thsc42{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:145px;
+text-align:center;
+}
+.thsc5{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:140px;
+text-align:center;
+}
+.thsc52{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:145px;
+text-align:center;
+}
+.thsc6{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:120px;
+text-align:center;
+}
+.thsc62{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:145px;
+text-align:center;
+}
+.thsc7{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:160px;
+text-align:center;
+}
+.thsc72{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:120px;
+text-align:center;
+}
+.thsc8{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:120px;
+text-align:center;
+}
+
+
+.thsc1a{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:270px;
+text-align:center;
+}
+.thsc2a{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:150px;
+text-align:center;
+}
+.thsc3a{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:145px;
+text-align:center;
+}
+.thsc4a{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:100px;
+text-align:center;
+}
+.thsc5a{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:195px;
+text-align:center;
+}
+.thsc6a{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:120px;
+text-align:center;
+}    
+
+.thsc7a{
+font-size:20px;
+color:#525252;
+font-weight: bold;
+height:40px;
+width:110px;
+text-align:center;
+}
+.gttxsWeek{
+	display:block;
+	cursor:pointer;
+}
+.gttxsMonth{
+	display:block;
+	cursor:pointer;
+}
+.gttxsYear{
+	display:block;
+	cursor:pointer;
+}
+.gttxsBig{
+	display:block;
+	cursor:pointer;
+}
+.gttxsSmall{
+	display:block;
+	cursor:pointer;
+}
+
+@media  (min-height:1050px) {
+.sch-percent-allocated-text /*作业计划内容 */
+{
+    display:block;
+    font-weight:bold;
+    font-size:15px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-22.04px; /*加了1，原来是4*/
+}
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:40px;
+}
+.x-grid-cell-inner{ /*产品名称的值 */
+
+    font-size:20px;
+    vertical-align: middle;
+    line-height: 38px !important;
+    margin-top: 0px;
+}
+.x-column-header-inner{ /*产品名称的行高 =同时是右边时间2行时间的高，要相加  */
+	 height: 127px;
+	 font-size: 40px;
+	 line-height: 127px;
+}
+.sch-header-row{  /*右边时间1行的高度 ，共有2行 */
+	height: 63px;
+	font-size: 20px;
+	line-height: 63px;
+}
+.sch-column-header{ /*甘特图的头部的时间字体大小*/
+	font-size:18px;
+}
+.x-box-inner{ /*中间 绿色的行高 */
+   height:130px;
+}
+.x-box-target{ /*中间绿色的行的中的字体层的高 */
+  height:40px;
+  line-height:40px;
+}
+.x-component-default{
+  /*中间绿色的行的中的层的高 */
+  height:130px;
+  line-height:130px;
+}
+
+}
+
+@media  (max-height:1050px) and (min-height:950px) {
+.sch-percent-allocated-text /*作业计划内容 */
+{
+    display:block;
+    font-weight:bold;
+    font-size:13.2px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-21.04px;
+}
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:35.2px;
+}
+.x-grid-cell-inner{ /*产品名称的值 */
+
+    font-size:17.6px;
+    vertical-align: middle;
+    line-height: 33.44px !important;
+    margin-top: 0px;
+}
+.x-column-header-inner{ /*产品名称的行高 =同时是右边时间2行时间的高，要相加  */
+	 height: 111.76px;
+	 font-size: 35.2px;
+	 line-height: 111.76px;
+}
+.sch-header-row{  /*右边时间1行的高度 ，共有2行 */
+	height: 55.44px;
+	font-size: 17.6px;
+	line-height: 55.44px;
+}
+.sch-column-header{ /*甘特图的头部的时间字体大小*/
+	font-size:15.84px;
+}
+.x-box-inner{ /*中间 绿色的行高 */
+   height:114.4px;
+}
+.x-box-target{ /*中间绿色的行的中的字体层的高 */
+  height:35.2px;
+  line-height:35.2px;
+}
+.x-component-default{
+  /*中间绿色的行的中的层的高 */
+  height:114.4px;
+  line-height:114.4px;
+}
+
+}
+
+.sch-event-inner {
+    overflow: visible;
+}
+.ext_jobplan .sch-percent-allocated-text
+{
+	 margin-top:-3.4px;
+}
+
+.ext_jobplan .sch-event-inner
+{
+	overflow: hidden;
+}
+.sch-event {
+   overflow: visible;
+}
+
+@media  (max-height:950px) and (min-height:850px) {
+.sch-percent-allocated-text /*作业计划内容 */
+{
+    display:block;
+    font-weight:bold;
+    font-size:11.85px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-21.04px;
+}
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:31.6px;
+}
+.x-grid-cell-inner{ /*产品名称的值 */
+
+    font-size:15.8px;
+    vertical-align: middle;
+    line-height: 30.02px !important;
+    margin-top: 0px;
+}
+.x-column-header-inner{ /*产品名称的行高 =同时是右边时间2行时间的高，要相加  */
+	 height: 100.33px;
+	 font-size: 31.6px;
+	 line-height: 100.33px;
+}
+.sch-header-row{  /*右边时间1行的高度 ，共有2行 */
+	height: 49.77px;
+	font-size: 15.8px;
+	line-height: 49.77px;
+}
+.sch-column-header{ /*甘特图的头部的时间字体大小*/
+	font-size:14.22px;
+}
+.x-box-inner{ /*中间 绿色的行高 */
+   height:102.7px;
+}
+.x-box-target{ /*中间绿色的行的中的字体层的高 */
+  height:31.6px;
+  line-height:31.6px;
+}
+.x-component-default{
+  /*中间绿色的行的中的层的高 */
+  height:102.7px;
+  line-height:102.7px;
+}
+
+}
+
+
+@media  (max-height:850px) and (min-height:750px)  {
+.sch-percent-allocated-text /*作业计划内容 */
+{
+    display:block;
+    font-weight:bold;
+    font-size:10.35px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-3.76px;
+}
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:27.6px;
+}
+.x-grid-cell-inner{ /*产品名称的值 */
+
+    font-size:13.8px;
+    vertical-align: middle;
+    line-height: 26.22px !important;
+    margin-top: 0px;
+}
+.x-column-header-inner{ /*产品名称的行高 =同时是右边时间2行时间的高，要相加  */
+	 height: 87.63px;
+	 font-size: 27.6px;
+	 line-height: 87.63px;
+}
+.sch-header-row{  /*右边时间1行的高度 ，共有2行 */
+	height: 43.47px;
+	font-size: 13.8px;
+	line-height: 43.47px;
+}
+.sch-column-header{ /*甘特图的头部的时间字体大小*/
+	font-size:12.42px;
+}
+.x-box-inner{ /*中间 绿色的行高 */
+   height:89.7px;
+}
+.x-box-target{ /*中间绿色的行的中的字体层的高 */
+  height:27.6px;
+  line-height:27.6px;
+}
+.x-component-default{
+  /*中间绿色的行的中的层的高 */
+  height:89.7px;
+  line-height:89.7px;
+}
+
+}
+
+
+@media  (max-height:750px) and (min-height:650px) {
+.sch-percent-allocated-text /*作业计划内容 */
+{
+    display:block;
+    font-weight:bold;
+    font-size:9px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-3.4px;
+}
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:19px;
+}
+.x-grid-cell-inner{ /*产品名称的值 */
+
+    font-size:12px;
+    vertical-align: middle;
+    line-height: 22.8px !important;
+    margin-top: 0px;
+}
+.x-column-header-inner{ /*产品名称的行高 =同时是右边时间2行时间的高，要相加  */
+	 height: 76.2px;
+	 font-size: 24px;
+	 line-height: 76.2px;
+}
+.sch-header-row{  /*右边时间1行的高度 ，共有2行 */
+	height: 37.8px;
+	font-size: 12px;
+	line-height: 37.8px;
+}
+.sch-column-header{ /*甘特图的头部的时间字体大小*/
+	font-size:10.8px;
+}
+.x-box-inner{ /*中间 绿色的行高 */
+   height:78px;
+}
+.x-box-target{ /*中间绿色的行的中的字体层的高 */
+  height:24px;
+  line-height:24px;
+}
+.x-component-default{
+  /*中间绿色的行的中的层的高 */
+  height:78px;
+  line-height:78px;
+}
+
+}
+
+@media  (max-height:650px)  {
+.sch-percent-allocated-text /*作业计划内容 */
+{
+    display:block;
+    font-weight:bold;
+    font-size:7.65px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-20.04px;
+}
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:20.4px;
+}
+.x-grid-cell-inner{ /*产品名称的值 */
+
+    font-size:10.2px;
+    vertical-align: middle;
+    line-height: 19.38px !important;
+    margin-top: 0px;
+}
+.x-column-header-inner{ /*产品名称的行高 =同时是右边时间2行时间的高，要相加  */
+	 height: 64.77px;
+	 font-size: 20.4px;
+	 line-height: 64.77px;
+}
+.sch-header-row{  /*右边时间1行的高度 ，共有2行 */
+	height: 32.13px;
+	font-size: 10.2px;
+	line-height: 32.13px;
+}
+.sch-column-header{ /*甘特图的头部的时间字体大小*/
+	font-size:9.18px;
+}
+.x-box-inner{ /*中间 绿色的行高 */
+   height:66.3px;
+}
+.x-box-target{ /*中间绿色的行的中的字体层的高 */
+  height:20.4px;
+  line-height:20.4px;
+}
+.x-component-default{
+  /*中间绿色的行的中的层的高 */
+  height:66.3px;
+  line-height:66.3px;
+}
+
+}
+
+/* 竖屏 */
+@media screen and (orientation:portrait){
+	
+	.sch-percent-allocated-text /*作业计划内容 */
+{
+    display:block;
+    font-weight:bold;
+    font-size:7.65px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    color:#FFF;
+    position:relative;
+    z-index:-1;
+    text-align:center;
+    margin-top:-20.04px;
+}
+.job_manager_textstyle{ /*甘特图标题 */
+    font-size:20.4px;
+}
+.x-grid-cell-inner{ /*产品名称的值 */
+
+    font-size:10.2px;
+    vertical-align: middle;
+    line-height: 19.38px !important;
+    margin-top: 0px;
+}
+.x-column-header-inner{ /*产品名称的行高 =同时是右边时间2行时间的高，要相加  */
+	 height: 64.77px;
+	 font-size: 20.4px;
+	 line-height: 64.77px;
+}
+.sch-header-row{  /*右边时间1行的高度 ，共有2行 */
+	height: 32.13px;
+	font-size: 10.2px;
+	line-height: 32.13px;
+}
+.sch-column-header{ /*甘特图的头部的时间字体大小*/
+	font-size:9.18px;
+}
+.x-box-inner{ /*中间 绿色的行高 */
+   height:66.3px;
+}
+.x-box-target{ /*中间绿色的行的中的字体层的高 */
+  height:20.4px;
+  line-height:20.4px;
+}
+.x-component-default{
+  /*中间绿色的行的中的层的高 */
+  height:66.3px;
+  line-height:66.3px;
+}	
+}

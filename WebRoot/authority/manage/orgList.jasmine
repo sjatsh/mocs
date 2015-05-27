@@ -1,0 +1,735 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.org.page.OrgListPage" contentType="text/html;charset=utf-8" %>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="u" uri="../menu/top.jscx" name="top"%>
+<%@taglib prefix="u" uri="../menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../menu/menu.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="../menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>${app.passport}</title>
+    <link rel="stylesheet" type="text/css" href="../../authority/css/css.css"/>
+    <link href="../../authority/javascript/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <u:js/>
+    <script type="text/javascript" charset="utf-8" src="../javascript/org.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../javascript/tree/js/jquery.ztree.all-3.4.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../javascript/template.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../javascript/jasmine-ajax.js"></script>
+	<c:ajaxmanager name="org" />
+    <script type="text/javascript">
+	<!--
+	
+	/**
+	 * 登录用户ID;
+	 */
+	 
+	var USER_ID = "<%#userId%>";
+	
+	var PAGE_ID = "<%#pageId%>";
+	
+	var TYPE_NODE = <%#typeNodeArray%>;
+	
+	var template_machine = null;
+	
+	jQuery(document).ready(function(){
+		init();
+		
+		if(jQuery("#template_machine").length > 0 )
+			template_machine = TrimPath.parseDOMTemplate("template_machine");
+	});
+	
+	
+	/**
+	 * 删除;
+	 */
+	function cmd_del_common(id){
+		if(confirm(message.confirm.del_child)){
+			op = "del";
+			jQuery.blockUI({bindEvents:false, "message":"", "css":{"border":"none"}});
+			jQuery(".delbtn").attr("disabled","disabled");
+		 	org.delOrg(id, USER_ID, PAGE_ID, function(res){
+		 		var result = eval(res.responseText);
+		 		if(result.succ){
+		 			alert(message.success.del_msg);
+		 			var o = result.content;
+					show_node_list(o);
+		 		}else{
+		 			alert(result.msg);
+		 		}
+		 		cmd_cancel();
+		 		jQuery(".delbtn").removeAttr("disabled");
+		 	 });
+		}
+	}
+	 
+	var C_NODE_ID = null;
+	
+	/**
+	 * 打开添加或编辑普通节点页面;
+	 */
+	function cmd_add_common(id){
+		 showMask();
+		 var h = 'loading...<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+		 addMaskContent(h);
+		 
+		op = "add";
+		var nodeId	= (id == undefined) ? "" : id;
+		C_NODE_ID = nodeId;
+		org.getOrg(nodeId, USER_ID, function(res){
+			var result = eval(res.responseText);
+			if(C_NODE_ID == nodeId){
+				if(result.succ){
+					var html = template_edit.process({tns:TYPE_NODE, "view":false});
+					addMaskContent(html);
+					set_form(result.content);
+					onchange_type();
+				}else{
+					h = result.msg + '<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+					addMaskContent(h);
+				}
+			}
+		 });
+	}
+	
+	 
+	function cmd_view_common(nodeId){
+		showMask();
+		var h = 'loading...<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+		addMaskContent(h);
+		C_NODE_ID = nodeId;
+		 
+		op = "view";
+		org.getOrg(nodeId, USER_ID, function(res){
+			var result = eval(res.responseText);
+			if(C_NODE_ID == nodeId){
+				if(result.succ){
+					var html = template_edit.process({tns:TYPE_NODE, "view":true});
+					addMaskContent(html);
+					set_form(result.content);
+					onchange_type();
+				}else{
+					h = result.msg + '<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+					addMaskContent(h);
+				}
+			}
+		 });
+	}
+	
+	
+	
+	/**
+	 * 确定;
+	 */
+	function cmd_confirm(){
+		 var node = get_form();
+		 var v = jQuery.trim(node["name"]);
+		 if( v == "" ){
+			 alert(message.error.org_empty);
+			 return;
+		 }
+		 
+		 if(node["device"]){
+			 var no = jQuery.trim(node["mesNodeid"]);
+			 if(no == ""){
+				 alert("SYMG机床序列号不能为空!");
+				 return;
+			 }
+		 }
+		 
+		 var s = jQuery.trim(node["seq"]);
+		 if( s == "" ){
+			 alert(message.error.org_number);
+			 return;
+		 }
+		 
+		 if(isNaN(s)){
+			 alert(message.error.org_number);
+			 return;
+		 }
+			 
+		if(confirm(message.confirm.info)){
+			var pid = getParId(selectedNode, node["nodeId"]);
+			if(pid != "")
+				node["parentId"] = pid;
+			
+			$(".btn_save,.btn_cancel").attr("disabled","disabled");
+			org.saveOrg(node, USER_ID, PAGE_ID, function(res){
+				var result = eval(res.responseText);
+				if(result.succ){
+					alert(message.success.save_msg);
+					
+					var o = result.content;
+					show_node_list(o);
+				}else{
+					alert(result.msg);
+				}
+				cmd_cancel();
+			 });	
+		}
+	}
+	
+	
+	/**
+	 * 取消;
+	 */
+	function cmd_cancel(){
+		 C_NODE_ID = null;
+		jQuery.unblockUI();
+	}
+	
+	function cmd_del_multi(name){
+		/**var del =$("input[name=" + name + "]:checked");
+		if( del.length <=0 ){
+			alert(message.error.org_sel_msg);
+			return;
+		}
+		var delArr = [];
+		del.each(function(){
+			delArr.push(this.value);
+		});
+		
+		if(confirm(message.confirm.del_child)){
+			op = "del";
+			jQuery.blockUI({"message":message.info.process});
+			jQuery(".delbtn").attr("disabled","disabled");
+		 	org.delOrgs(delArr.join(","), USER_ID, function(res){
+		 		var result = eval(res.responseText);
+		 		if(result.succ){
+		 			alert(message.success.del_msg);
+		 			after_bat_del_list(delArr);
+		 		}else{
+		 			alert(result.msg);
+		 		}
+		 		cmd_cancel();
+		 		jQuery(".delbtn").removeAttr("disabled");
+		 	 });
+		}*/
+	}
+	
+	function after_bat_del_list(delArr){
+		//1.删除列表;
+		var len = _children.length - 1;
+		for ( var i = len; i >=0 ; i--) {
+			var _o = _children[i];
+			
+			for(var j = 0; j < delArr.length; j++){
+				var d_id = delArr[j];
+				if(_o.nodeId == d_id){
+					_children.splice(i,1);
+					break;
+				}
+			}
+		}
+		//2.排序;
+		_children.sort(sortNode);
+		
+		//3.刷新列表;
+		var html = template_list.process({"data":_children});
+		jQuery("#child_content").html(html);
+		
+		refresh_tree([]);
+	}
+	
+	function checklength(self,maxlength){
+		var t = jQuery(self);
+	   	if (t.val().length > maxlength) {
+	          t.val(t.val().substring(0, maxlength));
+	          alert("已超過最大長度" + maxlength + "!");
+	          return false;
+	    }
+	   	return true;
+	}
+	
+	function onchange_type(){
+		var t = $("select[name=nodeType]").val();
+		//如果是设备类型请显示关联选项;
+		if( "13" == t ){
+			$(".tr_jc").show();
+		}else{
+			$(".tr_jc").hide();
+		}
+		$(".btn_cancel").removeAttr("disabled");
+	}
+	
+	var DEV_QUERY = null;
+	function jc_open(){
+		var mid = $("input[name=mesNodeid]").val();
+		mid = $.trim(mid);
+		if(mid == ""){
+			alert("请输入SYMG机床序列号!")
+			return;
+		}
+		jc_init(mid, "");
+		$("#div_result").html("");
+		$("#div_dev_query").center({"z-index":"2000", "display":"block", "top":"10%"});
+	}
+	
+	function jc_init(mid, pwd){
+		$("input[name=n_m]").val(mid);
+		$("input[name=n_p]").val(pwd);
+	}
+	
+	function jc_cancel(){
+		jc_stop();
+		$("#div_dev_query").hide();
+	}
+	
+	function jc_query(){
+		var mid = $("input[name=n_m]").val();
+		mid = $.trim(mid);
+		DEV_QUERY = mid;
+		
+		var pwd = $("input[name=n_p]").val();
+		pwd = $.trim(pwd);
+		if(pwd == ""){
+			alert("请输入关联密码!")
+			return;
+		}
+		
+		var nodeId = $("input[name=nodeId]").val();
+		
+		$("#div_result").html("loading...");
+		org.queryMachineInfo(nodeId, mid, pwd, function(res){
+			if(DEV_QUERY == mid){
+				var result = eval(res.responseText);
+		 		if(result.succ){
+		 			var rt = result.content["returnType"];
+		 			if("3" == rt){
+			 			var html = template_machine.process({"data":result.content});
+			 			$("#div_result").html(html);
+			 			var symgEquId = get(result.content, "machineId");
+			 			$("input[name=composeId]").val(mid + "@symg_swg@" + symgEquId);
+			 			jc_success(mid, pwd);
+		 			}else{
+		 				$("#div_result").html(result.content["message"]);
+		 			}
+		 		}else{
+		 			alert(result.msg);
+		 		}
+		 		jc_stop();
+			}
+		});
+	}
+	
+	function jc_success(mid, pwd){
+		$("input[name=mesNodeid]").val(mid);
+		$("input[name=mesPwd]").val(pwd);
+	}
+	function jc_stop(){
+		DEV_QUERY = null;
+	}
+	
+	function symg_show(self, max){
+		var f = checklength(self, max);
+		if(!f)return;
+		var nodeId = $("input[name=nodeId]").val();
+		var mesNodeid = $(self).val();
+		org.symg_show(nodeId, mesNodeid, function(res){
+			var result = eval(res.responseText);
+	 		if(result.succ){
+	 			$(".symg_show").html(result.content);
+	 		}else{
+	 			alert(result.msg);
+	 		}
+		});
+	}
+	-->
+	</script>
+</head>
+<body>
+<!--container-->
+<div class="container">
+    <!--header-->
+	<div id="header">
+	<u:top/>
+	</div>
+	<!--main-->
+	<div class="main">
+		<!--main_left-->
+		<div class="main_left">
+		 <u:menu/>
+		</div>
+	 
+	 	<!--main_right-->
+		<div class="main_rightss">
+	      <div class="zuzhijiagou_info">
+	        <div class="zuzhijiagou_info_left">
+	          <div id="tree" class="ztree a dumascroll b" style="width:279px;height:450px;margin-top:0px;">
+	          </div>
+	          <!--dumascroll-->
+	        </div>
+	        <!--zuzhijiagou_info_left-->
+	        <div id="child_content" class="zuzhijiagou_info_right">
+	        
+	        </div>
+	    <!--zuzhi_add-->
+	      </div>
+	      <!--zuzhijiagou_info-->
+	       
+	      
+	    </div>
+		<div class="clear"></div>
+		</div>
+	<div class="footer"><u:foot/></div>
+</div>
+<u:relogin/>
+<textarea id="template_list" class="hide">
+	<div style="height:400px;overflow-y:auto">
+	<table class="function_role_table" border="0" cellpadding="0px" cellspacing="1px" style="width:510px;">
+		<tr class="function_role_tr">
+			<th class="hide">
+				<input type="checkbox" onclick="sel('chk_node', this.checked)"/>
+			</th>
+			<th style="width:35%">${org.name}</th>
+			<th style="width:25%">${org.type}</th>
+			<th style="width:10%">${org.seq}</th>
+			<th style="width:30%">${org.group.op}</th>
+		</tr>
+		{for el in data}
+		<tr class="function_role_tr1">
+			<td class="hide"><input type="checkbox" name="chk_node" value="\$\{el.nodeId}"/></td>
+			<td title="\$\{el.bindData.name}">\$\{el.bindData.name}</td>
+			<td title="\$\{el.bindData.nodeType.text}">\$\{el.bindData.nodeType.text}</td>
+			<td title="\$\{el.bindData.seq}">\$\{el.bindData.seq}</td>
+			<td><a href="#" onclick="cmd_view_common('\$\{el.nodeId}')">${button.label.view}</a>
+				{if el.bindData.manage == true}			
+				| <a href="#" onclick="cmd_add_common('\$\{el.nodeId}')">${button.label.edit}</a>
+				| <a href="#" onclick="cmd_del_common('\$\{el.nodeId}')">${button.label.delete}</a>
+				{/if}
+			</td>
+		</tr>
+		{forelse}
+		<tr class="function_role_tr1">
+			<td colspan="5">${org.nodata}</td>
+		</tr>
+		{/for}
+	</table>
+	</div>
+	{if result["attach"]["manage"]}
+	<div class="zuzhi_add">
+	       <a href="javascript:void(0)" onclick="cmd_add_common();" class="zuzhi_addbtn">${button.label.new}</a>
+	</div>
+	{/if}
+</textarea>
+<textarea id="template_edit" class="hide">
+<form>
+<div class="zuzhijiagou_alert_info" style="left:0px">
+<div class="zuzhijiagou_alert_info_top">
+</div>
+<div class="zuzhijiagou_alert_info_middle">
+	<ul class="zuzhijiagou_ul1">
+	<li class="zuzhijiagou_li1">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  ${org.name}<span class="function_span2">&nbsp;*&nbsp;</span>：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input type="hidden" name="nodeId"><input class="zuzhijiagou_txt1" onKeyUp="checklength(this, 100)" onblur="checklength(this, 100)" name="name"/>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  ${org.type}：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <select name="nodeType" class="zuzhi_select1" onchange="onchange_type()">
+										{for el in tns.tns}
+										  <option value="\$\{el.typeId}">\$\{el.text}</option>
+										  {/for}
+										</select>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1 tr_jc">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  设备类型：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <select class="zuzhi_select1" name="equType">
+                                          <option value=""></option>
+                                          {for el in tns.tti}
+										  <option value="\$\{el.id}">\$\{el.equipmentType}</option>
+										  {/for}
+										  
+                                          <!--
+											<option value=""></option>
+											<option value="机床">机床</option>
+											<option value="PLC">PLC</option>
+											<option value="输送设备">输送设备</option>
+										  -->	
+										</select>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1 tr_jc">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  工位名称：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input name="workStationName" class="zuzhijiagou_txt1" onKeyUp="checklength(this, 30)" onblur="checklength(this, 30)"/>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1 tr_jc">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  制造商：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input name="manuFacturer" class="zuzhijiagou_txt1" onKeyUp="checklength(this, 30)" onblur="checklength(this, 30)"/>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1 tr_jc">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  产品型号：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input name="manuFactureType" class="zuzhijiagou_txt1" onKeyUp="checklength(this, 30)" onblur="checklength(this, 30)"/>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1 tr_jc">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left zuzhijiagou_li1_info_leftss">
+  设备描述：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  &lt;textarea class="zuzhijiagou_txt3" onKeyUp="checklength(this, 100)" onblur="checklength(this, 100)" name="equDesc"&gt;&lt;/textarea&gt;
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1 tr_jc">
+  <div class="zuzhijiagou_li1_info" style="width:459px;margin-left:-25px;">
+   <div class="zuzhijiagou_li1_info_left" style="width:136px;height:50px">
+  &nbsp;&nbsp;&nbsp;&nbsp;SYMG机床序列号<span class="function_span2">*</span>：
+  <input class="hide" type="password" name="mesPwd"/>
+  <input type="hidden" name="composeId"/>
+  <br/>
+  <span class="function_span2 symg_show"></span>
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input onKeyUp="checklength(this, 50)" onblur="symg_show(this, 50)" class="zuzhijiagou_txt4" name="mesNodeid"/><a href="javascript:void(0)" onclick="jc_open();" class="zuzhi_link2">关联</a>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  ${org.contactPerson}：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input name="contactPerson" onKeyUp="checklength(this, 10)" onblur="checklength(this, 10)" class="zuzhijiagou_txt1" />
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  ${org.contactTelephone}：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input onKeyUp="checklength(this, 20)" onblur="checklength(this, 20)" name="contactTelephone" class="zuzhijiagou_txt1"/>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  ${org.address}：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input onKeyUp="checklength(this, 30)" onblur="checklength(this, 30)" name="address" class="zuzhijiagou_txt1"/>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left zuzhijiagou_li1_info_leftss">
+  ${org.description}：
+  <select class="hide" name="state">
+	<option value="1">启用</option>
+  <option value="0">停用</option>
+  </select>
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  &lt;textarea class="zuzhijiagou_txt3" onKeyUp="checklength(this, 100)" onblur="checklength(this, 100)" name="description"&gt;&lt;&#47textarea&gt;
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li1">
+  <div class="zuzhijiagou_li1_info">
+   <div class="zuzhijiagou_li1_info_left">
+  ${org.seq}<span class="function_span2">&nbsp;*&nbsp;</span>：
+  </div>
+  <!--zuzhijiagou_li1_info_left-->
+  <div class="zuzhijiagou_li1_info_right">
+  <input  onKeyUp="checklength(this, 5)" onblur="checklength(this, 5)" class="zuzhijiagou_txt1" name="seq"/>
+  </div>
+  <!--zuzhijiagou_li1_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li1_info-->
+  </li>
+  
+  <li class="zuzhijiagou_li2">
+  <div class="zuzhijiagou_li2_info">
+  {if view == false}
+  <div class="zuzhijiagou_li2_info_left">
+  <a href="javascript:void(0)" onclick="cmd_confirm()" class="zuzhi_link3 btn_save">${button.label.ok}</a>
+  </div>
+  {/if}
+  <!--zuzhijiagou_li2_info_left-->
+  <div class="zuzhijiagou_li2_info_right">
+  <a href="javascript:void(0)" onclick="cmd_cancel()" class="zuzhi_link3 btn_cancel">${button.label.cancel}</a>
+  </div>
+  <!--zuzhijiagou_li2_info_right-->
+  <div class="clear"></div>
+  </div>
+  <!--zuzhijiagou_li2_info-->
+  </li>
+  </ul>
+  <div class="clear"></div>
+</div>
+</div>
+	</form>
+</textarea>
+<textarea id="template_machine" class="hide">
+<div class="zuzhijiagouadd_alert_info">
+    <div class="zuzhijiagouadd_alert_info_top"> </div>
+    <div class="zuzhijiagouadd_alert_info_middle">
+      <div class="zuzhijiagouadd_alert_info_middle_info">
+	<table class="usermanage_table" border="0" cellpadding="0px" cellspacing="1px">
+		<tr>
+			<th style="width:20%">序列号:</th><td style="width:30%">{if data["machineSeriaNo"] }\$\{data["machineSeriaNo"]}{/if}</td><th style="width:20%">产品型号:</th><td style="width:30%">{if data["machineType"] }\$\{data["machineType"]}{/if}</td>
+		</tr>
+		<tr>
+			<th>机床类型:</th><td>{if data["machineName"] }\$\{data["machineName"]}{/if}</td><th>订单号:</th><td>{if data["orderNo"] }\$\{data["orderNo"]}{/if}</td>
+		</tr>
+		<tr>
+			<th>用户:</th><td>{if data["customerName"] }\$\{data["customerName"]}{/if}</td><th>出厂时间:</th><td>{if data["outDate"] }\$\{data["outDate"]}{/if}</td>
+		</tr>
+		<tr>
+			<th>装配开始时间:</th><td>{if data["assembleStartDate"] }\$\{data["assembleStartDate"]}{/if}</td><th>装配结束时间:</th><td>{if data["assembleEndDate"] }\$\{data["assembleEndDate"]}{/if}</td>
+		</tr>
+		<tr>
+			<th>安装开始时间:</th><td>{if data["installStartDate"] }\$\{data["installStartDate"]}{/if}</td><th>安装结束时间:</th><td>{if data["installEndDate"] }\$\{data["installEndDate"]}{/if}</td>
+		</tr>
+		<tr>
+			<th>订单生产时间:</th><td>{if data["orderCreateDate"] }\$\{data["orderCreateDate"]}{/if}</td><th>装配班次:</th><td>{if data["assembleShiftNo"] }\$\{data["assembleShiftNo"]}{/if}</td>
+		</tr>
+	</table>
+		</div>
+      <!--zuzhijiagouadd_alert_info_middle_info-->
+    </div>
+    <!--zuzhijiagouadd_alert_info_middle-->
+    <div class="zuzhijiagouadd_alert_info_bottom"> </div>
+    <!--zuzhijiagouadd_alert_info_bottom-->
+  </div>	
+</textarea>
+<div id="div_dev_query" class="hide zuzhijiagouadd_alert_info">
+	<div class="zuzhijiagouadd_alert_info_top"> </div>
+    <!--zuzhijiagouadd_alert_info_top-->
+    <div class="zuzhijiagouadd_alert_info_middle">
+      <div class="zuzhijiagouadd_alert_info_middle_info">
+        <div style="width:423px">
+              <table class="zuzhijiagou_add_table_inner" border="0" cellpadding="0px" cellspacing="0px" width="423">
+                  <tr>
+                    <td class="zuzhijiagou_add_table_inner_td2">SYMG机床序列号：</td>
+                    <td class="zuzhijiagou_add_table_inner_td3"><input type="text" maxlength="100" readOnly="true" name="n_m" class="zuzhijiagou_add_txt1"></td>
+                  </tr>
+                  <tr>
+                    <td class="zuzhijiagou_add_table_inner_td5">关联密码：</td>
+                    <td class="zuzhijiagou_add_table_inner_td6"><input type="password" maxlength="100" name="n_p" class="zuzhijiagou_add_txt1"></td>
+                  </tr>
+                  <tr>
+					<td colspan="2">
+						<div class="zuzhijiagou_add_table_two_td2_info">
+		                  <div class="zuzhijiagou_add_table_two_td2_info_left"> <a href="javascript:void(0)" onclick="jc_query();" class="zuzhi_add_btn1">请求关联</a> </div>
+		                  <!--zuzhijiagou_add_table_two_td2_info_left-->
+		                  <div class="zuzhijiagou_add_table_two_td2_info_right"> <a href="javascript:void(0)" onclick="jc_cancel();" class="zuzhi_add_btn2">${button.label.cancel}</a> </div>
+		                  <!--zuzhijiagou_add_table_two_td2_info_right-->
+		                  <div class="clear"></div>
+		                </div>
+					</td>
+				</tr>
+                </table>
+          </div>
+          <div id="div_result">
+		  </div>
+      </div>
+      <!--zuzhijiagouadd_alert_info_middle_info-->
+    </div>
+    <!--zuzhijiagouadd_alert_info_middle-->
+    <div class="zuzhijiagouadd_alert_info_bottom"> </div>
+    <!--zuzhijiagouadd_alert_info_bottom-->
+</div>
+</body>
+</html>

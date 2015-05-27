@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<link rel="stylesheet" href="css/com_richfaces_overwrite.css" type="text/css"></link>
+	<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+	<link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" type="text/css"> </link>
+	<div id="content">
+		<h:inputHidden id="nodeStr" value="#{ProductTypeManagementBean.nodeStr}" />
+
+		<div  class="searcharea_tab"  style="text-align: left; height: 39px; ">
+			<div style="padding-top: 6px;"></div>
+			
+			<h:outputText value="开始时间:"  style="margin-left: 20px;"/>
+			<rich:calendar id="startTime" inputClass="common_calendar" popup="true" locale="en"
+				value="#{ProductTypeManagementBean.startTime}" cellWidth="10px"
+				cellHeight="20px" datePattern="yyyy-MM-dd" />
+				
+			<h:outputText value="结束时间:"  style="margin-left: 10px;"/>
+			<rich:calendar id="finishTime" inputClass="common_calendar" popup="true" locale="en"
+				value="#{ProductTypeManagementBean.endTime}" cellWidth="10px"
+				cellHeight="20px" datePattern="yyyy-MM-dd" />
+
+			<h:outputLabel style="margin-left: 20px;" value="产品型号：" />
+			<h:inputText id="ufixNo"  styleClass="common_input" value="#{ProductTypeManagementBean.proType}" />
+
+			<a4j:commandButton style="margin-left: 20px;" value="查询"
+				actionListener="#{ProductTypeManagementBean.findProListByProTypeAction}"
+				render="rightiframe" />
+		</div>
+
+		<div style=" width: 854px; ">
+			<div style="float: left; width: 6px; background-image:url('img/common_info_img/common_allTable_right_bg.png') ; height: 410px;"></div>
+			
+			<div id="proData" style=" height: 410px; width:848px; background-image:url('img/common_info_img/common_allTable_bg.png'); overflow: auto;">
+				<rich:dataTable id="productData"
+					value="#{ProductTypeManagementBean.defaultDataModel}" rows="16"
+					rowClasses="even-row, odd-row" cellpadding="0"
+					styleClass="dataTableEx" cellspacing="0" style="width:848px; "
+					border="0" var="prod">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="ID" />
+						</f:facet>
+						<h:outputText value="#{prod.userProdId}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="产品名称" />
+						</f:facet>
+						<h:outputText value="#{prod.uprodName}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="产品型号" />
+						</f:facet>
+						<h:outputText value="#{prod.uprodType}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="版本号" />
+						</f:facet>
+						<h:outputText value="#{prod.uprodVersion}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="产品描述" />
+						</f:facet>
+						<h:outputText value="#{prod.uprodDesc}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="投产时间" />
+						</f:facet>
+						<h:outputText value="#{prod.uprodOnlineTime}" />
+					</rich:column>
+					<rich:column styleClass="laseColumn">
+						<f:facet name="header">
+							<h:outputText value="产品状态" />
+						</f:facet>
+						<h:outputText value="#{prod.uprodStatus}" />
+					</rich:column>
+				</rich:dataTable>
+				
+			</div>			
+			<div style=" height:32px; text-align: center; background-image:url('img/common_info_img/common_number_bg.png') ;">
+				<rich:dataScroller for="productData" id="ds" maxPages="10" page="#{ProductTypeManagementBean.scrollerPage}"
+					renderIfSinglePage="true">
+
+					<f:facet name="first">
+						<h:outputText value="|◄◄" />
+					</f:facet>
+					<f:facet name="last">
+						<h:outputText value="►►|" />
+					</f:facet>
+
+					<f:facet name="fastForward">
+						<h:outputText value="►►" />
+					</f:facet>
+					<f:facet name="fastRewind">
+						<h:outputText value="◄◄" />
+					</f:facet>
+
+					<f:facet name="next">
+						<h:outputText value="►" />
+					</f:facet>
+					<f:facet name="previous">
+						<h:outputText value="◄" />
+					</f:facet>
+				</rich:dataScroller>
+			</div>
+		</div>
+	</div>
+
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script type="text/javascript">
+		
+		scrollbarShow();
+		
+		function scrollbarShow(){
+				$("#proData").mCustomScrollbar({
+					autoHideScrollbar:true,
+					horizontalScroll:true,
+				});
+			}
+	</script>
+</ui:composition>

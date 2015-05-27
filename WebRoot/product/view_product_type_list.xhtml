@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<script type="text/javascript">
+//<![CDATA[
+	function mobileCheck(item){
+		var str = item.value;
+		if(str==""){
+			alert('请输入手机号！');
+			return false;
+		}
+	    if(str.length!=11){
+	        alert('手机号码位数不正确！');
+	        item.value="";
+	        item.focus();
+	        return false;
+	     }
+	 	var myreg = /^(((13[0-9]{1})|15[0-9]{1}|18[0-9]{1}|)+\d{8})$/;
+	    if(!myreg.test(str)){
+	        alert('手机号码格式不正确！');
+	        item.value="";
+	        item.focus();
+	        return false;
+	    }
+	    return true;
+	}
+	$(document).ready(function() {  
+	 //  $(".saveBtn").click(function() { 
+	  //   $.blockUI({ message: $('.domMessage') }); 
+	   //    setTimeout($.unblockUI, 1000); });         
+	}); 
+ //]]>
+</script>
+<div class="domMessage" style="display:none;"> 
+   <h:graphicImage  value="images/order/loading.gif" />
+</div> 
+<div  class="searcharea_tab"  style="text-align: left; height: 39px; ">
+    <div style="height: 7px;"></div>
+    <h:panelGroup id="search" layout="block">
+		<h:outputLabel value="手机号" styleClass="common_condition_spacing_first" />
+		<h:inputText id="phonesear" value="#{UserSearchOrderBean.phonenum}"  maxlength="11" styleClass="common_input common_condition_spacing" >
+		</h:inputText>
+		<h:panelGroup id="doaddress"><h:message for="phonesear" ></h:message></h:panelGroup>
+		<h:commandButton id="serachbutton" styleClass="common_condition_spacing_end" action="#{UserSearchOrderBean.searchOrderstatus}" onclick="showMascot();"  value="查询" style="margin-left: 30px;">
+			<f:ajax  render=":myform:result doaddress phonesear" event="action" execute="search"></f:ajax>
+		</h:commandButton>
+	</h:panelGroup>
+</div>
+<div class="orderinfo">
+	<h:panelGroup  id="result"  layout="block">
+		<div style="height: 80px"></div>
+		<h:inputText value="#{UserSearchOrderBean.orderno}" style="margin-left: 200px;" readonly="true" styleClass="phoneinput"/>  
+		<h:inputText id="orderstatus" value="#{UserSearchOrderBean.orderstatus}" style="margin-left: 190px; " readonly="true" styleClass="phoneinput"/> 
+		<h:inputHidden id="hiddentime" value="#{UserSearchOrderBean.time}"></h:inputHidden>
+		<h:inputHidden id="hiddenhavevalue" value="#{UserSearchOrderBean.havevalue}"></h:inputHidden>	
+<script type="text/javascript" src="js/searchorder.js"></script>
+	    <h:graphicImage value="#{UserSearchOrderBean.progressbarvalue}" style="margin-top: 130px;margin-left: 135px;" 
+	    	rendered="#{UserSearchOrderBean.yichangjian}"></h:graphicImage>
+		<h:graphicImage  styleClass="huadongimg"   value="images/order/PSD08.png" rendered="#{UserSearchOrderBean.gongxu}"
+			 style="z-index:1;  margin-top: 129px; position:relative;left:#{UserSearchOrderBean.leftpostion}">
+			<!-- <h:graphicImage styleClass="zhezhaoceng" style="margin-top: 16px;" value="images/order/sqsq.png" rendered="#{UserSearchOrderBean.gongxu}"></h:graphicImage> -->
+			<div class="zhezhaocengdiv"></div>
+		</h:graphicImage>		
+	</h:panelGroup>
+</div>
+</ui:composition>

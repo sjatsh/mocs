@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<!-- Mimic Internet Explorer 8 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"  />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>车间管理</title>
+	<script type="text/javascript">
+	
+	var wjb51 = 0;
+	var hjb51 = 0;
+	hjb51 = document.documentElement.clientHeight;
+	wjb51 = document.documentElement.clientWidth;
+	if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
+			hjb51 = wjb51*1080/1920; 
+		//	   hjb51 = 600; 
+		//	   wjb51 = 800;
+		}
+	if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
+		   hjb51 = 600; 
+		   wjb51 = 800;
+		   document.body.style.overflow="scroll";
+	   }
+	if(800>wjb51){
+		   hjb51 = 600;
+		   wjb51 = 800;
+		   document.body.style.overflow="scroll";
+	}	
+	var fadeouttime = 500;
+	var settimeout = 100;
+	
+	function imgdragstart(){return false;}
+	</script>	
+	<link rel="stylesheet" href="css/menucss/zzsc.css" type="text/css"></link>
+	<link rel="stylesheet" href="css/menucss/maps.css" type="text/css"></link>
+	<link rel="stylesheet" href="css/menucss/test.css" type="text/css"></link>
+	
+	<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+	<h:outputScript library="js" name="exporting.js"></h:outputScript>
+	<h:outputScript library="js" name="highcharts-more.js"></h:outputScript>
+	<h:outputScript library="js" name="common.js"></h:outputScript>
+	<h:outputScript library="js" name="workshop_management.js"></h:outputScript>
+
+
+<!-- 	<h:outputScript library="menujs" name="maps.js"></h:outputScript> -->
+	<h:outputScript library="menujs" name="google.js"></h:outputScript>
+	<h:outputScript library="menujs" name="jquery-ui-1.10.4.js"></h:outputScript>
+	<h:outputScript library="menujs" name="index.js"></h:outputScript>
+	<h:outputScript library="js" name="common.js"></h:outputScript>
+<style type="text/css">
+
+.common_menu{
+}
+.select{
+	color:white;
+	background-color: #088B00;
+}
+.manage_bottom_li_select{
+	float:left;
+	width:384px;
+	height:90px;
+	font-weight:bold;
+	font-size:50px;
+	text-align:center;
+	line-height:90px;
+	vertical-align:middle;
+	color:white;
+	cursor:pointer;
+	background-color: #088B00;
+}
+.manage_bottom{
+	width:1920px;
+	height:80px;
+}
+.tsddivclass{
+	position: absolute;
+	right:2px;
+	bottom:34%;
+	width:13.0%;
+	height:5.8%;
+	border:0px solid red;
+	background-color: white;
+	z-index: 1000000;
+	display: none;
+	font-family:微软雅黑;
+	font-size:50%;
+	color:#4A4A4A;
+}
+.tsddivimg{
+	z-index: -1;
+	width:100%;
+	height:100%;
+	position: absolute;
+}
+.tscontentclass{
+	position: absolute;
+	right:2px;
+	bottom:8.2%;
+	width:13.0%;
+	height:28%;
+	border: 0px solid red;
+	background-color: white;
+	z-index: 1000000;
+	font-size: 50%;
+	overflow: hidden ;
+	color:#4A4A4A;
+	font-family:微软雅黑;
+	
+}
+</style>
+</h:head>
+<h:body style="overflow:hidden;">
+		<table id="mocscontains" border="0" cellpadding="0" cellspacing="0" style="height: 100%;height: 100%;position: relative;">
+		<tr>
+			<td id="mocscontainstop"  style="font-size: 28px;width: 100%;">
+				
+				<div class="tsddivclass" id="tsdiv001" >
+					<img src="images/gdtsbg.png" class="tsddivimg"/>
+					<table style="width: 100%;height: 100%;">
+						<tr>
+							<td style="width: 20%"></td>
+							<td style="width: 80%;line-height: 100%;height: 100%;vertical-align: middle;" id="tsdivtd001" ></td>
+						</tr>
+					</table>
+				</div>
+				<div class="tscontentclass" id="tscontent" style="display: none;border: 0px solid red;">
+					<table style="width: 100%;border: 0px solid red;height: 100%;" border="0">
+						<tr style="height:18%">
+							<td style="width: 64%;font-size:85%;" id="tscount" ></td>
+							<td style="width: 36%;">
+								<img src="images/tszxh.png" alt="最小化" onclick="zuixiaohua()" style="width:31%;height:70%;" />
+								<img src="images/tsgb.png" alt="关闭"  onclick="guanbi()" 
+								style="margin-left:10%;width:30%;height:70%;" />
+							</td>
+						</tr>
+						<tr style="height:82%">
+							<td colspan="2" id="tsgdnr" style="font-size: 80%;width: 100%;" valign="top" align="center"></td>
+						</tr>
+					</table>
+				</div>
+				<ui:insert name="content" ></ui:insert>
+			</td>
+		</tr>
+		<tr>	
+			 <td id="mocscontainsbottom" width="100%" >
+				 <ui:include src="/templates/includes/menu.xhtml" />
+				
+			</td>
+		</tr>
+		</table>
+		<div style="display: none;">
+	
+		<h:form id="myts1">
+		<h:inputHidden id="hidden" value="#{tsControlBean.prams}"></h:inputHidden>
+		<p:commandButton actionListener="#{menuBean.getSelectItem('b21.scdd')}" id="tssubmit"
+		value=" " style="display:none;"></p:commandButton>
+		<a4j:poll action="#{tsControlBean.refreshData}" interval="500000000" render="reloadTs" oncomplete="reloadTs()" ></a4j:poll>
+		<a4j:outputPanel id="reloadTs">
+			<h:inputHidden id="gdTs" value="#{tsControlBean.ts}" />
+		</a4j:outputPanel> 
+		</h:form>
+	
+		</div>
+		
+		<script type="text/javascript">
+		//<![CDATA[	
+		           
+		function reloadTs(){
+			var gdTs = document.getElementById("myts1:gdTs").value; 
+			var count=gdTs.split(",");
+			if(count.length>0){
+				document.getElementById("tsdivtd001").innerHTML="您有"+count.length+"个工单待关闭!";
+				var tt=document.getElementById("tscontent").style.display+"";
+				
+				if(tt=="none"){
+					document.getElementById("tsdiv001").style.display="block";
+				}
+				document.getElementById("tsdiv001").onclick=function(){
+					document.getElementById("tsdiv001").style.display="none";
+					document.getElementById("tscontent").style.display="block";
+					var gdTs1 = document.getElementById("myts1:gdTs").value; 
+					var ss=gdTs1.split(",");
+					document.getElementById("tscount").innerHTML="<span>&#160;&#160;以下"+ss.length+"个工单待关闭</span>";
+					document.getElementById("tsgdnr").innerHTML="";
+					var co=3;
+					if(ss.length<=3){
+						co=ss.length;
+					}
+					for(var i=0;i<co;i++){
+						var aa=ss[i];
+						var bb=aa.split("|");
+						var cc=bb[1];
+						var ee=bb[0];
+						var ff;
+						//alert("ee:"+ee);
+						if(i==0){
+							ff=ee.substring(4,ee.length);
+						}else if(i==ss.length){
+							ff=ee.substring(0,ee.length-1);
+						}else{
+							ff==ee.substring(4,ee.length);
+						}
+						//alert("ff:"+ff);
+						var value=cc.substring(5,cc.length);
+						value=value.substring(value.length-14,value.length);
+						document.getElementById("tsgdnr").innerHTML+="<div style='height:25%;widht:100%;font-size:120%;cursor:pointer' "
+						+" onclick='localAddress(\""+ff+"\")'>"
+						+"<img src='images/tsgdtb.png'style='width:18%;height:98%;'>"+value
+						+"</div><hr style='width:100%;height:2px;'/>";
+					}
+					
+					if(ss.length>3){
+						document.getElementById("tsgdnr").innerHTML+="<div style='widht:100%;height:25%;font-size:150%'>查看所有</div>";
+					}
+					
+				} 
+			}
+		}
+		function localAddress(address){
+			 SetCookie("jobdispathcNo",address);
+			 window.location.href='index.faces?page=/mocs/jobdispatch/jobdispatch.xhtml';
+			 document.getElementById("myts1:tssubmit").click();
+			 
+		}
+		function zuixiaohua(){
+			document.getElementById("tsdiv001").style.display="block";
+			document.getElementById("tscontent").style.display="none";
+		}
+		function guanbi(){
+			document.getElementById("tsdiv001").style.display="none";
+			document.getElementById("tscontent").style.display="none";
+		}
+		//]]>	
+		</script>
+	<script type="text/javascript">
+	
+	
+
+function findDimensions() // 函数：获取尺寸
+{
+
+document.getElementById("mocscontains").style.width=wjb51+"px";
+document.getElementById("mocscontains").style.height=hjb51+"px";
+
+document.getElementById("mocscontainstop").style.height=hjb51*90/100-20+"px"; //不知道为什么资料和子页面中间都减20 
+document.getElementById("mocscontainsbottom").style.height=hjb51*8/100+"px";
+
+}
+
+function findDimensions1() // 函数：获取尺寸 
+{
+
+document.getElementById("mocscontains").style.width=wjb51+"px";
+document.getElementById("mocscontains").style.height=hjb51+"px";
+
+document.getElementById("mocscontainstop").style.height=hjb51*90/100-20+"px"; 
+document.getElementById("mocscontainsbottom").style.height=hjb51*90/1080+"px";
+
+window.location.href=window.location.href; //重新载入页面  
+
+}
+ 
+findDimensions();  //一进入就执行一次 
+// 调用函数，获取数值
+//window.onresize=findDimensions1;  //窗口改变时执行 
+
+
+if(navigator.userAgent &amp;&amp; navigator.userAgent.split(";")[1].toLowerCase().indexOf("msie")>-1){
+    document.body.innerHTML = '<div onresize="findDimensions1();" style="width:100%;height:100%;position:absolute;z-index:-999;"></div>' + document.body.innerHTML;    
+} else {
+	//window.onresize = findDimensions1;
+}
+
+for(i in document.images)document.images[i].ondragstart=imgdragstart;
+</script>	
+			
+</h:body>
+</html>

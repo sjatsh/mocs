@@ -1,0 +1,424 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.user.page.UserInfoDetailPage" contentType="text/html;charset=UTF-8" resource="user"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="a" uri="auth.jscx" name="auth" %>
+<%@taglib prefix="u" uri="../menu/top.jscx" name="top"%>
+<%@taglib prefix="u" uri="../menu/menu.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="../menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html><head>
+<title><c:Out value="<%#smtcl.mocs.utils.authority.HelperUtil.title()%>" /></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<link href="../../authority/javascript/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" charset="utf-8" />
+<link href="../../authority/css/css.css" rel="stylesheet" type="text/css" charset="utf-8" />
+<u:js/>
+<script type="text/javascript" charset="utf-8" src="../../authority/javascript/tree/js/jquery.ztree.all-3.4.min.js"></script>
+<script type="text/javascript" charset="utf-8" language="javascript" src="../../authority/javascript/pagging.js"></script>
+<script type="text/javascript" charset="utf-8" language="javascript" src="../../authority/javascript/common.js"></script>
+<script type="text/javascript" charset="utf-8" language="javascript" src="../../authority/javascript/org-group-jscx.js"></script>
+<script type="text/javascript" i18n="true" charset="utf-8" language="javascript" src="../../authority/javascript/resource/resource.js"></script>
+<script type="text/javascript" src="../../authority/javascript/template.js"></script>
+<script type="text/javascript" charset="UTF-8" language="javascript">
+//<![CDATA[
+// 用户信息保存前，验证
+function checkForm () {
+	// 登录名验证 只能包含数字、字母、减号、下划线和句号，其他属于非法字符
+	if (!jQuery('#loginName').val()) {
+		alert (message.error.loginName_check_msg);
+		return false;
+	} else {
+		var rePsd = /^[a-zA-Z0-9\.\-\_]+$/;
+		if (!rePsd.test(jQuery('#loginName').val())){
+			alert (message.error.loginName_check_msg);
+			return false;
+		}	
+	}
+	
+	// 登录名长度控制50个字符
+	if (jQuery('#loginName').val().length>50){
+		alert(message.error.loginName_length_check_msg);
+		return false;	
+	}
+	
+	var nn = $.trim(jQuery('#nickName').val())
+	if (nn == ""){
+		alert("错误：用户昵称不允许为空！");
+		return false;	
+	}
+	
+	// 用户昵称长度控制50个字符
+	if (nn.length>50){
+		alert("错误：用户昵称的长度 不能超过50个字！");
+		return false;	
+	}
+	
+	// 密码验证 输入非法字符报错 密码长度6-16位，超出这个范围报错
+	if (jQuery("#userId").val()==''||jQuery('#password').val()){
+		var rePsd = /^[a-zA-Z0-9]+$/;
+		if (!rePsd.test(jQuery('#password').val())){
+			alert (message.error.password_check_msg);
+			return false;
+		}
+		if (jQuery("#password").val().length<6||jQuery("#password").val().length>16){
+			alert(message.error.password_length_check_msg);
+			return false;
+		}
+	}
+	
+	// 邮件地址验证
+	var reMail = /^(?:\w+\.?)*\w+@(?:\w+\.?)*\w+$/;
+	if(jQuery('#email').val()!=''&&!reMail.test(jQuery('#email').val())){
+		alert (message.error.email_check_msg);
+		return false;
+	}
+	
+	// 用户组织架构节点验证
+	if(jQuery('#orgId').val()==''){
+		alert (message.error.user_org_msg);
+		return false;
+	}
+	return true;
+}
+
+// 用户登录名验证
+function checkLoginName(obj){
+    var loginName =obj.value;
+    userAjax.validateLoginName(loginName,function(response){
+    	var ret = eval(response.responseText);
+    	if (!ret.succ) {
+    		alert(message.error.loginName_valid_msg);
+    		obj.value = "";
+		}
+    });
+}
+
+// 用户昵称验证
+function checkNickName(obj){
+    var nickName =obj.value;
+    userAjax.validateNickName(nickName,function(response){
+    	var ret = eval(response.responseText);
+    	if (!ret.succ) {
+    		alert(message.error.nickName_valid_msg);
+    		obj.value = "";
+		}
+    });
+}
+
+function save () { jQuery('#btnSave').click(); }
+
+
+// 隶属角色、隶属数据组 切换
+jQuery(document).ready(function() {
+	
+	//jQuery('.tabs h3').mousedown(function() {
+	//	jQuery('.tabs div').hide();
+	//	jQuery(this).siblings('h3').removeClass('active').end()
+	//				  .addClass('active').next('div').show();
+	//});
+	jQuery('#userT').mousedown(function(){
+		jQuery('#authTabs').hide();
+		jQuery('#userTabs').show();
+		
+	});
+	
+	jQuery('#authT').mousedown(function(){
+		jQuery('#userTabs').hide();
+		jQuery('#authTabs').show();
+		
+	});
+});
+	
+	/***查询角色
+	function cmd_new_role(){
+		selectRole();selectGroup();
+		jQuery.blockUI({ message: "",bindEvents:false});
+		jQuery("#roleDiv").center({"z-index":1200,display:"block"});
+		jQuery("#groupDiv").center({"z-index":1500,display:"block"});			
+	}
+	**/ 
+	
+	/***选择角色
+	function selectRole(){
+		$.post('roleList.jscx', {roleName:jQuery('#roleName').val(),fromDiv:"ok",colums:"code,name"},function(res){	
+		$("#roleData").html(res);				
+		jQuery('.blockOverlay').attr('title','close').click(function(){jQuery.unblockUI();$("#roleDiv").hide()}); 	
+		},'html');
+		
+		//jQuery('.blockOverlay').attr('title','单击关闭').click(jQuery.unblockUI); 
+		//jQuery('.close').click(jQuery.unblockUI);
+	}	
+	****/
+	
+	/****查询组织架构组
+	function cmd_new_group(){
+		selectGroup();
+		jQuery.blockUI({ message: "",bindEvents:false});
+		jQuery("#groupDiv").center({"z-index":1500,display:"block"});		
+	}
+	****/ 
+	/***选择组织架构组
+	function selectGroup(){
+		$.post('org_group.jscx', {groupName:jQuery('#groupName').val(),method:"ok"},function(res){
+		$("#groupData").html(res);				
+		jQuery('.blockOverlay').attr('title','close').click(function(){jQuery.unblockUI();$("#groupDiv").hide()}); 	
+		},'html');
+		
+		//jQuery('.blockOverlay').attr('title','单击关闭').click(jQuery.unblockUI); 
+		//jQuery('.close').click(jQuery.unblockUI);
+	}	
+	****/
+/**
+ * 添加角色;
+
+function cmd_confirm(name){
+	 if(name=='roleId'){
+	 	 var roleId = "";
+		 var selectedItems = getSelectedItems (name);
+		 if (selectedItems==""){
+		 	alert(message.error.select_msg);
+		 	return;
+		 }
+		 for (var i = 0; i < selectedItems.length; i++) {
+		        roleId += selectedItems [i].value+',';	        
+		 }
+		 userAjax.saveUserOfRole(roleId,jQuery("#userId").val(), function(res){
+				var result = eval(res.responseText);
+				if(!result.succ){
+					alert(result.msg);
+				}
+				jQuery.unblockUI;
+				window.location.reload();
+		 });	
+	 }else{
+	 	var groupId = "";
+	 	if(divSaveBoxes.length!=0){
+	 		for(var i=0;i<divSaveBoxes.length;i++){
+	 			groupId +=divSaveBoxes[i].value+',';
+	 		}
+	 	}else{
+	 		alert(message.error.select_msg);
+		 	return;
+	 	}
+	 	userAjax.saveUserGroups(groupId,jQuery("#userId").val(), function(res){
+				var result = eval(res.responseText);
+				if(!result.succ){
+					alert(result.msg);
+				}
+				jQuery.unblockUI;
+				window.location.reload();				
+		 });	
+	 }	 
+}
+ */
+/**
+ * 删除角色;
+
+function deleteRole(){
+	var roleUserId = "";
+	var selectedItems = getSelectedItems ('roleUserId');
+	if (selectedItems==""){
+	 	alert(message.error.select_msg);
+	 	return;
+	 }
+	 for (var i = 0; i < selectedItems.length; i++) {	        
+	        roleUserId += selectedItems [i].value+',';	        
+	 }
+	 userAjax.deleteUserOfRole(roleUserId, function(res){
+			var result = eval(res.responseText);
+			if(!result.succ){
+				alert(result.msg);
+			}
+			window.location.reload();
+	 });	
+}
+ */
+
+/**
+ * 删除组织架构组;
+
+function deleteGroup(){
+	var orgUserId = "";
+	var selectedItems = getSelectedItems ('orgUserId');
+	if (selectedItems==""){
+	 	alert(message.error.select_msg);
+	 	return;
+	 }
+	 for (var i = 0; i < selectedItems.length; i++) {	        
+	        orgUserId += selectedItems [i].value+',';	        
+	 }
+	 userAjax.deleteUserOfGroup(orgUserId, function(res){
+			var result = eval(res.responseText);
+			if(!result.succ){
+				alert(result.msg);
+			}
+			window.location.reload();
+	 });	
+}
+ */	
+//]]>
+</script>
+<c:Ajaxmanager name = "userAjax" />
+</head>
+<body>
+
+
+	<div class="container">
+	
+    <!--header-->
+	<div id="header"><u:top/></div>
+	
+	<!--main-->
+	<div class="main">
+		<!--main_left-->
+		<div class="main_left"><u:menu/></div>
+	 
+	 	<!--main_right-->
+<form runat="server" onsubmit="checkForm()">
+<c:hidden id="userId" datasource="<%#userInfo%>" valuefield="userId" />
+<c:button id="btnSave" runat="server" style="display:none" />
+		<div class="main_rightss">
+		<div class="function_p2">
+	
+	<a style="cursor:pointer" id="userT" class="function_role">${user.title}</a>
+	<a style="cursor:pointer" id="authT" class="function_role">${passport.module.manage}</a> 
+	</div>
+	 <p class="function_p3s"><a visible="<%#!view%>" href="javascript:save();" class="function_baseInfo_save">${button.label.save }</a></p>
+	 
+	<div class="usermanage_info">
+	<div>
+        <div id="userTabs">
+        <!-- 
+        <ul class="button-list">
+					<li><a href="javascript:cmd_new_role();">${button.label.new}</a></li>
+					<li><a href="javascript:deleteRole();">${button.label.delete}</a></li>
+			</ul>
+        <u:roleUser userId="userId" fieldName='roleCode,roleName'/>
+         -->
+        <table width="703" class="usermanage_table" border="0" cellpadding="0px" cellspacing="1px">
+		<tr>
+			<th>${user.code}：</th>
+			<td >
+			<c:textbox id="userCode" datasource="<%#userInfo%>" valuefield="userCode" visible="<%#!view%>"/>
+			<c:label datasource="<%#userInfo%>" valuefield="userCode" viewStateEnabled="false" visible="<%#view%>"/>	
+			</td>
+		</tr>
+		<tr>
+			<th>${user.loginName}<span class="function_span2">&nbsp;*&nbsp;</span>：</th>
+			<td >
+			<c:textbox id="loginName" datasource="<%#userInfo%>" valuefield="loginName" visible="<%#!view%>" onchange="javascript:checkLoginName(this);"/>
+			<c:label datasource="<%#userInfo%>" valuefield="loginName" viewStateEnabled="false" visible="<%#view%>"/>	
+			</td>
+			
+		</tr>
+		<tr>
+			<th>${user.nickName}<span class="function_span2">&nbsp;*&nbsp;</span>：</th>
+			<td>
+			<c:textbox id="nickName" datasource="<%#userInfo%>" valuefield="nickName" visible="<%#!view%>" onchange="javascript:checkNickName(this);"/>
+			<c:label datasource="<%#userInfo%>" valuefield="nickName" viewStateEnabled="false" visible="<%#view%>"/>	
+			</td>
+			
+		</tr>
+		<tr>
+			<th>${user.password}<span class="function_span2">&nbsp;*&nbsp;</span>：</th>
+			<td>
+			<c:textbox id="password" type="password" visible="<%#!view%>"/>
+			</td>
+			
+		</tr>
+		<tr>
+			<th>${user.email}：</th>
+			<td>
+			<c:textbox id="email" datasource="<%#userInfo%>" valuefield="email" visible="<%#!view%>"/>
+			<c:label datasource="<%#userInfo%>" valuefield="email" viewStateEnabled="false" visible="<%#view%>"/>	
+			</td>
+			
+		</tr>
+		<tr>
+			<th>${user.org}<span class="function_span2">&nbsp;*&nbsp;</span>：</th>
+			<td>
+			<c:popasyntree id="orgId" value='<%#userInfo.getOrgId()%>' pageId="passport.page.user.list" iwidth="300" twidth="300" theight="500" />			
+			</td>
+			
+		</tr>		
+		</table>
+        	
+        </div>	    
+        <div id="authTabs" style="display:none;margin-top:-17px">
+			<!-- 
+			<ul class="button-list">
+						<li><a href="javascript:cmd_new_group();">${button.label.new}</a></li>
+						<li><a href="javascript:deleteGroup();">${button.label.delete}</a></li>
+			</ul>
+			 -->			
+        <a:auth type="u" view="<%#!view%>" value='<%#userInfo == null?null:userInfo.getUserId()%>' pageId="passport.page.user.list" buttonId="button.new"/>
+		</div>
+    </div>
+  
+  
+   <div class="function_btn">
+	<br>
+	<a style="cursor:pointer" onclick="javascript:history.go(-1)" class="function_back">${button.label.back}</a></div>
+	
+   </div>
+    <div class="clear"></div> 
+	</div>
+			<div class="clear"></div>
+		</div>
+		<div class="footer"><u:foot/></div>
+</form>
+
+</div>
+
+
+
+
+
+	 
+
+ 
+<!-- 
+<div id="roleDiv" style="position: absolute; left: 30px; top: 20px;display:none;width:400px;">
+		<div >
+			<ul class="button-list" >
+				<li class="query-button"><a href="javascript:selectRole()">${button.label.search }</a></li>
+			</ul>		
+			<table class="query-form-table">
+			<tr>
+			<td>${role.name }</td>
+			<td>
+			<c:textbox id="roleName" />
+			</td>
+			</tr>
+			</table>
+		</div>
+		<div id="roleData"></div>	
+		
+		<div>		
+			<input type="button" onclick="cmd_confirm('roleId')" value="${button.label.ok }"/>
+		</div>
+</div>
+
+<div id="groupDiv" style="position: absolute; right: 100px; top: 200px;display:none;width:400px;">
+		<div >
+		<ul class="button-list" >
+			<li class="query-button"><a href="javascript:selectGroup()">${button.label.search }</a></li>
+		</ul>
+		<table class="query-form-table">
+		<tr>
+		<td>${org.group.name}</td>
+		<td>
+		<c:textbox id="groupName" />
+		</td>
+		</tr>
+		</table></div>
+		<div id="groupData" style="background-color:white;"></div>	
+		<div>		
+			<input type="button" onclick="cmd_confirm('_group_ck')" value="${button.label.ok }"/>
+		</div>
+</div>
+
+ -->
+ <u:relogin/>
+</body></html>

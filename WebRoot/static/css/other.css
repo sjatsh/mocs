@@ -1,0 +1,57 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*订单查询页面样式*/
+.orderinfo {
+	background-image: url("../images/order/02_03.png");
+	background-repeat: no-repeat;
+	height: 442px;
+	width: 855px;
+	color: white;
+}
+
+.orderbianhao {
+	float: left;
+	width: 300px;
+	margin-left: 180px;
+	margin-top: 80px;
+}
+
+.orderzhuangtai {
+	margin-top: 80px;
+	width: 300px;
+	margin-left: 600px;
+}
+
+.progressbar {
+	margin-top: 101px; /**chrome ff**/ /** ie 115px**/
+	width: 800px;
+	height: 160px;
+}
+
+.phoneinput {
+	background: #fff !important;
+	border: 1px solid #000 !important;
+	padding: 5px !important;
+	border-radius: 5px !important;
+	-webkit-border-radius: 5px !important;
+	-moz-border-radius: 5px !important;
+}
+
+.zhezhaoceng {
+	z-index: 5;
+	position: absolute;
+	border: 1px solid red;
+	border-top: -10px;
+}
+
+.zhezhaocengdiv{
+	z-index: 5;
+	position: absolute;
+	background-image: url("../images/order/sqsq.png");
+	background-repeat:no-repeat;
+	width:309px;
+	height:100px;
+	top: 362px;
+}
+/*end of 订单查询页面样式*/

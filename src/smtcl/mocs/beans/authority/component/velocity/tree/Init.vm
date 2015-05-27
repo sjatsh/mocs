@@ -1,0 +1,210 @@
+function ___set_hidden(id, val){
+	if(val == undefined)
+		val = "";
+	jQuery("#"+id).val(val);
+}
+
+function ___beforeClick_${id}(treeId, treeNode, clickFlag) {
+	if(treeNode.nocheck == true){
+		return false;
+	}
+	return true;
+}
+
+function ___nodeClick_${id}(event, treeId, treeNode){
+	var itxt = jQuery("#___tree_txt_$id");
+#if ($callback)
+	if( typeof $callback == "function" ){
+		var result = true;
+		if(itxt.length >0)
+			result = $callback(event, treeId, treeNode, itxt[0]);
+		else
+			result = $callback(event, treeId, treeNode);
+		if(!result)return;
+	}
+#end
+
+#if ("checkbox" != $type)
+	//赋值txt;
+	___set_common("$id", treeNode, itxt);
+#end
+}
+
+function ___set_common(id, treeNode, itxt){
+	if(itxt.length > 0){
+		var txt = "";
+		if(treeNode != null){
+			var t = "";
+			var p = null;
+			var arr = [];
+			arr.push(treeNode.name);
+			var curr = treeNode;
+			while( (p = curr.getParentNode()) != null){
+				arr.push(p.name);
+				curr = p;
+			}
+			if(arr.length > 0)
+				txt = "/" + arr.reverse().join("/");
+		}
+		itxt.val(txt);
+	}
+	
+	//赋值hidden;
+	var val = (treeNode == null) ? "" : treeNode.nodeId;
+	___set_hidden(id, val);
+}
+
+function ___nodeCheck_${id}(event, treeId, treeNode){
+	var itxt = jQuery("#___tree_txt_$id");
+	
+	#if ($callback)
+	if( typeof $callback == "function" ){
+		var result = true;
+		if(itxt.length >0)
+			result = $callback(event, treeId, treeNode, itxt[0]);
+		else
+			result = $callback(event, treeId, treeNode);
+		if(!result)return;
+	}
+	#end
+	
+	//赋值;
+	___set_checkbox(treeId, "$id");
+}
+
+
+function ___set_checkbox(treeId, id){
+	var t	  = jQuery.fn.zTree.getZTreeObj(treeId);
+	var nodes = t.getCheckedNodes(true);
+	var arr	  = [];
+	for(var i = 0; i < nodes.length; i++){
+		arr.push(nodes[i].nodeId);
+	}
+	___set_hidden(id, arr.join(","));
+}
+
+function ___tree_iterator(tree, nodes, map, key) {
+	if (!nodes || nodes.length <= 0 ) return;
+	for (var i = 0, l = nodes.length; i < l; i++) {
+		var nodeId = nodes[i][key];
+		if (nodeId == map[nodeId]) {
+			tree.checkNode(nodes[i], true, false, false);
+		}
+		___tree_iterator(tree, nodes[i]["children"], map, key);
+	}
+}
+
+function ___getFont_${id}(treeId, node) {
+	return node.font ? node.font : {};
+}
+
+function ___async_error_${id}(){
+	alert("Query Error!");
+}
+
+function ___async_success_${id}(event, treeId, treeNode, msg){
+}
+
+function ___ds_filter_${id}(treeId, parentNode, res){
+	if(res.succ){
+		return res.content;
+	}else{
+		alert(result.msg);
+		return [];
+	}
+}
+
+(function(Q_){
+	Q_.fn.zTree.reinit = function(id, val, zNodes, setting, expandAll){
+		val = (val == undefined) ? "" : val;
+		var treeId = "___treeControl_" + id;
+		var tree	  = Q_.fn.zTree.getZTreeObj(treeId);
+		expandAll = (expandAll == undefined)? false : expandAll ;
+		if(zNodes){
+			if(tree != null) setting = tree.setting; 
+			tree = Q_.fn.zTree.init(Q_("#"+treeId), setting, zNodes);
+		}	
+		if(tree != null){
+			if(tree.setting.check.enable){//checkbox;
+				tree.checkAllNodes(false);
+				if(Q_.trim(val) == ""){
+					val ="";
+				}else{
+					var ids = val.split(",");
+					var map = {};
+					for(var i = 0; i < ids.length; i++){
+						map[ids[i]] = ids[i];
+					}
+					___tree_iterator(tree, tree.getNodes(), map, "nodeId");
+				}
+				___set_hidden(id, val);
+			}else{//flat;
+				tree.cancelSelectedNode();
+				var treeNode = null;
+				if(Q_.trim(val) == ""){
+					val ="";
+				}else{
+					treeNode = tree.getNodeByParam("nodeId", val);
+					if(treeNode != null){
+						tree.selectNode(treeNode, false);
+					}
+				}
+				___set_common(id, treeNode, Q_("#___tree_txt_" + id));
+			}
+			tree.expandAll(expandAll);
+		}
+	}
+	Q_.fn.zTree.setAsyn = function(id, val, txt){
+		var val_id = "#" + id;
+		var txt_id = "#___tree_txt_" + id;
+		
+		Q_(val_id).val(val);
+		Q_(txt_id).val(txt);
+	}
+	Q_.fn.zTree.findTreeByTxtId = function(id){
+		var treeId = "___treeControl_" + id;
+		return Q_.fn.zTree.getZTreeObj(treeId);
+	}
+	Q_.fn.zTree.getFullNodeTxtById = function(id, nodeId){
+		var result = "";
+		var treeId = "___treeControl_" + id;
+		var tree = Q_.fn.zTree.getZTreeObj(treeId);
+		if(tree != null){
+			var treeNode = tree.getNodeByParam("nodeId", nodeId);
+			if(treeNode != null){
+				var t = "";
+				var p = null;
+				var arr = [];
+				arr.push(treeNode.name);
+				var curr = treeNode;
+				while( (p = curr.getParentNode()) != null){
+					arr.push(p.name);
+					curr = p;
+				}
+				if(arr.length > 0)
+					result = "/" + arr.reverse().join("/");
+			}
+		}
+		return result;
+	}
+})(jQuery);
+var ___zNodes_$id = $zNodes;
+var ___setting_$id = {#if($async_setting)
+					  $async_setting
+					  #end
+					  #if($checkbox)
+					  $checkbox
+					  #end
+					  view:{fontCss: ___getFont_${id},selectedMulti: $multi },
+					  callback:{onClick:___nodeClick_${id}, 
+					  			beforeClick:___beforeClick_${id}, 
+					  			onCheck: ___nodeCheck_${id}
+					  			#if($asyn)
+					  			,onAsyncError:___async_error_${id},
+							    onAsyncSuccess:___async_success_${id}
+							    #end
+							     }
+					 };
+jQuery.fn.zTree.init(jQuery("#___treeControl_$id"), ___setting_$id, ___zNodes_$id);
+
+

@@ -1,0 +1,96 @@
+@CHARSET "UTF-8";
+
+
+/**************************设备成本维护样式*********************************************/
+
+.equipment_cost_left{
+	float:left;
+    width:5px;
+}
+
+.equipment_cost_top{
+	float:left;
+	width:854px;
+	background-image: url(/mocs/images/equ/head_bg_line.png)  !important;
+	height:39px;
+}
+
+.equipment_cost_row{
+	
+	
+}
+
+.equipment_cost_style{
+	float:left;
+	width:854px;
+	
+}
+
+.equipment_cost_tablestyle{
+	
+}
+
+.equipment_cost_text1{
+	margin-left: 10px;
+	
+}
+
+.equipment_cost_text2{
+	margin-left: 10px;
+	
+}
+
+.equipment_cost_text3{
+	margin-left: 10px;
+	
+}
+
+/**************************设备类型样式*********************************************/
+
+.equipment_type_left{
+	float:left;
+	width:5px;
+}
+
+.equipment_type_center_right_top{
+	float:left;
+	width:854px;
+	background-image: url(/mocs/images/equ/head_bg_line.png)  !important;
+	height:39px;
+}
+
+.equipment_type_center_left{
+	float:left;
+	width:190px;
+}
+
+.equipment_type_center_right{
+	float:left;
+	width:664px;
+}
+
+.equipment_type_b1{
+	margin-left:650px;
+}
+
+.equipment_type_b2{
+	margin-left:20px;
+}
+
+/**************************设备台帐样式*********************************************/
+
+.equipment_accounting_left{
+	float:left;
+	width:5px;		
+}
+
+.equipment_accounting_center_left{
+	float:left;
+	width:190px;
+}
+
+.equipment_accounting_center_right{
+	float:left;
+	width:664px;
+}
+

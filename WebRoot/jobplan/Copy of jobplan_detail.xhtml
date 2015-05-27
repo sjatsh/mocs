@@ -1,0 +1,772 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link href="./ext/css/ext-theme-classic-all.css" rel="stylesheet"	type="text/css"></link>
+	<link href="./ext/css/sch-all.css" rel="stylesheet"	type="text/css" />
+	<link href="./ext/css/app.css" rel="stylesheet" type="text/css" />
+	<link href="./ext/css/performance.css" rel="stylesheet"	type="text/css" />
+	<link href="./css/jobdispatch.css" rel="stylesheet"	type="text/css" />
+    <h:outputScript library="js" name="common.js"></h:outputScript>
+    <script src="./ext/js/base/ext-all.js" type="text/javascript"></script>
+	<script src="./ext/js/base/sch-all-debug.js" type="text/javascript"></script>
+	<script src="./ext/js/base/ext-lang-zh_CN.js" type="text/javascript"></script>
+	<script src="./ext/js/base/scheduler-zh_CN.js"	type="text/javascript"></script>
+	<script src="./ext/js/base/examples-shared.js" type="text/javascript"></script>
+	<script src="./ext/js/base/performance.js"	type="text/javascript"></script>
+	<script src="./js/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script src="./ext/js/jobplan_ext.js" type="text/javascript"></script>
+    
+    <style type="text/css">
+.toptab{
+display:block !important;
+}		
+		
+.jobplan_top_right_third ul li {
+	float: left;
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family: "微软雅黑";
+	color: #595959;
+	font-weight: bold;
+}
+
+caption,th {
+	text-align: center;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.thsc1 {
+	font-size: 20px;
+	color: #525252;
+	font-weight: bold;
+	height: 40px;
+	width: 290px;
+	text-align: center;
+}
+
+.thsc2 {
+	font-size: 20px;
+	color: #525252;
+	font-weight: bold;
+	height: 40px;
+	width: 150px;
+	text-align: center;
+}
+
+.thsc3 {
+	font-size: 20px;
+	color: #525252;
+	font-weight: bold;
+	height: 40px;
+	width: 145px;
+	text-align: center;
+}
+
+.thsc4 {
+	font-size: 20px;
+	color: #525252;
+	font-weight: bold;
+	height: 40px;
+	width: 145px;
+	text-align: center;
+}
+
+.thsc5 {
+	font-size: 20px;
+	color: #525252;
+	font-weight: bold;
+	height: 40px;
+	width: 145px;
+	text-align: center;
+}
+
+.thsc6 {
+	font-size: 20px;
+	color: #525252;
+	font-weight: bold;
+	height: 40px;
+	width: 145px;
+	text-align: center;
+}
+
+.thsc7 {
+	font-size: 20px;
+	color: #525252;
+	font-weight: bold;
+	height: 40px;
+	width: 120px;
+	text-align: center;
+}
+
+.datatable_tr {
+	
+}
+
+.jobplanA {
+	font-size: 300px;
+}
+</style>
+</h:head>
+	<h:body>
+		<h:form id="myform">
+		<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+		<script type="text/javascript">	
+			document.getElementById("maskw").style.height = hjb51 + "px";
+			document.getElementById("maskw").style.width = wjb51 + "px";
+		</script>	
+			<table id="jobtable" width="100%" height="100%">
+				<tr>
+					<td id="detailtop" width="100%" valign="top">
+						<table id="topleftright" width="100%">
+							<tr>
+								<td id="topleft" width="20%" valign="middle" align="left" >
+								</td>
+								<td id="topright" width="80%" valign="top">
+									<table id="tabmenu" width="100%" height="100%" class="toptab">
+										<tr width="100%">
+											<td>
+												<table>
+													<tr>
+														<td id="tab_info_tab1" onclick="tab('1')" align="center"
+															style="cursor: pointer; width: 35%; float: left;"><h:outputText
+																value="作业计划详情" /></td>
+														<td id="tab_info_tab2" onclick="tab('2')"
+															style="cursor: pointer; width: 65%; float: left;color:#bababa;"><h:outputText
+																value="作业计划清单" /></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr id="tab1" style="display:block;" width="100%">
+											<td width="100%" id="toptable1">
+												<div id="jobplan_top_right"></div>
+											</td>
+										</tr>
+										<tr id="tab2" style="display: none;" width="100%">
+											<td width="100%" id="toptable"><img id="centerbg"
+												style="position: absolute; z-Index: -1; border: 0px solid blue"
+												src="./images/jobplan/list/job_bg.png" />
+												<table border="0" id="toptext" cellspacing="0" width="100%">
+													<tr>
+														<td id="toptexttd1" width="23%" align="center">作业计划名称</td>
+														<td id="toptexttd2" width="13%" align="center">零件类型编号</td>
+														<td id="toptexttd3" width="12%" align="center">计划数量</td>
+														<td id="toptexttd4" width="12%" align="center">完成数量</td>
+														<td id="toptexttd5" width="10%" align="center">进度</td>
+														<td id="toptexttd6" width="15%" align="center">计划开始时间</td>
+														<td id="toptexttd7" width="15%" align="left">计划结束时间</td>
+													</tr>
+													<tr>
+														<td colspan="7" width="100%" valign="bottom">
+															<div id="type_detail"
+																style="overflow: auto; margin-left: 0px; float: clear;">
+																<h:dataTable id="waitJobResults"
+																	value="#{JobPlanDetail.jobPlanResults}" rows="100"
+																	cellpadding="0" cellspacing="0"
+																	styleClass="datable_table" columnClasses=""
+																	headerClass="" rowClasses="datatable_tr" border="0"
+																	var="record">
+
+																	<h:column style="width:23%;text-align:center;height:10%">
+																		<h:outputText value="#{record.name}"></h:outputText>
+																	</h:column>
+																	<h:column style="width:13%;text-align: center;">
+																		<h:outputText value="#{record.parttypeno}"></h:outputText>
+																	</h:column>
+																	<h:column style="width:12%;text-align: center;">
+																		<h:outputText value="#{record.planNum}"></h:outputText>
+																	</h:column>
+																	<h:column style="width:12%;text-align: center;">
+																		<h:outputText value="#{record.finishNum}"></h:outputText>
+																	</h:column>
+																	<h:column style="width:10%;text-align: center;">
+																		<h:outputText value="#{record.process}%"></h:outputText>
+																	</h:column>
+																	<h:column style="width:17%;text-align: center;">
+																		<h:outputText value="#{record.planStarttime}"></h:outputText>
+																	</h:column>
+																	<h:column style="width:13%;text-align: center;">
+																		<h:outputText value="#{record.planEndtime}"></h:outputText>
+																	</h:column>
+																</h:dataTable>
+															</div>
+														</td>
+													</tr>
+												</table></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table> 
+
+					</td>
+				</tr>
+				<tr><td style="background-color: #F4F6F5;">
+				
+				<input type="hidden" id="maxId" value="0" /> <input
+						type="hidden" id="newTaskName" value="0" /> <input type="hidden"
+						id="hplanId" value="0" /> <input type="hidden" id="hpriorityId"
+						value="0" /> <input type="hidden" id="hplanStartTime" value="0" />
+						<input type="hidden" id="hhighlightadd" value="0" />
+						<div id="jobplan_content" class="jobplan_content">
+						   <div id="jobplanheight" style="background-color: #F4F6F5;"></div>
+							<div id="example-container" class="example-container" style="padding-top: 0px;"></div>
+							<!--Ext lib -->
+							<!--<script src="http://cdn.sencha.io/ext-4.2.0-gpl/ext-all.js" type="text/javascript"></script>-->
+							
+						</div>
+				</td></tr>
+				<tr>
+					<td id="detailcenter">
+						<table id="detailcenterdiv1"
+							style="position: absolute; z-index: 1003;display:none;">
+							<tr>
+								<td>
+									<!--上部 -->
+									<table>
+										<tr>
+											<td id="detailcentertd1"></td>
+											<td id="detailcentertd2"><a
+												href="javascript:openUrl('./jobplan/jobplan_add.faces')"
+												title="新增作业计划"><img
+													src="./images/jobplan/jobplan_17.png" id="img2" /></a></td>
+											<td id="detailcentertd3"><a
+												onClick="pageRelocation('edit')" href="#" title="编辑作业计划"><img
+													src="./images/jobplan/jobplan_14.png" id="img3" /></a></td>
+											<td id="detailcentertd4">
+												
+												<a onClick="deljobPlan()" href="#" title="删除作业计划">
+												<img src="./images/jobplan/jobplan_20.png" id="img4" />
+												</a>
+												
+											</td>
+											<td id="detailcentertd5">
+												<ui:remove>
+												<a onClick="pageRelocation('control')" href="#" title="作业计划控制">
+													<img src="./images/jobplan/jobplan_11.png" id="img5" />
+												</a>
+												</ui:remove>
+												<a  href="#" title="作业计划控制" style="cursor:help;">
+													<img src="./images/jobplan/jobplan_11.png" id="img5" />
+												</a>
+											</td>
+											<td id="detailcentertd6">
+												<ui:remove>
+												<a onClick="switchStatus()" title="作业计划启动" href="#" id="jobplanaid">
+													<img id="jobplanimg" src="./images/jobplan/dispatchstart.png"  />
+												</a>
+												</ui:remove>
+												<a  title="作业计划启动" href="#" id="jobplanaid" style="cursor:help;">
+													<img id="jobplanimg" src="./images/jobplan/dispatchstart.png"  />
+												</a>
+											</td>
+											<td id="detailcentertd7"><a><img
+													src="./images/jobplan/jobplan_08.png" id="img6" /></a>
+											</td>
+											<td id="detailcentertd8">
+											<ui:remove>
+											<a onClick="pageRelocation('statistic')" href="javascript:void(0);" title="作业计划统计">
+												<img src="./images/jobplan/jobplan_03.png" id="img7" />
+											</a>
+											</ui:remove>
+											<a  href="javascript:void(0);" title="作业计划统计" style="cursor:help;">
+												<img src="./images/jobplan/jobplan_03.png" id="img7" />
+											</a>
+											</td>
+										</tr>
+									</table>
+
+								</td>
+							</tr>
+							<tr>
+								<td valign="top">
+									<!--下部 -->
+									<div id="detailcenterdiv2">
+										<table id="detailcenterdiv3">
+											<tr>
+												<td width="25%">
+													<div id="detailcenterdiv2td">日期选择</div>
+												</td>
+												<td width="15%">
+													<div class="gttxsWeek">
+														<a onClick="switchV('week')" title="甘特图周显示"><img
+															src="./images/jobplan/jobplan_30.png" id="img8" /></a>
+													</div>
+												</td>
+												<td width="15%" align="center">
+													<div class="gttxsMonth">
+														<a onClick="switchV('month')" title="甘特图月显示"><img
+															src="./images/jobplan/jobplan_32.png" id="img9" /></a>
+													</div>
+												</td>
+												<td width="15%" align="center">
+													<div class="gttxsYear">
+														<a onClick="switchV('year')" title="甘特图年显示"><img
+															src="./images/jobplan/jobplan_35.png" id="img10" /></a>
+													</div>
+												</td>
+												<td width="15%" align="right">
+													<div class="gttxsBig">
+														<a onClick="enlargeOrnarrow('enlarge')" title="甘特图放大显示"><img
+															src="./images/jobplan/jobplan_37.png" id="img11" /></a>
+													</div>
+												</td>
+												<td width="15%" align="right">
+													<div class="gttxsSmall">
+														<a onClick="enlargeOrnarrow('narrow')" title="甘特图缩小显示"><img
+															src="./images/jobplan/jobplan_39.png" id="img12" /></a>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</td>
+							</tr>
+						</table>
+						<div id="gapid"></div>
+					</td>
+				</tr>
+
+			</table>
+			<img style="border: 0px solid; position: absolute;left: 0px;top:0px;" src="./images/profile_top_logo.png" id="img1" />
+		</h:form>
+		<script type="text/javascript">
+			var imgPercent = hjb51 / 1080; //比例 
+			//特定的高度
+
+			document.getElementById("jobtable").style.height = hjb51* 994 / 1080 + "px";//控制中间和上面的和的高度 
+			document.getElementById("jobtable").style.width = wjb51 + "px";
+
+			document.getElementById("jobplan_content").style.height = hjb51	* 63 / 100 + "px";//甘特图高  
+			document.getElementById("jobplan_content").style.width = wjb51	+ "px";
+	
+			document.getElementById("jobplanheight").style.width = wjb51 +"px";	
+			document.getElementById("jobplanheight").style.height = hjb51*10/1080 +"px";
+			document.getElementById("example-container").style.height = hjb51 * 63 / 100 - 40 + "px";//甘特图高 
+			document.getElementById("example-container").style.width = wjb51+ "px";
+
+			document.getElementById("toptext").style.height = hjb51 * 17 / 100 + "px";
+			document.getElementById("type_detail").style.height = hjb51 * 126/ 1080 + "px";
+
+			document.getElementById("topleftright").style.width = wjb51 + "px";
+			document.getElementById("topleftright").style.height = hjb51 * 23/ 100 + "px";
+			document.getElementById("topleft").style.width = wjb51 * 20 / 100	+ "px"; //为什么减90？ 
+			document.getElementById("topleft").style.height = hjb51 * 23 / 100	+ "px";
+			document.getElementById("topright").style.width = wjb51 * 80 / 100 + "px";
+			document.getElementById("topright").style.height = hjb51 * 23 / 100 + "px";
+			document.getElementById("tab_info_tab1").style.width = wjb51 * 80/ 100 * 32 / 100 + "px";
+			document.getElementById("tab_info_tab2").style.width = wjb51 * 80/ 100 * 50 / 100 + "px";
+			document.getElementById("toptexttd1").style.width = wjb51 * 80/ 100 * 23 / 100 + "px";
+			document.getElementById("toptexttd2").style.width = wjb51 * 80/ 100 * 13 / 100 + "px";
+			document.getElementById("toptexttd3").style.width = wjb51 * 80/ 100 * 12 / 100 + "px";
+			document.getElementById("toptexttd4").style.width = wjb51 * 80/ 100 * 12 / 100 + "px";
+			document.getElementById("toptexttd5").style.width = wjb51 * 80/ 100 * 10 / 100 + "px";
+			document.getElementById("toptexttd6").style.width = wjb51 * 80/ 100 * 17 / 100 + "px";
+			document.getElementById("toptexttd7").style.width = wjb51 * 80/ 100 * 13 / 100 + "px";
+
+			document.getElementById("toptable").style.width = wjb51 * 80 / 100	+ "px";//头部表格宽度 80% 
+			document.getElementById("toptable1").style.width = wjb51 * 80 / 100	+ "px";//头部表格宽度 80%  
+			document.getElementById("tabmenu").style.width = wjb51 * 80 / 100 + "px";
+			document.getElementById("tabmenu").style.height = hjb51 * 23 / 100 + "px";
+			document.getElementById("toptext").style.width = wjb51 * 80 / 100 + "px";
+			document.getElementById("type_detail").style.width = wjb51 * 80	/ 100 + "px";
+			//中间的宽度 
+
+			document.getElementById("detailcentertd1").style.width = wjb51 * 85	/ 192 + "px";
+			document.getElementById("detailcentertd2").style.width = wjb51 * 10	/ 192 + "px";
+			document.getElementById("detailcentertd3").style.width = wjb51 * 10	/ 192 + "px";
+			document.getElementById("detailcentertd4").style.width = wjb51 * 10	/ 192 + "px";
+			document.getElementById("detailcentertd5").style.width = wjb51 * 10	/ 192 + "px";
+			document.getElementById("detailcentertd6").style.width = wjb51 * 10	/ 192 + "px";
+			document.getElementById("detailcentertd7").style.width = wjb51 * 10 / 192 + "px";
+			document.getElementById("detailcentertd8").style.width = wjb51 * 10	/ 192 + "px";
+
+			document.getElementById("detailcenterdiv2").style.MarginTop = hjb51 * 28 / 1080 + "px";
+			document.getElementById("detailcenterdiv2td").style.fontSize = wjb51* 30 / 1920 + "px";
+			document.getElementById("detailcenterdiv3").style.width = wjb51	* 75 / 100 + "px";
+
+			//图片大小 
+			for ( var i = 2; 13 > i; i++) {
+				var new_image = new Image();
+				new_image.src = document.getElementById("img" + i).src;
+				var wjbimg = new_image.width;
+				var hjbimg = new_image.height;
+
+				document.getElementById("img" + i).style.width = wjbimg
+						* imgPercent + "px";
+				document.getElementById("img" + i).style.height = hjbimg
+						* imgPercent + "px";
+			}			
+			var new_image = new Image();
+			new_image.src = document.getElementById("jobplanimg").src;
+			var wjbimg = new_image.width;
+			var hjbimg = new_image.height;
+			document.getElementById("jobplanimg").style.width = wjbimg
+					* imgPercent + "px";
+			document.getElementById("jobplanimg").style.height = hjbimg
+					* imgPercent + "px";
+			
+			
+			imgReady('./images/profile_top_logo.png', function () { 
+				  var imgwjb51=this.width;
+			   	  var imghjb51=this.height;
+				  document.getElementById("img1").style.width=imgwjb51*imgPercent+"px";
+				  document.getElementById("img1").style.height=imghjb51*imgPercent+"px";										
+				  document.getElementById("img1").style.top=hjb51*30/1080+"px";
+				  document.getElementById("img1").style.left=wjb51*25/1920+"px";
+				  if(wjb51==800)
+				  {
+					  document.getElementById("img1").style.width=imgwjb51*45/100+"px";
+					  document.getElementById("img1").style.height=imghjb51*45/100+"px";  
+				  }
+			});  
+			
+			//顶部表格图片背景 
+			//只能适应多数情况，还有些不能适应 
+			document.getElementById("centerbg").style.left = wjb51 * 20 / 100 + "px"; //20
+			document.getElementById("centerbg").style.top = 0 + "px";
+			document.getElementById("centerbg").style.width = wjb51 * 78.5 / 100 + "px";
+			document.getElementById("centerbg").style.height = hjb51 * 265 / 1080 + "px"; //27 ,高度适应不了 
+					
+			//中间按钮的位置， 先改变了大小之后菜会期作用 
+			document.getElementById("detailcenterdiv1").style.width= wjb51*80/100+"px";
+			document.getElementById("detailcenterdiv1").style.height= hjb51*85/600+ "px"; 
+			document.getElementById("detailcenterdiv1").style.left = wjb51	* 388 / 1920 + "px";
+			document.getElementById("detailcenterdiv1").style.top = document.getElementById("topleft").offsetHeight	* 120 / 100 + "px";		
+
+			//menu字体大小 
+			document.getElementById("tab_info_tab1").style.fontSize = hjb51	* 40 / 1080 + "px";
+			document.getElementById("tab_info_tab1").style.LineHeight = hjb51 * 82 / 1080 + "px";
+			document.getElementById("tab_info_tab2").style.fontSize = hjb51	* 40 / 1080 + "px";
+			document.getElementById("tab_info_tab2").style.LineHeight = hjb51 * 82 / 1080 + "px";
+			//表格字体 
+			document.getElementById("toptext").style.fontSize = hjb51 * 24/ 1080 + "px";
+			document.getElementById("myform:waitJobResults").style.fontSize = hjb51	* 20 / 1080 + "px";
+			document.getElementById("myform:waitJobResults").style.width = wjb51 * 78 / 100 + "px";
+			
+		</script>
+
+		<script type="text/javascript">
+			var zflag = 1;
+
+			function switchV() {
+				switch (arguments[0]) {
+				case "week":
+					ds.switchViewPreset("weekAndDay", start, end);
+					zflag = 1;
+					document.getElementById("gapid").style.display = "none";
+					ds.scrollToDate(new Date(), true);
+					break;
+				case "month":
+					ds.switchViewPreset("monthAndYear", start, end);
+					zflag = 2;
+					document.getElementById("gapid").style.display = "block";
+					ds.scrollToDate(new Date(), true);
+					break;
+				case "year":
+					ds.switchViewPreset("year", start, end);
+					zflag = 3;
+					document.getElementById("gapid").style.display = "block";
+					ds.scrollToDate(new Date(), true);
+					break;
+				}
+			}
+
+			function enlargeOrnarrow() {
+				//判断是选择了放大还是缩小按钮
+			     if(arguments[0]=="enlarge")
+			     {
+			         if(zflag==1)
+			         {
+			            ds.switchViewPreset("monthAndYear",start,end);zflag=2;
+			            document.getElementById("gapid").style.display= "block";
+			            ds.scrollToDate(new Date(),true);
+			            return;
+			         }
+			         if(zflag==2)
+			         {
+			            ds.switchViewPreset("year",start,end);zflag=3;
+			            document.getElementById("gapid").style.display= "block";
+			            ds.scrollToDate(new Date(),true);
+			            return;
+			         }
+			     }
+			     else
+			     {
+			         if(zflag==3)
+			         {
+			            ds.switchViewPreset("monthAndYear",start,end);zflag=2;
+			            document.getElementById("gapid").style.display= "block";
+			            ds.scrollToDate(new Date(),true);
+			            return;
+			         }
+			         if(zflag==2)
+			         {
+				        ds.switchViewPreset("weekAndDay",start,end);zflag=1;
+				        document.getElementById("gapid").style.display= "none";
+				        ds.scrollToDate(new Date(),true);
+				        return;
+			         }
+			     }
+			}
+
+			function pageRelocation() {
+				switch (arguments[0]) {
+				case "edit":
+					if (editPlanId == -1) {
+						Ext.Msg.alert("提示", "请选择一条作业计划记录!", function() {
+						});
+					} else {
+						if (statusId != 10) {
+							Ext.Msg.alert("提示", "此状态不能编辑!", function() {
+							});
+						} else {
+							openUrl("./jobplan/jobplan_updata.faces?editPId="
+									+ editPlanId);
+							editPlanId = -1;
+						}
+					}
+					break;
+				case "control":
+					if (editPlanId == -1) {
+						Ext.Msg.alert("提示", "请选择一条作业计划记录!", function() {
+						});
+					} else {
+						openUrl("./jobplan/jobplan_control.faces?editPId="+ editPlanId);
+						editPlanId = -1;
+					}
+					break;
+				case "statistic":
+					openUrl("./jobplan/jobplan_statistics.faces");
+					editPlanId = -1;
+					break;
+				}
+			}
+
+			function deljobPlan() {
+				if (editPlanId == -1) {
+					Ext.Msg.alert("提示", "请选择一条作业计划记录!", function() {
+					});
+
+				} else {
+					if (statusId == 10) {
+						Ext.Msg
+								.confirm(
+										"确认删除",
+										"确认要删除所选记录吗？",
+										function(btn) {
+											if (btn == "yes") {
+												Ext.Ajax
+														.request({
+															url : "./jobplan/delete.action",
+															method : "post",
+															success : function(
+																	response) {
+																//var obj=Ext.decode(response.responseText);
+																Ext.Msg
+																		.alert(
+																				"提示",
+																				"作业计划删除成功!",
+																				function() {
+																					editPlanId == -1;
+																					ds
+																							.getEventStore()
+																							.reload(
+																									{
+																										params : {
+																											ishighlight : "true"
+																										}
+																									});
+																				});
+															},
+															failure : function(
+																	response,
+																	opts) {
+																Ext.Msg
+																		.alert("failure")
+															},
+															params : {
+																m : "",
+																id : editPlanId
+															},
+															failure : function(
+																	response,
+																	opts) {
+																Ext.Msg
+																		.alert("操作失败!");
+															},
+														});
+
+											}
+										});
+
+					} else {
+						Ext.Msg.alert("提示", "此状态不能删除!", function() {
+						});
+
+					}
+				}
+			}
+
+			function openUrl(url) {
+				features = "height=900,width=1500,top:200,left:200,status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";
+				winId = window.open(url, 'addpage', features);
+			}
+
+			function switchStatus() {
+				if (!(editPlanId == -1)) {
+					if (statusId == 10 || statusId == 20) {
+						if (statusId == 10) {
+							Ext.Ajax
+									.request({
+										url : "./jobplan/updateJobPlanInfoStatus.action",
+										method : "post",
+										params : {
+											jobPlanId : editPlanId,
+											status : 20
+										},
+										success : function(response) {
+											var result = response.responseText;
+											if (result == "true") {
+												Ext.Msg.alert("提示",
+														"作业计划启动成功!",
+														function() {
+															ds.getEventStore()
+																	.reload();
+															editPlanId = -1;
+														});
+											} else if (result == "false") {
+												Ext.Msg.alert("提示",
+														"作业计划启动失败!",
+														function() {
+														});
+											}
+										},
+										failure : function(response, opts) {
+											Ext.Msg.alert("操作失败!");
+										}
+									});
+
+						} else if (statusId == 20) {
+							Ext.Ajax
+									.request({
+										url : "./jobplan/updateJobPlanInfoStatus.action",
+										method : "post",
+										params : {
+											jobPlanId : editPlanId,
+											status : 10
+										},
+										success : function(response) {
+											var result = response.responseText;
+											if (result == "true") {
+												Ext.Msg.alert("提示",
+														"作业计划停止成功!",
+														function() {
+															ds.getEventStore()
+																	.reload();
+															editPlanId = -1;
+														});
+											} else if (result == "false") {
+												Ext.Msg.alert("提示",
+														"作业计划停止失败!",
+														function() {
+														});
+											}
+										},
+										failure : function(response, opts) {
+											Ext.Msg.alert("操作失败!");
+										}
+									});
+
+						}
+					} else {
+						Ext.Msg.alert("提示", "此状态不能操作!", function() {
+						});
+					}
+
+				} else {
+					Ext.Msg.alert("提示", "请选择一条工单记录!", function() {
+					});
+				}
+			}
+
+			function showNewPage(arg) {
+				var url = "";
+				switch (arg) {
+				case "statistic":
+					url = "./jobplan/jobplan_statistics.faces";
+					break;
+				}
+				;
+
+				$("#showDiv").show();
+				$("#disableAll").show();
+				$("#ifContent").attr("src", url);
+
+			}
+
+			function closeIf() {
+				$("#showDiv").hide();
+				$("#disableAll").hide();
+				$("#ifContent").attr("src", "");
+			}
+		</script>
+
+		<script type="text/javascript">
+			//<![CDATA[ 
+
+			function tab(id) {
+				if (id == '1') {
+					document.getElementById("tab1").style.display = "block";
+					document.getElementById("tab2").style.display = "none";
+					document.getElementById("tab_info_tab1").style.color = "#525252";
+					document.getElementById("tab_info_tab2").style.color = "#bababa";
+					
+				}
+				if (id == '2') {
+					document.getElementById("tab1").style.display = "none";
+					document.getElementById("tab2").style.display = "block";
+					document.getElementById("tab_info_tab1").style.color = "#bababa";
+					document.getElementById("tab_info_tab2").style.color = "#525252";
+				}
+			}
+
+			 
+			(function() {
+				Ext.Ajax
+						.request({
+							url : "./jobplan/findJobPlanDetailDefault.action",
+							method : "post",
+							success : function(response) {
+								var obj = Ext.decode(response.responseText);
+								document.getElementById("tab1").style.display = "block";
+								clickEvent(obj);
+							}
+						});
+			})();
+			
+
+			(function() {
+			})();
+
+			setTimeout(function(){
+				//document.getElementById("maskw").style.display="none";
+				document.getElementById("detailcenterdiv1").style.display="block";
+				$("#maskw").fadeOut(fadeouttime);
+				},settimeout);
+			
+			//]]>
+		</script>
+	</h:body>
+</ui:composition>

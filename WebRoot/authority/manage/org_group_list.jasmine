@@ -1,0 +1,116 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.org.page.OrgGroupListPage" contentType="text/html;charset=UTF-8" resource="org_group"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="u" uri="../menu/top.jscx" name="top"%>
+<%@taglib prefix="u" uri="../menu/menu.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="org_group.jscx" name="orgGroup" %>
+<%@taglib prefix="u" uri="../menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html><head>
+<title><c:Out value="<%#smtcl.mocs.utils.authority.HelperUtil.title()%>" /></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link href="../../authority/css/css.css" rel="stylesheet" type="text/css" />
+<u:js/>
+<script charset="utf-8" i18n = "true" type="text/javascript" src="../../authority/javascript/resource/resource.js"></script>
+<script type="text/javascript" src="../../authority/javascript/common.js"></script>
+<script type="text/javascript" src="../../authority/javascript/org-group-jscx.js"></script>
+<script type="text/javascript">
+    function create() {
+        location.href = "org_group_detail.jasmine";
+    }
+
+/**
+ * 查询
+ */
+function doQuery () {
+		document.all['btnQuery'].click();
+}
+
+$(document).ready(function(){
+	$("td[title=null]").attr("title","");
+	
+});
+</script>
+<style>
+.__div_auth{
+	width:400px;
+	float:left;
+}
+
+ul.default-pagging-class {list-style: none; margin: 0; padding: 0; display: inline}
+.default-pagging-class li {float: left;}
+.default-pagging-class li a {display: block; text-decoration: none; color: black; background-color: white; border: 1px solid #CCC; padding: 3px;  margin: 0 3px 0 0 }
+.default-pagging-class li a:hover {background-color: #CCC }
+.default-pagging-class li a.pagging-current {font-weight: bold ; background-color: #369; cursor: default; color: white; border:1px solid #369}
+.default-pagging-class li a.pagging-dot {cursor: default; }
+.default-pagging-class li a.pagging-dot:hover {background-color: white;}
+.default-pagging-left {float: left; padding: 3px; margin: 0 3px 0 0;}
+.default-pagging-right {float: right;}
+.default-pagging-clear {clear: both;}
+</style>
+
+<c:ajaxmanager name="orgGroup" />
+</head>
+<body>
+<form runat="server" method="get">
+<div class="container">
+		<!-- header -->
+		<div id="header"><u:top/></div>
+		
+		<!-- main -->
+		<div class="main">
+				<!-- main_left -->
+				<div class="main_left"><u:menu/></div>
+	 
+	 			<!-- main_right -->
+				<div class="main_rightss">
+						<div class="function_role_info">
+								<!-- 查询条件 -->
+								<div class="user_info">
+										<ul class="user_info_list">
+												<li class="user_info_list_li1">
+														<div class="user_info_list_message">
+																<div class="user_info_list_message_left">
+																		${org.group.name}：
+																</div>
+																<div class="user_info_list_message_right">
+																		<c:textBox id = "groupName" class="function_role_txt2" />
+																</div>
+																<div class="clear"></div>
+														</div>
+												</li>
+												<li visible="<%#manage%>" class="user_info_list_li3">
+														<a href="javascript:delGroup('list');" class="function_role_serachs">${button.label.delete}</a>														
+												</li>
+												<li visible="<%#manage%>" class="user_info_list_li3">
+														<a href="javascript:create();" class="function_role_serachs">${button.label.new}</a>
+												</li>
+												<li class="user_info_list_li3">
+														<a href="javascript:doQuery();" class="function_role_serachs">${button.label.search}</a>														
+														<c:button id="btnQuery" text="${button.label.search}" runat="server" style="display:none"/>
+												</li>
+										</ul>
+										<div class="clear"></div>
+								</div>
+								<!-- 查询条件 end -->
+
+								<table id="groupTab" class="function_role_table" border="0" cellpadding="0px" cellspacing="1px">
+										<u:orgGroup id = "list" isList="true"/>
+										<tr class="function_role_tr5">
+												<td colspan="6">
+								    				<c:pagging2 id = "pagging" pagesize="10" max="10" totalRows="<%#list.getTotal()%>"/>
+								   			</td>
+										</tr>
+								</table>
+						</div>
+				</div>
+				<!-- main_right end -->
+				
+				<div class="clear"></div>
+		</div>
+		<div class="footer"><u:foot/></div>
+</div>
+</form>
+<u:relogin/>
+</body>

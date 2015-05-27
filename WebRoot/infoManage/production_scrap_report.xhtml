@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:form id="myform">
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+<style type="text/css">
+	*{margin:0px;}
+</style>
+<link rel="stylesheet" href="css/month_output_report.css" type="text/css"></link>
+<div class="title-bar">
+<c:if test="${test.test}
+"></c:if>
+	<div class="logo-img">
+		<img src="images/profile_top_logo.png" />
+	</div>
+	<div class="title-text">生产报废报表</div>
+	<div class="filter-frame">
+		<div class="filter-bar">
+			<div class="filter-label">报表开始时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="startTime" tabindex="3" popup="true" inputClass="inputText" locale="en" 
+					value="#{productionScrapReportBean.startTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" />
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">报表结束时间:</div>
+			<div class="filter-input">
+				<rich:calendar id="endTime" tabindex="3" popup="true" inputClass="inputText" locale="en" 
+					value="#{productionScrapReportBean.endTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" 
+					 />
+			</div>
+		</div>
+		<div class="filter-bar">
+			<div class="filter-label">报废类型:</div>
+			<div class="filter-input">
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapReportBean.scrapType}"  id="bfType">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItem itemLabel="工废" itemValue="1"></f:selectItem>
+					<f:selectItem itemLabel="料废" itemValue="4"></f:selectItem>
+				</h:selectOneMenu>
+			</div>
+		</div>
+	</div>
+	<div class="filter-submit">
+		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
+			<a4j:ajax listener="#{productionScrapReportBean.Search}" event="click" 
+			execute="startTime endTime bfType" render=":myform:datatable" oncomplete="resizeTable()"></a4j:ajax>
+		</h:graphicImage>
+	</div>
+</div>
+<script language="javascript">
+	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
+	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080);
+	$(".title-text").css("left", wjb51 * 500 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
+	$(".filter-frame").css("left", wjb51 * 968 / 1920 + "px").css("top", hjb51 * 30 / 1080 + "px");
+	$(".filter-bar").css("width", wjb51 * 580 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top",hjb51 * 40 / 1080 + "px");
+	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
+	$(".filter-input").css("width", wjb51 * 246 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
+	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
+	$(".filter-input .rf-cal-extr").css("width", wjb51 * 246 / 1920 + "px");
+	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 47 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
+</script>
+
+<div class="content-frame">
+	<div id="list-frame">
+		<div style="overflow-x:auto; position: relative; width:100%">
+			<div class="ui-datatable ui-widget table-title" id="titleDiv">
+				<ui:remove></ui:remove>
+				<table style="width: 100%; height: 100%;" cellpadding="0" cellspacing="0">
+					<tr>
+						<th class="ui-state-default" colspan="5">报废信息</th>
+						<th class="ui-state-default" colspan="2">至工序</th>
+						<th class="ui-state-default" colspan="2">责任工序</th>
+						<th class="ui-state-default" colspan="2">产品</th>
+						<th class="ui-state-default" colspan="5">工时</th>
+					</tr>
+					<tr>
+						<th class="ui-state-default" width="7%" style="word-break:break-all">日期</th>
+						<th class="ui-state-default" width="8%" style="word-break:break-all">编号</th>
+						<th class="ui-state-default" width="5%" style="word-break:break-all">类型</th>
+						<th class="ui-state-default" width="5%" style="word-break:break-all">数量</th>
+						<th class="ui-state-default" width="7%" style="word-break:break-all">责任人/厂家</th>
+						<th class="ui-state-default" width="6%" style="word-break:break-all">名称</th>
+						<th class="ui-state-default" width="3%" style="word-break:break-all">序号</th>
+						<th class="ui-state-default" width="6%" style="word-break:break-all">名称</th>
+						<th class="ui-state-default" width="3%" style="word-break:break-all">序号</th>
+						<th class="ui-state-default" width="11%" style="word-break:break-all">编码</th>
+						<th class="ui-state-default" width="11%" style="word-break:break-all">名称</th>
+						<th class="ui-state-default" width="5%" style="word-break:break-all">累计</th>
+						<th class="ui-state-default" width="5%" style="word-break:break-all">合计</th>
+						<th class="ui-state-default" width="5%" style="word-break:break-all">单件</th>
+						<th class="ui-state-default" width="5%" style="word-break:break-all">当序</th>
+						<th class="ui-state-default" width="8%" style="word-break:break-all">详细原因</th>
+					</tr>
+				</table>
+			</div>
+			<div class="table-body">
+				<p:dataTable value="#{productionScrapReportBean.scrapReportData}" var="scrap" id="datatable" rowClasses="even-row, odd-row">
+					<p:column style="width:7%;word-break: break-all;">
+						<f:facet name="header">
+							日期
+						</f:facet>
+						<h:outputText value="#{scrap.operateDate}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;">
+						<f:facet name="header">
+							编号
+						</f:facet>
+						<h:outputText value="#{scrap.eventNo}" />
+					</p:column>
+					<p:column style="width:5%;word-break: break-all;">
+						<f:facet name="header">
+							类型
+						</f:facet>
+						<h:outputText value="#{scrap.scrapType}" />
+					</p:column>
+						<p:column style="width:5%;word-break: break-all;">
+						<f:facet name="header">
+							数量
+						</f:facet>
+						<h:outputText value="#{scrap.processNum}" />
+					</p:column>
+					<p:column style="width:7%;word-break: break-all;">
+						<f:facet name="header">
+							责任人/厂家
+						</f:facet>
+						<h:outputText value="#{scrap.responseNo}" />
+					</p:column>
+					<p:column style="width:6%;word-break: break-all;">
+						<f:facet name="header">
+							名称
+						</f:facet>
+						<h:outputText value="#{scrap.toName}" />
+					</p:column>
+					<p:column style="width:3%;word-break: break-all;">
+						<f:facet name="header">
+							序号
+						</f:facet>
+						<h:outputText value="#{scrap.toProcessOrder}" />
+					</p:column>
+					<p:column style="width:6%;word-break: break-all;">
+						<f:facet name="header">
+							名称
+						</f:facet>
+						<h:outputText value="#{scrap.zrProcessName}" />
+					</p:column>
+					<p:column style="width:3%;word-break: break-all;">
+						<f:facet name="header">
+							序号
+						</f:facet>
+						<h:outputText value="#{scrap.zrProcessOrder}" />
+					</p:column>
+					<p:column style="width:11%;word-break: break-all;">
+						<f:facet name="header">
+							编码
+						</f:facet>
+						<h:outputText value="#{scrap.partNo}" />
+					</p:column>
+					<p:column style="width:11%;word-break: break-all;">
+						<f:facet name="header">
+							名称
+						</f:facet>
+						<h:outputText value="#{scrap.partName}" />
+					</p:column>
+					<p:column style="width:5%;word-break: break-all;">
+						<f:facet name="header">
+							累计
+						</f:facet>
+						<h:outputText value="#{scrap.ljgs}" />
+					</p:column>
+					<p:column style="width:5%;word-break: break-all;">
+						<f:facet name="header">
+							合计
+						</f:facet>
+						<h:outputText value="#{scrap.hjgs}" />
+					</p:column>
+					<p:column style="width:5%;word-break: break-all;">
+						<f:facet name="header">
+							单件
+						</f:facet>
+						<h:outputText value="#{scrap.workTime}" />
+					</p:column>
+					<p:column style="width:5%;word-break: break-all;">
+						<f:facet name="header">
+							当序
+						</f:facet>
+						<h:outputText value="#{scrap.processingTime}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;">
+						<f:facet name="header">
+							详细原因
+						</f:facet>
+						<h:outputText value="#{scrap.operateReason}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</div>
+</div>
+<script language="javascript">
+	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
+	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
+	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
+	
+	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
+	$("#list-frame th").css("height", hjb51 * 44 / 1080 + "px");
+	function resizeTable() {
+		$(".ui-dt-c,.ui-state-default").css("font-size", hjb51 * 20 / 1080 + "px");
+		$(".table-title,.table-body").css("width", "1800px");
+		$(".table-body").css("margin-top",hjb51 * 44 / 1080 + "px").css("right","0px");
+		$("#titleDiv").css("width","1783px")
+	}
+	resizeTable();
+</script>
+</h:form>
+</ui:composition>

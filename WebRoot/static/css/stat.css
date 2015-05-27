@@ -1,0 +1,196 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*公共的Tab页切换样式*/
+.rf-cal-btn {
+	width: 0px;
+}
+
+.tabCursor {
+	cursor: pointer;
+}
+
+.shebeichaxunbiaoqian1 {
+	width: 854px;
+	height: 38px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/shebeichaxun_tab1.png);
+	color: #707070;
+}
+
+.shebeichaxunbiaoqian2 {
+	width: 854px;
+	height: 38px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/shebeichaxun_tab2.png);
+	color: #707070;
+}
+
+.shebeichaxunbiaoqian3 {
+	width: 854px;
+	height: 38px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/shebeichaxun_tab3.png);
+	color: #707070;
+}
+
+.shebeichaxunbiaoqian4 {
+	width: 854px;
+	height: 38px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/shebeichaxun_tab4.png);
+	color: #707070;
+}
+
+.shebeichaxunbiaoqian5 {
+	width: 854px;
+	height: 38px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/shebeichaxun_tab5.png);
+	color: #707070;
+}
+
+.shebeichaxunbiaoqian6 {
+	width: 854px;
+	height: 38px;
+	line-height: 48px;
+	overflow: hidden;
+	background-image: url(../img/shebeichaxun_tab6.png);
+	color: #707070;
+}
+
+.fontcolor {
+	color: black;
+}
+
+.devicetab1 {
+	width: 100px;
+	height: 35px;
+	line-height: 48px;
+	float: left;
+	text-indent: 2.5em;
+	font-size: 13px;
+}
+
+.devicetab2 {
+	width: 100px;
+	height: 35px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.4em;
+	font-size: 13px;
+}
+
+.devicetab3 {
+	width: 120px;
+	height: 35px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.7em;
+	font-size: 13px;
+}
+
+.devicetab4 {
+	width: 90px;
+	height: 35px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.6em;
+	font-size: 13px;
+}
+
+.devicetab5 {
+	width: 100px;
+	height: 35px;
+	line-height: 48px;
+	float: left;
+	text-indent: 1.6em;
+	font-size: 13px;
+}
+
+.devicetab6 {
+	width: 100px;
+	height: 40px;
+	line-height: 48px;
+	float: left;
+	text-indent: 2.5em;
+	font-size: 13px;
+}
+
+
+
+/*时间统计,oee分析 table样式*/
+.statClass{
+	border: 0;
+	width: 854px;
+	text-align: left;
+	font-size: 12px; 
+	background-image:url(../img/tablebg.png) ;
+	background-repeat: repeat-x; 
+}
+.statOee{
+	border: 0;
+	width: 848px;
+	text-align: left;
+	font-size: 12px; 
+	background-image:url(../img/stat_device_oee_table_bg_01.png) ;
+	background-repeat: repeat-x; 
+}
+.statClass td{
+	padding-left:5px;
+	border-right: 1px solid white;
+}
+.statOee td{
+	padding-left:5px;
+	border-right: 1px solid white;
+}
+
+
+/*时间统计页面样式*/
+.devicetime_left {
+	float: left;
+	width: 6px;
+	height: 398px;
+	background-image: url(../img/devicetime_leftshadow.png);
+}
+
+
+/*OEE趋势分析页面样式*/
+/*机床事件时间分析页面样式*/
+/*OEE分析页面样式*/
+/*加工事件页面样式*/
+
+
+/*节拍分析页面样式*/
+.chartarea{
+	clear:both;
+}
+.barChart{
+	margin-top:-360px;
+	margin-left:394px;
+	float:left;
+}
+.lineChart{
+	margin-top:-360px;
+	margin-left:4px;
+	float:left;
+}
+.deviceprofrequencyleftshadow{
+	float:left;
+	width:6px;
+	height:366px;
+	background-image: url(../img/common_info_img/common_allTable_right_bg_01.png);
+}
+
+/*时间统计,oee分析,时间比较 没有图表提示样式*/
+.stat-hide{
+	font-size:30px;
+	text-align:center;
+	color:rgb(150,150,150);
+}

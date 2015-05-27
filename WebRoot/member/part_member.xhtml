@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<link rel="stylesheet" href="../css/b21.css" type="text/css" />
+	<link rel="stylesheet" href="../css/b22.css" type="text/css" />
+	<h:outputScript library="js" name="tree.js"></h:outputScript>
+		
+	<div  style="width:100%; height: 100%; position: relative;">
+		
+		<!-- 数据表格左 -->
+		<div class="frame-up">
+		    <div class="headDiv">
+			    <div id="tre0" class="area-select" onclick="showMenu0('DropdownMenuBackground0','tre0');">
+			    	<span class="selecttext">部门：</span>
+			    	<h:outputText class="select" id="nodeName0" value="#{MemberPartBean.thisNodeName}" />
+			    </div>
+	
+				<div  id="DropdownMenuBackground0" onclick="closeTreeDiv0('DropdownMenuBackground0');" style="display:none;">
+						<p:tree value="#{MemberPartBean.root}" var="node" selectionMode="single"  >
+	
+							<p:treeNode styleClass="spanhover">
+								<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+							</p:treeNode>
+							<a4j:ajax event="select" render=":myform:nodeName0 :myform:tbleft" 
+								listener="#{MemberPartBean.onLeftNodeSelect}" />
+						</p:tree>
+						<a4j:outputPanel ajaxRendered="true"  >
+						</a4j:outputPanel>
+			    </div>	
+			    
+			    <h:inputText id="txt" styleClass="textBg" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"  value="#{MemberPartBean.searchType}"/>
+			    <p:commandButton style="" value="查询"  styleClass="delete" action="#{MemberPartBean.searchList}" update=":myform:tbleft"></p:commandButton>
+			</div>
+			<div class="div-content-top-shadow">
+				<img src="../images/demo/right_top_shadow.png" />
+			</div>
+			
+			<div class="table">
+				<p:dataTable  id="tbleft" value="#{MemberPartBean.memberData}" var="record" 
+	                selection="#{MemberPartBean.selectedMember}" paginator="false" paginatorPosition="bottom">
+	                
+					<p:column selectionMode="multiple" style="width:2%" />  
+					<p:column headerText="人员名称">  
+			            #{record.name}  
+			        </p:column>  
+					<p:column headerText="工号ID">  
+			            #{record.no}  
+			        </p:column>  
+					<!-- <p:column headerText="年龄">  
+			            #{record.age}  
+			        </p:column>  			        					
+					<p:column headerText="性别">  
+			            #{record.sex}  
+			        </p:column>  					
+					<p:column headerText="出生年月">  
+			            #{record.birthday}  
+			        </p:column>  					
+					<p:column headerText="婚否">  
+			            #{record.marriage}  
+			        </p:column>  					
+					<p:column headerText="学历">  
+			            #{record.education}  
+			        </p:column>  
+					<p:column headerText="联系方式">  
+			            #{record.phoneNumber}  
+			        </p:column>  							
+					<p:column headerText="居住地">  
+			            #{record.address}  
+			        </p:column>  							
+					<p:column headerText="电邮地址">  
+			            #{record.email}  
+			        </p:column>  							
+					<p:column headerText="所属部门">  
+			            #{record.nodeid}  
+			        </p:column>  							
+					<p:column headerText="所属班组">  
+			            #{record.teamid}  
+			        </p:column>  	-->
+						        						
+				</p:dataTable>
+			</div>
+			<div class="frame-middle">		
+				<p:commandButton value="" styleClass="dmove"  actionListener="#{MemberPartBean.updateParts}" update="myform:tbRight myform:tbleft"/>
+				<p:commandButton value="" styleClass="umove"  actionListener="#{MemberPartBean.updateMembers}" update="myform:tbleft myform:tbRight"/>
+	  		</div>  			
+	  	</div>		
+  		
+  		<!-- 数据表格右 -->
+		<div class="frame-down">	
+		    <div class="headDiv">
+				
+				<div id="tre2" class="area-select" onclick="showMenu0('DropdownMenuBackground1','tre2');">
+					<span class="selecttext">部门：</span>
+					<h:outputText class="select" id="nodeName2" value="#{MemberPartBean.thisNodeName}" />
+				</div>
+				
+				<div  id="DropdownMenuBackground1" onclick="closeTreeDiv0('DropdownMenuBackground1');" style="display:none;">
+						<p:tree value="#{MemberPartBean.root}" var="node" selectionMode="single"  id="tree22" >
+
+							<p:treeNode styleClass="spanhover">
+								<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+							</p:treeNode>
+							<a4j:ajax event="select" render=":myform:nodeName2 :myform:potype :myform:poname :myform:tbRight" 
+								listener="#{MemberPartBean.onRightNode1Select}" />
+						</p:tree>
+						<a4j:outputPanel ajaxRendered="true"  >
+						</a4j:outputPanel>
+			    </div>	
+	
+			    <h:selectOneMenu id="potype" value="#{MemberPartBean.positionType}" styleClass="select" style="margin-top: 8px;">
+					<f:selectItem itemLabel="职位类别" itemValue="" ></f:selectItem>
+					<f:selectItems value="#{MemberPartBean.positionTypes}"></f:selectItems>
+				
+					<a4j:ajax event="change" listener="#{MemberPartBean.onRightNode2Select}"
+					render=":myform:tbRight :myform:poname" execute="@this"></a4j:ajax>
+				</h:selectOneMenu>  
+			    
+			    					
+				<h:selectOneMenu id="poname" value="#{MemberPartBean.positionName}" styleClass="select" style="margin-top: 8px;">
+					<f:selectItem itemLabel="职位名称" itemValue=""></f:selectItem>
+					<f:selectItems value="#{MemberPartBean.positionNames}"></f:selectItems>
+				
+					<a4j:ajax event="change" listener="#{MemberPartBean.onRightNode3Select}"
+					render=":myform:tbRight" execute="@this"></a4j:ajax>
+				</h:selectOneMenu> 					
+			</div>
+			<div class="div-content-top-shadow">
+				<img src="../images/demo/right_top_shadow.png" />
+			</div>
+			
+			<div class="table">
+				<p:dataTable id="tbRight"  value="#{MemberPartBean.partData}" var="record2" selection="#{MemberPartBean.selectedPart}" 
+					paginator="false" paginatorPosition="bottom">
+	  				
+	                
+					<p:column selectionMode="multiple" style="width:2%" />
+	  				
+					<p:column headerText="部门名称">  
+			            #{record2.nodeName}  
+			        </p:column>
+					<p:column headerText="人员名称">  
+			            #{record2.name}  
+			        </p:column> 	
+			        <p:column headerText="职位名称">  
+			            #{record2.positionName}  
+			        </p:column>			          		        					
+					<p:column headerText="职位种类">  
+			            #{record2.category}  
+			        </p:column>  										
+				</p:dataTable>
+			</div>
+		</div>
+	</div>	
+	
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+		});
+		
+		function checkPart(){
+			if(document.getElementById("poname").value=="请选择")
+				return false;
+		}					
+		
+		checked();
+		
+		function checked(){	
+			$(".usercheck").parents("span").addClass("spanhover");	
+		}
+		$(".usernocheck").click(function(){
+			document.getElementById("DropdownMenuBackground1").style.display = "none";
+		});
+						
+		function showInsert(){
+			$("#divInsert").show();
+		}
+		
+		function showUpdate(){
+			$("#divUpdate").show();
+		}
+		
+		function searchFocus(id){
+			if(document.getElementById(id).value=="输入名称/工号")
+				document.getElementById(id).value=""
+		}
+		
+		function searchBlur(id){
+			if(document.getElementById(id).value=="")
+				document.getElementById(id).value="输入名称/工号"
+		}
+
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+
+</ui:composition>

@@ -1,0 +1,25 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.user.page.RoleOfUserDetailPage" contentType="text/html;charset=UTF-8" %>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="u" uri="roleList.jscx" name="role" %>
+<html><head>
+<title><c:Out value="<%#smtcl.mocs.utils.authority.HelperUtil.title()%>" /></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link href="../../authority/css/detail-form.css" rel="stylesheet" type="text/css" charset="utf-8" />
+<link href="../../authority/css/dialog-box.css" rel="stylesheet" type="text/css" charset="utf-8" />
+<script type="text/javascript" charset="utf-8" language="javascript" src="../../authority/javascript/common.js"></script>
+<script charset="utf-8" i18n = "true" type="text/javascript" src="../../authority/javascript/resource/resource.js"></script>
+
+</head><body><div id="content">
+<h1 class="title">添加角色</h1>
+<form runat="server" class="container">
+<div >
+<ul class="button-list" style="margin:12px 0 0 0px;">
+	<li><a href="javascript:save();">保存</a></li>
+	<li><a href="userInfoDetail.jasmine">返回</a></li>					
+</ul>
+</div>
+<c:button id="btnSave" text="保存" runat="server" class="button"/>
+<u:role id="list1" showCondition="true" editable="false" colums="id,name,remark,state,creater"/>
+
+</form>
+</body>

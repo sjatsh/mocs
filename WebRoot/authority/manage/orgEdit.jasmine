@@ -1,0 +1,296 @@
+﻿<%@page language="java" extends="smtcl.mocs.beans.authority.org.page.OrgEditPage" contentType="text/html;charset=utf-8" %>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<%@taglib prefix="u" uri="../menu/top.jscx" name="top"%>
+<%@taglib prefix="u" uri="../menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../menu/menu.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="../menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>${app.passport}</title>
+    <link rel="stylesheet" type="text/css" href="../../authority/css/css.css"/>
+    <link href="../../authority/javascript/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <u:js/>
+    <script type="text/javascript" charset="utf-8" src="../javascript/org.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../javascript/tree/js/jquery.ztree.all-3.4.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../javascript/template.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../javascript/jasmine-ajax.js"></script>
+	<c:ajaxmanager name="org" />
+    <script type="text/javascript">
+<!--
+
+/**
+ * 登录用户ID;
+ */
+var USER_ID = "<%#userId%>";
+
+var PAGE_ID = "<%#pageId%>";
+
+jQuery(document).ready(function(){
+	init();
+});
+
+var C_NODE_ID = null;
+
+/**
+ * 打开添加或编辑普通节点页面;
+ */
+function cmd_add_common(id){
+	 $(".btn_save,.btn_cancel").removeAttr("disabled");
+	 showMask();
+	var h = 'loading...<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+	addMaskContent(h);
+	
+	var nodeId	= (id == undefined) ? "" : id;
+	C_NODE_ID = nodeId;
+	org.getOrg(nodeId, USER_ID, function(res){
+		var result = eval(res.responseText);
+		if(C_NODE_ID == nodeId){
+			if(result.succ){
+				addMaskContent("");
+				
+				jQuery("#btn_save").show();
+				par_tree(result.content);
+			}else{
+				h = result.msg + '<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+				addMaskContent(h);
+			}
+		}
+	 });
+}
+ 
+ 
+ function cmd_view_common(nodeId){
+	 $(".btn_save,.btn_cancel").removeAttr("disabled");
+	showMask();
+	var h = 'loading...<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+	addMaskContent(h);
+	C_NODE_ID = nodeId;
+	
+	 org.getOrg(nodeId, USER_ID, function(res){
+		var result = eval(res.responseText);
+		if(C_NODE_ID == nodeId){
+			if(result.succ){
+				addMaskContent("");
+				
+				jQuery("#btn_save").hide();
+				par_tree(result.content);
+			}else{
+				h = result.msg + '<input type="button" onclick="cmd_cancel()" value="${button.label.cancel}"/>';
+				addMaskContent(h);
+			}
+		}
+	 });
+}
+  
+function par_tree(content){
+	var parentId = get(content, "parentId");
+	var txt = get(content, "longName");
+	jQuery.fn.zTree.setAsyn("parentId", parentId, txt );
+	set_form(content);
+	var form = jQuery("form")[0];
+	form["txt_nodeType"].value = content.nodeType.text;
+	jQuery("#template_edit").center({"z-index":1120, "display":"block", "top":"10%"});
+}
+
+
+/**
+ * 确定;
+ */
+function cmd_confirm(){
+	 var form = jQuery("form")[0];
+	 var v = jQuery.trim(form["parentId"].value);
+	 if( v == "" ){
+		 alert(message.error.org_par);
+		 return;
+	 }
+	 
+	 var node = get_form();
+	 node["parentId"] = v;
+	if(confirm(message.confirm.info)){
+		//var pid = get(node, "parentId");
+		
+		$(".btn_save,.btn_cancel").attr("disabled","disabled");
+		org.saveOrg(node, USER_ID, PAGE_ID, function(res){
+			var result = eval(res.responseText);
+			if(result.succ){
+				alert(message.success.save_msg);
+				
+				if(tree != null)
+					tree.reAsyncChildNodes(null, "refresh");
+				cancel_selected_node();
+			}else{
+				alert(result.msg);
+			}
+			cmd_cancel();
+		 });	
+	}
+}
+
+
+
+/**
+ * 取消;
+ */
+function cmd_cancel(){
+	 C_NODE_ID = null;
+	jQuery("#template_edit").hide();
+	jQuery.unblockUI();
+}
+
+-->
+</script>
+</head>
+<body>
+<div class="container">
+    <!--header-->
+	<div id="header">
+	<u:top/>
+	</div>
+	<!--main-->
+	<div class="main">
+		<!--main_left-->
+		<div class="main_left">
+		 <u:menu/>
+		</div>
+	 
+	 	<!--main_right-->
+		<div class="main_rightss">
+	      <div class="zuzhijiagou_info">
+	        <div class="zuzhijiagou_info_left">
+	          <div id="tree" class="ztree a dumascroll b" style="width:279px;height:450px;margin-top:0px">
+	          </div>
+	          <!--dumascroll-->
+	        </div>
+	        <!--zuzhijiagou_info_left-->
+	        <div id="child_content" class="zuzhijiagou_info_right"  style="height:450px;overflow-y:auto">
+	        
+	        </div>
+	    <!--zuzhi_add-->
+	      </div>
+	      <!--zuzhijiagou_info-->
+	       
+	      
+	    </div>
+		<div class="clear"></div>
+		</div>
+	<div class="footer"><u:foot/></div>
+</div>
+<u:relogin/>
+<textarea id="template_list" class="hide">
+<table  class="function_role_table" border="0" cellpadding="0px" cellspacing="1px" style="width:510px">
+	<tr class="function_role_tr">
+		<th class="hide">
+			<input type="checkbox" onclick="sel('chk_node', this.checked)"/>
+		</th>
+		<th style="width:35%">${org.name}</th>
+		<th style="width:25%">${org.type}</th>
+		<th style="width:10%">${org.seq}</th>
+		<th style="width:30%">${org.group.op}</th>
+	</tr>
+	{for el in data}
+	<tr class="function_role_tr1">
+		<td class="hide"><input type="checkbox" name="chk_node" value="\$\{el.nodeId}"/></td>
+		<td title="\$\{el.bindData.name}">\$\{el.bindData.name}</td>
+		<td title="\$\{el.bindData.nodeType.text}">\$\{el.bindData.nodeType.text}</td>
+		<td title="\$\{el.bindData.seq}">\$\{el.bindData.seq}</td>
+		<td>
+		<a href="#" onclick="cmd_view_common('\$\{el.nodeId}')">${button.label.view}</a>
+		{if el.bindData.manage == true}	
+		| <a href="#" onclick="cmd_add_common('\$\{el.nodeId}')">调整</a>
+		{/if}
+		</td>
+	</tr>
+	{forelse}
+	<tr class="function_role_tr1">
+		<td colspan="5">${org.nodata}</td>
+	</tr>
+	{/for}
+</table>
+</textarea>
+<div id="template_edit"  class="zuzhijiagou_alert_info hide">
+<form>
+<div class="zuzhijiagou_alert_info_top">
+</div>
+<div class="zuzhijiagou_alert_info_middle">
+<ul class="zuzhijiagou_ul1">
+		<li class="zuzhijiagou_li1">
+		  <div class="zuzhijiagou_li1_info">
+		   <div class="zuzhijiagou_li1_info_left">
+		  ${org.name}：
+		  </div>
+		  <!--zuzhijiagou_li1_info_left-->
+		  <div class="zuzhijiagou_li1_info_right">
+		  <input type="hidden" id="nodeId" name="nodeId"><input class="zuzhijiagou_txt1" name="name" readOnly="readonly"/>
+		  </div>
+		  <!--zuzhijiagou_li1_info_right-->
+		  <div class="clear"></div>
+		  </div>
+		  <!--zuzhijiagou_li1_info-->
+		  </li>
+		  
+		  <li class="zuzhijiagou_li1">
+		  <div class="zuzhijiagou_li1_info">
+		   <div class="zuzhijiagou_li1_info_left">
+		  ${org.parentName}：
+		  </div>
+		  <!--zuzhijiagou_li1_info_left-->
+		  <div class="zuzhijiagou_li1_info_right">
+		  <c:popasyntree id="parentId" exclude="nodeId" pageId="passport.page.org.edit" iwidth="150" twidth="300" theight="500"/>
+		  </div>
+		  <!--zuzhijiagou_li1_info_right-->
+		  <div class="clear"></div>
+		  </div>
+		  <!--zuzhijiagou_li1_info-->
+		  </li>
+		  <li class="zuzhijiagou_li1">
+		  <div class="zuzhijiagou_li1_info">
+		   <div class="zuzhijiagou_li1_info_left">
+		  ${org.type}：
+		  </div>
+		  <!--zuzhijiagou_li1_info_left-->
+		  <div class="zuzhijiagou_li1_info_right">
+		  <input name="nodeType" type="hidden" class="hide">
+					<input name="txt_nodeType" class="zuzhijiagou_txt1" readOnly="readonly"/>
+		  </div>
+		  <!--zuzhijiagou_li1_info_right-->
+		  <div class="clear"></div>
+		  </div>
+		  <!--zuzhijiagou_li1_info-->
+		  </li>
+		  
+		  <li class="hide">
+		  <input name="contactPerson"/>
+		  <input name="contactTelephone"/>
+		  <input name="address"/>
+		  <textarea name="description"></textarea>
+		  <select name="state">
+			<option value="1">启用</option>
+		    <option value="0">停用</option>
+		  </select>
+		  <input name="seq"/>
+		  </li>
+		
+		<li class="zuzhijiagou_li2">
+		  <div class="zuzhijiagou_li2_info">
+		  <div class="zuzhijiagou_li2_info_left">
+		  <a id="btn_save" href="javascript:void(0)" onclick="cmd_confirm()" class="zuzhi_link3 btn_save">${button.label.ok}</a>
+		  </div>
+		  <!--zuzhijiagou_li2_info_left-->
+		  <div class="zuzhijiagou_li2_info_right">
+		  <a href="javascript:void(0)" onclick="cmd_cancel()" class="zuzhi_link3 btn_cancel">${button.label.cancel}</a>
+		  </div>
+		  <!--zuzhijiagou_li2_info_right-->
+		  <div class="clear"></div>
+		  </div>
+		  <!--zuzhijiagou_li2_info-->
+		  </li>
+  </ul>
+  <div class="clear"></div>
+</div>
+</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:outputScript library="js" name="jquery-1.9.1.min.js"></h:outputScript>
+	<style>
+	.homemenu{
+		position:absolute;left:1000px;width:373px;background-color:gray;
+	}
+	.tohome{
+		position:absolute;left:1000px;top:1000px;width:373px;height:101px;
+	}
+	</style>
+	
+	<body id="mbody" style="width:1920px;height:1080px;z-index:10000;background-color:rgba(102,102,102,0.8);">
+	
+		<div id="homemenu" class="homemenu">
+		</div>
+		<img class="tohome" src="../img/menu/2_16.png"/>
+
+		<script type="text/javascript">
+		//<![CDATA[	
+		
+		var ip="http://10.10.60.24:8080/";
+			var parentNode="8a8abc973f17ee8a013f180023b60001";
+			var url=ip+"mocs/WSUserService/getAllNodesByParentNodeId.json";
+			//整个块的索引
+			var thisSub=0;
+			var lastSub=-1;
+			//选中块的节点id
+			var node=parentNode;
+			var selectedNode;
+			//层级
+			var layer=1;
+			//是否选中
+			var selected=false;
+			
+			$(document).ready(function(){
+				init(node);
+				
+				$(".tohome").click(function(){
+					thisSub=0;
+					selected=true;
+					$("#homemenu").html("");
+					init(parentNode);
+				});
+			});
+			
+			function init(node){
+				 $.ajax({
+					url: url,
+					data: "nodeId="+node+"&userId=100",
+					cache: false,
+					dataType: 'text',
+					success: function (returnData) {
+						var a=JSON.parse(returnData);
+						var data=a.data;					
+						//菜单位置
+						var position;
+						var fontSize;
+						
+						if(selected==true){
+							position=0;
+							layer=1;
+						}
+						else{
+							position=-378*(layer-1);
+						}
+						
+						var content='<div id="submenu'+layer+'" style="left:'+position+'px;position:absolute;width:373px;background-color:gray;">';
+						
+						for(var i=data.length-1;i>=0;i--){
+						//for(var i=0;i<data.length;i++){
+							var nodeId=data[i].nodeId;
+							var name=data[i].name;							
+							var num=data[i].childNodesNum;
+							var l=name.length;
+							
+							if(layer==1){
+								if(l<=6)
+									fontSize=36;
+								else
+									fontSize=36-(l-6)*3;	
+							}else{
+								fontSize=28;
+							}
+							
+							var top=990-101*(i+1);
+							
+							//node当前父节点id,nodeId当前节点id
+							content+='<div class="select'+layer+'" node="'+node+'" nodeId="'+nodeId+'" v="'+layer+'" style="position:absolute;top:'+top+'px;font-weight:bold;font-size:'+fontSize+'px;line-height:90px;width:373px;height:101px;background-image:url(../img/menu/2_14.png);">';
+							if(num==0){
+								content+='<span style="margin-left:119px;">'+name+'</span>';
+							}else{
+								content+='<img class="subselect'+layer+'" v="'+layer+'" node='+nodeId+' style="margin-left:30px;z-index:10001;" src="../img/menu/2_03.png"/>';
+								content+='<span style="margin-left:60px;">'+name+'</span>';
+							}
+							
+							content+='</div>';
+						}
+
+						content+='</div>';
+						$("#homemenu").append(content);
+						
+						selected=false;
+						$(".select"+layer).eq(thisSub).css("background-image","url(../img/menu/2_11.png)");
+
+						$(".select"+layer).click(function(){
+							$(".select"+layer).css("background-image","url(../img/menu/2_14.png)");
+							$(this).css("background-image","url(../img/menu/2_11.png)");
+
+							
+							//当前菜单级数
+							var v=parseInt($(this).attr("v"));
+							selectedNode=$(this).attr("node");
+							$("#homemenu").html("");
+							selected=true;
+							thisSub=$(this).index();
+							
+							var n=$(this).attr("nodeId");
+							//alert(n);
+							
+							init(selectedNode);
+						});	
+						
+						
+						$(".subselect"+layer).click(function(e){
+							e.stopPropagation();
+
+							//$(".subselect").attr("src","../img/menu/2_03.png");
+							//$(this).Children(".subselect").attr("src","../img/menu/2_07.png");
+							//当前菜单级数
+							var v=parseInt($(this).attr("v"));
+							if(v==layer){
+								layer++;
+							}else if(v<layer){
+								
+								for(var i=v+1;i<=layer;i++){
+									$("#submenu"+i).remove();
+								}
+								layer=v+1;
+							}
+							$(".subselect"+v).attr("src","../img/menu/2_03.png");
+							$(this).attr("src","../img/menu/2_07.png");
+							//alert(v);
+							
+							$(".select"+v).css("background-image","url(../img/menu/2_14.png)");
+							$(this).parents(".select"+v).css("background-image","url(../img/menu/2_11.png)");
+							
+							node=$(this).attr("node");
+							
+							init(node);
+						});
+								
+					}
+				});
+			}
+			
+		//]]>	
+		</script>
+	</body>
+
+</html>

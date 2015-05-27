@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<link rel="stylesheet" href="./css/workshop_management.css" type="text/css"></link>
+<link rel="stylesheet" href="./css/mocs_page.css" type="text/css"></link>
+
+<h:form id="myform">
+		<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+		<script type="text/javascript">	
+			document.getElementById("maskw").style.height = hjb51 + "px";
+			document.getElementById("maskw").style.width = wjb51 + "px";
+		</script>
+	<table  style="width: 100%;position: relative;" border="0" id="factop">
+	<!-- top start -->
+		<tr style="width: 100%;" id="headtr">
+			<td style="width: 20%;">
+				<div style="width:20%;background-image: url('./images/frstTab.png');
+    				cursor: pointer;position: absolute;"  id="headtrfisttd"></div>
+    				<img src="" style="position: absolute; border: 0px solid;left: 0px;top:0px;" id="autoImg1" />
+			</td>
+			<td style="width: 20%;font-weight:bold;color:#505050;" align="center" id="headxlh">
+				<h:outputText value="#{workshopManagementBean.mts.equSerialNo}" />
+			</td>
+			<td style="width: 20%;font-weight:bold;color:#505050;" align="center" id="headjgrw">
+				加工任务
+			</td>
+			<td style="width: 20%;font-weight:bold;color:#505050;" align="center" id="headxl">
+				效率
+			</td>
+			<td style="width: 20%;font-weight:bold;color:#505050;" align="center" id="headxcb">
+				产量
+			</td>
+		</tr>
+		<script type="text/javascript">
+			//<![CDATA[
+			           imgReady('./images/profile_top_logo.png', function () { 
+			        	   			var imgPercent = hjb51/1080; //比例 
+									  var imgwjb51=this.width;
+								   	  var imghjb51=this.height;
+								   	 document.getElementById("autoImg1").src="./images/profile_top_logo.png";
+									  document.getElementById("autoImg1").style.width=imgwjb51*imgPercent+"px";
+									  document.getElementById("autoImg1").style.height=imghjb51*imgPercent+"px";										
+									  document.getElementById("autoImg1").style.top=hjb51*30/1080+"px";
+									  document.getElementById("autoImg1").style.left=wjb51*25/1920+"px";
+									  if(wjb51==800)
+									  {
+										  document.getElementById("autoImg1").style.width=imgwjb51*45/100+"px";
+										  document.getElementById("autoImg1").style.height=imghjb51*45/100+"px";  
+									  }
+			                   });
+			         document.getElementById("headtr").style.height=hjb51*265/1080+"px";
+	        //]]>	
+			</script>
+	 <!--end of top-->
+	 <!--content start-->
+	 	<!--first row start-->
+	 	<tr>
+	 		<td colspan="5">
+	 			<div style="width: 100%;">
+	 			<img style="position:absolute;width:100%;z-Index:-1;" src="./images/manage_content_bg.png" id="bgimg"/>
+	 			<table style="width: 100%;height: 100%">
+	 				<tr style="width: 100%;" id="firstrow">
+				 		<td style="width: 20%;" align="center">
+				 			<div id="xyzabc" style="width:90%;"></div>
+				 		</td>
+				 		<td style="width: 20%;" align="center" id="firstrowfs">
+				 			<table style="width: 100%;">
+				 				<tr>
+				 					<td style="width: 35%;font-weight:bold;" >F</td>
+				 					<td style="width: 65%;font-weight:bold;" id="fv">
+				 						<h:outputText value="#{workshopManagementBean.mts.feedSpeed}" />
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 35%;font-weight:bold;" >S</td>
+				 					<td style="width: 65%;;font-weight:bold;" id="sv">
+				 						<h:outputText value="#{workshopManagementBean.mts.axisspeed}"/>
+				 					</td>
+				 				</tr>
+				 			</table>
+				 		</td>
+				 		<td style="width: 20%;font-weight:bold;" align="center" id="tworowfs">
+				 			<table style="width: 90%;height: 80%">
+				 				<tr>
+				 					<ui:remove>
+				 					<td style="width: 100%;" id="gongdan" >
+				 						工单:<h:outputText value="#{workshopManagementBean.mt.jobDispatchListNo}"/>
+				 					</td>
+				 					</ui:remove>
+				 					<td style="width: 100%; white-space: nowrap;" id="gongdan" onmouseover="xswzgd()" onmouseout="ycwzgd()">
+				 						工单:<h:outputText value="#{workshopManagementBean.mt.jobDispatchListNo}"/>
+				 					</td>
+				 					
+				 					
+				 				</tr>
+				 				<tr >
+				 					<td style="width: 100%" id="wcjh">
+				 						完成/计划:<span id="wcth"><h:outputText value="#{workshopManagementBean.mt.finishNum}" /></span> / 
+				 								<span id="jhth"><h:outputText value="#{workshopManagementBean.mt.processNum}" /></span>
+				 					</td>
+				 				</tr>
+				 				<tr >
+				 					<td style="width: 100%" id="sysj">
+				 						剩余时间:<span id="sysjTh"><h:outputText value="#{workshopManagementBean.mt.estimateLastTime}" /></span> 小时
+				 					</td>
+				 				</tr>
+				 			</table>
+				 		</td>
+				 		<td style="width: 20%;" align="center" id="threerowfs">
+				 			<table style="width: 90%;height: 80%">
+				 				<tr >
+				 					<td style="width: 40%;">可利用率</td>
+				 					<td style="width: 60%;color: #00A600;" id="klyl">
+				 						<h:outputText value="#{workshopManagementBean.ee.availability}"/>%
+				 					</td>
+				 				</tr>
+				 				<tr >
+				 					<td style="width: 40%;">表现性</td>
+				 					<td style="width: 60%;color: #00A600;" id="bxx">
+				 						<h:outputText value="#{workshopManagementBean.ee.expressivenessOf}"/>%
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 40%;">质量指数</td>
+				 					<td style="width: 60%;color: #E00606;" id="zlzs">
+				 						<h:outputText value="#{workshopManagementBean.ee.quality}"/>%
+				 					</td>
+				 				</tr>
+	 						</table>
+	 					</td>
+	 					<td style="width: 20%;" align="center">
+	 						<div style="position: absolute;margin-left:10px;" id="title1">
+	 							日产量
+	 						</div>
+	 						<div id="piethree" />
+	 					</td>
+	 				</tr>
+	 				<tr  id="tworow">
+				 		<td style="width: 20%;">
+				 			<div style="position: absolute;margin-left:10px;" id="title2">
+	 							进给速度
+	 						</div>
+				 			<div id="tutest" />
+				 		</td>
+				 		<td style="width: 20%;" align="center">
+				 			<div style="position: absolute;margin-left:10px;" id="title3">
+	 							时间分布
+	 						</div>
+				 			<div id="pieTureal" style="width: 100%;height: 100%;"></div>
+				 		</td>
+				 		<td style="width: 20%;" >
+			                
+			               <div style="position: absolute;margin-left:10px;z-index: 31" id="title7">
+	 							当前工件 
+	 						</div>
+	 						<div style="position: absolute;z-index: 31;" id="title8">
+	 							 <h:outputText value="#{workshopManagementBean.mt.finishNum}" style="color: green;" id="wcTs"/>
+	 						</div>
+			                <div id="sbdh"  style="width:98%; height:100%; overflow:hidden; position:relative;margin-left: 10px;">				
+								<img src="./images/part/zwtp.png"  id="lp" style="width: 98%;height: 98%;z-index: -1;position: absolute;"/>		
+								<div id="lp1"  style="width:98%; height:100%; overflow:hidden; z-index:10;">
+								</div> 						
+							</div> 
+				 		</td>
+				 		<td style="width: 20%;" align="center">
+				 			<div style="position: absolute;margin-left:10px;" id="title4">
+	 							OEE
+	 						</div>
+				 			<div id="tubiao" />
+				 		</td>
+				 		<td style="width: 20%;" align="center">
+				 			<div style="position: absolute;margin-left:10px;" id="title5">
+	 							月产量
+	 						</div>
+				 			<div id="pietwo" ></div>
+				 		</td>
+				 	</tr>
+				 	<tr  id="threerow">
+				 		<td style="width: 20%;">
+				 			<div style="position: absolute;margin-left:10px;" id="title6">
+	 							主轴转速
+	 						</div>
+				 			<div id="tutest2"/>
+				 		</td>
+				 		<td style="width: 20%;" align="center">
+				 			<table style="width: 80%;height: 80%;" id="fontsizeone" border="0">
+				 				<tr>
+				 					<td style="width: 20%">
+				 						<div id="yanse1" style="background-color:#009E39;float: left;"></div>
+				 					</td>
+				 					<td style="width: 80%;">
+				 						切削时间(<h:outputText value="#{workshopManagementBean.mts.cuttingTime}"/>h)
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 20%">
+				 						<div id="yanse2" style="background-color:#BDBEBD;float: left;"></div>	
+				 					</td>
+				 					<td style="width: 80%;">
+				 						辅助时间(<h:outputText value="#{workshopManagementBean.mts.assistedTime}"/>h)
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 20%">
+				 						<div  id="yanse3" style="background-color:#08AEFF;float: left;"></div>
+				 					</td>
+				 					<td style="width: 80%;">
+				 						准备时间(<h:outputText value="#{workshopManagementBean.mts.prepareTime}"/>h)
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 20%">
+				 						<div  id="yanse4" style="background-color:#FFDB00;float: left;"></div>
+				 					</td>
+				 					<td style="width: 80%;">
+				 						空闲时间(<h:outputText value="#{workshopManagementBean.mts.idleTime}"/>h)
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 20%">
+				 						<div id="yanse5" style="background-color:#5A595A;float: left;"></div>
+				 					</td>
+				 					<td style="width: 80%;">
+				 						停止时间(<h:outputText value="#{workshopManagementBean.mts.stopTime}"/>h)
+				 					</td>
+				 				</tr>
+				 			</table>
+				 		</td>
+				 		<td style="width: 20%;" align="center">
+				 			<table style="width: 90%;height:80%;" id="fontsizetwo">
+				 				<tr>
+				 					<td style="width: 40%;">工件ID:</td>
+				 					<td style="width: 60%; word-break: break-all;" id="gjidtxt">
+				 						<h:outputText value="#{workshopManagementBean.mt.no}"/>
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 40%">工件名称:</td>
+				 					<td style="width: 60%; word-break: break-all;" id="gjmc">
+				 						<h:outputText value="#{workshopManagementBean.mt.name}"/>
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 40%">工序名称:</td>
+				 					<td style="width: 60%; word-break: break-all;" id="gxmc">
+				 						<h:outputText value="#{workshopManagementBean.mt.processName}"/>
+				 					</td>
+				 				</tr>
+				 			</table>
+				 		</td>
+				 		<td style="width: 20%;" id="fontsizethree" align="center">
+				 			OEE <font style="color:#00A600;margin-left: 5px;"><h:outputText value="#{workshopManagementBean.ee.oee}" id="DOEE" />%</font>
+				 		</td>
+				 		<td style="width: 20%;" align="center">
+				 			<table style="width: 80%;height: 50%;" id="fontsizefour">
+				 				<tr>
+				 					<td style="width: 25%">
+				 						
+				 					</td>
+				 					<td style="width: 75%">
+				 						
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 25%">
+				 						
+				 					</td>
+				 					<td style="width: 75%">
+				 						
+				 					</td>
+				 				</tr>
+				 				<tr>
+				 					<td style="width: 25%">
+				 						
+				 					</td>
+				 					<td style="width: 75%">
+				 						
+				 					</td>
+				 				</tr>
+				 			</table>
+				 		</td>
+				 	</tr>
+	 			</table>
+	 			</div>
+	 		</td>
+	 	</tr>
+	</table>
+	
+    <!--content start-->
+    <h:inputHidden value="#{workshopManagementBean.pie}" id="pieValue"></h:inputHidden>
+    <h:inputHidden value="#{workshopManagementBean.piecb}" id="piecbValue"></h:inputHidden>
+    <h:inputHidden value="#{workshopManagementBean.piecbtwo}" id="piecbtwoValue"></h:inputHidden>
+	<!--end of content-->    
+<a4j:poll action="#{workshopManagementBean.refreshData}"  interval="1000" render="reload" oncomplete="reloadEqu()"></a4j:poll>
+<a4j:outputPanel id="reload">
+	<h:inputHidden value="#{workshopManagementBean.mts.xfeed}" id="xValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.yfeed}" id="yValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.zfeed}" id="zValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.afeed}" id="aValue"></h:inputHidden> 
+	<h:inputHidden value="#{workshopManagementBean.mts.bfeed}" id="bValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.cfeed}" id="cValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.ufeed}" id="uValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.vfeed}" id="vValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.wfeed}" id="wValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.feedSpeed}" id="fValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mts.axisspeed}" id="sValue"></h:inputHidden>	
+	<h:inputHidden value="#{workshopManagementBean.ee.oee}" id="oeeValue"></h:inputHidden> 
+	<h:inputHidden value="#{workshopManagementBean.mt.finishNum}" id="funishnumValue"></h:inputHidden> 
+	<h:inputHidden value="#{workshopManagementBean.mt.estimateLastTime}" id="estimateLastTimeValue"></h:inputHidden>
+	
+	<h:inputHidden value="#{workshopManagementBean.mt.jobDispatchListNo}" id="jobDispatchListNoValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mt.no}" id="noValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mt.name}" id="nameValue"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mt.processName}" id="processNameValue"></h:inputHidden>  
+	<h:inputHidden value="#{workshopManagementBean.mt.path}" id="partbg"></h:inputHidden>
+	<h:inputHidden value="#{workshopManagementBean.mt.processNum}" id="processNumValue"></h:inputHidden>
+</a4j:outputPanel>
+
+
+<script type="text/javascript">
+//<![CDATA[
+   	ycwzgd();
+    zwxx();
+    AutoWindon();
+	partUpdateBg();
+    loadData();
+	setTimeout(function(){
+		$("#maskw").fadeOut(fadeouttime);
+	},settimeout);
+     
+//]]>
+</script>
+</h:form>
+</ui:composition>

@@ -1,0 +1,772 @@
+@charset "utf-8";
+/* 导航栏 */
+.headDiv
+{
+	width: 100%;
+	height: 41px;
+	background-image: url('../images/demo/right_top_bg.png');
+}
+/* 导航栏输入框 */
+.headDiv input[type="text"], .guide_ljbh_head input[type="text"], .guide_text
+{
+	max-width: 180px;
+	width: 105px;
+	height: 24px !important;
+	padding: 0px 2px;
+	border: solid 1px #5b6571 !important;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	margin-top: 8px;
+	margin-left: 2%;
+	background-color: #e8e8e8 !important;
+	text-indent: 3px !important;
+}
+.guide_ljbh_head input[type="text"]
+{
+	width: 175px;
+}
+
+/* 导航栏 按钮*/
+.delete
+{
+	width: 61px;
+	height: 25px;
+	border: solid 1px #5b6571 !important;
+	margin-left: 2%;
+	cursor: pointer;
+}
+@media screen and (max-width: 960px)
+{
+	.delete
+	{
+		width: 61px;
+		height: 25px;
+		border: solid 1px #5b6571 !important;
+		margin-left: .5%;
+		cursor: pointer;
+	}
+}
+
+/*关闭 按钮*/
+@media screen and (-webkit-min-device-pixel-ratio:0){ 
+	.close
+	{
+		margin-top: 8px; 
+	}
+}
+
+/* 导航栏按钮（工序配置） */
+.deleteprocess
+{
+	width: 118px;
+	height: 25px;
+	border: solid 1px #5b6571 !important;
+	margin-left: 2%;
+	cursor: pointer;
+	background-color: #D8DCDD !important;
+	background:#85b2cb;
+}
+@media screen and (max-width: 960px)
+{
+	.deleteprocess
+	{
+		width: 104px;
+		height: 25px;
+		border: solid 1px #5b6571 !important;
+		margin-left: .5%;
+		cursor: pointer;
+		background-color: #D8DCDD !important;
+		background:#85b2cb;
+	}
+}
+.deleteprocess:hover
+{
+	background-color: white !important;
+	background-image: url('') !important;
+}
+/* 导航栏分割线 */
+.button-split
+{
+	display: inline-block;
+	vertical-align: middle;
+	width: 4px;
+	height: 41px;
+	margin-left: 2%;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: 0 -88px;
+}
+/* 导航栏 分割线（工序配置）*/
+.button-split2
+{
+	float: left;
+	width: 4px;
+	height: 41px;
+	margin-left: 2%;
+	margin-top: -8px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: 0 -47px;
+}
+@media screen and (max-width: 960px)
+{
+	.button-split
+	{
+		display: inline-block;
+		vertical-align: middle;
+		width: 4px;
+		height: 41px;
+		margin-left: .5%;
+		background: url('../images/demo/ui-bg-demos.png');
+		background-position: 0 -47px;
+	}
+	
+	.button-split2
+	{
+		float: left;
+		width: 4px;
+		height: 41px;
+		margin-left: .5%;
+		margin-top: -8px;
+		background: url('../images/demo/ui-bg-demos.png');
+		background-position: 0 -47px;
+	}
+}
+/* 导航栏阴影 */
+.div-content-top-shadow img
+{
+	position: relative;
+	width: 100%;
+	height: 5px;
+	z-index: 5;
+}
+
+/* 表格 */
+.table
+{
+	position: absolute;
+	width: 100%;
+	top: 41px;
+	bottom: 30px;
+	background-image: url('../images/demo/table_bg.png');
+	background-repeat: repeat-x;
+	background-position-y: 24px;
+	overflow: auto;
+	z-index: 1;
+}
+.table table
+{
+	height: auto;
+}
+.process_config_content .table table
+{
+	height: auto;
+}
+
+.ui-datatable table tfoot
+{
+	display: block;
+	width: auto;
+	height: 30px;
+	position: fixed;
+	bottom: 30px;
+	left: 170px;
+	right: 0px;
+	z-index: 1;
+}
+
+.ui-datatable table tfoot tr td
+{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.ui-datatable .ui-datatable-data td, .ui-datatable .ui-datatable-data-empty td, .ui-datatable table, .ui-editable-column
+{
+	border: 1px solid rgba(255, 255, 255, 0) !important;
+}
+
+.ui-inputtext
+{
+	height: 12px !important;
+}
+
+.div-content-table
+{
+	width: 100%;
+	height: 245px;
+}
+
+.div-content-table-title
+{
+	width: 100%;
+	height: 33px;
+	background-image: url('../images/demo/right_top_bg.png');
+	padding-top: 8px;
+	padding-left: 2%;
+}
+
+/* 工序配置零件选择列表 */
+.div-content-table-title-process-select
+{
+	float: left;
+	width: 160px;
+	height: 22px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: -4px -88px;
+}
+
+.process_config_select
+{
+	margin-left: 4px;
+	margin-top: 2px;
+}
+
+.process_config_select_input
+{
+	vertical-align: top;
+}
+
+/* 工序配置表格*/
+.tableprocess
+{
+	height: 204px;
+	background-image: url('../images/demo/table_bg.png');
+	text-align: center;
+	margin-top: -4px;
+	overflow: auto;
+	background-repeat: repeat-x;
+	background-position-y: 24px;
+}
+
+.tableprocess div table tbody, .process_config_content div table tbody
+{
+	position: relative;
+	top: 0;
+}
+
+/* 工序配置标签列表 */
+.process_config_xiaDiv
+{
+	position: absolute;
+	width: 100%;
+	height: auto;
+	top: 245px;
+	bottom: 0;
+}
+/* 工序配置标签列表背景 */
+.headDiv2 {
+	width: 100%;
+	height: 42px;
+	background-image: url('../images/demo/tabs_bg.png');
+}
+/* 工序配置标签 */
+.process_config_menuDiv
+{
+	position: relative;
+	float: left;
+	padding-top: 10px;
+	width: 121px;
+	height: 26px;
+	margin-top: 6px;
+	margin-left: -18px;
+	text-align: center;
+	text-indent: -2em;
+	font-size: 12px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: 0 -129px;
+	cursor: pointer;
+	color: #6C6C6C;
+	z-index: 1;
+}
+@media screen and (max-width: 960px)
+{
+	.process_config_menuDiv
+	{
+		position: relative;
+		float: left;
+		padding-top: 10px;
+		width: 121px;
+		height: 26px;
+		margin-top: 6px;
+		margin-left: -40px;
+		text-align: center;
+		text-indent: -2em;
+		font-size: 12px;
+		background: url('../images/demo/ui-bg-demos.png');
+		background-position: 0 -129px;
+		cursor: pointer;
+		color: #6C6C6C;
+		z-index: 1;
+	}
+}
+.headDiv2 .active
+{
+	color: Black;
+	z-index: 3;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: -120px -129px;
+}
+/* 工序配置标签底部 */
+.porcess_config_menu_bottom
+{
+	position: relative;
+	margin-top: -9px;
+	width: 100%;
+	height: 29px;
+	background-image: url('../images/demo/tabs_panel.png');
+	z-index: 2;
+}
+/* 工序向导标签底部 */
+.guide_menu_bottom
+{
+	position: relative;
+	margin-top: -9px;
+	width: 100%;
+	height: 11px;
+	background-image: url('../images/demo/tabs_panel_guide.png');
+	z-index: 2;
+}
+
+/* 工序配置详细内容 */
+.process_config_content
+{
+	position: absolute;
+	top: 61px;
+	bottom: 0;
+	left: 0;
+	right: 170px;
+	display: none;
+	overflow: auto;
+	margin-top: -3px;
+}
+/* 工序配置工艺路线图标（首个） */
+.process_config_content_gyxl_first
+{
+	float: left;
+	width: 86px;
+	height: 96px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: 0 -164px;
+	margin-top: 36px;
+	margin-left: 36px;
+	text-align: center;
+}
+/* 工序配置工艺路线图标（next图标） */
+.process_config_content_gyxl_arrow
+{
+	float: left;
+	width: 37px;
+	height: 96px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: -86px -164px;
+	margin: 36px 1%;
+}
+/* 工序配置工艺路线图标（其他） */
+.process_config_content_gyxl_other
+{
+	float: left;
+	width: 86px;
+	height: 96px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: 0 -164px;
+	margin-top: 36px;
+	text-align: center;
+}
+
+/* 工序配置工艺方案维护  */
+.process_config_ljgyfa
+{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin-top: -246px;
+	display: none;
+	z-index: 4;
+}
+
+/* 工序配置 工序向导 */
+.guide_kuangDiv
+{
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+.guide_kuangDiv_head
+{
+	width: 100%;
+	margin: 0;
+}
+
+/* 工序向导 通用输入条 */
+.guide_ljbh_head
+{
+	width: 100%;
+	height: 41px;
+	background-image: url('../images/demo/right_top_bg.png');
+	margin-top: 0;
+}
+/* 输入条文字 */
+.guide_text_label
+{
+	font-size: 12px;
+	color: #495767;
+	margin-left: 2%;
+}
+
+/* 工序向导 内容 */
+.guide_xd
+{
+	width: 100%;
+	margin-top: 0;
+	border: none;
+}
+
+/*选择框*/
+.select
+{
+	margin-left: 2%;
+}
+
+/* 保存按钮 */
+.btn-save
+{
+	width: 54px;
+	height: 55px;
+	cursor: pointer;
+}
+
+/* 上一步按钮 */
+.btn-prev
+{
+	width: 74px;
+	height: 52px;
+	cursor: pointer;
+}
+
+/* 下一步按钮 */
+.btn-next
+{
+	width: 75px;
+	height: 51px;
+	cursor: pointer;
+}
+
+/* 工序表格控制栏 */
+.headDivduan
+{
+	width: 100%;
+	height: 32px;
+	background-image: url('../images/demo/right_page_bg.png');
+	
+}
+
+/* 下拉弹出树状图 */
+#divtree
+{
+	margin-top: 30px; 
+	position: absolute; 
+	overflow: auto; 
+	z-index: 100; 
+	width: 300px;
+	height: 180px;
+}
+
+.ui-tree
+{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.ui-tree .ui-tree-container
+{
+	overflow: visible;
+	padding: 0 4px;
+}
+
+/* 树状图区域 */
+.materail_class_treeDiv
+{
+	position: absolute;
+	top: 41px;
+	bottom: 0;
+	width: 190px;
+	height: auto;
+	margin: 0;
+	
+	left: -190px;
+}
+
+/* 树状图边框 */
+.tree-head
+{
+	position: absolute;
+	top: 0;
+	width: 190px;
+	height: 14px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: 0 -260px;
+}
+.tree-foot
+{
+	position: absolute;
+	bottom: 0;
+	width: 190px;
+	height: 14px;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: 0 -274px;
+}
+.tree-body
+{
+	position: absolute;
+	top: 14px;
+	bottom: 14px;
+	width: 174px;
+	height: auto;
+	background-image: url('../images/demo/tree_border_middle.png');
+	padding: 0 8px;
+}
+/* 树状图阴影 */
+.div_tree_border_shadow
+{
+	position: absolute;
+	left: 190px;
+	width: 5px;
+	height: 100%;
+	z-index: 3;
+}
+.div_tree_border_shadow img
+{
+	width: 100%;
+	height: 100%;
+}
+/* 树状图折叠按钮 */
+.btn_tree_hidden
+{
+	position: absolute;
+	left: 190px;
+	top: 50%;
+	margin-top: -48px;
+	width: 26px;
+	height: 95px;
+	z-index: 2;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: -190px -260px;
+	cursor: pointer;
+}
+.btn_tree_show
+{
+	position: absolute;
+	left: 190px;
+	top: 50%;
+	margin-top: -48px;
+	width: 26px;
+	height: 95px;
+	z-index: 2;
+	background: url('../images/demo/ui-bg-demos.png');
+	background-position: -216px -260px;
+	cursor: pointer;
+}
+/* 树状图内容按钮 */
+.ui-tree .ui-tree-toggler
+{
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	margin-top: 2px;
+	background-image: url('../images/zTreeStandard.png');
+	width: 14px;
+	height: 14px;
+}
+.ui-icon-triangle-1-e
+{
+	background-position: -78px -74px;
+}
+.ui-icon-triangle-1-s
+{
+	background-position: -96px -74px;
+}
+
+/* 表格区域  */
+.materail_class_rightDiv
+{
+	position: absolute;
+	top: 41px;
+	bottom: 30px;
+	left: 190px;
+	right: 0;
+	width: auto;
+	height: auto;
+	overflow: auto;
+	
+	left: 0;
+}
+/* 带树状图表格 */
+.materail_class_rightDiv .table
+{
+	top: 0;
+	bottom: 0;
+}
+
+/* 带树状图表格分页 */
+.materail_class_rightDiv .ui-datatable table tfoot
+{
+	left: 360px;
+}
+.materail_class_rightDiv.hidden .ui-datatable table tfoot
+{
+	left: 170px;
+}
+
+/* 人员维护 区域树状图位置 */
+.area-select
+{
+	float:left;
+	margin-top:12px;
+	margin-left:2%;
+	white-space:nowrap; 
+	cursor: pointer;
+}
+#DropdownMenuBackground0
+{
+	position:absolute;
+	left:30px;
+	top:35px;
+	z-index:10;
+	width: 200px; 
+	height: 100px;
+}
+#DropdownMenuBackground1
+{
+	position:absolute;
+	left:30px;
+	top:35px;
+	z-index:10;
+	width: 200px; 
+	height: 100px;
+}
+
+/* 人员配置 上侧区域 */
+.frame-up
+{
+	width:100%; 
+	height: 50%; 
+	overflow:auto; 
+	position: relative;
+}
+.frame-up .table
+{
+	bottom: 42px;
+}
+.frame-up .ui-datatable table
+{
+	/*
+	padding-bottom: 30px;
+	*/
+}
+.frame-up .ui-datatable table tfoot
+{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+
+/* 人员配置 中间区域 */
+.frame-middle
+{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 42px;
+	background-image: url('../images/demo/tabs_bg.png');
+	z-index: 9;
+}
+.dmove
+{
+	background-image: url('../images/equ/todown.png') !important;
+	background-color: rgba(255, 255, 255, 0);
+	width: 33px;
+	height: 30px;
+	border: 0 !important;
+	margin: 6px auto auto 33.3%;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.umove
+{
+	background-image: url('../images/equ/toup.png') !important;
+	background-color: rgba(255, 255, 255, 0);
+	width: 33px;
+	height: 30px;
+	border: 0 !important;
+	margin: 6px auto auto 33.3%;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+/* 人员配置 上侧区域 */
+.frame-down
+{
+	width:100%; 
+	height: 50%; 
+	overflow:auto; 
+	position: relative;
+}
+.frame-down .table
+{
+	bottom: 0;
+}
+
+/* 弹出窗口(添加、修改) */
+.ui-dialog .ui-widget-content
+{
+	padding: 0;
+	color: #495767;
+}
+
+/* 标题栏阴影 */
+.ui-dialog .ui-dialog-content:before
+{
+	display: block;
+	content: "";
+	width: 100%;
+	height: 5px;
+	background-image: url('../images/demo/right_top_shadow.png');
+}
+/* 表格位置 */
+.ui-dialog .ui-widget-content table
+{
+	width: 100%;
+	padding: .5em 1em;
+	margin-bottom: 30px;
+}
+/* 底部 */
+.ui-dialog .headDivduan
+{
+	position: absolute;
+	bottom: 0;
+}
+/* 底部按钮 */
+.ui-dialog .headDivduan button
+{
+	float: right;
+	right: 2%;
+	top: 3.5px;
+}
+/* 表格内容 */
+.ui-dialog-content input[type="text"], .ui-dialog-content textarea, .ui-dialog-content select
+{
+	margin: 0;
+	padding: 0;
+	width: 90%;
+	border: solid 0px #5b6571 !important;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #e8e8e8 !important;
+	text-indent: 3px !important;
+	background-image: none;
+}

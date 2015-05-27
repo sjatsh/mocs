@@ -1,0 +1,12 @@
+<%@page contentType="text/html;charset=UTF-8" language="java"%>
+<%@taglib prefix="u" uri="menu/login-status.jscx" name="status"%>
+<html>
+<head>
+    <title>${app.passport}</title>
+    <link href="../authority/css/global.css" rel="stylesheet" charset="utf-8" />
+</head>
+<body style="background-color:#B9CBF3">
+<h1>${app.passport}</h1>
+    <u:status />
+</body>
+</html>

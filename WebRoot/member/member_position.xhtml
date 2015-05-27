@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<link rel="stylesheet" href="../css/b21.css" type="text/css" />
+	<link rel="stylesheet" href="../css/b22.css" type="text/css" />
+	<h:outputScript library="js" name="tree.js"></h:outputScript>
+
+		<div style="width:100%; height: 100%; position: relative;">
+			<div class="manage_top_left headDiv">
+				
+				<div id="tre00" class="area-select" onclick="showMenu0('DropdownMenuBackground0','tre00');">
+					<span class="selecttext">区域:</span>
+					<h:outputText class="select"  id="nodeName0" value="#{MemberPositionBean.thisNodeName}" />
+				</div>
+				
+				<div id="DropdownMenuBackground0" onclick="closeTreeDiv0('DropdownMenuBackground0');"  style="display:none;">
+					
+					<p:tree value="#{MemberPositionBean.root}" var="node" selectionMode="single"  id="tree22"  >
+		
+						<p:treeNode styleClass="spanhover">
+							<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+						</p:treeNode>
+						<a4j:ajax event="select" render=":myform:nodeName0 :myform:tb" 
+							listener="#{MemberPositionBean.onNodeSelect}" />
+					</p:tree>
+					<a4j:outputPanel ajaxRendered="true"  >
+					</a4j:outputPanel>
+			    </div>
+			    
+			    <p:commandButton style="margin-top: 8px;" value="新建"  styleClass="delete"  onclick="showInsert();return false;"/>
+		  		<p:commandButton style="margin-top: 8px;" value="更新"  styleClass="delete"  update=":myform" oncomplete="$('#divUpdate').show();"/>
+		  		<p:commandButton style="margin-top: 8px;" value="删除"  styleClass="delete"  update=":myform:hvalue myform:tb" oncomplete="check();"  action="#{MemberPositionBean.deleteRecord}"/>
+				<h:inputHidden id="hvalue" value="#{MemberPositionBean.msg}"/>
+			</div>	
+			<div class="div-content-top-shadow">
+				<img src="../images/demo/right_top_shadow.png" />
+			</div>
+	
+	  		
+	  		<!-- 数据表格 -->
+			<div class="table">
+				<p:dataTable id="tb" value="#{MemberPositionBean.data}" var="record"   
+	                selection="#{MemberPositionBean.selectedData}" rows="10" paginator="true" paginatorPosition="bottom">
+					<p:column selectionMode="multiple" style="width:2%" />
+					<p:column headerText="职位名称">  
+			            #{record.positionName}  
+			        </p:column>  
+					<p:column headerText="部门名称">  
+			            #{record.nodeid}  
+			        </p:column>  
+					<p:column headerText="职位ID">  
+			            #{record.positionId}  
+			        </p:column>  			        					
+					<p:column headerText="职位种类">  
+			            #{record.category}  
+			        </p:column>  					
+					<p:column headerText="职位属性">  
+			            #{record.attributes}  
+			        </p:column>  					
+					<p:column headerText="职位功能">  
+			            #{record.functions}  
+			        </p:column>  					
+					<p:column headerText="职位等级">  
+			            #{record.positionLevel}  
+			        </p:column>  
+					<p:column headerText="职位权限">  
+			            #{record.authorityLevel}  
+			        </p:column>  							
+			
+				</p:dataTable>
+			</div>
+		</div>
+		
+		<!-- 插入数据 -->
+		<div id="divInsert" style="display:none;background-image:url(../images/equ/divbg.png);position:absolute;width:727px;height:466px;left:333px;top:90px;z-index:5000;">
+			<h2 align="center" style="margin-top:7px;">部门职位新建</h2>
+			<table  style="font-size:20px;margin-top:30px;margin-left:30px;width:700px;height:200px;">
+				<tr>
+					<td width="15%">职位名称：</td>
+					<td width="35%"><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.insertData.positionName}"/></td>
+					<td>职位等级：</td>
+					<td>
+						<h:selectOneMenu styleClass="new_select_style" 
+							value="#{MemberPositionBean.insertData.positionLevel}">
+							<f:selectItem itemLabel="基础级" itemValue="基础级" ></f:selectItem>
+							<f:selectItem itemLabel="中级" itemValue="中级" ></f:selectItem>
+							<f:selectItem itemLabel="中高级" itemValue="中高级" ></f:selectItem>	
+							<f:selectItem itemLabel="高级" itemValue="高级" ></f:selectItem>							
+						</h:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td>职位种类：</td>
+					<td><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.insertData.category}"/></td>
+
+					
+				    <td width="15%">所属部门：</td>
+					<td width="35%">
+						<ui:remove><h:selectOneMenu  styleClass="new_select_style" value="#{MemberPositionBean.nodeNameIs}">
+							<f:selectItem itemLabel="请选择" itemValue="0" ></f:selectItem>
+							<f:selectItems value="#{MemberPositionBean.nodeMap}"></f:selectItems>
+						</h:selectOneMenu>
+						
+						<div id="tre02" style="float:left;margin-top:0px;margin-left:0px;" onclick="showMenu0('DropdownMenuBackground02','tre02');">
+							<h:outputText class="select"  id="nodeName02" value="#{MemberPositionBean.thisNodeName}" />
+						</div>
+						
+						<div id="DropdownMenuBackground02" onclick="closeTreeDiv0('DropdownMenuBackground02');"  style="display:none;position:absolute;left:-300px;top:0px;z-index:10000;">
+							
+							<p:tree value="#{MemberPositionBean.root}" var="node" selectionMode="single"  id="tree222" styleClass="materail_class_treeDiv" >
+				
+								<p:treeNode styleClass="spanhover">
+									<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+								</p:treeNode>
+								<a4j:ajax event="select" render=":myform:nodeName02 :myform:tb" 
+									listener="#{MemberPositionBean.onNodeSelect}" />
+							</p:tree>
+							<a4j:outputPanel ajaxRendered="true"  >
+							</a4j:outputPanel>
+					    </div> </ui:remove>
+					    
+					    
+					    
+					    <div id='tre2' style="float:left;margin-top:0px;margin-left:0px;" onclick="$('#DropdownMenuBackground2').show();">
+							<h:inputText id="nodeName2"  styleClass="new_input_style" value="#{MemberPositionBean.thisNodeName}"/>
+						</div>
+						<div  id="DropdownMenuBackground2" onclick="closeTreeDiv0('DropdownMenuBackground2');$('#DropdownMenuBackground2').hide();" style="backgroundcolor:black;display:none;position:absolute;left:480px;top:170px;z-index:10000;">
+								<p:tree value="#{MemberPositionBean.root}" var="node" selectionMode="single"  styleClass="materail_class_treeDiv" >
+			
+									<p:treeNode styleClass="spanhover">
+										<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+									</p:treeNode>
+									<a4j:ajax event="select" render=":myform:nodeName2 myform:tb" 
+										listener="#{MemberPositionBean.onNodeSelect}" />
+								</p:tree>
+								<a4j:outputPanel ajaxRendered="true"  >
+								</a4j:outputPanel>
+					     </div>
+					</td>
+				</tr>
+				<tr>
+					<td>职位属性：</td>
+					<td><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.insertData.attributes}"/></td>
+					<td>职位功能：</td>
+					<td><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.insertData.functions}"/></td>
+				</tr>				
+			</table>
+			
+			<div align="center" style="margin-top:100px;">	
+				<p:commandButton styleClass="delete" value="保存"  action="#{MemberPositionBean.insertRecord}" oncomplete="$('#divInsert').hide();" update="myform:tb"></p:commandButton>
+				<p:commandButton styleClass="delete" value="取消"  onclick="$('#divInsert').hide();return false;"></p:commandButton>			
+			</div>
+		</div>
+				
+		<!-- 更新数据 -->
+		<div id="divUpdate" style="display:none;background-image:url(../images/equ/divbg.png);position:absolute;width:727px;height:466px;left:333px;top:90px;z-index:5000;">
+			<h2 align="center" style="margin-top:7px;">部门职位更新</h2>
+			<table  style="font-size:20px;margin-top:30px;margin-left:30px;width:700px;height:200px;">
+				<tr>
+					<td width="15%">职位名称：</td>
+					<td width="35%"><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.newData.positionName}"/></td>
+					<td width="15%">所属部门：</td>
+					<td width="35%">
+						<ui:remove><h:selectOneMenu styleClass="new_select_style" value="#{MemberPositionBean.nodeNameUp}">
+							<f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
+							<f:selectItems value="#{MemberPositionBean.nodeMap}"></f:selectItems>
+						</h:selectOneMenu> </ui:remove>
+						<h:inputText disabled="true" styleClass="new_input_style" value="#{MemberPositionBean.newData.nodeid}"/>
+					</td>
+				</tr>
+				<tr>
+					<td>职位种类：</td>
+					<td><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.newData.category}"/></td>
+					<td>职位等级：</td>
+					<td><h:selectOneMenu styleClass="new_select_style"
+						value="#{MemberPositionBean.newData.positionLevel}">
+						<f:selectItem itemLabel="基础级" itemValue="基础级" ></f:selectItem>
+						<f:selectItem itemLabel="中级" itemValue="中级" ></f:selectItem>
+						<f:selectItem itemLabel="中高级" itemValue="中高级" ></f:selectItem>	
+						<f:selectItem itemLabel="高级" itemValue="高级" ></f:selectItem>							
+						</h:selectOneMenu> 
+					</td>
+				</tr>
+				<tr>
+					<td>职位属性：</td>
+					<td><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.newData.attributes}"/></td>					
+					<td>职位功能：</td>
+					<td><h:inputText styleClass="new_input_style" value="#{MemberPositionBean.newData.functions}"/></td>
+				</tr>				
+			</table>
+			
+			<div align="center" style="margin-top:100px;">	
+				<p:commandButton styleClass="delete" value="保存" action="#{MemberPositionBean.updateRecord}" update="myform:tb" oncomplete="$('#divUpdate').hide();"></p:commandButton>
+				<p:commandButton styleClass="delete" value="取消" onclick="$('#divUpdate').hide();return false;"></p:commandButton>			
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+		});					
+						
+		function showInsert(){
+			$("#divInsert").show();
+		}
+		
+		function showUpdate(){
+			$("#divUpdate").show();
+		}
+		
+		function del(){
+			if(confirm("确定删除？")){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		function check(){
+			var c=document.getElementById("myform:hvalue").value;
+			if(c=="1"){
+				alert("该职位下已有人员，无法删除！");
+				return false;
+			}else
+				alert("删除成功！");
+		}
+
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+	
+</ui:composition>

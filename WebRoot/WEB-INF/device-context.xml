@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+ 	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                       http://www.springframework.org/schema/tx 
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
+	                       http://www.springframework.org/schema/aop 
+	                       http://www.springframework.org/schema/aop/spring-aop.xsd">
+   
+    <!--  <bean id="propertyConfigurer" class="smtcl.mocs.common.device.DBConfigurer">
+       <property name="location" value="WEB-INF/DBconfig.properties"/>
+    </bean>  -->
+   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       <property name="location" value="WEB-INF/DBconfig.properties" /> 
+  </bean> 
+    
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="packagesToScan">
+			<list>
+				<value>smtcl.mocs.pojos.device</value>
+				<value>smtcl.mocs.pojos.authority</value>
+				<value>smtcl.mocs.pojos.job</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+			    <prop key="hibernate.connection.url">${connection.url}</prop>
+                <prop key="hibernate.connection.driver_class">${connection.driver}</prop>
+                <prop key="hibernate.connection.username">${connection.username}</prop>
+                <prop key="hibernate.connection.password">${connection.password}</prop>
+                <prop key="hibernate.dialect">${connection.dialect}</prop>
+                <prop key="hibernate.show_sql">${connection.show.sql}</prop>
+                <prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	      
+    
+	<!-- transaction manage -->
+	<bean id="baseService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true" lazy-init="true">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- end of transaction manage -->
+	<!-- 零件事物开始 -->
+	
+	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <aop:config>
+        <aop:pointcut id="interceptorPointCuts"  expression="execution(* smtcl.mocs.services.device.impl.PartServiceImp.*(..))" />
+        <aop:advisor advice-ref="txAdvice"  pointcut-ref="interceptorPointCuts" />        
+    </aop:config> -->      
+	<!-- 零件事物结束 -->
+
+
+	<bean id="beanFactory" class="org.dreamwork.persistence.ServiceFactory" />
+
+	<!-- generic type magic -->
+	<bean id="abstractDaoTarget" abstract="true"
+		class="org.dreamwork.persistence.hibernate.dao.impl.GenericHibernateDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="abstractServiceTarget" abstract="true"
+		class="org.dreamwork.persistence.GenericServiceSpringImpl" />
+
+	<bean id="genericDao" class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true" />
+
+	<bean id="genericService" class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true" />
+
+	<bean id="commonDao" class="smtcl.mocs.dao.device.impl.CommonDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="commonService1" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.CommonServiceImpl">
+				<property name="commonDao" ref="commonDao" />
+				<property name="dao">
+					<bean parent="abstractDaoTarget">
+						<constructor-arg value="java.lang.Object" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 权限调用Service -->
+	<bean id="authorizeService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.device.impl.AuthorizeServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.device.TUser" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+
+	<!-- 资源SERVICE -->
+	<bean id="resourceService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.ResourceServiceImpl">
+				<property name="commonService" ref="commonService1" />	
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TUserResource" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 产品SERVICE -->
+	<bean id="productService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.device.impl.ProductServiceImpl">
+				<property name="partService" ref="partService"></property>
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TUserProducts" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<!-- 产品service -->
+	<bean id="productionService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.ProductionImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TNodeProductionProfiles" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 树Service -->
+	<bean id="organizationService " parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.OrganizationServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TNodes" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 用户查看设备总览Service -->
+	<bean id="deviceService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.device.impl.DeviceServiceImpl">
+				<property name="commonService" ref="commonService1" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TNodes" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 作业计划SERVICE -->
+	<bean id="jobPlanService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.jobplan.impl.JobPlanServiceImpl">
+			<property name="commonService" ref="commonService1"/>
+			<property name="commonDao" ref="commonDao" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.job.TJobplanInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 设备管理SERVICE -->
+	<bean id="equipmentService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.jobplan.impl.EquipmentServiceImpl">
+			<property name="commonService" ref="commonService1"/>
+			<property name="commonDao" ref="commonDao" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.job.TEquipmentCostInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 人员管理SERVICE -->
+	<bean id="memberService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.device.impl.MemberServiceImpl">
+				<property name="commonService" ref="commonService1" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.job.TMemberInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 工单SERVICE -->
+	<bean id="jobDispatchService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.jobplan.impl.JobDispatchServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.job.TJobdispatchlistInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="mtService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.device.impl.MtServiceImpl">
+				<property name="commonService" ref="commonService1" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TMachinesInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	
+	<bean id="wsBZService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.WSBZServiceImpl">
+				<property name="commonService" ref="commonService1" />				
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TNodes" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 成本管理Service -->
+	<bean id="costManageService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.CostManageServiceImpl">
+				<property name="commonService" ref="commonService1" />
+				<property name="commonDao" ref="commonDao" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TNodes" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 零件Service -->
+	<!-- 
+	<bean id="partService" class="smtcl.mocs.services.device.impl.PartServiceImp">
+		<property name="commonDao" ref="commonDao" />
+	</bean> -->
+	<bean id="partService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.PartServiceImp">
+				<property name="commonDao" ref="commonDao" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.device.TNodes" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 登录和获取权限webservice配置 -->
+	<bean id="wsUserService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.WSUserServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.device.TUser" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- UpdataJobDispatch -->
+	<bean id="updataJobDispatch" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.jobplan.impl.UpdataJobDispatchImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.job.TEquJobDispatch" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- processService -->
+	<bean id="processService" parent="baseService">
+		<property name="target">
+			<bean
+				class="smtcl.mocs.services.device.impl.ProcessServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="smtcl.mocs.pojos.job.TProcessInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 报表数据服务  -->
+	<bean id="reportService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.report.impl.ReportServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="java.lang.Object" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 报废servic  -->
+	<bean id="scrapService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.jobplan.impl.ScrapServiceImpl">
+				<property name="commonDao" ref="commonDao" />
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="java.lang.Object" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 定时器配置start -->
+	 <!--  
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+        <property name="triggers">  
+            <list>  
+                 <ref local="BusinessTestTrigger" /> 
+            </list>  
+        </property>  
+    </bean> 
+    
+    <bean id="BusinessTestTrigger"  
+        class="org.springframework.scheduling.quartz.CronTriggerBean">  
+        <property name="jobDetail">  
+            <ref bean="BusinessTestDetail" />  
+        </property>  
+        <property name="cronExpression">  
+            <value>0 0/1 * * * ?</value>  
+        </property>  
+    </bean> 
+    
+    <bean id="BusinessTestTime" class="smtcl.mocs.common.device.ProcessMachineStopJob"/>  
+    
+    <bean id="BusinessTestDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject">  
+              <ref bean="BusinessTestTime" /> 
+        </property>  
+        <property name="concurrent" value="false" />  
+        <property name="targetMethod" value="run" />  
+    </bean> 
+     -->
+    <!-- 定时器配置end -->  
+</beans>

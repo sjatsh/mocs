@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasmine version="1.0" realtime="false">
+    <!-- 国际化支持配置项 -->
+    <i18n>
+        <resource-manager-factory>smtcl.mocs.common.authority.i18n.DatabaseWebResourceManagerFactory</resource-manager-factory>
+        <!-- 资源目录 -->
+        <resource>/WEB-INF/languages/</resource>
+        <!-- 默认的区域设置，必须指定 -->
+        <default-locale>zh_CN</default-locale>
+    </i18n>
+
+</jasmine>

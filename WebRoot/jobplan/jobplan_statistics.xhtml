@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!-- hightChart JS加载 -->
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="highcharts-more.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+<h:outputScript library="js" name="jobplan_statistics.js"></h:outputScript>
+<link rel="stylesheet" href="/mocs/css/product_cost.css" type="text/css"></link>
+ <link href="/mocs/css/jobplan_statistics.css" rel="stylesheet" type="text/css" />
+ 
+ <style type="text/css">
+input[type="reset"]:hover, input[type="submit"]:hover, input[type="button"]:hover {
+ background-image:url('./images/submitBotton01.png') !important;
+}
+input[type="submit"], input[type="button"]  {
+background-image: url('./images/submitBotton01.png') !important; 
+}
+*{margin:0px;}
+
+</style>
+ 
+	</h:head>
+	<h:body>
+		<h:form id="myform">
+<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+<script type="text/javascript">
+var wjb51 = 0;
+var hjb51 = 0;
+hjb51 = document.body.clientHeight;
+wjb51 = document.body.clientWidth;
+if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
+		hjb51 = wjb51*1080/1920; 
+	}
+if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
+	   hjb51 = 600; 
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+   }
+if(800>wjb51){
+	   hjb51 = 600;
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+}
+	document.getElementById("maskw").style.height = hjb51 + "px";
+	document.getElementById("maskw").style.width = wjb51 + "px";
+</script>
+		
+            <table id="container">
+            <tr><td id="title" style="" align="center">
+            	作业计划统计
+            </td></tr>
+            <tr><td>
+	          <table id="containercenter">
+	          <tr><td style="white-space:nowrap;" width="15%" align="center">
+	                <h:outputText value="作业计划名称   " id="jobplan_statistics_center_one_text"
+							  style=""/>
+			</td><td width="25%" align="left">				
+	            			<h:selectOneMenu id="jobplabid" 
+											value="#{JobPlanStatistics.jobplabid}"  style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{JobPlanStatistics.jobPlanNameMap}"></f:selectItems>
+							</h:selectOneMenu>
+		    </td><td style="white-space:nowrap;" width="12.5%" align="left" >						
+						<h:outputText id="time1" value="起始日期" style=""/><h:outputText id="time1x" style="color:red;" value="*" />
+		    </td><td width="10%">	
+						<rich:calendar id="startTime"  required="true"   style=""
+											value="#{JobPlanStatistics.startTime}" popup="true"
+											locale="en" inputClass="" styleClass=""
+											 datePattern="yyyy-MM-dd"
+											cellWidth="10px" cellHeight="20px" />
+		     </td><td style="white-space:nowrap;" width="12.5%" align="left" >										
+						<h:outputText id="time2" value="结束日期"  style=""/><h:outputText id="time2x" style="color:red;" value="*" />
+		     </td><td width="10%">		
+						<rich:calendar id="endTime" popup="true" required="true"  style=""
+											inputClass=""  locale="en"
+											value="#{JobPlanStatistics.endTime}"
+											datePattern="yyyy-MM-dd" cellWidth="10px" cellHeight="20px" />
+		     </td><td width="15%" align="left">		
+						<h:commandButton value="查询" id="seclectcom" style="cursor: pointer;color:#FFFFFF;background-color: #088B00;">
+						<a4j:ajax event="click" listener="#{JobPlanStatistics.searchList}"
+											render=":myform" execute="jobplabid startTime endTime"></a4j:ajax>
+						</h:commandButton>							
+	           </td></tr>
+	           </table>
+	        </td></tr>
+            <tr><td>
+	            
+	             <h:inputHidden id="beanvalue" value="#{JobPlanStatistics.columJsonData}" />
+	            <div id="type_detail" style="overflow:auto; ">              
+	            <div id="statisticsOneChart" />
+	            </div>
+
+	        </td></tr>
+            <tr><td>  
+				<table>
+				<tr><td>	
+					<img id="img1" src="../images/jbp_05.png" style=""/>
+					
+					<div id="type_detail2" style="overflow-x:hidden;overflow-y:auto; ">
+						
+						
+						<h:dataTable id="jobPlanResults" value="#{JobPlanStatistics.jobPlanResults}"
+						rows="50" styleClass="dtable_body_jp" 	
+					 	headerClass="datable_head_jp"	
+						rowClasses="dtable_row"	
+					 	columnClasses=""	
+						cellpadding="0"
+						cellspacing="0"  border="0"
+						 var="record">
+					
+						<h:column>
+						<div class="statistext1"><h:outputText value="#{record.name}"></h:outputText></div>	
+						</h:column>
+						<h:column>
+						<div class="statistext"><h:outputText value="#{record.bname}"></h:outputText></div>
+						</h:column>
+						<h:column>
+						<div class="statistext"><h:outputText value="#{record.planNum}"></h:outputText></div>
+						</h:column>
+						<h:column>
+						<div class="statistext"><h:outputText value="#{record.priority}"></h:outputText></div>
+						</h:column>
+						<h:column>
+						<div class="statistext"><h:outputText value="#{record.finishNum}"></h:outputText></div>
+						</h:column>
+						<h:column>
+	                    <div class="statistext">
+							
+							<h:panelGroup id="a1"  class="textwidth"
+											rendered="#{record.status == '10'}">
+										<h:outputText value="创建" style=""></h:outputText>	
+							</h:panelGroup>
+							<h:panelGroup id="a2"  class="textwidth"
+											rendered="#{record.status == '20'}">
+										<h:outputText value="待派工" style=""></h:outputText>	
+							</h:panelGroup>
+							<h:panelGroup id="a3"  class="textwidth"
+											rendered="#{record.status == '30'}">
+										<h:outputText value="已派工" style=""></h:outputText>	
+							</h:panelGroup>
+							<h:panelGroup id="a4"  class="textwidth"
+											rendered="#{record.status == '40'}">
+										<h:outputText value="上线" style=""></h:outputText>	
+							</h:panelGroup>
+							<h:panelGroup id="a5"  class="textwidth"
+											rendered="#{record.status == '50'}">
+										<h:outputText value="加工" style=""></h:outputText>	
+							</h:panelGroup> 
+							<h:panelGroup id="a6"  class="textwidth"
+											rendered="#{record.status == '60'}">
+										<h:outputText value="结束" style=""></h:outputText>	
+							</h:panelGroup>
+							<h:panelGroup id="a7"  class="textwidth"
+											rendered="#{record.status == '70'}">
+										<h:outputText value="完成" style=""></h:outputText>	
+							</h:panelGroup>
+						
+						</div>	
+						</h:column>
+					</h:dataTable>					
+	            </div>
+	            </td><td>
+	          <div style="margin-right:5px;margin-bottom:5px;"> 
+                    <h:commandButton value="" 
+	            	image="../images/jbp04.png"  action="#{JobPlanStatistics.toPage}" id="jobplan_statistics_buttom_b"  
+	            	immediate="true" onclick="window.close();"></h:commandButton>
+              </div>
+               </td></tr></table>
+
+	        </td></tr>
+</table>
+<script type="text/javascript">	
+
+ //宽高 
+ document.getElementById("container").style.width=wjb51+"px";
+ document.getElementById("container").style.height=hjb51+"px";
+ document.getElementById("containercenter").style.width=wjb51+"px";
+ 
+ document.getElementById("img1").style.width=wjb51*1373/1500+"px";
+ document.getElementById("img1").style.height=hjb51*55/900+"px";
+
+ document.getElementById("title").style.width=wjb51+"px";
+ document.getElementById("title").style.fontSize=hjb51*46/900+"px";
+ document.getElementById("myform:jobplan_statistics_center_one_text").style.fontSize=hjb51*25/900+"px";
+ 
+ document.getElementById("myform:jobplabid").style.width=wjb51*300/1500+"px";
+ document.getElementById("myform:jobplabid").style.height=hjb51*39/900+"px";
+ document.getElementById("myform:jobplabid").style.marginLeft=wjb51*20/1500+"px"
+ document.getElementById("myform:jobplabid").style.fontSize=hjb51*24/900+"px";
+ 
+ document.getElementById("myform:time1").style.fontSize=hjb51*25/900+"px";
+ document.getElementById("myform:time1").style.marginLeft=wjb51*40/1500+"px"
+ document.getElementById("myform:time1x").style.fontSize=hjb51*25/900+"px";
+ document.getElementById("myform:time2").style.fontSize=hjb51*25/900+"px";
+ document.getElementById("myform:time2").style.marginLeft=wjb51*40/1500+"px"
+ document.getElementById("myform:time2x").style.fontSize=hjb51*25/900+"px";
+ 
+ document.getElementById("myform:startTimePopup").style.fontSize=hjb51*24/900+"px";
+ document.getElementById("myform:startTimeInputDate").style.width=wjb51*160/1500+"px";
+ document.getElementById("myform:startTimeInputDate").style.height=hjb51*39/900+"px";
+ document.getElementById("myform:startTimeInputDate").style.marginLeft=wjb51*15/1500+"px"
+ document.getElementById("myform:endTimePopup").style.fontSize=hjb51*24/900+"px";
+ document.getElementById("myform:endTimeInputDate").style.width=wjb51*160/1500+"px";
+ document.getElementById("myform:endTimeInputDate").style.height=hjb51*39/900+"px";
+ document.getElementById("myform:endTimeInputDate").style.marginLeft=wjb51*15/1500+"px"
+ 
+ document.getElementById("myform:seclectcom").style.width=wjb51*124/1500+"px";
+ document.getElementById("myform:seclectcom").style.height=hjb51*37/900+"px";
+// document.getElementById("myform:seclectcom").style.marginLeft=wjb51*40/1500+"px"
+//document.getElementById("myform:seclectcom").style.marginTop=hjb51*10/900+"px"
+ 
+ document.getElementById("type_detail").style.width=wjb51*1400/1500+"px";
+ document.getElementById("type_detail").style.height=hjb51*530/900+"px";
+ document.getElementById("type_detail").style.marginLeft=wjb51*5/1500+"px"
+ document.getElementById("type_detail2").style.width=wjb51*1400/1500+"px";
+ document.getElementById("type_detail2").style.height=hjb51*230/900+"px";
+ document.getElementById("type_detail2").style.marginLeft=wjb51*5/1500+"px"
+ document.getElementById("myform:jobPlanResults").style.marginLeft="-"+wjb51*10/1500+"px"
+ document.getElementById("myform:jobPlanResults").style.width=wjb51+"px"
+ 
+ document.getElementById("myform:jobplan_statistics_buttom_b").style.width=wjb51*90/1500+"px";
+ document.getElementById("myform:jobplan_statistics_buttom_b").style.height=hjb51*90/900+"px";
+ document.getElementById("myform:jobplan_statistics_buttom_b").style.marginLeft=wjb51*20/1500+"px";
+ 
+ $(".textwidth").css("width",wjb51*90/1500+"px");
+ $(".statistext1").css("width",wjb51*400/1500+"px");
+ $(".statistext1").css("height",wjb51*35/900+"px");
+ $(".statistext1").css("padding-left",wjb51*15/1500+"px");
+ $(".statistext1").css("vertical-align","middle");
+ $(".statistext1").css("font-size",wjb51*15/900+"px");
+ $(".statistext").css("font-size",wjb51*15/900+"px");
+ $(".statistext").css("width",wjb51*200/1500+"px");
+ $(".statistext").css("text-align","left");
+
+ 
+</script>  
+    <script type="text/javascript">    
+    document.getElementById("myform:startTimePopupButton").style.display="none";
+    document.getElementById("myform:endTimePopupButton").style.display="none";
+    
+		loadData();//放最后
+		
+		$(document).ready(function(){
+			//$("#myform startTimePopupButton").hide();
+			//alert($("#myform startTimePopupButton").val());
+			//alert("1");
+			//alert(document.getElementById("myformst:artTimePopupButton").value);
+			
+		});
+	</script>
+	
+		<script type="text/javascript">
+				setTimeout(function(){
+				//document.getElementById("maskw").style.display="none";
+				$("#maskw").fadeOut(500);
+				},100);
+     	</script>	
+	
+		</h:form>
+	</h:body>
+</ui:composition>

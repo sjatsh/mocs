@@ -1,0 +1,1126 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">  
+
+ 	<!--Ext and ux styles -->
+	<link href="./ext/css/ext-theme-classic-all.css" rel="stylesheet" type="text/css"></link>
+    <!--Scheduler styles-->
+    <link href="./ext/css/sch-all.css" rel="stylesheet" type="text/css" />
+    <link href="./ext/css/app.css" rel="stylesheet" type="text/css" />
+    <link href="./ext/css/performance.css" rel="stylesheet" type="text/css" />
+    <link href="./css/jobdispatch.css" rel="stylesheet" type="text/css" />  
+    <link href="./ext/css/jquery-selectbox.css" rel="stylesheet"	type="text/css" />
+    <h:outputScript library="js" name="common.js"></h:outputScript>
+    
+<style type="text/css">
+*{
+	padding: 0px;
+	margin: 0px;
+	font-family:"微软雅黑";
+	color: #595959;
+	font-weight:bold;
+}
+
+.ui-treetable-toggler ui-icon ui-icon-triangle-1-s{
+	font-size:12px;
+}
+
+.x-column-header-inner {
+    height: 47.63px;
+    font-size: 27.6px;
+    line-height: 47.63px;
+}
+
+.sch-header-row {
+    height: 23.47px;
+    font-size: 13.8px;
+    line-height: 23.47px;
+}
+.even-row {
+			background-image: url('images/table_row1.png') !important;
+			border-bottom: none;
+			color: #5A6B7F !important;
+		}
+.ui-commandlink{
+		 
+			font-size: 14px;
+			text-decoration:none;
+		}
+.ui-treetable-toggler ui-icon ui-icon-triangle-1-s{
+	font-size:12px;
+}
+.t_selected {
+    float: left;
+    overflow: hidden;
+    width: 182px;
+    height: 24px;
+    line-height: 22px;
+    color: #000;
+    font-size: 12px;
+    text-align: left;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    display: block;
+}
+.ui-widget-content a {
+    font-size: 14px;
+    text-decoration: underline;
+}
+</style>
+<h:form id="myform">
+	<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+	<script type="text/javascript">	
+		document.getElementById("maskw").style.height = hjb51 + "px";
+		document.getElementById("maskw").style.width = wjb51 + "px";
+	</script>
+	<script src="./ext/js/jquery-selectbox.js" type="text/javascript"></script>
+	<h:inputHidden value="#{SubJobdispatchAdd.load}" id="loadtab"></h:inputHidden>
+	<h:inputHidden value="#{SubJobdispatchAdd.partTypeId}" id="partTypeId"></h:inputHidden>
+	<h:inputHidden value="#{SubJobdispatchAdd.taskNum}" id="taskNum"></h:inputHidden>
+	<h:inputHidden value="#{SubJobdispatchAdd.eduTypeId}" id="eduTypeId"></h:inputHidden>
+	<h:inputHidden value="#{SubJobdispatchAdd.jobState}" id="jobState"></h:inputHidden>
+	<table id="jobtable" width="100%" style="font-size:12px;" cellspacing="0" cellpadding="0">
+		<!-- *************************    上部           ********************************* -->
+		<tr>
+		   <td width="100%" valign="top">
+		 		<table id="topleftright">
+			       	<tr>
+			       		<td id="topleft" width="20%" valign="middle" align="left">
+				       		<img src="./images/profile_top_logo.png" style="position: absolute;
+				       			 z-Index: -1; border: 0px solid blue" id="img1"/>
+				       		<script type="text/javascript">
+								document.getElementById("img1").style.top=hjb51*30/1080+"px";
+								document.getElementById("img1").style.left=wjb51*50/1920+"px";
+								$(document).ready(function(){
+									$("#select_box_job_part").selectboxs();
+								});
+								$(document).ready(function(){
+									$("#select_box_job_jobStatus").selectboxs();
+								});
+								$(document).ready(function(){
+									$("#select_box_job_taskNum").selectboxs();
+								});
+								$(document).ready(function(){
+									$("#select_box_job_equName").selectboxs();
+								});
+							</script>
+				       	</td>
+				       	<td id="topright" width="80%">
+				       	<table id="toprightTable">
+				       	<tr>
+				       		<td id="tubiao" style="position: relative;vertical-align:top;padding:0px;">
+					       		<table border="0" cellpadding="0" cellspacing="0" id="tabfont">
+								    <tr>
+									    <td style="cursor: pointer;position: relative;overflow: hidden;"  onclick="sub('tab1')">
+									    	<img src="./images/tabselected.png" style="z-index: -1;position: absolute;" id="gttimg"/>
+											<div style="width: 100%;height: 100%;font-weight: bold;" align="center" id="gtt">
+												甘特图
+											</div>
+									    </td>
+									    <td style="cursor: pointer;position: relative;overflow: hidden;"  onclick="sub('tab2')">
+									    	<img src="./images/tabselect.png" style="z-index: -1;position: absolute;"  id="gdlbimg"/>
+											<div style="width: 100%;height: 100%;font-weight: bold;" align="center" id="gdlb">
+												工单列表
+											</div>
+									    </td>
+								    </tr>
+							    </table>
+							    <div style="width: 100%;height:100%;position: relative;" id="div_one">
+							    	<div style="float: left;">
+							    		<table>
+							    			<tr style="height:30px;">
+							    				<td><h:outputText value="工单状态"/></td>
+												<td>
+											  		<div id="select_box_job_jobStatus">
+										    			<table id="table_job_jobStatus">
+															<c:forEach items="#{SubJobdispatchAdd.jobStatusMap}" var="value">
+																<tr><td style="width:180px;">                                 
+														        	<label><input type="checkbox" name="select_box_job_jobStatus" onclick="s.changeSelected(this,event);" value="#{value.Id}" onblur="s.hiddenList()"/><span>#{value.Name}</span></label>
+														        </td></tr>
+													        </c:forEach>
+														</table>
+									    			</div>
+						    					</td>
+						    					<td><h:outputText value="零件" style="margin-left:20px;"/></td>
+						    					<td>
+									    			<div id="select_box_job_part">
+										    			<table id="table_job_part">
+															<c:forEach items="#{SubJobdispatchAdd.partTypeMap}" var="part">
+																<tr><td style="width:180px;">                                 
+														        	<label><input type="checkbox" name="select_box_job_part" onclick="s.changeSelected(this,event);" value="#{part.id}" onblur="s.hiddenList()"/><span>#{part.name}</span></label>
+														        </td></tr>
+													        </c:forEach>
+														</table>
+									    			</div>
+									    		</td>
+									    		<td><h:outputText value="开始时间" style="margin-left:20px;"/></td>
+										    	<td><rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+															value="#{SubJobdispatchAdd.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+													<h:message for="start" style="color:red" />
+												</td>
+							    			</tr>
+							    			<tr style="height:30px;">
+							    				<td><h:outputText value="任务编号"/></td>
+							    				<td>
+											    	<div id="select_box_job_taskNum">
+										    			<table id="table_job_taskNum">
+															<c:forEach items="#{SubJobdispatchAdd.taskNumMap}" var="value">
+																<tr><td style="width:180px;">                                 
+														        	<label><input type="checkbox" name="select_box_job_taskNum" onclick="s.changeSelected(this,event);" value="#{value.value}" onblur="s.hiddenList()"/><span>#{value.Name}</span></label>
+														        </td></tr>
+													        </c:forEach>
+														</table>
+									    			</div>
+									    		</td>
+									    		<td><h:outputText value="设备别名" style="margin-left:20px;"/></td>
+									    		<td>
+													<div id="select_box_job_equName">
+										    			<table id="table_job_equName">
+															<c:forEach items="#{SubJobdispatchAdd.eduTypeMap}" var="value">
+																<tr><td style="width:180px;">                                 
+														        	<label><input type="checkbox" name="select_box_job_equName" 
+														        		onclick="s.changeSelected(this,event);" value="#{value.Id}" 
+														        		onblur="s.hiddenList()"/><span>#{value.equName}</span></label>
+														        </td></tr>
+													        </c:forEach>
+														</table>
+									    			</div>
+									    		</td>
+									    		<td><h:outputText value="结束时间" style="margin-left:20px;"/></td>
+									    		<td>
+										    		<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" 
+									    				popup="true" locale="en" value="#{SubJobdispatchAdd.endTime}" datePattern="yyyy-MM-dd" 
+									    				required="true" requiredMessage="必须填写时间" />
+								    				<h:message for="end" style="color:red" />
+								    			</td>
+							    			</tr>
+							    		</table>
+							    	</div>
+							    	<div style="float: left;display:none;margin-top: 5px;" id="fenzu">
+ 										<h:outputText value="分组依据" style="margin-left:20px;"/>
+										<h:selectOneMenu id="group" value="#{SubJobdispatchAdd.group}" onchange="select()" 
+						    				style="margin-left:20px;color:#4F4F4F;  border-width: 0px;width: 140px;border: 1px solid #BFBFBF;font-family:微软雅黑;height:30px; font-size:13px;" >
+											<f:selectItems value="#{SubJobdispatchAdd.groups}"></f:selectItems>
+				    					</h:selectOneMenu>
+							    	</div>
+									<div id="button1" style="cursor: pointer;float: left;"  onclick="querybtn()">
+					 					<img src="./images/jobplan/list/jobpaln_button.png"  style="width: 60px;height: 65px; margin-left:20px;"/>
+									</div>
+									<div style="display:none;">
+										<h:commandButton id="chaxun_one" value="查询" style="display:none;" onclick="setValueforHidd()">
+											<f:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeBybatchNo')}" 
+												execute="start end jobState partTypeId taskNum eduTypeId" event="click"
+												render=":myform:tableTreeJob" />
+										</h:commandButton>
+										<h:commandButton id="chaxun_two" value="查询" style="display:none;" onclick="setValueforHidd()">
+											<f:ajax listener="#{SubJobdispatchAdd.searchList('root')}" 
+												execute="start end jobState partTypeId taskNum eduTypeId" event="click"
+												render=":myform:tableTreeJob_tab3" />
+										</h:commandButton>
+									</div>
+							    </div>
+							    <div style="width: 100%;height:100%;position: relative;margin-top: 80px;" id="div_two">
+							    	<table>
+							    		<tr>
+							    		<td>
+											<a onclick="pageLoad()" href="javascript:void(0);" title="报工单数据修改" style="margin-right: 20px;">
+												<img src="./images/jobplan/jobplan_14.png"  id="img10" />
+											</a>
+										</td>
+							    		<td>
+											<a  href="javascript:openUrl('./jobdispatch/production_scrap_add.faces')" title="生产报废" id="importButton"
+												style="margin-right: 20px;">
+												<img src="./images/scbf_48.png"  id="img9"/>
+											</a>
+										</td>
+								    	<td id="detailcentertd2">
+											<a onclick="pageRelocation('add')" href="javascript:void(0);" title="新增工单">
+												<img src="./images/jobplan/jobplan_17.png" id="img2" />
+											</a>
+										</td>
+										<td id="detailcentertd3">
+											<a onclick="pageRelocation('edit')" href="javascript:void(0);" title="编辑工单">
+												<img src="./images/jobplan/jobplan_14.png" id="img3" />
+											</a>
+										</td>
+										<td id="detailcentertd4">
+											<a onclick="switchStatus('delete')" href="javascript:void(0);" title="删除工单">
+												<img src="./images/jobplan/jobplan_20.png" id="img8" />
+											</a>
+										</td>
+										<td id="detailcentertd5">
+											<a onclick="switchStatus('dispatch')" title="派工" href="javascript:void(0);">
+												<img src="./images/jobplan/dispatch.png" id="img7"/>
+											</a>
+										</td>
+										<td id="detailcentertd6">
+										<a onclick="switchStatus('start')" title="工单启动" href="javascript:void(0);" id="dispatchaid">
+											<img id="dispatchimg" src="./images/jobplan/dispatchstart.png"/>
+										</a>
+										</td>
+										<td id="detailcentertd7">
+											<a onclick="switchStatus('pause')" title="工单暂停" href="javascript:void(0);" id="dispatch">
+												<img id="dispatchimages" src="./images/jobplan/dispatchpause.png" />
+											</a>
+										</td>
+						       			<td  id="detailcentertd8">
+											<div class="gttxsWeek">
+												<a onclick="switchV('week')" title="甘特图周显示">
+													<img src="./images/jobplan/jobplan_30.png" id="img4" />
+												</a>
+											</div>
+										</td>
+										<td  id="detailcentertd9">
+											<div class="gttxsMonth">
+												<a onclick="switchV('month')" title="甘特图月显示">
+													<img src="./images/jobplan/jobplan_32.png" id="img5" />
+												</a>
+											</div>
+										</td>
+										<td  id="detailcentertd10">
+											<div class="gttxsYear">
+												<a onclick="switchV('year')" title="甘特图年显示">
+													<img src="./images/jobplan/jobplan_35.png" id="img6" />
+												</a>
+											</div>
+										</td>
+							    		</tr>
+							    	</table>
+							    </div>
+						    </td>
+				       	</tr>
+				       	</table>
+				       	</td>
+					</tr>
+				</table>
+			</td>
+		</tr> 
+		<tr>
+			<td colspan="5" style="position: relative;vertical-align:top;padding:0px;">
+				<!--Ext lib -->
+				<script src="./ext/js/base/ext-all.js" type="text/javascript"></script>
+			    <script src="./ext/js/base/sch-all-debug.js" type="text/javascript"></script>
+				<script src="./ext/js/base/ext-lang-zh_CN.js" type="text/javascript"></script>
+				<script src="./ext/js/base/scheduler-zh_CN.js" type="text/javascript"></script> 
+			    <script src="./ext/js/base/examples-shared.js" type="text/javascript"></script>
+				<script src="./ext/js/base/performance.js" type="text/javascript"></script>
+<!-- 				<script src="./js/jquery-1.9.1.min.js" type="text/javascript"></script> -->
+			  	<input type="hidden" id="maxId" value="0" />
+			    <input type="hidden" id="hplanId" value="0" />
+			    <input type="hidden" id="htheoryWorktime" value="-1" />
+			    <input type="hidden" id="hplanStartTime" value="0"/>
+				<div class="jobplan_content" id="jobplan_content">
+					<div id="example-container" class="example-container" style="padding-top: 10px;"></div>
+					<script  src="./ext/js/jobdispatch.js" type="text/javascript"></script>
+					<div style="width: 100%;overflow: hidden; position:relative; margin-left: -10px;padding-top: 10px;" id="divtab2">
+					<div class="ui-treetable ui-widget" style="z-index:1; position: absolute; left: 10px; margin-left: -8px; padding: 0 9px 0 8px; width: 100%; height: 28px;">
+						<table style="width: 100%; height: 100%;">
+							<tr>
+								<th class="ui-state-default" width="17%">批次号</th>
+								<th class="ui-state-default" width="18%">工序</th>
+								<th class="ui-state-default" width="13%">工单号</th>
+								<th class="ui-state-default" width="4%">计划</th>
+								<th class="ui-state-default" width="4%">完成</th>
+								<th class="ui-state-default" width="4%">报废</th>
+								<th class="ui-state-default" width="6%">状态</th>
+								<th class="ui-state-default" width="10%">设备</th>
+								<th class="ui-state-default" width="7%">开始时间</th>
+								<th class="ui-state-default" width="7%">结束时间</th>
+								<th class="ui-state-default" width="11%">操作</th>
+							</tr>
+						</table>
+					</div>
+					<div style="width: 100%; height: 100%; margin-left: 10px; overflow-y: scroll;">
+						<p:treeTable value="#{SubJobdispatchAdd.treeNodeBybatchNo}" var="pip" id="tableTreeJob" styleClass="fix-head-table">
+							<p:column style="width: 17%; word-break: break-all;">
+								<f:facet name="header">
+								批次号
+								</f:facet>
+								<h:outputText value="#{pip.taskNo}" />
+							</p:column>
+							<p:column style="width: 18%; word-break: break-all;">
+								<h:outputText value="#{pip.process}" />
+							</p:column>
+							<p:column style="width: 13%; word-break: break-all;">
+								<h:outputText value="#{pip.dispatchNo}" />
+							</p:column>
+							<p:column style="width: 4%; word-break: break-all;">
+								<h:outputText value="#{pip.planNumber}" />
+							</p:column>
+							<p:column style="width: 4%; word-break: break-all;">
+								<h:outputText value="#{pip.finishNum}" />
+							</p:column>
+							<p:column style="width: 4%; word-break: break-all;">
+								<h:outputText value="#{pip.wisScrapNum}" />
+							</p:column>
+							<p:column style="width: 6%; word-break: break-all;">
+								<h:outputText value="#{pip.dispatchStatus}" />
+							</p:column>
+							<p:column style="width: 10%; word-break: break-all;">
+								<h:outputText value="#{pip.equipment}" />
+							</p:column>
+							<p:column style="width: 7%; word-break: break-all;">
+								<h:outputText value="#{pip.startTime}" />
+							</p:column>
+							<p:column style="width: 7%; word-break: break-all;">
+								<h:outputText value="#{pip.endTime}" />
+							</p:column>
+							<p:column style="width: 11%; word-break: break-all;">
+									<h:panelGroup id="btn1" rendered="#{pip.status == '30'}">
+										<h:commandLink value="[启动]"  onclick="return window.confirm('确认启动工单?');" title="工单启动">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeBybatchNo',pip.id,'40')}" event="click" 
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob" oncomplete="chaxun_one();"></a4j:ajax>
+										</h:commandLink>
+									</h:panelGroup>
+									<h:panelGroup id="btn2" rendered="#{pip.status == '80' || pip.status == '70'}">
+										<h:commandLink value="[关闭]" onclick="return window.confirm('确认关闭工单?');" title="工单关闭">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeBybatchNo',pip.id,'60')}" event="click" 
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob" oncomplete="chaxun_one();"></a4j:ajax>
+										</h:commandLink>
+									</h:panelGroup>
+									<h:panelGroup id="btn3" rendered="#{pip.status == '40' || pip.status == '50'}">
+										<h:commandLink value="[暂停]" onclick="return window.confirm('确认暂停工单?');" title="工单暂停">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeBybatchNo',pip.id,'80')}" event="click" 
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob" oncomplete="chaxun_one();"></a4j:ajax>
+										</h:commandLink>
+									</h:panelGroup>	
+									<h:panelGroup id="btn4" rendered="#{pip.status == '80'}">
+										<h:commandLink value="[恢复]" onclick="return window.confirm('确认恢复工单?');chaxun_one();" title="工单恢复">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeBybatchNo',pip.id,'50')}" event="click" 
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob" oncomplete="chaxun_one();"></a4j:ajax>
+										</h:commandLink>
+									</h:panelGroup>
+									<h:panelGroup id="btn5" rendered="#{pip.status == '20'}">
+										<h:commandLink value="[派工]" onclick="return window.confirm('确认派工?');" title="派工">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeBybatchNo',pip.id,'30')}" event="click" 
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob" oncomplete="chaxun_one();"></a4j:ajax>
+										</h:commandLink>
+									</h:panelGroup>
+									<h:panelGroup id="btn12" rendered="#{pip.status == '20' || pip.status == '30' || pip.status == '80'}">
+										<p:commandLink value="[编辑]" onclick="return changeStatus('edit',#{pip.id},#{pip.status},'#{pip.equipment}','#{pip.partName}',#{pip.planNumber},'#{pip.no}','#{pip.goodQuantity}')" title="工单编辑"
+											update=":myform:tableTreeJob" actionListener="#{SubJobdispatchAdd.refreshJobList('treeNodeBybatchNo','','')}"></p:commandLink>
+									</h:panelGroup>
+							</p:column>
+						</p:treeTable>
+					</div>
+					</div>
+					<div style="width: 100%;overflow: hidden; position:relative; margin-left: -10px;padding-top: 10px;" id="divtab3" >
+					<div class="ui-treetable ui-widget" style="z-index:1;position: absolute; left: 10px; margin-left: -8px; padding: 0 9px 0 8px; width: 100%; height: 27px;">
+							<table style="width: 100%; height: 100%;">
+								<tr>
+									<th class="ui-state-default" width="14%">设备</th>
+									<th class="ui-state-default" width="17%">工序</th>
+									<th class="ui-state-default" width="15%">零件号</th>
+									<th class="ui-state-default" width="4%">计划</th>
+									<th class="ui-state-default" width="4%">完成</th>
+									<th class="ui-state-default" width="4%">报废</th>
+									<th class="ui-state-default" width="6%">状态</th>
+									<th class="ui-state-default" width="12%">批次号</th>
+									<th class="ui-state-default" width="7%">开始时间</th>
+									<th class="ui-state-default" width="7%">结束时间</th>
+									<th class="ui-state-default" width="11%">操作</th>
+								</tr>
+							</table>
+						</div>
+						<div style="width: 100%; height: 100%; margin-left: 10px; overflow-y: scroll;">
+						<p:treeTable value="#{SubJobdispatchAdd.treeNodeByequName}" var="pip" id="tableTreeJob_tab3" >
+							<p:column style="width: 14%; word-break: break-all;">
+								<f:facet name="header">
+								设备
+								</f:facet>
+								<h:outputText value="#{pip.equipment}" />
+							</p:column>
+							<p:column style="width: 17%; word-break: break-all;">
+								<h:outputText value="#{pip.process}" />
+							</p:column>
+							<p:column style="width: 15%; word-break: break-all;">
+								<h:outputText value="#{pip.dispatchNo}" />
+							</p:column>
+							<p:column style="width: 4%; word-break: break-all;">
+								<h:outputText value="#{pip.planNumber}" />
+							</p:column>
+							<p:column style="width: 4%; word-break: break-all;">
+								<h:outputText value="#{pip.finishNum}" />
+							</p:column>
+							<p:column style="width: 4%; word-break: break-all;">
+								<h:outputText value="#{pip.wisScrapNum}" />
+							</p:column>
+							<p:column style="width: 6%; word-break: break-all;">
+								<h:outputText value="#{pip.dispatchStatus}" />
+							</p:column>
+							<p:column style="width: 12%; word-break: break-all;">
+								<h:outputText value="#{pip.taskNo}" />
+							</p:column>
+							<p:column style="width: 7%; word-break: break-all;">
+								<h:outputText value="#{pip.startTime}" />
+							</p:column>
+							<p:column style="width: 7%; word-break: break-all;">
+								<h:outputText value="#{pip.endTime}" />
+							</p:column>
+							<p:column style="width: 11%; word-break: break-all;">
+									<h:panelGroup id="btn6" rendered="#{pip.status == '10' || pip.status == '30'}">
+		                          		<h:commandLink value="[启动]" onclick="return window.confirm('确认启动工单?');" title="工单启动" >
+		                          			<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeByequName',pip.id,'40')}" event="click"
+		                          				execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob_tab3" oncomplete="chaxun_two();"/>
+		                          		</h:commandLink>
+		                          	</h:panelGroup>
+									<h:panelGroup id="btn7" rendered="#{pip.status == '80' || pip.status == '70'}">
+		                          		<h:commandLink value="[关闭]" onclick="return window.confirm('确认关闭工单?');" title="工单关闭">
+		                          			<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeByequName',pip.id,'60')}" event="click"
+		                          				execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob_tab3" oncomplete="chaxun_two();"/>
+		                          		</h:commandLink>
+		                          	</h:panelGroup>
+		                          	<h:panelGroup id="btn8" rendered="#{pip.status == '40' || pip.status == '50'}">
+										<h:commandLink value="[暂停]" onclick="return window.confirm('确认暂停工单?');" title="工单暂停" style="font-size:14px;">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeByequName',pip.id,'80')}" event="click"
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob_tab3" oncomplete="chaxun_two();"/>
+										</h:commandLink>
+									</h:panelGroup>	
+									<h:panelGroup id="btn9" rendered="#{pip.status == '80'}">
+										<h:commandLink value="[恢复]" onclick="return window.confirm('确认恢复工单?');" title="工单恢复">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeByequName',pip.id,'50')}" event="click"
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob_tab3" oncomplete="chaxun_two();"/>
+										</h:commandLink>
+									</h:panelGroup>
+									<h:panelGroup id="btn10" rendered="#{pip.status == '20'}">
+										<h:commandLink value="[派工]" onclick="return window.confirm('确认派工?');" title="派工">
+											<a4j:ajax listener="#{SubJobdispatchAdd.refreshJobList('treeNodeByequName',pip.id,'30')}" event="click"
+												execute="start end jobState partTypeId taskNum eduTypeId" render=":myform:tableTreeJob_tab3" oncomplete="chaxun_two();"/>
+										</h:commandLink>
+									</h:panelGroup>	
+									<h:panelGroup id="btn11" rendered="#{pip.status == '20' || pip.status == '30' || pip.status == '80'}">
+										<p:commandLink value="[编辑]" onclick="return changeStatus('edit',#{pip.id},#{pip.status},'#{pip.equipment}','#{pip.partName}',#{pip.planNumber},'#{pip.no}','#{pip.goodQuantity}')" title="工单编辑"
+											update=":myform:tableTreeJob_tab3" actionListener="#{SubJobdispatchAdd.refreshJobList('treeNodeByequName','','')}"></p:commandLink>
+									</h:panelGroup>								
+							</p:column>
+						</p:treeTable>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</h:form>
+
+<script type="text/javascript">
+
+	var imgPercent=hjb51/1080; //比例 
+	//i5图片的大小
+	var new_image2 = new Image();
+	new_image2.src = document.getElementById("img1").src;
+	var wjbimg2 = new_image2.width;
+	var hjbimg2 = new_image2.height;
+	document.getElementById("img1").style.width=wjbimg2*imgPercent-30+"px";
+	document.getElementById("img1").style.height=hjbimg2*imgPercent-30+"px";
+	document.getElementById("img1").style.left=wjb51*20/1920+"px";
+	document.getElementById("img1").style.top=wjb51*40/1920+"px";
+	//整个布局的宽和高(table)
+	document.getElementById("jobtable").style.height=hjb51*994/1080+"px";//控制中间和上面的和的高度 
+	document.getElementById("jobtable").style.width=wjb51+"px";
+	
+	document.getElementById("topleftright").style.width=wjb51+"px";
+	document.getElementById("topleftright").style.height=hjb51*23/100+"px";
+		
+	//上部图片(左)  和 (右)
+	document.getElementById("topleft").style.width=wjb51*20/100+"px";
+	document.getElementById("topleft").style.height=hjb51*23/100+"px";
+	document.getElementById("topright").style.width=wjb51*80/100+"px";
+	document.getElementById("topright").style.height=hjb51*23/100+"px";
+	document.getElementById("toprightTable").style.height=hjb51*23/100+"px";
+	//甘特图按钮图标
+	document.getElementById("tabfont").style.fontSize= hjb51*30/1080 +"px";
+	document.getElementById("gtt").style.width=193/1080*hjb51+"px";
+	document.getElementById("gtt").style.color="white";
+	document.getElementById("gttimg").style.width=193/1080*hjb51+"px";
+	document.getElementById("gttimg").style.height=40/1080*hjb51+"px";
+	//工单列表按钮图标
+	document.getElementById("gdlb").style.width=193/1080*hjb51+"px";
+	document.getElementById("gdlb").style.color="#5a5a5a";
+	document.getElementById("gdlbimg").style.width=193/1080*hjb51+"px";
+	document.getElementById("gdlbimg").style.height=40/1080*hjb51+"px";
+	
+	//查询条件
+	document.getElementById("myform:group").style.width=wjb51*100/1600+"px";
+	document.getElementById("myform:group").style.height=hjb51*30/900+"px";
+	document.getElementById("myform:startInputDate").style.width=wjb51*155/1600+"px";
+	document.getElementById("myform:startInputDate").style.height=hjb51*30/900+"px";
+	document.getElementById("myform:endInputDate").style.width=wjb51*155/1600+"px";
+	document.getElementById("myform:endInputDate").style.height=hjb51*30/900+"px";
+	document.getElementById("div_one").style.fontSize=22/1080*hjb51+"px";
+
+//------------------------------------------------------------------------------------------------------------
+
+	//甘特图 图片大小 
+	for(var i=2;10>=i;i++){
+		var new_image = new Image();
+		new_image.src = document.getElementById("img"+i).src;
+		var wjbimg = new_image.width;
+		var hjbimg = new_image.height;
+		document.getElementById("img"+i).style.width=wjbimg*imgPercent+"px";
+		document.getElementById("img"+i).style.height=hjbimg*imgPercent+"px";
+	}	
+	
+	function init() {
+		for(i in document.images){
+			disableDraggingFor(document.images[i]);
+		}
+	}
+	 
+	function disableDraggingFor(element) {
+		element.draggable = false;
+		element.onmousedown = function(event) {
+	    	event.preventDefault();
+		    return false;
+	  	};
+	}
+	init();
+	//工单启动图片
+	var new_image = new Image();
+	new_image.src = document.getElementById("dispatchimg").src;
+	var wjbimg = new_image.width;
+	var hjbimg = new_image.height;
+	document.getElementById("dispatchimg").style.width=wjbimg*imgPercent+"px";
+	document.getElementById("dispatchimg").style.height=hjbimg*imgPercent+"px";
+	//工单暂停图片
+	var new_image1 = new Image();
+	new_image1.src = document.getElementById("dispatchimages").src;
+	var wjbimg1 = new_image1.width;
+	var hjbimg1 = new_image1.height;
+	document.getElementById("dispatchimages").style.width=wjbimg1*imgPercent+"px";
+	document.getElementById("dispatchimages").style.height=hjbimg1*imgPercent+"px";
+
+	document.getElementById("jobplan_content").style.height=hjb51*63/100+"px";//甘特图高  
+	document.getElementById("jobplan_content").style.width=wjb51+"px";
+	document.getElementById("example-container").style.height=hjb51*63/100+"px";//甘特图高 
+	document.getElementById("example-container").style.width=wjb51+"px";
+	//工单列表的高和宽
+	document.getElementById("divtab2").style.height=hjb51*63/100+"px";
+	document.getElementById("divtab2").style.width=wjb51+"px";
+	document.getElementById("divtab3").style.height=hjb51*63/100+"px";
+	document.getElementById("divtab3").style.width=wjb51+"px";
+	
+	if(wjb51==800){ 
+		var new_image = new Image();
+		new_image.src = document.getElementById("img1").src;
+		var wjbimg = new_image.width;
+		var hjbimg = new_image.height;
+		
+		document.getElementById("img1").style.width=wjbimg*45/100+"px";
+        document.getElementById("img1").style.height=hjbimg*45/100+"px";
+	}
+	
+ 	//甘特图图标的宽度(编辑，删除，控制等)
+ 	new_image.src = document.getElementById("img2").src;
+	var hjbimg = new_image.height;
+	document.getElementById("detailcentertd2").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd3").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd4").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd5").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd6").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd7").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd8").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd9").style.width=wjb51*10/192+"px";
+	document.getElementById("detailcentertd10").style.width=wjb51*10/192+"px";
+</script>
+<script type="text/javascript">
+function setValueforHidd(){//对隐藏域进行赋值，以便jsf的ajax向控制bean传人参数
+	var partid = document.getElementById("select_box_job_part_hdn").value;
+	var equid = document.getElementById("select_box_job_equName_hdn").value;
+	var taskNum = document.getElementById("select_box_job_taskNum_hdn").value;
+	var jobState = document.getElementById("select_box_job_jobStatus_hdn").value;
+	document.getElementById("myform:partTypeId").value=partid;
+	document.getElementById("myform:taskNum").value=taskNum;
+	document.getElementById("myform:eduTypeId").value=equid;
+	document.getElementById("myform:jobState").value=jobState;
+}
+function chaxun_one(){
+	document.getElementById("myform:chaxun_one").click();
+}
+function chaxun_two(){
+	document.getElementById("myform:chaxun_two").click();
+}
+</script>
+ <script type="text/javascript">
+ onloadTab("tab1");
+ function onloadTab(loadtab){//甘特图和工单列表切换
+	//获取图片的高度
+	var new_image = new Image();
+	if("tab1"==loadtab){
+		document.getElementById("example-container").style.display="block";
+		document.getElementById("divtab2").style.display="none";
+		document.getElementById("divtab3").style.display="none";
+		document.getElementById("div_one").style.display="block";
+		document.getElementById("div_two").style.display="block";
+		document.getElementById("fenzu").style.display="none";
+	}else{
+		document.getElementById("myform:group").value =1;
+		document.getElementById("example-container").style.display="none";
+		document.getElementById("divtab2").style.display="block";
+		document.getElementById("div_one").style.display="block";
+		document.getElementById("div_two").style.display="none";
+		document.getElementById("fenzu").style.display="block";
+	}
+}
+ function sub(tt){
+	if("tab1"==tt){
+		document.getElementById("myform:loadtab").value="tab1";
+		document.getElementById("gttimg").src="./images/tabselected.png"; 
+		document.getElementById("gtt").style.color="white";
+		document.getElementById("gdlbimg").src="./images/tabselect.png"; 
+		document.getElementById("gdlb").style.color="#5a5a5a";
+	}else{
+		document.getElementById("myform:loadtab").value="tab2";
+		document.getElementById("gttimg").src="./images/tabselect.png"; 
+		document.getElementById("gtt").style.color="#5a5a5a";
+		document.getElementById("gdlbimg").src="./images/tabselected.png"; 
+		document.getElementById("gdlb").style.color="white";
+	}
+	onloadTab(tt);
+}
+ 
+
+ 
+ 	function querybtn(pattern){
+		var loadtab=document.getElementById("myform:loadtab").value;
+		if(loadtab == 'tab1'){//甘特图查询
+			jobchaxun();//具体业务逻辑在jobdispatch.js
+		}else{
+			var group = document.getElementById("myform:group").value;
+			if(group == 1){
+				document.getElementById("myform:chaxun_one").click();
+			}else if(group == 2){
+				document.getElementById("myform:chaxun_two").click();
+			}
+		}
+	}
+
+ 	function select(){
+ 		var group = document.getElementById("myform:group").value;
+		if(group == 1){//任务号为头
+			document.getElementById("divtab3").style.display="none";
+			document.getElementById("divtab2").style.display="block";
+		}else if(group == 2){//设备为头
+			document.getElementById("divtab2").style.display="none";
+			document.getElementById("divtab3").style.display="block";
+		}
+ 	}
+ 	
+    function openUrl(url) {    
+        features="height=1080,width=1620,top:200,left:200,status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";             
+        winId=window.open(url,'addpage2',features); 
+    }
+	var zflag=1;
+	
+	function switchV()
+	{
+	   switch(arguments[0])
+	   {
+	      case "week":ds.switchViewPreset("weekAndDay",start,end);
+	                  zflag=1;
+	                  ds.scrollToDate(new Date(),true);
+	      break;
+	      case "month":ds.switchViewPreset("monthAndYear",start,end);
+	                   zflag=2;
+	                   ds.scrollToDate(new Date(),true);
+	      break;
+	      case "year":ds.switchViewPreset("year",start,end);
+	                  zflag=3;
+	                  ds.scrollToDate(new Date(),true);
+	      break;
+	   }
+	}
+
+	function enlargeOrnarrow()
+	{
+	     //判断是选择了放大还是缩小按钮
+	     if(arguments[0]=="enlarge")
+	     {
+	         if(zflag==1)
+	         {
+	            ds.switchViewPreset("monthAndYear",start,end);zflag=2;
+	            ds.scrollToDate(new Date(),true);
+	            return;
+	         }
+	         if(zflag==2)
+	         {
+	            ds.switchViewPreset("year",start,end);zflag=3;
+	            ds.scrollToDate(new Date(),true);
+	            return;
+	         }
+	     }
+	     else
+	     {
+	         if(zflag==3)
+	         {
+	            ds.switchViewPreset("monthAndYear",start,end);zflag=2;
+	            ds.scrollToDate(new Date(),true);
+	            return;
+	         }
+	         if(zflag==2)
+	         {
+		        ds.switchViewPreset("weekAndDay",start,end);zflag=1;
+		        ds.scrollToDate(new Date(),true);
+		        return;
+	         }
+	     }
+	}
+
+	function pageRelocation()
+	{
+	   switch(arguments[0])
+	   {
+	      case "edit"://编辑工单
+	    	  if(editPlanId==-1)
+	          {
+	                alert("请选择一条工单！");
+	          }
+	          else
+	          {
+	              if(statusId==30 || statusId == 20 || statusId ==80)
+	              {
+	                 openUrl("./jobdispatch/jobdispatch_updata.faces?editPId="+editPlanId);	                 
+	              }
+	              else
+	              {
+	            	  alert("此状态不能编辑！");
+	              } 
+	          }
+	      break;
+	    
+	      case "statistic": //工单统计
+	    	   openUrl("./jobdispatchstatics/jobdispatchstatics.faces?editPId="+editPlanId);
+	    
+	      break;
+	      
+	      case "add":   //工单添加 
+	    	   openUrl("./jobdispatch/jobdispatch_add.faces"); 
+	      break;
+	   }
+	}
+	
+	function pageLoad(){
+		if(editPlanId==-1)
+        {
+              alert("请选择一条工单！");
+        }else{
+        	openUrl("./jobdispatch/jobdispatchNumEdit.faces?jobdispatchId="+editPlanId); 
+        }
+	}
+
+	//工单列表的各种操作，并对需要的数据进行赋值
+	function changeStatus(status, jobdispatchid, pipstatus,equipment,partname,plannum,no,goodQuantityNum){
+		goodQuantity = goodQuantityNum;
+ 		equSerialNo = equipment;
+ 		partName = partname;
+ 		planNum = plannum;
+ 		processNum = plannum;
+		dispatchNo = no;
+		editPlanId = jobdispatchid;
+		statusId = pipstatus;
+		if(status=='edit')
+			return pageRelocation(status);
+		var flag = switchStatus(status);//当返回false时点击的时取消阿牛
+		return flag;
+	}
+	
+	function switchStatus(){
+		if(arguments[0]=="dispatch"){//派工
+			if(!(editPlanId==-1)){
+				if(statusId==20){
+					Ext.Ajax.request({
+						url:"./jobdispatch/checkDispathById.action",
+						method:"post",
+						params:{
+							dispatchNo:dispatchNo
+						},
+						success:function(response){
+							var obj=Ext.decode(response.responseText);
+							if(obj.flag){
+								if(!window.confirm("该派工单发送到设备为："+obj.equSerialNo+"请确认！")){
+									return false;
+								}
+								Ext.Ajax.request({
+									url:"./jobdispatch/updateJobdispatchStatus.action",
+									params:{
+										dispatchId:editPlanId,
+										status:30,
+										flag:0
+								 	},
+								 	success:function(response){
+										 var result=response.responseText;
+										 if(result=="true"){
+											 alert("工单派工成功！");
+											 ds.getEventStore().reload();
+											 //1,状态更改成功后，还选中甘特图数据
+											 //2,状态更改后更新当前状态。
+											 statusId = 30;
+// 											 editPlanId=-1;
+										 }else if(result=="false"){
+											 alert("工单派工失败！");
+										 }
+									 },
+									 failure:function(response,opts){
+										 alert("操作失败！");
+									 }
+								});
+							}else{
+								alert("工单没有对应的机床设备");
+							}
+						},
+						failure:function(response,opts){
+							alert("操作失败!");
+						}
+					});
+				}else{
+					alert("此状态不能进行派工！");
+				}
+			}else{
+	        	 alert("请选择一条工单记录！");
+	        }
+		}
+	
+	   if(arguments[0]=="delete"){
+		   
+	       if(statusId==30||statusId==20)
+		   {
+			   if(window.confirm("确认删除该工单吗?"))
+			   {
+				   Ext.Ajax.request({
+						url:"./jobdispatch/delete.action",//获取设备资源信息
+						method:"post",
+	                    params:{
+							dispatchId:editPlanId
+					 },
+					 success:function(response){
+							 ds.getEventStore().reload();
+							 editPlanId=-1;
+					 },
+					 failure:function(response,opts){
+						 alert("操作失败！");
+						}
+			    	});  
+		        }else{
+		        	return false;
+		        } 
+	       }else {
+	    	   alert("此状态不能进行删除！");
+	       }
+	  }
+	
+		if(arguments[0]=="start")//工单启动  
+	    {
+	        if(!(editPlanId==-1))
+	        {
+	             if(statusId==30||statusId==80||statusId==70)
+	             {  
+	                  if(statusId==30)
+	                  {
+							Ext.Ajax.request({
+								url:"./jobdispatch/checkDispathById.action",
+								method:"post",
+								params:{
+									dispatchNo:dispatchNo
+								},
+								success:function(response){
+									var obj=Ext.decode(response.responseText);
+									if(!window.confirm("该工单发送的设备序列号为："+obj.equSerialNo+",零件名称："+partName+",计划产量："+planNum+",确认启动吗?")){
+										return false;
+									}
+									var flag=0;//0：不启动同批次工单   1：启动
+									Ext.Ajax.request({
+										url:"./jobdispatch/updateJobdispatchStatus.action",//获取设备资源信息
+										method:"post",
+										params:{
+											dispatchId:editPlanId,
+											status:40,
+											flag:flag
+									 },
+									 success:function(response){
+										 var result=response.responseText;
+										 if(result=="true")
+										 {
+											 alert("工单已启动！");
+											 ds.getEventStore().reload();
+											 //1,状态更改成功后，还选中甘特图数据
+											 //2,状态更改后更新当前状态。
+											 statusId = 40;
+// 											 editPlanId=-1;
+										 }
+										 else if(result=="false")
+										  {
+											 alert("工单启动失败！");
+										 }
+									 },
+									 failure:function(response,opts){
+										 alert("操作失败！");
+										}
+									}); 
+								}
+							});
+							   
+	                  }
+	                  else
+	                  {
+                	 	  if(window.confirm("该工单的计划数量是:"+processNum+",合格数量是:"+goodQuantity+",确定结束吗?")){
+                	 		 var flag = 0;
+                  		  	 Ext.Ajax.request({
+                   				url:"./jobdispatch/updateJobDispatchWhenStop.action",//当关闭时更改工单状态
+                   				method:"post",
+                   				params:{
+  		                 			jobdispatchId:editPlanId,
+  		                 			status:60,
+  		                 			flag:flag
+  	                 			},
+  	                 			success:function(response){
+  	                 				var result=response.responseText;
+  	                 				if(result=="true")
+ 									{
+ 										alert("工单已关闭！");
+ 										ds.getEventStore().reload();
+ 										 //1,状态更改成功后，还选中甘特图数据
+										 //2,状态更改后更新当前状态。
+ 										statusId = 60;
+// 										editPlanId=-1;
+ 									}
+ 									else if(result=="false")
+ 									{
+ 										 alert("工单关闭失败！");
+ 									}
+  			                 	},
+  	                 			failure:function(response,opts){
+  	                 			    alert("操作失败！");
+  	                 			}
+                   			}); 
+ 	                 	  }else{
+ 	                 		  return false;
+ 	                 	  }
+	                 }
+	             }
+	             else
+	             {
+	            	 alert("此状态不能进行操作！");
+		         }
+	        }
+	        else
+	        {
+	        	 alert("请选择一条工单记录！");
+	        }
+	    }
+	    
+	    if(arguments[0]=="pause")//工单暂停与恢复
+	    {
+	        if(!(editPlanId==-1))
+	        {
+	             if(statusId==50 || statusId==40)//暂停
+	             {   
+	         		if(window.confirm("是否暂停工单？")){
+	         		   	 var flag = 0;
+		            	 Ext.Ajax.request({
+							url:"./jobdispatch/updateJobDispatchWhenPause.action",
+							method:"post",
+							params:{
+								dispatchId:editPlanId,
+								status:80,
+								flag:flag
+							},
+							success:function(response){
+								var result=response.responseText;
+								if(result=="true")
+								{
+									alert("工单已暂停！");
+									ds.getEventStore().reload();
+									 //1,状态更改成功后，还选中甘特图数据
+									 //2,状态更改后更新当前状态。
+									statusId = 80;
+// 									editPlanId=-1;
+								}
+								else if(result=="false")
+								{
+									 alert("工单暂停失败！");
+								}
+							},
+							failure:function(response,opts){
+								 alert("操作失败！");
+							}
+						});
+	         		}else{
+	         			return false;
+	         		}
+	             }
+	             else if(statusId==80)//恢复
+	             {
+	            	 var flag = 0;
+	            	 Ext.Ajax.request({
+	 					url:"./jobdispatch/updateJobdispatchWhenRecover.action",
+	 					method:"post",
+	 					params:{
+	 						dispatchId:editPlanId,
+	 						status:50,
+	 						flag:flag
+	 					},
+	 					success:function(response){
+	 						var result=response.responseText;
+	 						if(result=="true")
+	 						{
+	 							alert("工单已恢复！");
+	 							ds.getEventStore().reload();
+	 							 //1,状态更改成功后，还选中甘特图数据
+								 //2,状态更改后更新当前状态。
+	 							statusId=50;
+// 								editPlanId=-1;
+	 						}
+	 						else if(result=="false")
+	 						{
+	 							 alert("工单恢复失败！");
+	 						}
+	 					},
+	 					failure:function(response,opts){
+	 						 alert("操作失败！");
+	 					}
+	 				});
+	             }else{
+	            	 alert("此状态不能暂停！");
+	             }
+	        }
+	        else
+	        {
+	        	 alert("请选择一条工单记录！");
+	        }
+	    }
+	    return true;
+	}
+	
+</script>
+ 
+<script type="text/javascript">
+	//<![CDATA[ 
+// 		(function(){
+// 		    Ext.Ajax.request({
+// 				url:"./jobdispatch/findJobPlanDetailDefaultBYDispatchIdDefault.action",
+// 				method:"post",
+// 				success:function(response){
+// 					var obj=Ext.decode(response.responseText);
+// 					clickEvent(obj);	
+// 				},
+// 				failure:function(response,opts){alert("failure");},
+// 				params:{
+// 			    }
+// 		    });
+// 		})();
+
+		setTimeout(function(){
+			//document.getElementById("detailcenterdiv1").style.display="block";
+			$("#maskw").fadeOut(500);
+			},100);
+		
+	//]]> 
+</script>
+
+</ui:composition>

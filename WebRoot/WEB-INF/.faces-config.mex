@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JSFFlowViewLayout version="1.0">
+  <Drawing gridVisible="true" snapOn="true" />
+  <JSFFlowResource path="" location="30,30" dimension="36,36" />
+  <JSFFlowResource path="jsf-demo.xhtml" location="180,30" dimension="130,36" />
+  <JSFFlowResource path="/resource/view_consume_storage.xhtml" location="480,30" dimension="271,36" />
+  <JSFFlowResource path="/device/view_device_real_information.xhtml" location="30,230" dimension="291,36" />
+  <JSFFlowResource path="/device/stat_device_time.xhtml" location="30,130" dimension="218,36" />
+  <JSFFlowResource path="/device/stat_device_oee_trend.xhtml" location="480,230" dimension="251,36" />
+  <JSFFlowResource path="/device/stat_device_machine_event.xhtml" location="30,330" dimension="277,36" />
+  <JSFFlowResource path="/device/stat_device_oee.xhtml" location="330,130" dimension="215,36" />
+  <JSFFlowResource path="/device/stat_device_process_event.xhtml" location="480,330" dimension="275,36" />
+  <JSFFlowResource path="/device/stat_device_processfrequency.xhtml" location="30,530" dimension="296,36" />
+  <JSFFlowResource path="/parts/part_process_guide.xhtml" />
+  <JSFFlowNavigationCase id=",jsf-demo.xhtml,success,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="66,33" />
+      <AbsolutePoint location="180,33" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/resource/view_consume_storage.xhtml,UserResource,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="48,66" />
+      <AbsolutePoint location="48,103" />
+      <AbsolutePoint location="615,103" />
+      <AbsolutePoint location="615,66" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/device/view_device_real_information.xhtml,realInformation,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="30,58" />
+      <AbsolutePoint location="-7,58" />
+      <AbsolutePoint location="-7,248" />
+      <AbsolutePoint location="30,248" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/device/stat_device_time.xhtml,statDeviceTimePath,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="33,66" />
+      <AbsolutePoint location="33,130" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/device/stat_device_oee_trend.xhtml,statDeviceOEETrendPath,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="63,66" />
+      <AbsolutePoint location="63,73" />
+      <AbsolutePoint location="600,73" />
+      <AbsolutePoint location="600,230" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/device/stat_device_machine_event.xhtml,statDeviceMachineEventPath,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="30,33" />
+      <AbsolutePoint location="-37,33" />
+      <AbsolutePoint location="-37,348" />
+      <AbsolutePoint location="30,348" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/device/stat_device_oee.xhtml,statDeviceOEEBeanPath,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="63,30" />
+      <AbsolutePoint location="63,-7" />
+      <AbsolutePoint location="437,-7" />
+      <AbsolutePoint location="437,130" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/device/stat_device_process_event.xhtml,statDeviceProcessEventBeanPath,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="48,30" />
+      <AbsolutePoint location="48,-37" />
+      <AbsolutePoint location="792,-37" />
+      <AbsolutePoint location="792,348" />
+      <AbsolutePoint location="755,348" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/device/stat_device_processfrequency.xhtml,StatDeviceProFrequencyBeanPath,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="33,30" />
+      <AbsolutePoint location="33,-7" />
+      <AbsolutePoint location="7,-7" />
+      <AbsolutePoint location="7,548" />
+      <AbsolutePoint location="30,548" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+  <JSFFlowNavigationCase id=",/parts/part_process_guide.xhtml,PartProcessGuide,&lt;empty&gt;" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="48,48" />
+      <AbsolutePoint location="0,0" />
+    </AutomaticBendpoints>
+  </JSFFlowNavigationCase>
+</JSFFlowViewLayout>
+

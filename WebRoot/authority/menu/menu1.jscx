@@ -1,0 +1,18 @@
+<%@page language="java" extends="smtcl.mocs.beans.authority.menu.MenuUC" contentType="text/html;charset=UTF-8"%>
+<%@taglib prefix="c" uri="http://www.dreamwork.com/jasmine2/web/ui" %>
+<div class="new_main_left_nav">
+  <p><a href="#"><img src="../authority/images/new_z_pic1.jpg" /></a></p>
+</div>
+<!--new_main_left_nav-->
+<div class="new_main_left_info">
+  <ul class="new_main_left_info_list">
+  <c:repeater viewStateEnabled = "false" datasource="<%#applications%>">
+		<c:repeater viewStateEnabled="false" datasource='<%#DataBinder.eval (container.dataItem, "modules")%>'>
+			<c:repeater viewStateEnabled="false" datasource='<%#DataBinder.eval (container.dataItem, "pages")%>'>
+    <li class="new_main_left_list_li1"><a href="<%#DataBinder.eval (container.dataItem, "url")%>" class='new_main_left_list_link1<%#((Boolean)DataBinder.eval (container.dataItem, "current"))?"_current":""%>'><%#DataBinder.eval (container.dataItem, "label")%></a></li>
+   			</c:repeater>
+		</c:repeater>
+	</c:repeater>
+  </ul>
+  <!--new_main_left_info_list-->
+</div>

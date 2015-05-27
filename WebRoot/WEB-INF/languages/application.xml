@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource-set name="application">
+    <bundle language="zh_CN">
+        <item key="enable" value="启用" />
+        <item key="disable" value="禁用" />       
+        <button.label.search>查询</button.label.search>
+        <button.label.new>新增</button.label.new>
+        <button.label.delete>删除</button.label.delete>
+        <button.label.save>保存</button.label.save>
+        <button.label.edit>编辑</button.label.edit>
+        <button.label.cancel>取消</button.label.cancel>
+        <button.label.back>返回</button.label.back>
+        <button.label.ok>确定</button.label.ok>
+    </bundle>
+    <bundle language="en_US">
+    	<button.label.search>Search</button.label.search>
+        <button.label.new>New</button.label.new>
+        <button.label.delete>Delete</button.label.delete>
+        <button.label.save>Save</button.label.save>
+        <button.label.edit>Edit</button.label.edit>
+        <button.label.cancel>Cancel</button.label.cancel>
+        <button.label.back>Back</button.label.back>
+        <button.label.ok>OK</button.label.ok>
+    </bundle>
+</resource-set>

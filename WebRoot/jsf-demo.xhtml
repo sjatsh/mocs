@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui" xml:lang="en" lang="en">
+<h:head>
+	<title>在线工厂 JSF2.0 DEMO</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="css/cssLayout.css" />
+	<link rel="stylesheet" type="text/css" href="css/primefaces.css" />
+</h:head>
+<h:body>
+	<p>
+		<ui:insert name="body">JSF2.0+Spring3.0+Hibernate3.2+Dreamwork 框架整合示例</ui:insert>
+	</p>
+	<h:form id="form1">
+		<h:inputText value="#{TestBean.msg}">
+			<f:ajax event="keyup" execute="@this" render="output1 output2"></f:ajax>
+		</h:inputText>
+		<ui:insert name="body">ajax应用</ui:insert>
+		<br />
+		<h:outputText id="output1" value="#{TestBean.msg.toUpperCase()}"></h:outputText>
+		<br />
+		<h:outputText id="output2" value="#{TestBean.msg.length()}"></h:outputText>
+		<h:outputLabel value="选取时间" />
+		<h:panelGroup>
+			<rich:calendar id="selectTime" popup="true" locale="en"
+				value="#{TestBean.selectTime}" cellWidth="10px" cellHeight="20px"
+				datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			<h:message for="selectTime " style="color:red" />
+		</h:panelGroup>
+		<h:outputText id="output3" value="请输入编号："></h:outputText>
+		<h:inputText name="no" value="#{TestBean.no}"></h:inputText>
+		<h:commandButton id="button1" action="#{TestBean.searchAction}"
+			value="查询">
+		</h:commandButton>
+		<br/>
+		<p:panel header="AutoComplete" toggleable="true" id="panel">  
+        <h:panelGrid columns="2" cellpadding="5"> 
+            <h:outputLabel value="Simple :" for="acSimple" />  
+          <p:autoComplete id="acSimple" value="#{TestBean.mtNO}"    
+                    completeMethod="#{TestBean.complete}"/> 
+        </h:panelGrid>
+       </p:panel> 
+		
+		<p:autoComplete id="mtNO" value="#{TestBean.mtNO}"
+			maxlength="30" onblur="subchange('form1:mtNO');"
+			onkeyup="testchinese(this.id)"
+			completeMethod="#{TestBean.complete}" maxResults="20"
+			minQueryLength="1" />
+		<br />
+		<rich:dataTable id="datatable1" value="#{TestBean.defaultDataModel}"
+			rows="10" rowClasses="rowClass1, rowClass2" cellpadding="0"
+			styleClass="dataTableEx" cellspacing="0" width="100%" border="0"
+			var="record">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="需求编号" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="出厂编号" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="创建日期" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column>
+				<h:outputText value="#{record.no}"></h:outputText>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{record.machineToolOutNo}"></h:outputText>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{record.createDate}"></h:outputText>
+			</rich:column>
+			<f:facet name="footer">
+				<rich:dataScroller for="datatable1" id="ds" maxPages="10"
+					page="#{TestBean.scrollerPage}" renderIfSinglePage="true"
+					rendered="#{TestBean.defaultDataModel.getRowCount()>0}" />
+			</f:facet>
+		</rich:dataTable>
+		<br />
+		<h:dataTable id="datatable2" value="#{TestBean.results.getData()}"
+			styleClass="richDataTableStyle" rows="10"
+			onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+			onRowMouseOut="this.style.backgroundColor='#ffffff'" cellpadding="0"
+			cellspacing="0" width="700" border="0" var="record">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="需求编号" />
+				</f:facet>
+				<h:outputText value="#{record.no}"></h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="出厂编号" />
+				</f:facet>
+				<h:outputText value="#{record.machineToolOutNo}"></h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="创建日期" />
+				</f:facet>
+				<h:outputText value="#{record.createDate}"></h:outputText>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</h:body>
+</html>

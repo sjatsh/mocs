@@ -1,0 +1,4 @@
+#Wed May 22 13:47:50 CST 2013
+eclipse.preferences.version=1
+validator.Checked=WebRoot/resource/view_clamp_list.xhtml,WebRoot/authority/javascript/jquery-1.6.2.min.js,WebRoot/authority/javascript/pagging.js,WebRoot/static/js/timeanalysis.js,WebRoot/map/displaymap.xhtml,WebRoot/resources/js/view_device_overview.js,WebRoot/resources/js/stat_device_oee_trend.js,WebRoot/resources/js/timeanalysis.js,WebRoot/authority/javascript/resource/resource.zh_CN.js,WebRoot/authority/javascript/resource/resource.js,WebRoot/resource/view_cutlery_list.xhtml
+validator.Unchecked=

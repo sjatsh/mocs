@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<style type="text/css">
+
+	.ui-datatable th{
+			background-image: url(../images/equ/table_head_line.png) !important;
+	}
+	
+</style>
+<div style="width: 855px;">
+<div align="center" style="margin-top: 10px;"><font style="font-size: 18px;font-weight: bold;">过程质量数据</font></div>
+	<table style="margin-bottom: 10px;margin-left: 60px;margin-top: 10px;background-color: #D6E9E9;" >
+		<tr>
+			<td style="height: 30px;"><h:outputText value="零件类型:"></h:outputText></td>
+			<td>
+				 <h:selectOneMenu value="#{processQualityListBean.selectPartType}"  id="selectPT" styleClass="textBg">
+               		<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+		       		<f:selectItems value="#{processQualityListBean.partType}"  
+			           var="pp"  itemLabel="#{pp.name}"  itemValue="#{pp.id}" /> 
+			        <f:ajax event="valueChange" listener="#{processQualityListBean.PartClassChange}" render=":myform:selectPS :myform:selectSP"> </f:ajax>
+		    	</h:selectOneMenu> 
+			</td>
+			<td></td>
+			<td>
+				<h:outputText value="生产提交日期:" style="padding-left: 20px;"></h:outputText>
+			</td>
+			<td>
+				<rich:calendar id="ontart"  popup="true" locale="en" styleClass="textBg" 
+					value="#{processQualityListBean.onStartTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd HH:mm:ss" />
+			</td>
+			<td>~</td>
+			<td>
+				<rich:calendar id="onend"  popup="true" locale="en" styleClass="textBg" 
+					value="#{processQualityListBean.onEndTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd HH:mm:ss" />
+			</td>
+		</tr>
+		<tr>
+			<td style="height: 30px;">
+				<h:outputText value="产品序列号:"></h:outputText>
+			</td>
+			<td colspan="2">
+				 <h:selectOneMenu value="#{processQualityListBean.productSerial}"  id="selectPS" styleClass="textBg" style="width:180px;">
+		       		<f:selectItems value="#{processQualityListBean.qualityList}"  
+			           var="pp"  itemLabel="#{pp.no}"  itemValue="#{pp.no}" /> 
+			        <f:ajax event="valueChange" listener="#{processQualityListBean.ProductSerialChange}" render=":myform:selectSP"> </f:ajax>
+		    	</h:selectOneMenu> 
+			</td>
+			<td>
+				<h:outputText value="产品工序:" style="padding-left: 20px;"></h:outputText>
+			</td>
+			<td colspan="2">
+				 <h:selectOneMenu value="#{processQualityListBean.selectProcess}"  id="selectSP" styleClass="textBg" >
+               		<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+		       		<f:selectItems value="#{processQualityListBean.processList}"  
+			           var="pp"  itemLabel="#{pp.name}"  itemValue="#{pp.id}" /> 
+		    	</h:selectOneMenu> 
+			</td>
+			<td>
+				<p:commandButton value="查询" actionListener="#{processQualityListBean.Search}" styleClass="delete" update=":myform:productQuality">
+				</p:commandButton>
+				<p:commandButton value="打印" styleClass="delete"></p:commandButton>
+			</td>
+		</tr>
+	</table>
+</div>
+<div style="width: 855px;">
+	<div style="width: 845px;font-size: 16px;height: 25px;padding-top: 5px;background-color: #9ABDC4;padding-left: 10px;">
+		<b>产品过程质量列表</b>
+	</div>
+	<div>
+		<p:dataTable var="product" style="width:1500px;"  value="#{processQualityListBean.pqdm}" id="productQuality" editable="true"  
+	    	  sortMode="multiple" dynamic="true" selection="#{processQualityListBean.pqm}" paginator="true" rows="10"   
+	    	  paginatorPosition="bottom" scrollable="true" scrollWidth="854">
+			<p:column selectionMode="multiple"  />
+	        <p:column headerText="工序名称" style="width:8%">
+               <h:outputText value="#{product.processName}" />
+	        </p:column>
+	       <p:column headerText="工单编号" style="width:16%">
+               <h:outputText value="#{product.dispatchNo}" />
+	        </p:column>
+	       <p:column headerText="检验类型" style="width:7%">
+               <h:outputText value="#{product.checkType}" />
+	        </p:column>
+	       <p:column headerText="检验人员" style="width:7%">
+                <h:outputText value="#{product.operator}" />
+	        </p:column>
+	         <p:column headerText="检验参数" style="width:7%">
+               <h:outputText value="#{product.checkParam}" />
+	        </p:column>
+	         <p:column headerText="标准值" style="width:7%">
+               <h:outputText value="#{product.standardValue}" />
+	        </p:column>
+	         <p:column headerText="上限值" style="width:7%">
+               <h:outputText value="#{product.maxValue}" />
+	        </p:column>
+	         <p:column headerText="实测值" style="width:7%">
+               <h:outputText value="#{product.realValue}" />
+	        </p:column>
+	          <p:column headerText="允差上限" style="width:7%">
+               <h:outputText value="#{product.maxtolerance}" />
+	        </p:column>
+	          <p:column headerText="允差下限" style="width:8%">
+               <h:outputText value="#{product.mintolerance}" />
+	        </p:column>
+	          <p:column headerText="检验工时" style="width:8%">
+               <h:outputText value="#{product.checkTime}" />
+	        </p:column>
+	        <p:column headerText="检验结果" style="width:8%">
+                <h:outputText value="#{product.result}" />
+	        </p:column>
+	    </p:dataTable> 
+	</div>
+</div>
+
+</ui:composition>

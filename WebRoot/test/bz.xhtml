@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xml:lang="en" lang="en">
+<h:head>
+	<title>北展接口测试</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<h:body>
+
+	
+	<h:form id="form1">
+	<h:outputText style="font-size: 20px;margin-left: 100px;" value="北展接口测试"></h:outputText><br/><br/>
+	<h:outputText value="设备名称:" style="margin-left: 20px;font-size: 12px;"/>
+	<h:selectOneMenu value="#{bzBean.nameselected}" id="xlk" style="width: 140px;margin-left: 20px;"  immediate="true">
+		<f:selectItems  value="#{bzBean.nameList}"/>
+	</h:selectOneMenu><br/><br/>
+	
+	<h:outputText value="测试参数:" style="height: 100px;width: 200px;margin-left:20px;font-size: 12px;"/>	
+	<h:inputText value="#{bzBean.prams}" style="height: 50px;width: 800px;margin-left: 20px;font-size: 12px;"></h:inputText>
+	<br/>
+	<a4j:commandButton actionListener="#{bzBean.onTest}" render=":form1:test" style="margin-left: 20px;"></a4j:commandButton>
+	<br/><br/>
+	<h:outputText value="测试结果:" style="margin-left: 20px;font-size: 12px;"></h:outputText>
+	<h:inputText value="#{bzBean.rvalue}" id="test" style="margin-left: 20px;height: 50px;width: 300px;"></h:inputText>
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<script type="text/javascript" src="./js/jquery.blockUI.js"></script>
+	<!-- hightChart JS加载 -->
+	<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+	<h:outputScript library="js" name="highcharts-more.js"></h:outputScript>
+	<h:outputScript library="js" name="exporting.js"></h:outputScript>
+	<h:outputScript library="js" name="product_cost_one.js"></h:outputScript>
+	<h:outputScript library="js" name="common.js"></h:outputScript>
+	<link rel="stylesheet" href="./css/product_cost.css"
+		type="text/css"></link>
+	<link rel="stylesheet" href="./css/mocs_page.css" type="text/css"></link>
+	
+	<style type="text/css">
+		.rf-p-b {
+		     padding-left: 2px !important;
+		     padding-right: 20px !important;
+		}
+	</style>
+	
+	<h:form id="myform">
+		<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+		<script type="text/javascript">	
+			document.getElementById("maskw").style.height = hjb51 + "px";
+			document.getElementById("maskw").style.width = wjb51 + "px";
+		</script>
+		<table id="costcontains">
+			<tr>
+				<td id="costtop">
+					<table>
+						<tr>
+							<td width="30%" align="center" valign="top">
+								<img
+								src="./images/profile_top_logo.png" 
+								style="position: absolute;z-Index: -1; border: 0px solid blue"
+								id="img1" />
+								<script type="text/javascript">
+								document.getElementById("img1").style.top = hjb51* 30 / 1080 + "px";
+								document.getElementById("img1").style.left = wjb51* 40 / 1920 + "px";
+								</script>
+								</td>
+							<td width="20%" align="center">
+
+								<table id="searchtext">
+									<tr>
+										<td id="ulli1"
+											style="font-weight: bold; vertical-align: middle; color: #505050;">
+											产品型号：</td>
+									</tr>
+									<tr>
+										<td id="ulli2"><a4j:commandButton
+												image="./images/cost_btn_bg.png" value=" "
+												actionListener="#{ProductCost.searchList}" id="button1"
+												render=":myform" /> <h:selectOneMenu id="no"
+												value="#{ProductCost.partTypeNo}"
+												style="color:#444444;  border-width: 0px;
+						position: absolute;border: 1px solid #BFBFBF;font-family:微软雅黑;">
+												<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+												<f:selectItems value="#{ProductCost.noMap}"></f:selectItems>
+												<a4j:ajax event="change"
+													listener="#{ProductCost.searchList}" render=":myform:right_panel costcenterleft imgpanel"
+													execute="@this" />
+											</h:selectOneMenu></td>
+									</tr>
+									<tr>
+										<td align="center" id="ulli3"
+											style="font-weight: bold; vertical-align: middle; color: #505050;">
+											零件成本</td>
+									</tr>
+								</table>
+							</td>
+							<td width="20%" align="center">
+
+								<ul>
+									<li id="ulli4"
+										style="font-weight: bold; vertical-align: middle; color: #505050;">分项成本</li>
+								</ul>
+							</td>
+							<td width="30%" align="right">
+								<ul>
+									<li id="ulli5"
+										style="font-weight: bold; vertical-align: middle; color: #505050;">机台成本</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td id="costcenter">
+
+					<table width="100%">
+						<tr>
+							<td width="60%" valign="top">
+							<a4j:outputPanel ajaxRendered="true">
+							<div id="imgpanel">
+							<img id="coverimg"
+								style="position: absolute; left: 0px; z-Index: 10000; border: 0px solid blue;display:none;"
+								src="./images/cost_content_bg_cover.png" />
+							<c:if test="#{ProductCost.results.size()==0}">
+							   <script type="text/javascript">
+							      document.getElementById("coverimg").style.display ="block";
+							   </script>
+							</c:if>	
+							</div>
+							</a4j:outputPanel>
+							<img id="img3"
+								style="position: absolute; left: 0px; z-Index: -1; border: 0px solid blue;display:none;"
+								src="./images/cost_content_bg.png" />
+								<div id="nexttab"
+									style="position: absolute; margin-top: 200px; margin-left: 1840px; z-index: 100">
+									<img src="./images/nextTab.png" style="cursor: pointer"
+										id="img2"
+										onclick="jumpto('/mocs/costmanage/cost_analysis.xhtml')" />
+								</div>
+								<a4j:outputPanel ajaxRendered="true">
+								<table id="costcenterleft">
+									<tr>
+										<td id="costcenterlefttd1" width="100%"></td>
+									</tr>
+									<tr>
+										<td id="costcenterlefttd2" align="left" valign="top"><img
+											id="img4"
+											style="position: absolute; left: 0px; z-Index: -1; border: 0px solid blue;display:none;"
+											src="./images/cost_conten_table_bg.png" />
+											<div id="type_detail"
+																style="overflow: auto; margin-left: 0px; float: clear;">
+											 <h:dataTable
+												id="cost_bar" value="#{ProductCost.results}" rows="10"
+												cellpadding="0" cellspacing="0" styleClass="datable_body"
+												columnClasses="column_body" headerClass="head_body" rowClasses="row_body" border="0"
+												var="record">
+												<h:column>
+													<f:facet name="header">
+														<div id="table1column1"
+															style="text-align: center; font-weight: bold;">
+															<h:outputText value="产品号" id="tabletext1" />
+														</div>
+													</f:facet>
+													<div style="text-align: center; font-weight: bold;">
+														<h:commandLink id="table1column1val"
+															value="#{record.partNo}"
+															style="font-weight: bold;text-decoration:none;">
+															<a4j:ajax
+																listener="#{ProductCost.searNoVal(record.partNo)}"
+																event="click" render=":myform:right_panel" />
+														</h:commandLink>
+													</div>
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														<div id="table1column2"
+															style="text-align: center; font-weight: bold;">
+															<h:outputText value="人工" id="tabletext2" />
+														</div>
+													</f:facet>
+													<h:outputText id="textval1" value="#{record.peopleCost}"></h:outputText>
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														<div id="table1column3"
+															style="text-align: center; font-weight: bold;">
+															<h:outputText value="辅料" id="tabletext3" />
+														</div>
+													</f:facet>
+													<h:outputText id="textval2" value="#{record.accMaterialCost}"></h:outputText>
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														<div id="table1column4"
+															style="text-align: center; font-weight: bold;">
+															<h:outputText value="能源" id="tabletext4" />
+														</div>
+													</f:facet>
+													<h:outputText id="textval3" value="#{record.energyCost}"></h:outputText>
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														<div id="table1column5"
+															style="text-align: center; font-weight: bold;">
+															<h:outputText value="折旧" id="tabletext5" />
+														</div>
+													</f:facet>
+													<h:outputText id="textval4" value="#{record.oldCost}"></h:outputText>
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+														<div id="table1column6"
+															style="text-align: center; font-weight: bold;">
+															<h:outputText value="主料" id="tabletext6" />
+														</div>
+													</f:facet>
+													<h:outputText id="textval5" value="#{record.mainMaterialCost}"></h:outputText>
+												</h:column>
+											</h:dataTable>
+											</div>
+											</td>
+									</tr>
+									<tr>
+										<td id="costcenterlefttd3"><h:inputHidden
+												value="#{ProductCost.columJsonData}" id="beanvalue" />
+											<div id="productcostoneChart" /></td>
+									</tr>
+								</table>
+								</a4j:outputPanel>
+								</td>
+							<td width="40%" valign="top" align="left"><rich:panel
+									id="right_panel"
+									style="background:rgba(255, 255, 255, 0.8) none repeat scroll 0 0 !important;
+				filter:Alpha(opacity=80); background:#fff;">
+									<table>
+										<tr>
+											<td valign="top">
+												<table id="rightpietable">
+													<tr>
+														<td width="100%" id="rightpietabletd1" valign="top"
+															align="left"><h:inputHidden
+																value="#{ProductCost.pieJsonData}" id="beanvalue1" />
+															<div id="productcosttwoChart"
+																style="overflow: hidden; z-index: 10000;" />
+															<div id="twoChartText"
+																style="color: green; font-weight: bold; position: absolute; text-align: center;">
+																<h:outputText value="合计"></h:outputText>
+																<br /> ￥
+																<h:outputText id="costTotal" style="color: green;" value="#{ProductCost.dataMap.costTotal}"></h:outputText>
+															</div></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+							
+										<tr>
+											<td valign="top">
+											
+											<div id="machineCostchartbar" style="overflow: auto; margin-left: 0px; float: clear;" >
+																<h:inputHidden
+																	value="#{ProductCost.columnAndLineJsonData}"
+																	id="beanvalue2" />
+																<div id="productcostthreeChart" />
+															</div>
+										
+											<ui:remove>
+											<h:dataTable id="machineCost"
+													value="#{ProductCost.costResults}" rows="10"
+													styleClass="dtable_body" headerClass="datable_head"
+													rowClasses="dtable_row"
+													columnClasses="dt_c_1,dt_c_2,dt_c_2,dt_c_2,dt_c_2"
+													cellpadding="0" cellspacing="0" border="0" var="record">
+													<h:column>
+														<f:facet name="header">
+															<div id="table2column1"> <h:outputText value="机台"
+																	id="table2text1" />
+															</div>
+														</f:facet>
+														<h:outputText value="#{record.equSerialNo}"></h:outputText>
+													</h:column>
+													<h:column>
+														<f:facet name="header">
+															<div id="table2column2"> <h:outputText value="切削"
+																	id="table2text2" />
+															</div>
+														</f:facet>
+														<h:outputText value="#{record.energyCost_cutting}"></h:outputText>
+													</h:column>
+													<h:column>
+														<f:facet name="header">
+															<div id="table2column3"> <h:outputText value="辅助"
+																	id="table2text3" />
+															</div>
+														</f:facet>
+														<h:outputText value="#{record.energyCost_dryRunning}"></h:outputText>
+													</h:column>
+													<h:column>
+														<f:facet name="header">
+															<div id="table2column4"> <h:outputText value="准备"
+																	id="table2text4" />
+															</div>
+														</f:facet>
+														<h:outputText value="#{record.energyCost_prepare}"></h:outputText>
+													</h:column>
+													<h:column>
+														<f:facet name="header">
+															<div id="table2column5"> <h:outputText value="合计"
+																	id="table2text5" />
+															</div>
+														</f:facet>
+														<h:outputText value="#{record.total}"></h:outputText>
+													</h:column>
+												</h:dataTable>
+												</ui:remove>
+												</td>
+										</tr>
+									</table>
+									<script type="text/javascript">
+										loadData();//放最后
+									</script>
+									
+	<script type="text/javascript">
+
+			var imgPercent = hjb51 / 1080; //比例   
+			//高度
+			document.getElementById("costcontains").style.width = wjb51 + "px";
+			document.getElementById("costcontains").style.height = hjb51 * 90
+					/ 100 + "px";
+			document.getElementById("costtop").style.width = wjb51 + "px";
+			document.getElementById("costtop").style.height = hjb51 * 23 / 100
+					+ "px";
+			document.getElementById("searchtext").style.width = wjb51 * 20
+					/ 100 + "px";
+			document.getElementById("searchtext").style.height = hjb51 * 23
+					/ 100 + "px";
+			document.getElementById("costcenter").style.width = wjb51 + "px";
+			document.getElementById("costcenter").style.height = hjb51 * 705/1080 + "px";  //控制中间的高度 
+			document.getElementById("costcenterleft").style.height = hjb51 * 725
+					/ 1080 + "px";
+			document.getElementById("costcenterleft").style.width = wjb51 * 1000
+			/ 1920 + "px";
+			document.getElementById("costcenterlefttd1").style.height = hjb51
+					* 10 / 1080 + "px";
+			document.getElementById("costcenterlefttd1").style.width = wjb51
+					* 745 / 1920 + "px";
+			document.getElementById("costcenterlefttd2").style.height = hjb51
+					* 372 / 1080 + "px";
+
+			//左侧表格字体 
+			for ( var i = 1; 7 > i; i++) {
+				document.getElementById("myform:cost_bar:tabletext" + i).style.fontSize = hjb51
+						* 28 / 1080 + "px";
+			}			
+			document.getElementById("type_detail").style.width = wjb51
+			* 990 / 1920 + "px";
+			
+			document.getElementById("myform:cost_bar").style.width = wjb51
+					* 975 / 1920 + "px";
+			document.getElementById("myform:cost_bar").style.fontSize = hjb51
+					* 25 / 1080 + "px";
+			document.getElementById("myform:cost_bar").style.marginLeft = wjb51
+					* 10 / 1920 + "px";
+
+			document.getElementById("costcenterlefttd3").style.width = wjb51
+					* 745 / 1920 + "px";
+			document.getElementById("costcenterlefttd3").style.height = hjb51
+					* 200 / 1080 + "px";
+
+			document.getElementById("table1column1").style.width = wjb51 * 230
+					/ 1920 + "px";
+			document.getElementById("table1column1").style.fontSize = hjb51
+					* 28 / 1080 + "px";
+			document.getElementById("table1column2").style.width = wjb51 * 120
+					/ 1920 + "px";
+			document.getElementById("table1column2").style.paddingLeft = wjb51
+					* 5 / 1920 + "px";
+			document.getElementById("table1column2").style.fontSize = hjb51
+					* 28 / 1080 + "px";
+			document.getElementById("table1column3").style.width = wjb51 * 83
+					/ 1920 + "px";
+			document.getElementById("table1column3").style.paddingLeft = wjb51
+					* 5 / 1920 + "px";
+			document.getElementById("table1column3").style.fontSize = hjb51
+					* 28 / 1080 + "px";
+			document.getElementById("table1column4").style.width = wjb51 * 83
+					/ 1920 + "px";
+			document.getElementById("table1column4").style.paddingLeft = wjb51
+					* 5 / 1920 + "px";
+			document.getElementById("table1column4").style.fontSize = hjb51
+					* 28 / 1080 + "px";
+			document.getElementById("table1column5").style.width = wjb51 * 83
+					/ 1920 + "px";
+			document.getElementById("table1column5").style.paddingLeft = wjb51
+					* 5 / 1920 + "px";
+			document.getElementById("table1column5").style.fontSize = hjb51
+					* 28 / 1080 + "px";
+			document.getElementById("table1column6").style.width = wjb51 * 83
+					/ 1920 + "px";
+			document.getElementById("table1column6").style.paddingLeft = wjb51
+					* 5 / 1920 + "px";
+			document.getElementById("table1column6").style.fontSize = hjb51
+					* 28 / 1080 + "px";
+			document.getElementById("productcostoneChart").style.marginTop = "-"
+					+ wjb51 * 40 / 1920 + "px";
+
+
+			document.getElementById("rightpietable").style.width = wjb51 * 40
+					/ 100 + "px";
+			document.getElementById("rightpietabletd1").style.width = wjb51
+					* 765 / 1920 + "px";
+
+			/*
+			//右侧表格字体 
+			document.getElementById("myform:machineCost").style.width = wjb51
+					* 1100 / 1920 + "px";
+			document.getElementById("myform:machineCost").style.marginLeft = wjb51
+					* 20 / 1920 + "px";
+			for ( var i = 1; 6 > i; i++) {
+				document.getElementById("myform:machineCost:table2text" + i).style.fontSize = hjb51
+						* 28 / 1080 + "px";
+			}
+			document.getElementById("myform:machineCost").style.fontSize = hjb51
+					* 24 / 1080 + "px";
+			document.getElementById("table2column1").style.width = wjb51 * 150
+					/ 1920 + "px";
+			document.getElementById("table2column1").style.paddingLeft = wjb51
+					* 15 / 1920 + "px";
+			document.getElementById("table2column2").style.width = wjb51 * 100
+					/ 1920 + "px";
+			document.getElementById("table2column2").style.paddingLeft = wjb51
+					* 15 / 1920 + "px";
+			document.getElementById("table2column3").style.width = wjb51 * 100
+					/ 1920 + "px";
+			document.getElementById("table2column3").style.paddingLeft = wjb51
+					* 15 / 1920 + "px";
+			document.getElementById("table2column4").style.width = wjb51 * 100
+					/ 1920 + "px";
+			document.getElementById("table2column4").style.paddingLeft = wjb51
+					* 15 / 1920 + "px";
+			document.getElementById("table2column5").style.width = wjb51 * 100
+					/ 1920 + "px";
+			document.getElementById("table2column5").style.paddingLeft = wjb51
+					* 15 / 1920 + "px";
+            */
+            
+            
+            document.getElementById("myform:right_panel").style.marginTop = hjb51
+			* 3 / 1080 + "px";
+			
+			document.getElementById("productcosttwoChart").style.marginTop = "-" + wjb51
+					* 20 / 1080 + "px";
+			document.getElementById("productcosttwoChart").style.marginLeft = "-"
+					+ wjb51 * 16 / 1920 + "px";
+			document.getElementById("twoChartText").style.fontSize = hjb51 * 45
+					/ 1080 + "px";
+			document.getElementById("twoChartText").style.top = hjb51 * 420
+					/ 1080 + "px"; //离顶部   
+			document.getElementById("twoChartText").style.left = wjb51 * 1300
+					/ 1920 + "px"; //离左边 
+			document.getElementById("myform:costTotal").style.fontSize = hjb51 * 30
+					/ 1080 + "px";		
+
+			document.getElementById("machineCostchartbar").style.width = wjb51
+					* 45 / 100 + "px";
+			document.getElementById("machineCostchartbar").style.marginTop ="-"+ hjb51
+			* 20 / 1080 + "px";
+					
+		//	document.getElementById("machineCostchartbar").style.height = hjb51
+		//			* 539 / 1080 + "px";
+			
+		//	document.getElementById("machineCostchartbar").style.marginLeft = "-"
+		//			+ wjb51 * 6 / 100 + "px"; //第3个图左移6%
+
+			document.getElementById("nexttab").style.marginTop = wjb51 * 94
+					/ 1080 + "px";
+			document.getElementById("nexttab").style.marginLeft = wjb51 * 1840
+					/ 1920 + "px";
+
+			//按钮的大小 
+			document.getElementById("myform:button1").style.width = 40
+					* imgPercent + "px"; //是40和36大小 
+			document.getElementById("myform:button1").style.height = 36
+					* imgPercent + "px";
+			document.getElementById("myform:button1").style.marginLeft = "0px";
+			document.getElementById("myform:no").style.width = 370 * imgPercent
+					+ "px"; //是270和36大小 
+			document.getElementById("myform:no").style.height = 36 * imgPercent
+					+ "px";
+			document.getElementById("myform:no").style.lineHeight = hjb51 * 36
+					/ 1080 + "px";
+			document.getElementById("myform:no").style.marginLeft = "0px"; //离左边为左边图片的宽度 
+			document.getElementById("myform:no").style.fontSize = hjb51 * 28
+					/ 1080 + "px";
+			//top的字体 
+			document.getElementById("ulli1").style.width = wjb51 * 384 / 1920
+					+ "px";
+			document.getElementById("ulli1").style.fontSize = hjb51 * 36 / 1080
+					+ "px";
+			document.getElementById("ulli1").style.lineHeight = hjb51 * 50
+					/ 1080 + "px";
+			document.getElementById("ulli1").style.marginLeft = hjb51 * 20
+					/ 1920 + "px";
+
+			document.getElementById("ulli2").style.width = wjb51 * 245 / 1920
+					+ "px";
+			document.getElementById("ulli2").style.lineHeight = hjb51 * 40
+					/ 1080 + "px";
+			document.getElementById("ulli2").style.marginLeft = "0px";
+
+			document.getElementById("ulli3").style.width = wjb51 * 384 / 1920
+					+ "px";
+			document.getElementById("ulli3").style.fontSize = hjb51 * 55 / 1080
+					+ "px";		
+			document.getElementById("ulli3").style.lineHeight = hjb51 * 150
+					/ 1080 + "px";
+
+			document.getElementById("ulli4").style.width = wjb51 * 384 / 1920
+					+ "px";
+			document.getElementById("ulli4").style.fontSize = hjb51 * 55 / 1080
+					+ "px";
+			document.getElementById("ulli4").style.lineHeight = hjb51 * 150
+					/ 1080 + "px";
+			document.getElementById("ulli4").style.marginTop = hjb51 * 90
+					/ 1080 + "px";
+			document.getElementById("ulli5").style.width = wjb51 * 384 / 1920
+					+ "px";
+			document.getElementById("ulli5").style.fontSize = hjb51 * 55 / 1080
+					+ "px";
+			document.getElementById("ulli5").style.lineHeight = hjb51 * 150
+					/ 1080 + "px";
+			document.getElementById("ulli5").style.marginTop = hjb51 * 90
+					/ 1080 + "px";
+			document.getElementById("ulli5").style.marginRight = hjb51 * 90
+					/ 1920 + "px";
+   
+			//图片和背景图片大小 
+			for ( var i = 2; 5 > i; i++) {
+				var new_image = new Image();
+				new_image.src = document.getElementById("img" + i).src;
+				var wjbimg = new_image.width;
+				var hjbimg = new_image.height;
+
+				document.getElementById("img" + i).style.width = wjbimg
+						* imgPercent + "px";
+				document.getElementById("img" + i).style.height = hjbimg
+						* imgPercent + "px";
+			}
+			
+
+					
+			document.getElementById("img3").style.left = "0px"; //离左边 
+			document.getElementById("img3").style.top = hjb51 * 25 / 100 + "px"; //离顶部 
+			document.getElementById("img3").style.width = wjb51 + "px";
+			document.getElementById("img3").style.height = hjb51 * 64 / 100
+					+ 20 + "px";
+			//这2个图片大小要一样 
+			document.getElementById("coverimg").style.left = "0px"; //离左边 
+			document.getElementById("coverimg").style.top = hjb51 * 25 / 100 + "px"; //离顶部 
+			document.getElementById("coverimg").style.width = wjb51 + "px";
+			document.getElementById("coverimg").style.height = hjb51 * 64 / 100
+					+ 18 +"px";
+			
+
+			document.getElementById("img4").style.left = wjb51 * 15 / 1920
+					+ "px"; //离左边 =img3的左部和宽度  
+			document.getElementById("img4").style.top = hjb51 * 289 / 1080 
+					+ "px"; //离顶部 
+			document.getElementById("img4").style.width = wjb51 * 745 / 1920
+					+ "px";
+			document.getElementById("img4").style.height = hjb51 * 372 / 1080
+					+ "px";	
+		
+			//背景图片的位置 
+			imgReady('./images/profile_top_logo.png', function () { 
+									  var imgwjb51=this.width;
+								   	  var imghjb51=this.height;
+									  document.getElementById("img1").style.width=imgwjb51*imgPercent+"px";
+									  document.getElementById("img1").style.height=imghjb51*imgPercent+"px";										
+									  //document.getElementById("img1").style.top=hjb51*30/1080+"px";
+									  //document.getElementById("img1").style.left=wjb51*25/1920+"px";
+									  if(wjb51==800)
+									  {
+										  document.getElementById("img1").style.width=imgwjb51*45/100+"px";
+										  document.getElementById("img1").style.height=imghjb51*45/100+"px";  
+									  }
+			 });
+			imgReady('./images/nextTab.png', function () { 
+				  var imgwjb51=this.width;
+				  var imghjb51=this.height;
+				  document.getElementById("img2").style.width=imgwjb51*imgPercent+"px";
+				  document.getElementById("img2").style.height=imghjb51*imgPercent+"px";										
+			});
+			
+			if(wjb51==980){
+			document.getElementById("img4").style.top = hjb51 * 275 / 1080 +3
+			+ "px"; //离顶部 
+			document.getElementById("img4").style.height = hjb51 * 355 / 1080
+			+ "px";	
+			}
+			
+			//列表的第一个字段的 字体 大小要放在最后 
+			for ( var i = 0; 10 > i; i++) {
+				document.getElementById("myform:cost_bar:" + i
+						+ ":table1column1val").style.fontSize = hjb51 * 24
+						/ 1080 + "px";	
+				document.getElementById("myform:cost_bar:" + i +":textval1").style.marginLeft= wjb51 * 30 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval2").style.marginLeft= wjb51 * 10 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval3").style.marginLeft= wjb51 * 10 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval4").style.marginLeft= wjb51 * 10 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval5").style.marginLeft= wjb51 * 10 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval1").style.width= wjb51 * 120 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval2").style.width= wjb51 * 83 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval3").style.width= wjb51 * 83 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval4").style.width= wjb51 * 83 / 1920 + "px";
+				document.getElementById("myform:cost_bar:" + i +":textval5").style.width= wjb51 * 83 / 1920 + "px";
+			}
+			
+			
+			
+			
+		</script>
+
+		<script type="text/javascript">
+			loadData();//放最后
+			loadData_machine();
+		</script>
+			<script type="text/javascript">
+				setTimeout(function(){
+				//document.getElementById("maskw").style.display="none";
+				document.getElementById("img3").style.display="block";
+				document.getElementById("img4").style.display="block";
+				$("#maskw").fadeOut(fadeouttime);
+				},settimeout);
+	        </script>								
+									
+								</rich:panel></td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
+		</table>
+		
+	</h:form>
+
+</ui:composition>

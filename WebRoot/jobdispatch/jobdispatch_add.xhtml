@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<link rel="stylesheet" href="../css/jobplan_control.css" type="text/css"></link>
+	
+		<style type="text/css">
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family: "微软雅黑";
+	color: #595959;
+	font-weight: bold;
+}	
+	
+.ui-state-highlight, .ui-widget-header .ui-state-highlight{
+text-shadow:none !important;
+}
+
+textarea, input[type="text"], input[type="password"], select {
+color:#595959;
+}
+.ui-button-icon-only {
+    width: 25px;
+    height:25px;
+}
+.ui-button-text
+{
+	padding: 0;
+	margin-top: -6px;
+}
+.rf-au-btn-arrow {
+    width: 19px;
+    height: 22px;
+}
+	</style>
+	
+	</h:head>		
+
+	<h:body>
+		<h:form id="myform">
+<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+<script type="text/javascript">
+var wjb51 = 0;
+var hjb51 = 0;
+hjb51 = document.body.clientHeight;
+wjb51 = document.body.clientWidth;
+if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
+		hjb51 = wjb51*1080/1920; 
+	}
+if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
+	   hjb51 = 600; 
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+   }
+if(800>wjb51){
+	   hjb51 = 600;
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+}
+	document.getElementById("maskw").style.height = hjb51 + "px";
+	document.getElementById("maskw").style.width = wjb51 + "px";
+</script>
+<table id="addcontains" >
+<tr>
+	<td  align="center"><h:outputText
+			value="工单新建"  id="jobplancontrol_top_text" />
+	</td>
+</tr>
+<tr><td style="text-align: center;">
+			
+     <table width="60%" height="100%">
+		<tr width="100%" height="50%">
+			<td width="15%" align="center"><h:outputText value="零件名称" id="jobplancontrol_top_text1" /></td>
+			<td width="25%" align="left">
+				<rich:autocomplete id="partTypeId" mode="client" minChars="0" autofill="false" autocompleteMethod="#{JobdispatchAdd.complete}"
+					value="#{JobdispatchAdd.partTypeId}" showButton="true">
+					<f:ajax event="selectitem" listener="#{JobdispatchAdd.searchList}" execute="partTypeId" render="myform:processResults :myform:carList :myform:shuaxin :myform:planjob"></f:ajax>
+				</rich:autocomplete>
+                <h:message for="partTypeId"></h:message>
+			</td>
+			<td width="12%" id="righttabletd1" align="center"><h:outputText value="投料数量" /></td>
+			<td width="20%" id="righttabletd2" align="left"><h:inputText id="num" value="#{JobdispatchAdd.num}" style="color:#595959;width:148.537px" /></td>
+			<td width="12%" id="righttabletd3" align="center"><h:outputText value="批次名称" /></td>
+			<td width="20%" id="righttabletd4" align="left"><h:inputText id="taskNum" value="#{JobdispatchAdd.taskNum}" style="color:#595959;" /></td>
+		    <td width="1%"></td>
+		    </tr>
+		    <tr>
+		    <td id="righttabletd5" align="center"><h:outputText value="开始时间" /></td>
+			<td id="righttabletd6" align="left">
+				<rich:calendar id="startDate" popup="true" required="true" requiredMessage="不能为空"  locale="en"
+								inputClass="time" value="#{JobdispatchAdd.startDate}" datePattern="yyyy-MM-dd" 
+								cellWidth="10px" cellHeight="20px" />
+			<h:message for="startDate" style="color:red"  />	
+			</td>
+			<td id="righttabletd7" align="center"><h:outputText value="结束时间" /></td>
+			<td id="righttabletd8" align="left">
+				<rich:calendar id="endDate" popup="true" required="true" requiredMessage="不能为空"  locale="en"
+								inputClass="time" value="#{JobdispatchAdd.endDate}" datePattern="yyyy-MM-dd" 
+								cellWidth="10px" cellHeight="20px" />
+			<h:message for="endDate" style="color:red"  />					
+			</td>
+			<td id="righttabletd9" align="center"><h:outputText value="批次号" /></td>
+			<td><h:selectOneMenu id="planjob" style="color:#595959;width:100%;"
+					value="#{JobdispatchAdd.planjobId}" >
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{JobdispatchAdd.planjobMap}"></f:selectItems>
+					<p:ajax listener="#{JobdispatchAdd.autoComplete}" execute="planjob" event="change" update="myform:num myform:taskNum" oncomplete="changeDisabled()"></p:ajax>
+				</h:selectOneMenu></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+
+ </td>
+ </tr><tr>
+ <td  style="text-align: center;" valign="top">
+						<img id="centerbg"
+							style="height:1px; left: 0px; border: 0px solid blue;"
+							src="../images/zyjhkz_line.png" />	
+     <table width="100%">
+		<tr>
+			<td valign="top" width="30%">
+				<table width="100%">
+				<tr><td>
+				<b><h:outputText value="工艺清单" style="float:left;"/></b>
+				</td></tr>
+				<tr><td width="100%">
+				<div id="type_detail"
+							style="overflow: auto; margin-left: 0px; float: clear;">
+				<p:dataTable id="processResults" var="record" value="#{JobdispatchAdd.mediumProcessModel}" paginator="false" 
+					rows="500" paginatorPosition="bottom" selection="#{JobdispatchAdd.selectedProcess}" style="border:0px;" >
+					<p:column selectionMode="multiple" id="leftpcol1" disabledSelection="true" style="background-color:rgb(191,191,191);" update=":myform:displayMulti" />
+					<p:column headerText="工序编码" id="leftpcol2" style="background-color:rgb(191,191,191);" >#{record.no}</p:column>
+					<p:column headerText="工序名称" id="leftpcol3" style="background-color:rgb(191,191,191);" >#{record.cname}</p:column>
+					<p:column headerText="节拍时间" id="leftpcol4" style="background-color:rgb(191,191,191);">#{record.theoryWorktime}</p:column>
+				</p:dataTable>	
+				</div>
+				</td></tr>
+				</table>		
+			</td>
+			<td width="5%" valign="top">
+					<table>
+						<tr>
+							<td valign="top">
+							<div onmousedown="sub()"   id="scDiv2" >
+							<h:commandButton  id="product" value="生成" update=":myform:carList"  
+								 style="background-color:rgb(0,160,64);border:0px !important; 
+									background-image: url('') !important;color:white !important;" >
+									<f:ajax event="click" render=":myform:carList :myform:shuaxin" listener="#{JobdispatchAdd.produceJobDispathList}" execute="partTypeId num taskNum"  />
+									</h:commandButton>
+							</div>		
+							</td>
+						</tr>
+						<tr>
+							<td >
+							
+							<h:commandButton  id="product1" value="取消" update=":myform:carList"
+								 style="background-color:rgb(0,160,64);border:0px !important;
+									background-image: url('') !important;color:white !important;" >
+									<f:ajax  render=":myform:carList :myform:shuaxin" listener="#{JobdispatchAdd.delList}"   />
+									</h:commandButton>
+									
+							</td>
+						</tr>
+					</table>
+			</td>
+			<td  valign="top" width="65%">
+			    <table width="100%">
+				<tr><td>
+			<b><h:outputText id="qingdan1text" value="工单列表" style="float:left" /></b>
+			</td></tr>
+			<tr><td>
+		<div id="type_detail1"
+							style="overflow: auto; margin-left: 0px; float: clear;">	
+		<p:dataTable id="carList" var="record" value="#{JobdispatchAdd.jobdispatchModel}"  rows="10"  
+	             paginatorPosition="bottom" editable="true"   styleClass="table" 
+                 selection="#{JobdispatchAdd.selectedJobdispatch}" > 
+      <p:ajax event="rowSelect" listener="#{JobdispatchAdd.onRowSelect}"   update=":myform:carList"  />           
+        <p:ajax event="rowEdit" listener="#{JobdispatchAdd.onEdit}" update=":myform:carList :myform:messages" />
+        <p:ajax event="rowEditCancel" listener="#{JobdispatchAdd.onCancel}" update=":myform:carList" />
+
+     
+     							<p:column id="rightpcol1">
+										<f:facet name="header" >
+											<p:selectBooleanCheckbox value="#{JobdispatchAdd.oneBool}">
+												<f:ajax render=":myform:carList" listener="#{JobdispatchAdd.editCheckBox}" />
+											</p:selectBooleanCheckbox>
+										</f:facet>
+										<p:selectBooleanCheckbox value="#{record.bool}">
+											<f:ajax render=":myform:carList" listener="#{JobdispatchAdd.editList(record.dno)}" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+     
+        <p:column id="rightpcol2" headerText="工单编码"  >  
+           <p:cellEditor>
+                <f:facet name="output">
+                
+                <h:outputText value="#{record.dno}" />               
+                    
+                </f:facet>
+                <f:facet name="input">
+                    <h:outputText value="#{record.dno}"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>       
+  
+  <ui:remove>
+        <p:column id="rightpcol3" headerText="投料工单号"  >   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.batchNo.substring(0,10)}..." />
+                </f:facet>
+                <f:facet name="input">
+                    <h:outputText value="#{record.batchNo}" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column> 
+        
+        <p:column id="rightpcol4" headerText="任务号"  >   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.taskNum}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:outputText value="#{record.taskNum}"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>  
+</ui:remove>
+  
+        <p:column id="rightpcol5" headerText="工序编码"  >   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.no}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:outputText value="#{record.no}" /> 
+                </f:facet>
+            </p:cellEditor>
+        </p:column>  
+  
+        <p:column id="rightpcol6" headerText="工序名称"  >  
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.cname}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:outputText id="cname" value="#{record.cname}"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column> 
+        
+        <p:column id="rightpcol7" headerText="设备类型"  >           
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.eduTypeName}" />
+                </f:facet>
+                <f:facet name="input">
+                    	<h:selectOneMenu id="equTypeId" value="#{record.equTypeId}"  >            
+							<f:selectItems value="#{record.eduTypeMapforupdata}" var="tt" itemLabel="#{tt.sbname}" itemValue="#{tt.sbvalue}"></f:selectItems>
+					    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>  
+        
+        <p:column id="rightpcol8" headerText="数量"  >  
+        <p:cellEditor>     
+                <f:facet name="output">
+                    <h:outputText value="#{record.num}" />
+                </f:facet>
+                <f:facet name="input"> 
+                <h:outputText id="num" value="#{record.num}"  /> 
+                </f:facet>                                 
+                    
+        </p:cellEditor>
+        </p:column> 
+               
+        <p:column id="rightpcol9"  >
+            <p:rowEditor />
+        </p:column>
+
+    </p:dataTable> 
+    </div>
+    	
+    </td></tr>
+	</table>
+			</td>
+		</tr>
+	</table>
+
+ </td></tr>
+ 
+	<tr>
+		<td id="addcentertd3td5" colspan="2"  align="center">
+			<div id="submitbut">
+		<p:commandButton id="submitbut2"   oncomplete="window.opener.location.reload();window.close();"
+				value="" actionListener="#{JobdispatchAdd.saveJobDispatch}" style="float:left;border:0;width:55px;height:55px; background-image: url('../images/zyjhkz_save.png');background-color: white;" />						
+		<div id="submitbut3" style="float:left;"></div>
+		<h:commandButton value="" id="jobplancontrol_buttom_b4"  immediate="true" onclick="window.close();"
+		style="float:left;background-image: url(../images/zyjhkz_qx.png);height:55px;width:55px;background-color:white;border:0px;"  />
+			</div>						
+			</td>
+
+	</tr>
+</table>	
+<p:growl id="messages" showDetail="true"/> 
+<p:panel id="shuaxin">
+		<script type="text/javascript">
+		   document.getElementById("myform:processResults").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:processResults:leftpcol1").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:processResults:leftpcol2").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:processResults:leftpcol3").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:processResults:leftpcol4").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:processResults_data").style.fontSize=hjb51*15/900+"px";
+		   
+		   document.getElementById("myform:carList").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList:rightpcol1").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList:rightpcol2").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList:rightpcol5").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList:rightpcol6").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList:rightpcol7").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList:rightpcol8").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList:rightpcol9").style.fontSize=hjb51*15/900+"px";
+		   document.getElementById("myform:carList_data").style.fontSize=hjb51*15/900+"px";
+		   </script>
+</p:panel>
+<script>
+
+function changeDisabled(){
+	var planJob = document.getElementById("myform:planjob").value;
+	if(planJob){
+		document.getElementById("myform:num").disabled = true;
+		document.getElementById("myform:taskNum").disabled = true;
+	}else{
+		document.getElementById("myform:num").disabled = false;
+		document.getElementById("myform:taskNum").disabled = false;
+		document.getElementById("myform:num").value = "";
+		document.getElementById("myform:taskNum").value = "";
+	}
+	document.getElementById("myform:num").style.height=hjb51*25/900+"px";
+	document.getElementById("myform:num").style.width=wjb51*150/1600+"px";
+	document.getElementById("myform:taskNum").style.width=wjb51*150/1600+"px";
+	document.getElementById("myform:taskNum").style.height=hjb51*25/900+"px";
+}
+</script>
+<script type="text/javascript">
+var imgPercent = hjb51/900; //比例 
+document.getElementById("addcontains").style.width=wjb51+"px";
+document.getElementById("addcontains").style.height=hjb51*800/900+"px";
+
+document.getElementById("myform:jobplancontrol_top_text").style.fontSize=hjb51*45/900+"px";
+document.getElementById("myform:jobplancontrol_top_text1").style.fontSize=hjb51*24/900+"px";
+
+//图片背景 
+document.getElementById("centerbg").style.marginTop = hjb51* 30 / 900 + "px";
+document.getElementById("centerbg").style.width = wjb51* 1352/1600+ "px";
+
+document.getElementById("myform:partTypeIdInput").style.width=wjb51*150/1600+"px";
+document.getElementById("myform:partTypeIdInput").style.height=hjb51*25/900+"px";
+document.getElementById("myform:partTypeIdInput").style.fontSize=hjb51*16/900+"px";
+document.getElementById("myform:num").style.height=hjb51*25/900+"px";
+document.getElementById("myform:num").style.width=wjb51*150/1600+"px";
+document.getElementById("myform:taskNum").style.width=wjb51*150/1600+"px";
+document.getElementById("myform:taskNum").style.height=hjb51*25/900+"px";
+document.getElementById("myform:planjob").style.width=wjb51*150/1600+"px";
+document.getElementById("myform:planjob").style.height=hjb51*25/900+"px";
+document.getElementById("myform:startDateInputDate").style.width=wjb51*175/1600+"px";
+document.getElementById("myform:startDateInputDate").style.height=hjb51*25/900+"px";
+document.getElementById("myform:endDateInputDate").style.width=wjb51*150/1600+"px";
+document.getElementById("myform:endDateInputDate").style.height=hjb51*25/900+"px"; 
+
+document.getElementById("righttabletd1").style.width=wjb51*100/1600+"px";
+document.getElementById("righttabletd1").style.fontSize=hjb51*24/900+"px";
+document.getElementById("righttabletd2").style.width=wjb51*130/1600+"px";
+document.getElementById("righttabletd3").style.width=wjb51*100/1600+"px";
+document.getElementById("righttabletd3").style.fontSize=hjb51*24/900+"px";
+document.getElementById("righttabletd4").style.width=wjb51*130/1600+"px";
+document.getElementById("righttabletd5").style.width=wjb51*140/1600+"px";
+document.getElementById("righttabletd5").style.fontSize=hjb51*24/900+"px";
+document.getElementById("righttabletd6").style.width=wjb51*130/1600+"px";
+document.getElementById("righttabletd7").style.width=wjb51*140/1600+"px";
+document.getElementById("righttabletd7").style.fontSize=hjb51*24/900+"px";
+document.getElementById("righttabletd8").style.width=wjb51*130/1600+"px";
+document.getElementById("righttabletd9").style.width=wjb51*130/1600+"px";
+document.getElementById("righttabletd9").style.fontSize=hjb51*24/900+"px";
+
+document.getElementById("type_detail").style.height = hjb51 * 400/ 900 + "px";
+document.getElementById("myform:processResults").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:processResults").style.width=wjb51*487/1600+"px";
+document.getElementById("myform:processResults:leftpcol1").style.width=wjb51*487/1600*2/100+"px";
+document.getElementById("myform:processResults:leftpcol1").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:processResults:leftpcol2").style.width=wjb51*487/1600*25/100+"px";
+document.getElementById("myform:processResults:leftpcol2").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:processResults:leftpcol3").style.width=wjb51*487/1600*25/100+"px";
+document.getElementById("myform:processResults:leftpcol3").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:processResults:leftpcol4").style.width=wjb51*487/1600*24/100+"px";
+document.getElementById("myform:processResults:leftpcol4").style.fontSize=hjb51*15/900+"px";
+
+document.getElementById("myform:product").style.width=wjb51*75/1600+"px";
+document.getElementById("myform:product").style.height=wjb51*75/1600+"px";
+document.getElementById("myform:product").style.fontSize=wjb51*18/1600+"px";
+document.getElementById("scDiv2").style.marginTop=hjb51*80/900+"px";
+document.getElementById("scDiv2").style.width=wjb51*75/1600+"px";
+document.getElementById("scDiv2").style.height=wjb51*75/1600+"px";
+document.getElementById("myform:product1").style.marginTop=hjb51*80/900+"px";
+document.getElementById("myform:product1").style.width=wjb51*75/1600+"px";
+document.getElementById("myform:product1").style.height=wjb51*75/1600+"px";
+document.getElementById("myform:product1").style.fontSize=wjb51*18/1600+"px"
+
+document.getElementById("type_detail1").style.height = hjb51 * 400/ 900 + "px";
+document.getElementById("type_detail1").style.width = wjb51 * 60/ 100 + "px";
+document.getElementById("myform:carList").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:carList:rightpcol1").style.width=wjb51*487/1600*5/100+"px";
+document.getElementById("myform:carList:rightpcol1").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:carList:rightpcol2").style.width=wjb51*487/1600*20/100+"px";
+document.getElementById("myform:carList:rightpcol2").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:carList:rightpcol5").style.width=wjb51*487/1600*10/100+"px";
+document.getElementById("myform:carList:rightpcol5").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:carList:rightpcol6").style.width=wjb51*487/1600*5/100+"px";
+document.getElementById("myform:carList:rightpcol6").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:carList:rightpcol7").style.width=wjb51*487/1600*10/100+"px";
+document.getElementById("myform:carList:rightpcol7").style.fontSize=hjb51*15/900+"px";
+document.getElementById("myform:carList:rightpcol8").style.width=wjb51*487/1600*10/100+"px";
+document.getElementById("myform:carList:rightpcol8").style.fontSize=hjb51*15/900+"px";	
+document.getElementById("myform:carList:rightpcol9").style.width=wjb51*487/1600*5/100+"px";
+document.getElementById("myform:carList:rightpcol9").style.fontSize=hjb51*15/900+"px";	
+
+document.getElementById("submitbut3").style.width=wjb51*110/1600+"px";
+document.getElementById("submitbut3").style.height=hjb51*10/900+"px";
+
+document.getElementById("submitbut").style.marginLeft=wjb51*600/1600+"px";
+
+</script>
+
+<script type="text/javascript">
+     document.getElementById("myform:startDatePopupButton").style.display="none";
+     document.getElementById("myform:endDatePopupButton").style.display="none";
+    function sub(){      
+		var num = document.getElementById("myform:num").value;
+		var partTypeId = document.getElementById("myform:partTypeIdInput").value;
+		if(partTypeId==null || partTypeId=="undefined" || partTypeId==""){
+			alert("请选择零件名称!");
+			return false;
+		}
+		if(num==null || num=="undefined" || num==""){
+			alert("投料数量不能为空!");
+			return false;
+		}
+		var taskNum = document.getElementById("myform:taskNum").value;
+		if(taskNum==null || taskNum=="undefined" || taskNum==""){
+			alert("批次号不能为空!");
+			return false;
+		}
+		var startDate = document.getElementById("myform:startDateInputDate").value;
+		var endDate = document.getElementById("myform:endDateInputDate").value;
+		if(startDate==null || startDate=="undefined" || startDate==""){
+			alert("开始时间不能为空!");
+			return false;
+		}
+		if(endDate==null || endDate=="undefined" || endDate==""){
+			alert("结束时间不能为空!"); 
+			return false;
+		}
+	 	var sDate = new Date(startDate.replace(/\-/g, "\/"));
+	 	var eDate = new Date(endDate.replace(/\-/g, "\/"));
+	 	if(sDate>eDate){
+	 		alert("开始时间不能大于结束时间!"); 
+			return false;	 		
+	 	}
+		
+       	var reg = new RegExp("^[0-9]*$");
+       	var obj = document.getElementById("myform:num");
+	    if(!reg.test(obj.value)){
+	        alert("投料数量为数字!");
+	    }
+		
+    }	
+</script>
+		
+    	 <script type="text/javascript">
+				setTimeout(function(){
+				//document.getElementById("maskw").style.display="none";
+				$("#maskw").fadeOut(500);
+				},100);
+     	</script>
+		</h:form>
+	</h:body>
+	
+</ui:composition>

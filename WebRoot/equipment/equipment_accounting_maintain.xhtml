@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+
+<div style="width: 100%;height: 100%; position: relative;">
+ 	<div class="headDiv" id="equipment_type_center_right_top">
+		<div style="width: 100%;height: 5px;"></div> 
+		<p:commandButton value="导出" oncomplete="onOutput()" styleClass="delete" />
+	    <h:commandButton id="output" value="导出" action="#{EquipmentAccounting.downloadExcel}" style="display: none;" />
+	</div>
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+	<div class="materail_class_treeDiv">
+		<div class="tree-head"></div>
+		<div class="tree-body">
+		    <p:tree value="#{EquipmentAccounting.root}" var="node" id="tree" selectionMode="single"  selection="#{EquipmentAccounting.treeSelectedEqu}"  >  
+					<p:ajax event="select" update=":myform:carList"
+						listener="#{EquipmentAccounting.onNodeSelect}" execute="@this" oncomplete="bgReposition($('.table'))" />
+		        <p:treeNode id="treeNode">  
+		            <h:outputText value="#{node.equipmentType}" id="lblNode"/>  
+		        </p:treeNode>  
+		    </p:tree>  
+	    </div>
+		<div class="tree-foot"></div>
+		<div class="div_tree_border_shadow">
+			<img src="../images/demo/tree_border_shadow.png" />
+		</div>
+		<div id="tree_move_btn" class="btn_tree_show"></div>
+	</div>
+	<ui:remove>
+		<div id="equipment_accounting_center_right_top" class="equipment_accounting_center_right_top">
+			<p:commandButton id="add" value="新建" update=":myform:apart " oncomplete="addPartTypelog.show()"   styleClass="delete"/> 
+		    <p:commandButton  value="删除(D)" styleClass="delete"  actionListener="#{EquipmentAccounting.onSelected}" oncomplete="ondelete()" update=":myform:sed"/> 
+		    <p:commandButton id="delete" value="删除(D)" update=":myform:carList :myform:displayMulti"  actionListener="#{EquipmentAccounting.onDelete}" style="display:none;"/> 
+		</div>
+	</ui:remove>
+	<div style="position: absolute;border:1px black solid;width: 402px;height: 200px;display: none;background-color: white;margin-left: 100px;margin-top: 100px;z-index: 10" id="shangchuan">
+    	<rich:fileUpload doneLabel="文件上传成功"
+		        noDuplicate="true"
+	 			serverErrorLabel="文件过大,导致文件上传失败"
+				fileUploadListener="#{EquipmentAccounting.listener}"
+				id="upload" acceptedTypes="jpg,pdf,png"
+				ontyperejected="alert('添加文件格式为jpg,pdf,png');" maxFilesQuantity="5"
+				clearLabel="clear" deleteLabel="删除" addLabel="添加文件"
+				uploadLabel="上传文件" 
+				style="width:400px;height:80px;border-right: 1px solid silver;border-right-color: white;">
+				<f:ajax event="uploadcomplete" execute="@none" render=":myform:messages"></f:ajax>
+		</rich:fileUpload>
+		<div style="width: 100px;height: 90px;"></div>
+		<h:commandButton value="关闭" onclick="onBlock"  styleClass="delete">
+		    <f:ajax listener="#{EquipmentAccounting.updateEquImage}"  event="click"  render=":myform:carList" onevent="onBlock" ></f:ajax>
+		</h:commandButton>
+    </div>
+    <div class="materail_class_rightDiv hidden">
+    	<p:dataTable id="carList" var="record" value="#{EquipmentAccounting.mediumEquipmentInfoModel}" paginator="true" rows="10"   
+		paginatorPosition="bottom" editable="true" selection="#{EquipmentAccounting.selectedEquipment}" styleClass="table" style="width: 2000px;">   
+        <p:ajax event="rowEdit" listener="#{EquipmentAccounting.onEdit}" update=":myform:carList :myform:messages" />
+        <p:ajax event="rowEditCancel" listener="#{EquipmentAccounting.onCancel}" update=":myform:carList" />
+  
+        <p:column headerText="" style="width:2%;word-break: break-all;"/>
+        <p:column selectionMode="multiple"  style="width:3%;word-break: break-all;"/>
+        <p:column headerText="设备名称" style="width:10%;word-break: break-all;">  
+           <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.equName}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.equName}" disabled="true" style="width: 100%;" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>  
+  
+        <p:column headerText="设备类型名称" style="width:8%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.equipmentType}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.equipmentType}"  disabled="true" style="width: 100%;" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>  
+        
+        <p:column headerText="设备序列号" style="width:7%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.equSerialNo}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.equSerialNo}" disabled="true" style="width: 100%;"  />
+                </f:facet>
+            </p:cellEditor>
+        </p:column> 
+        
+        <p:column headerText="节点名称" style="width:7%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.nodeName}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.nodeName}"  disabled="true" style="width: 100%;" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>   
+  
+        <p:column headerText="型号/牌号" style="width:5%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.norm}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.norm}" style="width: 100%;"  />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>  
+  
+        <p:column headerText="出厂编号" style="width:7%;word-break: break-all;">  
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.outfacNo}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.outfacNo}" style="width: 100%;"  />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>  
+        
+        <p:column headerText="厂家" style="width:5%;word-break: break-all;">  
+             
+             <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.manufacturer}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.manufacturer}" style="width: 100%;"  />
+                </f:facet>
+            </p:cellEditor>  
+        </p:column>
+        
+        <p:column headerText="进/验日期" style="width:7%;word-break: break-all;">     
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.checktime}" />
+                </f:facet>
+                <f:facet name="input">
+                  
+                     <p:inputText value="#{record.checktime}" onclick="WdatePicker()" style="width: 100%;" />
+                   <ui:remove>
+                     <p:calendar value="#{record.checktime}"  >
+                     <f:convertDateTime pattern="yyyy-MM-dd"></f:convertDateTime>
+                     </p:calendar>
+                   </ui:remove> 
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="X位置" style="width:5%;word-break: break-all;">  
+             
+           <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.xAxis}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.xAxis}" style="width: 100%;"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Y位置 " style="width:5%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.yAxis}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.yAxis}" style="width: 100%;"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="IP地址 " style="width:7%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.ipAddress}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.ipAddress}" style="width: 100%;"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <ui:remove>
+         <p:column headerText="图片路径" style="width:7%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.path}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.path}"  style="width: 100%;"  />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        </ui:remove>
+        
+        <p:column headerText="操作人员 " style="width:7%;word-break: break-all;">   
+             
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.peopleName}" />
+                </f:facet>
+                <f:facet name="input">
+                        <h:selectOneMenu id="equId" value="#{record.peopleId}" style="width: 100%;" > 
+                            <f:selectItem itemValue="" itemLabel="请选择"/>            
+							<f:selectItems value="#{record.allmap}"></f:selectItems>
+					    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="备注 " style="width:7%;word-break: break-all;">                  
+             <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{record.equDesc}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{record.equDesc}" style="width: 100%;"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>        
+                
+        <p:column headerText="上传图片" style="width:7%;word-break: break-all;">
+            <div style="width:80px;">
+            <p:commandLink value="上传" actionListener="#{EquipmentAccounting.setPart(record.equId,record.equSerialNo)}" oncomplete="ondisplay()"  ></p:commandLink>
+            <h:outputText value=" | "></h:outputText>
+	        <p:commandLink actionListener="#{EquipmentAccounting.getImgUrlAddress(record.equId)}" value="预览" oncomplete="imageUrl.show()" 
+	       		update=":myform:img1 :myform:img2 :myform:img3 :myform:img4"></p:commandLink>
+	       	</div>	
+	    </p:column>
+	    
+        <p:column headerText="操作" style="width:1%;word-break: break-all;">
+            <p:rowEditor />
+        </p:column>
+
+    </p:dataTable> 
+
+    <p:dialog widgetVar="imageUrl" width="460" height="310" style="z-index:91">
+    	<div id="image1">
+    		<h:graphicImage value="../images/device/gz#{EquipmentAccounting.imgUrl1}" id="img1"></h:graphicImage>
+    		<h:graphicImage value="../images/device/tj#{EquipmentAccounting.imgUrl1}" id="img2"></h:graphicImage>
+    		<h:graphicImage value="../images/device/kx#{EquipmentAccounting.imgUrl1}" id="img3"></h:graphicImage>
+    		<h:graphicImage value="../images/device/yx#{EquipmentAccounting.imgUrl1}" id="img4"></h:graphicImage>
+    	</div>
+    </p:dialog>
+    
+    <p:dialog id="addlog" widgetVar="addPartTypelog" resizable="false">
+      <h:panelGroup id="apart">
+      	
+    	<table width="1000" border="0" cellspacing="0">
+		  <tr>
+		    <td colspan="6">设备设定</td>
+		  </tr>
+		  <tr>
+		    <td>设备编码<h:outputText style="color:red;" value="*" /></td>
+		    <td><h:inputText id="equSerialNo" value="#{EquipmentAccounting.equObj.equSerialNo}"  /></td>
+		    <td></td>
+		    <td>设备名称<h:outputText style="color:red;" value="*" /></td>
+		    <td><h:inputText id="equName" value="#{EquipmentAccounting.equObj.equName}"  /></td>
+		    <td></td>
+		  </tr>
+		  <tr>
+		    <td>出厂编号</td>
+		    <td><h:inputText id="outfacNo" value="#{EquipmentAccounting.equObj.outfacNo}"  /></td>
+		    <td></td>
+		    <td>厂家</td>
+		    <td><h:inputText value="#{EquipmentAccounting.equObj.manufacturer}"  /></td>
+		    <td></td>
+		  </tr>
+		  <tr>
+		    <td>X位置</td>
+		    <td><h:inputText value="#{EquipmentAccounting.equObj.xAxis}"  /></td>
+		    <td></td>
+		    <td>Y位置</td>
+		    <td><h:inputText value="#{EquipmentAccounting.equObj.yAxis}"  /></td>
+		    <td></td>
+		  </tr>	
+		  <tr>
+		    <td>型号/牌号</td>
+		    <td>  
+		     <h:inputText value="#{EquipmentAccounting.equObj.norm}"  />
+		    </td>
+		    <td></td>
+		    <td>备注</td>
+		    <td><h:inputText value="#{EquipmentAccounting.equObj.equDesc}"  /></td>
+		    <td></td>
+		  </tr>
+		  <tr>
+		  	<td>进/验日期</td>
+		    <td>
+		    <p:calendar value="#{EquipmentAccounting.equObj.checktime}" id="checktime" />
+		    </td>
+		    <td></td>
+		    <td>
+		    <h:outputText value="设备类型"  /><h:outputText style="color:red;" value="*" />
+		    </td>
+			<td>            
+			              <h:selectOneMenu id="addequId"   
+								value="#{EquipmentAccounting.equObj.equTypeId}" >
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{EquipmentAccounting.equTypeMap}"></f:selectItems>
+							</h:selectOneMenu>
+			</td>
+			 <td></td>
+		  </tr>
+		    <tr>
+		    <td colspan="6">
+		      				<p:commandButton onclick="onAdd()" value="增加"></p:commandButton>
+		    				<p:commandButton actionListener="#{EquipmentAccounting.addEqu}" 
+		    				 value="增加" render=":myform:carList :myform:apart :myform:messages" style="display:none;" id="addPartType">
+		    				</p:commandButton>
+		    				
+		   </td> 				
+		   </tr> 				
+		</table>
+    </h:panelGroup>
+    </p:dialog>
+    <p:dialog id="multiDialog"  widgetVar="multiCarDialog"  height="200" showEffect="fade" hideEffect="explode" >  
+        <p:dataList id="displayMulti" value="#{EquipmentAccounting.selectedEquipment}" var="process"> 
+        </p:dataList>  
+    </p:dialog>
+     </div>
+    </div> 
+		
+ <p:growl id="messages" showDetail="true"/> 
+     <h:inputHidden value="#{EquipmentAccounting.selected}" id="sed"></h:inputHidden>
+       <script type="text/javascript">
+	//<![CDATA[
+	       function ondelete(){
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认删除此数据！")){
+		    		   document.getElementById("myform:delete").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行删除！");
+	    	   }
+	       }
+	       
+	       function onClear(){
+	    	   if(confirm("是否确认要清空数据,请慎重选择！")){
+	    		   document.getElementById("myform:clear").click();
+	    	   }
+	       }
+	       function onStop(){
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认停用这些数据！")){
+		    		   document.getElementById("myform:disabled").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行停用！");
+	    	   }
+	       }
+	       function onAdd(){
+	    	   var addequId=document.getElementById("myform:addequId").value;
+	    	   var equSerialNo=document.getElementById("myform:equSerialNo").value;
+	    	   var equName=document.getElementById("myform:equName").value;
+	    	   if(null==addequId||""==addequId){
+	    		   alert("请选择设备类型");
+	    		   return false;
+	    	   }else  if(null==equSerialNo||""==equSerialNo){
+	    		   alert("请输入设备编码");
+	    		   return false;
+	    	   }else if(null==equName||""==equName){
+	    		   alert("请输入设备名称");
+	    		   return false;
+	    	   }else{   
+	    		   document.getElementById("myform:addPartType").click();
+	     	   }
+	       }
+	       
+	       function ondisplay(){
+	    	   document.getElementById("shangchuan").style.display="block";
+	       }
+	       function onBlock(){
+	    	   document.getElementById("shangchuan").style.display="none";
+	       }
+	       
+	//]]>
+	</script>	
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 		
+	
+</ui:composition>

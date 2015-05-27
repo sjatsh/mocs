@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:form id="menuform">
+<h:inputHidden id="menuJsonStr" value="#{menuBean.menuJsonStr}" />
+<h:inputHidden id="nowSelectMenuItem" value="#{menuBean.nowSelectMenuItem}" />
+	<div class="content">
+		<div id="bottom-bar">
+			<ul id="menus" class="venus-menu">
+			</ul>
+		</div>
+	</div>
+		<script language="javascript">
+	//<![CDATA[	
+		$(document).ready(function() {
+
+
+		var menuListJson = document.getElementById("menuform:menuJsonStr").value;
+		
+		var nowSelectMenuItem = document.getElementById("menuform:nowSelectMenuItem").value;
+
+        //生成menu DOM
+		json2Html(menuListJson);
+        
+        //创建多级菜单
+		$().maps();
+
+        /* menu自适应CSS */
+        var minHeight = 600;
+        var menuListObj = eval("(" + menuListJson + ")");   //对象引用
+        var documentWidth = $("#bottom-bar")[0].offsetWidth;	//当前宽度
+        var documentHeight = document.body.offsetHeight;    //总高度获取
+        if(documentHeight < minHeight) { documentHeight = minHeight; }
+        $("#bottom-bar").css("margin-top", 1006 / 1080 * documentHeight + "px");  //框架高度
+        $("#menus").css("width", menuListObj.content.length * (335 / 1920 * documentWidth) + "px").css("height", 8 / 100 * documentHeight + "px");   //菜单栏尺寸
+        $("#menus>li>a").css("font-size", 38 / 1080 * documentHeight + "px").css("width", 335 / 1920 * documentWidth + "px").css("height", 8 / 100 * documentHeight + "px").css("line-height", 8 / 100 * documentHeight + "px");  //单个菜单尺寸
+        $("#menus>li>.indicator").css("top", ((8 / 100 * documentHeight) - 20) / 2 + "px");  //子菜单icon位置
+        $("#menus>li>ul").css("bottom", 8 / 100 * documentHeight + "px");    //子菜单位置
+        $("#menus>li>ul li a").css("width", 300 / 1920 * documentWidth + "px").css("font-size", 30 / 1080 * documentHeight + "px").css("padding", 30 / 1920 * documentWidth + "px").css("line-height", 30 / 1080 * documentHeight + "px");   //子菜单尺寸
+        $("#menus>li>ul li>.indicator").css("top", ((8 / 100 * documentHeight) - 20) / 2 + "px");    //复子菜单icon位置
+
+        //悬停是否直接显示三级菜单
+        $("#menus>li>a,#menus>li>.indicator").mouseover(function() {
+            $(this.parentNode).find(".active").parent("ul").css("display", "block");
+        });
+        $("#menus>li>a,#menus>li>.indicator").mouseleave(function() {
+            $(this.parentNode).find("li>ul").css("display", "none");
+        });
+
+        //定位当前焦点
+        if(getCookie("menuActive") != null) {
+			act(getCookie("menuActive"));
+		}
+		else {
+			act(nowSelectMenuItem);
+		}
+        //当前选中项居中
+        var activeLeft = $("#menus>.active")[0].offsetLeft;
+        var activeWidth = 335 / 1920 * documentWidth;
+        var menuRightPadding = documentWidth - menuListObj.content.length * (335 / 1920 * documentWidth);
+        if(menuRightPadding < 0 && activeLeft > documentWidth / 2) {
+            $("#menus").css("left", -(activeLeft - ((documentWidth - activeWidth) / 2)) + "px");
+          	
+            //右侧留白补回
+            if($("#menus")[0].offsetLeft < menuRightPadding) {
+                $("#menus").css("left", menuRightPadding + "px");
+            }
+        }
+        
+
+        //允许拖拽
+		$("#menus").draggable({
+			axis: "x",
+			stop: function() {
+				if($("#menus")[0].offsetLeft > 0) {
+					$("#menus").animate({left:"0px"}, 500);
+				}
+                var menuRightPadding = $("#bottom-bar")[0].offsetWidth - menuListObj.content.length * (335 / 1920 * documentWidth);
+                if(menuRightPadding >= 0) {menuRightPadding = 0;}
+				if($("#menus")[0].offsetLeft < menuRightPadding) {
+					$("#menus").animate({left: menuRightPadding + "px"}, 500);
+				}
+
+                clickAble = false;
+            }
+		});
+	});
+		//]]>
+	</script>
+</h:form>
+</ui:composition>
+ 

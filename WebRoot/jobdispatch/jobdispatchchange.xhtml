@@ -1,0 +1,896 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link rel="stylesheet" href="./css/jobplan_add.css" type="text/css"></link>
+		<link href="./ext/css/jquery-selectbox.css" rel="stylesheet"
+			type="text/css" />
+		<script src="./ext/js/jquery-selectbox.js" type="text/javascript"></script>
+		<h:outputScript library="js" name="common.js"></h:outputScript>
+		<style type="text/css">
+.data {
+	height: 37px;
+	font-weight: normal;
+}
+
+.toptab {
+	display: block !important;
+}
+.rf-cal-extr{
+    font-weight: normal;
+}
+.rf-cal-tl-ftr{
+    font-weight: normal;
+}
+.rf-cal-tl-btn{
+    font-weight: normal;
+}
+
+.btn-next {
+	width: 59px;
+	height: 59px;
+	cursor: pointer;
+}
+
+.ui-dt-c{
+   font-weight: normal;
+   color:#333333;
+}
+.ui-state-default .ui-dt-c span{
+   text-shadow:none;
+   color:white;
+}
+ .mybutton .ui-button-text{
+   color:white;
+}
+.t_select_list_table{
+   width: 230px;
+}
+
+textarea, input[type="text"], input[type="password"], select{
+font-size:20px;
+font-family: "微软雅黑";
+color:#333333;
+}
+
+.ui-state-default{background:#00a040;}
+
+.t_selected {
+	float: left;
+	overflow: hidden;
+	width: 230px;
+	height: 30px;
+	line-height: 28px;
+	color: #000;
+	text-align: left;
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+	display: block;
+}
+
+
+/* 保存按钮 */
+.btn-save {
+	width: 53px;
+	height: 53px;
+	cursor: pointer;
+}
+
+/* 上一步按钮 */
+.btn-prev {
+	width: 59px;
+	height: 59px;
+	cursor: pointer;
+}
+
+.imagebtn {
+	cursor: pointer;
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family: "微软雅黑";
+	color: #595959;
+	font-weight: bold;
+	font-size:inherit;
+}
+</style>
+
+	</h:head>
+
+	<h:body>
+		<h:form id="myform">
+			<div id="maskw"
+				style="position: absolute; z-index: 1000000; top: 0px; left: 0px; background-color: white;"></div>
+			<script type="text/javascript">
+				
+				$(document).ready(function() {
+					$("#select_box_No").selectboxs();
+				});
+				$(document).ready(function() {
+					$("#select_box_Name").selectboxs();
+				});
+			</script>
+			<div style="width: 100%;" align="center" id ="content">
+
+				<table id="baogong" style="width: 100%">
+					<tr>
+						<td id="detailtop" valign="top" colspan="3">
+							<table id="topleftright" style="width: 100%;">
+								<tr>
+									<td id="topleft" valign="middle" align="right" rowspan="2"></td>
+									<td id="topright" valign="middle">
+										<div id="topright" align="center">
+
+											<table id="tabmenu" style="width: 100%">
+												<tr>
+													<td id="tiaojian1" width="60%"> 
+														<table width="100%">
+															<tr>
+																<td width="43%" align="right"><h:outputText
+																		value="设备序列号：" /></td>
+																<td width="57%">
+																	<div id="select_box_No">
+																		<table id="table_No" >
+																			<c:forEach items="#{JobdispatchChange.equTypeList}"
+																				var="equ">
+																				<tr>
+																					<td style="width: 230px;"><label><input
+																							type="checkbox" name="select_box_No"
+																							onclick="s.changeSelected(this,event);"
+																							value="#{equ.id}" onblur="s.hiddenList()" /><span>#{equ.no}</span></label>
+																					</td>
+																				</tr>
+																			</c:forEach>
+																		</table>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<td style="width: 30%;" align="right"><h:outputText value="设备名称：" /></td>
+																<td>
+																	<div id="select_box_Name">
+																		<table id="table_Name">
+																			<c:forEach
+																				items="#{JobdispatchChange.equTypeNameList}"
+																				var="equName">
+																				<tr>
+																					<td style="width: 230px;"><label><input
+																							type="checkbox" name="select_box_Name"
+																							onclick="s.changeSelected(this,event);"
+																							value="#{equName.id}" onblur="s.hiddenList()" /><span>#{equName.name}</span></label>
+																					</td>
+																				</tr>
+																			</c:forEach>
+																		</table>
+																	</div>
+																</td>
+															</tr>
+														</table>
+													</td>
+													<td id="button" style="width: 20%;" align="center"><h:graphicImage
+															alt="next" url="./images/jobplan/list/jobpaln_button.png"
+															onclick="subClick('myform:chaxun_one')"
+															styleClass="imagebtn"
+															style="float: right; margin-right: 1%;"></h:graphicImage>
+														<h:commandButton id="chaxun_one" value="查询"
+															style="display:none;" onclick="setValueforHidd()">
+															<f:ajax listener="#{JobdispatchChange.serachEqu}"
+																execute="serachEquId serachEquId2" event="click"
+																render=":myform:tb :myform:hiddenequID" />
+														</h:commandButton></td>
+													<td width="20%">&nbsp;</td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+								<tr><td align="left">
+										<p:commandButton id="importButton" value="报工单信息" style="display:none;background-color:rgba(219, 234, 231, 1);;border:0;width: 120px;font-size: 14px;height: 30px;margin-right: 30px;background-image: url('');"
+											onclick="javascript:openUrl('./jobdispatch/jobdispatchNo.faces')">
+										</p:commandButton>
+									</td>
+								</tr>
+							</table>
+
+						</td>
+					</tr>
+					<tr>
+						<!--上一步控制-->
+						<td align="left" style="width: 15%;">
+							<div id="divPrev1" style="display: none;" align="center">
+								<h:graphicImage alt="prev" url="./images/demo/icons/left.png"
+									onclick="controlScreen(2)" styleClass="btn-next"
+									></h:graphicImage>
+								<p:commandButton value="上一步" id="btn_prev1"
+									style="display: none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+									onclick="controlScreen(2)" />
+									<br/><div style="font-weight: normal;">上一步</div>
+							</div>
+
+						</td>
+						<!--内容控制-->
+						<td id="middleCenter" align="center" style="width:70%">
+							<div style="position: relative; overflow: hidden; " id="equipmentCopy">
+								<div id="title" style="position:absolute;left:0px;top:0px;right:0px;z-index: 1;" >
+									<div class="ui-datatable ui-widget">
+										<table width="100%">
+											<tr>
+												<th class="ui-state-default" style="width: 33%"
+													><div class="ui-dt-c">
+														<span>序号</span>
+													</div></th>
+												<th class="ui-state-default" style="width: 33%"
+													><div class="ui-dt-c">
+														<span>设备序列号</span>
+													</div></th>
+												<th class="ui-state-default" style="width: 34%"
+													><div class="ui-dt-c">
+														<span>设备名称</span>
+													</div></th>
+											</tr>
+										</table>
+									</div>
+								</div>
+								
+								<div id="equipment" style="overflow-y:scroll;margin-left: 0px ">
+
+									<h:inputHidden id="hiddenequID"
+										value="#{JobdispatchChange.equId}"></h:inputHidden>
+									<h:inputHidden value="#{JobdispatchChange.jobdispatchId}"
+										id="jobdispatchId"></h:inputHidden>
+									<p:dataTable id="tb" style="width:100%;"
+										value="#{JobdispatchChange.data}" var="record"
+										paginator="false" paginatorPosition="bottom"
+										selectionMode="single" rowKey="#{record.equId}">
+										<p:ajax event="rowSelect"
+											listener="#{JobdispatchChange.onRowSelect}"
+											update=":myform:hiddenequID" />
+										<p:column headerText="序号"
+											style="width:33%;word-break:break-all ">  
+					            #{JobdispatchChange.data.rowIndex+1}  
+					        </p:column>
+										<p:column headerText="设备序列号"
+											style="width:33%;word-break:break-all;">  
+					            #{record.no}  
+					        </p:column>
+										<p:column headerText="设备名称"
+											style="width:34%;word-break:break-all">  
+					            #{record.name}  
+					        </p:column>
+									</p:dataTable>
+								</div>
+								<div id="title2" style="position:absolute;left:0px;top:0px;right:0px;z-index: 1;display: none" >
+									<div class="ui-datatable ui-widget">
+										<table width="100%">
+											<tr>
+												<th class="ui-state-default" style="width:35%;word-break:break-all">
+												 <div class="ui-dt-c">
+														<span>工单号</span>
+													</div></th>
+												<th class="ui-state-default" style="width:25%;word-break:break-all">
+												<div class="ui-dt-c">
+														<span>零件名称</span>
+													</div></th>
+												<th class="ui-state-default" style="width:15%;word-break:break-all">
+												<div class="ui-dt-c">
+														<span>零件编号</span>
+													</div></th>
+												<th class="ui-state-default" style="width:5%;word-break:break-all">
+												<div class="ui-dt-c">
+														<span>工序号</span>
+													</div></th>
+												<th class="ui-state-default" style="width:15%;word-break:break-all">
+												<div class="ui-dt-c">
+														<span>工序名称</span>
+													</div></th>
+												<th class="ui-state-default" style="width:3%;word-break:break-all">
+												<div class="ui-dt-c">
+														<span>投料数量</span>
+													</div></th>
+												<th class="ui-state-default" style="width:2%;word-break:break-all">
+												<div class="ui-dt-c">
+														<span>已报工</span>
+													</div></th>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<div id="getjobdispatch" style="display: none; overflow-y: scroll">
+									<p:dataTable id="tb2" style="width:100%;"
+										value="#{JobdispatchChange.dispatcheRsults}" var="info"
+										selectionMode="single" paginator="false"
+										paginatorPosition="bottom" rowKey="#{info.jobdispatchid}"
+										selection="#{JobdispatchChange.selectValue}">
+
+										<p:column headerText="工单号"
+											style="width:35%;word-break:break-all">  
+					            #{info.no}  
+					        </p:column>
+										<p:column headerText="零件名称" style="width:25%;word-break:break-all">  
+					            #{info.partname}  
+					        </p:column>
+										<p:column headerText="零件编号" style="width:15%;word-break:break-all">  
+					            #{info.partNo}  
+					        </p:column>
+					                    <p:column headerText="工序号" style="width:5%;word-break:break-all">  
+					            #{info.processorder}  
+					        </p:column>
+										<p:column headerText="工序名称" style="width:15%;word-break:break-all">  
+					            #{info.processname}  
+					        </p:column>
+										<ui:remove>
+											<p:column headerText="批次计划号" style="width:10%;word-break:break-all">  
+					            #{info.jobplanno}  
+					        </p:column>
+										</ui:remove>
+										<p:column headerText="投料数量" style="width:3%;word-break:break-all">  
+					            #{info.plannum}  
+					        </p:column>
+										<p:column headerText="已报工" style="width:2%;word-break:break-all">  
+					            #{info.finishNum}  
+					        </p:column>
+									</p:dataTable>
+								</div>
+								<div align="center" id="selectedInfo"  style="display: none"> 
+								     <table id="tab1">
+								     <tr>
+								     <td width="23%" align="right"><h:outputText value="所选设备名称:" style="font-weight: normal;"/>&nbsp;&nbsp;</td>
+                                     <td width="77%"><h:outputText id="selectEquName" style="font-weight: normal;" value ="#{JobdispatchChange.selectedEquName}"></h:outputText>
+                                     </td></tr><tr>
+                                    <td align="right"><h:outputText value="所选工单号:" style="font-weight: normal;"/>&nbsp;&nbsp;</td>
+                                    <td><h:outputText id="selectDispatchNo" style="font-weight: normal;" value ="#{JobdispatchChange.selectedDispatchNo}"></h:outputText>
+								     </td>
+								     </tr>
+								     </table>
+                                   
+                                    </div>
+								<div id="editInfo" style="display: none; overflow: auto"
+									align="center">
+									<table id="tab2">
+										<tr>
+											<td align="right" width="25%"><h:outputText id="labelUser" value="报工人员:"
+													/>&nbsp;&nbsp;</td>
+											<td id="userName" width="50%"><h:selectOneMenu id="user"
+													value="#{JobdispatchChange.userId}"
+													style="color:#595959;height:33px;font-weight: normal;">
+													<f:selectItems value="#{JobdispatchChange.userMap}"
+														var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
+														<f:ajax event="change" listener="#{JobdispatchChange.getUserInfo}" execute="@this" />
+												</h:selectOneMenu> <h:message for="user" style="color:red" /></td>
+											<td width="5%"><div style="color: red">*</div></td>
+											<td width="20%" rowspan="4" class="mybutton"><p:commandButton value="10"
+													style="border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+													onclick="onSetNum(10)" /><br />
+											<br /> <p:commandButton value="20"
+													style="border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+													onclick="onSetNum(20)" /><br />
+											<br /> <p:commandButton value="30"
+													style="border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+													onclick="onSetNum(30)" /><br />
+											<br /> <p:commandButton value="40"
+													style="border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+													onclick="onSetNum(40)" /></td>
+										</tr>
+
+										<tr>
+											<td align="right"><h:outputText id="labelNum" value="报工数量:"
+													/>&nbsp;&nbsp;</td>
+											<td><div style="position: relative;">
+													<h:inputText id="txtNum" value="#{JobdispatchChange.num}"
+														style="color:#595959;height:33px;font-weight: normal;"
+														required="true"
+														onkeyup="this.value=this.value.replace(/\D/g,'')"
+														onafterpaste="this.value=this.value.replace(/\D/g,'')"
+														requiredMessage="不能为空">
+														<a4j:ajax event="change"
+															listener="#{JobdispatchChange.checkNum}" execute="@this"
+															render=":myform:isSuccess" oncomplete="checkNum()"></a4j:ajax>
+													</h:inputText><h:outputText style="color:red" id="maxNum" value="#{JobdispatchChange.maxNum}"></h:outputText>
+													<h:graphicImage alt="plus" id ="plus"
+														style="width: 18px;height: 18px;top: 1px;position: absolute;cursor: pointer;"
+														url="./images/demo/icons/plus.png" onclick="controlNum(1)"></h:graphicImage>
+													<h:graphicImage alt="minus" id="minus"
+														style="width: 18px;height: 18px;top: 18px;position: absolute;cursor: pointer;"
+														url="./images/demo/icons/minus.png"
+														onclick="controlNum(2)"></h:graphicImage>
+													<br />
+													<h:message for="txtNum" style="color:red" />
+												</div></td>
+											<td><div style="color: red">*</div></td>
+										</tr>
+										<tr>
+											<td align="right"><h:outputText id="labelStartTime" value="开始时间:"
+													/>&nbsp;&nbsp;</td>
+											<td><rich:calendar id="startTime" popup="true"
+													inputClass="data" locale="en" 
+													value="#{JobdispatchChange.startTime}"
+													datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
+													cellHeight="20px" /><br /> <h:message
+													for="startTime" style="color:red" /></td>
+											<td><div style="color: red">*</div></td>
+										</tr>
+										<tr>
+											<td align="right"><h:outputText id="labelfinishTime" value="结束时间:"
+													/>&nbsp;&nbsp;</td>
+											<td><rich:calendar id="finishTime" popup="true"
+													inputClass="data" locale="en"
+													value="#{JobdispatchChange.finishTime}"
+													datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
+													cellHeight="20px" /><br /> <h:message
+													for="finishTime" style="color:red" /></td>
+											<td><div style="color: red">*</div></td>
+										</tr>
+										<tr height="10px"></tr>
+										<tr>
+											<td colspan="4">
+												<div id="divPrev2" style="position: relative;">
+													<h:graphicImage alt="prev"
+														url="./images/demo/icons/left.png"
+														onclick="controlScreen(3)" styleClass="btn-prev"
+														style="float: left; margin-left: 10%;"></h:graphicImage><div style="font-weight: normal;position: absolute; top:20px;left: 23%">上一步</div>
+												</div>
+												<div style="font-weight: normal;float: right;position: relative;margin-right: 15%;margin-top: 20px">下一步</div>
+												<div id="divSave" style="float: right;position: relative;margin-right: 3%">
+													<h:graphicImage alt="save"
+														url="./images/demo/icons/right.png"
+														onclick="subClick('myform:btn_save')"
+														styleClass="btn-save"
+														></h:graphicImage>
+													<p:commandButton value="确定" id="btn_save"
+														style="display:none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+														onclick="onZZ()" update=":myform:bgdispatchNo :myform:bgEquSerial :myform:bgPartNo :myform:bgProcessName :myform:bgProcessOrder 
+														 :myform:bgPlanNum :myform:bgfinishNum :myform:bgNum :myform:bgUser :myform:bgStartTime :myform:bgFinishTime"/>
+													<h:commandButton style="display:none;" id="submitButton1">
+														<a4j:ajax event="click"
+															listener="#{JobdispatchChange.checkNum}" execute="@this"
+															 render=":myform:isSuccess" oncomplete="WZ()"></a4j:ajax>
+													</h:commandButton>
+													<p:commandButton id="submitButton"
+														actionListener="#{JobdispatchChange.checkNum}"
+														style="display:none;background-image: url('./images/jobplan/add/open.png');"
+														update=":myform:isSuccess " oncomplete="WZ()" />
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<div id="comfirm" style="display: none; overflow: auto"
+									align="center">
+									<table id="tab3" cellspacing="15px">
+									<tr><td colspan="4" align="center"><div id="title3" style="font-weight:normal;">报工信息确认</div></td>
+									</tr>
+									<tr height="10px"></tr>
+									<tr>
+									  <td width="20%" align="right">报工工单：</td>
+									   <td colspan="3"><h:outputLabel id ="bgdispatchNo" value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel>
+									   </td>
+									</tr>
+									<tr style="margin-top: 40px">
+									<td width="20%" align="right">报工设备：</td>
+									<td width="30%"><h:outputLabel id ="bgEquSerial" value ="#{JobdispatchChange.equSerialNo}" style="font-weight:normal"></h:outputLabel></td>
+									<td width="20%" align="right">报工零件：</td>
+									<td width="30%"><h:outputLabel id ="bgPartNo" value ="#{JobdispatchChange.partNo}" style="font-weight:normal"></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">报工工序：</td>
+									<td><h:outputLabel id ="bgProcessName" value ="#{JobdispatchChange.processName}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">报工工序号：</td>
+									<td><h:outputLabel id ="bgProcessOrder" value ="#{JobdispatchChange.processOrder}" style="font-weight:normal"></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">投料数：</td>
+									<td><h:outputLabel id ="bgPlanNum" value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">已报工数：</td>
+									<td><h:outputLabel id ="bgfinishNum" value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">本次报工数：</td>
+									<td><h:outputLabel id ="bgNum" value ="#{JobdispatchChange.num}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">报工人员：</td>
+									<td><h:outputLabel id ="bgUser" value ="#{JobdispatchChange.userName}" style="font-weight:normal"></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">报工开始时间：</td>
+									<td><h:outputLabel id ="bgStartTime" value ="#{JobdispatchChange.startTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd HH-mm-ss" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+									<td align="right">报工结束时间：</td>
+									<td><h:outputLabel id ="bgFinishTime" value ="#{JobdispatchChange.finishTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd HH-mm-ss" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+									</tr>
+									<tr><td colspan="4">
+									  <div style="position: relative; float: left;margin-left:30%">
+									  <h:graphicImage alt="commit"
+														url="./images/demo/icons/commit.png"
+														onclick="subClick('myform:btn_commit')"
+														styleClass="btn-save"
+														></h:graphicImage>
+													<h:commandButton style="display:none;" id="btn_commit">
+														<a4j:ajax event="click"
+															listener="#{JobdispatchChange.saveData}" execute="@form"
+															oncomplete="dlg1.show()" render=":myform:isSuccess myform:dlg1"></a4j:ajax>
+													</h:commandButton>  
+									  </div>
+									  <div style="float: left;font-weight: normal;position: relative; top:20px;left: 3%">确认</div>
+									  <div style="font-weight: normal;float: right;position: relative;margin-right: 30%;margin-top: 20px">取消</div>
+									  <div style="float: right;position: relative;margin-right: 3%">
+									   <h:graphicImage alt="close"
+														url="./images/demo/icons/close.png"
+														onclick ="btnclose()"
+														styleClass="btn-save"
+														></h:graphicImage>
+									  </div>
+									</td></tr>
+								    </table>
+							    </div>
+							</div>
+						</td>
+						<!--下一步控制-->
+						<td align="right" style="width: 15%;">
+							<div id="divNext1" align="center">
+								<h:graphicImage alt="next" url="./images/demo/icons/right.png"
+									onclick="subClick('myform:btn_next1')" styleClass="btn-next"
+									></h:graphicImage>
+								<p:commandButton value="下一步" id="btn_next1"
+									style="display: none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+									onclick="onYZ()" />
+								<p:commandButton id="addcentertd3td5comhiddle"
+									actionListener="#{JobdispatchChange.getjobdispatch}"
+									style="display:none;background-image: url('./images/jobplan/add/open.png');"
+									update=":myform:tb2 " oncomplete="controlScreen(1)" />
+									<br/><div style="font-weight: normal;">下一步</div>
+							</div>
+							<div id="divNext2" style="display: none;" align="center">
+								<h:graphicImage alt="next" url="./images/demo/icons/right.png"
+									onclick="subClick('myform:btn_next2')" styleClass="btn-next"
+									></h:graphicImage>
+								<p:commandButton id="btn_next2" value="下一步"
+									actionListener="#{JobdispatchChange.getJobdispatchIdValue}"
+									style="display: none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+									update=":myform:jobdispatchId :myform:user :myform:selectDispatchNo :myform:selectEquName :myform:maxNum" oncomplete="onXZ()" />
+							     <br/><div style="font-weight: normal;">下一步</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+
+				<h:inputHidden value="#{JobdispatchChange.isSuccess}" id="isSuccess"></h:inputHidden>
+				<h:inputHidden value="#{JobdispatchChange.serachEquId}"
+					id="serachEquId"></h:inputHidden>
+				<h:inputHidden value="#{JobdispatchChange.serachEquId2}"
+					id="serachEquId2"></h:inputHidden>
+				<img src="./images/profile_top_logo.png"
+					style="position: absolute; z-Index: -1; border: 0px solid blue" id="img1" />
+				<p:dialog header="提示信息" widgetVar="dlg1" id="dlg1" modal="true" onHide="location.reload();" height="240" width="700" resizable="false">
+				  <table width="100%">
+				  <tr>
+				  <td width="20%" align="right">报工结果：</td>
+				  <td><h:outputLabel value ="#{JobdispatchChange.isSuccess}" style="font-weight:normal"></h:outputLabel></td>
+				  </tr>
+				  <tr>
+				  <td width="20%" align="right">报工单号：</td>
+				  <td><h:outputLabel value ="#{JobdispatchChange.eventNo}" style="font-weight:normal"></h:outputLabel></td>
+				  </tr>
+				  <tr>
+				  <td width="20%" align="right">工单号：</td>
+				  <td><h:outputLabel value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel></td>
+				  </tr>
+				  <tr>
+				  <td width="20%" align="right">投料数：</td>
+				  <td><h:outputLabel value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
+				  </tr> 
+				  <tr>
+				   <td width="20%" align="right">完成数：</td>
+				  <td><h:outputLabel value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
+				  </tr>
+				   <tr>
+				    <td width="20%" align="right">报废数：</td>
+				  <td><h:outputLabel value ="#{JobdispatchChange.wisScrapNum}" style="font-weight:normal"></h:outputLabel></td>
+				   </tr>
+				    <tr>
+				     <td width="20%" align="right">工单状态：</td>
+				  <td><h:outputLabel value ="#{JobdispatchChange.status}" style="font-weight:normal"></h:outputLabel></td>
+				    </tr>
+				    <tr><td colspan="2" align="center">
+				     <h:button value="关闭" onclick="location.reload();"></h:button>
+				     </td>
+				    </tr>
+				  </table>
+				</p:dialog>
+				<p:growl id="messages" showDetail="true" />
+			</div>
+			<script type="text/javascript">
+				//<![CDATA[ 
+               
+				var imgPercent = hjb51 / 1080; //比例 
+				//i5图片的大小
+				var new_image2 = new Image();
+				new_image2.src = document.getElementById("img1").src;
+				var wjbimg2 = new_image2.width;
+				var hjbimg2 = new_image2.height;
+				document.getElementById("img1").style.width = wjbimg2
+						* imgPercent + "px";
+				document.getElementById("img1").style.height = hjbimg2
+						* imgPercent + "px";
+				document.getElementById("img1").style.left = wjb51 * 20 / 1920
+						+ "px";
+				document.getElementById("img1").style.top = wjb51 * 40 / 1920
+						+ "px";
+				//整个布局的宽和高(table)         
+				document.getElementById("baogong").style.height = hjb51 * 994
+						/ 1080 + "px";//控制中间和上面的和的高度 
+				document.getElementById("baogong").style.width = wjb51 + "px";
+
+				document.getElementById("topleftright").style.width = wjb51
+						+ "px";
+				document.getElementById("topleftright").style.height = hjb51
+						* 23 / 100 + "px";
+
+				//上部图片(左)  和 (右)
+				document.getElementById("topleft").style.width = wjb51 * 20
+						/ 100 + "px";
+				document.getElementById("topleft").style.height = hjb51 * 23
+						/ 100 + "px";
+				document.getElementById("topright").style.width = wjb51 * 80
+						/ 100 + "px";
+				document.getElementById("topright").style.height = hjb51 * 23
+						/ 100 + "px";
+
+				//内容高度
+				document.getElementById("equipment").style.height = hjb51 * 600
+						/ 1080 + "px";
+				document.getElementById("getjobdispatch").style.height = hjb51
+						* 600 / 1080 + "px";
+				document.getElementById("editInfo").style.height = hjb51 * 600
+						/ 1080 + "px";
+				document.getElementById("comfirm").style.height = hjb51 * 700
+				/ 1080 + "px";
+				//内容宽度
+				document.getElementById("equipment").style.width = wjb51 * 70
+						/ 100 + "px";
+				document.getElementById("equipmentCopy").style.width = wjb51 * 70
+				/ 100 -17 + "px";
+				document.getElementById("getjobdispatch").style.width = wjb51
+						* 70 / 100 + "px";
+				document.getElementById("editInfo").style.width = wjb51 * 70
+						/ 100 + "px";
+				//document.getElementsByClassName("editInfo")
+				
+				//字体
+				document.getElementById("content").style.fontSize = hjb51*16/700+"px";
+				document.getElementById("title3").style.fontSize = hjb51*25/700+"px";
+				
+				//table
+				document.getElementById("tab1").style.width = wjb51*35/100+"px";
+				document.getElementById("tab2").style.width = wjb51*40/100+"px";
+				document.getElementById("tab3").style.width = wjb51*60/100+"px";
+				
+				document.getElementById("myform:user").style.width = wjb51*200/1366+"px";
+				document.getElementById("myform:txtNum").style.width = wjb51*200/1366+"px";
+				document.getElementById("myform:startTimeInputDate").style.width = wjb51*200/1366+"px";
+				document.getElementById("myform:finishTimeInputDate").style.width = wjb51*200/1366+"px";
+				
+				//+-号位置
+				document.getElementById("myform:minus").style.left = wjb51*200/1366 -16 + "px";
+				document.getElementById("myform:plus").style.left = wjb51*200/1366 -16 + "px";
+				function onYZ() {
+					var equId = document.getElementById("myform:hiddenequID").value;
+
+					if (null == equId || "" == equId) {
+						alert("请选择设备！");
+					} else {
+						document.getElementById(
+								"myform:addcentertd3td5comhiddle").click();
+					}
+				}
+
+				function onXZ() {
+					var dispatchId = document
+							.getElementById("myform:jobdispatchId").value;
+					if (null == dispatchId || "" == dispatchId) {
+						alert("请选择工单！");
+					} else {
+						document.getElementById("divNext2").style.display = "none";
+						document.getElementById("divPrev1").style.display = "none";
+						document.getElementById("title2").style.display = "none";
+						document.getElementById("getjobdispatch").style.display = "none";
+						document.getElementById("myform:user").style.width = wjb51*200/1366+"px";
+						document.getElementById("editInfo").style.display = "block";
+						
+						//document.getElementById("myform:next2").click();
+					}
+				}
+
+				function onZZ() {
+					var user = document.getElementById("myform:user").value;
+					var num = document.getElementById("myform:txtNum").value;
+					var startTime = document
+							.getElementById("myform:startTimeInputDate").value;
+					var finishTime = document
+							.getElementById("myform:finishTimeInputDate").value;
+					var tt = dateCompare(startTime, finishTime);
+					//alert(startTime);
+					if (null == user || "" == user) {
+						alert("请选择报工人员！");
+					} else if (null == num || "" == num) {
+						alert("请填写报工数量！");
+					} else if (num == 0) {
+						alert("报工数量不能为0!");
+					} else if (null == startTime || "" == startTime) {
+						alert("请选择开始时间！");
+					} else if (null == finishTime || "" == finishTime) {
+						alert("请选择结束时间！");
+					} else if (!tt) {
+						alert("开始时间不能大于结束时间!");
+					} else {
+						document.getElementById("myform:submitButton").click();
+						
+					}
+				}
+				
+				function WZ(){
+					var isSuccess = document.getElementById("myform:isSuccess").value;
+
+					if (null != isSuccess && isSuccess != "符合要求") {
+
+						alert(isSuccess);
+						document.getElementById("myform:txtNum").value = 1;
+						document.getElementById("myform:txtNum").focus();
+					}else{
+						document.getElementById("editInfo").style.display = "none";
+						document.getElementById("comfirm").style.display = "block";
+					}
+					
+				}
+
+				function dateCompare(startDate, endDate) {
+					//yyyy-mm-dd hh:mi:ss
+					var beginTimes = startDate.substring(0, 10).split('-');
+					var hour = startDate.substring(11, 13);
+					var min = startDate.substring(14, 16);
+					var seconde = startDate.substring(17, 19);
+					var starttime = new Date(beginTimes[0], beginTimes[1],
+							beginTimes[2], hour, min, seconde);
+					var starttimes = starttime.getTime();
+					//alert(starttimes);
+					var endTimes = endDate.substring(0, 10).split('-');
+					var endhour = endDate.substring(11, 13);
+					var endmin = endDate.substring(14, 16);
+					var endseconde = endDate.substring(17, 19);
+					var endtime = new Date(endTimes[0], endTimes[1],
+							endTimes[2], endhour, endmin, endseconde);
+					var end = endtime.getTime();
+
+					if (starttimes > end) {
+						return false;
+					} else {
+						return true;
+					}
+				}
+
+				function reslut() {//验证是否添加成功
+					var isSuccess = document.getElementById("myform:isSuccess").value;
+
+					if (null != isSuccess && isSuccess == "添加成功") {
+						document.getElementById("dlg1").show();
+						//alert(isSuccess);
+						location.reload();
+						//document.getElementById("editInfo").style.display = "none";
+						//document.getElementById("comfirm").style.display = "block";
+
+					} else {
+						alert(isSuccess);
+					}
+				}
+
+				function checkNum() {//验证报工数量
+					var isSuccess = document.getElementById("myform:isSuccess").value;
+
+					if (null != isSuccess && isSuccess != "符合要求") {
+
+						alert(isSuccess);
+						document.getElementById("myform:txtNum").value = 1;
+						document.getElementById("myform:txtNum").focus();
+					}
+					//else{
+					//	alert(isSuccess);
+					//}
+				}
+
+				function controlScreen(type) {//控制画面
+					if (type == 1) {
+						document.getElementById("divPrev1").style.display = "block";
+						document.getElementById("divNext1").style.display = "none";
+						document.getElementById("divNext2").style.display = "block";
+						document.getElementById("title").style.display = "none";
+						document.getElementById("title2").style.display = "block";
+						document.getElementById("getjobdispatch").style.display = "block";
+						document.getElementById("equipment").style.display = "none";
+
+					} else if (type == 2) {
+						document.getElementById("divPrev1").style.display = "none";
+						document.getElementById("divNext1").style.display = "block";
+						document.getElementById("divNext2").style.display = "none";
+						document.getElementById("title").style.display = "block";
+						document.getElementById("title2").style.display = "none";
+						document.getElementById("getjobdispatch").style.display = "none";
+						document.getElementById("equipment").style.display = "block";
+
+					} else if (type == 3) {
+
+						document.getElementById("divPrev1").style.display = "block";
+						document.getElementById("divNext2").style.display = "block";
+						document.getElementById("title2").style.display = "block";
+						document.getElementById("editInfo").style.display = "none";
+						document.getElementById("getjobdispatch").style.display = "block";
+
+					}
+				}
+
+				function subClick(id) {
+					document.getElementById(id).click();
+				}
+
+				function onSetNum(num) {
+					document.getElementById("myform:txtNum").value = num;
+				}
+
+				function controlNum(s) {
+
+					if (s == 1) {
+						var txtNum = document.getElementById("myform:txtNum");
+						var currentNum = parseInt(txtNum.value);
+
+						txtNum.value = currentNum + 1;
+					} else if (s == 2) {
+
+						var txtNum = document.getElementById("myform:txtNum");
+						var currentNum = parseInt(txtNum.value);
+						if (currentNum != 1) {
+							txtNum.value = currentNum - 1;
+						}
+					}
+				}
+
+				function setValueforHidd() {//对隐藏域进行赋值，以便jsf的ajax向控制bean传人参数
+
+					var d = document.getElementById("equipment").style.display;
+					//alert(d);
+					if (d == "" || d =="block") {
+						var equId = document
+								.getElementById("select_box_No_hdn").value;
+						var equId2 = document
+						       .getElementById("select_box_Name_hdn").value;
+						document.getElementById("myform:serachEquId").value = equId;
+						document.getElementById("myform:serachEquId2").value = equId2;
+					} else {
+						return false;
+					}
+				}
+				
+				function setTitle(){
+					var obj=document.getElementById("equipment");
+					if(obj.scrollHeight>obj.clientHeight||obj.offsetHeight>obj.clientHeight){ 
+						document.getElementById("title").style.display = "block";
+					}
+				}
+				
+				function btnclose(){
+					location.reload();
+				}
+				function openUrl(url) {
+					var features = "height=900,width=1500,top:200,left:200,status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";
+					winId = window.open(url, 'addpage', features);
+				}
+				//]]>
+			</script>
+		</h:form>
+	</h:body>
+</ui:composition>

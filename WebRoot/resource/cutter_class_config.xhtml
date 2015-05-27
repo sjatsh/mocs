@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<style type="text/css">
+		td{
+			word-break: break-all;
+		}
+	</style>
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+
+<div style="width: 100%;height: 100%; position:relative;">
+	<div class="headDiv">
+		<h:inputText id="txt" value="#{CutterManagementBean.search}" styleClass="textBg" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 
+		<p:commandButton value="查询" actionListener="#{CutterManagementBean.searchCutterClass}" update=":myform:tree :myform:dataTable" oncomplete="bgReposition($('.table'));" styleClass="delete"></p:commandButton>															
+		<div class="button-split"></div> 
+		<p:commandButton value="新建"  update=":myform:addcut" oncomplete="addCutter.show();bgReposition($('.table'));" styleClass="delete"></p:commandButton>		
+		<p:commandButton value="删除" update=":myform:set" oncomplete="ondelete();bgReposition($('.table'));" actionListener="#{CutterManagementBean.onSelected}"  styleClass="delete" ></p:commandButton>	
+		<p:commandButton id="delete" value="删除" update=":myform:dataTable :myform:displaycutter" actionListener="#{CutterManagementBean.deleteCutter}" style="display: none;"></p:commandButton>									
+	</div>
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+
+	<div class="materail_class_treeDiv">
+		<div class="tree-head"></div>
+		<div class="tree-body">
+			<p:tree value="#{CutterManagementBean.root}" var="node" id="tree" selection="#{CutterManagementBean.selectedNode}" selectionMode="single" style="width:160px;"> 		            
+		        <p:ajax event="select" listener="#{CutterManagementBean.getCutterClassOnclick}" update=":myform:dataTable :myform:cutterclass" oncomplete="bgReposition($('.table'));" />  
+		        <p:treeNode>  
+		            <h:outputText value="#{node}" />  
+		        </p:treeNode>  
+		    </p:tree>  
+		</div>
+		<div class="tree-foot"></div>
+		<div class="div_tree_border_shadow">
+			<img src="../images/demo/tree_border_shadow.png" />
+		</div>
+		<div id="tree_move_btn" class="btn_tree_show"></div>
+	</div>	
+
+	<!-- 右边 -->
+	<div class="materail_class_rightDiv hidden">	
+	     <!--刀具类型列表 -->
+	    <p:dataTable var="cutter" value="#{CutterManagementBean.mediCuttertypeInfoDataModel}" 
+	     	dynamic="true"  paginator="true" rows="10" editable="true" selection="#{CutterManagementBean.selectCutt}" 
+	    	sortMode="multiple" paginatorPosition="bottom" id="dataTable" styleClass="table">
+	    	
+	    	<p:ajax event="rowEdit" listener="#{CutterManagementBean.updateCutter}" />		
+    		<p:column headerText="" style="width:2%" />    	
+	  		<p:column selectionMode="multiple" style="width:2%"/>
+	    
+	        <p:column headerText="刀具类型名称" style="width:14%">
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{cutter.name}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                	<p:inputText value="#{cutter.name}" style="width:100%" />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	        <p:column headerText="刀具类型编号"  style="width:14%">
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{cutter.no}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                	<p:inputText value="#{cutter.no}" style="width:100%" disabled="disabled"/>
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	        <p:column headerText="刀具类别"  style="width:12%">
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{cutter.cutterclass}" readonly="true"/>
+	                </f:facet>
+	                <f:facet name="input">
+	                	<p:inputText value="#{cutter.cutterclass}" style="width:100%" disabled="true"/>
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	      
+			<p:column headerText="规格尺寸"  style="width:14%">
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{cutter.norm}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                	<p:inputText value="#{cutter.norm}" style="width:100%" />
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+	        
+	           <p:column headerText="备注"  style="width:14%">
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                    <h:outputText value="#{cutter.remark}"/>
+	                </f:facet>
+	                <f:facet name="input">
+	                	<p:inputText value="#{cutter.remark}" style="width:100%"/>
+	                </f:facet>
+	            </p:cellEditor>
+	        </p:column>
+		
+	        <p:column headerText="操作" style="width:6%">
+            	<p:rowEditor />
+       	 	</p:column>	
+	    </p:dataTable>  
+	</div>
+</div>
+	<!-- 添加 -->
+	 <p:dialog widgetVar="addCutter" resizable="false">
+    	<h:panelGroup id="addcut">
+    		<table>
+    			<tr>
+    				<td>刀具类型名称：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{CutterManagementBean.addcutt.name}" id="name" style="border: 1px black solid;"></h:inputText></td>
+    				<td><div style="color: gray;">例：刀具-100000</div></td>
+    			</tr>
+    			<tr>
+    				<td>刀具类型编号：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{CutterManagementBean.addcutt.no}" id="no" style="border: 1px black solid;"></h:inputText></td>
+    				<td><div style="color: gray;">例：CT-100000</div></td>
+    			</tr>
+    			<tr>
+    				<td>刀具类别：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{CutterManagementBean.addcutt.cutterclass}" id="cutterclass" style="border: 1px black solid; color:black;" disabled="true"></h:inputText></td>
+    				<td><div style="color: gray;">例：铣刀</div></td>
+    			</tr>
+    			<tr>
+    				<td>规格尺寸：</td>
+    				<td><h:inputText value="#{CutterManagementBean.addcutt.norm}" style="border: 1px black solid;"></h:inputText></td>
+    				<td><div style="color: gray;">例：D16R0</div></td>
+    			</tr>
+    			<tr>
+    				<td>备注</td>
+    				<td colspan="2"><h:inputText value="#{CutterManagementBean.addcutt.remark}" style="border: 1px black solid;"></h:inputText></td>
+    			</tr>
+    		</table>
+	    	<div class="headDivduan">
+   				<p:commandButton onclick="onadd()" value="增加"></p:commandButton>    															
+    			<p:commandButton actionListener="#{CutterManagementBean.addCutter}" value="增加" 
+    				update=":myform:dataTable :myform:addcut :myform:messages" id="addcutter" style="display:none;" 
+    				oncomplete="addCutter.hide()">
+    			</p:commandButton>	    					    				 
+				<p:growl id="messages" showDetail="true"/> 
+	    	</div>
+    	</h:panelGroup>
+    </p:dialog>
+
+      <!-- 删除 -->
+    <p:dialog id="multiDialog" height="200" showEffect="fade" hideEffect="explode" >
+        <p:dataList id="displaycutter" value="#{CutterManagementBean.selectCutt}" var="tpro"></p:dataList>  
+    </p:dialog>       
+    <h:inputHidden value="#{CutterManagementBean.selected}" id="set"></h:inputHidden>
+    
+    
+    <script type="text/javascript">
+    	//<![CDATA[
+    	    document.getElementById("myform:txt").value="输入刀具名称";
+    	   //添加
+    	   function onadd(){
+    		   var name = document.getElementById("myform:name").value;
+    		   var no = document.getElementById("myform:no").value;
+    		   var cutterclass = document.getElementById("myform:cutterclass").value;
+    		   
+    		   if(name == null || name == ""){
+    			   alert("请输入刀具类型名称！");
+    			   return false;
+    		   }else if(no == null || no == ""){
+    			   alert("请输入刀具类型编号！");
+    			   return false;
+    		   }else if(cutterclass == null || cutterclass == ""){
+    			   alert("请选择刀具类别！");
+    			   return false;
+    		   }else{
+    			   document.getElementById("myform:addcutter").click();
+    			   
+    		   }
+    	   }   
+    	   
+    	   	 //删除
+    		 function ondelete(){
+  		  	   var temp = document.getElementById("myform:set").value;
+  		  	  if(null!=temp&&""!=temp){
+		  		   if(confirm("是否确认删除此数据！")){
+			    	   document.getElementById("myform:delete").click();
+			    	} 
+		  	   }else{
+		  		   alert("请选择一条数据进行删除！");
+		  	   }
+  		     }
+    	   	 
+    	   function searchFocus(id){
+ 				if(document.getElementById(id).value=="输入刀具名称")
+ 					document.getElementById(id).value="";
+ 			}
+ 			
+ 			function searchBlur(id){
+ 				if(document.getElementById(id).value=="")
+ 					document.getElementById(id).value="输入刀具名称";
+ 			}
+ 			
+    	//]]>
+    </script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+
+</ui:composition>

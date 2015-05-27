@@ -1,0 +1,39 @@
+<%@page language="java" contentType="text/html;charset=utf-8" %>
+<%@taglib prefix="u" uri="../authority/menu/top1.jscx" name="top"%>
+<%@taglib prefix="u" uri="../authority/menu/relogin.jscx" name="relogin"%>
+<%@taglib prefix="u" uri="../authority/menu/menu1.jscx" name="menu"%>
+<%@taglib prefix="u" uri="../authority/menu/foot.jscx" name="foot"%>
+<%@taglib prefix="u" uri="../authority/menu/js.jscx" name="js"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>${app.passport}</title>
+    <link rel="stylesheet" type="text/css" href="../authority/css/css.css"/>
+    <u:js/>
+</head>
+<body>
+<!--container-->
+<div class="container">
+    <!--header-->
+	<div id="header">
+	<u:top/>
+	</div>
+	<!--main-->
+	<div class="main">
+		<!--main_left-->
+		<div class="main_left">
+		 <u:menu/>
+		</div>
+	 
+	 	<!--main_right-->
+		<div class="main_right">
+		<p class="index_p1"><a href="#"><img src="../authority/images/main_login_title.png" /></a></p>
+		</div>
+		<div class="clear"></div>
+		</div>
+	<div class="footer"><u:foot/></div>
+</div>
+<u:relogin/>
+</body>
+</html>

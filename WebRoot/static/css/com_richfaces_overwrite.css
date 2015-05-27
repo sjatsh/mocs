@@ -1,0 +1,365 @@
+@charset "utf-8";
+
+/*分页头部样式重写*/
+
+.rf-dt{
+	border: 0px;
+}
+
+.rf-dt-r{
+	height: 24px;
+}
+.rf-dt-shdr{
+	border: 0px;
+}
+.rf-dt-shdr-c {
+	border-top:0px;
+	border-color: white;
+	color:white;
+	height:26px;
+	border-left:none;
+	border-bottom:0px;
+	padding:0px;
+	background-image: url("../img/common_info_img/common_table_head_bg.png");
+}
+
+
+.dataTableEx{
+	border-bottom: none;
+}
+
+.rf-dt-c{
+	border-right-color:white;
+	border-bottom: 0px;
+	padding-left: 10px !important;
+	padding: 0px;
+}
+
+/*分页底部背景样式重写*/
+.rf-dt-ftr-c {
+	padding: 0px;
+	margin: 0px;
+}
+
+.rf-ds {
+	margin: 0px;
+	height: 27px;
+	padding: 0px;
+	padding-top: 0px;
+	background: transparent;
+	-webkit-text-size-adjust:none;/*解决谷歌浏览器影响字体设定*/
+}
+
+/*按钮样式重写*/
+.rf-ds-btn {
+	width: 33px;
+	margin: 0px;
+	height: 27px;
+	padding: 0px;
+	border: 0px;
+	font-size:9px;
+	text-align: center;
+	line-height: 27px;
+}
+
+.rf-ds-btn-first {
+	width: 33px;
+	height: 27px;
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+}
+
+.rf-ds-btn-first:hover {
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+.rf-ds-btn-fastrwd {
+	width: 33px;
+	height: 27px;
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+}
+
+.rf-ds-btn-fastrwd:hover {
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+.rf-ds-btn-prev {
+	width: 33px;
+	height: 27px;
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+}
+
+.rf-ds-btn-prev:hover {
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+.rf-ds-btn-next {
+	width: 33px;
+	height: 27px;
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+}
+
+.rf-ds-btn-next:hover {
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+.rf-ds-btn-fastfwd {
+	width: 33px;
+	height: 27px;
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+}
+
+.rf-ds-btn-fastfwd:hover {
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+.rf-ds-btn-last {
+	width: 33px;
+	height: 27px;
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+}
+
+.rf-ds-btn-last:hover {
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+.rf-ds-dis {
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+}
+
+.rf-ds-dis:hover {
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+/*数字按钮样式重写*/
+.rf-ds-nmb-btn {
+	font-size:9px;
+	width: 33px;
+	height: 27px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	background: url(../img/common_info_img/common_table_number_bg.png) no-repeat top;
+	line-height: 27px;
+}
+
+.rf-ds-act {
+	color: #FFFFFF;
+	border: 0px;
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+.rf-ds-nmb-btn:hover {
+	color: #FFFFFF;
+	border: 0px;
+	background: url(../img/common_info_img/common_table_number_bg_hover.png) no-repeat top;
+}
+
+
+
+
+
+.even-row {
+	background-image: url('../img/common_info_img/common_table_col_bg.png') !important;
+	background-position: 0px 24px;
+	border-bottom: none;
+}
+
+.odd-row {
+	background-image: url('../img/common_info_img/common_table_col_bg.png') !important;
+	border-bottom: none;
+}
+
+
+.laseColumn {
+	border-right: 0px;
+}
+
+
+
+
+/*------------POP--------------------*/
+/*层背景*/
+.rf-pp-cntr{
+	border: 1px #899297 solid;
+}
+
+.rf-pp-hdr-cnt{
+	font-size: 14px;
+	text-align: center;
+}
+
+.rf-pp-hdr{
+	background-color: #E0E8EA;
+	background-image:none;
+	height: 30px;
+}
+.rf-pp-hdr-cntrls{
+	padding-right: 10px;
+	padding-top: 5px;
+}
+.rf-pp-cnt{
+	padding: 0px;
+}
+/*pop分页头部样式重写*/
+.rf-dt{
+	border: 0px;
+	
+}
+.popcutSelect{
+	background-image: url("../img/common_info_img/pop_Tab_bg.png");
+	height:219px;
+}
+.rf-dt-b{
+	height: 24px;
+}
+.rf-dt-hd{
+	border: 0px;
+}
+.rf-dt-hdr-c{
+	border-top:0px;
+	border-color: white;
+	color:white;
+	height:27px;
+	border-left:none;
+	border-bottom:0px;
+	padding:0px;
+	background-image: url("../img/common_info_img/pop_Tab_head_bg.png");
+}
+
+
+.rf-dt-hdr-c{
+	border-right-color:white;
+	border-bottom: 0px;
+	padding-left: 10px !important;
+	padding: 0px;
+}
+
+/*分页底部背景样式重写*/
+.rf-dt-ftr-c {
+	padding: 0px;
+	margin: 0px;
+}
+
+.popScroller {
+	margin: 0px;
+	height: 27px;
+	padding: 0px;
+	padding-top: 0px;
+	background: transparent;
+	-webkit-text-size-adjust:none;/*解决谷歌浏览器影响字体设定*/
+}
+
+/*按钮样式重写*/
+.rf-ds-btn {
+	width: 33px;
+	margin: 0px;
+	height: 27px;
+	padding: 0px;
+	border: 0px;
+	font-size:9px;
+	text-align: center;
+	line-height: 27px;
+}
+
+.popScroller .rf-ds-btn-first {
+	width: 33px !important;
+	height: 27px !important;
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-first:hover {
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-fastrwd {
+	width: 33px !important;
+	height: 27px !important;
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-fastrwd:hover {
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-prev {
+	width: 33px !important;
+	height: 27px !important;
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-prev:hover {
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-next {
+	width: 33px !important;
+	height: 27px !important;
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-next:hover {
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-fastfwd {
+	width: 33px !important;
+	height: 27px !important;
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-fastfwd:hover {
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-last {
+	width: 33px !important;
+	height: 27px !important;
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-btn-last:hover {
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-dis {
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-dis:hover {
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+/*数字按钮样式重写*/
+.popScroller .rf-ds-nmb-btn {
+	font-size:9px !important;
+	width: 33px !important;
+	height: 27px !important;
+	padding: 0px !important;
+	margin: 0px !important;
+	border: 0px !important;
+	background: url(../img/common_info_img/pop_Tab_number_bg.png) no-repeat top !important;
+	line-height: 27px !important;
+}
+
+.popScroller .rf-ds-act {
+	color: #FFFFFF !important;
+	border: 0px !important;
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popScroller .rf-ds-nmb-btn:hover {
+	color: #FFFFFF !important;
+	border: 0px !important;
+	background: url(../img/common_info_img/pop_Tab_number_hover_bg.png) no-repeat top !important;
+}
+
+.popEven-row {
+	background-image: url('img/common_info_img/common_table_col_bg.png') !important;
+	background-position: 0px 24px;
+	border-bottom: none;
+}
+
+.popOdd-row {
+	background-image: url('img/common_info_img/common_table_col_bg.png') !important;
+	border-bottom: none;
+}

@@ -18,6 +18,7 @@ public class TJobInfoDataModel extends ListDataModel<TJobInfo> implements Select
 		super(data);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public TJobInfo getRowData(String Id) {
 		List<TJobInfo> process = (List<TJobInfo>) getWrappedData();

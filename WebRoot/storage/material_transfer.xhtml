@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link rel="stylesheet" href="./css/MaterialTransfer.css" type="text/css"></link>
+		<style type="text/css">   
+		/* 保存按钮 */
+		.btn-save {
+			width: 53px;
+			height: 53px;
+			cursor: pointer;
+		}
+		.imagebtn {
+			cursor: pointer;
+       }
+       *{
+       font-weight: normal;
+       font-size:inherit;
+       font-family: "微软雅黑" !important;
+       }
+       .inputText{
+		width:100%;
+		height:90%;
+		line_height:100%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		font-weight: normal;
+	   }
+	   .inputText2{
+		width:58%;
+		height:100%;
+		line_height:100%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		font-weight: normal;
+	   }
+	   .inputTextNoChange{
+		width:100%;
+		height:100%;
+		line_height:100%;
+		font-size:100% ;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		background-color: #F0F0F0 !important;
+		background-image: url("") !important;
+	    }
+	    .ui-state-default{
+	      background:#00a040;
+	       
+	    }
+        .ui-dt-c{
+		   font-weight: normal;
+		   color:#333333;
+		}
+		.ui-state-default .ui-dt-c span{
+		   text-shadow:none;
+		   color:white;
+		   font-weight: bold;
+		}
+		.ui-button-text{
+		   color: white;
+		}
+		
+       </style>
+       <script type="text/javaScript" src="./js/jquery-1.9.1.min.js"></script>
+       <script type="text/javascript">  
+       </script>
+
+	</h:head>
+
+	<h:body>
+		<h:form id="myform">
+			<div id="maskw"
+				style="position: absolute; z-index: 10; top: 0px; left: 0px; background-color: white;"></div>
+
+			<div style="width: 100%;" align="center" id ="content">
+
+				<table id="inStorage" style="width: 100%">
+					    <tr>
+					         <td id="title" align="center">
+					         <div><h:outputText value="子库存转移"/></div>
+					         </td>
+					    </tr>
+					    <tr>
+					    <td>
+					    <div id="divTransNo" style="position: relative;float: right;">
+					    <div id="transNo3" style="top:0;float: right;"><h:outputText value="#{MaterialTransfer.transNo}"/></div>
+					    <div id="transNo2" style="float: right;"><h:outputText value="事务代码:"/></div>
+					    </div>
+					    </td>
+					    </tr>
+					    <tr>
+					    <td align="center">
+					    <table style="font-weight: normal;">
+							  <tr>
+							          <td>
+										<h:outputText id="txtJobPlan" style="float: right;" value="来源" />
+									 </td>
+									 <td colspan="3">
+							          <div id ="divJobPlanId"> 
+										<h:inputText id="source" styleClass="inputText"
+										 value="#{MaterialTransfer.source}" style="color:#595959;" />
+									  </div> 
+							       </td>
+							  </tr>
+							  <tr>
+							  <td><h:outputText id="txtPart" style="float: right;" value="物料" /></td>
+							  <td colspan="3">
+							  	<div style="position: relative;">
+							  		<div id ="divPartNo" style="float: left;">
+							  			<h:selectOneMenu id="materialId" styleClass="inputText"
+											value="#{MaterialTransfer.materialId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{MaterialTransfer.materialList}" var="part" itemLabel="#{part.no}" itemValue="#{part.id}"></f:selectItems>
+											<f:ajax event="change" listener="#{MaterialTransfer.getMaterialInfo}" execute="@this"
+											 render=":myform:materialName :myform:tb :myform:storageId :myform:unitId :myform:batchCtrl :myform:seqCtrl :myform:positionCtrl :myform:batchId :myform:seqId :myform:versionId :myform:storageIdD
+											  :myform:positionIdD :myform:positionIdD2"/>
+										</h:selectOneMenu>
+									</div>
+								    <div id ="divMaterialtName" style="float: right;">
+								    	<h:inputText id="materialName" styleClass="inputText" disabled="true"
+										 value="#{MaterialTransfer.materialName}" style="color:#595959;background-color: #F0F0F0" />
+									</div>
+								</div>
+							  </td>
+							  </tr>
+							   <tr>
+							     <td><h:outputText id="txtStorage" style="float: right;"  value="子库存" /></td>
+								 <td> <div id ="divStorageId"> 
+										<h:selectOneMenu id="storageId" styleClass="inputText"
+											value="#{MaterialTransfer.storageId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{MaterialTransfer.materialStorageInfoList}" var="tt" itemLabel="#{tt.no}" itemValue="#{tt.storageId}"></f:selectItems>
+											<f:ajax event="change" listener="#{MaterialTransfer.getMaterialPositionInfo}" execute="@this" render=":myform:positionId :myform:availableNum :myform:positionCtrl
+											 :myform:batchId :myform:seqId :myform:versionId"/>
+										</h:selectOneMenu>
+									  </div></td>	
+								 <td><h:outputText id="txtStorageD" style="float: right;"  value="目标子库存" /></td>
+								 <td> <div id ="divStorageIdD"> 
+										<h:selectOneMenu id="storageIdD" styleClass="inputText"
+											value="#{MaterialTransfer.transferStorageId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{MaterialTransfer.storageInfoList}" var="tt" itemLabel="#{tt.no}" itemValue="#{tt.id}"></f:selectItems>
+											<f:ajax event="change" listener="#{MaterialTransfer.getPositionInfo}" execute="@this" render=":myform:positionIdD :myform:positionIdD2 :myform:positionCtrl :myform:positionType"/>
+										</h:selectOneMenu>
+									  </div></td>		
+							  </tr>
+							   <tr>
+								 <td><h:outputText id="txtPosition" style="float: right;" value="货位"/></td>
+								 <td><div id ="divPositionId" > 
+										<h:selectOneMenu id="positionId" styleClass="inputText" disabled="#{MaterialTransfer.tempPositionCtrl}"
+											value="#{MaterialTransfer.positionId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{MaterialTransfer.materialPositionInfoList}" var="tt" itemLabel="#{tt.no}" itemValue="#{tt.positionId}"></f:selectItems>
+										    <f:ajax event="change" listener="#{MaterialTransfer.getBatchInfo}" execute="@this" render=":myform:batchId :myform:availableNum :myform:seqId :myform:versionId"/>
+										</h:selectOneMenu>
+									  </div>
+								  </td>
+								  <td><h:outputText id="txtPositionD" style="float: right;" value="目标货位"/></td>
+								 <td>								  
+									   <div id="divPositionIdD" style="position: relative;">
+									        <div id ="divPositionIdD1">
+											<h:selectOneMenu id="positionIdD" styleClass="inputText"
+												value="#{MaterialTransfer.transferPositionId}" disabled="#{MaterialTransfer.tempPositionCtrl2}"
+												style="color:#595959;">
+												<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+												<f:selectItems value="#{MaterialTransfer.positionInfoList}" var="tt" itemLabel="#{tt.no}" itemValue="#{tt.id}"></f:selectItems>
+												<f:ajax event="change" listener="#{MaterialTransfer.positionChange}" execute="@this" render=":myform:positionIdD2"/>
+											</h:selectOneMenu></div>
+											<div id ="divPositionIdD2" style="position:absolute;top:0;left:0">
+											<h:inputText id="positionIdD2" styleClass="inputText" disabled="#{MaterialTransfer.isEdit}"
+																 value="#{MaterialTransfer.editPositionNo}" style="color:#595959; " />
+										    </div>
+										</div>
+								</td>
+								 
+							  </tr>
+							  <tr>
+								 <td><h:outputText id="txtBatch" style="float: right;" value="批次"/></td>
+								 <td><div id ="divBatchId" > 
+										<h:selectOneMenu id="batchId" styleClass="inputText" disabled="#{MaterialTransfer.batchCtrl2}"
+											value="#{MaterialTransfer.batchId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{MaterialTransfer.productBatchList}" var="tt" itemLabel="#{tt.no}" itemValue="#{tt.batchId}"></f:selectItems>
+										   <f:ajax event="change" listener="#{MaterialTransfer.getSeqInfo}" execute="@this" render=":myform:seqId :myform:availableNum :myform:versionId"/>
+										</h:selectOneMenu>
+									  </div></td>
+									   <td><h:outputText id="txtUnit" style="float: right;" value="单位"/></td>
+								 <td><div id ="divUnit" > 
+										<h:selectOneMenu id="unitId" styleClass="inputText"
+											value="#{MaterialTransfer.unitName}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{MaterialTransfer.unitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+										    <f:ajax event="change" listener="#{MaterialTransfer.unitChange}" execute="@this" render=":myform:availableNum"/>
+										</h:selectOneMenu>
+									  </div></td>
+							  </tr>
+							  <tr>
+								 <td><h:outputText id="txtSeq" style="float: right;" value="序列"/></td>
+								 <td><div id ="divSeqId" > 
+										<h:selectOneMenu id="seqId" styleClass="inputText" disabled="#{MaterialTransfer.seqCtrl2}"
+											value="#{MaterialTransfer.seqId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{MaterialTransfer.productSeqList}" var="tt" itemLabel="#{tt.no}" itemValue="#{tt.seqId}"></f:selectItems>
+										    <f:ajax event="change" listener="#{MaterialTransfer.seqChange}" execute="@this" render=":myform:availableNum :myform:transferNum :myform:versionId"/>
+										</h:selectOneMenu>
+									  </div></td>
+								  <td><h:outputText id="txtTransferNum" style="float: right;" value="转移数量"/></td>
+								 <td><div id ="divTransferNum" > 
+										<h:inputText id="transferNum" styleClass="inputText" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+														onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')"
+										 value="#{MaterialTransfer.transferNum}" style="color:#595959;" />
+									  </div></td>
+							  </tr>
+							   <tr>
+								 <td><h:outputText id="txtAvailableNum" style="float: right;" value="可用数"/></td>
+								 <td><div id ="divAvailableNum" > 
+										<h:inputText id="availableNum" styleClass="inputText" disabled="true"
+										 value="#{MaterialTransfer.availableNum}" style="color:#595959;;background-color: #F0F0F0" />
+									  </div></td>
+								<td><h:outputText id="txtVersion" style="float: right;" value="版本" /></td>
+								  <td>
+								     <div id ="divVersion">
+								    	<h:selectOneMenu id="versionId" styleClass="inputText" disabled="#{MaterialTransfer.tempVersionCtrl}"
+												value="#{MaterialTransfer.versionNo}"
+											    style="color:#595959;">
+											    <f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+												<f:selectItems value="#{MaterialTransfer.versionList}" var="tt" itemLabel="#{tt.no}" itemValue="#{tt.no}"></f:selectItems>
+												 <f:ajax event="change" listener="#{MaterialTransfer.versionChange}" execute="@this"/>
+											</h:selectOneMenu>
+									 </div>
+								  </td>
+							  </tr>
+							  <tr>
+							     <td></td>
+							     <td></td>
+							      <td colspan="2" align="center"><p:commandButton id="add" value="新增" onclick="check()"
+						            style="border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;margin-right:15px">
+						             
+						           </p:commandButton>
+						           <p:commandButton id="addInfo" action="#{MaterialTransfer.addInfo}"
+						            style="display:none;" update=":myform:tb :myform:availableNum"></p:commandButton>
+						           </td>
+							  </tr>
+						    </table>
+					    </td>
+					    </tr>
+					    <tr>
+					      <td>
+								<div id="equipment" style="overflow:auto;">
+								    <p:dataTable id="tb" style="width:100%;" editable="true" paginator="true" rows="3"
+								value="#{MaterialTransfer.materialInStorageInfoList}" var="record"
+								 paginatorPosition="bottom"
+								selectionMode="single" rowKey="#{record.id}">
+											<p:column headerText="物料编号"
+												style="width:15%;word-break:break-all;text-align: center;">  
+						            #{record.materialNo}  
+						        </p:column>
+											<p:column headerText="子库存"
+												style="width:14%;word-break:break-all;text-align: center;">  
+						            #{record.storageNo}  
+						        </p:column>
+						        <p:column headerText="货位"
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.positionNo}  
+						        </p:column>
+						          <p:column headerText="批次"
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.batchNo}  
+						        </p:column>
+						        <p:column headerText="序列"
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.seqNo}  
+						        </p:column>
+						        <p:column headerText="目标库存" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.transferStorageNo}  
+						        </p:column> 
+						         <p:column headerText="目标货位" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.transferPositionNo}  
+						        </p:column> 
+						        <p:column headerText="数量" 
+												style="width:8%;word-break:break-all;text-align: center;">  
+						            #{record.num}  
+						        </p:column> 
+						         <p:column headerText="单位" 
+												style="width:8%;word-break:break-all;text-align: center;">  
+						            #{record.unitName}  
+						        </p:column> 
+							    </p:dataTable>
+								</div>
+					      </td> 
+					    </tr>
+					    <tr>
+					    <td colspan="2" align="center">
+						    <div id="divPrev2" style="position: relative;">
+								    <p:commandButton value="入库 " action="#{MaterialTransfer.saveDataInfo}" style="border:0;background-color: #00A040;background-image: url('');color:white;
+										text-shadow:none;"  oncomplete="onZZ()" update=":myform:success">
+									</p:commandButton>
+					        </div>
+					    </td> 
+					    </tr>
+			   </table>
+				<h:inputHidden value="#{MaterialTransfer.success}" id="success"></h:inputHidden>
+				<h:inputHidden value="#{MaterialTransfer.batchCtrl}" id="batchCtrl"></h:inputHidden>
+				<h:inputHidden value="#{MaterialTransfer.seqCtrl}" id="seqCtrl"></h:inputHidden>
+				<h:inputHidden value="#{MaterialTransfer.positionCtrl}" id="positionCtrl"></h:inputHidden>
+				<h:inputHidden value="#{MaterialTransfer.positionCtrl2}" id="positionCtrl2"></h:inputHidden>
+				<h:inputHidden value="#{MaterialTransfer.positionType}" id="positionType"></h:inputHidden>
+				<p:growl id="messages" showDetail="true" />
+			</div>
+			<script type="text/javascript">
+				//<![CDATA[ 
+				var wjb51 = 0;
+				var hjb51 = 0;
+				hjb51 = document.body.clientHeight;
+			    wjb51 = document.body.clientWidth;
+				var imgPercent = hjb51 / 1080; //比例 
+				
+				//内容高度
+				document.getElementById("title").style.height=hjb51*150/900+"px";
+                document.getElementById("title").style.fontSize=hjb51*45/900+"px";
+                
+                document.getElementById("equipment").style.width = "100%";
+                document.getElementById("equipment").style.height = hjb51*280/900+"px";
+                document.getElementById("equipment").style.align = "center";
+                document.getElementById("equipment").style.fontSize = hjb51*20/900+"px";
+                
+                //标题设置
+                document.getElementById("myform:txtJobPlan").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtPart").style.fontSize=hjb51*23/900+"px";
+                
+                document.getElementById("myform:txtStorageD").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtStorageD").style.marginLeft = "10px"; 
+                
+                document.getElementById("myform:txtTransferNum").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtTransferNum").style.marginLeft = "10px"; 
+                
+                document.getElementById("myform:txtStorage").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtPosition").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtBatch").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtSeq").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtAvailableNum").style.fontSize=hjb51*23/900+"px";
+                
+                document.getElementById("myform:txtPositionD").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtPositionD").style.marginLeft = "10px"; 
+                
+                document.getElementById("myform:txtUnit").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtUnit").style.marginLeft = "10px"; 
+                
+                document.getElementById("myform:txtVersion").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtVersion").style.marginLeft = "10px"; 
+                //输入DIV控件 
+                document.getElementById("divTransNo").style.marginRight = wjb51*350/1500+"px"; 
+                
+                document.getElementById("divJobPlanId").style.width = wjb51*430/1500+"px";  
+                document.getElementById("divJobPlanId").style.height = hjb51*40/900+"px";
+                document.getElementById("divJobPlanId").style.marginLeft = "30px"; 
+                document.getElementById("divJobPlanId").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divPartNo").style.width = wjb51*190/1500+"px";  
+                document.getElementById("divPartNo").style.height = hjb51*40/900+"px";
+                document.getElementById("divPartNo").style.marginLeft = "30px"; 
+                document.getElementById("divPartNo").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divMaterialtName").style.width = wjb51*190/1500+"px"; 
+                document.getElementById("divMaterialtName").style.height = hjb51*40/900+"px";
+                document.getElementById("divMaterialtName").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divStorageIdD").style.width = wjb51*140/1500+"px"; 
+                document.getElementById("divStorageIdD").style.height = hjb51*40/900+"px";
+                document.getElementById("divStorageIdD").style.marginLeft = "30px"; 
+                document.getElementById("divStorageIdD").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divStorageId").style.width = wjb51*140/1500+"px"; 
+                document.getElementById("divStorageId").style.height = hjb51*40/900+"px";
+                document.getElementById("divStorageId").style.marginLeft = "30px"; 
+                document.getElementById("divStorageId").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divPositionId").style.width = wjb51*140/1500+"px";  
+                document.getElementById("divPositionId").style.height = hjb51*40/900+"px";
+                document.getElementById("divPositionId").style.marginLeft = "30px"; 
+                document.getElementById("divPositionId").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divPositionIdD").style.width = wjb51*140/1500+"px";  
+                document.getElementById("divPositionIdD").style.height = hjb51*40/900+"px";
+                document.getElementById("divPositionIdD").style.marginLeft = "30px"; 
+                document.getElementById("divPositionIdD").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divPositionIdD1").style.width = wjb51*140/1500+"px";
+                document.getElementById("divPositionIdD1").style.height = hjb51*40/900+"px";
+                document.getElementById("divPositionIdD2").style.width = wjb51*122/1500+"px";
+                document.getElementById("divPositionIdD2").style.height = hjb51*40/900+"px";
+                
+                
+                document.getElementById("divBatchId").style.width = wjb51*140/1500+"px";  
+                document.getElementById("divBatchId").style.height = hjb51*40/900+"px";
+                document.getElementById("divBatchId").style.marginLeft = "30px"; 
+                document.getElementById("divBatchId").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divSeqId").style.width = wjb51*140/1500+"px";  
+                document.getElementById("divSeqId").style.height = hjb51*40/900+"px";
+                document.getElementById("divSeqId").style.marginLeft = "30px"; 
+                document.getElementById("divSeqId").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divTransferNum").style.width = wjb51*140/1500+"px"; 
+                document.getElementById("divTransferNum").style.height = hjb51*40/900+"px";
+                document.getElementById("divTransferNum").style.marginLeft = "30px"; 
+                document.getElementById("divTransferNum").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divAvailableNum").style.width = wjb51*140/1500+"px";  
+                document.getElementById("divAvailableNum").style.height = hjb51*40/900+"px";
+                document.getElementById("divAvailableNum").style.marginLeft = "30px"; 
+                document.getElementById("divAvailableNum").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divUnit").style.width = wjb51*140/1500+"px"; 
+                document.getElementById("divUnit").style.height = hjb51*40/900+"px";
+                document.getElementById("divUnit").style.marginLeft = "30px"; 
+                document.getElementById("divUnit").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("divVersion").style.width = wjb51*140/1500+"px"; 
+                document.getElementById("divVersion").style.height = hjb51*40/900+"px";
+                document.getElementById("divVersion").style.marginLeft = "30px"; 
+                document.getElementById("divVersion").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("myform:instockNum").style.fontSize = hjb51*20/900+"px";
+                document.getElementById("myform:add").style.fontSize = hjb51*15/900+"px";
+                
+                document.getElementById("divPrev2").style.fontSize = hjb51*20/900+"px";
+                function check(){
+                	var materialId = document.getElementById("myform:materialId").value;
+  				    var storageId = document.getElementById("myform:storageId").value;
+  				    var storageIdD = document.getElementById("myform:storageIdD").value;
+  				    var transferNum = document.getElementById("myform:transferNum").value;
+  				    var availableNum = document.getElementById("myform:availableNum").value;
+  				    var versionNo = document.getElementById("myform:versionId").value;
+  				    
+  				    var positionCtrl2 = document.getElementById("myform:positionCtrl2").value;
+				    var positionIdD = document.getElementById("myform:positionIdD").value;
+				    var positionType = document.getElementById("myform:positionType").value;
+  				    if(null == materialId || "" == materialId) {
+						return;
+					}
+  				    if(null == storageId || "" == storageId){
+						alert("请选择来源库房！");
+						return;
+					}
+  				    if(null == storageIdD || "" == storageIdD){
+						alert("请选择目标库房！");
+						return;
+					}
+  				    
+  				    if(positionCtrl2 =="true"){
+						if(positionType =="3"){
+							var positionIdD2 = document.getElementById("myform:positionIdD2").value;
+							if(null == positionIdD2 || "" == positionIdD2){
+								alert("请选择目标货位！");
+								return;
+							}
+						}else{
+							if(null == positionIdD || "" == positionIdD){
+								alert("请选择目标货位！");
+								return;
+							}
+						}
+						
+					}
+  				    if(null == transferNum || "" == transferNum){
+						alert("请输入转移数量！");
+						return;
+					}
+  				    if(transferNum>availableNum){
+						alert("转移数量不可以大于现有量！");
+						return;
+					}
+  				    
+  				  if(null == versionNo || "" == versionNo){
+						alert("请选择版本号！");
+						return;
+					}
+  				    
+  				    var batchCtrl = document.getElementById("myform:batchCtrl").value;
+  				    var seqCtrl = document.getElementById("myform:seqCtrl").value;
+  				    var positionCtrl = document.getElementById("myform:positionCtrl").value;
+  				    
+  				    if(null != positionCtrl && "true" == positionCtrl){
+				    	var positionId = document.getElementById("myform:positionId").value;
+				    	if(null == positionId || "" == positionId){
+				    		alert("请选择货位！");
+							return;
+				    	}
+				    }
+  				    
+  				    if(null != batchCtrl && "true" == batchCtrl){
+  				    	var batchId = document.getElementById("myform:batchId").value;
+  				    	if(null == batchId || "" == batchId){
+  				    		alert("请选择批次！");
+  							return;
+  				    	}
+  				    }
+  				    
+  				    if(null != seqCtrl && "true" == seqCtrl){
+				    	var seqId = document.getElementById("myform:seqId").value;
+				    	if(null == seqId || "" == seqId){
+				    		alert("请选择序列！");
+							return;
+				    	}
+				    }
+  				    
+				    document.getElementById("myform:addInfo").click();
+					
+                }
+				
+				function onZZ()  {
+					var msg = document.getElementById("myform:success").value;
+					if(msg =="保存成功"){
+						 window.close();
+					}else{
+						alert(msg);
+					}
+					
+				}
+				//]]>
+			</script>
+		</h:form>
+	</h:body>
+</ui:composition>

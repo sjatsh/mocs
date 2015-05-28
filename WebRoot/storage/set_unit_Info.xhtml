@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+<style type="text/css">
+			
+				.td{
+			word-break: break-all;
+		}
+</style>
+<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+     <div class="headDiv" style="margin-top: 10px;">
+		<p:commandButton value="新建" oncomplete="addUnit.show();bgReposition($('.table'));" styleClass="delete" ></p:commandButton>
+		<p:commandButton   id="shuaxin1"  actionListener="#{SetUnitInfoBean.searchList}" update=":myform:dataTable2" style="display:none;"></p:commandButton>
+		<p:commandButton value="删除" update=":myform:select1" styleClass="delete" oncomplete="ondelete2();bgReposition($('.table'));" actionListener="#{SetUnitInfoBean.onSelected}"></p:commandButton>
+		<p:commandButton id="delete1" value="删除" update=":myform:dataTable2 :myform:displayMulti1"  actionListener="#{SetUnitInfoBean.deleteTUnitInfo}"  style="display: none;"/> 
+	</div>
+    <p:dataTable var="var" value="#{SetUnitInfoBean.mediumTUnitInfoModel}" id="dataTable2" style="width: auto; left: 170px; right: 0;" styleClass="table"
+		  editable="true" dynamic="true" selection="#{SetUnitInfoBean.selectedTunInfo}" paginator="true" paginatorPosition="bottom" rows="10" >
+		 <p:ajax event="rowEdit" listener="#{SetUnitInfoBean.updateTUnitInfo}" update=":myform:dataTable2 :myform:messages2" />
+	     <p:ajax event="rowEditCancel" listener="#{SetUnitInfoBean.onCancel}" update=":myform:dataTable2" />
+	                 <p:column selectionMode="multiple" />        
+						<p:column headerText="分类名称">
+						   <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unittypename}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                         <h:outputText value="#{var.unittypename}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+                        </p:column>
+						<p:column headerText="单位名称">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unitname}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <p:inputText value="#{var.unitname}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="单位缩写">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unitshort}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <p:inputText value="#{var.unitshort}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="描述">
+						  <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unitdesc}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <p:inputText value="#{var.unitdesc}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+		 				</p:column>
+		 				<p:column headerText="状态">
+						  <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unitstatus}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                      <h:selectOneMenu value="#{var.unitstatus}" >  
+	                          <f:selectItems value="#{SetUnitInfoBean.unitstatuss}" var="unitstatus" itemLabel="#{unitstatus}" itemValue="#{unitstatus}" /> 
+			                 </h:selectOneMenu>  
+			                 </f:facet>
+	                      </p:cellEditor>
+		 				</p:column>
+		 				<p:column headerText="操作">
+							<p:rowEditor />
+						</p:column>
+		   </p:dataTable>
+	 <p:dialog widgetVar="addUnit" resizable="false">
+	    <div style="width:300px;height: 300px;">
+    	<table>
+    		<tr>
+    			<td>分类名称：<font style="color:red;">*</font></td>
+    			<td>
+    				<h:selectOneMenu value="#{SetUnitInfoBean.unittypename}" id="addunittype" >  
+	                     <f:selectItems value="#{SetUnitInfoBean.unitTypeList}" /> 
+			            </h:selectOneMenu>  
+    			</td>
+    		</tr>
+    			<tr>
+    				<td>单位名称：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SetUnitInfoBean.unitName}" id="addunitName" style="border:1px black solid;"></h:inputText></td>
+    				
+    			</tr>
+    			<tr>
+    				<td>单位缩写：</td>
+    				<td><h:inputText value="#{SetUnitInfoBean.unitShort}" id="addunitShort" style="border:1px black solid;"></h:inputText></td>
+    				
+    			</tr>
+    			<tr>
+    				<td>描述：</td>
+    				<td colspan="2">
+    					<h:inputTextarea value="#{SetUnitInfoBean.unitDesc}"></h:inputTextarea>
+    				</td>
+    			</tr>
+    		</table>
+    		</div>
+	    	<div class="headDivduan">
+			<p:commandButton value="新增" styleClass="delete" onclick="yinc()" ></p:commandButton>
+			<p:commandButton value="新增" id="addunit" actionListener="#{SetUnitInfoBean.addTUnitInfo}" 
+				update=":myform:dataTable2 :myform:messages2 "   oncomplete="addUnit.hide()" 
+				style="display:none"/>
+    	    </div>
+    	<p:growl id="messages2" showDetail="true"/> 
+     </p:dialog>
+      <!-- 删除 -->
+    <p:dialog id="multiDialog1" height="200" showEffect="fade" hideEffect="explode"  widgetVar="multiCarDialog">
+        <p:dataList id="displayMulti1" value="#{SetUnitInfoBean.selectedTunInfo}" var="tun"></p:dataList>  
+    </p:dialog>    
+      <h:inputHidden value="#{SetUnitInfoBean.selected}" id="select1"></h:inputHidden>
+	<script type="text/javascript">
+	 
+	//<![CDATA[
+	      document.getElementById("myform:shuaxin1").click();
+	      //删除
+		 	 function ondelete2(){
+		  	   var temp = document.getElementById("myform:select1").value;
+		  	   if(null!=temp&&""!=temp){
+		  		   if(confirm("是否确认删除此数据！")){
+			    	   document.getElementById("myform:delete1").click();
+			    	} 
+		  	   }else{
+		  		   alert("请选择一条数据进行删除！");
+		  	   }
+		     }
+		  
+	      
+       function yinc(){
+    	  
+    	   var addunittype=document.getElementById("myform:addunittype").value; 
+    	   var addunitName=document.getElementById("myform:addunitName").value;
+    	 
+    	    if(null==addunittype||""==addunittype){
+    		   alert("请选择单位类别！");
+    	   } 
+    	    else if(null==addunitName||""==addunitName){
+    		   alert("请输入单位名称！");
+    	   }else{
+    		   document.getElementById("myform:addunit").click();
+    	   }
+    	   
+       }
+      //]]>
+	</script>
+</ui:composition>

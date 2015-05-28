@@ -37,9 +37,10 @@
         var minHeight = 600;
         var menuListObj = eval("(" + menuListJson + ")");   //对象引用
         var documentWidth = $("#bottom-bar")[0].offsetWidth;	//当前宽度
-        var documentHeight = document.body.offsetHeight;    //总高度获取
+        var documentHeight = $(window).height();    //总高度获取
+        console.log(documentHeight);
         if(documentHeight < minHeight) { documentHeight = minHeight; }
-        $("#bottom-bar").css("margin-top", 1006 / 1080 * documentHeight + "px");  //框架高度
+        $("#bottom-bar").css("top", 1006 / 1080 * documentHeight + "px");  //框架高度
         $("#menus").css("width", menuListObj.content.length * (335 / 1920 * documentWidth) + "px").css("height", 8 / 100 * documentHeight + "px");   //菜单栏尺寸
         $("#menus>li>a").css("font-size", 38 / 1080 * documentHeight + "px").css("width", 335 / 1920 * documentWidth + "px").css("height", 8 / 100 * documentHeight + "px").css("line-height", 8 / 100 * documentHeight + "px");  //单个菜单尺寸
         $("#menus>li>.indicator").css("top", ((8 / 100 * documentHeight) - 20) / 2 + "px");  //子菜单icon位置

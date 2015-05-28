@@ -10,31 +10,25 @@ import java.util.Map;
 import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
 
+import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import smtcl.mocs.pojos.device.TUserProdctionPlan;
 import smtcl.mocs.pojos.job.TJobplanInfo;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.services.authority.ICommonService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.utils.device.StringUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 @Controller
 public class JobPlanWeb {
 
-	private  Gson gson = new GsonBuilder().serializeNulls().create();
-	
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	/**
 	 * 设备接口实例
 	 */
-	@ManagedProperty("#{deviceService}")
-	private IJobPlanService jobPlanService;
+	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
 	
 	@ManagedProperty("#{commonService1}")
 	private ICommonService commonService;
@@ -181,7 +175,7 @@ public class JobPlanWeb {
 			
 			TPartTypeInfo tPartTypeInfo=commonService.get(TPartTypeInfo.class,Long.parseLong(resourceId));
 			if(StringUtils.isEmpty(planId)) planId="-1";
-			TUserProdctionPlan tUserProdctionPlan=commonService.get(TUserProdctionPlan.class,Long.parseLong(planId));
+//			TUserProdctionPlan tUserProdctionPlan=commonService.get(TUserProdctionPlan.class,Long.parseLong(planId));
 			TJobplanInfo jobplanInfo=new TJobplanInfo();			
 			jobplanInfo.setTPartTypeInfo(tPartTypeInfo);
 //			jobplanInfo.setTUserProdctionPlan(tUserProdctionPlan);
@@ -340,7 +334,7 @@ public class JobPlanWeb {
 				modelMap.put("data", "");
 				modelMap.put("success", false);
 			}else{
-			jobPlanService.deleteJobPlanInfoById(tJobplanInfo);
+				jobPlanService.deleteJobPlanInfoById(tJobplanInfo);
 				modelMap.put("data", "");
 				modelMap.put("success", true);
 			}
@@ -383,13 +377,6 @@ public class JobPlanWeb {
 	}
 	
 	private Map<String,Object> getMap(Map<String, Object> tempMap){
-		Map<String,Object> modelMap = new HashMap<String,Object>();
-		modelMap.put("data", tempMap);
-		modelMap.put("success", true);
-		return modelMap;
-	}
-	
-	private Map<String,Object> getMap1(String tempMap){
 		Map<String,Object> modelMap = new HashMap<String,Object>();
 		modelMap.put("data", tempMap);
 		modelMap.put("success", true);
@@ -470,9 +457,9 @@ public class JobPlanWeb {
 	}
 	
 /*-----------------------------------------------------------------------------------------------------*/
-	public IJobPlanService getJobPlanService() {
-		return jobPlanService;
-	}
+//	public IJobPlanService getJobPlanService() {
+//		return jobPlanService;
+//	}
 
 	public ICommonService getCommonService() {
 		return commonService;
@@ -481,10 +468,10 @@ public class JobPlanWeb {
 	public void setCommonService(ICommonService commonService) {
 		this.commonService = commonService;
 	}
-
-	public void setJobPlanService(IJobPlanService jobPlanService) {
-		this.jobPlanService = jobPlanService;
-	}
+//
+//	public void setJobPlanService(IJobPlanService jobPlanService) {
+//		this.jobPlanService = jobPlanService;
+//	}
 	
 	
 }

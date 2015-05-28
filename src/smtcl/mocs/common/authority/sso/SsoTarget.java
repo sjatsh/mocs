@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 对应servlet的url:/sso/sso-target
+ * 瀵瑰簲servlet鐨剈rl:/sso/sso-target
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-9
- * Time: 下午4:14
+ * Time: 涓嬪崍4:14
  */
 public class SsoTarget extends HttpServlet {
     private ISsoReceiver receiver;

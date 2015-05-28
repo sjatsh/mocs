@@ -36,6 +36,7 @@ public class TUserEquWorkEvents implements java.io.Serializable {
 	private String workResult;//加工结果
 	private Long theoryCycletime;//秒
 	private String operatorNo; //当前操作者工号
+	private Long flag;//是否导入erp标记位，1：已导入，0：未导入
 
 	// Constructors
 
@@ -208,5 +209,14 @@ public class TUserEquWorkEvents implements java.io.Serializable {
 
 	public void setOperatorNo(String operatorNo) {
 		this.operatorNo = operatorNo;
+	}
+
+	@Column(name = "flag", precision = 22, scale = 0)
+	public Long getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Long flag) {
+		this.flag = flag;
 	}
 }

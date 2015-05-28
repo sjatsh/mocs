@@ -1,44 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	   xmlns:p="http://www.springframework.org/schema/p"
-	   xmlns:aop="http://www.springframework.org/schema/aop"
  	   xmlns:tx="http://www.springframework.org/schema/tx"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans 
 						   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	                       http://www.springframework.org/schema/tx 
-	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
-	                       http://www.springframework.org/schema/aop 
-	                       http://www.springframework.org/schema/aop/spring-aop.xsd">
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd">
    
-    <!--  <bean id="propertyConfigurer" class="smtcl.mocs.common.device.DBConfigurer">
-       <property name="location" value="WEB-INF/DBconfig.properties"/>
-    </bean>  -->
-   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-       <property name="location" value="WEB-INF/DBconfig.properties" /> 
-  </bean> 
     
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+     <property name="location" value="WEB-INF/DBconfig.properties"/>
+    </bean>
+    <bean id="machineToolUpdateFreq" class="smtcl.mocs.web.webservice.model.MachineToolUpdateFreq"
+	init-method="init" destroy-method="destory" scope="singleton"></bean>
+	<!-- Spring Quartz -->
+	<bean name="runMeJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="smtcl.mocs.web.webservice.model.RunMeJob" />
+		<property name="jobDataAsMap">
+		  <map>
+			<entry key="machineToolUpdateFreq" value-ref="machineToolUpdateFreq" />
+		  </map>
+		</property>
+	</bean>
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runMeJob" />
+		<property name="cronExpression" value="59 59 23 * * ?" />
+	</bean>
+	<bean name="runMeJob1" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="smtcl.mocs.web.webservice.model.RunMeJob1" />
+		<property name="jobDataAsMap">
+		  <map>
+			<entry key="machineToolUpdateFreq" value-ref="machineToolUpdateFreq" />
+		  </map>
+		</property>
+	</bean>
+	<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runMeJob1" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+	</bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+	   		<list><ref bean="runMeJob" /> <ref bean="runMeJob1" /> </list>
+		</property>
+		<property name="triggers">
+	    	<list><ref bean="cronTrigger" /> <ref bean="cronTrigger1" /></list>
+		</property>
+   </bean>
+    <bean id="dataSource1" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${connection1.jdbcUrl}" />
+      <property name="username" value="${connection1.user}" />
+      <property name="password" value="${connection1.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+      <property name="initialSize" value="3" />
+      <property name="minIdle" value="3" /> 
+      <property name="maxActive" value="5" />
+
+      <!-- 配置获取连接等待超时的时间 -->
+      <property name="maxWait" value="60000" />
+
+      <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+      <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+      <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+      <property name="minEvictableIdleTimeMillis" value="300000" />
+
+      <property name="validationQuery" value="SELECT 'x'" />
+      <property name="testWhileIdle" value="true" />
+      <property name="testOnBorrow" value="false" />
+      <property name="testOnReturn" value="false" />
+
+      <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+      <property name="poolPreparedStatements" value="true" />
+      <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+      
+      
+      <!-- 关闭长时间不使用的连接 -->
+        <property name="removeAbandoned" value="true" /> <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandonedTimeout" value="600" /> <!-- 1200秒，也就是20分钟 -->
+        <property name="logAbandoned" value="true" /> <!-- 关闭abanded连接时输出错误日志 -->
+        
+	</bean>
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource1" />
 		<property name="packagesToScan">
 			<list>
 				<value>smtcl.mocs.pojos.device</value>
 				<value>smtcl.mocs.pojos.authority</value>
 				<value>smtcl.mocs.pojos.job</value>
+				<value>smtcl.mocs.pojos.storage</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
 			<props>
-			    <prop key="hibernate.connection.url">${connection.url}</prop>
-                <prop key="hibernate.connection.driver_class">${connection.driver}</prop>
-                <prop key="hibernate.connection.username">${connection.username}</prop>
-                <prop key="hibernate.connection.password">${connection.password}</prop>
-                <prop key="hibernate.dialect">${connection.dialect}</prop>
-                <prop key="hibernate.show_sql">${connection.show.sql}</prop>
-                <prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
+                <prop key="hibernate.dialect">${connection1.dialect}</prop>
+                <prop key="hibernate.show_sql">${connection1.show.sql}</prop>
+                <prop key="hibernate.connection.release_mode">after_transaction</prop>
 			</props>
 		</property>
 	</bean>
 
+	<!-- atomikos事务管理器 -->
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" 
+        init-method="init" destroy-method="close">
+        <property name="forceShutdown" value="true"/>
+    </bean>
+
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+        <property name="transactionTimeout" value="300" />
+    </bean>
+
+    <!-- spring 事务管理器 -->
+    <bean id="springTransactionManager"
+        class="org.springframework.transaction.jta.JtaTransactionManager">
+        <property name="transactionManager" ref="atomikosTransactionManager"/>
+        <property name="userTransaction" ref="atomikosUserTransaction" />
+        <property name="allowCustomIsolationLevels" value="true"/> 
+    </bean>
+
+    <!-- 使用annotation定义事务，对于要加入事物的类，只需对该类加 @Transactional  -->
+    <tx:annotation-driven transaction-manager="springTransactionManager" />
+
+<!--     hibernate Dao层模板 -->
+<!--     <bean id="transactionManager" -->
+<!--         class="org.springframework.orm.hibernate3.HibernateTemplate"> -->
+<!--         <property name="sessionFactory" ref="sessionFactory"></property> -->
+<!--     </bean> -->
+    
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -56,21 +143,6 @@
 			</props>
 		</property>
 	</bean>
-	<!-- end of transaction manage -->
-	<!-- 零件事物开始 -->
-	
-	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="*" propagation="REQUIRED" />
-        </tx:attributes>
-    </tx:advice>
-    
-    <aop:config>
-        <aop:pointcut id="interceptorPointCuts"  expression="execution(* smtcl.mocs.services.device.impl.PartServiceImp.*(..))" />
-        <aop:advisor advice-ref="txAdvice"  pointcut-ref="interceptorPointCuts" />        
-    </aop:config> -->      
-	<!-- 零件事物结束 -->
-
 
 	<bean id="beanFactory" class="org.dreamwork.persistence.ServiceFactory" />
 
@@ -149,7 +221,7 @@
 	<bean id="productService" parent="baseService">
 		<property name="target">
 			<bean class="smtcl.mocs.services.device.impl.ProductServiceImpl">
-				<property name="partService" ref="partService"></property>
+				<property name="partService" ref="partService"/>
 				<property name="dao">
 					<bean parent="genericDao">
 						<property name="target">
@@ -183,7 +255,7 @@
 	</bean>
 
 	<!-- 树Service -->
-	<bean id="organizationService " parent="baseService">
+	<bean id="organizationService" parent="baseService">
 		<property name="target">
 			<bean
 				class="smtcl.mocs.services.device.impl.OrganizationServiceImpl">
@@ -205,6 +277,7 @@
 	<bean id="deviceService" parent="baseService">
 		<property name="target">
 			<bean class="smtcl.mocs.services.device.impl.DeviceServiceImpl">
+                <property name="remoteCommonService" ref="remoteCommonService" />
 				<property name="commonService" ref="commonService1" />
 				<property name="dao">
 					<bean parent="genericDao">
@@ -220,24 +293,24 @@
 		</property>
 	</bean>
 	
-	<!-- 作业计划SERVICE -->
-	<bean id="jobPlanService" parent="baseService">
-		<property name="target">
-			<bean class="smtcl.mocs.services.jobplan.impl.JobPlanServiceImpl">
-			<property name="commonService" ref="commonService1"/>
-			<property name="commonDao" ref="commonDao" />
-				<property name="dao">
-					<bean parent="genericDao">
-						<property name="target">
-							<bean parent="abstractDaoTarget">
-								<constructor-arg value="smtcl.mocs.pojos.job.TJobplanInfo" />
-							</bean>
-						</property>
-					</bean>
-				</property>
-			</bean>
-		</property>
-	</bean>
+	 	<!-- 作业计划SERVICE --> 
+<!-- 	<bean id="jobPlanService" parent="baseService"> -->
+<!-- 		<property name="target"> -->
+<!-- 			<bean class="smtcl.mocs.services.jobplan.impl.JobPlanServiceImpl"> -->
+<!-- 			<property name="commonService" ref="commonService1"/> -->
+<!-- 			<property name="commonDao" ref="commonDao" /> -->
+<!-- 				<property name="dao"> -->
+<!-- 					<bean parent="genericDao"> -->
+<!-- 						<property name="target"> -->
+<!-- 							<bean parent="abstractDaoTarget"> -->
+<!-- 								<constructor-arg value="smtcl.mocs.pojos.job.TJobplanInfo" /> -->
+<!-- 							</bean> -->
+<!-- 						</property> -->
+<!-- 					</bean> -->
+<!-- 				</property> -->
+<!-- 			</bean> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 	
 	<!-- 设备管理SERVICE -->
 	<bean id="equipmentService" parent="baseService">
@@ -277,21 +350,21 @@
 	</bean>
 	
 	<!-- 工单SERVICE -->
-	<bean id="jobDispatchService" parent="baseService">
-		<property name="target">
-			<bean class="smtcl.mocs.services.jobplan.impl.JobDispatchServiceImpl">
-				<property name="dao">
-					<bean parent="genericDao">
-						<property name="target">
-							<bean parent="abstractDaoTarget">
-								<constructor-arg value="smtcl.mocs.pojos.job.TJobdispatchlistInfo" />
-							</bean>
-						</property>
-					</bean>
-				</property>
-			</bean>
-		</property>
-	</bean>
+<!-- 	<bean id="jobDispatchService" parent="baseService"> -->
+<!-- 		<property name="target"> -->
+<!-- 			<bean class="smtcl.mocs.services.jobplan.impl.JobDispatchServiceImpl"> -->
+<!-- 				<property name="dao"> -->
+<!-- 					<bean parent="genericDao"> -->
+<!-- 						<property name="target"> -->
+<!-- 							<bean parent="abstractDaoTarget"> -->
+<!-- 								<constructor-arg value="smtcl.mocs.pojos.job.TJobdispatchlistInfo" /> -->
+<!-- 							</bean> -->
+<!-- 						</property> -->
+<!-- 					</bean> -->
+<!-- 				</property> -->
+<!-- 			</bean> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 	
 	<bean id="mtService" parent="baseService">
 		<property name="target">
@@ -337,6 +410,7 @@
 			<bean
 				class="smtcl.mocs.services.device.impl.CostManageServiceImpl">
 				<property name="commonService" ref="commonService1" />
+				<property name="remoteCommonService" ref="remoteCommonService" />
 				<property name="commonDao" ref="commonDao" />
 				<property name="dao">
 					<bean parent="genericDao">
@@ -381,6 +455,7 @@
 		<property name="target">
 			<bean
 				class="smtcl.mocs.services.device.impl.WSUserServiceImpl">
+                <property name="remoteCommonService" ref="remoteCommonService" />
 				<property name="dao">
 					<bean parent="genericDao">
 						<property name="target">
@@ -394,24 +469,7 @@
 		</property>
 	</bean>
 	
-	<!-- UpdataJobDispatch -->
-	<bean id="updataJobDispatch" parent="baseService">
-		<property name="target">
-			<bean
-				class="smtcl.mocs.services.jobplan.impl.UpdataJobDispatchImpl">
-				<property name="dao">
-					<bean parent="genericDao">
-						<property name="target">
-							<bean parent="abstractDaoTarget">
-								<constructor-arg
-									value="smtcl.mocs.pojos.job.TEquJobDispatch" />
-							</bean>
-						</property>
-					</bean>
-				</property>
-			</bean>
-		</property>
-	</bean>
+
 	
 	<!-- processService -->
 	<bean id="processService" parent="baseService">
@@ -433,9 +491,26 @@
 	</bean>
 	
 	<!-- 报表数据服务  -->
-	<bean id="reportService" parent="baseService">
+<!-- 	<bean id="reportService" parent="baseService"> -->
+<!-- 		<property name="target"> -->
+<!-- 			<bean class="smtcl.mocs.services.report.impl.ReportServiceImpl"> -->
+<!-- 				<property name="dao"> -->
+<!-- 					<bean parent="genericDao"> -->
+<!-- 						<property name="target"> -->
+<!-- 							<bean parent="abstractDaoTarget"> -->
+<!-- 								<constructor-arg -->
+<!-- 									value="java.lang.Object" /> -->
+<!-- 							</bean> -->
+<!-- 						</property> -->
+<!-- 					</bean> -->
+<!-- 				</property> -->
+<!-- 			</bean> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	<!-- 库存物料查询 -->
+		<bean id="materielManageService" parent="baseService">
 		<property name="target">
-			<bean class="smtcl.mocs.services.report.impl.ReportServiceImpl">
+			<bean class="smtcl.mocs.services.storage.impl.MaterielManageServiceImpl">
 				<property name="dao">
 					<bean parent="genericDao">
 						<property name="target">
@@ -449,12 +524,10 @@
 			</bean>
 		</property>
 	</bean>
-	
-	<!-- 报废servic  -->
-	<bean id="scrapService" parent="baseService">
+	<!-- 库房库存管理Service -->
+	<bean id="storageManage" parent="baseService">
 		<property name="target">
-			<bean class="smtcl.mocs.services.jobplan.impl.ScrapServiceImpl">
-				<property name="commonDao" ref="commonDao" />
+			<bean class="smtcl.mocs.services.storage.impl.StorageManageImpl">
 				<property name="dao">
 					<bean parent="genericDao">
 						<property name="target">
@@ -468,7 +541,23 @@
 			</bean>
 		</property>
 	</bean>
-	
+<!-- 单位设置SERVICE -->
+	<bean id="setunitService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.storage.impl.SetUnitServiceImpl">
+			<property name="commonService" ref="commonService1" />	
+			<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.storage.TUnitType" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
 	<!-- 定时器配置start -->
 	 <!--  
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  

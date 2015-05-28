@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import org.json.JSONString;
 
 /**
- * 映射数据库中"按钮"的实体类
+ * 鏄犲皠鏁版嵁搴撲腑"鎸夐挳"鐨勫疄浣撶被
  *
  * User: gjy
  * Date: 2012-10-15

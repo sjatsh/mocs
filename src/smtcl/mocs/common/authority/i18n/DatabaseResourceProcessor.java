@@ -18,7 +18,7 @@ import java.util.Map;
  * Created with IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-11-1
- * Time: ÏÂÎç8:43
+ * Time: ä¸‹åˆ8:43
  */
 public class DatabaseResourceProcessor implements BeanFactoryPostProcessor {
     private SessionFactory sessionFactory;

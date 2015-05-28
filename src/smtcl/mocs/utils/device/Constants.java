@@ -1,6 +1,8 @@
 package smtcl.mocs.utils.device;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +16,8 @@ import java.util.Map;
  * @版本：V1.0
  */
 public class Constants {
-
+	
+	public static final String configPath = "/erp/erpReturn.txt";
 	/**
 	 * 登录后跳转页面
 	 */
@@ -24,31 +27,33 @@ public class Constants {
 	 * 登录SESSION标识
 	 */
 	public static final String USER_SESSION_KEY = "mocs.session.user";
-	
+
 	/**
 	 * NC登录默认密码
 	 */
 	public static String LOGIN_PWD="123456";
-	/**
-	 * 默认密钥
-	 */
-	public static String KEY_STRING="smtcl-i5";  
-	
-	/**
-	 * 默认账户
-	 */
-	public static String KEY_ACCOUNT="fwmh+vIhdGD8I4n99WrArQ=="; 
-	
-	/**
-	 * 厂商编号
-	 */
-	public static String KEY_COMPANY_NO="euwAx8veU5AHMHOZNXuJtA=="; 
-	
-	/**
-	 * 开发模式
-	 */
-	public static Boolean IS_DEV_MODE=false;
-	
+
+    /**
+     * 生产调度页面ID
+     */
+    public static final String SCDD_PAGE_ID = "mocs.scdd.page.scdd";
+    /**
+     * 作业计划页面ID
+     */
+    public static final String ZYJH_PAGE_ID = "mocs.zyjh.page.zyjh";
+    /**
+     * 按钮ID集合
+     */
+    public static final String[] BUTTONS_ID ={
+            "button.view",	 //查看
+            "button.manage",	//管理
+            "button.new",      //新增
+            "button.delete",   //删除
+            "button.save",    //保存
+            "button.edit",     //编辑
+            "button.supreme"		//超级管理
+    };
+
 	/**
 	 * 分页大小
 	 */
@@ -75,6 +80,10 @@ public class Constants {
 	public static final String[] USER_DEL_MSG = { "删除成功！", "删除失败！"};
 	
 	public static final String[] USER_UPDATE_MSG = { "更新成功！", "更新失败！"};
+	/**
+	 * 加工工单是否合理
+	 */
+	public static final String[] IS_OK_NOTOK={"调用接口失败！","Ok","NOK"};
 
 	/**
 	 * 系统标识
@@ -98,6 +107,7 @@ public class Constants {
 	 * 工厂建模，物理地址跟逻辑地址的对应关系
 	 */
 	public static final Map<String,String> MOCS_PATH_MAP = new HashMap<String, String>();
+	public static final List<Map<String,Object>> MATERIELTYPE=new ArrayList<Map<String,Object>>();
 		static{
 			VIRTUALPAGES.put("历史分析", "");//key 虚拟页面名       value url默认值
 			P_V_PAGES.put("时间统计", "历史分析");
@@ -125,6 +135,29 @@ public class Constants {
 			MOCS_PATH_MAP.put("/mocs/productInProgress/product_in_progress_composite.xhtml","mocs.zzpcx.page.zzpcx");
 			MOCS_PATH_MAP.put("/mocs/device/workshop_management.xhtml","mocs.sbgl.page.sbgl");
 				
-		
+		    
+			MOCS_PATH_MAP.put("/mocs/storage/storage_manage.xhtml","mocs.ckgl.page.kfgl");
+			MOCS_PATH_MAP.put("/mocs/storage/materiel_position_manage.xhtml","mocs.ckgl.page.kwgl");
+			
+			Map<String,Object> typeMap1=new HashMap<String, Object>();
+			typeMap1.put("id", "1");
+			typeMap1.put("value", "原材料");
+			MATERIELTYPE.add(typeMap1);
+			Map<String,Object> typeMap2=new HashMap<String, Object>();
+			typeMap2.put("id", "2");
+			typeMap2.put("value", "半成品");
+			MATERIELTYPE.add(typeMap2);
+			Map<String,Object> typeMap3=new HashMap<String, Object>();
+			typeMap3.put("id", "3");
+			typeMap3.put("value", "成品");
+			MATERIELTYPE.add(typeMap3);
+			Map<String,Object> typeMap4=new HashMap<String, Object>();
+			typeMap4.put("id", "4");
+			typeMap4.put("value", "消耗品");
+			MATERIELTYPE.add(typeMap4);
+			Map<String,Object> typeMap5=new HashMap<String, Object>();
+			typeMap5.put("id", "5");
+			typeMap5.put("value", "后台维护");
+			MATERIELTYPE.add(typeMap5);
 		}
 }

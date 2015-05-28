@@ -195,7 +195,7 @@ public class ExcelUtils {
 	  public void outputEquExcel(String excelName, List list, String[] firstRowValue) {
 		    try {
 		      this.createSheet(firstRowValue);
-		      this.setEquValueToRow(excelName, list);
+		      this.setEquValueToRow(excelName, list); 
 		    } catch (Exception ex) {
 		      System.out.print(ex);
 		    }
@@ -225,14 +225,16 @@ public class ExcelUtils {
 		        (String)map.get("equSerialNo"),
 		        (String)map.get("equipmentType"),
 		        (String)map.get("equName"),
-		        (String)map.get("norm"),
-		        (String)map.get("outfacNo"),
-		        (String)map.get("manufacturer"),
-		        (String)map.get("checktime"),
-		        String.valueOf(map.get("xAxis")),
-		        String.valueOf(map.get("yAxis")),
-		        (String)map.get("ipAddress"),
-		        (String)map.get("equDesc")
+		        null==map.get("norm")?"":map.get("norm").toString(),
+		        null==map.get("outfacNo")?"":map.get("outfacNo").toString(),	
+		        null==map.get("manufacturer")?"":map.get("manufacturer").toString(),
+		        null==map.get("checktime")?"":map.get("checktime").toString(),
+		        null==map.get("xAxis")?"":map.get("xAxis").toString(),
+		        null==map.get("yAxis")?"":map.get("yAxis").toString(),
+		        null==map.get("ipAddress")?"":map.get("ipAddress").toString(),
+		        null==map.get("equDesc")?"":map.get("equDesc").toString(),
+		        null==map.get("peopleName")?"":map.get("peopleName").toString(),
+
 		        };
 		        this.createCell(row, obj);
 		      }

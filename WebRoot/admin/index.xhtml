@@ -37,6 +37,26 @@ function openUrl(url) {
     features="status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";             
     winId=window.open(url,'newwindow',features);
 }
+
+var wjb51 = 0;
+var hjb51 = 0;
+hjb51 = document.documentElement.clientHeight;
+wjb51 = document.documentElement.clientWidth;
+if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
+		hjb51 = wjb51*1080/1920; 
+	//	   hjb51 = 600; 
+	//	   wjb51 = 800;
+	}
+if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
+	   hjb51 = 600; 
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+   }
+if(800>wjb51){
+	   hjb51 = 600;
+	   wjb51 = 800;
+	   document.body.style.overflow="scroll";
+}	
 </script>
 </h:head>
 
@@ -87,7 +107,8 @@ function openUrl(url) {
 			
 		</div>
 		<!-- 初始化RICHFACES部分组件 -->
-	
+		<rich:calendar popup="true" locale="en" value="#{organizeMaterielManageBean.startTime}" datePattern="yyyy-MM-dd"
+			cellWidth="10px" cellHeight="20px" style="display:none;"/> 
 	</h:form>
 	<div style="display: none;">
 	<rich:fileUpload></rich:fileUpload>

@@ -25,6 +25,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import smtcl.mocs.beans.device.JobdispatchChangeBean;
 import smtcl.mocs.model.DeviceInfoModel;
+import smtcl.mocs.model.TMaterialPositionModel;
 import smtcl.mocs.pojos.device.TEquipmentInfo;
 import smtcl.mocs.pojos.device.TNodeProductionProfiles;
 import smtcl.mocs.pojos.device.TNodes;
@@ -34,14 +35,22 @@ import smtcl.mocs.pojos.device.TUserEquOeedaily;
 import smtcl.mocs.pojos.device.TUserEquOeestore;
 import smtcl.mocs.services.device.ICommonService;
 import smtcl.mocs.services.device.IDeviceService;
+import smtcl.mocs.services.erp.IImportService;
 import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.DateUtils;
 import smtcl.mocs.utils.device.StringUtils;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TJobplanInfo;
+import smtcl.mocs.pojos.job.TMaterailTypeInfo;
 import smtcl.mocs.pojos.job.TPartBasicInfo;
 import smtcl.mocs.pojos.job.TProcessInfo;
 import smtcl.mocs.pojos.job.TProductionEvents;
+import smtcl.mocs.pojos.storage.TMaterialStorage;
+import smtcl.mocs.pojos.storage.TMaterialVersion;
+import smtcl.mocs.pojos.storage.TMaterielPositionInfo;
+import smtcl.mocs.pojos.storage.TStorageInfo;
+import smtcl.mocs.pojos.storage.TTransaction;
+import smtcl.mocs.pojos.storage.TTransactionRelation;
 
 
 
@@ -61,8 +70,21 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	 * 注入通用service
 	 */
 	private ICommonService commonService;
-	 
-	public ICommonService getCommonService() {
+
+    /**
+     * 注入远程通用service
+     */
+    private ICommonService remoteCommonService;
+
+    public ICommonService getRemoteCommonService() {
+        return remoteCommonService;
+    }
+
+    public void setRemoteCommonService(ICommonService remoteCommonService) {
+        this.remoteCommonService = remoteCommonService;
+    }
+
+    public ICommonService getCommonService() {
 		return commonService;
 	}
 
@@ -72,11 +94,11 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	
 	/**
 	 * 获取设备总览的历史数据
-	 * @param serialon 设备序列号
+	 * @param serialNo 设备序列号
 	 * @return  DeviceInfoModel
 	 */
 	@Override
-	public DeviceInfoModel getDeviceInfoModelHistory(String serialon) {
+	public DeviceInfoModel getDeviceInfoModelHistory(String serialNo) {
 		DeviceInfoModel dim = new DeviceInfoModel();
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String hql = "select new map(" + "a.equSerialNo as equSerialNo,"
@@ -101,10 +123,10 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 				+ " b.dayProcessPartsCount as dayProcessPartsCount " + ")"
 				+ " from TEquipmentInfo as a , TUserEquStatusStore as b "
 				+ " where a.equSerialNo=b.equSerialNo and a.equSerialNo='"
-				+ serialon + "'";
+				+ serialNo + "'";
 
 		String hql2 = "select new map(programm as programm,operator as operator) from TUserEquCurStatus where equSerialNo='"
-				+ serialon + "'  order by updateTime desc ";
+				+ serialNo + "'  order by updateTime desc ";
 		try {
 			IDataCollection<Map<String, Object>> test = dao.executeQuery(1, 1, hql, parameters);
 			if (test.getData().size() > 0) {
@@ -240,11 +262,13 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		return dim;
 	}
 
-	/**
-	 * 时间统计查询
-	 * @param parameters 查询条件集合
-	 * @return List<Map<String, Object>>
-	 */
+    /**
+     * 时间统计查询
+     * @param equSerialNo
+     * @param startTime
+     * @param endTime
+     * @return
+     */
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> findIHisroryStatistics(String equSerialNo,String startTime,String endTime) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
@@ -1211,7 +1235,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 
 	/**
 	 * 历史分析查询全部结果集
-	 * @param parameters查询条件集合
+	 * @param parameters 查询条件集合
 	 * @return List
 	 */
 	@Override
@@ -1295,7 +1319,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 				  " and DATE_FORMAT(a.updateTime,'%Y-%m-%d')='"+date+"'";
 		List<Map<String, Object>> rs=new ArrayList<Map<String,Object>>();
 		try {
-			 rs=dao.executeQuery(hql, parameters);
+//			 rs=dao.executeQuery(hql, parameters);
+            rs = remoteCommonService.executeQuery(hql, parameters);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1473,7 +1498,6 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	
 	/**
 	 * 获取制定设备的当日加工数
-	 * @param nodeid
 	 * @param date 格式yyyy-MM-dd
 	 * @return List<Map<String,Object>>
 	 */
@@ -1606,21 +1630,26 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	/**
 	 * 手动报工信息处理
 	 */
-	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo) {
+	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo,String isGood,
+			 String depName,String jgCheckUser,String zpCheckUser,String sjCheckUser) {
 		try{
 			Collection<Parameter> parameters = new HashSet<Parameter>();
 			String sql = "";
 			String tempEventNo ="";
 			int partId =0;
-			List<Map<String,Object>> jobDispatchInfo = dao.executeNativeQuery("select no,processNum,finishNum,jobplanID,batchNo,nodeid,processID,wisScrapNum from T_JOBDISPATCHLIST_INFO where ID ="+dispatchId+"", parameters);
-			List<Map<String,Object>> memberInfo = dao.executeNativeQuery("select no from t_member_info where ID ="+userId+"", parameters);
-			List<Map<String,Object>> partInfo = dao.executeNativeQuery("select ID from t_part_type_info where no ='"+partNo+"'", parameters);
+			String partName ="";
+//			List<Map<String,Object>> jobDispatchInfo = dao.executeNativeQuery("select no,processNum,finishNum,jobplanID,batchNo,nodeid,processID,wisScrapNum from T_JOBDISPATCHLIST_INFO where ID ="+dispatchId+"", parameters);
+			List<Map<String,Object>> jobDispatchInfo = remoteCommonService.executeNativeQuery("select no,processNum,finishNum,jobplanID,batchNo,nodeid,processID,wisScrapNum from T_JOBDISPATCHLIST_INFO where ID ="+dispatchId+"", parameters);
+			List<Map<String,Object>> memberInfo = dao.executeNativeQuery("select no,name from t_member_info where ID ="+userId+"", parameters);
+			List<Map<String,Object>> partInfo = dao.executeNativeQuery("select ID,name from t_part_type_info where no ='"+partNo+"'", parameters);
 			List<Map<String,Object>> equInfo = dao.executeNativeQuery("select equ_SerialNo from t_equipmentaddinfo where equ_ID ="+equId+"", parameters);
 			
 			String userNo = memberInfo.get(0).get("no").toString();
+			String userName = memberInfo.get(0).get("name").toString();
 			String equ_SerialNo = equInfo.get(0).get("equ_SerialNo").toString();
 			if(partInfo.size()>0){
 			   partId = Integer.parseInt(partInfo.get(0).get("ID").toString());
+			   partName = partInfo.get(0).get("name").toString();
 			}
 			
 			String jobdispatchNo = jobDispatchInfo.get(0).get("no").toString();
@@ -1644,17 +1673,20 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 				//更新工单状态
 				if(finishNum ==0){
 					sql = "update t_jobdispatchlist_info set status =50 where ID ="+dispatchId+";";
-					dao.executeNativeUpdate(sql, parameters);
+//					dao.executeNativeUpdate(sql, parameters);
+                    remoteCommonService.executeNativeUpdate(sql, parameters);
 				}
 				if(finishNum+num+wisScrapNum ==planNum){
 					sql = "update t_jobdispatchlist_info set status =70,real_endtime ='"+StringUtils.formatDate(new Date(), 3)+"' where ID ="+dispatchId+";";
-					dao.executeNativeUpdate(sql, parameters);
+//					dao.executeNativeUpdate(sql, parameters);
+                    remoteCommonService.executeNativeUpdate(sql, parameters);
 				}
 				//手动报工处理-20140730 FW  start_2  ---------------------------------------------//
 				//更新工单完成数量
 			    sql ="update t_jobdispatchlist_info set finishNum="+(finishNum+num)+" where ID ="+dispatchId+";";
-				dao.executeNativeUpdate(sql, parameters);
-//				
+//				dao.executeNativeUpdate(sql, parameters);
+                remoteCommonService.executeNativeUpdate(sql, parameters);
+//
 //				//添加WorkEvents
 //				for(int i =0;i<num;i++){
 //					sql ="insert into T_UserEquWorkEvents (equ_serialNo,starttime,finishtime,cuttingTask,operator_no,partNo,theoryWorktime,cuttingTime,toolchangeTime,workTime,theoryCycletime,flag) VALUES ((select equ_SerialNo from T_EquipmentAddInfo where equ_ID="+equId+"),"
@@ -1713,7 +1745,9 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 				
 				//添加报废数据处理-20140725 YT  start_1  ---------------------------------------------//
 				//如果前工单完成数+报废数=计划数,则完成
-				TJobdispatchlistInfo record=commonService.get(TJobdispatchlistInfo.class,Long.parseLong(dispatchId));
+//				TJobdispatchlistInfo record=commonService.get(TJobdispatchlistInfo.class,Long.parseLong(dispatchId));
+                TJobdispatchlistInfo record=remoteCommonService.get(TJobdispatchlistInfo.class,Long.parseLong(dispatchId));
+
 				TProcessInfo tProcessInfo=record.getTProcessInfo();
 				if(record.getStatus()!=60||record.getStatus()!=70)
 				{
@@ -1723,7 +1757,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						Collection<Parameter> f_parameters = new HashSet<Parameter>();
 						f_parameters.add(new Parameter("batchNo", record.getBatchNo(), Operator.EQ)); //建议用batchNo，不用jobplanId，更加通用一些
 						f_parameters.add(new Parameter("TProcessInfo", commonService.get(TProcessInfo.class,tProcessInfo.getOnlineProcessId()), Operator.EQ)); // 上道工序		
-						List<TJobdispatchlistInfo> f_temp=commonService.find(TJobdispatchlistInfo.class, (List<Sort>)null, f_parameters);
+//						List<TJobdispatchlistInfo> f_temp=commonService.find(TJobdispatchlistInfo.class, (List<Sort>)null, f_parameters);
+						List<TJobdispatchlistInfo> f_temp=remoteCommonService.find(TJobdispatchlistInfo.class, (List<Sort>)null, f_parameters);
 						//存在前序工单情况下，满足前序工单的完成数=本序工单的完成数+本序工单的发现报废数 也完成该工单
 						if(f_temp!=null&&f_temp.size()>0)
 						{
@@ -1735,7 +1770,9 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 								}
 						}
 					}
-					commonService.save(record);
+//					commonService.save(record);
+//                    remoteCommonService.save(record);
+                    remoteCommonService.update(TJobdispatchlistInfo.class,record);
 				}
 				//添加报废数据处理-20140725  YT  end_1  ---------------------------------------------//
 				
@@ -1764,13 +1801,15 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						     
 						   //更新节点生产概况 
 						       Date partFinishDate= finishTime;
+                            partFinishDate = StringUtils.convertDate(StringUtils.formatDate(partFinishDate, 2), "yyyy-MM-dd");
 						       String partFinishiDateStr=StringUtils.formatDate(partFinishDate, 2);//下线时间
 						       TNodes tnodes=commonService.get(TNodes.class,noteId);
 						       //每天插入一条数据，判断是插入还是更新
 						        Collection<Parameter> nodeproductionprofile_param = new HashSet<Parameter>();
 						        nodeproductionprofile_param.add(new Parameter("TNodes",tnodes, Operator.EQ));
 						        nodeproductionprofile_param.add(new Parameter("uprodId",addPartBasicInfo.getPartTypeId().longValue(),Operator.EQ));//B21 暂无产品类型，产品类型ID将与零件类型ID匹配
-						        List<TNodeProductionProfiles> nodeproductionprofile_rs=commonService.find(TNodeProductionProfiles.class, Arrays.asList (new Sort ("updateTime", Sort.Direction.DESC)), nodeproductionprofile_param);
+//						        List<TNodeProductionProfiles> nodeproductionprofile_rs=commonService.find(TNodeProductionProfiles.class, Arrays.asList (new Sort ("updateTime", Sort.Direction.DESC)), nodeproductionprofile_param);
+                            List<TNodeProductionProfiles> nodeproductionprofile_rs=remoteCommonService.find(TNodeProductionProfiles.class, Arrays.asList (new Sort ("updateTime", Sort.Direction.DESC)), nodeproductionprofile_param);
 						        if(nodeproductionprofile_rs!=null&&nodeproductionprofile_rs.size()>0)
 						        {
 						        	TNodeProductionProfiles tnodeproductionprofiles=nodeproductionprofile_rs.get(0);
@@ -1783,7 +1822,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        		    tnodeproductionprofiles.setMonthlyOutput(tnodeproductionprofiles.getMonthlyOutput()+num);
 						        		    tnodeproductionprofiles.setAnnualOutput(tnodeproductionprofiles.getAnnualOutput()+num);
 						        		    tnodeproductionprofiles.setTotalOutput(tnodeproductionprofiles.getTotalOutput()+num);
-						        		    commonService.update(tnodeproductionprofiles);
+//						        		    commonService.update(tnodeproductionprofiles);
+                                            remoteCommonService.update(TNodeProductionProfiles.class, tnodeproductionprofiles);
 						        		
 						        		}
 						        	else {
@@ -1793,7 +1833,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        		   int year=partFinishDate.getYear();
 						        		   int month=partFinishDate.getMonth();
 						        		   TNodeProductionProfiles addNodeProductionProfiles=new TNodeProductionProfiles();
-						        		   addNodeProductionProfiles.setDailyOutput(new Double(num)); //日产量
+						        		   addNodeProductionProfiles.setDailyOutput((double) num); //日产量
 						        		   addNodeProductionProfiles.setTotalOutput(tnodeproductionprofiles.getTotalOutput()+num); //总产量
 						        		   addNodeProductionProfiles.setTNodes(tnodeproductionprofiles.getTNodes()); //节点
 						        		   addNodeProductionProfiles.setUpdateTime(partFinishDate); //更新时间
@@ -1808,11 +1848,11 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        			    	      //同周
 						        			    	      if(StringUtils.getYearWeek(updateTime).equals(StringUtils.getYearWeek(partFinishDate)))
 						        			    	          addNodeProductionProfiles.setWeeklyOutput(tnodeproductionprofiles.getWeeklyOutput()+num);
-						        			    	      else addNodeProductionProfiles.setWeeklyOutput(new Double(num));
+						        			    	      else addNodeProductionProfiles.setWeeklyOutput((double) num);
 						        			           }
 						        			       else { 
 						        			    	   //跨月份
-						        			    	   addNodeProductionProfiles.setMonthlyOutput(new Double(num));
+						        			    	   addNodeProductionProfiles.setMonthlyOutput((double) num);
 						        			    	 //跨月份 同周
 						        			    	   if(StringUtils.getYearWeek(updateTime).equals(StringUtils.getYearWeek(partFinishDate)))
 						        			    	       {
@@ -1820,30 +1860,32 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        			    	       }
 						        			    	   else 
 						        			    	       {
-						        			    		      addNodeProductionProfiles.setWeeklyOutput(new Double(num));
+						        			    		      addNodeProductionProfiles.setWeeklyOutput((double) num);
 						        			    	       }
 						        			            }
 						        			        }
 						        		   else 
 						        			   {   //跨年
-						        			       addNodeProductionProfiles.setAnnualOutput(new Double(num));
-						        			       addNodeProductionProfiles.setMonthlyOutput(new Double(num));
-						        			       addNodeProductionProfiles.setWeeklyOutput(new Double(num)); //?跨年同周，怎么办
+						        			       addNodeProductionProfiles.setAnnualOutput((double) num);
+						        			       addNodeProductionProfiles.setMonthlyOutput((double) num);
+						        			       addNodeProductionProfiles.setWeeklyOutput((double) num); //?跨年同周，怎么办
 						        			   }
-						        		   commonService.save(addNodeProductionProfiles);
+//						        		   commonService.save(addNodeProductionProfiles);
+                                        remoteCommonService.save(TNodeProductionProfiles.class, addNodeProductionProfiles);
 						        	}
 						        }else{
 						        	 //没有历史信息，插入新的信息
 						        	   TNodeProductionProfiles addNodeProductionProfiles=new TNodeProductionProfiles();				        		
 					        		   addNodeProductionProfiles.setTNodes(tnodes); //节点
 					        		   addNodeProductionProfiles.setUpdateTime(partFinishDate); //更新时间
-					        		   addNodeProductionProfiles.setUprodId(addPartBasicInfo.getPartTypeId().longValue()); //产品零件ID
-					        		   addNodeProductionProfiles.setDailyOutput(new Double(num)); //日产量
-					        		   addNodeProductionProfiles.setTotalOutput(new Double(num)); //总产量
-					        		   addNodeProductionProfiles.setAnnualOutput(new Double(num));
-			        			       addNodeProductionProfiles.setMonthlyOutput(new Double(num));
-			        			       addNodeProductionProfiles.setWeeklyOutput(new Double(num)); 
-			        			       commonService.save(addNodeProductionProfiles);
+					        		   addNodeProductionProfiles.setUprodId(addPartBasicInfo.getPartTypeId()); //产品零件ID
+					        		   addNodeProductionProfiles.setDailyOutput((double) num); //日产量
+					        		   addNodeProductionProfiles.setTotalOutput((double) num); //总产量
+					        		   addNodeProductionProfiles.setAnnualOutput((double) num);
+			        			       addNodeProductionProfiles.setMonthlyOutput((double) num);
+			        			       addNodeProductionProfiles.setWeeklyOutput((double) num);
+//			        			       commonService.save(addNodeProductionProfiles);
+                                    remoteCommonService.save(TNodeProductionProfiles.class, addNodeProductionProfiles);
 						        }
 						}
 					
@@ -1854,7 +1896,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 					
 					if(jobplanId !=null && !StringUtils.isEmpty(jobplanId+""))
 					{
-						   TJobplanInfo JobplanInfo=commonService.get(TJobplanInfo.class,jobplanId);
+//						   TJobplanInfo JobplanInfo=commonService.get(TJobplanInfo.class,jobplanId);
+						   TJobplanInfo JobplanInfo=remoteCommonService.get(TJobplanInfo.class,jobplanId);
 						   JobplanInfo.setFinishNum(JobplanInfo.getFinishNum()+num);
 						   int qualifiedNum=0;
 						   if(JobplanInfo.getQualifiedNum()!=null) qualifiedNum=JobplanInfo.getQualifiedNum();
@@ -1869,14 +1912,16 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 							   commonService.update(JobplanInfo);
 							   //当批次的总发现报废数和尾序的完成数之和等于批次计划数量时，关闭该批次，同时整组工单都关闭
 							    String jobdispatchsql="from TJobdispatchlistInfo where jobplanId="+jobplanId;
-								List<TJobdispatchlistInfo> tjobdispathclist=commonService.executeQuery(jobdispatchsql);
+//								List<TJobdispatchlistInfo> tjobdispathclist=commonService.executeQuery(jobdispatchsql);
+								List<TJobdispatchlistInfo> tjobdispathclist=remoteCommonService.executeQuery(jobdispatchsql);
 								if(tjobdispathclist!=null&&tjobdispathclist.size()>0)
 								for(TJobdispatchlistInfo tj:tjobdispathclist){
 									if(tj.getStatus()!=70||tj.getStatus()!=60) //将没有关闭的工单全部关闭
 									{
 										tj.setStatus(70);
 										tj.setRealEndtime(new Date());
-										commonService.update(TJobdispatchlistInfo.class, tj);
+//										commonService.update(TJobdispatchlistInfo.class, tj);
+                                        remoteCommonService.update(TJobdispatchlistInfo.class, tj);
 									}
 								}
 							   
@@ -1905,7 +1950,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 									       p_JobplanInfo.setStatus(70); //已完成
 									       p_JobplanInfo.setRealEndtime(new Date()); //已完成
 									  }
-								   commonService.update(p_JobplanInfo);	
+//								   commonService.update(p_JobplanInfo);
+                                   remoteCommonService.update(p_JobplanInfo);
 							   }else  //查找下个月份的作业计划
 							   {
 								   SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM");
@@ -1915,7 +1961,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 								   hql=" from TJobplanInfo t where t.planType=1 " +
 								   		" and t.TPartTypeInfo.id="+p_JobplanInfo.getTPartTypeInfo().getId()+
 								   		" and DATE_FORMAT(t.realStarttime,'%Y-%m') = '"+nextMonth+"'";
-								  List<TJobplanInfo> list= commonService.executeQuery(hql);
+//								  List<TJobplanInfo> list= commonService.executeQuery(hql);
+								  List<TJobplanInfo> list= remoteCommonService.executeQuery(hql);
 								  //可以找到下个月的作业计划
 								  if(list!=null&&list.size()>0)
 								  {
@@ -1929,7 +1976,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 										   next_p_jobplanInfo.setStatus(70); //已完成
 										   next_p_jobplanInfo.setRealEndtime(new Date()); //已完成
 										  }
-									   commonService.update(next_p_jobplanInfo);	
+//									   commonService.update(next_p_jobplanInfo);
+                                      remoteCommonService.update(next_p_jobplanInfo);
 								  }else //没有找到下一个月的，就仍然加到当前月份
 								  {
 									   p_JobplanInfo.setFinishNum(p_JobplanInfo.getFinishNum()+num);
@@ -1941,7 +1989,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 										       p_JobplanInfo.setStatus(70); //已完成
 										       p_JobplanInfo.setRealEndtime(new Date()); //已完成
 										  }
-									   commonService.update(p_JobplanInfo);	
+//									   commonService.update(p_JobplanInfo);
+                                      remoteCommonService.update(p_JobplanInfo);
 								  }
 								   
 							   }
@@ -1956,8 +2005,9 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 							   hql=" from TJobplanInfo t where t.planType=1 " +
 							   		" and t.TPartTypeInfo.id="+JobplanInfo.getTPartTypeInfo().getId()+
 							   		" and DATE_FORMAT(t.realStarttime,'%Y-%m') = '"+currentMonth+"'";
-							  List<TJobplanInfo> list= commonService.executeQuery(hql);
-							   
+//							  List<TJobplanInfo> list= commonService.executeQuery(hql);
+							  List<TJobplanInfo> list= remoteCommonService.executeQuery(hql);
+
 							  if(list!=null&&list.size()>0)
 							  {
 								   TJobplanInfo p0_JobplanInfo=list.get(0); //取当月计划
@@ -1970,7 +2020,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 									      p0_JobplanInfo.setStatus(70); //已完成
 									      p0_JobplanInfo.setRealEndtime(new Date()); //已完成
 									  }
-								   commonService.update(p0_JobplanInfo);	
+//								   commonService.update(p0_JobplanInfo);
+                                  remoteCommonService.update(p0_JobplanInfo);
 							  } //如果没有查找上一个月
 							  else{
 							       Calendar pcal=Calendar.getInstance();
@@ -1980,7 +2031,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 								   hql=" from TJobplanInfo t where t.planType=1 " +
 								   		" and t.TPartTypeInfo.id="+JobplanInfo.getTPartTypeInfo().getId()+
 								   		" and DATE_FORMAT(t.realStarttime,'%Y-%m') = '"+lastMonth+"'";
-								  List<TJobplanInfo> list0= commonService.executeQuery(hql);
+//								  List<TJobplanInfo> list0= commonService.executeQuery(hql);
+								  List<TJobplanInfo> list0= remoteCommonService.executeQuery(hql);
 								  //可以找到上个月的作业计划
 								  if(list0!=null&&list0.size()>0)
 								  {
@@ -1994,7 +2046,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 										   last_p_jobplanInfo.setStatus(70); //已完成
 										   last_p_jobplanInfo.setRealEndtime(new Date()); //已完成
 										  }
-									   commonService.update(last_p_jobplanInfo);	
+//									   commonService.update(last_p_jobplanInfo);
+                                      remoteCommonService.update(last_p_jobplanInfo);
 								  }else //没有找到上一个月的，什么都不做
 								  {
 									 
@@ -2005,6 +2058,20 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						   }
 					}
 				}
+				try{
+					//插入ERP中间库				
+					IImportService importService = (IImportService)ServiceFactory.getBean("importService");
+					if(importService!=null)
+					{
+						importService.insertWisTransfer(tproductionEvents.getId());
+						if(processOrder.equals("400")){
+						importService.insertWisQaCheck(num, partNo, partName, jobdispatchNo, isGood, depName, jgCheckUser, zpCheckUser,sjCheckUser, userName);
+						}
+					}
+				}catch(Exception e){
+					
+				}
+				
 				return "添加成功"+tempEventNo;
 
 			}
@@ -2022,7 +2089,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	public String checkNum(String dispatchId,int num) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		try{
-			List<Map<String,Object>> jobDispatchInfo = dao.executeNativeQuery("select processNum,finishNum,wisScrapNum from T_JOBDISPATCHLIST_INFO where ID ="+dispatchId+"", parameters);
+//			List<Map<String,Object>> jobDispatchInfo = dao.executeNativeQuery("select processNum,finishNum,wisScrapNum from T_JOBDISPATCHLIST_INFO where ID ="+dispatchId+"", parameters);
+			List<Map<String,Object>> jobDispatchInfo = remoteCommonService.executeNativeQuery("select processNum,finishNum,wisScrapNum from T_JOBDISPATCHLIST_INFO where ID ="+dispatchId+"", parameters);
 			int finishNum = Integer.parseInt(jobDispatchInfo.get(0).get("finishNum").toString());
 			int planNum = Integer.parseInt(jobDispatchInfo.get(0).get("processNum").toString());
 			int wisScrapNum = Integer.parseInt(jobDispatchInfo.get(0).get("wisScrapNum").toString());
@@ -2078,16 +2146,17 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 			sql = sql +" and j.id in ( "+dispatchId+")";
 		}
 		sql =sql +" order by j.plan_starttime desc";
-		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
-		
+//		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
+		List<Map<String,Object>> dataList = remoteCommonService.executeNativeQuery(sql, parameters);
+
 		return dataList;
 	}
     
 
 	@Override
-	public List<Map<String, Object>> getUserList(String userId) {
+	public List<Map<String, Object>> getUserList(String userId,String nodeId) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		String sql = "select id,name from T_Member_INFO where status =0 ";
+		String sql = "select id,name from T_Member_INFO where status =0 and nodeid ='"+nodeId+"' ";
 		if(!StringUtils.isEmpty(userId)){
 			sql += " and ID ="+userId+"";
 		}
@@ -2112,7 +2181,6 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		return dataList;
 	}
 
-
 	@Override
 	/**
 	 * 获取工单编号集合
@@ -2126,32 +2194,51 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		return dataList;
 	}
 
-	@Override
+
 	/**
 	 * 获取设备序列号集合
 	 */
-	public List<Map<String, Object>> getEquTypeMap() {
+    @Override
+	public List<Map<String, Object>> getEquTypeMap(String nodeId) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		String sql = "select equ_ID as id,equ_SerialNo as "
-				+ "no from t_equipmentaddinfo ";
-		
-		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
-		
-		return dataList;
+//		String sql = "select t.equ_ID as id,t.equ_SerialNo as "
+//				+ "no from t_equipmentaddinfo t where t.nodeID = '"+nodeId+"'";
+        String sql = "select e.equ_ID as id, e.equ_SerialNo as no "
+                +" from t_equipmentaddinfo e "
+                +" left join T_Nodes n on e.nodeid=n.nodeID "
+                +" left join t_equipmenttype_info et on e.equ_type=et.id "
+                +" where 1=1 and n.p_NodeID ='"+nodeId+"'";
+        return dao.executeNativeQuery(sql, parameters);
 	}
 
-	@Override
+    /**
+     * 获取设备序列号集合
+     */
+    @Override
+    public List<Map<String, Object>> getEquTypeMap() {
+        Collection<Parameter> parameters = new HashSet<Parameter>();
+        String sql = "select t.equ_ID as id,t.equ_SerialNo as "
+                + "no from t_equipmentaddinfo t ";
+
+        return dao.executeNativeQuery(sql, parameters);
+    }
+
+
 	/**
 	 * 获取设备名称集合
 	 */
-	public List<Map<String, Object>> getEquTypeNameMap() {
+    @Override
+	public List<Map<String, Object>> getEquTypeNameMapByNodeId(String nodeId) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		String sql = "select equ_ID as id,equ_name as "
-				+ "name from t_equipmentaddinfo ";
-		
-		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
-		
-		return dataList;
+//		String sql = "select equ_ID as id,equ_name as "
+//				+ "name from t_equipmentaddinfo ";
+
+        String sql = "select e.equ_ID as id, e.equ_SerialNo as no,e.equ_name as name "
+                +" from t_equipmentaddinfo e "
+                +" left join T_Nodes n on e.nodeid=n.nodeID "
+                +" left join t_equipmenttype_info et on e.equ_type=et.id "
+                +" where 1=1 and n.p_NodeID ='"+nodeId+"'";
+        return dao.executeNativeQuery(sql, parameters);
 	}
 
 	
@@ -2183,11 +2270,11 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	/**
 	 * 获取member信息
 	 */
-	public List<Map<String, Object>> getMemberInfo(String userId) {
+	public List<Map<String, Object>> getMemberInfo(String userId,String nodeId) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String sql = "select id,name,no from t_member_info inner join t_user"
 				+ " on t_user.memberID =t_member_info.id "
-				+ " where  t_user.UserID ='"+userId+"' ";
+				+ " where  t_user.UserID ='"+userId+"' and t_member_info.nodeid ='"+nodeId+"' ";
 		
 		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
 		
@@ -2205,8 +2292,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		if(!StringUtils.isEmpty(query)){
 			hql += " and equ.equSerialNo like '%"+query+"%'";
 		}
-		List<Map<String,Object>> dataList= dao.executeQuery(hql);
-		return dataList;
+        return dao.executeQuery(hql);
 	}
 
 	@Override
@@ -2220,8 +2306,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		if(!StringUtils.isEmpty(query)){
 			hql += " and equ.equName like '%"+query+"%'";
 		}
-		List<Map<String,Object>> dataList = dao.executeQuery(hql);
-		return dataList;
+        return dao.executeQuery(hql);
 	}
 
 	@Override
@@ -2507,13 +2592,15 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						     
 						   //更新节点生产概况 
 						       Date partFinishDate=updateDate;
+                            partFinishDate = StringUtils.convertDate(StringUtils.formatDate(partFinishDate, 2), "yyyy-MM-dd");
 						       String partFinishiDateStr=StringUtils.formatDate(partFinishDate, 2);//下线时间
 						       TNodes tnodes=commonService.get(TNodes.class,noteId);
 						       //每天插入一条数据，判断是插入还是更新
 						        Collection<Parameter> nodeproductionprofile_param = new HashSet<Parameter>();
 						        nodeproductionprofile_param.add(new Parameter("TNodes",tnodes, Operator.EQ));
-						        nodeproductionprofile_param.add(new Parameter("uprodId",addPartBasicInfo.getPartTypeId().longValue(),Operator.EQ));//B21 暂无产品类型，产品类型ID将与零件类型ID匹配
-						        List<TNodeProductionProfiles> nodeproductionprofile_rs=commonService.find(TNodeProductionProfiles.class, Arrays.asList (new Sort ("updateTime", Sort.Direction.DESC)), nodeproductionprofile_param);
+						        nodeproductionprofile_param.add(new Parameter("uprodId", addPartBasicInfo.getPartTypeId(),Operator.EQ));//B21 暂无产品类型，产品类型ID将与零件类型ID匹配
+//						        List<TNodeProductionProfiles> nodeproductionprofile_rs=commonService.find(TNodeProductionProfiles.class, Arrays.asList (new Sort ("updateTime", Sort.Direction.DESC)), nodeproductionprofile_param);
+                            List<TNodeProductionProfiles> nodeproductionprofile_rs=remoteCommonService.find(TNodeProductionProfiles.class, Arrays.asList (new Sort ("updateTime", Sort.Direction.DESC)), nodeproductionprofile_param);
 						        if(nodeproductionprofile_rs!=null&&nodeproductionprofile_rs.size()>0)
 						        {
 						        	TNodeProductionProfiles tnodeproductionprofiles=nodeproductionprofile_rs.get(0);
@@ -2526,8 +2613,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        		    tnodeproductionprofiles.setMonthlyOutput(tnodeproductionprofiles.getMonthlyOutput()+num);
 						        		    tnodeproductionprofiles.setAnnualOutput(tnodeproductionprofiles.getAnnualOutput()+num);
 						        		    tnodeproductionprofiles.setTotalOutput(tnodeproductionprofiles.getTotalOutput()+num);
-						        		    commonService.update(tnodeproductionprofiles);
-						        		
+//						        		    commonService.update(tnodeproductionprofiles);
+                                            remoteCommonService.update(TNodeProductionProfiles.class, tnodeproductionprofiles);
 						        		}
 						        	else {
 						        		   //有历史信息，插入新的信息
@@ -2536,7 +2623,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        		   int year=partFinishDate.getYear();
 						        		   int month=partFinishDate.getMonth();
 						        		   TNodeProductionProfiles addNodeProductionProfiles=new TNodeProductionProfiles();
-						        		   addNodeProductionProfiles.setDailyOutput(new Double(num)); //日产量
+						        		   addNodeProductionProfiles.setDailyOutput((double) num); //日产量
 						        		   addNodeProductionProfiles.setTotalOutput(tnodeproductionprofiles.getTotalOutput()+num); //总产量
 						        		   addNodeProductionProfiles.setTNodes(tnodeproductionprofiles.getTNodes()); //节点
 						        		   addNodeProductionProfiles.setUpdateTime(partFinishDate); //更新时间
@@ -2551,11 +2638,11 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        			    	      //同周
 						        			    	      if(StringUtils.getYearWeek(updateTime).equals(StringUtils.getYearWeek(partFinishDate)))
 						        			    	          addNodeProductionProfiles.setWeeklyOutput(tnodeproductionprofiles.getWeeklyOutput()+num);
-						        			    	      else addNodeProductionProfiles.setWeeklyOutput(new Double(num));
+						        			    	      else addNodeProductionProfiles.setWeeklyOutput((double) num);
 						        			           }
 						        			       else { 
 						        			    	   //跨月份
-						        			    	   addNodeProductionProfiles.setMonthlyOutput(new Double(num));
+						        			    	   addNodeProductionProfiles.setMonthlyOutput((double) num);
 						        			    	 //跨月份 同周
 						        			    	   if(StringUtils.getYearWeek(updateTime).equals(StringUtils.getYearWeek(partFinishDate)))
 						        			    	       {
@@ -2563,30 +2650,32 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						        			    	       }
 						        			    	   else 
 						        			    	       {
-						        			    		      addNodeProductionProfiles.setWeeklyOutput(new Double(num));
+						        			    		      addNodeProductionProfiles.setWeeklyOutput((double) num);
 						        			    	       }
 						        			            }
 						        			        }
 						        		   else 
 						        			   {   //跨年
-						        			       addNodeProductionProfiles.setAnnualOutput(new Double(num));
-						        			       addNodeProductionProfiles.setMonthlyOutput(new Double(num));
-						        			       addNodeProductionProfiles.setWeeklyOutput(new Double(num)); //?跨年同周，怎么办
+						        			       addNodeProductionProfiles.setAnnualOutput((double) num);
+						        			       addNodeProductionProfiles.setMonthlyOutput((double) num);
+						        			       addNodeProductionProfiles.setWeeklyOutput((double) num); //?跨年同周，怎么办
 						        			   }
-						        		   commonService.save(addNodeProductionProfiles);
+//						        		   commonService.save(addNodeProductionProfiles);
+                                        remoteCommonService.save(TNodeProductionProfiles.class, addNodeProductionProfiles);
 						        	}
 						        }else{
 						        	 //没有历史信息，插入新的信息
 						        	   TNodeProductionProfiles addNodeProductionProfiles=new TNodeProductionProfiles();				        		
 					        		   addNodeProductionProfiles.setTNodes(tnodes); //节点
 					        		   addNodeProductionProfiles.setUpdateTime(partFinishDate); //更新时间
-					        		   addNodeProductionProfiles.setUprodId(addPartBasicInfo.getPartTypeId().longValue()); //产品零件ID
-					        		   addNodeProductionProfiles.setDailyOutput(new Double(num)); //日产量
-					        		   addNodeProductionProfiles.setTotalOutput(new Double(num)); //总产量
-					        		   addNodeProductionProfiles.setAnnualOutput(new Double(num));
-			        			       addNodeProductionProfiles.setMonthlyOutput(new Double(num));
-			        			       addNodeProductionProfiles.setWeeklyOutput(new Double(num)); 
-			        			       commonService.save(addNodeProductionProfiles);
+					        		   addNodeProductionProfiles.setUprodId(addPartBasicInfo.getPartTypeId()); //产品零件ID
+					        		   addNodeProductionProfiles.setDailyOutput((double) num); //日产量
+					        		   addNodeProductionProfiles.setTotalOutput((double) num); //总产量
+					        		   addNodeProductionProfiles.setAnnualOutput((double) num);
+			        			       addNodeProductionProfiles.setMonthlyOutput((double) num);
+			        			       addNodeProductionProfiles.setWeeklyOutput((double) num);
+//			        			       commonService.save(addNodeProductionProfiles);
+                                    remoteCommonService.save(TNodeProductionProfiles.class, addNodeProductionProfiles);
 						        }
 						}
 					
@@ -2615,7 +2704,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 								List<TJobdispatchlistInfo> tjobdispathclist=commonService.executeQuery(jobdispatchsql);
 								if(tjobdispathclist!=null&&tjobdispathclist.size()>0)
 								for(TJobdispatchlistInfo tj:tjobdispathclist){
-									if(tj.getStatus()!=70||tj.getStatus()!=60) //将没有关闭的工单全部关闭
+									if(!tj.getStatus().equals(70)||!tj.getStatus().equals(60)) //将没有关闭的工单全部关闭
 									{
 										tj.setStatus(70);
 										tj.setRealEndtime(new Date());
@@ -2748,6 +2837,17 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						   }
 					}
 				}
+				try{
+					//插入ERP中间库				
+					IImportService importService = (IImportService)ServiceFactory.getBean("importService");
+					if(importService!=null)
+					{
+						importService.insertWisTransfer(tproductionEvents.getId());
+					}
+				}catch(Exception e){
+					
+				}
+				
 				return "添加成功";
 
 			}
@@ -2763,27 +2863,124 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	@Override
 	public List<Map<String, Object>> getListInfo(String sql) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
-		
-		return dataList;
+
+        return dao.executeNativeQuery(sql, parameters);
 	}
 
 	@Override
 	/**
 	 * 保存成品入库数据
 	 */
-	public String saveInStockDataInfo(String num,String instockNo,List<Map<String,Object>> dataList){
+	public String saveInStockDataInfo(String num,String inventoryId,String materialPositionId,String partId,String instockNo,List<Map<String,Object>> dataList){
 		    //String planNo;
 		   // Integer stockNUm;
 			try{ 
 				Collection<Parameter> parameters = new HashSet<Parameter>();
 				for(Map<String,Object> dd:dataList){
-					if(null !=dd.get("num") && null !=num && null !=dd.get("jobplanNo") && !dd.get("finishNum").equals("不可用")){
+					if(null !=dd.get("num") && null !=num){
 						String no = dd.get("jobplanNo").toString();
-						int bomNum =Integer.parseInt(dd.get("num").toString());
-						int instockNum =Integer.parseInt(dd.get("instockNum").toString());
-						String sql="update t_jobplan_info set instockNum ="+(instockNum+(bomNum*Integer.parseInt(num)))+" where no ='"+no+"'";
-						dao.executeNativeUpdate(sql,parameters);
+						String storageNo = dd.get("storageNo").toString(); //入库批次号
+						int bomNum =0;
+						if(!no.equals("不可用") && !dd.get("instockNum").toString().equals("不可用")){//更新批次入库数量
+						    bomNum =Integer.parseInt(dd.get("num").toString());
+							int instockNum =Integer.parseInt(dd.get("instockNum").toString());
+							String sql="update t_jobplan_info set instockNum ="+(instockNum+(bomNum*Integer.parseInt(num)))+" where no ='"+no+"'";
+							dao.executeNativeUpdate(sql,parameters);
+						}
+						String partTypeId ="";
+						String hql ="";
+						if(null !=dd.get("type") && dd.get("type").toString().equals("主料")){
+							partTypeId = partId;
+							hql="select new Map(materialType.id as id) from TPartTypeInfo parttype,TMaterailTypeInfo materialType" +
+									" where materialType.no=parttype.no"+
+									" and parttype.id="+partTypeId;
+						}else{
+							partTypeId = dd.get("materailId").toString();
+							hql="select new Map(materialType.id as id) from TMaterailTypeInfo materialType" +
+									" where materialType.id="+partTypeId+"";
+						}
+						//if(null !=dd.get("type") && dd.get("type").toString().equals("主料")){
+							//入库存业务处理
+						Collection<Parameter> parameters1 = new HashSet<Parameter>();				
+						List<Map<String,Object>> parttypetemp=dao.executeQuery(hql,parameters1);
+						if(parttypetemp.size()>0){//成品在物料类型中存在
+							String materialId = parttypetemp.get(0).get("id").toString();
+							TMaterialStorage tMaterialStorage =new TMaterialStorage();
+							List<Map<String,Object>> temp=dao.executeNativeQuery("select id from t_material_storage"
+									+ " where batchNo ='"+storageNo+"' and storage_id ="+inventoryId+" and material_id ="+materialId+"",parameters1);
+							//获取物料信息
+							TMaterailTypeInfo tMaterailTypeInfo = commonService.get(TMaterailTypeInfo.class,Long.parseLong(materialId));
+							//获取库房信息
+							TStorageInfo tStorageInfo = commonService.get(TStorageInfo.class,Integer.parseInt(inventoryId));
+						    //获取版本信息
+							TMaterialVersion tMaterialVersion = new TMaterialVersion();
+							if(null !=tMaterailTypeInfo.getVersionId()){
+								tMaterialVersion =commonService.get(TMaterialVersion.class,tMaterailTypeInfo.getVersionId());
+							}
+							//库存信息
+							if(temp.size()>0){
+								tMaterialStorage = commonService.get(TMaterialStorage.class,Integer.parseInt(temp.get(0).get("id").toString()));
+								Double i = tMaterialStorage.getAvailableNum();
+								tMaterialStorage.setAvailableNum(i+Double.parseDouble(num));
+								commonService.update(tMaterialStorage);
+							}else{
+								tMaterialStorage.setTMaterailTypeInfo(tMaterailTypeInfo);//物料
+								tMaterialStorage.setTStorageInfo(tStorageInfo);//库房
+								tMaterialStorage.setPositonId(Integer.parseInt(materialPositionId));//货位ID
+								//tMaterialStorage.setBatchNo(storageNo);//入库批次
+								tMaterialStorage.setAvailableNum(Double.parseDouble(num));//现有量
+								tMaterialStorage.setUnitName(tMaterailTypeInfo.getUnit());//单位
+								tMaterialStorage.setVersionNo(tMaterialVersion.getVersionNo());//版本
+								tMaterialStorage.setRetainNum(0.00);
+								tMaterialStorage.setProcessDate(new Date());//处理日期
+								commonService.save(tMaterialStorage);
+								
+							}
+							//入库事务处理
+							TTransaction tTransaction = new TTransaction();
+							tTransaction.setTransNo(instockNo);//入库单号
+							tTransaction.setTMaterailTypeInfo(tMaterailTypeInfo);//物料
+							tTransaction.setTStorageInfo(tStorageInfo);//库房
+							tTransaction.setPositionId(Integer.parseInt(materialPositionId));//库位
+							tTransaction.setVersionNo(tMaterialVersion.getVersionNo());
+							tTransaction.setProcessNum(Double.parseDouble(num));//数量
+							tTransaction.setUnitName(tMaterailTypeInfo.getUnit());
+							//tTransaction.setBatchNo(storageNo);
+							//工单，事务关系
+							//事务关系
+							List<TTransactionRelation> list = new ArrayList<TTransactionRelation>();
+							String strHql ="from TTransactionRelation where tansType ='成品入库'";
+							list = commonService.executeQuery(strHql);
+							for(TTransactionRelation tt:list){
+								tTransaction.setTTransactionRelation(tt);//事务关系
+							}
+							
+							//工单
+							String strSql ="select t_jobdispatchlist_info.no as no from t_jobdispatchlist_info "
+									+ " inner join t_process_info on t_process_info.id =t_jobdispatchlist_info.processID"
+									+ " where t_jobdispatchlist_info.taskNum ='"+no+"' and t_process_info.offlineProcess =1";
+							List<Map<String,Object>> list2 = commonService.executeNativeQuery(strSql);
+							for(Map<String,Object> ss:list2){
+								tTransaction.setJobdispatchNo(ss.get("no").toString());//工单号
+							}
+							
+							tTransaction.setTransDate(new Date());//事务处理时间
+							commonService.save(tTransaction);
+							
+							//中间库（只处理主料）
+							if(null !=dd.get("type") && dd.get("type").toString().equals("主料")){
+								try{
+									//插入ERP中间库				
+									IImportService importService = (IImportService)ServiceFactory.getBean("importService");
+									if(importService!=null)
+									{
+										importService.inStockinsertWisTransfer(bomNum*Integer.parseInt(num), no, instockNo);
+									}
+								}catch(Exception e){
+									
+								}
+							}
+						}
 					}
 				}
 				

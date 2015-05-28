@@ -60,30 +60,41 @@
 		}
 	</style>
 	<div class="headDiv">
-		
+		<h:inputHidden id="erpReturn" value="#{controllerSwitchBean.erpReturn}"></h:inputHidden>
 		<h:inputText id="txt" value="#{partTypeConfigBean.query}" styleClass="textBg" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 
 		<p:commandButton value="查询" actionListener="#{partTypeConfigBean.queryData}" update=":myform:carList" oncomplete="bgReposition($('.table'));" styleClass="delete"></p:commandButton>
 		
 		<div class="button-split"></div>
-		 
+		<ui:remove>
 		<p:commandButton id="add" value="新建" update=":myform:apart " oncomplete="addPartTypelog.show();bgReposition($('.table'));"   styleClass="delete"/> 
 		
 		<p:commandButton  value="删除" styleClass="delete"  actionListener="#{partTypeConfigBean.onSelected}" oncomplete="ondelete();bgReposition($('.table'));" update=":myform:sed"/> 
 		<p:commandButton id="delete" value="删除" update=":myform:carList :myform:displayMulti :myform:messages"  actionListener="#{partTypeConfigBean.onDelete}" style="display:none;"/> 
 		
-		<ui:remove>	
+		
 		<p:commandButton  value="停用" styleClass="delete"  actionListener="#{partTypeConfigBean.onSelected}" oncomplete="onStop()" update=":myform:sed"/>
 		<p:commandButton id="disabled" value="停用" update=":myform:carList :myform:displayMulti :myform:messages"  actionListener="#{partTypeConfigBean.onDisabled}"  style="display:none;"/>
-		</ui:remove>
+	
 		<p:commandButton id="resume" value="恢复" update=":myform:carList :myform:displayMulti :myform:messages" oncomplete="multiCarDialog;bgReposition($('.table'));"  actionListener="#{partTypeConfigBean.onResume}" styleClass="delete"/>
-		
+		</ui:remove>
 		<h:selectOneMenu value="#{partTypeConfigBean.selectOption}" styleClass="select">
 		   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
 	       <f:selectItems value="#{partTypeConfigBean.options}"  
 	           var="option"  itemLabel="#{option}"  itemValue="#{option}" />  
 	           <a4j:ajax event="valueChange" listener="#{partTypeConfigBean.selectChange}" render=":myform:carList :myform:displayMulti" oncomplete="bgReposition($('.table'));"></a4j:ajax>
 	    </h:selectOneMenu> 
-	   
+	    <div style="float: right;margin-top: 7px;margin-right: 19px;">
+ 		    <h:outputText value="ERP回传" style="margin-left: -64px;"></h:outputText>
+		    <button class="mwui-switch-btn" style="margin-top: -22px;" onclick="changeValue();" >
+		    	<span id="spanId" change="OFF">ON</span>
+		    	<input id="erp" type="hidden" name="show_icon2" value="1" />
+		    </button>  
+	    </div>
+
+	    <h:commandButton id="erpButton" style="display:none;">
+	    	<a4j:ajax listener="#{controllerSwitchBean.changFile}" event="click" execute="erpReturn" 
+	    		render=":myform:erpReturn" oncomplete="loadErpConfig"></a4j:ajax>
+	    </h:commandButton>
          <h:inputHidden value="#{partTypeConfigBean.partNo}" id="partNo"></h:inputHidden>                
 	     <div style="position: absolute;border:1px black solid;width: 402px;height: 200px;display: none;background-color: white;margin-left: 100px;margin-top: 100px;z-index: 10" id="shangchuan">
 	    	<rich:fileUpload doneLabel="文件上传成功"
@@ -220,9 +231,9 @@
                    </h:outputText>
                 </f:facet>
                 <f:facet name="input">
-               	 	<p:inputText value="#{part.createDate}" readonly="true" style="width:100%;">
+               	 	<h:outputText value="#{part.createDate}" readonly="true" style="width:100%;">
                	 		 	<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
-               	 	</p:inputText>
+               	 	</h:outputText>
                 </f:facet>
             </p:cellEditor>
         </p:column>
@@ -234,9 +245,10 @@
                     </h:outputText>
                 </f:facet>
                 <f:facet name="input">
-               	 	<p:inputText value="#{part.updateDate}" readonly="true" style="width:100%;">
+               	 	<h:outputText value="#{part.updateDate}" readonly="true" style="width:100%;">
                	 		 <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
-               	 	</p:inputText>
+               	 	</h:outputText>
+               	 	
                 </f:facet>
             </p:cellEditor>
         </p:column>
@@ -248,9 +260,11 @@
        		<p:commandLink actionListener="#{partTypeConfigBean.getImgUrlAddress}" value="预览" oncomplete="imageUrl.show()" 
        		update=":myform:partImgUrl :myform:img1"><f:attribute name="url" value="#{part.path}"></f:attribute></p:commandLink>
         </p:column>
+        <ui:remove>
 		<p:column headerText="操作" style="width:3%;word-break: break-all;">
             <p:rowEditor />
         </p:column>
+        </ui:remove>
     </p:dataTable>
     
     <h:inputHidden value="#{partTypeConfigBean.partImgUrl}" id="partImgUrl"></h:inputHidden>

@@ -8,7 +8,7 @@ import javax.servlet.jsp.tagext.VariableInfo;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-8
- * Time: ÏÂÎç4:47
+ * Time: ä¸‹åˆ4:47
  */
 public class SsoVariableTEI extends TagExtraInfo {
     @Override

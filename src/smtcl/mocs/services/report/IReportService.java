@@ -79,7 +79,7 @@ public interface IReportService {
 	 * 获取人员编号信息
 	 * @return
 	 */
-	public List<Map<String,Object>> getPersonList();
+	public List<Map<String,Object>> getPersonList(String nodeid);
 	/**
 	 * 根据时间查询生产报废报表数据
 	 * @param start

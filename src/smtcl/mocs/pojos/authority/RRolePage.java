@@ -15,7 +15,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 映射数据库中"角色-页面"关系表的实体
+ * 映射数据库中"角色-页面"关系表的实体�?
  *
  * User: gjy
  * Date: 2012-10-16

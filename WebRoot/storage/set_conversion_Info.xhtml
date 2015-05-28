@@ -1,0 +1,656 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+
+<style type="text/css">
+ .inputTextNoChange{
+		width:95%;
+		height:80%;
+		line_height:80%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		background-color: #F0F0F0 !important;
+		background-image: url("") !important;
+		margin-left: 5%;
+	}
+	.ui-treenode-leaf-icon {
+	    display: inline-block;
+	    height: 16px;
+	    width: 0px !important;
+	}
+	.ui-tree {
+		width: 100%;
+	}
+	.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight
+	{
+	    background: #cccccc !important;
+	}
+</style>
+<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+
+
+<div class="guide_kuangDiv">
+<h:inputHidden id="contype" value="#{SUConversionBean.conversionType}"></h:inputHidden>
+<div class="guide_kuangDiv_head">
+<div class="guide_xd">
+	<div class="headDiv2">
+	        <div class="process_config_menuDiv active" id="conbz" onclick="menuClick('myform:conbz')" style="margin-left: 2%"><span>标准 </span></div>
+		 	<div class="process_config_menuDiv" id="confn" onclick="menuClick('myform:confn')"><span>分类内 </span></div>
+		 	<div class="process_config_menuDiv" id="confj" onclick="menuClick('myform:confj')"><span>分类间</span></div><br/>
+			<p:commandButton value=" 标准  "   style="display:none;" id="conbz" actionListener="#{SUConversionBean.getBz}" oncomplete="displaybz()" update=":myform:bz"></p:commandButton>
+			<p:commandButton value=" 分类内  "  style="display:none;" id="confn" actionListener="#{SUConversionBean.getFln}" oncomplete="displayfln()" update=":myform:fln"></p:commandButton>
+		    <p:commandButton value=" 分类间  "  style="display:none;" id="confj" actionListener="#{SUConversionBean.getFlj}"  oncomplete="displayflj()" update=":myform:flj"></p:commandButton>
+	</div>
+	<div class="guide_menu_bottom"></div>
+    <div id="bz" style="display: block;">	
+        	<h:panelGroup id="bz" >	
+	    	<div style="width: 100%; height: 20px;">
+		       <div class="headDiv" >
+			       <p:commandButton value="新建" oncomplete="addConversion.show();bgReposition($('.table'));" styleClass="delete"   ></p:commandButton>
+			       <p:commandButton   id="shuaxin2"  actionListener="#{SUConversionBean.searchList}" update=":myform:dataTable3" style="display:none;"></p:commandButton>
+			       <p:commandButton value="删除" update=":myform:select2" styleClass="delete" oncomplete="ondelete1();bgReposition($('.table'));" actionListener="#{SUConversionBean.onSelected}"></p:commandButton>
+		           <p:commandButton id="delete2" value="删除" update=":myform:dataTable3 :myform:displayMulti2"  actionListener="#{SUConversionBean.deleteTUnitConversion}"  style="display: none;"/> 
+			     </div>
+	    	</div>	
+		<p:dataTable var="var" value="#{SUConversionBean.medTUnitConversionModel}" id="dataTable3" style="width: auto; left: 170px; right: 0; margin-top: 35px;" styleClass="table"
+	      editable="true" dynamic="true" selection="#{SUConversionBean.selectuncon}" paginator="true" paginatorPosition="bottom" rows="10" >
+	     <p:ajax event="rowEdit" listener="#{SUConversionBean.updateTUnitConversion}" update=":myform:dataTable3 :myform:messages3" />
+	     <p:ajax event="rowEditCancel" listener="#{SUConversionBean.onCancel}" update=":myform:dataTable3" />
+	                    <p:column selectionMode="multiple" />   
+						<p:column headerText="分类名称">
+						<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unittypename}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{var.unittypename}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+                        </p:column>
+						<p:column headerText="单位">
+						 <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unitname}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <h:selectOneMenu value="#{var.unitname}" >  
+	                          <f:selectItems value="#{var.unitnameList}" var="unit"   itemLabel="#{unit.unitname}" itemValue="#{unit.unitname}"  /> 
+			                 </h:selectOneMenu>  
+			                 </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="基准单位">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unit}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{var.unit}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="换算">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.ratio}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <p:inputText value="#{var.ratio}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+		 				</p:column>
+		 				<p:column headerText="操作">
+							<p:rowEditor />
+						</p:column>
+		   </p:dataTable>
+	    <p:dialog widgetVar="addConversion" resizable="false">
+	    <div style="width:300px;height: 300px;">
+	    <table>
+    		<tr>
+    			<td>分类名称：<font style="color:red;">*</font></td>
+    			<td>
+    				<h:selectOneMenu value="#{SUConversionBean.unittypename}" id="addunittype1" >  
+	                
+					<f:selectItems value="#{SUConversionBean.unitTypeList}"></f:selectItems>
+				  <p:ajax update=":myform:addunitname1 :myform:unit1" event="change" execute=":myform:addunittype1" />
+			         </h:selectOneMenu>  
+    			</td>
+    		</tr>
+    			<tr>
+    				<td>单位：<font style="color:red;">*</font></td>
+    				<td>
+    				<h:selectOneMenu value="#{SUConversionBean.unitname}" id="addunitname1" >  
+	                    <f:selectItems value="#{SUConversionBean.unitNameList}" ></f:selectItems>
+	                </h:selectOneMenu>  
+    			</td>
+    			</tr>
+    			<tr>
+    				<td>基准单位：</td>
+    				<td><h:inputText value="#{SUConversionBean.unit}" id="unit1" style="border:1px black solid;"  disabled="true"></h:inputText></td>
+    				
+    			</tr>
+    			<tr>
+    				<td>换算：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SUConversionBean.ratio}" id="ratio1" style="border:1px black solid;"></h:inputText></td>
+    				
+    			</tr>
+    		</table>
+    		</div>
+	    	<div class="headDivduan">
+			<p:commandButton value="新增" styleClass="delete" onclick="yinc()"  ></p:commandButton>
+			<p:commandButton value="新增" id="addConver" actionListener="#{SUConversionBean.addTUnitConverInfo}" 
+				update=":myform:dataTable3 :myform:messages3 "   oncomplete="addConversion.hide()" 
+				style="display:none"/>
+    	    </div>
+    	   <p:growl id="messages3" showDetail="true"/> 
+    	</p:dialog>
+    	  <!-- 删除 -->
+      <p:dialog id="multiDialog2" height="200" showEffect="fade" hideEffect="explode"  widgetVar="multiCarDialog">
+        <p:dataList id="displayMulti2" value="#{SUConversionBean.selectuncon}" var="tun"></p:dataList>  
+      </p:dialog> 
+     </h:panelGroup>
+    	</div>	
+    	  <div id="fln"  style="display:none;" >	
+    	    <h:panelGroup id="fln" >
+        	<div style="width: 100%; height: 20px;">
+		       <div class="headDiv" >
+			       <p:commandButton value="新建" oncomplete="addConversion1.show();bgReposition($('.table'));" styleClass="delete" ></p:commandButton>
+			       <p:commandButton value="删除" update=":myform:select2" styleClass="delete" oncomplete="ondelete2();bgReposition($('.table'));" actionListener="#{SUConversionBean.onSelected1}"></p:commandButton>
+		           <p:commandButton id="delete3" value="删除" update=":myform:dataTable4 :myform:displayMulti3"  actionListener="#{SUConversionBean.deleteTunitConclassify}"  style="display: none;"/> 
+			   </div>
+	    	</div>	
+		<p:dataTable var="cla" value="#{SUConversionBean.medTUnitConversionModel1}" id="dataTable4" style="width: auto; left: 170px; right: 0; margin-top: 35px;" styleClass="table"
+	      editable="true" dynamic="true" selection="#{SUConversionBean.selectuncon1}" paginator="true" paginatorPosition="bottom" rows="10" >
+	        <p:ajax event="rowEdit" listener="#{SUConversionBean.updateTunitConclassify}" update=":myform:dataTable4 :myform:messages4" />
+	         <p:ajax event="rowEditCancel" listener="#{SUConversionBean.onCancel}" update=":myform:dataTable4" />
+	                  <p:column selectionMode="multiple" /> 
+	                  <p:column headerText="物料编码">
+						<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{cla.no}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{cla.no}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+                        </p:column>
+	                 <p:column headerText="分类名称">
+						<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{cla.unittypename}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <h:outputText value="#{cla.unittypename}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+                        </p:column>
+						<p:column headerText="单位">
+						 <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{cla.unitname}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                       <h:selectOneMenu value="#{cla.unitname}" >  
+	                          <f:selectItems value="#{cla.unitnameList1}" var="unit"   itemLabel="#{unit.unitname}" itemValue="#{unit.unitname}"  /> 
+			                 </h:selectOneMenu>  
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="基准单位">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{cla.unit}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{cla.unit}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="换算">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{cla.ratio}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <p:inputText value="#{cla.ratio}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+		 				</p:column>
+		 				<p:column headerText="操作">
+							<p:rowEditor />
+						</p:column>
+		   </p:dataTable>
+		    <p:dialog widgetVar="addConversion1" resizable="false">
+	       <div style="width:400px;height: 300px;">
+	       <table>
+    	   <tr>
+    			<td>分类名称：<font style="color:red;">*</font></td>
+    			<td>
+    				<h:selectOneMenu value="#{SUConversionBean.unittypename1}" id="addunittype2" >  
+	                       <f:selectItems value="#{SUConversionBean.unitTypeList}"  /> 
+	                        <p:ajax update=":myform:addunitname2 :myform:unit2" event="change" execute=":myform:addunittype2" />
+			            </h:selectOneMenu>  
+    			</td>
+    		</tr>
+    		 <tr>
+    			<td>物料编码：<font style="color:red;">*</font></td>
+    	        <td  colspan="3">
+				<div style="position: relative; width: 100%;">
+					<h:inputText value="#{SUConversionBean.no}" id="notest" styleClass="inputTextChang"
+						onfocus="onfocusNOList()" onkeyup="onkeyupNOList()" autocomplete="off" ></h:inputText>
+					<div style="width:89%;height:200px;position: absolute;margin-left: 2%;display: none;font-size:100%" id="nolist" onmouseleave="onblurNOList()">
+						<p:tree value="#{SUConversionBean.noroot}" var="node" id="notree" style="widht:100%;" 
+							selectionMode="single" selection="#{SUConversionBean.noselectroot}">
+							<p:ajax event="select" listener="#{SUConversionBean.OnTreeNodeSelect}"
+								update=":myform:name2 :myform:notest"  
+								oncomplete="treeOnclick()"/>
+					        <p:treeNode>
+					            <h:outputText value="#{node.no}" styleClass="jobtreeclass"/>
+					        </p:treeNode>
+					    </p:tree>	  
+					</div>
+					<h:commandButton value=""  id="nobtn" style="display:none;">
+							<a4j:ajax listener="#{SUConversionBean.onkeyupNoList}"
+								 event="click" execute="notest" 
+								 render=":myform:notree" />
+					</h:commandButton>
+				</div>
+			</td>
+    		</tr>
+    		<tr>
+    				<td>单位：<font style="color:red;">*</font></td>
+    				<td>
+    				<h:selectOneMenu value="#{SUConversionBean.unitname1}" id="addunitname2" >  
+	                      <f:selectItems value="#{SUConversionBean.unitNameList1}"  /> 
+	                </h:selectOneMenu>  
+    			</td>
+    			</tr>
+    			<tr>
+    				<td>基准单位：</td>
+    				<td><h:inputText value="#{SUConversionBean.unit1}" id="unit2" style="border:1px black solid;"  disabled="true"></h:inputText></td>
+    				
+    			</tr>
+    			<tr>
+    				<td>换算：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SUConversionBean.ratio1}" id="ratio2" style="border:1px black solid;"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>物料说明：</td>
+    				<td><h:inputText value="#{SUConversionBean.matename}" id="name2" style="border:1px black solid;"  disabled="true"></h:inputText></td>
+    				
+    			</tr>
+    		</table>
+    		</div>
+	    	<div class="headDivduan">
+			<p:commandButton value="新增" styleClass="delete"  onclick="yanzh()"  ></p:commandButton>
+			<p:commandButton value="新增" id="addConver1"    actionListener="#{SUConversionBean.addTunitConclassify}" 
+				update=":myform:dataTable4 :myform:messages4 "   oncomplete="addConversion1.hide()" 
+				style="display:none"/>
+    	    </div>
+    	   <p:growl id="messages4" showDetail="true"/> 
+    	</p:dialog>
+    	<p:dialog id="multiDialog3" height="200" showEffect="fade" hideEffect="explode"  widgetVar="multiCarDialog">
+        <p:dataList id="displayMulti3" value="#{SUConversionBean.selectuncon1}" var="tun"></p:dataList>  
+        </p:dialog> 
+        	</h:panelGroup>	
+          </div>
+          <div id="flj" style="display:none;">	
+        	<h:panelGroup id="flj" >
+        	<div style="width: 100%; height: 20px;">
+		       <div class="headDiv" >
+			       <p:commandButton value="新建" oncomplete="addConversion2.show();bgReposition($('.table'));" styleClass="delete" ></p:commandButton>
+			       <p:commandButton value="删除" update=":myform:select2" styleClass="delete" oncomplete="ondelete3();bgReposition($('.table'));" actionListener="#{SUConversionBean.onSelected2}"></p:commandButton>
+		           <p:commandButton id="delete4" value="删除" update=":myform:dataTable5 :myform:displayMulti4"  actionListener="#{SUConversionBean.deleteUnitConsortInfo}"  style="display: none;"/>
+			       <div></div>
+				</div>
+	    	</div>	
+		<p:dataTable var="fja" value="#{SUConversionBean.medTUnitConversionModel2}" id="dataTable5" style="width: auto; left: 170px; right: 0; margin-top: 35px;" styleClass="table"
+	      editable="true" dynamic="true" selection="#{SUConversionBean.selectuncon2}" paginator="true" paginatorPosition="bottom" rows="10" >
+	         <p:ajax event="rowEdit" listener="#{SUConversionBean.updateUnitConsortInfo}" update=":myform:dataTable5 :myform:messages5" />
+	         <p:ajax event="rowEditCancel" listener="#{SUConversionBean.onCancel}" update=":myform:dataTable5" />
+	                  <p:column selectionMode="multiple" /> 
+	                  <p:column headerText="物料编码">
+						<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{fja.no}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{fja.no}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+                        </p:column>
+	                 <p:column headerText="分类名称1">
+						<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{fja.unittypename1}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{fja.unittypename1}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+                        </p:column>
+					  <p:column headerText="基准单位1">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{fja.unit1}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{fja.unit1}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="换算">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{fja.ratio}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <p:inputText value="#{fja.ratio}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+		 				</p:column>
+		 				 <p:column headerText="分类名称2">
+						<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{fja.unittypename2}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{fja.unittypename2}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+                        </p:column>
+					  <p:column headerText="基准单位2">
+							<p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{fja.unit2}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <h:outputText value="#{fja.unit2}" />
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+		 			 <p:column headerText="操作">
+							<p:rowEditor />
+						</p:column>
+		   </p:dataTable>
+		     <p:dialog widgetVar="addConversion2" resizable="false">
+	       <div style="width:400px;height: 300px;">
+	       <table>
+    	   <tr>
+    			<td>分类名称1：<font style="color:red;">*</font></td>
+    			<td>
+    				<h:selectOneMenu value="#{SUConversionBean.unittypename2}" id="addunittype3" >  
+	                       <f:selectItems value="#{SUConversionBean.unitTypeList}"  /> 
+	                        <p:ajax update=":myform:unit3" event="change" execute=":myform:addunittype3" />
+			            </h:selectOneMenu>  
+    			</td>
+    		</tr>
+    		<tr>
+    				<td>基准单位1：</td>
+    				<td><h:inputText value="#{SUConversionBean.unit2}" id="unit3" style="border:1px black solid;"  disabled="true"></h:inputText></td>
+    				
+    			</tr>
+    		    <tr>
+    			<td>物料编码：<font style="color:red;">*</font></td>
+    	        <td  colspan="3">
+				<div style="position: relative; width: 100%;">
+					<h:inputText value="#{SUConversionBean.no1}" id="notest1" styleClass="inputTextChang"
+						onfocus="onfocusNOList1()" onkeyup="onkeyupNOList1()" autocomplete="off" ></h:inputText>
+					<div style="width:89%;height:200px;position: absolute;margin-left: 2%;display: none;font-size:100%" id="nolist1" onmouseleave="onblurNOList1()">
+						<p:tree value="#{SUConversionBean.noroot1}" var="node" id="notree1" style="widht:100%;" 
+							selectionMode="single" selection="#{SUConversionBean.noselectroot1}">
+							<p:ajax event="select" listener="#{SUConversionBean.OnTreeNodeSelect1}"
+								update=":myform:name3 :myform:notest1"  
+								oncomplete="treeOnclick1()"/>
+					        <p:treeNode>
+					            <h:outputText value="#{node.no}" styleClass="jobtreeclass"/>
+					        </p:treeNode>
+					    </p:tree>	  
+					</div>
+					<h:commandButton value=""  id="nobtn1" style="display:none;">
+							<a4j:ajax listener="#{SUConversionBean.onkeyupNoList1}"
+								 event="click" execute="notest1" 
+								 render=":myform:notree1" />
+					</h:commandButton>
+				</div>
+			</td>
+    		</tr>
+    		<tr>
+    				<td>换算：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SUConversionBean.ratio2}" id="ratio3" style="border:1px black solid;"></h:inputText></td>
+    			</tr>
+    			<tr>
+    			<td>分类名称2：<font style="color:red;">*</font></td>
+    			<td>
+    				<h:selectOneMenu value="#{SUConversionBean.unittypename3}" id="addunittype4" >  
+	                       <f:selectItems value="#{SUConversionBean.unitTypeList}"  /> 
+	                        <p:ajax update=":myform:unit4" event="change" execute=":myform:addunittype4" />
+			            </h:selectOneMenu>  
+    			</td>
+    		 </tr>
+    		 <tr>
+    				<td>基准单位2：</td>
+    				<td><h:inputText value="#{SUConversionBean.unit3}" id="unit4" style="border:1px black solid;"  disabled="true"></h:inputText></td>
+    				
+    			</tr>
+    			<tr>
+    				<td>物料说明：</td>
+    				<td><h:inputText value="#{SUConversionBean.matename1}" id="name3" style="border:1px black solid;"  disabled="true"></h:inputText></td>
+    				
+    			</tr>
+    		</table>
+    		</div>
+	    	<div class="headDivduan">
+			<p:commandButton value="新增" styleClass="delete" onclick="yanfl()"   ></p:commandButton>
+			<p:commandButton value="新增" id="addConver2"   actionListener="#{SUConversionBean.addUnitConsortInfo}"   update=":myform:dataTable5 :myform:messages5 "   oncomplete="addConversion2.hide()"  style="display:none"/>
+    	    </div>
+    	   <p:growl id="messages5" showDetail="true"/> 
+    	</p:dialog>
+    	<p:dialog id="multiDialog4" height="200" showEffect="fade" hideEffect="explode"  widgetVar="multiCarDialog">
+        <p:dataList id="displayMulti4" value="#{SUConversionBean.selectuncon2}" var="tun"></p:dataList>  
+        </p:dialog> 
+        	</h:panelGroup>	
+          </div>
+    </div>
+    </div>
+    </div>
+     <h:inputHidden value="#{SUConversionBean.selected}" id="select2"></h:inputHidden>  
+    <script type="text/javascript">
+	    //<![CDATA[
+	      document.getElementById("myform:shuaxin2").click(); 
+	      function onkeyupNOList(){
+	  		document.getElementById("myform:nobtn").click();
+	  		document.getElementById("nolist").style.display="block";
+	  	}
+	  	function onfocusNOList(){
+	  		document.getElementById("nolist").style.display="block";
+	  	}
+	  	function onblurNOList(){
+	  		document.getElementById("nolist").style.display="none";
+	  	}
+	  	
+	  	document.getElementById("nolist").onmouseout=function(event){
+	  		var s =event.relatedTarget;
+	      	if (!this.contains(s)) {
+	      		this.style.display="none";
+	      	}            
+	  	};
+	  	function treeOnclick(){
+	  		document.getElementById("nolist").style.display="none";
+	  	}
+	  	
+	    function onkeyupNOList1(){
+	  		document.getElementById("myform:nobtn1").click();
+	  		document.getElementById("nolist1").style.display="block";
+	  	}
+	  	function onfocusNOList1(){
+	  		document.getElementById("nolist1").style.display="block";
+	  	}
+	  	function onblurNOList1(){
+	  		document.getElementById("nolist1").style.display="none";
+	  	}
+	  	
+	  	document.getElementById("nolist1").onmouseout=function(event){
+	  		var s =event.relatedTarget;
+	      	if (!this.contains(s)) {
+	      		this.style.display="none";
+	      	}            
+	  	};
+	  	function treeOnclick1(){
+	  		document.getElementById("nolist1").style.display="none";
+	  	}
+	      
+	   function yinc(){
+    	   var addunittype=document.getElementById("myform:addunittype1").value; 
+    	   var addunitname=document.getElementById("myform:addunitname1").value;
+    	   var ratio=document.getElementById("myform:ratio1").value;
+    	   
+    	   if(null==addunittype||""==addunittype){
+    		   alert("请选择单位类别！");
+    	   }else if(null==addunitname||""==addunitname){
+    		   alert("请选择单位名称！");
+    	   }
+    	   else if(null==ratio||""==ratio){
+    		   alert("请输入换算率 ！");
+    	    }
+    	   else if(isNaN(ratio)){
+    		   alert("请输入数字 ！");
+    		   
+    	   }
+    	   else{
+    		   document.getElementById("myform:addConver").click();
+    	   }
+    	   
+       }
+       
+	   function yanzh(){
+    	   var addunittype=document.getElementById("myform:addunittype2").value; 
+    	   var addunitname=document.getElementById("myform:addunitname2").value;
+    	   var ratio=document.getElementById("myform:ratio2").value;
+    	   
+    	   if(null==addunittype||""==addunittype){
+    		   alert("请选择单位类别！");
+    	   }else if(null==addunitname||""==addunitname){
+    		   alert("请选择单位名称！");
+    	   }
+    	   else if(null==ratio||""==ratio){
+    		   alert("请输入换算率 ！");
+    	    }
+    	   else if(isNaN(ratio)){
+    		   alert("请输入数字 ！");
+    	   }else{
+    		   document.getElementById("myform:addConver1").click();
+    	   }
+    	   
+       }
+	   
+	   function yanfl(){
+    	   var addunittype3=document.getElementById("myform:addunittype3").value; 
+    	   var addunittype4=document.getElementById("myform:addunittype4").value; 
+    	   var ratio=document.getElementById("myform:ratio3").value;
+    	   
+    	   if(null==addunittype3||""==addunittype3){
+    		   alert("请选择单位类别！");
+    	   }else if(null==addunittype4||""==addunittype4){
+    		   alert("请选择单位类别！");
+    	   }
+    	   else if(null==ratio||""==ratio){
+    		   alert("请输入换算率 ！");
+    	    }
+    	   else if(isNaN(ratio)){
+    		   alert("请输入数字 ！");
+    	   }else{
+    		   document.getElementById("myform:addConver2").click();
+    	   }
+    	   
+       }
+	   
+      function menuClick(id){
+	    	  var arr=new Array("conbz","confn","confj");
+	    	  var tt=id.substring(7,id.length);
+	    	  
+	    	  for(var i=0;i<arr.length;i++){
+	    		 
+	    		  if(arr[i] == tt) {
+	    			  document.getElementById(arr[i]).className = "process_config_menuDiv active";
+	    			  document.getElementById("myform:contype").value=tt;
+	    		  } else {
+	    			  document.getElementById(arr[i]).className = "process_config_menuDiv";
+	    		  }
+	    		  
+	    	  }
+		    	document.getElementById(id).click();
+	      }
+	     
+	      function displaybz(){
+	    	 
+	    	  document.getElementById("bz").style.display="block";
+	    	  document.getElementById("fln").style.display="none";
+	    	  document.getElementById("flj").style.display="none";
+	    	  bgReposition(document.getElementById("bz").firstChild);
+	    	  
+	      }
+	      function displayfln(){
+	    	  
+	    	  document.getElementById("bz").style.display="none";
+	    	  document.getElementById("fln").style.display="block";
+	    	  document.getElementById("flj").style.display="none";
+	    	  bgReposition(document.getElementById("fln").firstChild);
+	      }
+	      function displayflj(){
+	    	  
+	    	  document.getElementById("bz").style.display="none";
+	    	  document.getElementById("fln").style.display="none";
+	    	  document.getElementById("flj").style.display="block";
+	    	  bgReposition(document.getElementById("flj").firstChild);
+	      }
+	      
+	    //删除
+		 	 function ondelete1(){
+		  	   var temp = document.getElementById("myform:select2").value;
+		  	   if(null!=temp&&""!=temp){
+		  		   if(confirm("是否确认删除此数据！")){
+			    	   document.getElementById("myform:delete2").click();
+			    	} 
+		  	   }else{
+		  		   alert("请选择一条数据进行删除！");
+		  	   }
+		     }
+	    
+		 	function ondelete2(){
+			  	   var temp = document.getElementById("myform:select2").value;
+			  	   if(null!=temp&&""!=temp){
+			  		   if(confirm("是否确认删除此数据！")){
+				    	   document.getElementById("myform:delete3").click();
+				    	} 
+			  	   }else{
+			  		   alert("请选择一条数据进行删除！");
+			  	   }
+			     }
+			    
+			function ondelete3(){
+			  	   var temp = document.getElementById("myform:select2").value;
+			  	   if(null!=temp&&""!=temp){
+			  		   if(confirm("是否确认删除此数据！")){
+				    	   document.getElementById("myform:delete4").click();
+				    	} 
+			  	   }else{
+			  		   alert("请选择一条数据进行删除！");
+			  	   }
+			     }
+      //]]>
+	</script>
+
+
+
+</ui:composition>

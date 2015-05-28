@@ -34,6 +34,7 @@ import smtcl.mocs.services.jobplan.IJobPlanService;
 @ViewScoped
 public class JobdispatchlistAddBean implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 作业计划接口实例
 	 */
@@ -154,6 +155,7 @@ public class JobdispatchlistAddBean implements Serializable {
 	/**
 	 * 构造
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JobdispatchlistAddBean(){
 		//获取节点ID
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -200,6 +202,7 @@ public class JobdispatchlistAddBean implements Serializable {
 	/**
 	 * 作业名称ID和其他关联表的联动
 	 */
+	@SuppressWarnings("unchecked")
 	public void getJobInfoSub(){
 		materailTypelist.clear();
 		jobNum = null;
@@ -219,14 +222,13 @@ public class JobdispatchlistAddBean implements Serializable {
 		
 		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String,Object> lst =jobPlanService.getJobdispatchlistInfoForAdd(jobplanId);
-		List<Map<String,Object>> lst0 = (ArrayList)lst.get("lst0");
-		List<Map<String,Object>> lst7 = (ArrayList)lst.get("lst7");
-		List<Map<String,Object>> lst6 = (ArrayList)lst.get("lst6");
-		List<Map<String,Object>> lst1 = (ArrayList)lst.get("lst1");
-		List<Map<String,Object>> lst2 = (ArrayList)lst.get("lst2");
-		List<Map<String,Object>> lst3 = (ArrayList)lst.get("lst3");
-		List<Map<String,Object>> lst4 = (ArrayList)lst.get("lst4");
-		List<Map<String,Object>> lst5 = (ArrayList)lst.get("lst5");
+		List<Map<String,Object>> lst7 = (ArrayList<Map<String,Object>>)lst.get("lst7");
+		List<Map<String,Object>> lst6 = (ArrayList<Map<String,Object>>)lst.get("lst6");
+		List<Map<String,Object>> lst1 = (ArrayList<Map<String,Object>>)lst.get("lst1");
+		List<Map<String,Object>> lst2 = (ArrayList<Map<String,Object>>)lst.get("lst2");
+		List<Map<String,Object>> lst3 = (ArrayList<Map<String,Object>>)lst.get("lst3");
+		List<Map<String,Object>> lst4 = (ArrayList<Map<String,Object>>)lst.get("lst4");
+		List<Map<String,Object>> lst5 = (ArrayList<Map<String,Object>>)lst.get("lst5");
 		
 		if (lst6.size()>0) {
 			Map<String,Object> map = lst6.get(0);

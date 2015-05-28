@@ -5,22 +5,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.dreamwork.persistence.ServiceFactory;
 
+import smtcl.mocs.pojos.device.TUser;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
+import smtcl.mocs.services.device.IAuthorizeService;
 import smtcl.mocs.services.device.IPartService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
-import smtcl.mocs.services.jobplan.IJobPlanService;
-import smtcl.mocs.utils.device.StringUtils;
+import smtcl.mocs.utils.device.Constants;
 
 /**
  * 
@@ -28,18 +26,15 @@ import smtcl.mocs.utils.device.StringUtils;
  * @作者：yyh
  * @创建时间：2013-7-2 下午13:05:16
  * @修改者：songkaiang
- * @修改日期：
- * @修改说明：
+ * @修改日期：2015-1-14
+ * @修改说明：添加工单操作按钮权限控制
  * @version V1.0
  */
 @ManagedBean(name="JobPlanDetail")
 @SessionScoped
 public class JobPlanDetailBean implements Serializable {
-	//---------------------------service--------------------------------------------
-	/**
-	 * 作业计划接口实例
-	 */
-	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
+	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 工单接口实例
 	 */
@@ -47,10 +42,11 @@ public class JobPlanDetailBean implements Serializable {
 	/**
 	 * 零件Service接口
 	 */
-	private IPartService partService=(IPartService)ServiceFactory.getBean("partService");
-	
-	//---------------------------------------------------------------------------------
-	private static String PART_NAME = "partName"; //(cookie名称)零件名称
+	private IPartService partService = (IPartService)ServiceFactory.getBean("partService");
+    /**
+     * 权限接口
+     */
+    private IAuthorizeService authorityService = (IAuthorizeService)ServiceFactory.getBean("authorizeService");
 	/**
 	 * 状态数据集
 	 */
@@ -62,13 +58,20 @@ public class JobPlanDetailBean implements Serializable {
 	private List<Map<String,Object>> partTypeList = new ArrayList<Map<String,Object>>();
 	//零件名称
 	private String partTypeId;
-	
+
+    /**
+     * 是否对按钮有操作权限
+     */
+    private boolean viewDisabled;
+
 	/**
 	 * 在构造函数数初始化数据
 	 */
 	public JobPlanDetailBean(){
 		partTypeList.clear();
 		partTypeList = jobDispatchService.getPartTypeMap(this.getNodeid());//map中是id，name
+
+        this.authorize();
 	}
 	
 	public List<String> complete(String query){
@@ -85,6 +88,25 @@ public class JobPlanDetailBean implements Serializable {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		return (String)session.getAttribute("nodeid");
 	}
+
+    /**
+     * 按钮权限判断
+     */
+    private void authorize() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        TUser checkUser = (TUser) session.getAttribute(Constants.USER_SESSION_KEY);
+        Long userID = new Long(checkUser.getUserId());
+
+        String pageID = Constants.ZYJH_PAGE_ID;
+        viewDisabled = false;
+        List<String> buttonList = authorityService.getButtonsFunctionList(userID.toString(), pageID);
+        for (String b : buttonList) {
+            if (b != null && Constants.BUTTONS_ID[1].equals(b)) {
+                viewDisabled = true;
+            }
+        }
+
+    }
 	
 //-----------------------------set-----get-----------------------------------------------------------------------------
 	public List<Map<String, Object>> getStatusList() {
@@ -124,5 +146,11 @@ public class JobPlanDetailBean implements Serializable {
 		this.partTypeList = partTypeList;
 	}
 
+    public boolean isViewDisabled() {
+        return viewDisabled;
+    }
 
+    public void setViewDisabled(boolean viewDisabled) {
+        this.viewDisabled = viewDisabled;
+    }
 }

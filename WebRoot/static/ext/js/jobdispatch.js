@@ -90,7 +90,20 @@ Ext.onReady(function () {
 	end=date1;
 	
 	 //加载数据信息
-	resourceStore.load();
+	resourceStore.load({
+		params: {
+			taskNum : '',//任务编号默认为空
+			jobstatus : '10,20,30,40,50,80',//工单状态id
+			partid:'',
+			planStime : start,
+			planEtime : end
+		}, 
+		callback: function(records, options, success) {
+			 
+		},
+		scope: this,
+		add:false
+	});
 	eventStore.load({
 		params: {
 			taskNum : '',//任务编号默认为空
@@ -261,7 +274,7 @@ Ext.onReady(function () {
 			document.getElementById("dispatchimages").src = "./images/jobplan/dispatchrecover.png";
 			document.getElementById("dispatch").title = "工单恢复";
 			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14_un.png";
+			document.getElementById("img3").src = "./images/jobplan/jobplan_14.png";
 			//派工灰色
 			document.getElementById("img7").src = "././images/jobplan/dispatch_un.png";
 		}
@@ -277,7 +290,7 @@ Ext.onReady(function () {
 		 partName = eventRecord.data.partName;//零件名称
 		 planNum=eventRecord.data.planNum;//计划数量
 		 var jobdispatchNO = eventRecord.data.no;
-		 document.getElementById("importButton").href="javascript:openUrl('./jobdispatch/production_scrap_add.faces?jobdispatchNO="+jobdispatchNO+"')";
+		 document.getElementById("importButton").href="javascript:openUrl('./erp/production_scrap_add.faces?jobdispatchNO="+jobdispatchNO+"')";
 	});
 		
 	 //工单编号
@@ -514,9 +527,9 @@ function jobchaxun(){//查询过滤
 			taskNum : taskNum,//任务编号默认为空
 			jobstatus : jobState,//工单状态id
 			partid : partid,
-			equid:equid,
-			planStime : start,
-			planEtime : end
+			equid : equid,
+			planStime : startTime,
+			planEtime : endTime
 		}, 
 		callback: function(records, options, success) {
 			 

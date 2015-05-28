@@ -35,7 +35,7 @@ import smtcl.mocs.services.jobplan.IJobPlanService;
 @ViewScoped
 public class JobdispatchlistUpdataBean implements Serializable {
 	
-	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 作业计划接口实例
 	 */
@@ -193,6 +193,7 @@ public class JobdispatchlistUpdataBean implements Serializable {
 	/**
 	 * 作业名称ID和其他关联表的联动
 	 */
+	@SuppressWarnings("unchecked")
 	public void getJobInfoSub(){
 		materailTypelist.clear();
 		subjobplanNum =null;
@@ -206,12 +207,11 @@ public class JobdispatchlistUpdataBean implements Serializable {
 		
 		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String,Object> lst =jobPlanService.getJobdispatchlistInfoForAdd(jobplanId);
-		List<Map<String,Object>> lst0 = (ArrayList)lst.get("lst0");
-		List<Map<String,Object>> lst1 = (ArrayList)lst.get("lst1");
-		List<Map<String,Object>> lst2 = (ArrayList)lst.get("lst2");
-		List<Map<String,Object>> lst3 = (ArrayList)lst.get("lst3");
-		List<Map<String,Object>> lst4 = (ArrayList)lst.get("lst4");
-		List<Map<String,Object>> lst5 = (ArrayList)lst.get("lst5");
+		List<Map<String,Object>> lst1 = (ArrayList<Map<String,Object>>)lst.get("lst1");
+		List<Map<String,Object>> lst2 = (ArrayList<Map<String,Object>>)lst.get("lst2");
+		List<Map<String,Object>> lst3 = (ArrayList<Map<String,Object>>)lst.get("lst3");
+		List<Map<String,Object>> lst4 = (ArrayList<Map<String,Object>>)lst.get("lst4");
+		List<Map<String,Object>> lst5 = (ArrayList<Map<String,Object>>)lst.get("lst5");
 		
 		for(Map<String,Object> map : lst1){
 		Map<String,Object> m = new HashMap<String,Object>();
@@ -311,6 +311,7 @@ System.out.println("----------->"+materailTypelist.size());
 		this.booleanValue = booleanValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	public String getJobdispatchlistName() {
 		if(jobdispatchlistId==null && jobplanId==null){
 //		jobdispatchlistId = "76"; //给个固定值
@@ -349,12 +350,11 @@ System.out.println("----------->"+materailTypelist.size());
 		
 		Map<String,Object> lst =jobPlanService.getJobdispatchlistInfoForAdd(id);
 
-		List<Map<String,Object>> lst0 = (ArrayList)lst.get("lst0");
-		List<Map<String,Object>> lst1 = (ArrayList)lst.get("lst1");
-		List<Map<String,Object>> lst2 = (ArrayList)lst.get("lst2");
-		List<Map<String,Object>> lst3 = (ArrayList)lst.get("lst3");
-		List<Map<String,Object>> lst4 = (ArrayList)lst.get("lst4");
-		List<Map<String,Object>> lst5 = (ArrayList)lst.get("lst5");
+		List<Map<String,Object>> lst1 = (ArrayList<Map<String,Object>>)lst.get("lst1");
+		List<Map<String,Object>> lst2 = (ArrayList<Map<String,Object>>)lst.get("lst2");
+		List<Map<String,Object>> lst3 = (ArrayList<Map<String,Object>>)lst.get("lst3");
+		List<Map<String,Object>> lst4 = (ArrayList<Map<String,Object>>)lst.get("lst4");
+		List<Map<String,Object>> lst5 = (ArrayList<Map<String,Object>>)lst.get("lst5");
 		
 		for(Map<String,Object> map : lst1){
 		Map<String,Object> m = new HashMap<String,Object>();
@@ -390,7 +390,6 @@ System.out.println("----------->"+materailTypelist.size());
 		if(lst3.size()>0){
 		Map<String,Object> map3 = lst3.get(0);
 		processplanName = (String)map3.get("pname");
-//		processplanDefault;      //工艺方案中无字段
 		 if(map3.get("theoryWorktime")!=null){
 		processplanTheoryWorktime = map3.get("theoryWorktime").toString();
 		 }
@@ -583,10 +582,6 @@ System.out.println("----------->"+materailTypelist.size());
 		return jobdispatchlistId;
 	}
 
-	public void setJobdispatchlistId(String jobdispatchlistId) {
-		this.jobdispatchlistId = jobdispatchlistId;
-	}
-
 	public String getJobdispatchlistNo() {
 		return jobdispatchlistNo;
 	}
@@ -594,8 +589,5 @@ System.out.println("----------->"+materailTypelist.size());
 	public void setJobdispatchlistNo(String jobdispatchlistNo) {
 		this.jobdispatchlistNo = jobdispatchlistNo;
 	}	
-
-	
-	
 
 }

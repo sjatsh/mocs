@@ -181,18 +181,18 @@
 		case 2:
 			document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2_click";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4";
 			break;
 		case 3:
-			document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3_click";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4";
 			break;
 		case 4:
-			document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4_click";
 			break;

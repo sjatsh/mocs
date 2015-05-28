@@ -18,11 +18,6 @@ var createWidth = wjb51*1894/1920;
 var createHeight = hjb51*685/1080;
 var createRowHeight = hjb51*39/1080;
 var createColumnWidth = wjb51*374/1920;
-var fieldStyle = "font-size:"+wjb51*25/1920+"px;";
-var fieldWidth = wjb51*200/1920;
-var defineWidth = wjb51*490/1920;
-var defineHeight = hjb51*350/1080;
-var fsize = 5;
 var resourceStore;
 var eventStore;
 
@@ -241,12 +236,12 @@ Ext.onReady(function () {
 	        document.getElementById("jobplanaid").title="作业计划启动";//与xhtml有关
 			 
 		 }
-		 else if(statusId==40)
-	     {
-	        document.getElementById("jobplanimg").src="./images/jobplan/dispatchstop.png";
-	        document.getElementById("jobplanaid").title="作业计划停止";
-			 
-	      }
+//		 else if(statusId==40)
+//	     {
+//	        document.getElementById("jobplanimg").src="./images/jobplan/dispatchstop.png";
+//	        document.getElementById("jobplanaid").title="作业计划停止";
+//			 
+//	      }
 	     }
 		jobName=eventRecord.data.Name;
 	});

@@ -24,10 +24,10 @@ public class DatabaseResourceAdapter extends AbstractResourceAdapter {
     }
 
     /**
-     * 装载指定名称和区域设置的资源绑定
+     * 装载指定名称和区域设置的资源绑定�?
      *
      * @param locale 区域设置
-     * @return 资源绑定
+     * @return 资源绑定�?
      */
     @Override
     protected IResourceBundle loadResourceByLocale (Locale locale) {

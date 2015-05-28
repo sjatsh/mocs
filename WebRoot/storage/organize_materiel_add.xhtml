@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<style type="text/css">
+	.text{
+		border: 1px black solid !important;
+	}
+	.textBgColor{
+		background-color: #DBDBDB !important;
+		background-image: none !important;
+		height: 10px !important;
+	}
+	</style>
+	<script type="text/javascript">
+		//<![CDATA[
+
+		//]]>
+		</script>
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+	<h:outputScript library="js" name="organize_materiel.js"></h:outputScript>
+	<div class="guide_kuangDiv">
+		<div class="guide_kuangDiv_head">
+			<div class="guide_ljbh_head"> 
+				<h:inputHidden value="#{organizeMaterielAddBean.nodeid}" id="nodeid"></h:inputHidden>
+				<h:outputText value="物料编号" styleClass="guide_text_label"/><h:outputText value="*" style="color:red"/>
+				<h:inputText value="#{organizeMaterielAddBean.tti.no}" styleClass="guide_text" id="no"/>
+				<h:outputText value="物料描述" styleClass="guide_text_label" /><h:outputText value="*" style="color:red"/>
+				<h:inputText value="#{organizeMaterielAddBean.tti.name}" styleClass="guide_text" id="desc"/>
+				<h:outputText value="版本号" styleClass="guide_text_label"/>
+				<h:inputText value="#{organizeMaterielAddBean.tmv.versionNo}" styleClass="textBgColor"  readonly="true"/>
+			</div>
+			<div class="guide_xd">
+				<div class="headDiv2">
+				 	<div class="process_config_menuDiv active" id="xszy" style="margin-left: 2%" onclick="menuClick('zy')">
+				 		<span> 主  要  </span>
+				 	</div>
+				 	<div class="process_config_menuDiv" id="xskc" onclick="menuClick('kc')"><span> 库  存 </span></div>
+				 	<div class="process_config_menuDiv" id="xswlqd" ><span> 物料清单 </span></div>
+				 	<ui:remove>
+				 	<div class="process_config_menuDiv" id="xswlqd" onclick="menuClick('wlqd')" style="cursor: default;">
+				 		<span style="cursor:default;"> 物料清单 </span>
+				 	</div>
+				 	</ui:remove>
+				 	<div class="process_config_menuDiv" id="xscg" onclick="menuClick('cg')"><span> 采  购  </span></div>
+				 	<div class="process_config_menuDiv" id="xsjh"  onclick="menuClick('jh')"><span> 计  划  </span></div>
+			    </div>
+			    <div class="guide_menu_bottom"></div>
+			    <div id="zy" style="position: relative;display: block;">
+			    	<div style="width:100%;height:270px;position: absolute; left: 0px; top: 230px;background-color: #E5E6E8;z-index:1" 
+			    		class="zybg" ></div>
+			    	<div style="width:310px;height:395px;position: absolute;left:316px;top:63px;z-index:2;" 
+			    		class="zytxt">
+			    		<div style="width: 100%;" >
+			    			<h:outputText value="基准单位" styleClass="guide_text_label"/>
+		   					<h:outputText value="*" style="color:red"/>
+							<h:selectOneMenu  value="#{organizeMaterielAddBean.tti.unit}" styleClass="select" id="unit">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{organizeMaterielAddBean.baseUnitList}" var="unit" 
+									itemLabel="#{unit.unitName}" itemValue="#{unit.unitName}"></f:selectItems>
+								<f:ajax event="change" listener="#{organizeMaterielAddBean.getAssistUnitData}" execute="@this" 
+								render=":myform:assistUnitId"></f:ajax>
+							</h:selectOneMenu>
+			    		</div>
+			    		<div style="width: 100%;" class="zytxtTop">
+			    			<h:outputText value="辅助单位&#160;" styleClass="guide_text_label"/>
+							<h:selectOneMenu value="#{organizeMaterielAddBean.tti.assistUnitId}" id="assistUnitId" styleClass="select">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{organizeMaterielAddBean.assistUnitList}" var="unit" 
+										itemLabel="#{unit.unitName}" itemValue="#{unit.unitName}"></f:selectItems>
+							</h:selectOneMenu>
+			    		</div>
+			    		<div style="width: 100%;" class="zytxtTopTwo">
+			    			<h:outputText value="物料类型" styleClass="guide_text_label"/>
+	    			 		<h:outputText value="*" style="color:red"/>
+							<h:selectOneMenu  style="color:#595959;" value="#{organizeMaterielAddBean.tti.className}" 
+								styleClass="select" id="className">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{organizeMaterielAddBean.typelist}" var="tp" itemLabel="#{tp.value}" 
+									itemValue="#{tp.id}"></f:selectItems>
+							</h:selectOneMenu>
+			    		</div>
+			    		<div style="width: 100%;" class="zytxtTop">
+			    			<h:outputText value="物料类别" styleClass="guide_text_label"/>
+							<h:outputText value="*" style="color:red"/>
+							<h:selectOneMenu  style="color:#595959;" value="#{organizeMaterielAddBean.tti.PId}" 
+								styleClass="select" id="pid">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{organizeMaterielAddBean.classList}" var="cl" itemLabel="#{cl.name}" 
+									itemValue="#{cl.id}"></f:selectItems>
+							</h:selectOneMenu>
+			    		</div>
+			    		<div style="width: 100%;" class="zytxtTop">
+			    			<h:outputText value="启用状态" styleClass="guide_text_label"/>
+							<h:outputText value="*" style="color:red"/>
+							<h:selectOneMenu  style="color:#595959;" value="#{organizeMaterielAddBean.tti.status}" styleClass="select">
+								<f:selectItem itemLabel="开启" itemValue="0"></f:selectItem>
+								<f:selectItem itemLabel="关闭" itemValue="1"></f:selectItem>
+							</h:selectOneMenu>
+			    		</div>
+			    	</div>
+			    	<div style="width:525px;height:100px;position: absolute;left:820px;top:230px;z-index:2;border: 2px solid #999999;" 
+			    		class="zycheck">
+			    		<h:outputText value="单位转换" styleClass="guide_text_label"/>
+			    		<div style="width: 100%;margin-top: 20px;" id="dwzh">
+			    			<h:selectOneRadio value="#{organizeMaterielAddBean.tti.unitConversion}" style="color:#495767;width:90%;" >
+							   	<f:selectItem itemValue="0" itemLabel="标准" />
+							   	<f:selectItem itemValue="1" itemLabel="特定物料" />
+							   	<f:selectItem itemValue="2" itemLabel="二者皆有" />
+							</h:selectOneRadio>
+			    		</div>
+						
+			    	</div>
+			    	<div style="width:170px;height:25px;position: absolute;left:820px;top:365px;z-index:2;"
+			    		class="isbom">
+			    		<h:selectManyCheckbox value="#{organizeMaterielAddBean.isBom}" style="color:#495767" 
+					 		id="isConcession">
+						 	<f:selectItem itemLabel="是否允许BOM" itemValue="是"></f:selectItem>
+						</h:selectManyCheckbox>
+			    	</div>
+			    	<div style="width:765px;height:180px;position: absolute;left:316px;top:535;z-index:2;"
+			    	 class="zyRemarks">
+			    		<h:outputText value="备注" styleClass="guide_text_label"/><br/>
+						<h:inputTextarea value="#{organizeMaterielAddBean.tti.memo}" style="width:80%;height:70%;"/>
+			    	</div>
+			    	<div style="width:220px;height:70px;position: absolute;left:1290px;top:580;z-index:2;" 
+			    		class="zysave">
+			    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" 
+			    			styleClass="btn-save" style="float: left; margin-left: 1%;"></h:graphicImage>
+			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_jbxx')" 
+			    			styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage>
+			    	</div>
+			    </div>
+				<div id="kc" style="position: relative;display: none;">
+					<div style="width:100%;height:65px;position: absolute;left:0px;top:30px;z-index:1;background-color: #EAEBED;" 
+						align="center" class="kccheck">
+						<div style="width: 80%;" class="kccheckTop">
+							<h:selectManyCheckbox value="#{organizeMaterielAddBean.isKuCun}" style="color:#495767;width:100%;" >
+							 	<f:selectItem itemLabel="库存物料" itemValue="库存物料"></f:selectItem>
+							 	<f:selectItem itemLabel="版本控制" itemValue="版本控制"></f:selectItem>
+							 	<f:selectItem itemLabel="可存储" itemValue="可存储"></f:selectItem>
+							 	<f:selectItem itemLabel="可处理" itemValue="可处理"></f:selectItem>
+							 	<f:selectItem itemLabel="可保留" itemValue="可保留"></f:selectItem>
+							</h:selectManyCheckbox>
+						</div>
+					</div>
+					<div style="width:430px;height:285px;position: absolute;left:135px;top:130px;z-index:2;border: 2px solid #999999;" 
+						class="kcpccc" align="center">
+						<div style="width: 100%;" class="kctxtTop" align="left">
+							<h:outputText value="批次存储期限" styleClass="guide_text_label"/>
+						</div>
+						<div style="width: 100%;" class="kcpcccTop" align="left">
+							<h:outputText value="&#160;&#160;&#160;&#160;控&#160;制&#160;&#160;" styleClass="guide_text_label"/>
+							<h:selectOneMenu value="#{organizeMaterielAddBean.tmes.isBatchTimeCtrl}" styleClass="select">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="控制" itemValue="0"></f:selectItem>
+								<f:selectItem itemLabel="不控制" itemValue="1"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+						<div style="width: 100%" class="kctxtTop">
+							<h:outputText value="存储期限" styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmes.batchTime}" styleClass="guide_text" id="batchTime"/>
+							<h:selectOneMenu   value="#{organizeMaterielAddBean.tmes.batchTimeUnit}" styleClass="select">
+								<f:selectItem itemLabel="天" itemValue="天"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div style="width:430px;height:285px;position: absolute;left:640px;top:130px;z-index:2;border: 2px solid #999999;"
+						class="kcpckz" align="center">
+						<div style="width: 100%;" class="kctxtTop" align="left">
+							<h:outputText value="批次控制" styleClass="guide_text_label"/>
+						</div>
+						<div  class="kctxtTop">
+							<h:outputText value="&#160;控&#160;制 &#160;&#160;" styleClass="guide_text_label"/>
+							<h:selectOneMenu   value="#{organizeMaterielAddBean.tmes.isBatchCtrl}" styleClass="select">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="控制" itemValue="0"></f:selectItem>
+								<f:selectItem itemLabel="不控制" itemValue="1"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+						<div  class="kctxtTop">
+							<h:outputText value="起始前缀  " styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmes.batchPrefix}" styleClass="guide_text" />
+						</div>
+						<div  class="kctxtTop">
+							<h:outputText value="起始编号 " styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmes.batchStartno}" styleClass="guide_text"/>
+						</div>
+					</div>
+					<div style="width:430px;height:285px;position: absolute;left:1145px;top:130px;z-index:2;border: 2px solid #999999;"
+						class="kcxlkz" align="center">
+						<div style="width: 100%;" class="kctxtTop" align="left">
+							<h:outputText value="序列控制" styleClass="guide_text_label"/>
+						</div>
+						<div  class="kctxtTop">
+							<h:outputText value="&#160;生 &#160;成&#160;&#160;" styleClass="guide_text_label"/>
+							<h:selectOneMenu  value="#{organizeMaterielAddBean.tmes.isSeqCtrl}" styleClass="select">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="控制" itemValue="0"></f:selectItem>
+								<f:selectItem itemLabel="不控制" itemValue="1"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+						<div  class="kctxtTop">
+							<h:outputText value="起始前缀  " styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmes.seqPrefix}" styleClass="guide_text"/><br/>
+						</div>
+						<div  class="kctxtTop">
+							<h:outputText value="起始编号 " styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmes.seqStartno}" styleClass="guide_text"/>
+						</div>
+					</div>
+					<div style="width:100%;height:85px;position: absolute;left:0px;top:450px;z-index:1;background-color: #EAEBED;" 
+						 class="kckwkz">
+						<div class="kckwxz" style="vertical-align: top;">
+							<h:outputText value="库位控制" styleClass="guide_text_label" style="display: inline-block;"/>
+							<h:selectOneMenu value="#{organizeMaterielAddBean.tmes.isPositionCtrl}" styleClass="select" style="vertical-align: top;" 
+								onchange="disabelStockOrPostion()" id="isPositionCtrl">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="控制" itemValue="0"></f:selectItem>
+								<f:selectItem itemLabel="不控制" itemValue="1"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+						<div class="kckwxz">
+						<h:selectManyCheckbox value="#{organizeMaterielAddBean.isStockCtrl}" style="color:#495767;display: inline-block;" 
+							disabled="true" id="isStockCtrl" onclick="subClick('myform:isStockCtrlbtn')">
+						 	<f:selectItem itemLabel="限制子库存" itemValue="是"></f:selectItem>
+						</h:selectManyCheckbox>
+						<p:commandButton style="display:none;" action="#{organizeMaterielAddBean.ChangeIsStockCtrl}" 
+							id="isStockCtrlbtn" update=":myform:stockNo" oncomplete="CtrlChange('myform:isStockCtrl:0','myform:stockNo')">
+						</p:commandButton>
+						<h:selectOneMenu value="#{organizeMaterielAddBean.tmes.stockNo}" id="stockNo" styleClass="select" 
+							disabled="true" onchange="selecChange('myform:stockNo','myform:realStockNo')" style="vertical-align: top;">
+							<f:selectItem itemLabel="请选择子库存" itemValue="" ></f:selectItem>
+							<f:selectItems value="#{organizeMaterielAddBean.childrenStockList}" var="stock" 
+								itemLabel="#{stock.storageName}" itemValue="#{stock.storageNo}"></f:selectItems>
+						</h:selectOneMenu>
+						<h:inputHidden value="#{organizeMaterielAddBean.tmes.stockNo}" id="realStockNo"></h:inputHidden>
+						</div>
+						<div class="kckwxz">
+							<h:selectManyCheckbox value="#{organizeMaterielAddBean.isPostionCtrl}" style="color:#495767;display: inline-block;" 
+								id="isPostionCtrl" disabled="true" onclick="subClick('myform:isPostionCtrlbtn')">
+							 	<f:selectItem itemLabel="限制库位" itemValue="是"></f:selectItem>
+							</h:selectManyCheckbox>
+							<p:commandButton style="display:none;" actionListener="#{organizeMaterielAddBean.ChangeIsPostionCtrl}" 
+								id="isPostionCtrlbtn" update=":myform:postionNo" 
+								oncomplete="CtrlChange('myform:isPostionCtrl:0','myform:postionNo')">
+							</p:commandButton>
+							<h:selectOneMenu value="#{organizeMaterielAddBean.tmes.postionNo}" id="postionNo" styleClass="select" 
+								disabled="true" onchange="selecChange('myform:postionNo','myform:realPostionNo')" style="vertical-align: top;">
+								<f:selectItem itemLabel="请选择子库存" itemValue=""></f:selectItem>
+								<f:selectItems value="#{organizeMaterielAddBean.childrenPostionList}" var="stock" 
+									itemLabel="#{stock.positionName}" itemValue="#{stock.positionNo}"></f:selectItems>
+							</h:selectOneMenu>
+							<h:inputHidden value="#{organizeMaterielAddBean.tmes.postionNo}" id="realPostionNo"></h:inputHidden>
+						</div>
+					</div>
+					<div style="width:220px;height:70px;position: absolute;left:740px;top:600px;z-index:2;"
+						class="kcsave">
+						<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" 
+							styleClass="btn-save" style="float: left; margin-left: 1%;"></h:graphicImage>
+			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_jbxx')" 
+			    			styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage>
+					</div>
+				</div>
+				
+				<div id="wlqd" style="display: none;">
+					<div style="width:100%;height: 100%;">
+						<div style="width: 100%;margin-top:10px; text-align: center;">  
+				    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" styleClass="btn-save" style="float: left; margin-left: 1%;"></h:graphicImage>
+				    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_jbxx')" styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage> 
+				    	</div>
+					</div>
+				</div>
+				<div id="cg" style="display: none;position: relative;">
+					<div style="width:400px;height:70px;position: absolute;left:640px;top:100px;z-index:2;" class="cgcontent">
+						<h:outputText value="采购员" styleClass="guide_text_label"/>
+						<h:selectOneMenu  value="#{organizeMaterielAddBean.buyer}"  styleClass="select">
+							<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+							<f:selectItems value="#{organizeMaterielAddBean.buyerList}" var="stock" itemLabel="#{stock.name}" 
+								itemValue="#{stock.no}"></f:selectItems>
+						</h:selectOneMenu>
+						<br/>
+						<h:outputText value="价目" styleClass="guide_text_label"/>
+						<h:inputText value="#{organizeMaterielAddBean.price}" styleClass="guide_text" id="price"/>
+					</div>
+					<div style="width:220px;height:70px;position: absolute;left:740px;top:600px;z-index:2;"
+						class="kcsave">
+						<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" 
+							styleClass="btn-save" style="float: left; margin-left: 1%;"></h:graphicImage>
+			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_jbxx')" 
+			    			styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage>
+					</div>
+				</div>
+				<div id="jh" style="display: none;position: relative;">
+					<div style="width:100%;height:80px;position: absolute;left:0px;top:30px;z-index:1;background-color:#EAEBED;"
+						class="jhcheck" align="center">
+						<div class="jhheadleftOne">
+							<h:outputText value="库存计划" styleClass="guide_text_label"/>
+							<h:selectOneMenu  value="#{organizeMaterielAddBean.tmep.planType}" styleClass="select" >
+								<f:selectItem itemLabel="请选择子库存" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="未计划" itemValue="0"></f:selectItem>
+								<f:selectItem itemLabel="最大计划" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="最小计划" itemValue="2"></f:selectItem>
+								<f:selectItem itemLabel="订货点计划" itemValue="3"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+						<div class="jhheadleft">
+							<h:outputText value="计划员" styleClass="guide_text_label"/>
+							<h:selectOneMenu  value="#{organizeMaterielAddBean.tmep.planner}"  styleClass="select">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItems value="#{organizeMaterielAddBean.buyerList}" var="stock" itemLabel="#{stock.name}" 
+									itemValue="#{stock.no}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+						<div class="jhheadleft">
+							<h:outputText value="制造或采购" styleClass="guide_text_label"/>
+							<h:selectOneMenu  value="#{organizeMaterielAddBean.tmep.planClass}"  styleClass="select">
+								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="制造" itemValue="0"></f:selectItem>
+								<f:selectItem itemLabel="采购" itemValue="1"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div style="width:425px;height:200px;position: absolute;left:90px;top:140px;z-index:2;border: 2px solid #999999;"  
+						class="jhkcjh" align="center">
+						<div style="width: 100%;" class="jhRowTop" align="left">
+							<h:outputText value="库存计划" styleClass="guide_text_label"/>
+						</div>
+						<div  class="jhRowTop">
+							<h:outputText value="最大值" styleClass="guide_text_label" />
+							<h:inputText value="#{organizeMaterielAddBean.tmep.storageMax}" styleClass="guide_text" id="storageMax"/>
+						</div>
+						<div class="jhRowTop">
+							<h:outputText value="最小值" styleClass="guide_text_label" />
+							<h:inputText value="#{organizeMaterielAddBean.tmep.storageMin}" styleClass="guide_text" id="storageMin"/>
+						</div>
+		 			</div>
+					<div style="width:425px;height:200px;position: absolute;left:630px;top:140px;z-index:2;border: 2px solid #999999;"  
+						class="jhdhl" align="center">
+						<div  class="jhRowTop"  style="width: 100%;" align="left">
+							<h:outputText value="订货量" styleClass="guide_text_label"/>
+						</div>
+						<div  class="jhRowTop">
+							<h:outputText value="最大值" styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmep.orderMax}" styleClass="guide_text" id="orderMax"/><br/>
+						</div>
+						<div  class="jhRowTop">
+							<h:outputText value="最小值" styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmep.orderMin}" styleClass="guide_text" id="orderMin"/>
+						</div>
+					</div>
+					<div style="width:425px;height:200px;position: absolute;left:1165px;top:140px;z-index:2;border: 2px solid #999999;"  
+						class="jhcb" align="center">
+						<div  class="jhRowTop" style="width: 100%;" align="left">
+							<h:outputText value="成本" styleClass="guide_text_label"/><br/>
+						</div>
+						<div  class="jhRowTop">
+							<h:outputText value="订单" styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmep.costOrder}" styleClass="guide_text"/><br/>
+						</div>
+						<div  class="jhRowTop">
+							<h:outputText value="保管" styleClass="guide_text_label"/>
+							<h:inputText value="#{organizeMaterielAddBean.tmep.storageRate}" styleClass="guide_text"/>
+						</div>
+					</div>
+					<div style="width:425px;height:200px;position: absolute;left:1165px;top:360px;z-index:2;border: 2px solid #999999;"  
+						class="jhaqkc" align="center">
+						<div  class="jhRowTop" align="left" style="width: 100%;">
+							<h:outputText value="安全库存" styleClass="guide_text_label"/>
+						</div>
+						<div  class="jhRowTop">
+							<h:outputText value="安全数量" styleClass="guide_text_label" />
+							<h:inputText value="#{organizeMaterielAddBean.tmep.thresholdValue}" styleClass="guide_text" id="thresholdValue"/>
+						</div>
+					</div>
+					<div style="width:965px;height:200px;position: absolute;left:90px;top:360px;z-index:2;border: 2px solid #999999;"  
+						class="jhly">
+						<h:outputText value="来源" styleClass="guide_text_label"/><br/>
+					</div>	
+					
+					<div style="width:220px;height:70px;position: absolute;left:740px;top:600px;z-index:2;"
+						class="jhsave">
+						<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" 
+							styleClass="btn-save" style="float: left; margin-left: 1%;"></h:graphicImage>
+			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_jbxx')" 
+			    			styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage>
+					</div>					
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	<p:commandButton id="btn_next_jbxx" value="取消"  styleClass="btn-next"  style="display: none" />
+	<p:commandButton id="btn_save" value="保存" actionListener="#{organizeMaterielAddBean.SaveOrganizeMateriel}" style="display: none;" 
+		onclick="return valueIsNullOrNaN();" update=":myform:msg"/>
+
+	<h:panelGrid id="msg">
+		<h:inputHidden value="#{organizeMaterielAddBean.message}" id="message"></h:inputHidden>
+		<p:commandButton value="test"  actionListener="#{MenuHeadBean.onClick('fhzzwlcx','0')}" update=":myform:rightiframe" 
+			id="tizhuan" style="display: none;"/>
+		<script type="text/javascript">
+		//<![CDATA[
+		 var message=document.getElementById('myform:message').value;
+		 if(null!=message && ""!=message){
+			 alert(message);
+			 subClick('myform:tizhuan');
+			 document.getElementById('myform:message').value="";
+		 }
+		//]]>
+		</script>
+	</h:panelGrid>
+	 <script type="text/javascript">
+	//<![CDATA[
+	     $("#zy").height($(".guide_kuangDiv").height()-$(".guide_ljbh_head").height()-$(".headDiv2").height());
+	     $(".zybg").css("top", hjb51 * 230 / 1080+"px").css("left","0px").css("width", "100%").css("height", hjb51 * 270/1080+"px");
+	     $(".zytxt").css("top", hjb51 * 63 / 1080+"px").css("left",wjb51 * 316/1920+"px").css("width", wjb51 * 310/1920+"px").css("height", hjb51 * 395/1080+"px");
+	     $(".zytxtTop").css("margin-top",hjb51 * 40 / 1080+"px");
+	     $(".zytxtTopTwo").css("margin-top",hjb51 * 95 / 1080+"px");
+	     $(".zycheck").css("top", hjb51 * 63 / 1080+"px").css("left",wjb51 * 820/1920+"px").css("width", wjb51 * 525/1920+"px").css("height", hjb51 * 100/1080+"px");
+	     $("#dwzh").css("margin-top",hjb51 * 20 / 1080+"px").css("margin-left",wjb51 * 30 / 1920+"px");
+	     $(".isbom").css("top", hjb51 * 365 / 1080+"px").css("left",wjb51 * 820/1920+"px").css("width", wjb51 * 170/1920+"px").css("height", hjb51 * 25/1080+"px");
+	     $(".zyRemarks").css("top", hjb51 * 535 / 1080+"px").css("left",wjb51 * 316/1920+"px").css("width", wjb51 * 765/1920+"px").css("height", hjb51 * 180/1080+"px");
+	     $(".zysave").css("top", hjb51 * 580 / 1080+"px").css("left",wjb51 * 1290/1920+"px").css("width", wjb51 * 220/1920+"px").css("height", hjb51 * 70/1080+"px");
+	     
+	     $("#kc").height($(".guide_kuangDiv").height()-$(".guide_ljbh_head").height()-$(".headDiv2").height());
+	     $(".kccheck").css("top", hjb51 * 30 / 1080+"px").css("left","0px").css("width", "100%").css("height", hjb51 * 65/1080+"px");
+	     $(".kccheckTop").css("margin-top", hjb51 * 20 / 1080+"px");
+	     $(".kccheckTop").css("margin-left", wjb51 * 180 / 1920+"px");
+	     $(".kcpccc").css("top", hjb51 * 130 / 1080+"px").css("left",wjb51 * 135/1920+"px").css("width",  wjb51 * 430/1920+"px").css("height", hjb51 * 285/1080+"px");
+	     $(".kcpcccTop").css("margin-top",hjb51 * 60 / 1080+"px");
+	     $(".kctxtTop").css("margin-top",hjb51 * 25 / 1080+"px");
+	     $(".kcpckz").css("top", hjb51 * 130 / 1080+"px").css("left",wjb51 * 640/1920+"px").css("width",  wjb51 * 430/1920+"px").css("height", hjb51 * 285/1080+"px");
+	     $(".kcxlkz").css("top", hjb51 * 130 / 1080+"px").css("left",wjb51 * 1145/1920+"px").css("width",  wjb51 * 430/1920+"px").css("height", hjb51 * 285/1080+"px");
+	     $(".kckwkz").css("top", hjb51 * 450 / 1080+"px").css("left","0px").css("width", "100%").css("height", hjb51 * 85/1080+"px");
+	     $(".kckwxz").css("margin-left",wjb51 * 200 / 1920+"px").css("display","inline-block").css("white-space","nowrap").css("margin-top",hjb51 * 20 / 1080+"px");
+	     
+	     $(".kcsave").css("top", hjb51 * 600 / 1080+"px").css("left",wjb51 * 740/1920+"px").css("width", wjb51 * 220/1920+"px").css("height", hjb51 * 70/1080+"px");
+	     
+	     $("#cg").height($(".guide_kuangDiv").height()-$(".guide_ljbh_head").height()-$(".headDiv2").height());
+	     $(".cgcontent").css("top", hjb51 * 100 / 1080+"px").css("left",wjb51 * 640/1920+"px").css("width", wjb51 * 400/1920+"px").css("height", hjb51 * 70/1080+"px");
+	     
+	     $("#jh").height($(".guide_kuangDiv").height()-$(".guide_ljbh_head").height()-$(".headDiv2").height());
+	     $(".jhcheck").css("top", hjb51 * 30 / 1080+"px").css("left","0px").css("width", "100%").css("height", hjb51 * 80/1080+"px");
+	     $(".jhheadleftOne").css("display","inline-block").css("white-space","nowrap").css("margin-top",hjb51 * 20 / 1080+"px");
+	     $(".jhheadleft").css("margin-left",wjb51 * 165 / 1920+"px").css("display","inline-block").css("white-space","nowrap").css("margin-top",hjb51 * 20 / 1080+"px");
+	     
+	     $(".jhkcjh").css("top", hjb51 * 140 / 1080+"px").css("left",wjb51 * 90/1920+"px").css("width", wjb51 * 425/1920+"px").css("height", hjb51 * 200/1080+"px");
+	     $(".jhRowTop").css("margin-top",hjb51 * 15 / 1080+"px");
+	     $(".jhdhl").css("top", hjb51 * 140 / 1080+"px").css("left",wjb51 * 630/1920+"px").css("width", wjb51 * 425/1920+"px").css("height", hjb51 * 200/1080+"px");
+	     $(".jhcb").css("top", hjb51 * 140 / 1080+"px").css("left",wjb51 * 1165/1920+"px").css("width", wjb51 * 425/1920+"px").css("height", hjb51 * 200/1080+"px");
+	     $(".jhaqkc").css("top", hjb51 * 360 / 1080+"px").css("left",wjb51 * 1165/1920+"px").css("width", wjb51 * 425/1920+"px").css("height", hjb51 * 200/1080+"px");
+	     $(".jhly").css("top", hjb51 * 360 / 1080+"px").css("left",wjb51 * 90/1920+"px").css("width", wjb51 * 965/1920+"px").css("height", hjb51 * 200/1080+"px");
+	     $(".jhsave").css("top", hjb51 * 600 / 1080+"px").css("left",wjb51 * 740/1920+"px").css("width", wjb51 * 220/1920+"px").css("height", hjb51 * 70/1080+"px");
+	    
+	     
+	//]]>
+	</script>
+</ui:composition>

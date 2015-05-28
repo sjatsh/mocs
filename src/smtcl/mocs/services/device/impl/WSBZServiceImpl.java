@@ -21,6 +21,7 @@ import org.dreamwork.persistence.Parameter;
 
 
 import smtcl.mocs.beans.device.EquWorkEventProcess;
+import smtcl.mocs.beans.erp.WisTransferThread;
 import smtcl.mocs.common.device.LogHelper;
 import smtcl.mocs.pojos.device.TEquipmentInfo;
 import smtcl.mocs.pojos.device.TMachineDiagnoseio;
@@ -160,7 +161,7 @@ public class WSBZServiceImpl extends GenericServiceSpringImpl<TNodes, String> im
 					tu.setCfeed(StringUtils.isEmpty3(cfeed));
 					tu.setUfeed(StringUtils.isEmpty3(ufeed));
 					tu.setVfeed(StringUtils.isEmpty3(vfeed));
-					tu.setWfeed(StringUtils.isEmpty3(wfeed));;
+					tu.setWfeed(StringUtils.isEmpty3(wfeed));
 					commonService.save(tu);
 			}
 			
@@ -427,58 +428,7 @@ public class WSBZServiceImpl extends GenericServiceSpringImpl<TNodes, String> im
 	 * @param theoryCycletime 秒
 	 * @return boolean
 	 */
-	
-//	public boolean InsertWorkEvents(String equSerialNo, String cuttingeventId,String starttime, String finishtime,
-//			String cuttingTask,String ncprogramm,String partName,String theoryWorktime,String cuttingTime,
-//			String toolchangeTime,String workTime,String workResult,String theoryCycletime){
-//
-//		String params="equSerialNo="+equSerialNo+"-----&cuttingeventId="+cuttingeventId+"-----&starttime="+starttime+"-----&finishtime="+cuttingTask+"-----&cuttingTask=cuttingTask";
-//		
-//		LogHelper.log("InsertWorkEvents:", params);
-//		String partNo="";
-//		if(null!=cuttingTask&&!"".equals(cuttingTask)){
-//			String[] cuttingTaskArray=cuttingTask.split(",");
-//			cuttingTask=cuttingTaskArray[0];
-//			partNo=cuttingTaskArray[1];
-//		}
-//		
-//		boolean bool=true;
-//		TUserEquWorkEvents tu=new TUserEquWorkEvents();
-//			tu.setEquSerialNo(equSerialNo);
-//			tu.setCuttingeventId(cuttingeventId);
-//			tu.setStarttime(StringUtils.convertDate(starttime, "yyyy-MM-dd HH:mm:ss"));
-//			tu.setFinishtime(StringUtils.convertDate(finishtime, "yyyy-MM-dd HH:mm:ss"));
-//			tu.setCuttingTask(cuttingTask);
-//			tu.setNcprogramm(ncprogramm);
-//			tu.setPartNo(partName); //yutao修改
-//			tu.setTheoryWorktime(Long.parseLong(theoryWorktime));
-//			tu.setCuttingTime(Long.parseLong(cuttingTime));
-//			tu.setToolchangeTime(Long.parseLong(toolchangeTime));
-//			tu.setWorkTime(Long.parseLong(workTime));
-//			tu.setWorkResult(workResult);
-//			tu.setTheoryCycletime(Long.parseLong(theoryCycletime));
-//			try {
-//				commonService.save(tu);
-//				bool=true;
-//				/**
-//				 * 开启子线程处理  yutao  start
-//				 */				
-//				// 构造一个线程池  
-//				
-//				ThreadPoolExecutor threadPool = new ThreadPoolExecutor(10, 30, 10, TimeUnit.SECONDS,  
-//				new ArrayBlockingQueue<Runnable>(20), new ThreadPoolExecutor.DiscardOldestPolicy() );
-//				threadPool.execute(new EquWorkEventProcess(tu.getId(),partNo)); 
-////				EquWorkEventProcess equWorkEventProcess=new EquWorkEventProcess(tu.getId());
-////				Thread childThread = new Thread(equWorkEventProcess);
-////				childThread.start();
-//				/**********end*******************/
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				bool=false;
-//			}
-//		return bool;
-//	}
-	
+    @Override
 	public boolean InsertWorkEvents(String equSerialNo, String cuttingeventId,String starttime, String finishtime,
 			String cuttingTask,String ncprogramm,String partName,String theoryWorktime,String cuttingTime,
 			String toolchangeTime,String workTime,String workResult,String theoryCycletime){
@@ -502,6 +452,7 @@ public class WSBZServiceImpl extends GenericServiceSpringImpl<TNodes, String> im
 			tu.setWorkTime(Long.parseLong(workTime));
 			tu.setWorkResult(workResult);
 			tu.setTheoryCycletime(Long.parseLong(theoryCycletime));
+			tu.setFlag(0L);//是否导入erp标记位，1：已导入，0：未导入
 			//查询机床
 			String mode="";
 			String hql=" from TEquipmentInfo t1 where t1.equSerialNo='"+equSerialNo+"'";
@@ -532,9 +483,18 @@ public class WSBZServiceImpl extends GenericServiceSpringImpl<TNodes, String> im
 				 * 开启子线程处理  yutao  start
 				 */				
 				// 构造一个线程池  
-				if("1".equals(mode)){  //自动模式统计工单计数
-				threadPool.execute(new EquWorkEventProcess(tu.getId(),"")); 
+			if ("1".equals(mode)) { // 自动模式统计工单计数
+				threadPool.execute(new EquWorkEventProcess(tu.getId(), ""));
+				
+				
+				String temppath = this.getClass().getClassLoader().getResource("").getPath();
+				temppath = new File(new File(temppath).getParent()).getParent();
+				File file1 = new File(temppath + Constants.configPath);
+				if (file1.exists()) {
+					threadPool.execute(new WisTransferThread(tu.getId()));
 				}
+
+			}
 //				EquWorkEventProcess equWorkEventProcess=new EquWorkEventProcess(tu.getId());
 //				Thread childThread = new Thread(equWorkEventProcess);
 //				childThread.start();

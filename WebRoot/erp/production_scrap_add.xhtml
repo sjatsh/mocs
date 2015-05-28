@@ -1,0 +1,634 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	>
+<h:head>
+<style type="text/css">
+	* {
+		padding: 0px;
+		margin: 0px;
+		font-family: "微软雅黑";
+		color: #595959;
+	}
+	.inputText{
+		width:95%;
+		height:80%;
+		line_height:80%;
+		font-size:90% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		margin-left: 5%;
+	}
+	.baofeiInputText{
+		width:20%;
+		height:90%;
+		line_height:90%;
+		font-size:85% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		margin-left: 2%;
+	}
+	.wuliaoInputText{
+		width:90%;
+		height:90%;
+		line_height:90%;
+		font-size:90% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		margin-left: 2%;
+	}
+	.inputTextChang{
+		width:90%;
+		height:65%;
+		line_height:65%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		margin-left: 2%;
+	}
+	.inputTextNoChange{
+		width:95%;
+		height:80%;
+		line_height:80%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		background-color: #F0F0F0 !important;
+		background-image: url("") !important;
+		margin-left: 5%;
+	}
+	.ui-treenode-leaf-icon {
+	    display: inline-block;
+	    height: 16px;
+	    width: 0px !important;
+	}
+	.ui-tree {
+		width: 100%;
+	}
+	.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight
+	{
+	    background: #cccccc !important;
+	}
+</style>
+</h:head>		
+<h:body>
+<h:form id="myform">
+<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+<div style="width: 100%;height: 100%;font-size: 30px;" align="center">
+	<table style="width: 80%;height: 100%;font-size: 60%;" border="0" cellpadding="0" cellspacing="0" >
+		<tr>
+			<td style="width:100%;height: 2%;" colspan="6">
+				<h:outputText value="报废单号"  /><h:outputText value="*" style="color:red;"></h:outputText>
+				<h:outputText value="BF_" style="margin-left:2%;background-color: #F0F0F0;"></h:outputText>
+				<h:inputText  value="#{productionScrapAddBean.tps.tzdCode}" styleClass="baofeiInputText" id="tzdCode" style="margin-left:0px;"/>
+				<h:outputText value="报废账户"  style="margin-left:5%;"/>
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.scrapUserName}" styleClass="baofeiInputText">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.scrapUserList}" var="user" itemLabel="#{user.segment1}" 
+						itemValue="#{user.dispositionId}"></f:selectItems>
+				</h:selectOneMenu>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="6" align="center" style="height:10%"> 
+				<h:outputText value="生产报废管理" style="font-size:30px;font-weight: bold;"/>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:16%;height: 5%;" align="right">
+				<h:outputText value="物料名称"  />
+			</td>
+			<td style="width:33%;" colspan="2">
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.selectedPartId}" styleClass="wuliaoInputText" id="wlname">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.partList}" var="user" itemLabel="#{user.name}" 
+						itemValue="#{user.id}"></f:selectItems>
+					<f:ajax event="change" listener="#{productionScrapAddBean.selectPartChange()}" execute="@this" 
+					render=":myform:pclist :myform:itemCode :myform:jobtest :myform:entityName :myform:toOperationNum 
+					:myform:zrOperationNum :myform:wisProcessTime :myform:gsxx :myform:isCurrentProcess :myform:isConcession"></f:ajax>
+				</h:selectOneMenu>
+			</td>
+			<td style="width:17%;" align="right">
+				<h:outputText value="物料编码"  /><h:outputText value="*" style="color:red;" />
+			</td>
+			<td style="width:34%;" colspan="2">
+				<h:inputText  value="#{productionScrapAddBean.tps.itemCode}" styleClass="inputTextNoChange" readonly="true" id="itemCode"/>
+				
+			</td>
+		</tr>
+		<tr>
+			<td style="width:16%;height: 5%;" align="right">
+				<h:outputText value="批次列表"  />
+			</td>
+			<td style="width:17%;">
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.jobPlanId}" styleClass="inputText" id="pclist">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.jobPlanList}" var="user" itemLabel="#{user.name}" 
+						itemValue="#{user.id}"></f:selectItems>
+					<f:ajax event="change" listener="#{productionScrapAddBean.selectJobPlanChange}" execute="@this" 
+					render=":myform:jobtree"></f:ajax>
+				</h:selectOneMenu>
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="工单编号"  /><h:outputText value="*" style="color:red;"></h:outputText>
+			</td>
+			<td style="width:51%;" colspan="3">
+				<div style="position: relative; width: 100%;">
+					<h:inputText value="#{productionScrapAddBean.jobdispatchNo}" id="jobtest" styleClass="inputTextChang"
+						onfocus="onfocusJobList()" onkeyup="onkeyupJObList()" autocomplete="off"></h:inputText>
+					<div style="width:89%;height:200px;position: absolute;margin-left: 2%;display: none;font-size:100%" id="joblist">
+						<p:tree value="#{productionScrapAddBean.jobroot}" var="node" id="jobtree" style="font-size:70%;widht:100%;"
+							selectionMode="single" selection="#{productionScrapAddBean.jobselectroot}">
+							<p:ajax event="select" listener="#{productionScrapAddBean.OnTreeNodeSelect}"
+								update=":myform:entityName :myform:itemCode :myform:toOperationNum :myform:jobtest 
+								:myform:zrOperationNum :myform:wisProcessTime :myform:wlname"  
+								oncomplete="treeOnclick()"/>
+					        <p:treeNode>
+					            <h:outputText value="#{node.no}" styleClass="jobtreeclass"/>
+					        </p:treeNode>
+					    </p:tree>	  
+					</div>
+					<h:commandButton value=""  id="jobbtn" style="display:none;">
+							<a4j:ajax listener="#{productionScrapAddBean.onkeyupJobList}"
+								 event="click" execute="jobtest" 
+								 render=":myform:jobtree" />
+					</h:commandButton>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:16%;height: 5%;" align="right">
+				<h:outputText value="ERP任务号"  /><h:outputText value="*" style="color:red;" />
+			</td>
+			<td style="width:17%;">
+				<h:inputText value="#{productionScrapAddBean.tps.entityName}" id="entityName" styleClass="inputTextNoChange" readonly="true" />
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="工段"  /><h:outputText value="*" style="color:red;"></h:outputText>
+			</td>
+			<td style="width:17%;">
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.tps.gd}" styleClass="inputText" id="gongduan">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.sectionList}" var="section" itemLabel="#{section.gd}" 
+						itemValue="#{section.gd}"></f:selectItems>
+				</h:selectOneMenu>
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="至工序号"  /><h:outputText value="*" style="color:red;" />
+			</td>
+			<td style="width:18%;">
+				<h:inputText  value="#{productionScrapAddBean.tps.toOperationNum}" styleClass="inputTextNoChange" readonly="true" 
+					id="toOperationNum"/>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:16%;height: 5%;" align="right">
+				<h:outputText value="工废数量"  />
+			</td>
+			<td style="width:17%;">
+				<h:inputText  value="#{productionScrapAddBean.processScrapNum}" styleClass="inputText" id="processScrapNum" 
+					onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" >
+					<a4j:ajax event="change" listener="#{productionScrapAddBean.GFLFSUM}" execute="processScrapNum materialScrapNum" 
+						render=":myform:scrapSum"></a4j:ajax>
+				</h:inputText>
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="料废数量"  />
+			</td>
+			<td style="width:17%;">
+				<h:inputText  value="#{productionScrapAddBean.materialScrapNum}" styleClass="inputText" id="materialScrapNum"
+					onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+					<a4j:ajax event="change" listener="#{productionScrapAddBean.GFLFSUM}" execute="processScrapNum materialScrapNum" 
+						render=":myform:scrapSum"></a4j:ajax>
+				</h:inputText>
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="报废总数"  />
+			</td>
+			<td style="width:18%;">
+				<h:inputText  value="#{productionScrapAddBean.scrapSum}" styleClass="inputTextNoChange" readonly="true" id="scrapSum" />
+			</td>
+		</tr>
+		<tr>
+			<td style="width:16%;height: 5%;" align="right">
+				<h:outputText value="责任工序号"  /><h:outputText value="*" style="color:red;" />
+			</td>
+			<td style="width:17%;" >
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.tps.zrOperationNum}" styleClass="inputText" 
+					id="zrOperationNum">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.processNoList}" var="process" itemLabel="#{process.processOrder}"
+						itemValue="#{process.processOrder}"></f:selectItems>
+				</h:selectOneMenu>
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="责任人员"  />
+			</td>
+			<td style="width:17%;" >
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.tps.responser}" styleClass="inputText">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.userList}" var="user" itemLabel="#{user.name}" 
+						itemValue="#{user.userId}"></f:selectItems>
+				</h:selectOneMenu>
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="报废原因"  />
+			</td>
+			<td style="width:18%;">
+				<h:inputText  value="#{productionScrapAddBean.tps.reson}" styleClass="inputText" />
+			</td>
+		</tr>
+		<tr>
+			<td style="width:16%;height: 5%;" align="right">
+				<h:outputText value="检验日期"  />
+			</td>
+			<td style="width:17%;">
+				<rich:calendar popup="true" locale="en" value="#{productionScrapAddBean.checkTime}" datePattern="yyyy-MM-dd"
+					cellWidth="10px" cellHeight="20px"  inputClass="inputText"/> 
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="检验人员"  />
+			</td>
+			<td style="width:17%;">
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.tps.checkOperation}" styleClass="inputText">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.checkList}" var="user" itemLabel="#{user.check}" 
+						itemValue="#{user.check}"></f:selectItems>
+				</h:selectOneMenu>
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="责任厂家"  />
+			</td>
+			<td style="width:18%;">
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.tps.vendor}" styleClass="inputText" 
+					id="vendor">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.zrcjlist}" var="zrcj" itemLabel="#{zrcj.vendorName}" 
+						itemValue="#{zrcj.vendorName}"></f:selectItems>
+				</h:selectOneMenu>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:16%;height: 5%;" align="right">
+				<h:outputText value="开票日期"  />
+			</td>
+			<td style="width:17%;">
+				<rich:calendar popup="true" locale="en" value="#{productionScrapAddBean.tps.invoiceDat}" datePattern="yyyy-MM-dd"
+					cellWidth="10px" cellHeight="20px"  inputClass="inputText"/> 
+			</td>
+			<td style="width:16%;" align="right">
+				<h:outputText value="开票人员"  />
+			</td>
+			<td style="width:17%;">
+				<h:selectOneMenu  style="color:#595959;" value="#{productionScrapAddBean.tackTike}" styleClass="inputText">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{productionScrapAddBean.userList}" var="user" itemLabel="#{user.name}" 
+						itemValue="#{user.userId}"></f:selectItems>
+				</h:selectOneMenu>
+			</td>
+			<td style="width:16%;">
+				
+			</td>
+			<td style="width:18%;">
+					
+			</td>
+		</tr>
+		<tr>
+			<td style="width:100%;height: 37%;" colspan="6">
+				<div style="width: 100%;height: 100%;">
+					<div style="width: 100%;height: 10%;font-weight: bold;background-color: ">
+						 <h:outputText  value="工序工时信息列表"/>
+						 
+						<p:commandButton value="计算工时" style="border:0;background-color: #00A040;background-image: url('');color:white;
+							text-shadow:none;right:10%;position: absolute;font-size:70%;" action="#{productionScrapAddBean.jsgsInfo}" 
+							update=":myform:isCurrentProcess :myform:gsxx :myform:message" onclick="return yanzheng3()"></p:commandButton>
+					</div>
+					<div style="width: 100%;height: 90%;border: 1px solid black;">
+						<p:dataTable id="wisProcessTime" var="process" value="#{productionScrapAddBean.processList}" 
+						 	selection="#{productionScrapAddBean.selectProcess}" style="width:100%;" rowKey="#{process.itemCode}">
+					        <p:column headerText="工序号">
+					            <h:outputText value="#{process.processOrder}" />
+					        </p:column>
+					        <p:column headerText="工序名称">
+					            <h:outputText value="#{process.processName}" />
+					        </p:column>
+					        <p:column headerText="工时">
+					            <h:outputText value="#{process.processingTime}" />
+					        </p:column>
+					         <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+				     	</p:dataTable>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:100%;height: 3%;" colspan="6">
+				<h:panelGroup id="gsxx" style="width:100%;color: red;">
+					<h:outputText value="当序工时:" />
+					<h:outputText value="#{productionScrapAddBean.dxgs}" />
+					<h:outputText value="单件工时:" style="margin-left:5%;color: red;" />
+					<h:outputText value="#{productionScrapAddBean.djgs}" />
+					<h:inputHidden value="#{productionScrapAddBean.djgs}" id="djgsValue"></h:inputHidden>
+					<h:outputText value="合计工时:" style="margin-left:5%;color: red;" />
+					<h:outputText value="#{productionScrapAddBean.hjgs}" />
+					<h:outputText value="累计工时:" style="margin-left:5%;color: red;" />
+					<h:outputText value="#{productionScrapAddBean.ljgs}" />
+				</h:panelGroup>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:100%;height: 3%;" colspan="6">
+				 <h:selectManyCheckbox value="#{productionScrapAddBean.isCurrentProcess}" style="font-size:100%;float: left;" 
+				 	id="isCurrentProcess">
+				 	<f:selectItem itemLabel="是否至工序已加工" itemValue="是"></f:selectItem>
+				 	<f:ajax listener="#{productionScrapAddBean.SelectCurrentProcess}" event="click" execute="isCurrentProcess wisProcessTime" 
+				 		render=":myform:wisProcessTime"  />
+				 </h:selectManyCheckbox>
+				 <div style="height: 100%;width: 30px;float: left;"></div>
+				 <h:selectManyCheckbox value="#{productionScrapAddBean.isConcession}" style="font-size:100%;" id="isConcession">
+					 	<f:selectItem itemLabel="是否让步接受" itemValue="是"></f:selectItem>
+				 </h:selectManyCheckbox>
+				 
+				
+			</td>
+		</tr>
+		<tr>
+			<td style="width:100%;height: 10%;" colspan="6" align="center">
+				 <ui:remove>
+				 <p:commandButton value="新增 " style="border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;"  action="#{productionScrapAddBean.saveData('1')}" update=":myform:mesTs" onclick="return yanzheng2();">
+				</p:commandButton>
+				</ui:remove>
+				
+				<p:commandButton id="addbtn"  value="新增" action="#{productionScrapAddBean.saveData('2')}" style="border:0;
+					background-color: #00A040;background-image: url('');color:white;text-shadow:none;" 
+					update=":myform:mesTs" onclick="return yanzheng2();" />
+
+				<p:commandButton  value="取消"  id="addcentertd3td5com2"
+					style="border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;margin-left:50px;" 
+						onclick="window.close();"/>	
+			</td>
+		</tr>	
+	</table>
+	
+
+	<h:panelGrid id="mesTs">
+		<h:inputHidden value="#{productionScrapAddBean.message}" id="message"></h:inputHidden>
+		<script type="text/javascript">
+		//<![CDATA[	
+		      var message=document.getElementById("myform:message").value;
+		      if(null!=message&&""!=message&&"正常保存"!=message&&"关闭工单"!=message){
+		    	  alert(message);
+		      }
+		//]]>	
+		</script>
+	</h:panelGrid>
+</div>
+<script type="text/javascript">
+//<![CDATA[	
+	setTimeout(function(){$("#maskw").fadeOut(500);},100);
+	//$(".ui-treenode-leaf-icon").remove();
+	function onkeyupJObList(){
+		document.getElementById("myform:jobbtn").click();
+		document.getElementById("joblist").style.display="block";
+	}
+	function onfocusJobList(){
+		document.getElementById("joblist").style.display="block";
+	}
+	function onblurJObList(){
+		document.getElementById("joblist").style.display="none";
+	}
+	document.getElementById("joblist").onmouseout=function(event){
+		var s =event.relatedTarget;
+    	if (!this.contains(s)) {
+    		this.style.display="none";
+    	}            
+	};
+	function treeOnclick(){
+		document.getElementById("joblist").style.display="none";
+	}
+	
+	function yanzheng(){
+		var tzdCode=document.getElementById("myform:tzdCode").value;
+		var jobtest=document.getElementById("myform:jobtest").value;
+		var entityName=document.getElementById("myform:entityName").value;
+		var itemCode=document.getElementById("myform:itemCode").value;
+		var toOperationNum=document.getElementById("myform:toOperationNum").value;
+		var zrOperationNum=document.getElementById("myform:zrOperationNum").value;
+		var processScrapNum=document.getElementById("myform:processScrapNum").value;
+		var materialScrapNum=document.getElementById("myform:materialScrapNum").value;
+		var vendor=document.getElementById("myform:vendor").value;
+		var djgsValue=document.getElementById("myform:djgsValue").value;
+		var gongduan=document.getElementById("myform:gongduan").value;
+		
+		
+		if(null==tzdCode||""==tzdCode){
+			alert("报废单号不能为空!");
+		}else if(null==jobtest||""==jobtest){
+			alert("工单编号不能为空!");
+		}
+		else if(null==entityName||""==entityName){
+			alert("ERP任务号不能为空!");
+		}
+		else if(null==itemCode||""==itemCode){
+			alert("物料编码不能为空!");
+		}
+		else if(null==toOperationNum||""==toOperationNum){
+			alert("至工序不能为空!");
+		}else if(null==gongduan||""==gongduan){
+			alert("工段不能为空!");
+		}
+		else if(null==processScrapNum||""==processScrapNum){
+			if(null==materialScrapNum||""==materialScrapNum){
+				alert("工废和料废至少填一个!");	
+			}else{
+				if(null==vendor||""==vendor){
+					alert("当有料废时,需指明责任产家!");	
+				}else{
+					if(null==djgsValue||""==djgsValue){
+						alert("请先计算工时!");
+					}else{
+						document.getElementById("myform:addbtn").click();	
+					}
+					
+				}
+			}
+		}
+		else if(null==materialScrapNum||""==materialScrapNum){
+			if(null==processScrapNum||""==processScrapNum){
+				alert("工废和料废至少填一个!");	
+			}else{
+				if(null==zrOperationNum||""==zrOperationNum){
+					alert("责任工序不能为空!");
+				}else{
+					if(null==djgsValue||""==djgsValue){
+						alert("请先计算工时!");
+					}else{
+						document.getElementById("myform:addbtn").click();	
+					}	
+				}
+				
+			}
+		}
+		else if(null!=materialScrapNum && ""!=materialScrapNum){
+			if(null==vendor||""==vendor){
+				alert("当有料废时,需指明责任产家!");	
+			}else{
+				if(null==djgsValue||""==djgsValue){
+					alert("请先计算工时!");
+				}else{
+					document.getElementById("myform:addbtn").click();	
+				}	
+			}
+		}
+		
+
+	}
+	
+	function yanzheng2(){
+		var tzdCode=document.getElementById("myform:tzdCode").value;
+		var jobtest=document.getElementById("myform:jobtest").value;
+		var entityName=document.getElementById("myform:entityName").value;
+		var itemCode=document.getElementById("myform:itemCode").value;
+		var toOperationNum=document.getElementById("myform:toOperationNum").value;
+		var zrOperationNum=document.getElementById("myform:zrOperationNum").value;
+		var processScrapNum=document.getElementById("myform:processScrapNum").value;
+		var materialScrapNum=document.getElementById("myform:materialScrapNum").value;
+		var vendor=document.getElementById("myform:vendor").value;
+		var djgsValue=document.getElementById("myform:djgsValue").value;
+		var gongduan=document.getElementById("myform:gongduan").value;
+		var scrapSum=document.getElementById("myform:scrapSum").value;
+		
+		var message=document.getElementById("myform:message").value;
+		if("关闭工单"==message){
+  		  if(confirm("该报废完成后将关闭该批次下的所有工单,请确认是否提交报废信息！")){
+  			  return true;
+  		  }else{
+  			  return false;
+  		  }
+  	  	}else if(null==tzdCode||""==tzdCode){
+			alert("报废单号不能为空!");
+			return false;
+		}else if(null==jobtest||""==jobtest){
+			alert("工单编号不能为空!");
+			return false;
+		}else if(null==entityName||""==entityName){
+			alert("ERP任务号不能为空!");
+			return false;
+		}else if(null==itemCode||""==itemCode){
+			alert("物料编码不能为空!");
+			return false;
+		}else if(null==toOperationNum||""==toOperationNum){
+			alert("至工序不能为空!");
+			return false;
+		}else if(null==gongduan||""==gongduan){
+			alert("工段不能为空!");
+			return false;
+		}else if(null==scrapSum||""==scrapSum){
+			alert("报废总数不能为空");
+			return false;
+		}else if(null!=materialScrapNum && ""!=materialScrapNum && (null==vendor||""==vendor)){
+			alert("当有料废时,需指明责任产家!");
+			return false;
+		}else if(null!=processScrapNum && ""!=processScrapNum && (null==zrOperationNum||""==zrOperationNum)){
+			alert("责任工序不能为空!");
+			return false;
+		}else if(null==djgsValue||""==djgsValue){
+			alert("请先计算工时!");
+			return false;
+		}else{
+			return true;
+			//document.getElementById("myform:addbtn").click();	
+		}	
+	}
+	
+	function yanzheng3(){
+		var tzdCode=document.getElementById("myform:tzdCode").value;
+		var jobtest=document.getElementById("myform:jobtest").value;
+		var entityName=document.getElementById("myform:entityName").value;
+		var itemCode=document.getElementById("myform:itemCode").value;
+		var toOperationNum=document.getElementById("myform:toOperationNum").value;
+		var zrOperationNum=document.getElementById("myform:zrOperationNum").value;
+		var processScrapNum=document.getElementById("myform:processScrapNum").value;
+		var materialScrapNum=document.getElementById("myform:materialScrapNum").value;
+		var vendor=document.getElementById("myform:vendor").value;
+		var djgsValue=document.getElementById("myform:djgsValue").value;
+		var gongduan=document.getElementById("myform:gongduan").value;
+		var scrapSum=document.getElementById("myform:scrapSum").value;
+		
+		var message=document.getElementById("myform:message").value;
+		if("关闭工单"==message){
+  		  if(confirm("该报废完成后将关闭该批次下的所有工单,请确认是否提交报废信息！")){
+  			  return true;
+  		  }else{
+  			  return false;
+  		  }
+  	  	}else if(null==tzdCode||""==tzdCode){
+			alert("报废单号不能为空!");
+			return false;
+		}else if(null==jobtest||""==jobtest){
+			alert("工单编号不能为空!");
+			return false;
+		}else if(null==entityName||""==entityName){
+			alert("ERP任务号不能为空!");
+			return false;
+		}else if(null==itemCode||""==itemCode){
+			alert("物料编码不能为空!");
+			return false;
+		}else if(null==toOperationNum||""==toOperationNum){
+			alert("至工序不能为空!");
+			return false;
+		}else if(null==gongduan||""==gongduan){
+			alert("工段不能为空!");
+			return false;
+		}else if(null==scrapSum||""==scrapSum){
+			alert("报废总数不能为空");
+			return false;
+		}else if(null!=materialScrapNum && ""!=materialScrapNum && (null==vendor||""==vendor)){
+			alert("当有料废时,需指明责任产家!");
+			return false;
+		}else if(null!=processScrapNum && ""!=processScrapNum && (null==zrOperationNum||""==zrOperationNum)){
+			alert("责任工序不能为空!");
+			return false;
+		}else{
+			return true;
+			//document.getElementById("myform:addbtn").click();	
+		}	
+	}
+	
+	function yanzgd(){
+		var jobtest=document.getElementById("myform:toOperationNum").value;
+		var scrapSum=document.getElementById("myform:scrapSum").value;
+		if(null==toOperationNum||""==toOperationNum){
+			alert("至工序不能为空!");
+		}else if(null==scrapSum||""==scrapSum){
+			alert("报废总数不能为空!");
+		}else{
+			document.getElementById("myform:xsgsxx").click();
+		}
+	}
+	function jsWorkTime(){
+		var jobtest=document.getElementById("myform:jobtest").value;
+		var scrapSum=document.getElementById("myform:scrapSum").value;
+		if(null==jobtest||""==jobtest){
+			alert("工单编号不能为空");
+			return false;
+		}else if(null==scrapSum||""==scrapSum){
+			alert("报废总数不能为空");
+			return false;
+		}else{
+			return true;	
+		}
+		
+	}
+	//]]>	
+</script>
+</h:form>
+</h:body>
+</ui:composition>

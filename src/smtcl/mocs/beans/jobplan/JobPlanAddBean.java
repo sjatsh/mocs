@@ -19,871 +19,651 @@ import javax.servlet.http.HttpSession;
 import org.dreamwork.persistence.ServiceFactory;
 import org.primefaces.event.RowEditEvent;
 
-import smtcl.mocs.pojos.device.TUserProdctionPlan;
 import smtcl.mocs.pojos.job.TJobplanInfo;
-import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.services.device.IOrganizationService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 
 /**
- * 
- * ×÷Òµ¼Æ»®Ìí¼ÓBean
- * @×÷Õß£ºyyh
- * @´´½¨Ê±¼ä£º2013-7-2 ÏÂÎç13:05:16
- * @ĞŞ¸ÄÕß£ºsongkaiang
- * @ĞŞ¸ÄÈÕÆÚ£º
- * @ĞŞ¸ÄËµÃ÷£º
+ *
+ * ä½œä¸šè®¡åˆ’æ·»åŠ Bean
+ * @ä½œè€…ï¼šyyh
+ * @åˆ›å»ºæ—¶é—´ï¼š2013-7-2 ä¸‹åˆ13:05:16
+ * @ä¿®æ”¹è€…ï¼šsongkaiang
+ * @ä¿®æ”¹æ—¥æœŸï¼š
+ * @ä¿®æ”¹è¯´æ˜ï¼š
  * @version V1.0
  */
 @ManagedBean(name="JobPlanAdd")
 @ViewScoped
 public class JobPlanAddBean implements Serializable {
-	
-	/**
-	 * ×÷Òµ¼Æ»®½Ó¿ÚÊµÀı
-	 */
-	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
-	/**
-	 * È¨ÏŞ½Ó¿ÚÊµÀı
-	 */
-	private IOrganizationService organizationService=(IOrganizationService)ServiceFactory.getBean("organizationService");
+
     /**
-     * ÓÃÓÚÒ³Ãæ´«Öµ
+     * ä½œä¸šè®¡åˆ’æ¥å£å®ä¾‹
      */
-	private Map<String,Object> jobPlanMap = new HashMap<String,Object>();
-	/**
-	 * Éú²ú¼Æ»®¼¯
-	 */
-	private Map<String,Object> producePlanMap = new HashMap<String,Object>(); //±äÁ¿Ê××ÖÄ¸Ğ¡Ğ´
-	/**
-	 * Áã¼şÃû³Æ¼¯
-	 */
-	private List<Map<String,Object>> partMap = new ArrayList<Map<String,Object>>();
-	/**
-	 * ÓÅÏÈ¼¶
-	 */
-	private Map<String,Object> priorityMap = new HashMap<String,Object>();
-	/**
-	 * ×÷Òµ¼Æ»®ID
-	 */
-	private String id;
-	/**
-	 * ×´Ì¬
-	 */
-	private String status="ĞÂ½¨";
-	/**
-	 * ´ÓÊôÉú²ú¼Æ»®ID
-	 */
-	private String uplanId;
-	/**
-	 * ×÷Òµ¼Æ»®Ãû³Æ
-	 */
-	private String name;
-	/**
-	 * ×÷Òµ¼Æ»®±àºÅ
-	 */
-	private String no;
-	/**
-	 * ¼Æ»®¿ªÊ¼Ê±¼ä
-	 */
-	private Date planStarttime;
-	/**
-	 * ¼Æ»®½áÊøÊ±¼ä
-	 */
-	private Date planEndtime;
-	/**
-	 * ¼Æ»®ÊıÁ¿
-	 */
-	private String planNum;
-		
-	/**
-	 * Áã¼ş±àºÅID
-	 */
-	private String partTypeId;
-	/**
-	 * Áã¼ş±àºÅ
-	 */
-	private String partTypeNo;
-	/**
-	 * Áã¼şÃû³Æ
-	 */
-	private String partTypeName;
-	/**
-	 * Áã¼şÍ¼Ö½ºÅ
-	 */
-	private String partTypeDrawingno;
-	/**
-	 * Áã¼ş°æ±¾ºÅ
-	 */
-	private String partTypeVersion;
-	/**
-	 * Éú²ú¼Æ»®±àºÅ
-	 */
-	private String productPlanNo;
-	/**
-	 * Éú²ú¼Æ»®ÀàĞÍ
-	 */
-	private String productPlanType;
-	/**
-	 * Éú²ú¼Æ»®ÊıÁ¿
-	 */
-	private String productPlanNum;
-	/**
-	 * Éú²ú¼Æ»®×´Ì¬
-	 */
-	private String productPlanStatus;
-	/**
-	 * Éú²ú¼Æ»®Ãû³Æ
-	 */
-	private String productPlanName;
-	/**
-	 * ÓÅÏÈ¼¶
-	 */
-	private String priority;
-	/**
-	 * Ò³ÃæÖµÇå¿Õ
-	 */
-	private String valueToNul;	
-	/**
-	 * A3--Éú²ú¼Æ»®±àºÅ
-	 */
-	private String proPlanNo;
-	/**
-	 * ½»»õÈÕÆÚ
-	 */
-	private Date submitTime;
-	/**
-	 * ¼Æ»®ÀàĞÍ
-	 */
-	private String planType;
-	/**
-	 * ¸¸×÷Òµ¼Æ»®
-	 */
-	private List<TJobplanInfo> pJobPlan; 
-	/**
-	 * ¸¸×÷Òµ¼Æ»®id
-	 */
-	private String pJobPlanId;
-	
-	private String isSuccess;
-	
-	private String allocatedNum;//ÒÑ·ÖÅäÈÎÎñÊıÁ¿
-	private List<Map<String,Object>> addTask=new ArrayList<Map<String,Object>>();//·ÖÅäÈÎÎñÁÙÊ±´æ´¢Êı¾İ
-	private List<Map<String,Object>> realaddTask=new ArrayList<Map<String,Object>>();//·ÖÅäÈÎÎñÁÙÊ±´æ´¢Êı¾İ
-	private String addTaskNo;//Ìí¼ÓÈÎÎñ±àºÅ
-	private String addTaskNum;//Ìí¼ÓÈÎÎñÊıÁ¿
-	private boolean addbool=false;//ÊÇ·ñÏÔÊ¾Ìí¼Ó°´Å¥
-	/**
-	 * ¹¹Ôì
-	 */
-	public JobPlanAddBean(){
-		//»ñÈ¡½ÚµãID
-		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		String nodeid = (String)session.getAttribute("nodeid");
-		List<Map<String,Object>> lst = jobPlanService.getPlanAndForList(nodeid);//Éú²ú¼Æ»®ÏÂÀ­ÁĞ±í
-		for(Map<String,Object> map : lst){
-			if(map.get("cid")!=null && !"".equals(map.get("cid"))){
-			    producePlanMap.put((String)map.get("uplanName"),map.get("cid").toString());
-			}
-		}	
-		partMap = jobPlanService.getPartAndForList(nodeid);	//Áã¼şÏÂÀ­ÀïÚÀ°ü
-		//Áã¼şÀàĞÍID
-		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		if(request.getParameter("addpNo")!=null && !"".equals(request.getParameter("addpNo"))  && !request.getParameter("addpNo").equals("undefined")){
-			partTypeId = request.getParameter("addpNo").trim();
-			
-			List<Map<String,Object>> lstpart =jobPlanService.getPartTypeByIdFor(partTypeId);
-	    	if(lstpart.size()>0){
-	    		Map<String,Object>  map = lstpart.get(0); 		
-			if(map.get("bno")!=null){
-			partTypeNo = map.get("bno").toString();
-			}
-			if(map.get("bname")!=null){
-			partTypeName = map.get("bname").toString();
-			}
-			if(map.get("drawingno")!=null){
-			partTypeDrawingno = map.get("drawingno").toString();
-			}
-			if(map.get("version")!=null){
-			partTypeVersion = map.get("version").toString();
-			}
-	    	}
-	    	status="ĞÂ½¨";
+    private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
+    /**
+     * æƒé™æ¥å£å®ä¾‹
+     */
+    private IOrganizationService organizationService=(IOrganizationService)ServiceFactory.getBean("organizationService");
+    /**
+     * ç”Ÿäº§è®¡åˆ’é›†
+     */
+    protected Map<String,Object> producePlanMap; //å˜é‡é¦–å­—æ¯å°å†™
+    /**
+     * é›¶ä»¶åç§°é›†
+     */
+    private List<Map<String,Object>> partMap = new ArrayList<Map<String,Object>>();
+    /**
+     * ä½œä¸šè®¡åˆ’ID
+     */
+    private String id;
+    /**
+     * çŠ¶æ€
+     */
+    private String status="æ–°å»º";
+    /**
+     * ä»å±ç”Ÿäº§è®¡åˆ’ID
+     */
+    private String uplanId;
+    /**
+     * ä½œä¸šè®¡åˆ’åç§°
+     */
+    private String name;
+    /**
+     * ä½œä¸šè®¡åˆ’ç¼–å·
+     */
+    private String no;
+    /**
+     * è®¡åˆ’å¼€å§‹æ—¶é—´
+     */
+    private Date planStarttime;
+    /**
+     * è®¡åˆ’ç»“æŸæ—¶é—´
+     */
+    private Date planEndtime;
+    /**
+     * è®¡åˆ’æ•°é‡
+     */
+    private String planNum;
+
+    /**
+     * é›¶ä»¶ç¼–å·ID
+     */
+    private String partTypeId;
+    /**
+     * é›¶ä»¶ç¼–å·
+     */
+    private String partTypeNo;
+    /**
+     * é›¶ä»¶åç§°
+     */
+    protected String partTypeName;
+    /**
+     * é›¶ä»¶å›¾çº¸å·
+     */
+    protected String partTypeDrawingno;
+    /**
+     * é›¶ä»¶ç‰ˆæœ¬å·
+     */
+    protected String partTypeVersion;
+    /**
+     * ä¼˜å…ˆçº§
+     */
+    private String priority;
+    /**
+     * é¡µé¢å€¼æ¸…ç©º
+     */
+    private String valueToNul;
+    /**
+     * A3--ç”Ÿäº§è®¡åˆ’ç¼–å·
+     */
+    private String proPlanNo;
+    /**
+     * äº¤è´§æ—¥æœŸ
+     */
+    private Date submitTime;
+    /**
+     * è®¡åˆ’ç±»å‹
+     */
+    private String planType;
+    /**
+     * çˆ¶ä½œä¸šè®¡åˆ’
+     */
+    private List<TJobplanInfo> pJobPlan;
+    /**
+     * çˆ¶ä½œä¸šè®¡åˆ’id
+     */
+    private String pJobPlanId;
+
+    private String isSuccess;
+
+    private String allocatedNum;//å·²åˆ†é…ä»»åŠ¡æ•°é‡
+    private List<Map<String,Object>> addTask=new ArrayList<Map<String,Object>>();//åˆ†é…ä»»åŠ¡ä¸´æ—¶å­˜å‚¨æ•°æ®
+    private List<Map<String,Object>> realaddTask=new ArrayList<Map<String,Object>>();//åˆ†é…ä»»åŠ¡ä¸´æ—¶å­˜å‚¨æ•°æ®
+    private String addTaskNo;//æ·»åŠ ä»»åŠ¡ç¼–å·
+    private String addTaskNum;//æ·»åŠ ä»»åŠ¡æ•°é‡
+    private boolean addbool=false;//æ˜¯å¦æ˜¾ç¤ºæ·»åŠ æŒ‰é’®
+    /**
+     * æ„é€ 
+     */
+    public JobPlanAddBean(){
+        //è·å–èŠ‚ç‚¹ID
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        String nodeid = (String)session.getAttribute("nodeid");
+        List<Map<String,Object>> lst = jobPlanService.getPlanAndForList(nodeid);//ç”Ÿäº§è®¡åˆ’ä¸‹æ‹‰åˆ—è¡¨
+        producePlanMap = new HashMap<String,Object>();
+        for(Map<String,Object> map : lst){
+            if(map.get("cid")!=null && !"".equals(map.get("cid"))){
+                producePlanMap.put((String)map.get("uplanName"),map.get("cid").toString());
+            }
         }
-		//×÷Òµ¼Æ»®±àºÅ	
-		List<Map<String,Object>> partlst =  jobPlanService.getPartTypeByIdFor(partTypeId);
-		if(partlst.size()>0){
-			Map<String,Object> m = partlst.get(0);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-			String dd  = sdf.format(new Date());
-//			no ="WP_"+(String)m.get("bno")+"_"+dd+"_"+m.get("bid").toString();
-			no ="WP_"+dd;
-		}
-		addTask=new ArrayList<Map<String,Object>>();
-		realaddTask=new ArrayList<Map<String,Object>>();
-	}
-	
-	private String dialog;
-	/**
-	 * Ìí¼Ó×÷Òµ¼Æ»®
-	 */
-	public String addJobAction(){	
-		isSuccess="Ìí¼ÓÊ§°Ü";
-		if(no==null || "".equals(no)){
-			int  radnum = (int)(Math.random()*1000000);  //Éú³É6Î»Ëæ»úÊı
-			if(radnum<99999){
-				radnum = radnum+100000;
-			}
-			String autoNo  = String.valueOf(radnum);	
-			no = "WP"+autoNo;   //×÷Òµ¼Æ»®±àºÅNO²»ÊäÈë£¬×Ô¶¯Éú³É¸øËû
-		}
-		List<Map<String,Object>> lst = jobPlanService.getPlanByName(no);	
-	    if(lst.size()==0){   //´ËÃû³ÆµÄ×÷Òµ¼Æ»®²»´æÔÚ£¬Ìá½»
-	    	isSuccess=jobPlanService.addJobPlan(this);	
-	    }else{
-	    	dialog = "show";
-	    	HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-	    	request.setAttribute("dialog", dialog);
-	    }
-	    return "jobplanadd";
-	}
-	
-	/**
-	 * µÃµ½×÷Òµ¼Æ»®±àºÅ
-	 */
-	public void getJobplanNo(){
-		List<Map<String,Object>> partlst =  jobPlanService.getPartTypeByIdFor(partTypeId);
-		String maxId  = jobPlanService.getMaxJobPlanId();
-		if(partlst.size()>0){
-			Map<String,Object> m = partlst.get(0);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-			String dd  = sdf.format(new Date());
-			no ="WP_"+(String)m.get("bno")+"_"+dd+"_"+maxId;
-		}
-	}
-	
-	private String show; //¼ì²â±àºÅ·µ»ØÏÔÊ¾ĞÅÏ¢
-	/**
-	 * ¼ì²â±àºÅ·½·¨
-	 */
-	public void getShowInfo(){
-		List<Map<String,Object>> lst = jobPlanService.getPlanByName(no);
-		if(lst.size()==0){ //²»´æÔÚ
-			show = "±àºÅ²»´æÔÚ,¿ÉÓÃ";
-		}else{             //ÒÑ´æÔÚ
-			show ="±àºÅÒÑ´æÔÚ,²»¿ÉÓÃ";
-		}
-	}
-	
-	
-	/**
-	 * ×÷Òµ¼Æ»®±àºÅµÄÄ£ºı²éÑ¯
-	 * @param query
-	 * @return
-     * @throws and @exception
-	 */
-    public List<String> complete(String query) {   
-        List<String> results = jobPlanService.getTJobplanInfoNo(query);   
-        return results;   
-    } 
-	
-	/**
-	 * 2¼¶Áª¶¯Éú²ú¼Æ»®ÏêÏ¸
-	 */
-    public void getJobplanInfo(){
-    	productPlanNo = null;
-    	productPlanType = null;
-    	productPlanNum = null;
-    	productPlanStatus = null;
-    	productPlanName = null;
-    	
-    	List<Map<String,Object>> lst =jobPlanService.getJobplanByIdFor(uplanId);
-    	if(lst.size()>0){
-    		Map<String,Object>  map = lst.get(0);    	
-		if(map.get("uplanNo")!=null){
-		productPlanNo = map.get("uplanNo").toString();
-		}
-		if(map.get("uplanType")!=null){
-		productPlanType = map.get("uplanType").toString();
-		}
-		if(map.get("uplanNum")!=null){
-		productPlanNum = map.get("uplanNum").toString();
-		}
-		if(map.get("uplanStatus")!=null){
-		productPlanStatus = map.get("uplanStatus").toString();
-		}
-		if(map.get("uplanName")!=null){
-		productPlanName = map.get("uplanName").toString();
-		}
-     }
-    	
+        partMap = jobPlanService.getPartAndForList(nodeid);	//é›¶ä»¶ä¸‹æ‹‰é‡Œè¯¶åŒ…
+        //é›¶ä»¶ç±»å‹ID
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        if(request.getParameter("addpNo")!=null && !"".equals(request.getParameter("addpNo"))  && !request.getParameter("addpNo").equals("undefined")){
+            partTypeId = request.getParameter("addpNo").trim();
+
+            List<Map<String,Object>> lstpart =jobPlanService.getPartTypeByIdFor(partTypeId);
+            if(lstpart.size()>0){
+                Map<String,Object>  map = lstpart.get(0);
+                if(map.get("bno")!=null){
+                    partTypeNo = map.get("bno").toString();
+                }
+                if(map.get("bname")!=null){
+                    partTypeName = map.get("bname").toString();
+                }
+                if(map.get("drawingno")!=null){
+                    partTypeDrawingno = map.get("drawingno").toString();
+                }
+                if(map.get("version")!=null){
+                    partTypeVersion = map.get("version").toString();
+                }
+            }
+            status="æ–°å»º";
+        }
+        //ä½œä¸šè®¡åˆ’ç¼–å·
+        List<Map<String,Object>> partlst =  jobPlanService.getPartTypeByIdFor(partTypeId);
+        if(partlst.size()>0){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+            String dd  = sdf.format(new Date());
+            no ="WP_"+dd;
+        }
+        addTask=new ArrayList<Map<String,Object>>();
+        realaddTask=new ArrayList<Map<String,Object>>();
     }
-	
-	/**
-	 * 2¼¶Áª¶¯Áã¼şÀàĞÍÏêÏ¸
-	 */
-	public void getPartInfo(){
-		partTypeNo = null;
-		partTypeName = null;
-		partTypeDrawingno = null;
-		partTypeVersion = null;
-		
-		List<Map<String,Object>> lst =jobPlanService.getPartTypeByIdFor(partTypeId);
-    	if(lst.size()>0){
-    		Map<String,Object>  map = lst.get(0); 		
-		if(map.get("bno")!=null){
-		partTypeNo = map.get("bno").toString();
-		}
-		if(map.get("bname")!=null){
-		partTypeName = map.get("bname").toString();
-		}
-		if(map.get("drawingno")!=null){
-		partTypeDrawingno = map.get("drawingno").toString();
-		}
-		if(map.get("version")!=null){
-		partTypeVersion = map.get("version").toString();
-		}
-    	}
-		
-	}
-	
-	public void getPTJobPlanInfo(){
-		System.out.println("planType:"+planType);
-		if(null==planType||"".equals(planType)||planType.equals("1")){
-			pJobPlan=new ArrayList<TJobplanInfo>();
-			addbool=false;
-		}else if(planType.equals("2")){
-			pJobPlan=jobPlanService.getTJobplanInfoByBatchNo(planType,partTypeId);
-			addbool=true;
-		}else{
-			pJobPlan=jobPlanService.getTJobplanInfoByBatchNo(planType,partTypeId);
-			addbool=false;
-		}
-		
-	}
-	public void getProPlanNoValue(){
-		int sum=0;
-		for(Map<String,Object> map:addTask){
-			sum=Integer.parseInt(null==map.get("addTaskNum")?"0":map.get("addTaskNum").toString())+sum;
-		}
-		allocatedNum=(Integer.parseInt(planNum)-sum)+"";//¼ÆËã´ı·ÖÅäÈÎÎñÊı
-	}
-	/**
-	 * Îª·ÖÅäÈÎÎñÁÙÊ±Êı¾İ Ìí¼ÓÊı¾İ
-	 */
-	public void addTaskData(){
-		int i=0;//Î¨Ò»id
-		int sum=0;//ÒÑ·ÖÅä×ÜÊı
-		boolean addbool=true; //ÊÇ·ñÖØ¸´   ÊÇ ²»ÖØ¸´   ·ñ ÖØ¸´
-		for(Map<String,Object> map:addTask){
-			sum=Integer.parseInt(null==map.get("addTaskNum")?"0":map.get("addTaskNum").toString())+sum;
-			i=Integer.parseInt(map.get("id")+"");
-			if(addTaskNo.equals(map.get("addTaskNo")+"")){
-				addbool=false;
-			}
-		}//ÅĞ¶ÏÏÂÒ»¸öidÖµ ºÍ ×ÜÒÑ·ÖÅäµÄÊıÁ¿
-		
-		if(addbool){//Èç¹û²»ÖØ¸´
-			Map<String,Object> at=new HashMap<String, Object>();
-			at.put("id", (i+1)+"");//ÉèÖÃidÎ¨Ò»
-			at.put("addTaskNo", addTaskNo);
-			at.put("addTaskNum", addTaskNum);
-			at.put("reportNum", 0);
-			
-			Map<String,Object> realat=new HashMap<String, Object>();
-			realat.put("id", (i+1)+"");//ÉèÖÃidÎ¨Ò»
-			realat.put("addTaskNo", addTaskNo);
-			realat.put("addTaskNum", addTaskNum);
-			realat.put("reportNum", 0);
-			
-			if((Integer.parseInt(planNum)-(sum+Integer.parseInt(addTaskNum)))<0){//Èç¹ûÉèÖÃ·ÖÅäÊıÁ¿´óÓÚ  ¼Æ»®ÊıÁ¿
-				//ÌáÊ¾¿É·ÖÅäÊıÁ¿²»×ã
-				 FacesMessage msg = new FacesMessage("×÷Òµ¼Æ»®ĞÂÔö","ĞÂÔöÊ§°Ü,¿É·ÖÅäÊıÁ¿²»×ã£¡");  
-	    	     FacesContext.getCurrentInstance().addMessage(null, msg);  
-			}else{
-				allocatedNum=(Integer.parseInt(planNum)-(sum+Integer.parseInt(addTaskNum)))+""; //·ñÔò Õı³£¼ÆËã ¿É·ÖÅäÊı
-				addTask.add(at);
-				realaddTask.add(realat);
-				addTaskNo="";
-				addTaskNum="";
-			}
-		}else{
-			 FacesMessage msg = new FacesMessage("×÷Òµ¼Æ»®ĞÂÔö","ĞÂÔöÊ§°Ü,ERPÈÎÎñºÅÖØ¸´£¡");  
-    	     FacesContext.getCurrentInstance().addMessage(null, msg);  
-		}
-		
-	}
-	public void onRowCancel(RowEditEvent event){
-	}
-	/**
-	 * Îª·ÖÅäÈÎÎñÁÙÊ±Êı¾İ ĞŞ¸ÄÊı¾İ
-	 */
-	public void updateTaskData(RowEditEvent event){
-		Map<String,Object> map=(Map<String,Object>)event.getObject();
-		int sum=0;//ÒÑ·ÖÅä×ÜÊı
-		for(Map<String,Object> mp:addTask){
-			sum=Integer.parseInt(null==mp.get("addTaskNum")?"0":mp.get("addTaskNum").toString())+sum;
-		}//ÅĞ¶Ï ×ÜÒÑ·ÖÅäµÄÊıÁ¿
-		
-		for(Map<String,Object> mm:realaddTask){
-			if(mm.get("id").toString().equals(map.get("id").toString())){
-				System.out.println("addTask:"+mm.get("addTaskNo")+"--"+mm.get("addTaskNum"));
-				System.out.println("event:"+map.get("addTaskNo")+"--"+map.get("addTaskNum"));
-				if((Integer.parseInt(planNum)-sum)<0){//Èç¹ûÉèÖÃ·ÖÅäÊıÁ¿´óÓÚ  ¼Æ»®ÊıÁ¿
-					//ÌáÊ¾¿É·ÖÅäÊıÁ¿²»×ã
-					 FacesMessage msg = new FacesMessage("×÷Òµ¼Æ»®ĞÂÔö","ĞÂÔöÊ§°Ü,¿É·ÖÅäÊıÁ¿²»×ã£¡");  
-		    	     FacesContext.getCurrentInstance().addMessage(null, msg); 
-		    	     map.put("addTaskNum", mm.get("addTaskNum"));
-				}else if(Integer.parseInt(map.get("reportNum").toString())>Integer.parseInt(map.get("addTaskNum").toString())){//ÅĞ¶Ï ÈÎÎñ·ÖÅäÊıÊÇ·ñ´óÓÚÉÏ±¨Êı
-					FacesMessage msg = new FacesMessage("×÷Òµ¼Æ»®ĞÂÔö","ĞÂÔöÊ§°Ü,¿É·ÖÅäÊıÁ¿²»ÄÜĞ¡ÓÚÉÏ±¨Êı£¡");  
-		    	    FacesContext.getCurrentInstance().addMessage(null, msg);
-		    	    map.put("addTaskNum", mm.get("addTaskNum"));
-				}else{
-					mm.put("addTaskNum", map.get("addTaskNum"));
-				}
-			}
-		}
-		
-	}
-	/**
-	 * Îª·ÖÅäÈÎÎñÁÙÊ±Êı¾İ É¾³ı
-	 */
-	public void delTaskData(Map<String,Object> selectedTask){
-		allocatedNum=(Integer.parseInt(allocatedNum)+Integer.parseInt(selectedTask.get("addTaskNum").toString()))+""; //½«É¾³ıµÄÊıÁ¿ÖØĞÂ·ÖÅä¸ø ¿É·ÖÅäÊıÁ¿
-		addTask.remove(selectedTask);//É¾³ıÊı¾İ
-		realaddTask.remove(selectedTask);
-	}
-	
-	/**=====================================set,get·½·¨=================================================**/
-	
-	
 
-	public String getDialog() {
-		
-    	HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-    	dialog = (String)request.getAttribute("dialog");
-		return dialog;
-	}
-
-	public void setDialog(String dialog) {
-		this.dialog = dialog;
-	}
-	
-	public IJobPlanService getJobPlanService() {
-		return jobPlanService;
-	}
-
-	public void setJobPlanService(IJobPlanService jobPlanService) {
-		this.jobPlanService = jobPlanService;
-	}
-
-	public IOrganizationService getOrganizationService() {
-		return organizationService;
-	}
-
-	public void setOrganizationService(IOrganizationService organizationService) {
-		this.organizationService = organizationService;
-	}
-
-	public Map<String, Object> getJobPlanMap() {
-		return jobPlanMap;
-	}
-
-	public void setJobPlanMap(Map<String, Object> jobPlanMap) {
-		this.jobPlanMap = jobPlanMap;
-	}
-
-	public Map<String, Object> getProducePlanMap() {
-		return producePlanMap;
-	}
-
-	public void setProducePlanMap(Map<String, Object> producePlanMap) {
-		this.producePlanMap = producePlanMap;
-	}
-
-	public List<Map<String, Object>> getPartMap() {
-		return partMap;
-	}
-
-	public void setPartMap(List<Map<String, Object>> partMap) {
-		this.partMap = partMap;
-	}
-
-	public Map<String, Object> getPriorityMap() {
-		return priorityMap;
-	}
-
-	public void setPriorityMap(Map<String, Object> priorityMap) {
-		this.priorityMap = priorityMap;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getStatus() {
-		status="ĞÂ½¨";
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-
-	public String getUplanId() {
-		return uplanId;
-	}
-
-	public void setUplanId(String uplanId) {
-		this.uplanId = uplanId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Date getPlanStarttime() {
-		return planStarttime;
-	}
-
-	public void setPlanStarttime(Date planStarttime) {
-		this.planStarttime = planStarttime;
-	}
-
-	public Date getPlanEndtime() {
-		return planEndtime;
-	}
-
-	public void setPlanEndtime(Date planEndtime) {
-		this.planEndtime = planEndtime;
-	}
-
-	public String getPlanNum() {
-		return planNum;
-	}
-
-	public void setPlanNum(String planNum) {
-		this.planNum = planNum;
-	}
-	
-	public String getPartTypeId() {
-		if(uplanId==null && partTypeId==null){
-			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			if (request.getParameter("planId") != null
-					&& !"".equals(request.getParameter("planId"))
-					&& !request.getParameter("planId").equals("undefined")) {
-				id = request.getParameter("planId").trim();
-				initDataByPlanId();
-			}
-			
-			if(request.getParameter("partId") != null
-					&& !"".equals(request.getParameter("partId"))
-					&& !request.getParameter("partId").equals("undefined")){
-				
-				partTypeId = request.getParameter("partId").trim();
-				planType = "1";//×÷Òµ¼Æ»®
-				SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
-				String dd  = format.format(new Date());
-				no ="WP_"+dd;
-				name = "WP_"+dd;
-				priority = "1";
-			}
-			
-		}
-		
-		return partTypeId;
-	}
-
-	private void initDataByPlanId() {
-		if(id!=null && !id.isEmpty()){
-			List<Map<String,Object>> maplst = jobPlanService.getPlanAndPartList(id);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			if(maplst.size()>0){
-				Map<String,Object> map = maplst.get(0);
-				if(map.get("status")!=null){
-					status = map.get("status").toString();
-				}
-				try {
-					if(map.get("planStarttime")!=null){
-					planStarttime = sdf.parse(map.get("planStarttime").toString());
-					}
-					if(map.get("planEndtime")!=null){
-					planEndtime = sdf.parse(map.get("planEndtime").toString());
-					}
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				if(map.get("bid")!=null){
-					partTypeId = map.get("bid").toString();
-				}
-				if(map.get("bno")!=null){
-					partTypeNo = map.get("bno").toString();
-				}
-				if(map.get("bname")!=null){
-					partTypeName = map.get("bname").toString();
-				}
-				if(map.get("drawingno")!=null){
-					partTypeDrawingno = map.get("drawingno").toString();
-				}
-				if(map.get("version")!=null){
-					partTypeVersion = map.get("version").toString();
-				}
-				if(map.get("planNo")!=null){
-					proPlanNo = map.get("planNo").toString();
-				}
-				
-				if(map.get("priority")!=null){
-					priority = map.get("priority").toString();
-				}
-				//×÷Òµ¼Æ»®±àºÅ	
-				SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
-				String dd  = format.format(new Date());
-				no ="WP_"+dd;
-				name = "WP_"+dd;
-				if(null!=map.get("planType")){
-					planType="2";
-					if(planType.equals("2")){
-						getPTJobPlanInfo();
-					}
-				}
-				if(map.get("id") != null){
-					pJobPlanId = map.get("id").toString();
-				}
-			}
-		}
-	}
-
-	public void setPartTypeId(String partTypeId) {
-		this.partTypeId = partTypeId;
-	}
-
-	public String getPriority() {
-		return priority;
-	}
-
-	public void setPriority(String priority) {
-		this.priority = priority;
-	}
+    private String dialog;
     /**
-     * Ìø³öÒ³ÃæºóÇå¿ÕÒ³ÃæµÄÖµ
-     * @return
+     * æ·»åŠ ä½œä¸šè®¡åˆ’
      */
-	public String getValueToNul() {
-		id = null;
-		status = null;
-		uplanId = null;
-		name = null;
-		planStarttime = null;
-		planEndtime = null;
-		planNum = null;
-//		partTypeId = null;
-		priority = null;
-		return valueToNul;
-	}
+    public String addJobAction(){
+        isSuccess="æ·»åŠ å¤±è´¥";
+        if(no==null || "".equals(no)){
+            int  radnum = (int)(Math.random()*1000000);  //ç”Ÿæˆ6ä½éšæœºæ•°
+            if(radnum<99999){
+                radnum = radnum+100000;
+            }
+            String autoNo  = String.valueOf(radnum);
+            no = "WP"+autoNo;   //ä½œä¸šè®¡åˆ’ç¼–å·NOä¸è¾“å…¥ï¼Œè‡ªåŠ¨ç”Ÿæˆç»™ä»–
+        }
+        List<Map<String,Object>> lst = jobPlanService.getPlanByName(no);
+        if(lst.size()==0){   //æ­¤åç§°çš„ä½œä¸šè®¡åˆ’ä¸å­˜åœ¨ï¼Œæäº¤
+            isSuccess=jobPlanService.addJobPlan(this);
+        }else{
+            dialog = "show";
+            HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            request.setAttribute("dialog", dialog);
+        }
+        return "jobplanadd";
+    }
 
-	public void setValueToNul(String valueToNul) {
-		this.valueToNul = valueToNul;
-	}
-
-	public String getNo() {
-		return no;
-	}
-
-	public void setNo(String no) {
-		this.no = no;
-	}
-
-	public String getPartTypeNo() {
-		return partTypeNo;
-	}
-
-	public void setPartTypeNo(String partTypeNo) {
-		this.partTypeNo = partTypeNo;
-	}
-
-	public String getPartTypeName() {
-		return partTypeName;
-	}
-
-	public void setPartTypeName(String partTypeName) {
-		this.partTypeName = partTypeName;
-	}
-
-	public String getPartTypeDrawingno() {
-		return partTypeDrawingno;
-	}
-
-	public void setPartTypeDrawingno(String partTypeDrawingno) {
-		this.partTypeDrawingno = partTypeDrawingno;
-	}
-
-	public String getPartTypeVersion() {
-		return partTypeVersion;
-	}
-
-	public void setPartTypeVersion(String partTypeVersion) {
-		this.partTypeVersion = partTypeVersion;
-	}
-
-	public String getProductPlanNo() {
-		return productPlanNo;
-	}
-
-	public void setProductPlanNo(String productPlanNo) {
-		this.productPlanNo = productPlanNo;
-	}
-
-	public String getProductPlanType() {
-		return productPlanType;
-	}
-
-	public void setProductPlanType(String productPlanType) {
-		this.productPlanType = productPlanType;
-	}
-
-	public String getProductPlanNum() {
-		return productPlanNum;
-	}
-
-	public void setProductPlanNum(String productPlanNum) {
-		this.productPlanNum = productPlanNum;
-	}
-
-	public String getProductPlanStatus() {
-		return productPlanStatus;
-	}
-
-	public void setProductPlanStatus(String productPlanStatus) {
-		this.productPlanStatus = productPlanStatus;
-	}
-
-	public String getProductPlanName() {
-		return productPlanName;
-	}
-
-	public void setProductPlanName(String productPlanName) {
-		this.productPlanName = productPlanName;
-	}
-
-	public String getShow() {
-		return show;
-	}
-
-	public void setShow(String show) {
-		this.show = show;
-	}
+    private String show; //æ£€æµ‹ç¼–å·è¿”å›æ˜¾ç¤ºä¿¡æ¯
+    /**
+     * æ£€æµ‹ç¼–å·æ–¹æ³•
+     */
+    public void getShowInfo(){
+        List<Map<String,Object>> lst = jobPlanService.getPlanByName(no);
+        if(lst.size()==0){ //ä¸å­˜åœ¨
+            show = "ç¼–å·ä¸å­˜åœ¨,å¯ç”¨";
+        }else{             //å·²å­˜åœ¨
+            show = "ç¼–å·å·²ç»å­˜åœ¨,ä¸å¯ç”¨!";
+        }
+    }
 
 
-	public String getProPlanNo() {
-		return proPlanNo;
-	}
+    /**
+     * ä½œä¸šè®¡åˆ’ç¼–å·çš„æ¨¡ç³ŠæŸ¥è¯¢
+     * @param query ä½œä¸šè®¡åˆ’ç¼–å·
+     * @return ä½œä¸šè®¡åˆ’ç¼–å·é›†åˆ
+     */
+    public List<String> complete(String query) {
+        return jobPlanService.getTJobplanInfoNo(query);
+    }
 
+    public void getPTJobPlanInfo(){
+        System.out.println("planType:"+planType);
+        if(null==planType||"".equals(planType)||planType.equals("1")){
+            pJobPlan=new ArrayList<TJobplanInfo>();
+            addbool=false;
+        }else if(planType.equals("2")){
+            pJobPlan=jobPlanService.getTJobplanInfoByBatchNo(planType,partTypeId);
+            addbool=true;
+        }else{
+            pJobPlan=jobPlanService.getTJobplanInfoByBatchNo(planType,partTypeId);
+            addbool=false;
+        }
 
-	public void setProPlanNo(String proPlanNo) {
-		this.proPlanNo = proPlanNo;
-	}
+    }
+    public void getProPlanNoValue(){
+        int sum=0;
+        for(Map<String,Object> map:addTask){
+            sum=Integer.parseInt(null==map.get("addTaskNum")?"0":map.get("addTaskNum").toString())+sum;
+        }
+        allocatedNum=(Integer.parseInt(planNum)-sum)+"";//è®¡ç®—å¾…åˆ†é…ä»»åŠ¡æ•°
+    }
+    /**
+     * ä¸ºåˆ†é…ä»»åŠ¡ä¸´æ—¶æ•°æ® æ·»åŠ æ•°æ®
+     */
+    public void addTaskData(){
+        int i=0;//å”¯ä¸€id
+        int sum=0;//å·²åˆ†é…æ€»æ•°
+        boolean addbool=true; //æ˜¯å¦é‡å¤   æ˜¯ ä¸é‡å¤   å¦ é‡å¤
+        for(Map<String,Object> map:addTask){
+            sum=Integer.parseInt(null==map.get("addTaskNum")?"0":map.get("addTaskNum").toString())+sum;
+            i=Integer.parseInt(map.get("id")+"");
+            if(addTaskNo.equals(map.get("addTaskNo")+"")){
+                addbool=false;
+            }
+        }//åˆ¤æ–­ä¸‹ä¸€ä¸ªidå€¼ å’Œ æ€»å·²åˆ†é…çš„æ•°é‡
 
-	public Date getSubmitTime() {
-		return submitTime;
-	}
+        if(addbool){//å¦‚æœä¸é‡å¤
+            Map<String,Object> at=new HashMap<String, Object>();
+            at.put("id", (i+1)+"");//è®¾ç½®idå”¯ä¸€
+            at.put("addTaskNo", addTaskNo);
+            at.put("addTaskNum", addTaskNum);
+            at.put("reportNum", 0);
 
-	public void setSubmitTime(Date submitTime) {
-		this.submitTime = submitTime;
-	}
+            Map<String,Object> realat=new HashMap<String, Object>();
+            realat.put("id", (i+1)+"");//è®¾ç½®idå”¯ä¸€
+            realat.put("addTaskNo", addTaskNo);
+            realat.put("addTaskNum", addTaskNum);
+            realat.put("reportNum", 0);
 
-	public String getPlanType() {
-		return planType;
-	}
+            if((Integer.parseInt(planNum)-(sum+Integer.parseInt(addTaskNum)))<0){//å¦‚æœè®¾ç½®åˆ†é…æ•°é‡å¤§äº  è®¡åˆ’æ•°é‡
+                //æç¤ºå¯åˆ†é…æ•°é‡ä¸è¶³
+                FacesMessage msg = new FacesMessage("ä½œä¸šè®¡åˆ’æ–°å¢","æ–°å¢å¤±è´¥,å¯åˆ†é…æ•°é‡ä¸è¶³ï¼");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }else{
+                allocatedNum=(Integer.parseInt(planNum)-(sum+Integer.parseInt(addTaskNum)))+""; //å¦åˆ™ æ­£å¸¸è®¡ç®— å¯åˆ†é…æ•°
+                addTask.add(at);
+                realaddTask.add(realat);
+                addTaskNo="";
+                addTaskNum="";
+            }
+        }else{
+            FacesMessage msg = new FacesMessage("ä½œä¸šè®¡åˆ’æ–°å¢","æ–°å¢å¤±è´¥,ERPä»»åŠ¡å·é‡å¤ï¼");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
 
-	public void setPlanType(String planType) {
-		this.planType = planType;
-	}
+    }
+    public void onRowCancel(RowEditEvent event){
+    }
+    /**
+     * ä¸ºåˆ†é…ä»»åŠ¡ä¸´æ—¶æ•°æ® ä¿®æ”¹æ•°æ®
+     * @param event é€‰æ‹©æ•°æ®
+     */
+    public void updateTaskData(RowEditEvent event){
+        Map<String,Object> map=((Map<String,Object>) event.getObject());
+        int sum=0;//å·²åˆ†é…æ€»æ•°
+        for(Map<String,Object> mp:addTask){
+            sum=Integer.parseInt(null==mp.get("addTaskNum")?"0":mp.get("addTaskNum").toString())+sum;
+        }//åˆ¤æ–­ æ€»å·²åˆ†é…çš„æ•°é‡
 
-	public List<TJobplanInfo> getpJobPlan() {
-		return pJobPlan;
-	}
+        for(Map<String,Object> mm:realaddTask){
+            if(mm.get("id").toString().equals(map.get("id").toString())){
+                System.out.println("addTask:"+mm.get("addTaskNo")+"--"+mm.get("addTaskNum"));
+                System.out.println("event:"+map.get("addTaskNo")+"--"+map.get("addTaskNum"));
+                if((Integer.parseInt(planNum)-sum)<0){//å¦‚æœè®¾ç½®åˆ†é…æ•°é‡å¤§äº  è®¡åˆ’æ•°é‡
+                    //æç¤ºå¯åˆ†é…æ•°é‡ä¸è¶³
+                    FacesMessage msg = new FacesMessage("ä½œä¸šè®¡åˆ’æ–°å¢","æ–°å¢å¤±è´¥,å¯åˆ†é…æ•°é‡ä¸è¶³ï¼");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                    map.put("addTaskNum", mm.get("addTaskNum"));
+                }else if(Integer.parseInt(map.get("reportNum").toString())>Integer.parseInt(map.get("addTaskNum").toString())){//åˆ¤æ–­ ä»»åŠ¡åˆ†é…æ•°æ˜¯å¦å¤§äºä¸ŠæŠ¥æ•°
+                    FacesMessage msg = new FacesMessage("ä½œä¸šè®¡åˆ’æ–°å¢","æ–°å¢å¤±è´¥,å¯åˆ†é…æ•°é‡ä¸èƒ½å°äºä¸ŠæŠ¥æ•°!");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                    map.put("addTaskNum", mm.get("addTaskNum"));
+                }else{
+                    mm.put("addTaskNum", map.get("addTaskNum"));
+                }
+            }
+        }
 
-	public void setpJobPlan(List<TJobplanInfo> pJobPlan) {
-		this.pJobPlan = pJobPlan;
-	}
+    }
+    /**
+     * ä¸ºåˆ†é…ä»»åŠ¡ä¸´æ—¶æ•°æ® åˆ é™¤
+     */
+    public void delTaskData(Map<String,Object> selectedTask){
+        allocatedNum=(Integer.parseInt(allocatedNum)+Integer.parseInt(selectedTask.get("addTaskNum").toString()))+""; //å°†åˆ é™¤çš„æ•°é‡é‡æ–°åˆ†é…ç»™ å¯åˆ†é…æ•°é‡
+        addTask.remove(selectedTask);//åˆ é™¤æ•°æ®
+        realaddTask.remove(selectedTask);
+    }
 
-	public String getpJobPlanId() {
-		return pJobPlanId;
-	}
+    /**=====================================set,getæ–¹æ³•=================================================**/
 
-	public void setpJobPlanId(String pJobPlanId) {
-		this.pJobPlanId = pJobPlanId;
-	}
+    public String getDialog() {
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        dialog = (String)request.getAttribute("dialog");
+        return dialog;
+    }
 
-	public String getIsSuccess() {
-		return isSuccess;
-	}
+    public void setDialog(String dialog) {
+        this.dialog = dialog;
+    }
 
-	public void setIsSuccess(String isSuccess) {
-		this.isSuccess = isSuccess;
-	}
+    public IJobPlanService getJobPlanService() {
+        return jobPlanService;
+    }
 
-	public List<Map<String, Object>> getAddTask() {
-		return addTask;
-	}
+    public void setJobPlanService(IJobPlanService jobPlanService) {
+        this.jobPlanService = jobPlanService;
+    }
 
-	public void setAddTask(List<Map<String, Object>> addTask) {
-		this.addTask = addTask;
-	}
+    public IOrganizationService getOrganizationService() {
+        return organizationService;
+    }
 
-	public String getAddTaskNo() {
-		return addTaskNo;
-	}
+    public void setOrganizationService(IOrganizationService organizationService) {
+        this.organizationService = organizationService;
+    }
 
-	public void setAddTaskNo(String addTaskNo) {
-		this.addTaskNo = addTaskNo;
-	}
+    public List<Map<String, Object>> getPartMap() {
+        return partMap;
+    }
 
-	public String getAddTaskNum() {
-		return addTaskNum;
-	}
+    public void setPartMap(List<Map<String, Object>> partMap) {
+        this.partMap = partMap;
+    }
 
-	public void setAddTaskNum(String addTaskNum) {
-		this.addTaskNum = addTaskNum;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getAllocatedNum() {
-		return allocatedNum;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setAllocatedNum(String allocatedNum) {
-		this.allocatedNum = allocatedNum;
-	}
+    public String getStatus() {
+        status="æ–°å»º";
+        return status;
+    }
 
-	public boolean isAddbool() {
-    	HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		if (request.getParameter("planId") != null
-				&& !"".equals(request.getParameter("planId"))
-				&& !request.getParameter("planId").equals("undefined")) {
-			addbool=true;
-		}
-		return addbool;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setAddbool(boolean addbool) {
-		this.addbool = addbool;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public List<Map<String, Object>> getRealaddTask() {
-		return realaddTask;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setRealaddTask(List<Map<String, Object>> realaddTask) {
-		this.realaddTask = realaddTask;
-	}
+    public Date getPlanStarttime() {
+        return planStarttime;
+    }
+
+    public void setPlanStarttime(Date planStarttime) {
+        this.planStarttime = planStarttime;
+    }
+
+    public Date getPlanEndtime() {
+        return planEndtime;
+    }
+
+    public void setPlanEndtime(Date planEndtime) {
+        this.planEndtime = planEndtime;
+    }
+
+    public String getPlanNum() {
+        return planNum;
+    }
+
+    public void setPlanNum(String planNum) {
+        this.planNum = planNum;
+    }
+
+    public String getPartTypeId() {
+        if(uplanId==null && partTypeId==null){
+            HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            if (request.getParameter("planId") != null
+                    && !"".equals(request.getParameter("planId"))
+                    && !request.getParameter("planId").equals("undefined")) {
+                id = request.getParameter("planId").trim();
+                initDataByPlanId();
+            }
+
+            if(request.getParameter("partId") != null
+                    && !"".equals(request.getParameter("partId"))
+                    && !request.getParameter("partId").equals("undefined")){
+
+                partTypeId = request.getParameter("partId").trim();
+                planType = "1";//ä½œä¸šè®¡åˆ’
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
+                String dd  = format.format(new Date());
+                no ="WP_"+dd;
+                name = "WP_"+dd;
+                priority = "1";
+            }
+
+        }
+
+        return partTypeId;
+    }
+
+    private void initDataByPlanId() {
+        if(id!=null && !id.isEmpty()){
+            List<Map<String,Object>> maplst = jobPlanService.getPlanAndPartList(id);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            if(maplst.size()>0){
+                Map<String,Object> map = maplst.get(0);
+                if(map.get("status")!=null){
+                    status = map.get("status").toString();
+                }
+                try {
+                    if(map.get("planStarttime")!=null){
+                        planStarttime = sdf.parse(map.get("planStarttime").toString());
+                    }
+                    if(map.get("planEndtime")!=null){
+                        planEndtime = sdf.parse(map.get("planEndtime").toString());
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(map.get("bid")!=null){
+                    partTypeId = map.get("bid").toString();
+                }
+                if(map.get("bno")!=null){
+                    partTypeNo = map.get("bno").toString();
+                }
+                if(map.get("bname")!=null){
+                    partTypeName = map.get("bname").toString();
+                }
+                if(map.get("drawingno")!=null){
+                    partTypeDrawingno = map.get("drawingno").toString();
+                }
+                if(map.get("version")!=null){
+                    partTypeVersion = map.get("version").toString();
+                }
+                if(map.get("planNo")!=null){
+                    proPlanNo = map.get("planNo").toString();
+                }
+
+                if(map.get("priority")!=null){
+                    priority = map.get("priority").toString();
+                }
+                //ä½œä¸šè®¡åˆ’ç¼–å·
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss");
+                String dd  = format.format(new Date());
+                no ="WP_"+dd;
+                name = "WP_"+dd;
+                if(null!=map.get("planType")){
+                    planType="2";
+                    if(planType.equals("2")){
+                        getPTJobPlanInfo();
+                    }
+                }
+                if(map.get("id") != null){
+                    pJobPlanId = map.get("id").toString();
+                }
+            }
+        }
+    }
+
+    public void setPartTypeId(String partTypeId) {
+        this.partTypeId = partTypeId;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    /**
+     * è·³å‡ºé¡µé¢åæ¸…ç©ºé¡µé¢çš„å€¼
+     * @return valueToNul
+     */
+    public String getValueToNul() {
+        id = null;
+        status = null;
+        uplanId = null;
+        name = null;
+        planStarttime = null;
+        planEndtime = null;
+        planNum = null;
+        priority = null;
+        return valueToNul;
+    }
+
+    public void setValueToNul(String valueToNul) {
+        this.valueToNul = valueToNul;
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
+
+    public String getPartTypeNo() {
+        return partTypeNo;
+    }
+
+    public void setPartTypeNo(String partTypeNo) {
+        this.partTypeNo = partTypeNo;
+    }
+
+    public String getShow() {
+        return show;
+    }
+
+    public void setShow(String show) {
+        this.show = show;
+    }
+
+    public String getProPlanNo() {
+        return proPlanNo;
+    }
+
+    public Date getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
+    }
+
+    public String getPlanType() {
+        return planType;
+    }
+
+    public void setPlanType(String planType) {
+        this.planType = planType;
+    }
+
+    public List<TJobplanInfo> getpJobPlan() {
+        return pJobPlan;
+    }
+
+    public void setpJobPlan(List<TJobplanInfo> pJobPlan) {
+        this.pJobPlan = pJobPlan;
+    }
+
+    public String getpJobPlanId() {
+        return pJobPlanId;
+    }
+
+    public void setpJobPlanId(String pJobPlanId) {
+        this.pJobPlanId = pJobPlanId;
+    }
+
+    public String getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public List<Map<String, Object>> getAddTask() {
+        return addTask;
+    }
+
+    public void setAddTask(List<Map<String, Object>> addTask) {
+        this.addTask = addTask;
+    }
+
+    public String getAddTaskNo() {
+        return addTaskNo;
+    }
+
+    public void setAddTaskNo(String addTaskNo) {
+        this.addTaskNo = addTaskNo;
+    }
+
+    public String getAddTaskNum() {
+        return addTaskNum;
+    }
+
+    public void setAddTaskNum(String addTaskNum) {
+        this.addTaskNum = addTaskNum;
+    }
+
+    public String getAllocatedNum() {
+        return allocatedNum;
+    }
+
+    public void setAllocatedNum(String allocatedNum) {
+        this.allocatedNum = allocatedNum;
+    }
+
+    public boolean isAddbool() {
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        if (request.getParameter("planId") != null
+                && !"".equals(request.getParameter("planId"))
+                && !request.getParameter("planId").equals("undefined")) {
+            addbool=true;
+        }
+        return addbool;
+    }
+
+    public List<Map<String, Object>> getRealaddTask() {
+        return realaddTask;
+    }
 
 }

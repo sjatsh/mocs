@@ -15,8 +15,8 @@ import smtcl.mocs.utils.authority.AuthorityUtil;
 
 /**
  * 用户接口的实现类
- * 1. 更新用户的信
- * 2. 更新用户、功能角色 数据角色三的关
+ * 1. 更新用户的信?
+ * 2. 更新用户、功能角色?数据角色三?的关?
  * @author jun
  * 
  */
@@ -50,7 +50,7 @@ public class UserServiceImpl extends GenericServiceSpringImpl<User, String> impl
 
     
     /****
-     * 依据单个查询条件或多个查询条
+     * 依据单个查询条件或多个查询条?
      * 返回有权限查看的用户信息
      */
     @Override
@@ -85,7 +85,7 @@ public class UserServiceImpl extends GenericServiceSpringImpl<User, String> impl
      * IDataCollection
      * 1. pageNo 当前页码
      * 2. pageSize 页
-     * 3. parameters 单个查询条件或多个查询条件
+     * 3. parameters 单个查询条件或?多个查询条件
      * 
      * 返回 分页的User信息结果 
      */
@@ -98,10 +98,10 @@ public class UserServiceImpl extends GenericServiceSpringImpl<User, String> impl
 
     /**
      * 1. 保存用户信息
-     * 2. 保存用户、功能角色和数据角色之间的关
-     * 参数
-     * 1. user 保存的用户信
-     * 2. userRoleOrgGroup 保存的用户功能角色和数据角色的关系
+     * 2. 保存用户、功能角色和数据角色之间的关?
+     * 参数?
+     * 1. user ?保存的用户信?
+     * 2. userRoleOrgGroup ?保存的用户?功能角色和数据角色的关系
      */
 	@Override
 	public void saveOrUpdateUserRoleGroup(User user, List<RUserRoleOrgGroup> userRoleOrgGroup) {		
@@ -115,7 +115,7 @@ public class UserServiceImpl extends GenericServiceSpringImpl<User, String> impl
 
 	/***
 	 * 删除用户
-	 * 1. 删除用户、功能角色数据角色三关系
+	 * 1. 删除用户、功能角色?数据角色三?关系
 	 * 2. 删除用户?
 	 */
 	@Override

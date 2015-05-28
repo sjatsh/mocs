@@ -1,13 +1,14 @@
 package smtcl.mocs.services.device;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import smtcl.mocs.services.jobplan.IJobDispatchService;
-import smtcl.mocs.utils.device.StringUtils;
+import smtcl.mocs.beans.device.EquWorkEventProcess;
 
 public class TestServiceMain {
 	
@@ -15,13 +16,39 @@ public class TestServiceMain {
 		
 //		ApplicationContext context= new FileSystemXmlApplicationContext("D:\\Workspaces\\MOCSWorspace\\mocs\\WebRoot\\WEB-INF\\device-context.xml");
 		//ApplicationContext context= new FileSystemXmlApplicationContext("D:\\Item\\mocs\\WebRoot\\WEB-INF\\device-context.xml");
-		ApplicationContext context= new FileSystemXmlApplicationContext("D:\\Workspaces\\Myeclipse10workspace\\a3-mocs-sy-pl-01\\WebRoot\\WEB-INF\\device-context.xml");   
-//		/**
-//		 * 产品型号 下拉框
-//		 */
+		ApplicationContext context= new FileSystemXmlApplicationContext("E:\\git\\mocs\\WebRoot\\WEB-INF\\device-context.xml");   
+		/**
+		 * 产品型号 下拉框
+		 */
 		ICostManageService costManageService=(ICostManageService)context.getBean("costManageService");
+		
+		System.err.println("start..."+new Date());
+		EquWorkEventProcess thread0=new EquWorkEventProcess(new Long(12325),"");
+		new Thread(thread0).start();
+		System.err.println("start...01..."+new Date());
+		EquWorkEventProcess thread1=new EquWorkEventProcess(new Long(12325),"");
+		new Thread(thread1).start();
+		/**
+		 * 构造一个线程池
+		 */
+//	    ThreadPoolExecutor threadPool = new ThreadPoolExecutor(10, 30, 10, TimeUnit.SECONDS,  
+//				new ArrayBlockingQueue<Runnable>(20), new ThreadPoolExecutor.DiscardOldestPolicy());
+//	    
+//	    threadPool.execute(new EquWorkEventProcess(new Long(12325),"")); 
 //		
-		costManageService.processEquWorkEvent(new Long(163));
+//		System.err.println("start..."+new Date());
+//		
+//		try {
+//			Thread.sleep(10);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		System.err.println("start...01..."+new Date());
+//		threadPool.execute(new EquWorkEventProcess(new Long(12325),"")); 
+//	    costManageService.processEquWorkEvent(new Long(12325));
+	    
 		
 //		System.err.println(costManageService.getPartTypeList().size());
 		
@@ -42,8 +69,6 @@ public class TestServiceMain {
 //		costManageService.getProductTheoryCostAnalysis("100001");
 //		costManageService.processEquWorkEvent(new Long(8));
 //		costManageService.queryLastPartCost();
-		
-		System.err.println(StringUtils.isValid("http://10.10.10.13:8080/mocs/images/part/1394536782695adoyrpqmvju1.png"));
 	}
 
 }

@@ -61,6 +61,7 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 	private TEquipmenttypeInfo TEquipmenttypeInfo; //设备类型
 	private Integer erpScrapNum;//erp报废数量
 	private Integer wisScrapNum;//wis报废数量
+	private Integer dutyScrapNum;//责任报废数量
 	
 
 	private Integer oldStatus;//工单的上一个状态，用于恢复
@@ -370,7 +371,7 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 		this.taskNum = taskNum;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "processID")
 	public TProcessInfo getTProcessInfo() {
 		return TProcessInfo;
@@ -406,6 +407,11 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 	public void setWisScrapNum(Integer wisScrapNum) {
 		this.wisScrapNum = wisScrapNum;
 	}
-
-	
+	@Column(name = "dutyScrapNum")
+	public Integer getDutyScrapNum() {
+		return dutyScrapNum;
+	}
+	public void setDutyScrapNum(Integer dutyScrapNum) {
+		this.dutyScrapNum = dutyScrapNum;
+	}
 }

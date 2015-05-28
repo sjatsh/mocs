@@ -20,7 +20,7 @@ import smtcl.mocs.utils.authority.DateUtil;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
- * 信息管理-人员明细表
+ * 信息管理-设备明细表
  * @author songkaiang
  *
  */
@@ -28,6 +28,8 @@ import smtcl.mocs.utils.device.StringUtils;
 @ViewScoped
 public class EquSerialDetailBean implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	//报表数据集
 	private List<Map<String,Object>> outData = new ArrayList<Map<String,Object>>();
 	

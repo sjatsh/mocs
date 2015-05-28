@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created with IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-11-2
- * Time: ÏÂÎç9:54
+ * Time: ä¸‹åˆ9:54
  */
 public class I18nFilter implements Filter {
     @Override

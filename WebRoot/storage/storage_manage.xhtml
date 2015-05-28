@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+	<style>
+	.rf-cal-extr{
+	 text-shadow: none;
+	 color: #333;
+	 word-break:normal;
+	}
+	 .ui-datatable .ui-datatable-data td div.ui-dt-c{
+	 overflow: visible;
+	 }
+	 .ui-datatable .ui-datatable-data td{
+	 overflow: visible;
+	 }
+	 .common_calendar
+	 {
+		width: 117px;
+	 }
+	 .ui-dialog .ui-widget-content table{
+			 margin-bottom: 0px;
+			 padding: 0px;
+			 width: auto;
+			}
+	</style>
+	<div class="headDiv">
+		<h:inputText id="txt"  value="#{StorageManage.query}" styleClass="textBg" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 
+		<p:commandButton value="查询" actionListener="#{StorageManage.queryData}" update=":myform:storageList" oncomplete="bgReposition($('.table'));" styleClass="delete" > </p:commandButton>
+		
+		<div class="button-split"></div>
+		 
+		<p:commandButton id="add" value="新建" update=":myform:astorage" oncomplete="addInfo.show()"   styleClass="delete" /> 
+		
+		<p:commandButton  value="删除" styleClass="delete"  update=":myform:sed" actionListener="#{StorageManage.onSelected}" oncomplete="ondelete()"/> 
+		<p:commandButton id="delete" value="删除" update=":myform:storageList :myform:displayMulti"  actionListener="#{StorageManage.onDelete}"  style="display: none;"/> 
+	</div>
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+	
+    <p:dataTable var="info" value="#{StorageManage.data}" id="storageList" editable="true" rowKey="#{info.id}"
+    	  sortMode="multiple" dynamic="true" selection="#{StorageManage.selectedStorage}" paginator="true" rows="16"
+    	  paginatorPosition="bottom" styleClass="table" style="width: auto; left: 170px; right: 0;">
+        
+        <p:ajax event="rowEdit" listener="#{StorageManage.onEdit}" update=":myform:storageList :myform:messages" />
+        <p:ajax event="rowEditCancel" listener="#{StorageManage.onCancel}" update=":myform:storageList" />
+ 		<p:ajax event="rowSelect" update=":myform:multiDialog"  />  
+ 		
+		<p:column selectionMode="multiple" style="width:2%;text-align: center;word-break: break-all;" />
+
+        <p:column headerText="库房编号"  style="width:10%;word-break: break-all;">
+              #{info.storageNo}  
+        </p:column>
+        <p:column headerText="库房名称"  style="width:10%;word-break: break-all;">
+              #{info.storageName}  
+        </p:column>
+        <p:column headerText="库房状态"  style="width:10%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.storageStatus}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:selectOneMenu value="#{info.storageStatus}" >  
+                       <f:selectItem itemLabel="活动" itemValue="活动"/>
+                       <f:selectItem itemLabel="禁止" itemValue="禁止"/>
+                    </h:selectOneMenu>  
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="可净得"   style="width:10%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.isAvailable}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:selectOneMenu value="#{info.isAvailable}" >  
+                       <f:selectItem itemLabel="是" itemValue="1"/>
+                       <f:selectItem itemLabel="否" itemValue="2"/>
+                    </h:selectOneMenu>  
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+         <p:column headerText="失效日期" style="width:15%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.invalidDate}">
+                    </h:outputText>
+                </f:facet>
+                
+                <f:facet name="input">
+                 <p:inputText value="#{info.invalidDate}" onclick="WdatePicker()" />
+                    <ui:remove>
+               	 	 <rich:calendar popup="true" locale="en" 
+						value="#{info.invalidDate}"
+						datePattern="yyyy-MM-dd" cellWidth="10px"
+						cellHeight="20px" >
+						</rich:calendar>
+						</ui:remove>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="计划方式"   style="width:8%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.planType}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:selectOneMenu value="#{info.planType}" >  
+                       <f:selectItem itemLabel="最小-最大" itemValue="1"/>
+                       <f:selectItem itemLabel="在订购点" itemValue="2"/>
+                       <f:selectItem itemLabel="看板补充" itemValue="3"/>
+                       <f:selectItem itemLabel="盘点补充" itemValue="4"/>
+                    </h:selectOneMenu>  
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="库位控制"   style="width:8%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.positionType}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:selectOneMenu value="#{info.positionType}" >  
+                       <f:selectItem itemLabel="无" itemValue="1"/>
+                       <f:selectItem itemLabel="预指定" itemValue="2"/>
+                       <f:selectItem itemLabel="动态输入" itemValue="3"/>
+                       <f:selectItem itemLabel="物料层" itemValue="4"/>
+                    </h:selectOneMenu>  
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="库房位置"  style="width:10%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.address}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{info.address}"   />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="保管员"   style="width:10%;word-break: break-all;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.storageMan}" />
+                </f:facet>
+                <f:facet name="input">
+                		<h:selectOneMenu value="#{info.storageMan}"  >            
+							<f:selectItems value="#{StorageManage.memberList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="操作" style="width:6%;word-break: break-all;">
+            <p:rowEditor />
+        </p:column>
+		
+    </p:dataTable>
+    <p:dialog id="addlog" widgetVar="addInfo" resizable="false" >
+    <div style="width:350px;height: 400px;">
+      <h:panelGroup id="astorage">
+      	<table>
+      		<tr>
+      			<td align="center" style="height: 35px;">库房编号：<font style="color:red;">*</font></td>
+      			<td><h:inputText value="#{StorageManage.no}" id="addNo" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：li_ceshi_001</div></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height:35px;">库房名称：<font style="color:red;">*</font></td>
+      			<td><h:inputText value="#{StorageManage.name}" id="addName" styleClass=""></h:inputText></td>
+      			<td><div style="color: gray;">例：A库房</div></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height: 35px;">库房状态：<font style="color:red;">*</font></td>
+      			<td>
+      				<h:selectOneMenu value="#{StorageManage.status}" id="addStatus" style="margin:0; padding:0; width: 90%;">  
+                       <f:selectItem itemLabel="请选择" itemValue="请选择"/>
+                       <f:selectItem itemLabel="活动" itemValue="活动"/>
+                       <f:selectItem itemLabel="禁止" itemValue="禁止"/>
+                    </h:selectOneMenu>  
+      			</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height: 35px;">可净得：<font style="color:red;">*</font></td>
+      			<td>
+      				<h:selectOneMenu value="#{StorageManage.isAvailable}" id="addIsAvailable" style="margin:0; padding:0; width: 90%;">  
+                       <f:selectItem itemLabel="请选择" itemValue="请选择"/>
+                       <f:selectItem itemLabel="是" itemValue="1"/>
+                       <f:selectItem itemLabel="否" itemValue="2"/>
+                    </h:selectOneMenu>  
+      			</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height: 35px;">失效日期：<font style="color:red;">*</font></td>
+      			<td>
+      				<rich:calendar popup="true" locale="en" 
+						value="#{StorageManage.invalidDate}" id="addInvalidDate"
+						datePattern="yyyy-MM-dd" cellWidth="10px"
+						cellHeight="20px" >
+						</rich:calendar>
+      			</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height: 35px;">计划方式：<font style="color:red;">*</font></td>
+      			<td>
+      				<h:selectOneMenu value="#{StorageManage.planType}" id="addPlanType" style="margin:0; padding:0; width: 90%;">  
+                       <f:selectItem itemLabel="请选择" itemValue="请选择"/>
+                       <f:selectItem itemLabel="最小-最大" itemValue="1"/>
+                       <f:selectItem itemLabel="在订购点" itemValue="2"/>
+                       <f:selectItem itemLabel="看板补充" itemValue="3"/>
+                       <f:selectItem itemLabel="盘点补充" itemValue="4"/>
+                    </h:selectOneMenu>  
+      			</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height: 35px;">库位控制：<font style="color:red;">*</font></td>
+      			<td>
+      				<h:selectOneMenu value="#{StorageManage.positionType}" id="addPositionType" style="margin:0; padding:0; width: 90%;">  
+                       <f:selectItem itemLabel="请选择" itemValue="请选择"/>
+                       <f:selectItem itemLabel="无" itemValue="1"/>
+                       <f:selectItem itemLabel="预指定" itemValue="2"/>
+                       <f:selectItem itemLabel="动态输入" itemValue="3"/>
+                       <f:selectItem itemLabel="物料层" itemValue="4"/>
+                    </h:selectOneMenu>  
+      			</td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height:35px;">库房位置：<font style="color:red;">*</font></td>
+      			<td><h:inputText value="#{StorageManage.address}" id="addAddress" styleClass=""></h:inputText></td>
+      			<td></td>
+      		</tr>
+      		<tr>
+      			<td align="center" style="height: 35px;">保管人员：<font style="color:red;">*</font></td>
+      			<td>
+      				<h:selectOneMenu value="#{StorageManage.storageMan}" id="addStorageMan" style="margin:0; padding:0; width: 90%;">  
+                       <f:selectItem itemLabel="请选择" itemValue="请选择"/>
+                       <f:selectItems value="#{StorageManage.memberList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+                    </h:selectOneMenu>  
+      			</td>
+      			<td></td>
+      		</tr>
+      	</table>
+      	<div class="headDivduan">
+			<p:commandButton onclick="onAdd()" value="增加" styleClass="delete"></p:commandButton>
+			<p:commandButton actionListener="#{StorageManage.saveStorageInfo}" id="addStorageInfo"  
+			 	value="增加" update=":myform:isSuccess" style="display:none;" 
+			 	oncomplete="result()">
+			</p:commandButton>
+			<p:commandButton id="btn2" onclick="addInfo.hide()" update=":myform:storageList" style="display:none;" ></p:commandButton>
+			<p:growl id="messages" showDetail="true"/> 
+		</div>
+    </h:panelGroup>
+    </div>
+    </p:dialog>
+    <h:inputHidden id="isSuccess" value="#{StorageManage.success}"></h:inputHidden>
+     <p:dialog id="multiDialog"  widgetVar="multiCarDialog"  height="200" showEffect="fade" hideEffect="explode" >
+        <p:dataList id="displayMulti" value="#{StorageManage.selectedStorage}" var="part"> 
+        </p:dataList>  
+    </p:dialog>
+    <h:inputHidden value="#{StorageManage.selected}" id="sed"></h:inputHidden>
+    <script type="text/javascript">
+	//<![CDATA[
+	       function result(){
+	    	   var str = document.getElementById("myform:isSuccess").value;
+	    	   if(str =="成功"){
+	    		   document.getElementById("myform:btn2").click();
+	    	   }else{
+	    		   alert(str);
+	    		   return false;
+	    	   }
+	       }
+	       
+	       function ondelete(){
+	    	  
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认删除此数据！")){
+		    		   document.getElementById("myform:delete").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行删除！");
+	    	   }
+	       }
+	       function onClear(){
+	    	   if(confirm("是否确认要清空数据,请慎重选择！")){
+	    		   document.getElementById("myform:clear").click();
+	    	   }
+	       }
+	       function onAdd(){
+	    	   var addno=document.getElementById("myform:addNo").value;
+	    	   var addName=document.getElementById("myform:addName").value;
+	    	   var addStatus=document.getElementById("myform:addStatus").value;
+	    	   var addIsAvailable=document.getElementById("myform:addIsAvailable").value;
+	    	   var addInvalidDate=document.getElementById("myform:addInvalidDateInputDate").value;
+	    	   var addPlanType=document.getElementById("myform:addPlanType").value;
+	    	   var addPositionType=document.getElementById("myform:addPositionType").value;
+	    	   var addAddress=document.getElementById("myform:addAddress").value;
+	    	   var addStorageMan=document.getElementById("myform:addStorageMan").value;
+	    	   if(null==addno||""==addno){
+	    		   alert("请输入库房编号");
+	    		   return false;
+	    	   }else if(null==addName||""==addName){
+	    		   alert("请输入库房名称");
+	    		   return false;
+	    	   }else if(null==addStatus||""==addStatus||"请选择"==addStatus){
+	    		   alert("请选择库房状态");
+	    		   return false;
+	    	   }else if(null==addIsAvailable||""==addIsAvailable||"请选择"==addIsAvailable){
+	    		   alert("请选择库房可净得");
+	    		   return false;
+	    	   }else if(null==addInvalidDate||""==addInvalidDate){
+	    		   alert("请选择库房失效日期");
+	    		   return false;
+	    	   }else if(null==addPlanType||""==addPlanType||"请选择"==addPlanType){
+	    		   alert("请选择库房计划方式");
+	    		   return false;
+	    	   }else if(null==addPositionType||""==addPositionType||"请选择"==addPositionType){
+	    		   alert("请选择库房库位控制");
+	    		   return false;
+	    	   }else if(null==addAddress||""==addAddress){
+	    		   alert("请输入库房位置");
+	    		   return false;
+	    	   }else if(null==addStorageMan||""==addStorageMan||"请选择"==addStorageMan){
+	    		   alert("请选择库房保管人员");
+	    		   return false;
+	    	   }else{
+	    		   document.getElementById("myform:addStorageInfo").click();
+	    		   //document.getElementById("myform:addlog").style.display="none";
+	    	   }
+	       }
+	       function searchFocus(id){
+				if(document.getElementById(id).value=="输入编号/名称/状态")
+					document.getElementById(id).value=""
+			}
+			
+			function searchBlur(id){
+				if(document.getElementById(id).value=="")
+					document.getElementById(id).value="输入编号/名称/状态"
+			}
+			document.getElementById("myform:txt").value="输入编号/名称/状态";
+			
+	//]]>
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript>
+</ui:composition>

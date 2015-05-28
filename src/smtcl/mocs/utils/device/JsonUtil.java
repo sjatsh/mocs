@@ -2,7 +2,7 @@ package smtcl.mocs.utils.device;
 import java.beans.IntrospectionException;  
 import java.beans.Introspector;  
 import java.beans.PropertyDescriptor;  
-import java.math.BigDecimal;  
+   
 import java.math.BigInteger;  
 import java.util.List;  
 import java.util.Map;  
@@ -15,7 +15,7 @@ public class JsonUtil {
 	        StringBuilder json = new StringBuilder();  
 	        if (obj == null) {  
 	            json.append("\"\"");  
-	        } else if (obj instanceof String || obj instanceof Integer || obj instanceof Float || obj instanceof Boolean || obj instanceof Short || obj instanceof Double || obj instanceof Long || obj instanceof BigDecimal || obj instanceof BigInteger || obj instanceof Byte) {  
+	        } else if (obj instanceof String || obj instanceof Integer || obj instanceof Float || obj instanceof Boolean || obj instanceof Short || obj instanceof Double || obj instanceof Long || obj instanceof Long || obj instanceof BigInteger || obj instanceof Byte) {  
 	            json.append("\"").append(string2json(obj.toString())).append("\"");  
 	        } else if (obj instanceof Object[]) {  
 	            json.append(array2json((Object[]) obj));  

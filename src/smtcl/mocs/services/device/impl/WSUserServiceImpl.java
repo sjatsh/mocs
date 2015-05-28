@@ -1,6 +1,5 @@
 package smtcl.mocs.services.device.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,14 +42,27 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 	 * 注入通用service
 	 */
 	private ICommonService commonService;
-	 
-	public ICommonService getCommonService() {
-		return commonService;
-	}
 
-	public void setCommonService(ICommonService commonService) {
-		this.commonService = commonService;
-	}
+    /**
+     * remote 远程数据源服务接口
+     */
+    private ICommonService remoteCommonService;
+
+    public ICommonService getCommonService() {
+        return commonService;
+    }
+
+    public void setCommonService(ICommonService commonService) {
+        this.commonService = commonService;
+    }
+
+    public ICommonService getRemoteCommonService() {
+        return remoteCommonService;
+    }
+
+    public void setRemoteCommonService(ICommonService remoteCommonService) {
+        this.remoteCommonService = remoteCommonService;
+    }
 
 	/**
 	 * 用户登录
@@ -162,47 +174,24 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 	 * @param jobDispatchNo 工单编号
 	 * @return
 	 */
+    @SuppressWarnings("unchecked")
 	public boolean updateProduceTask(String equSerialNo,String jobDispatchNo){
 		String hql="from TJobdispatchlistInfo t where no='"+jobDispatchNo+"'";
-		List<TJobdispatchlistInfo> tjlist=dao.executeQuery(hql);
+        List<TJobdispatchlistInfo> tjlist = remoteCommonService.executeQuery(hql);
 		if(null!=tjlist&&tjlist.size()>0){
 			TJobdispatchlistInfo tj=tjlist.get(0);
-			if(tj.getFinishNum()>0){
-				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
-			}else{
-				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
-				tj.setStatus(50); //状态从上线(40) 到 加工(50)
-				Date da=new Date();
-				tj.setRealStarttime(da);
-			}
-			
-			try {
-				dao.update(TJobdispatchlistInfo.class,tj);
-				/*
-				String sql="update  t_equ_jobdispatch set status=1 where status!=0 and equ_SerialNo='"+equSerialNo+"'";
-				dao.executeNativeUpdate(sql);         
-				
-				hql="from TEquJobDispatch where equSerialNo='"+equSerialNo+"' and jobdispatchNo='"+jobDispatchNo+"'";
-				List<TEquJobDispatch> rs=dao.executeQuery(hql);
-				TEquJobDispatch ejd=new TEquJobDispatch();
-				if(null!=rs&&rs.size()>0){
-					ejd=rs.get(0);
-					//ejd.setJobdispatchNo(tj.getNo());
-					ejd.setStatus(2);					
-					dao.update(TEquJobDispatch.class, ejd);
-				}
-		*/
-				
-//				}else{
-//					ejd.setEquSerialNo(equSerialNo);
-//					ejd.setJobdispatchNo(tj.getNo());
-//					dao.save(TEquJobDispatch.class, ejd);
-//				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-			
+            if (tj.getFinishNum() <= 0) {
+//				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
+                tj.setStatus(50); //状态从上线(40) 到 加工(50)
+                Date da=new Date();
+                tj.setRealStarttime(da);
+            }
+//            else {
+//				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
+//            }
+
+            remoteCommonService.update(TJobdispatchlistInfo.class,tj);
+
 			return true;
 		}else{
 			return false;
@@ -211,41 +200,35 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 	
 	/**
 	 * 切换工单
-	 * @param equSerialNo
+	 * @param equSerialNo 机床序列号
 	 * @param jobDispatchNo 工单编号
 	 * @return
 	 */
+    @SuppressWarnings("unchecked")
 	public Map<String,Object> changeProduceTask(String equSerialNo,String jobDispatchNo){
-		Map<String, Object> res = new HashMap<String, Object>();
-		try {
-			
-			String sql="update  t_equ_jobdispatch set status=1 where status!=0 and equ_SerialNo='"+equSerialNo+"'";
-			dao.executeNativeUpdate(sql);         
-			
-			String hql="from TEquJobDispatch where equSerialNo='"+equSerialNo+"' and jobdispatchNo='"+jobDispatchNo+"'";
-			List<TEquJobDispatch> rs=dao.executeQuery(hql);
-			TEquJobDispatch ejd=new TEquJobDispatch();
-			if(null!=rs&&rs.size()>0){
-				ejd=rs.get(0);
-				//ejd.setJobdispatchNo(tj.getNo());
-				ejd.setStatus(2);					
-				dao.update(TEquJobDispatch.class, ejd);
-			}
-			
-			hql=" from TJobdispatchlistInfo where no='"+jobDispatchNo+"'";
-			List<TJobdispatchlistInfo> jobdispatch=dao.executeQuery(hql);
-			if(null!=jobdispatch&&jobdispatch.size()>0){
-				TJobdispatchlistInfo rec=jobdispatch.get(0);
-				res.put("planNum", rec.getProcessNum());
-				res.put("finishNum",rec.getFinishNum());
-				res.put("jobDispatchNo",rec.getNo());
-			  }
-			return res;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+        Map<String, Object> res = new HashMap<String, Object>();
+
+        String sql = "update  t_equ_jobdispatch set status=1 where status!=0 and equ_SerialNo='" + equSerialNo + "'";
+        remoteCommonService.executeNativeUpdate(sql);
+
+        String hql = "from TEquJobDispatch where equSerialNo='" + equSerialNo + "' and jobdispatchNo='" + jobDispatchNo + "'";
+        List<TEquJobDispatch> rs = remoteCommonService.executeQuery(hql);
+        if (null != rs && rs.size() > 0) {
+            TEquJobDispatch ejd = rs.get(0);
+            ejd.setStatus(2);
+            remoteCommonService.update(TEquJobDispatch.class, ejd);
+        }
+
+        hql = " from TJobdispatchlistInfo where no='" + jobDispatchNo + "'";
+        List<TJobdispatchlistInfo> jobdispatch = remoteCommonService.executeQuery(hql);
+        if (null != jobdispatch && jobdispatch.size() > 0) {
+            TJobdispatchlistInfo rec = jobdispatch.get(0);
+            res.put("planNum", rec.getProcessNum());
+            res.put("finishNum", rec.getFinishNum());
+            res.put("jobDispatchNo", rec.getNo());
+        }
+        return res;
+
 	}
 	
 	public Boolean switchMode(String equSerialNo,String type)
@@ -260,21 +243,18 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 		}
 		return false;
 	}
-	
+
+    @SuppressWarnings("unchecked")
 	public Boolean jobFinished(String equSerialNo,String jobDispatchNo){
-		try{
-		String hql=" from TJobdispatchlistInfo t where no='"+jobDispatchNo+"'";
-		List<TJobdispatchlistInfo> tjlist=dao.executeQuery(hql);
-		if(null!=tjlist&&tjlist.size()>0){
-			TJobdispatchlistInfo tj=tjlist.get(0);
-			if(tj.getStatus().intValue()==60 || tj.getStatus().intValue()==70)
-			return true;
-		  }	
-		}catch(Exception e){
-			
-		}
-		return false;
-	}
+        String hql = " from TJobdispatchlistInfo t where no='" + jobDispatchNo + "'";
+        List<TJobdispatchlistInfo> tjlist = remoteCommonService.executeQuery(hql);
+        if (null != tjlist && tjlist.size() > 0) {
+            TJobdispatchlistInfo tj = tjlist.get(0);
+            if (tj.getStatus() == 60 || tj.getStatus() == 70)
+                return true;
+        }
+        return false;
+    }
 	
 	@Override
 	public Map<String,Object> memberLogin(String memID, String memPass,
@@ -325,5 +305,37 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 		}
 		
 		return loginRes;
+	}
+
+	@Override
+    @SuppressWarnings("unchecked")
+	public int JobOnlineCheck(String equSerialNo, String jobDispatchNo) {
+		String hql = "select new Map(jobdis.id as Id,jobdis.onlineNumber as onlineNumber,jobdis.processNum as planNum) "
+				+ " from TJobdispatchlistInfo jobdis,TEquJobDispatch equ_job"
+				+ " where equ_job.jobdispatchNo=jobdis.no"
+				+ " and equ_job.jobdispatchNo='"+jobDispatchNo+"'"
+				+ " and equ_job.equSerialNo='"+equSerialNo+"'";
+		List<Map<String,Object>> list = remoteCommonService.executeQuery(hql);
+		if(list != null && list.size()>0){
+			Map<String,Object> map = list.get(0);
+			int onlineNumber=0;
+			int planNum=0;
+			if(map.get("onlineNumber")!=null && !map.get("onlineNumber").toString().equals("")){
+				onlineNumber = Integer.parseInt(map.get("onlineNumber").toString());
+			}
+			if(map.get("planNum")!=null && !map.get("planNum").toString().equals("")){
+				planNum = Integer.parseInt(map.get("planNum").toString());
+			}
+			
+			Long id = Long.parseLong(map.get("Id").toString());
+			TJobdispatchlistInfo jobdis = dao.get(TJobdispatchlistInfo.class, id);
+			jobdis.setOnlineNumber(jobdis.getOnlineNumber()==null?0:jobdis.getOnlineNumber()+1);
+            remoteCommonService.save(TJobdispatchlistInfo.class,jobdis);
+			
+			if(onlineNumber>planNum){
+				return 2;
+			}
+		}
+		return 1;
 	}
 }

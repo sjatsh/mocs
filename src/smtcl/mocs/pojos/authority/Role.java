@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 
 /**
- * 映射数据库中"角色"的实体类
+ * 鏄犲皠鏁版嵁搴撲腑"瑙掕壊"鐨勫疄浣撶被
  *
  * User: gjy
  * Date: 2012-10-11

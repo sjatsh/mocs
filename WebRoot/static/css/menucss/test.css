@@ -150,10 +150,10 @@ body>table
 	position: fixed;
 	bottom: 0px;
 	left: 0px;
+	right: 0px;
 	margin: 0;
 	padding: 0;
 	padding-top:1px;
-	width: 100%;
 	background-image: -moz-linear-gradient(top, #CCCCCC, #FFFFFF);
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #CCCCCC), color-stop(1, #FFFFFF));
 	z-index: 200001;

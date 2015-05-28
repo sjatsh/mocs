@@ -20,7 +20,6 @@ import org.dreamwork.persistence.ServiceFactory;
 import org.primefaces.event.RowEditEvent;
 
 import smtcl.mocs.pojos.job.TJobplanInfo;
-import smtcl.mocs.services.device.IOrganizationService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 
 /**
@@ -28,7 +27,7 @@ import smtcl.mocs.services.jobplan.IJobPlanService;
  * 作业计划编辑Bean
  * @作者：yyh
  * @创建时间：2013-7-2 下午13:05:16
- * @修改者：yyh
+ * @修改者：songkaiang
  * @修改日期：
  * @修改说明：
  * @version V1.0
@@ -37,14 +36,12 @@ import smtcl.mocs.services.jobplan.IJobPlanService;
 @ViewScoped
 public class JobPlanUpdataBean implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * 作业计划接口实例
 	 */
 	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
-	/**
-	 * 权限接口实例
-	 */
-	private IOrganizationService organizationService=(IOrganizationService)ServiceFactory.getBean("organizationService");
     /**
      * 用于页面传值
      */
@@ -69,6 +66,10 @@ public class JobPlanUpdataBean implements Serializable {
 	 * 状态
 	 */
 	private String status;
+	/**
+	 * 状态Hidden
+	 */
+	private String statusHidden;
 	/**
 	 * 从属生产计划ID
 	 */
@@ -313,6 +314,7 @@ public class JobPlanUpdataBean implements Serializable {
 	/**
 	 * 为分配任务临时数据 修改数据
 	 */
+	@SuppressWarnings("unchecked")
 	public void updateTaskData(RowEditEvent event){
 		Map<String,Object> map=(Map<String,Object>)event.getObject();
 		int sum=0;//已分配总数
@@ -363,7 +365,10 @@ public class JobPlanUpdataBean implements Serializable {
 				if(maplst.size()>0){
 					Map<String,Object> map = maplst.get(0);
 					if(map.get("status")!=null){
-						status = map.get("status").toString();
+						statusHidden = map.get("status").toString();
+					}
+					if(map.get("statusName")!=null){
+						status = map.get("statusName").toString();
 					}
 					if(map.get("name")!=null){
 						name = (String)map.get("name");
@@ -449,14 +454,6 @@ public class JobPlanUpdataBean implements Serializable {
 
 	public void setJobPlanService(IJobPlanService jobPlanService) {
 		this.jobPlanService = jobPlanService;
-	}
-
-	public IOrganizationService getOrganizationService() {
-		return organizationService;
-	}
-
-	public void setOrganizationService(IOrganizationService organizationService) {
-		this.organizationService = organizationService;
 	}
 
 	public Map<String, Object> getJobPlanMap() {
@@ -739,6 +736,14 @@ public class JobPlanUpdataBean implements Serializable {
 
 	public void setRealaddTask(List<Map<String, Object>> realaddTask) {
 		this.realaddTask = realaddTask;
+	}
+
+	public String getStatusHidden() {
+		return statusHidden;
+	}
+
+	public void setStatusHidden(String statusHidden) {
+		this.statusHidden = statusHidden;
 	}
 	
 }

@@ -65,7 +65,7 @@
 		<div class="filter-bar">
 			<div class="filter-label">人员:</div>
 			<div class="filter-input">
-				<h:selectOneMenu value="#{jobdispatchDetailBean.person}" styleClass="filter-select">
+				<h:selectOneMenu id="person_id" value="#{jobdispatchDetailBean.person}" styleClass="filter-select">
 					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
 					<f:selectItems value="#{jobdispatchDetailBean.personList}" var="person" itemLabel="#{person.personName}" itemValue="#{person.personValue}"></f:selectItems>
 				</h:selectOneMenu>
@@ -86,7 +86,7 @@
 	</div>
 	<div class="filter-submit">
 		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
-			<a4j:ajax listener="#{jobdispatchDetailBean.SubmitSearch}" event="click" execute="jobplanStatus partName jobCreateDate equSerialNo jobStartTime" render=":myform:datatable :myform:ds" oncomplete="resizeTable();searchBtn();"></a4j:ajax>
+			<a4j:ajax listener="#{jobdispatchDetailBean.SubmitSearch}" event="click" execute="person_id jobplanStatus partName jobCreateDate jobCreateDateEnd equSerialNo jobStartTime jobStartTimeEnd" render=":myform:datatable :myform:ds" oncomplete="resizeTable();searchBtn();"></a4j:ajax>
 		</h:graphicImage>
 	</div>
 	<div class="filter-export">

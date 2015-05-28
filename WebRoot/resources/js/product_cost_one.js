@@ -8,7 +8,8 @@ function loadData() {
 }
 function loadData_machine() {
 	var columJsonData = document.getElementById("myform:beanvalue").value;
-	var columJsonData = eval('(' + columJsonData + ')'); 
+    var columJsonData = eval('(' + columJsonData + ')'); 
+	
 	generateChart(columJsonData);
 	}
 
@@ -47,8 +48,7 @@ function generateChart(barModel) {
 	                    text: ''
 	                },
 	                gridLineColor: "rgba(255, 255, 255, 0)",  
-	                labels: {  //X轴的标签（下面的说明）
-						enabled: false,               //是否显示
+	                labels: {  //X杞寸殑鏍囩锛堜笅闈㈢殑璇存槑锛�						enabled: false,               //鏄惁鏄剧ず
 					},
 	                   
 	            },
@@ -58,7 +58,7 @@ function generateChart(barModel) {
 	            	 href: ''
 	        },
 			exporting:{ 
-				 enabled:false //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示 
+				 enabled:false //鐢ㄦ潵璁剧疆鏄惁鏄剧ず鈥樻墦鍗扳�,'瀵煎嚭'绛夊姛鑳芥寜閽紝涓嶈缃椂榛樿涓烘樉绀�
 			},
 	            tooltip: {
 	                formatter: function() {
@@ -93,7 +93,7 @@ function generateChart(barModel) {
 	                    'rgba(255,220,0,1)',
 	                    'rgba(191,191,191,1)',
 	                    {linearGradient: [682,340, 682, 320],
-	                 	stops: [[0, 'rgba(138,138,138,1)'] , [1, 'rgba(89,89,89,1)']]},//深灰   
+	                 	stops: [[0, 'rgba(138,138,138,1)'] , [1, 'rgba(89,89,89,1)']]},//娣辩伆   
 
 	            ],
 	            series: [{
@@ -147,7 +147,7 @@ function pieChart(barModel) {
             },
             tooltip: {
             	enabled:false,
-        	    pointFormat: '<b>{point.name}</b> ￥{y} ',
+        	    pointFormat: '<b>{point.name}</b> 锟y} ',
             	percentageDecimals: 1
             },
             plotOptions: {
@@ -158,7 +158,7 @@ function pieChart(barModel) {
                         enabled: true,
                         connectorColor: '#000000',
                         
-                        format: '<b>{point.name}</b> ￥{y} ',
+                        format: '<b>{point.name}</b> 锟y} ',
                         style:{
                         	fontSize:piefontsize,
                         	color:'rgba(138,138,138,1)'
@@ -169,18 +169,14 @@ function pieChart(barModel) {
             },
             
     		colors:[                   
-    				   'rgba(0,168,255,1)', //兰
-    				   'rgba(0,160,64,1)',  //绿
-    				   'rgba(255,220,0,1)', //黄
-    				   'rgba(191,191,191,1)', //灰
-    				   'rgba(138,138,138,1)',//深灰   
+    				   'rgba(0,168,255,1)', //鍏�    				   'rgba(0,160,64,1)',  //缁�    				   'rgba(255,220,0,1)', //榛�    				   'rgba(191,191,191,1)', //鐏�    				   'rgba(138,138,138,1)',//娣辩伆   
     				],
     				credits: {
     						 text: '',
     						 href: ''
     				},
     				exporting:{ 
-    					 enabled:false //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示 
+    					 enabled:false //鐢ㄦ潵璁剧疆鏄惁鏄剧ず鈥樻墦鍗扳�,'瀵煎嚭'绛夊姛鑳芥寜閽紝涓嶈缃椂榛樿涓烘樉绀�
     				}, 
     				
             series: [{
@@ -238,8 +234,7 @@ chart = new Highcharts.Chart({
                     text: ''
                 },
                 gridLineColor: "rgba(255,255,255,0)",  
-                labels: {  //X轴的标签（下面的说明）
-					enabled: false,               //是否显示
+                labels: {  //X杞寸殑鏍囩锛堜笅闈㈢殑璇存槑锛�					enabled: false,               //鏄惁鏄剧ず
 				},
                    
             },
@@ -249,7 +244,7 @@ chart = new Highcharts.Chart({
 	            	 href: ''
 	        },
 			exporting:{ 
-				 enabled:false //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示 
+				 enabled:false //鐢ㄦ潵璁剧疆鏄惁鏄剧ず鈥樻墦鍗扳�,'瀵煎嚭'绛夊姛鑳芥寜閽紝涓嶈缃椂榛樿涓烘樉绀�
 			},
 			 legend: {
 	             layout: 'horizontal',

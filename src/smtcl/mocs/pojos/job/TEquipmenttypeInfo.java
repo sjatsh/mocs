@@ -36,6 +36,9 @@ public class TEquipmenttypeInfo implements java.io.Serializable {
 	private Integer level;          //层级类别
 	private String isdel; //是否删除0正常1删除
 	private String nodeid;
+	private String erpResouceCode;
+	private String erpResouceDesc;
+	
 	private Set<RProcessEquipmenttype> RProcessEquipmenttypes = new HashSet<RProcessEquipmenttype>(
 			0);
 	private Set<TEquipmenttypeInfo> TEquipmenttypeInfos = new HashSet<TEquipmenttypeInfo>(
@@ -174,5 +177,24 @@ public class TEquipmenttypeInfo implements java.io.Serializable {
 	public void setNodeid(String nodeid) {
 		this.nodeid = nodeid;
 	}
+	
+	@Column(name = "erp_resouce_code")
+	public String getErpResouceCode() {
+		return erpResouceCode;
+	}
+
+	public void setErpResouceCode(String erpResouceCode) {
+		this.erpResouceCode = erpResouceCode;
+	}
+	
+	@Column(name = "erp_resouce_desc")
+	public String getErpResouceDesc() {
+		return erpResouceDesc;
+	}
+
+	public void setErpResouceDesc(String erpResouceDesc) {
+		this.erpResouceDesc = erpResouceDesc;
+	}
+	
 	
 }

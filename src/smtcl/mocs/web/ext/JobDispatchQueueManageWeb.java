@@ -14,14 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.dreamwork.persistence.ServiceFactory;
 
-import smtcl.mocs.services.authority.ICommonService;
 import smtcl.mocs.services.device.IOrganizationService;
-import smtcl.mocs.services.jobplan.IJobDispatchService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.utils.device.StringUtils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * 
@@ -37,6 +32,7 @@ import com.google.gson.GsonBuilder;
 @ViewScoped
 public class JobDispatchQueueManageWeb implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 作业计划接口实例
 	 */
@@ -137,8 +133,6 @@ public class JobDispatchQueueManageWeb implements Serializable {
 	 * 作业计划详情
 	 */
 	public void getJonPlanDetail(){
-		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-//		jobplanId = (String)session.getAttribute("");  //要从这里得到
 		jobplanId = "";
 		List<Map<String, Object>> lst = jobPlanService.getJobPlanDetail(jobplanId); //作业计划详情
 		if(lst.size()>0){
@@ -289,38 +283,6 @@ public class JobDispatchQueueManageWeb implements Serializable {
 		//获取节点ID
 				HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 				String nodeid = (String)session.getAttribute("nodeid");
-				
-				/*
-				waitJobResults = jobPlanService.getWaitJobList(nodeid);//待分配作业
-				for(Map<String, Object> map : waitJobResults){
-					if(map.get("name")==null){
-						map.put("name", "");
-					}
-					if(map.get("planNum")==null){
-						map.put("planNum", 0);
-					}
-					if(StringUtils.isEmpty((String)map.get("planStarttime"))){
-						map.put("planStarttime", "");
-					}
-				    if(StringUtils.isEmpty((String)map.get("planEndtime"))){
-						map.put("planEndtime", "");
-					}
-				    
-				    if(map.get("name")!=null && !"".equals(map.get("name"))){
-				    	map.put("name", StringUtils.getSubString((String)map.get("name"),"1"));   //截取字段
-				    }
-				}	
-				
-				if(jobplanId == null){
-				if(waitJobResults.size()>0){                    //作业计划ID,默认第一个
-					Map<String, Object> map = waitJobResults.get(0);
-					if(map.get("jobplanid")!=null){
-					jobplanId = map.get("jobplanid").toString();
-					}
-				}
-				}
-				jobplanId = "1";  //测试，默认给个ID
-*/
 				dispatchFinishResults = jobPlanService.getAlreadyDispatchList(nodeid); //已分配工单
 				for(Map<String, Object> map : dispatchFinishResults){
 					if(map.get("no")==null){
@@ -346,51 +308,8 @@ public class JobDispatchQueueManageWeb implements Serializable {
 				    if(map.get("no")!=null && !"".equals(map.get("no"))){
 				    	map.put("no", StringUtils.getSubString((String)map.get("no"),"4"));   //截取字段
 				    }
-				    /*if(map.get("name")!=null && !"".equals(map.get("name"))){
-				    	map.put("name", StringUtils.getSubString((String)map.get("name"),"1"));   //截取字段
-				    }*/
-				    /*if(map.get("jobno")!=null && !"".equals(map.get("jobno"))){
-				    	map.put("jobno", StringUtils.getSubString((String)map.get("jobno"),"6"));   //截取字段
-				    }*/
 				}
 				
-			/*	
-				List<Map<String, Object>> lst = jobPlanService.getJobPlanDetail(jobplanId); //作业计划详情  ===>没有使用到，ext中实现了
-				if(lst.size()>0){
-					Map<String, Object> map = lst.get(0);
-					if(map.get("jobplanid")!=null){
-						jobplanid	 = map.get("jobplanid").toString();
-					}
-					if(map.get("process")!=null){
-						schedule	 = map.get("process").toString();
-					}
-					if(map.get("userProdPlanId")!=null){
-						producePlanId	 = map.get("userProdPlanId").toString();
-					}
-					if(map.get("parttypeid")!=null){
-						partTypeId	 = map.get("parttypeid").toString();
-					}
-					
-					if(map.get("name")!=null){
-					jobName	 = (String)map.get("name");
-					}
-					if(map.get("planNum")!=null){
-					planNum = map.get("planNum").toString();
-					}
-					if(map.get("planStarttime")!=null){
-					startTime = (String)map.get("planStarttime");
-					}
-					if(map.get("planEndtime")!=null){
-					endTime = (String)map.get("planEndtime");
-					}
-					if(map.get("priority")!=null){
-					priority = map.get("priority").toString();
-					}
-					if(map.get("finishNum")!=null){
-					finishNum = map.get("finishNum").toString();
-					}
-				}
-				*/
 		return dispatchFinishResults;
 	}
 

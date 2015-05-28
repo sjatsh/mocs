@@ -86,6 +86,7 @@
 	<h:inputHidden value="#{SubJobdispatchAdd.taskNum}" id="taskNum"></h:inputHidden>
 	<h:inputHidden value="#{SubJobdispatchAdd.eduTypeId}" id="eduTypeId"></h:inputHidden>
 	<h:inputHidden value="#{SubJobdispatchAdd.jobState}" id="jobState"></h:inputHidden>
+    <h:inputHidden value="#{SubJobdispatchAdd.viewDisabled}" id="viewDisabled"></h:inputHidden>
 	<table id="jobtable" width="100%" style="font-size:12px;" cellspacing="0" cellpadding="0">
 		<!-- *************************    上部           ********************************* -->
 		<tr>
@@ -132,7 +133,7 @@
 									    </td>
 								    </tr>
 							    </table>
-							    <div style="width: 100%;height:100%;position: relative;" id="div_one">
+							    <div style="width: 100%;position: relative;" id="div_one">
 							    	<div style="float: left;">
 							    		<table>
 							    			<tr style="height:30px;">
@@ -220,13 +221,24 @@
 												render=":myform:tableTreeJob" />
 										</h:commandButton>
 										<h:commandButton id="chaxun_two" value="查询" style="display:none;" onclick="setValueforHidd()">
-											<f:ajax listener="#{SubJobdispatchAdd.searchList('root')}" 
+											<f:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeByequName')}" 
+												execute="start end jobState partTypeId taskNum eduTypeId" event="click"
+												render=":myform:tableTreeJob_tab3" />
+										</h:commandButton>
+										<h:commandButton id="jobQuery" value="查询" style="display:none;" onclick="setValueforHidd()">
+											<f:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeBybatchNo')}" 
+												execute="start end jobState partTypeId taskNum eduTypeId" event="click"
+												render=":myform:tableTreeJob" />
+										</h:commandButton>
+										<h:commandButton id="jobQueryByEqu" value="查询" style="display:none;" onclick="setValueforHidd()">
+											<f:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeByequName')}" 
 												execute="start end jobState partTypeId taskNum eduTypeId" event="click"
 												render=":myform:tableTreeJob_tab3" />
 										</h:commandButton>
 									</div>
 							    </div>
 							    <div style="width: 100%;height:100%;position: relative;margin-top: 80px;" id="div_two">
+                                <div id="viewDisabled">
 							    	<table>
 							    		<tr>
 							    		<td>
@@ -235,7 +247,7 @@
 											</a>
 										</td>
 							    		<td>
-											<a  href="javascript:openUrl('./jobdispatch/production_scrap_add.faces')" title="生产报废" id="importButton"
+											<a  href="javascript:openUrl('./erp/production_scrap_add.faces')" title="生产报废" id="importButton"
 												style="margin-right: 20px;">
 												<img src="./images/scbf_48.png"  id="img9"/>
 											</a>
@@ -293,6 +305,7 @@
 										</td>
 							    		</tr>
 							    	</table>
+                                    </div>
 							    </div>
 						    </td>
 				       	</tr>
@@ -635,6 +648,9 @@ function setValueforHidd(){//对隐藏域进行赋值，以便jsf的ajax向控�
 	var equid = document.getElementById("select_box_job_equName_hdn").value;
 	var taskNum = document.getElementById("select_box_job_taskNum_hdn").value;
 	var jobState = document.getElementById("select_box_job_jobStatus_hdn").value;
+	if(!jobState){
+		jobState='10,20,30,40,50,80';
+	}
 	document.getElementById("myform:partTypeId").value=partid;
 	document.getElementById("myform:taskNum").value=taskNum;
 	document.getElementById("myform:eduTypeId").value=equid;
@@ -681,6 +697,7 @@ function chaxun_two(){
 		document.getElementById("gtt").style.color="#5a5a5a";
 		document.getElementById("gdlbimg").src="./images/tabselected.png"; 
 		document.getElementById("gdlb").style.color="white";
+		document.getElementById("myform:jobQuery").click();
 	}
 	onloadTab(tt);
 }
@@ -706,9 +723,11 @@ function chaxun_two(){
 		if(group == 1){//任务号为头
 			document.getElementById("divtab3").style.display="none";
 			document.getElementById("divtab2").style.display="block";
+			document.getElementById("myform:jobQuery").click();
 		}else if(group == 2){//设备为头
 			document.getElementById("divtab2").style.display="none";
 			document.getElementById("divtab3").style.display="block";
+			document.getElementById("myform:jobQueryByEqu").click();
 		}
  	}
  	
@@ -1100,27 +1119,17 @@ function chaxun_two(){
 </script>
  
 <script type="text/javascript">
-	//<![CDATA[ 
-// 		(function(){
-// 		    Ext.Ajax.request({
-// 				url:"./jobdispatch/findJobPlanDetailDefaultBYDispatchIdDefault.action",
-// 				method:"post",
-// 				success:function(response){
-// 					var obj=Ext.decode(response.responseText);
-// 					clickEvent(obj);	
-// 				},
-// 				failure:function(response,opts){alert("failure");},
-// 				params:{
-// 			    }
-// 		    });
-// 		})();
+    $(document).ready(function(){
+        //显示控制按钮权限
+        if($("#myform\\:viewDisabled").val() == "false") {
+//             $("#viewDisabled").hide();
+        }
+    });
 
 		setTimeout(function(){
-			//document.getElementById("detailcenterdiv1").style.display="block";
 			$("#maskw").fadeOut(500);
 			},100);
 		
-	//]]> 
 </script>
 
 </ui:composition>

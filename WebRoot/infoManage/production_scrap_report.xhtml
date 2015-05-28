@@ -73,7 +73,7 @@
 		<div style="overflow-x:auto; position: relative; width:100%">
 			<div class="ui-datatable ui-widget table-title" id="titleDiv">
 				<ui:remove></ui:remove>
-				<table style="width: 100%; height: 100%;" cellpadding="0" cellspacing="0">
+				<table style="width: 100%; height: 100%;" cellpadding="0" cellspacing="0" class="tablehight">
 					<tr>
 						<th class="ui-state-default" colspan="5">报废信息</th>
 						<th class="ui-state-default" colspan="2">至工序</th>
@@ -101,7 +101,7 @@
 					</tr>
 				</table>
 			</div>
-			<div class="table-body">
+			<div class="table-body" style="overflow: auto;">
 				<p:dataTable value="#{productionScrapReportBean.scrapReportData}" var="scrap" id="datatable" rowClasses="even-row, odd-row">
 					<p:column style="width:7%;word-break: break-all;">
 						<f:facet name="header">
@@ -211,6 +211,8 @@
 	
 	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
 	$("#list-frame th").css("height", hjb51 * 44 / 1080 + "px");
+	alert($("#list-frame").height()+"--"+$(".tablehight").height());
+	$(".table-body").css("height",($("#list-frame").height()-$(".tablehight").height())); 
 	function resizeTable() {
 		$(".ui-dt-c,.ui-state-default").css("font-size", hjb51 * 20 / 1080 + "px");
 		$(".table-title,.table-body").css("width", "1800px");

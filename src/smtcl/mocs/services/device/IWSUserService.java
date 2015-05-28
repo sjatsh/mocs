@@ -79,5 +79,13 @@ public interface IWSUserService {
 	 * @return
 	 */
 	public Boolean jobFinished(String equSerialNo,String jobDispatchNo);
+	
+	/**
+	 * 工单是否合理
+	 * @param equSerialNo
+	 * @param jobDispatchNo
+	 * @return
+	 */
+	public int JobOnlineCheck(String equSerialNo, String jobDispatchNo);
 
 }

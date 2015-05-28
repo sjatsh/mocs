@@ -7,14 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
-
-
-
-
-
-
 
 import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.stereotype.Controller;
@@ -25,10 +18,8 @@ import smtcl.mocs.pojos.device.TEquipmentInfo;
 import smtcl.mocs.pojos.device.TUser;
 import smtcl.mocs.pojos.job.TEquJobDispatch;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
-import smtcl.mocs.services.authority.ICommonService;
+import smtcl.mocs.services.device.ICommonService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
-import smtcl.mocs.services.jobplan.IJobPlanService;
-import smtcl.mocs.services.jobplan.UpdataJobDispatch;
 import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.StringUtils;
 
@@ -41,30 +32,21 @@ public class JobDispatchWeb {
 	private  Gson gson = new GsonBuilder().serializeNulls().create();
 	
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-	private UpdataJobDispatch updataJobDispat = (UpdataJobDispatch)ServiceFactory.getBean("updataJobDispatch");
 	/**
 	 * 工单接口实例
 	 */
-	@ManagedProperty("#{jobDispatchService}")
-	private IJobDispatchService jobDispatchService;
+	private IJobDispatchService jobDispatchService = (IJobDispatchService)ServiceFactory.getBean("jobDispatchService");
 	
-	@ManagedProperty("#{commonService1}")
-	private ICommonService commonService;
-	
-	/**
-	 * 作业计划接口实例
-	 */
-	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
+	private ICommonService remoteCommonService = (ICommonService)ServiceFactory.getBean("remoteCommonService");
 	
 	/**
 	 * 获取设备资源信息
-	 * @return
-	 * @throws Exception
+	 * return
 	 */
 	@RequestMapping(value ="/jobdispatch/getDevicesList.action")
 	public @ResponseBody Map<String, ? extends Object> getTestsExtData(HttpServletRequest request,String taskNum,String jobstatus, String partid,String equid,String planStime,String planEtime) throws Exception{
 		String nodeid=(String)request.getSession().getAttribute("nodeid");
-		List<Map<String, Object>> tempData = (List<Map<String,Object>>) jobDispatchService.getDevicesInfo(nodeid,formatTaskNum(taskNum),jobstatus, partid,equid, planStime, planEtime);
+		List<Map<String, Object>> tempData = jobDispatchService.getDevicesInfo(nodeid,formatTaskNum(taskNum),jobstatus, partid,equid, planStime, planEtime);
 		List<Map<String, Object>> newData = new ArrayList<Map<String,Object>>();
 		for(Map<String,Object> map : tempData){
 			Map<String,Object> newMap = new HashMap<String,Object>();
@@ -129,7 +111,7 @@ public class JobDispatchWeb {
 			planEtime=fe;
 		}
 		
-		List<Map<String, Object>> temp = (List<Map<String,Object>>) jobDispatchService.getJobDispatchsInfo(nodeid,formatTaskNum(taskNum),jobstatus,partid,equid,planStime,planEtime);
+		List<Map<String, Object>> temp = jobDispatchService.getJobDispatchsInfo(nodeid,formatTaskNum(taskNum),jobstatus,partid,equid,planStime,planEtime);
 		long maxId=0;
 		if(temp.size()>0 && temp!=null){
 			for(Map<String, Object> map : temp){
@@ -210,8 +192,7 @@ public class JobDispatchWeb {
 	
 		List<Map<String, Object>> tempData = new ArrayList<Map<String,Object>>();
 		//临时数据
-		//List<Map<String, Object>> temp = (List<Map<String,Object>>) jobDispatchService.getJobDispatchsInfo("8a8abc973f1dc2dc013f1dc3d7dc0001","");
-		List<Map<String, Object>> temp = (List<Map<String,Object>>) jobDispatchService.getJobDispatchsInfoOne(jobdispatchId);
+		List<Map<String, Object>> temp = jobDispatchService.getJobDispatchsInfoOne(jobdispatchId);
 		System.out.println(gson.toJson(temp));
 		long maxId=0;
 		if(temp.size()>0 && temp!=null){
@@ -258,9 +239,7 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 根据最大工单编号查找响应的作业计划
-	 * @param p
 	 * @return
-	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/findJobPlanDetailDefaultBYDispatchIdDefault.action")
 	public @ResponseBody Map<String, ? extends Object> getJobplanDetail() throws Exception{
@@ -378,7 +357,7 @@ public class JobDispatchWeb {
 			Date tempDate = format1.parse(temp);		
 			Long end = tempDate.getTime()+(Long.parseLong(durationTime)*3600000);	
 			Date endDate = new Date(end);
-			TJobdispatchlistInfo tJobdispatchlistInfo = commonService.get(TJobdispatchlistInfo.class,Long.valueOf(id));
+			TJobdispatchlistInfo tJobdispatchlistInfo = remoteCommonService.get(TJobdispatchlistInfo.class,Long.valueOf(id));
 			
 			tJobdispatchlistInfo.setNo(no);
 			tJobdispatchlistInfo.setName(name);
@@ -410,7 +389,7 @@ public class JobDispatchWeb {
 	public @ResponseBody Map<String, ? extends Object> updateJobdispatch(String startTime ,String endTime,String id,String resourceId,String statusId,String num){
 		try {
 			if(startTime!=null && endTime!=null && id!=null){
-				TJobdispatchlistInfo tJobdispatchlistInfo = commonService.get(TJobdispatchlistInfo.class,Long.valueOf(id));
+				TJobdispatchlistInfo tJobdispatchlistInfo = remoteCommonService.get(TJobdispatchlistInfo.class,Long.valueOf(id));
 				if(statusId=="40"||statusId=="50")
 				{
 					tJobdispatchlistInfo.setPlanEndtime(format.parse(endTime));
@@ -420,7 +399,7 @@ public class JobDispatchWeb {
 					tJobdispatchlistInfo.setPlanEndtime(format.parse(endTime));
 				}
 				if(resourceId!=null){
-					TEquipmentInfo tEquipmentInfo = commonService.get(TEquipmentInfo.class,Long.valueOf(resourceId));
+					TEquipmentInfo tEquipmentInfo = remoteCommonService.get(TEquipmentInfo.class,Long.valueOf(resourceId));
 					tJobdispatchlistInfo.setTEquipmentInfo(tEquipmentInfo);
 				}
 				if(StringUtils.isEmpty(num)){
@@ -447,7 +426,7 @@ public class JobDispatchWeb {
 	public @ResponseBody Map<String, Object> SplitJobPlan(String id,String time){
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
-			TJobdispatchlistInfo tJobdispatchlistInfo = commonService.get(TJobdispatchlistInfo.class,Long.parseLong(id));
+			TJobdispatchlistInfo tJobdispatchlistInfo = remoteCommonService.get(TJobdispatchlistInfo.class,Long.parseLong(id));
 			Date tempEndDate = tJobdispatchlistInfo.getPlanEndtime();
 			
 			//进行修改操作
@@ -477,13 +456,13 @@ public class JobDispatchWeb {
 	}
 	/**
 	 * 删除工单信息
-	 * @param id
+	 * @param dispatchId 派工单Id
 	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/delete.action")
 	public @ResponseBody Map<String, ? extends Object> deleteJobplan(String dispatchId){
 		try {
-			TJobdispatchlistInfo tJobdispatchlistInfo = commonService.get(TJobdispatchlistInfo.class,Long.parseLong(dispatchId));
+			TJobdispatchlistInfo tJobdispatchlistInfo = remoteCommonService.get(TJobdispatchlistInfo.class,Long.parseLong(dispatchId));
 			if(tJobdispatchlistInfo!=null) jobDispatchService.deleteJobDispatchInfo(tJobdispatchlistInfo);		
 		} catch (NumberFormatException e) {
 			return getModelMapError("操作失败!");
@@ -582,14 +561,11 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 工单暂停
-	 * @return
+	 * return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/updateJobDispatchWhenPause.action")
 	public @ResponseBody Boolean updateJobDispatchWhenPause(String dispatchId,String status,String flag) throws Exception{
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date now=new Date();
-		String nowDateString=formatDate.format(now);
 		try
 		{
 			jobDispatchService.setStatusToOldstatus(dispatchId,status,flag);
@@ -609,9 +585,6 @@ public class JobDispatchWeb {
 	 */
 	@RequestMapping(value ="/jobdispatch/updateJobdispatchWhenRecover.action")
 	public @ResponseBody Boolean updateJobdispatchWhenRecover(String dispatchId,String status,String flag) throws Exception{
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date now=new Date();
-		String nowDateString=formatDate.format(now);
 		try
 		{
 			jobDispatchService.updateJobdispatchWhenRecover(dispatchId,status,flag);
@@ -626,13 +599,6 @@ public class JobDispatchWeb {
 	
 	@RequestMapping(value="/jobdispatch/setSessionId.action")
 	public @ResponseBody void setSessionId(String sessionId){
-		try {
-			    String id=sessionId; 
-			}
-		 catch (Exception e) {
-			e.printStackTrace();
-			
-		} 
 		
 	}
 	
@@ -676,21 +642,5 @@ public class JobDispatchWeb {
 		modelMap.put("success", false);
 		return modelMap;
 	} 
-
-	public ICommonService getCommonService() {
-		return commonService;
-	}
-
-	public void setCommonService(ICommonService commonService) {
-		this.commonService = commonService;
-	}
-
-	public IJobDispatchService getJobDispatchService() {
-		return jobDispatchService;
-	}
-
-	public void setJobDispatchService(IJobDispatchService jobDispatchService) {
-		this.jobDispatchService = jobDispatchService;
-	}
 	
 }

@@ -4,12 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,31 +25,25 @@ import jxl.write.WritableWorkbook;
 import org.apache.http.impl.cookie.DateUtils;
 import org.dreamwork.persistence.ServiceFactory;
 
-
-
-
-
-import smtcl.mocs.pojos.job.TPartTypeInfo;
-import smtcl.mocs.services.device.IPartService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
 import smtcl.mocs.services.report.IReportService;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
  * 信息管理-加工工单明细
- * @author songkaiang
- *
+ * @文件：JobdispatchDetailBean.java
+ * @作者： songkaiang
+ * @创建日期：2014年10月28日
  */
 @ManagedBean(name="jobdispatchDetailBean")
 @ViewScoped
 public class JobdispatchDetailBean implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	//报表服务接口实例
 	private IReportService reportService = (IReportService)ServiceFactory.getBean("reportService");
 	//工单实例接口
 	private IJobDispatchService jobDispatchService = (IJobDispatchService)ServiceFactory.getBean("jobDispatchService");
-	//零件实例接口
-	private IPartService partService=(IPartService)ServiceFactory.getBean("partService");
 	
 	//报表数据集
 	private List<Map<String,Object>> outData = new ArrayList<Map<String,Object>>();
@@ -107,7 +98,7 @@ public class JobdispatchDetailBean implements Serializable{
 		equSerialNoList.clear();
 		equSerialNoList = jobDispatchService.getDevicesInfo(this.getnodeid());
 		personList.clear();
-		personList = reportService.getPersonList();
+		personList = reportService.getPersonList(this.getnodeid());
 		this.SubmitSearch();
 	}
 

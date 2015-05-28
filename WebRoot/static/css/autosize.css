@@ -1,0 +1,8 @@
+/* 自适应元素标识 */
+.auto-size {}
+/* 绝对定位自适应元素标识 */
+.auto-size-absolute {
+    position: absolute;
+}
+/* 排除自适应元素标识 */
+.auto-size-exclude {}

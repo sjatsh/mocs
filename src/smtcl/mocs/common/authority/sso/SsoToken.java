@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-9-29
- * Time: ÉÏÎç11:46
+ * Time: ä¸Šåˆ11:46
  */
 public class SsoToken implements Serializable {
     private Serializable userData;

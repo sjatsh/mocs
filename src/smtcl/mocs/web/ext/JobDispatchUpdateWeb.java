@@ -57,11 +57,14 @@ public class JobDispatchUpdateWeb {
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<TJobdispatchlistInfo> list = jobDispatchService.getJobDispatchInfo(jobdispatchlistId);
 		boolean flag = false;
+		String jobStatus = "";
 		for(TJobdispatchlistInfo t : list){
+			jobStatus = t.getStatus().toString();
 			if(t.getStatus() == 30)
 				flag = true;
 		}
 		map.put("flag", flag);
+		map.put("jobStatus", jobStatus);
 		return map;
 	}
 	

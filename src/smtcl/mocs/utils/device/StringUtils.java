@@ -15,8 +15,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -627,6 +629,87 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 		}
 		return proMap;
 	}
+
+	/**
+	 * 获取属性文件传入的属性  
+	 * ps  如果传入参数为null 则默认读取所有属性
+	 * @param context 上下文
+	 * @param Url  属性文件路劲
+	 * @param parm 需要获取的属性名字
+	 * @return
+	 */
+	public static Map<String, String> getUrlForAll(ServletContext context,String Url,String ...parm) {
+		Map<String, String> proMap = new HashMap<String, String>();
+		String configPath = "/WEB-INF/"+Url;
+		String base = context.getRealPath ("/");
+		Properties p;
+		InputStream inputStream;
+		try {
+			//读取配置文件里的url
+			inputStream = new BufferedInputStream(new FileInputStream(base + configPath));
+			p = new Properties();
+			p.load(inputStream);
+			if(null!=parm&&parm.length>0){
+				for(int i=0;i<parm.length;i++){
+					proMap.put( parm[i],  p.getProperty(parm[i]));
+				}
+			}else{
+				Iterator itr =p.entrySet().iterator();//遍历
+				while (itr.hasNext()) {
+				Entry e = (Entry)itr.next();
+				//System.err.println(e.getKey()+":"+e.getValue());//获取对应的值
+				proMap.put(e.getKey()+"",e.getValue()+"");
+				}
+			}
+			
+			inputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return proMap;
+		
+		//获取属性文件全部属性
+//		 HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();		
+//   	 Map<String, String> map=StringUtils.getUrlForAll(request.getServletContext(), "ErpParm.properties", null);
+//   	 Collection<String> c = map.values();
+//        Iterator it = c.iterator();
+//        for (; it.hasNext();) {
+//            System.out.println(it.next());
+//        }
+		//获取属性文件部分属性
+//        Map<String, String> map2=StringUtils.getUrlForAll(request.getServletContext(), "ErpParm.properties","test1","test2","test3");
+//        Collection<String> d = map2.values();
+//        Iterator itd = d.iterator();
+//        for (; itd.hasNext();) {
+//            System.out.println(itd.next());
+//        }
+	}
+	/**
+	 * 获取属性文件单条属性
+	 * @param context 上下文
+	 * @param Url  属性文件路劲
+	 * @param parm 需要获取的属性名字
+	 * @return
+	 */
+	public static String getUrlForOne(ServletContext context,String Url,String parm) {
+		String proMap = "";
+		String configPath = "/WEB-INF/"+Url;
+		String base = context.getRealPath ("/");
+		Properties p;
+		InputStream inputStream;
+		try {
+			//读取配置文件里的url
+			inputStream = new BufferedInputStream(new FileInputStream(base + configPath));
+			p = new Properties();
+			p.load(inputStream);
+			proMap=p.getProperty(parm);
+			inputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return proMap;
+	}
+	
 	
 	/**
 	 * 手机合法性验证

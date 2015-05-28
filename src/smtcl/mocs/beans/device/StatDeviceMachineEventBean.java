@@ -1,13 +1,10 @@
 package smtcl.mocs.beans.device;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +21,6 @@ import org.dreamwork.persistence.Parameter;
 import org.dreamwork.persistence.ServiceFactory;
 import org.dreamwork.util.IDataCollection;
 
-import smtcl.mocs.beans.authority.cache.TreeNode;
 import smtcl.mocs.common.device.JsonResponseResult;
 import smtcl.mocs.common.device.pages.DataPage;
 import smtcl.mocs.common.device.pages.PageListBaseBean;
@@ -33,7 +29,6 @@ import smtcl.mocs.pojos.device.TEquipmentInfo;
 import smtcl.mocs.pojos.device.TNodes;
 import smtcl.mocs.services.device.IDeviceService;
 import smtcl.mocs.services.device.IOrganizationService;
-import smtcl.mocs.utils.device.FaceContextUtil;
 import smtcl.mocs.utils.device.StringUtils;
 
 
@@ -91,10 +86,6 @@ public class StatDeviceMachineEventBean extends PageListBaseBean implements Seri
 	 */
 	private String machineEvent;
 	/**
-	 * 数据库存在数据的日期
-	 */
-	private List<String> dateChecked = new ArrayList<String>();
-	/**
 	 * 设备接口实例
 	 */
 	private IDeviceService deviceService=(IDeviceService) ServiceFactory.getBean("deviceService");
@@ -127,7 +118,9 @@ public class StatDeviceMachineEventBean extends PageListBaseBean implements Seri
 		eventNameList.add(new SelectItem("--所有--"));
 		List<String> eventList = deviceService.getAllEventName();
 		for (String str : eventList) {
-			eventNameList.add(new SelectItem(str));
+            if(str.getBytes().length!=str.length()){//判断是否是汉字2014年12月26日11:58:28-lopman
+                eventNameList.add(new SelectItem(str));
+            }
 		}
 		//getDeviceMachineEventStatAction();
 		return eventNameList;
@@ -188,7 +181,7 @@ public class StatDeviceMachineEventBean extends PageListBaseBean implements Seri
 	 */
 	public String MachineToolEventTimeDistributionChart() {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		String machine = "";
+		String machine;
 		// 判断选择的下拉框是否为默认
 		if (!StringUtils.isEmpty(eventName) && eventName.equals("--所有--")) {
 			eventName = null;
@@ -242,8 +235,7 @@ public class StatDeviceMachineEventBean extends PageListBaseBean implements Seri
 			}
 			if(bool){
 				dateTime=eventtime;
-				bool=false;
-				break;
+                break;
 			}
 		}
 		for(Map<String, Object> map:zonglist){
@@ -254,15 +246,13 @@ public class StatDeviceMachineEventBean extends PageListBaseBean implements Seri
 		}
 		JsonResponseResult tt=new JsonResponseResult();
 		tt.setContent(rslist);
-		String machine=tt.toJsonString();
-		this.machineEvent=machine;
+        this.machineEvent= tt.toJsonString();
 		
 	} 
 	
 	public void black(){
 		List<Map<String, Object>> rslist=new ArrayList<Map<String, Object>>();//返回数据
-		boolean bool=false;
-		for(int i=0;i<datelist.size();i++){
+        for(int i=0;i<datelist.size();i++){
 			Map<String, Object> map=datelist.get(i);
 			String eventtime=map.get("EVENTTIME").toString();
 			if(eventtime.equals(dateTime)){
@@ -280,8 +270,7 @@ public class StatDeviceMachineEventBean extends PageListBaseBean implements Seri
 		}
 		JsonResponseResult tt=new JsonResponseResult();
 		tt.setContent(rslist);
-		String machine=tt.toJsonString();
-		this.machineEvent=machine;
+        this.machineEvent= tt.toJsonString();
 	}
 	@Override
 	public PageListDataModel getExtendDataModel() {
@@ -303,29 +292,21 @@ public class StatDeviceMachineEventBean extends PageListBaseBean implements Seri
 	public StatDeviceMachineEventBean() {
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		String equSerialNo = StringUtils.getCookie(request, "equSerialNo");
-		if (null != equSerialNo) {			
+		if (null != equSerialNo) {
 			machineNameList= new ArrayList<SelectItem>();
-			List<TEquipmentInfo> list = deviceService.getAllEquName("'" + equSerialNo+ "'");
+			List<TEquipmentInfo> list = deviceService.getAllEquName(equSerialNo);
 			if (list != null && list.size()>0) {
 				machineNameList.add(new SelectItem(equSerialNo, list.get(0).getEquName()));
 				machineName=equSerialNo;
 			}
 		}
 		if (null == startTime && null == endTime) {
-			try {
-				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd"); 
-				Date dNow = new Date();   //当前时间
-				Date dBefore = new Date();
-
-				Calendar calendar = Calendar.getInstance(); 
-				calendar.setTime(format.parse(format.format(dNow)));
-				calendar.add(Calendar.DAY_OF_MONTH, +1); 
-				dBefore = calendar.getTime();  
-				startTime = format.parse(format.format(dNow));
-				endTime = dBefore;
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+            Date date = StringUtils.convertDate(StringUtils.formatDate(new Date(),2),"yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, +1);
+            startTime = date;
+            endTime = calendar.getTime();
 		}
 		getDeviceMachineEventStatAction();
 	}

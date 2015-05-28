@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import org.dreamwork.persistence.GenericServiceSpringImpl;
 import org.dreamwork.persistence.Operator;
 import org.dreamwork.persistence.Parameter;
-import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.ibm.faces.util.StringUtil;
@@ -44,27 +43,14 @@ import smtcl.mocs.utils.device.FaceContextUtil;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
- * 作业计划管理SERVICE接口实现类
- * @作者：Jf
- * @创建时间：2013-05-06
- * @修改者：songkaiang
- * @修改日期：
- * @修改说明：
- * @version V1.0
+ * Created by Jf
+ * CreateTime:2013/05/06
+ * Description:作业计划服务接口实现
  */
 @SuppressWarnings("unchecked")
 public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, String> implements IJobPlanService {
 	
-	
 	@Override
-	public List<Map<String, Object>> findAllJobPlanAndPartInfo(String nodeId) {
-		String hql="SELECT d.id AS Id,  d.typeNo AS Cls,d.name AS Name " +
-				"from t_part_type_info d where d.status !='删除' " +
-				"and d.nodeid='"+nodeId+"'" +
-				"order by CONVERT(d.name USING gbk) asc ";
-		return dao.executeNativeQuery(hql);
-	}
-	
 	public Map<String, Object> getAllJobPlanAndPartInfo(String nodeId,String partName,String planStatus,String startTime,String endTime,String isexpand){
 		String sql="SELECT"
 				+ " a.id as partId,"
@@ -94,23 +80,23 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		
 		sql += " ORDER BY a.name,b.plan_type,b.name";
 		List<Map<String, Object>> ds=dao.executeNativeQuery(sql);
-		List prlist=new ArrayList();
+		List<String> prlist=new ArrayList<String>();
 		List<Map<String, Object>> rs=new ArrayList<Map<String, Object>>();
 		boolean iszk=Boolean.parseBoolean(isexpand);
 		//iszk=true;
 		for(Map<String, Object> map:ds){
 			if(null!=map.get("partId")&&!prlist.contains(map.get("partId").toString())){
 				
-				List<Map<String, Object>> san=new ArrayList();
+				List<Map<String, Object>> san=new ArrayList<Map<String, Object>>();
 				Map<String, Object> pc=new HashMap<String, Object>();
 				pc.put("Id",map.get("partId")+"0000002");
 				pc.put("Name","批次计划");
 				pc.put("expanded",iszk);
-				pc.put("children",new ArrayList());
+				pc.put("children",new ArrayList<Map<String, Object>>());
 				pc.put("leaf",true);
 				san.add(pc);//添加第二层批次计划
 				
-				List<Map<String, Object>> er=new ArrayList(); //第二层
+				List<Map<String, Object>> er=new ArrayList<Map<String, Object>>(); //第二层
 				Map<String, Object> zy=new HashMap<String, Object>();
 				zy.put("Id",map.get("partId")+"0000001");
 				zy.put("Name","作业计划");
@@ -137,7 +123,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		
 	}
 	/**	
-	@Override
+//	@Override
 	public Map<String, Object> getAllJobPlanAndPartInfo(String nodeId,String partid,String planStatus,String startTime,String endTime){
 		String sql="SELECT"
 				+ " a.id as partId,"
@@ -426,7 +412,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	//查询所有作业计划
 	@Override
 	public List<Map<String, Object>> findAllJobPlan(String nodeId,String partid,String planStatus,String startTime,String endTime) {
-		List<Map<String, Object>> result=new ArrayList();
+		List<Map<String, Object>> result=new ArrayList<Map<String, Object>>();
 		String hql = "SELECT NEW MAP(a.id AS Id,a.no AS No," 
 				+"a.name AS Name," 
 				+"a.status AS Status,"
@@ -507,7 +493,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 					}
 					mm.put("planNum",tt.get("planNum"));
 					mm.put("finishNum",tt.get("finishNum"));
-					Date date=new Date();
 					double rr=Double.parseDouble(tt.get("finishNum").toString())/Double.parseDouble(tt.get("planNum").toString())*100;
 					DecimalFormat df=new DecimalFormat("0.00"); 
 					mm.put("Percentage",df.format(rr));
@@ -619,8 +604,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	public String getMaxJobPlanInfoId()
 	{
 		String hql="select MAX(id) from TJobplanInfo" ;
-		String mID=dao.executeQuery(hql).get(0).toString();
-	    return mID;
+        return dao.executeQuery(hql).get(0).toString();
 	}
 
 	
@@ -632,7 +616,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String hql = " FROM TJobplanInfo WHERE id="+jobPlanId;
 		List<TJobplanInfo> tempList = dao.executeQuery(hql, parameters);
-		if(tempList.size()>0 && tempList!=null){
+		if(tempList.size() > 0){
 			return tempList.get(0);
 		}
 		return null;
@@ -649,14 +633,14 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String hql = " FROM TJobplanInfo WHERE id="+jobPlanId;
 		List<TJobplanInfo> tempList = dao.executeQuery(hql, parameters);
-		if(tempList.size()>0 && tempList!=null){
+		if(tempList.size() > 0){
 			return tempList.get(0);
 		}
 		return null;
 }
 		
 	private ICommonDao commonDao;
-	private ICommonService commonService;	
+	private ICommonService commonService;
 	
 	public ICommonDao getCommonDao() {
 		return commonDao;
@@ -683,6 +667,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				+" a.name AS name," 
 				+" a.no AS no," 
 				+" a.status AS status,"
+				+ "s.name as statusName,"
 				+" DATE_FORMAT(a.planStarttime,'%Y-%m-%d %T') AS planStarttime,"
 				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d %T') as planEndtime, "
 				+" DATE_FORMAT(a.finishDate,'%Y-%m-%d %T') as finishDate, "
@@ -701,8 +686,9 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				+" b.version as version,"
 				+" b.source as source"
 				+")"
-				+" FROM TJobplanInfo a , TPartTypeInfo b "
-				+" WHERE a.TPartTypeInfo.id=b.id   ";
+				+" FROM TJobplanInfo a , TPartTypeInfo b,TStatusInfo s "
+				+" WHERE a.TPartTypeInfo.id=b.id   "
+				+" and s.id=a.status";
 		if(jobplabid!=null && !"".equals(jobplabid)){
 			hql += " AND a.id = '"+jobplabid+"'  "; 
 		}		
@@ -743,11 +729,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		        		+ " order by b.name";
 		        return dao.executeNativeQuery(sql);
 			}
-	/**
-	 * 作业计划编号的模糊查询
-	 * @param 
-	 * @return
-	 */
+
 	public List<String> getTJobplanInfoNo(String no){
 		List<String> lst1  = new ArrayList<String>();
 		Collection<Parameter> parameters = new HashSet<Parameter>();
@@ -758,8 +740,8 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		        hql += " where tt.no like '%"+no+"%'  ";
 				}
 		 List<Map<String, Object>> lst = dao.executeQuery(hql, parameters);
-		 HashSet s = new HashSet();
-		 for(Map map : lst){
+		 HashSet<String> s = new HashSet<String>();
+		 for(Map<String, Object> map : lst){
 			 String mtclass = (String)map.get("no");
 			 s.add(mtclass);
 		 }
@@ -799,7 +781,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			System.out.println("jobPlanAddBean.getNo().length():"+jobPlanAddBean.getNo().length());
 			jpi.setNo(jobPlanAddBean.getNo());
 			//如果是作业计划,默认状态为40
-			if("1".equals(jobPlanAddBean.getPlanType().toString())) 
+			if("1".equals(jobPlanAddBean.getPlanType()))
 				{ 
 				   jpi.setStatus(40);
 				   jpi.setRealStarttime(jobPlanAddBean.getPlanStarttime()); //计划开始时间就是实际开始时间
@@ -818,7 +800,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			jpi.setFinishNum(0);
 			jpi.setQualifiedNum(0);
 			jpi.setTPartTypeInfo(tPartTypeInfo);     //零件名称
-			jpi.setProcess(new Double(0));
+			jpi.setProcess((double) 0);
 			jpi.setChildrenTotalNum(0);
 			jpi.setAllocatedNum(Integer.parseInt(jobPlanAddBean.getAllocatedNum()));
 			if(!StringUtils.isEmpty(jobPlanAddBean.getPriority())){
@@ -858,11 +840,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			return "添加失败";
 		}		
 	}
-	/**
-	 * 通过作业计划查找 分配任务
-	 * @param jopPlanId
-	 * @return
-	 */
+
 	public List<Map<String,Object>> getTJobplanTaskInfo(String jopPlanId){
 		String sql="select "
 				+ " a.id as id,"
@@ -876,7 +854,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		List<Map<String,Object>> rs=dao.executeNativeQuery(sql);
 		for(Map<String,Object> mm:rs){
 			String sql2="select status from T_JOBDISPATCHLIST_INFO where jobplanID='"+mm.get("jobPlanId")+"' and (status=40 or status=50)";
-			List list=dao.executeNativeQuery(sql2);
+			List<Map<String, Object>> list=dao.executeNativeQuery(sql2);
 			if(null!=list&&list.size()>0){
 				mm.put("edit", null);
 			}else{
@@ -890,19 +868,13 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		}
 		return rs;
 	}
-	/**
-	 * 通过作业计划查找 分配任务对象
-	 * @param jopPlanId
-	 * @return
-	 */
-	public List<TJobplanTaskInfo> getTJobplanTaskInfoObject(String jopPlanId){
+
+	private List<TJobplanTaskInfo> getTJobplanTaskInfoObject(String jopPlanId){
 		String hql=" from TJobplanTaskInfo a"
 				+ " where a.jobPlanId='"+jopPlanId+"'";
 		return  dao.executeQuery(hql);
 	}
-	/**
-	 * 通过名称查询，判断是否多次提交作业计划
-	 */
+
 	public List<Map<String,Object>> getPlanByName(String name){ 
 		
 		String hql = "SELECT NEW MAP(" 
@@ -913,30 +885,8 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				+" WHERE a.no = '"+name+"'  ";
 		return dao.executeQuery(hql);
 	}
-	
-	/**
-	 * 作业计划添加联动生产计划详细-通过ID
-	 */
-	public List<Map<String,Object>> getJobplanByIdFor(String jobplanId){ 
-		
-		String hql = "SELECT NEW MAP(" 
-				+" a.uplanNo AS uplanNo,"            //生产计划编号
-				+" a.uplanType AS uplanType," //计划类型
-				+" a.uplanNum AS uplanNum," //计划数量
-				+" a.uplanName AS uplanName," //计划名称
-				+" a.uplanUnit AS uplanUnit," //单位
-				+" a.uplanRouting AS uplanRouting," //工艺路线
-				+" a.uplanStatus AS uplanStatus"    //状态
-				+" )"
-				+" FROM TUserProdctionPlan a "
-				+" WHERE a.id = '"+jobplanId+"'  ";
-		return dao.executeQuery(hql);
-	}
 
-	/**
-	 * 作业计划添加联动零件类型详细-通过ID
-	 */
-	public List<Map<String,Object>> getPartTypeByIdFor(String partTypeId){ 
+	public List<Map<String,Object>> getPartTypeByIdFor(String partTypeId){
 		
 		String hql = "SELECT NEW MAP(" 
 				+" b.id as bid,"
@@ -973,275 +923,106 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	 * 作业计划修改
 	 */
 	public String updataJobPlan(JobPlanUpdataBean jobPlanAddBean){
-		try {
-			 TJobplanInfo jpi = null;
-				if(!StringUtils.isEmpty(jobPlanAddBean.getId())){
-					jpi=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanAddBean.getId()));
-				}
-				String proPlanNo = jobPlanAddBean.getProPlanNo(); //生产计划编号
-				
-				String partTypeId=jobPlanAddBean.getPartTypeId();
-				TPartTypeInfo tPartTypeInfo=null;
-				if(!StringUtils.isEmpty(partTypeId)){
-					tPartTypeInfo=commonService.get(TPartTypeInfo.class, Long.valueOf(partTypeId));
-				}
+        try {
+            TJobplanInfo jpi = null;
+            if (!StringUtils.isEmpty(jobPlanAddBean.getId())) {
+                jpi = commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanAddBean.getId()));
+            }
+            String proPlanNo = jobPlanAddBean.getProPlanNo(); //生产计划编号
 
-				jpi.setNo(jobPlanAddBean.getNo());
-				jpi.setStatus(10);  //创建10状态下才能修改
-				jpi.setPlanNo(proPlanNo);   //生产计划编号
-				jpi.setName(jobPlanAddBean.getName());
-				jpi.setPlanStarttime(jobPlanAddBean.getPlanStarttime());
-				jpi.setPlanEndtime(jobPlanAddBean.getPlanEndtime());
-				jpi.setFinishDate(jobPlanAddBean.getSubmitTime());
-				if(!StringUtils.isEmpty(jobPlanAddBean.getPlanNum())){
-					jpi.setPlanNum(Integer.parseInt(jobPlanAddBean.getPlanNum()));
-				}
-				
-				jpi.setTPartTypeInfo(tPartTypeInfo);     //零件名称
-				
-				if(!StringUtils.isEmpty(jobPlanAddBean.getPriority())){
-					jpi.setPriority(Integer.parseInt(jobPlanAddBean.getPriority()));
-				}
-				
-				jpi.setPlanType(Integer.parseInt(jobPlanAddBean.getPlanType()));//计划类型
-				if(null!=jobPlanAddBean.getpJobPlanId()&&!"".equals(jobPlanAddBean.getpJobPlanId())){//父作业计划
-					List<TJobplanInfo> pjob=this.getTJobplanInfoById(jobPlanAddBean.getpJobPlanId());
-					if(null!=pjob&&pjob.size()>0){
-						jpi.setTJobplanInfo(pjob.get(0));
-					}else{
-						jpi.setTJobplanInfo(null);
-					}
-				}else{
-					jpi.setTJobplanInfo(null);
-				}
-				commonService.updateObject(jpi);
-				if(jpi.getPlanType()==2){
-					List<TJobplanTaskInfo> ttilist=getTJobplanTaskInfoObject(jpi.getId().toString());//根据作业id 获取作业分配任务对象
-					TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);//获取用户
-					List delList=new ArrayList();
-					for(Map<String,Object> mm:jobPlanAddBean.getRealaddTask()){
-						if(!jobPlanAddBean.getAddTask().contains(mm)){
-							if(null!=mm.get("realId")){
-								delList.add(mm.get("realId").toString());//判断需要删除的数据
-							}
-						}
-					}
-					for(Map<String,Object> mm:jobPlanAddBean.getRealaddTask()){
-						if(null==mm.get("realId")){//realId 为空说明该分配任务是新增
-							TJobplanTaskInfo taskinfo=new TJobplanTaskInfo();
-							taskinfo.setJobPlanId(jpi.getId());
-							taskinfo.setJobPlanNo(jpi.getNo());
-							taskinfo.setTaskNO(mm.get("addTaskNo").toString());
-							taskinfo.setTaskNum(Integer.parseInt(mm.get("addTaskNum").toString()));
-							taskinfo.setOperator(user.getNickName());
-							taskinfo.setOperatorTime(new Date());
-							taskinfo.setReportNum(Integer.parseInt(mm.get("reportNum").toString()));
-							commonService.saveObject(taskinfo); //添加分配任务
-							continue;
-						}
-						
-						for(TJobplanTaskInfo tti:ttilist){
-							if(mm.get("realId").toString().equals(tti.getId().toString())){ //不为空  的话 匹配对象
-								if(delList.contains(tti.getId().toString())){
-									commonService.delete(tti);
-									continue;
-								}
-								if(mm.get("addTaskNo").toString().equals(tti.getTaskNO())
-										&&mm.get("addTaskNum").toString().equals(tti.getTaskNum().toString())){//如果没有修改 则不操作数据进入下一次操作
-									break;
-								}else{
-									tti.setTaskNO(mm.get("addTaskNo").toString());
-									tti.setTaskNum(Integer.parseInt(mm.get("addTaskNum").toString()));
-									commonService.update(tti);
-									break;
-								}
-							}
-						}
-						
-					}
-				}
-			return "修改成功";
-		} catch (Exception e) {
-			e.printStackTrace();
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return "修改失败";
-		}
-	   
-		
-	}
-	
-	/**
-	 * 通过作业计划得到工序清单
-	 */
-	public List<Map<String,Object>> getProcessByJobPlanId(String jobplabid){
-		String hql = "SELECT NEW MAP(" 
-				+" a.id AS id,"            //作业计划
-				+" c.id as cid,"            //工序
-				+" c.no as no,"  
-				+" c.name as name,"
-				+" c.theoryWorktime as theoryWorktime,"
-				+" c.processDuration as processDuration,"
-				+" c.TEquipmenttypeInfo.equipmentType as equipmentType,"
-				+" c.TProcessplanInfo.id as pid,"     //工艺ID
-				+" c.TProcessplanInfo.name as pname,"  //工艺名称
-				+" b.id as bid "             //作业
-				+")"
-				+" FROM TJobplanInfo a , TJobInfo b ,TProcessInfo c"
-				+" WHERE a.id=b.TJobplanInfo.id AND b.TProcessInfo.id=c.id  ";
-		if(jobplabid!=null && !"".equals(jobplabid)){
-			hql += " AND a.id = '"+jobplabid+"'  "; 
-		}		
-		return dao.executeQuery(hql);	
-	}
-	
-	/**
-	 * 控制页面--通过零件ID得到作业计划ID下拉
-	 */
-	public List<Map<String,Object>> getJobPlanMapByPart(String nodeid,String partId){
-		String hql = "SELECT NEW MAP(" 
-				+" a.id AS id,"            //作业计划
-				+" a.no AS no,"            //作业计划编号===>
-				+" a.name AS name," 
-				+" DATE_FORMAT(a.planStarttime,'%Y-%m-%d %T') AS planStarttime,"   //yao
-				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d %T') as planEndtime, "      //yao
-				+" a.planNum as planNum,"                                          //yao
-				+" a.priority as priority,"
-				+" a.TPartTypeInfo.id as partid,"    //零件ID
-				+" a.TPartTypeInfo.name as partname"
-				+")"
-				+" FROM TJobplanInfo a  WHERE  a.nodeid = '"+nodeid+"'  ";
-		if(partId!=null && !"".equals(partId)){
-			hql += " AND a.TPartTypeInfo.id = '"+partId+"'  "; 
-		}	
-		List<Map<String,Object>> lst = dao.executeQuery(hql);		
-		return lst;		
-	}
-	/**
-	 * 控制页面--通过零件ID得到工艺方案ID下拉
-	 */
-	public List<Map<String,Object>> getProcessPlanMapByPart(String nodeid,String partId){
-		String hql = "SELECT NEW MAP(" 
-				+" a.id AS id,"            //作业计划
-				+" a.no AS no,"            //作业计划编号===>
-				+" a.name AS name," 
-				+" DATE_FORMAT(a.planStarttime,'%Y-%m-%d %T') AS planStarttime,"   //yao
-				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d %T') as planEndtime, "      //yao
-				+" a.planNum as planNum,"                                          //yao
-				+" a.priority as priority,"
-				+" a.TPartTypeInfo.id as partid,"    //零件ID
-				+" a.TPartTypeInfo.name as partname,"
-				+" b.id as pid,"     //工艺方案ID
-				+" b.name as pname"  //工艺方案名称
-				+")"
-				+" FROM TJobplanInfo a ,  TProcessplanInfo b"
-				+" WHERE a.TPartTypeInfo.id=b.TPartTypeInfo.id  AND a.nodeid = '"+nodeid+"'   ";
-		if(partId!=null && !"".equals(partId)){
-			hql += " AND a.TPartTypeInfo.id = '"+partId+"'  "; 
-		}	
-		List<Map<String,Object>> lst = dao.executeQuery(hql);		
-		return lst;	
-	}
-	
-	
-	/**
-	 * 通过作业计划ID，工艺方案ID，零件ID得到工序清单
-	 */
-	public List<Map<String,Object>> getProcessPlanById(String nodeid,String jobplanid,String processPlanId,String partId){
-		String hql = "SELECT NEW MAP(" 
-				+" a.id AS id,"            //作业计划
-				+" a.no AS no,"            //作业计划编号===>
-				+" a.name AS name," 
-				+" DATE_FORMAT(a.planStarttime,'%Y-%m-%d %T') AS planStarttime,"   //yao
-				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d %T') as planEndtime, "      //yao
-				+" a.planNum as planNum,"                                          //yao
-//				+" c.processingTime as processingTime, "//buyao
-//				+" c.theoryWorktime as theoryWorktime, "//yao
-				+" a.priority as priority,"
-				+" a.TPartTypeInfo.id as partid,"    //零件ID
-				+" a.TPartTypeInfo.name as partname,"
-//				+" c.id as cid,"            //工序 ===>
-//				+" c.no as cno,"  
-//				+" c.name as cname,"
-//				+" c.theoryWorktime as theoryWorktime,"   //节拍时间
-//				+" c.processDuration as processDuration," //工序连续
-//				+" c.TEquipmenttypeInfo.equipmentType as equipmentType," //设备类型
-//				+" c.TProcessplanInfo.id as pid,"     //工艺方案ID
-//				+" c.TProcessplanInfo.name as pname,"  //工艺方案名称
-				+" b.id as bid "             //工艺方案ID
-				+")"
-				+" FROM TJobplanInfo a ,  TProcessplanInfo b"
-//				+ " ,TProcessInfo c"
-				+" WHERE a.TPartTypeInfo.id=b.TPartTypeInfo.id";
-//				+ " AND b.id=c.TProcessplanInfo.id AND  c.status = 0  ";
-		if(nodeid!=null && !"".equals(nodeid)){
-			hql += " AND a.nodeid = '"+nodeid+"'  "; 
-		}
-		if(jobplanid!=null && !"".equals(jobplanid)){
-			hql += " AND a.id = '"+jobplanid+"'  "; 
-		}	
-//		if(processPlanId!=null && !"".equals(processPlanId)){
-//			hql += " AND c.TProcessplanInfo.id = '"+processPlanId+"'  "; 
-//		}	
-		if(partId!=null && !"".equals(partId)){
-			hql += " AND a.TPartTypeInfo.id = '"+partId+"'  "; 
-		}	
-		List<Map<String,Object>> lst = dao.executeQuery(hql);
-		for(Map<String,Object> map :lst){
-			String no = map.get("cno").toString();
-			String cid = map.get("cid").toString();
-			String nocid = no +"@#" + cid;
-			map.put("nocid", nocid);
-			map.put("bool", true);  //为页面复选框为选定
-		}		
-		return lst;
-		
-	}
-	
-	/**
-	 * 通过作业计划ID，工艺方案ID，零件ID得到工序清单,--不要关联作业计划表，会是1对多,触发工艺方案按钮时
-	 */
-	public List<Map<String,Object>> getProcessPlanById1(String jobplanid,String processPlanId,String partId){
-		String hql = "SELECT NEW MAP(" 
-				+" c.id as cid,"            //工序 ===>
-				+" c.no as cno,"  
-				+" c.name as cname,"
-				+" c.theoryWorktime as theoryWorktime,"   //节拍时间
-				+" c.processDuration as processDuration," //工序连续
-				+" c.TEquipmenttypeInfo.equipmentType as equipmentType," //设备类型
-				+" c.TProcessplanInfo.id as pid,"     //工艺方案ID
-				+" c.TProcessplanInfo.name as pname"  //工艺方案名称
-				+")"
-				+" FROM TProcessInfo c"
-				+" WHERE c.status = 0  ";
-		if(processPlanId!=null && !"".equals(processPlanId)){
-			hql += " AND c.TProcessplanInfo.id = '"+processPlanId+"'  "; 
-		}	
-		List<Map<String,Object>> lst = dao.executeQuery(hql);
-		for(Map<String,Object> map :lst){
-			String no = map.get("cno").toString();
-			String cid = map.get("cid").toString();
-			String nocid = no +"@#" + cid;
-			map.put("nocid", nocid);
-			map.put("bool", true);  //为页面复选框为选定
-		}		
-		return lst;
-		
-	}
-	
-	/**
-	 * 通过作业计划得到作业列表 --作业计划控制页面
-	 */
-	public List<Map<String,Object>> getJobByJobPlanId(String jobplanId){
-		String hql = "SELECT NEW MAP(" 
-				+" a.no AS jobNo,"                       //作业ID，其实是作业no
-				+" a.TProcessInfo.id AS processId,"     //工序ID
-				+" a.name AS joName"                          //作业名称
-				+")"
-				+" FROM TJobInfo a "
-				+" WHERE a.TJobplanInfo.id = '"+jobplanId+"'  ";
-		return dao.executeQuery(hql);	
-	}
-	
+            String partTypeId = jobPlanAddBean.getPartTypeId();
+            TPartTypeInfo tPartTypeInfo = null;
+            if (!StringUtils.isEmpty(partTypeId)) {
+                tPartTypeInfo = commonService.get(TPartTypeInfo.class, Long.valueOf(partTypeId));
+            }
+
+            if(jpi==null){
+                return "修改失败";
+            }
+            jpi.setNo(jobPlanAddBean.getNo());
+//				jpi.setStatus(10);  //创建10状态下才能修改
+            jpi.setPlanNo(proPlanNo);   //生产计划编号
+            jpi.setName(jobPlanAddBean.getName());
+            jpi.setPlanStarttime(jobPlanAddBean.getPlanStarttime());
+            jpi.setPlanEndtime(jobPlanAddBean.getPlanEndtime());
+            jpi.setFinishDate(jobPlanAddBean.getSubmitTime());
+            if (!StringUtils.isEmpty(jobPlanAddBean.getPlanNum())) {
+                jpi.setPlanNum(Integer.parseInt(jobPlanAddBean.getPlanNum()));
+            }
+
+            jpi.setTPartTypeInfo(tPartTypeInfo);     //零件名称
+
+            if (!StringUtils.isEmpty(jobPlanAddBean.getPriority())) {
+                jpi.setPriority(Integer.parseInt(jobPlanAddBean.getPriority()));
+            }
+
+            jpi.setPlanType(Integer.parseInt(jobPlanAddBean.getPlanType()));//计划类型
+            if (null != jobPlanAddBean.getpJobPlanId() && !"".equals(jobPlanAddBean.getpJobPlanId())) {//父作业计划
+                List<TJobplanInfo> pjob = this.getTJobplanInfoById(jobPlanAddBean.getpJobPlanId());
+                if (null != pjob && pjob.size() > 0) {
+                    jpi.setTJobplanInfo(pjob.get(0));
+                } else {
+                    jpi.setTJobplanInfo(null);
+                }
+            } else {
+                jpi.setTJobplanInfo(null);
+            }
+            commonService.updateObject(jpi);
+            if (jpi.getPlanType() == 2) {
+                List<TJobplanTaskInfo> ttilist = getTJobplanTaskInfoObject(jpi.getId().toString());//根据作业id 获取作业分配任务对象
+                TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);//获取用户
+                List<String> delList = new ArrayList<String>();
+                for (Map<String, Object> mm : jobPlanAddBean.getRealaddTask()) {
+                    if (!jobPlanAddBean.getAddTask().contains(mm)) {
+                        if (null != mm.get("realId")) {
+                            delList.add(mm.get("realId").toString());//判断需要删除的数据
+                        }
+                    }
+                }
+                for (Map<String, Object> mm : jobPlanAddBean.getRealaddTask()) {
+                    if (null == mm.get("realId")) {//realId 为空说明该分配任务是新增
+                        TJobplanTaskInfo taskinfo = new TJobplanTaskInfo();
+                        taskinfo.setJobPlanId(jpi.getId());
+                        taskinfo.setJobPlanNo(jpi.getNo());
+                        taskinfo.setTaskNO(mm.get("addTaskNo").toString());
+                        taskinfo.setTaskNum(Integer.parseInt(mm.get("addTaskNum").toString()));
+                        taskinfo.setOperator(user.getNickName());
+                        taskinfo.setOperatorTime(new Date());
+                        taskinfo.setReportNum(Integer.parseInt(mm.get("reportNum").toString()));
+                        commonService.saveObject(taskinfo); //添加分配任务
+                        continue;
+                    }
+
+                    for (TJobplanTaskInfo tti : ttilist) {
+                        if (mm.get("realId").toString().equals(tti.getId().toString())) { //不为空  的话 匹配对象
+                            if (delList.contains(tti.getId().toString())) {
+                                commonService.delete(tti);
+                                continue;
+                            }
+                            if (mm.get("addTaskNo").toString().equals(tti.getTaskNO())
+                                    && mm.get("addTaskNum").toString().equals(tti.getTaskNum().toString())) {//如果没有修改 则不操作数据进入下一次操作
+                                break;
+                            } else {
+                                tti.setTaskNO(mm.get("addTaskNo").toString());
+                                tti.setTaskNum(Integer.parseInt(mm.get("addTaskNum").toString()));
+                                commonService.update(tti);
+                                break;
+                            }
+                        }
+                    }
+
+                }
+            }
+            return "修改成功";
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return "修改失败";
+        }
+
+
+    }
+
 	/**
 	 * 作业计划控制-- 通过作业计划ID得到零件ID
 	 */
@@ -1255,180 +1036,15 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeQuery(hql);	
 	}	
 	
-	/**
-	 * 作业清单保存
-	 */
-	public void addJobInfo(JobPlanControlBean jobPlanControlBean) {
- /*
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		List<Map<String, Object>> lst = jobPlanControlBean.getJobList();
 
-		if (lst.size() > 0) {
-			for (Map<String, Object> map : lst) {
-				TJobInfo tJobInfo = new TJobInfo();
-				
-				if (map.get("jobNo") != null) {
-					tJobInfo.setNo(map.get("jobNo").toString());
-				}
-
-				if (map.get("processId") != null) {
-					TProcessInfo tProcessInfo = null;
-					String processId = map.get("processId").toString();
-					if (!StringUtils.isEmpty(processId)) {
-						tProcessInfo = commonService.get(TProcessInfo.class,
-								Long.valueOf(processId));
-					}
-					tJobInfo.setTProcessInfo(tProcessInfo);
-				}
-				if (jobPlanControlBean.getJobplabid() != null) {
-					TJobplanInfo tJobplanInfo = null;
-					String jobplabid = jobPlanControlBean.getJobplabid();
-					if (!StringUtils.isEmpty(jobplabid)) {
-						tJobplanInfo = commonService.get(TJobplanInfo.class,
-								Long.valueOf(jobplabid));
-					}
-					tJobInfo.setTJobplanInfo(tJobplanInfo);
-				}
-				
-				if (map.get("joName") != null) {
-					tJobInfo.setName(map.get("joName").toString());
-				}
-				
-				if(jobPlanControlBean.getJobPlanResults()!=null){   //隐含导入的字段
-					Map<String, Object> mmm = jobPlanControlBean.getJobPlanResults();
-					if(mmm.get("planNum")!=null){
-				    tJobInfo.setPlanNum(Integer.parseInt(mmm.get("planNum").toString()));
-					}
-					if(mmm.get("planStarttime")!=null){
-					    Date d;
-						try {
-							d = sdf.parse(mmm.get("planStarttime").toString());
-							tJobInfo.setPlanStarttime(d);
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
-					}
-					if(mmm.get("planEndtime")!=null){
-					    Date d;
-							try {
-								d = sdf.parse(mmm.get("planEndtime").toString());
-								tJobInfo.setPlanEndtime(d);
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-					}
-
-				}
-				if(map.get("theoryWorktime")!=null){
-				    tJobInfo.setTheoryWorktime(Integer.parseInt(map.get("theoryWorktime").toString()));
-				}
-				
-				tJobInfo.setFinishNum(0);
-				tJobInfo.setStatus(20); // 待派工
-				int size = this.getBooleanAddJob(tJobInfo.getNo()).size(); //通过编号判断是否已经存在
-				if (size == 0) { //等于0，不存在就添加
-					commonService.saveObject(tJobInfo);
-				}
-			}
-		}
-		this.updateJobplanStatus(jobPlanControlBean.getJobplabid());  //保存后修改了作业计划的状态为20.
-	*/
-	}
-	
-	/**
-	 * 作业清单保存 是否重复添加--通过编号判断
-	 */
-	public List<Map<String,Object>> getBooleanAddJob(String no){
-		String hql = "SELECT NEW MAP(" 
-				+" a.id AS id,"  
-				+" a.no AS jobNo,"                       //作业ID，其实是作业no
-				+" a.name AS joName"                          //作业名称
-				+")"
-				+" FROM TJobInfo a "
-				+" WHERE a.no = '"+no+"'  ";
-		return dao.executeQuery(hql);
-	} 
-	
-	
-	/**
-	 * 作业清单生成后----作业计划状态修改//待派工20
-	 */
-	public void updateJobplanStatus(String jobplanId){
-		TJobplanInfo tj = null;
-		if(!StringUtils.isEmpty(jobplanId)){
-			tj=commonService.get(TJobplanInfo.class, Long.valueOf(jobplanId));
-			tj.setStatus(20);
-			commonService.updateObject(tj);
-		}		
-	}
-	
-	
-	/**
-	 * 单独添加1个作业计划
-	 */
-	public void addOneJob(JobPlanControlBean jobPlanControlBean){
-		/*
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		TJobInfo tJobInfo = new TJobInfo();
-		tJobInfo.setNo(jobPlanControlBean.getJobId());
-		TProcessInfo tProcessInfo=null;	
-		int theoryWorktime =0; //节拍时间
-		if(!StringUtils.isEmpty(jobPlanControlBean.getProcessId())){
-			tProcessInfo=commonService.get(TProcessInfo.class, Long.valueOf(jobPlanControlBean.getProcessId()));
-			theoryWorktime = tProcessInfo.getTheoryWorktime();
-		}
-		 tJobInfo.setTheoryWorktime(theoryWorktime); //得到工序的节拍时间
-		 
-		TJobplanInfo tJobplanInfo = null;
-		if(!StringUtils.isEmpty(jobPlanControlBean.getJobplabid())){
-			tJobplanInfo=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid()));
-		}
-		if(jobPlanControlBean.getJobPlanResults()!=null){   //隐含导入的字段
-			Map<String, Object> mmm = jobPlanControlBean.getJobPlanResults();
-			if(mmm.get("planNum")!=null){
-		    tJobInfo.setPlanNum(Integer.parseInt(mmm.get("planNum").toString()));
-			}
-			if(mmm.get("planStarttime")!=null){
-			    Date d;
-				try {
-					d = sdf.parse(mmm.get("planStarttime").toString());
-					tJobInfo.setPlanStarttime(d);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-			if(mmm.get("planEndtime")!=null){
-			    Date d;
-					try {
-						d = sdf.parse(mmm.get("planEndtime").toString());
-						tJobInfo.setPlanEndtime(d);
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-			}
-		}
-		
-		tJobInfo.setTProcessInfo(tProcessInfo);
-		tJobInfo.setNo(jobPlanControlBean.getJobId()); //没有错，添加的是NO
-		tJobInfo.setName(jobPlanControlBean.getJobName());
-		tJobInfo.setStatus(20);  //待派工
-		commonService.save(tJobInfo);
-		*/
-	}
-	
-	
-	
-	/**
-	 * 通过Id和开始时间得到作业计划
-	 */
 	public List<Map<String,Object>> getPlanListByIdAndTime(String jobplabid,Date startTime,Date endTime){
 		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		String startTime1 = null;
-		if(startTime!=null && !"".equals(startTime)){
+		if(startTime != null && !startTime.toString().equals("")){
 		startTime1 =  sdf.format(startTime);
 		}
 		String endTime1 = null;
-		if(endTime!=null && !"".equals(endTime)){
+		if(endTime!=null && !endTime.toString().equals("")){
 		endTime1 =  sdf.format(endTime);
 		}
 		
@@ -1455,28 +1071,16 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		if(jobplabid!=null && !"".equals(jobplabid) && !jobplabid.equals("undefined")){
 			hql += " AND a.id = '"+jobplabid+"'  "; 
 		}	
-		if(startTime!=null && !"".equals(startTime)){
+		if(startTime!=null){
 			hql += " AND a.planStarttime >= DATE_FORMAT('"+startTime1+"','%Y-%m-%d %T')  "; 
 		}	
-		if(endTime!=null && !"".equals(endTime)){
+		if(endTime!=null){
 			hql += " AND a.planStarttime <= DATE_FORMAT('"+endTime1+"','%Y-%m-%d %T')  "; 
 		}	
 		hql += " order by a.id asc ";
 		return dao.executeQuery(hql);	
 	}
-	
-	/**
-	 * 删除作业通过ID
-	 */
-	public void delJob(String jobId){
-		TJobInfo tJobInfo = null;
-		if(!StringUtils.isEmpty(jobId)){
-			tJobInfo=commonService.get(TJobInfo.class, Long.valueOf(jobId));
-		}
-		commonService.delete(tJobInfo);
-//		commonService.deleteById(TJobInfo.class,"id",Long.valueOf(jobId));
-	} 
-	
+
 	/**
 	 * 修改工单时得到作业集合
 	 */
@@ -1543,7 +1147,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 						+" WHERE j.TProcessInfo.id = c.id   "
 						+" AND c.id = t.processId  "
 						+" AND t.equipmentTypeId = d.id   ";	
-				   if(jobplanId!=null && !"".equals(jobplanId)){
+				   if(!"".equals(jobplanId)){
 					   hql5 += " AND  j.id =  '"+jobplanId+"'   "; 
 				   }
 		List<Map<String,Object>> lst5 =  dao.executeQuery(hql5);
@@ -1557,7 +1161,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 					+")"
 					+" FROM TJobInfo j ,TProcessInfo c,TProcessplanInfo b , TProcessmaterialInfo t  "
 					+" WHERE j.TProcessInfo.id = c.id AND c.TProcessplanInfo.id = b.id  AND b.materialId = t.id  ";	
-			   if(jobplanId!=null && !"".equals(jobplanId)){
+			   if(!"".equals(jobplanId)){
 				   hql1 += " AND  j.id =  '"+jobplanId+"'   "; 
 			   }
 		 List<Map<String,Object>> lst1 =  dao.executeQuery(hql1);
@@ -1685,16 +1289,16 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		t.setFinishNum(0);
 		commonService.saveObject(t);
 		
-		if(jobplanId!=null && !"".equals(jobplanId)){ //修改作业计划的状态根据作业
+		if(jobplanId!=null){ //修改作业计划的状态根据作业
 			String hql = "SELECT concat(MIN(" 
 					+" a.status))"            //作业状态
 					+" FROM TJobInfo a "
 					+" WHERE a.TJobplanInfo.id = '"+jobplanId+"'  ";
 			List<String> str = dao.executeQuery(hql);
 			if(str.size()>0){
-				String no = str.get(0).toString();
+				String no = str.get(0);
 				if(no!=null && !"".equals(no)){
-					TJobplanInfo tJobplanInfo=commonService.get(TJobplanInfo.class, Long.valueOf(jobplanId));
+					TJobplanInfo tJobplanInfo=commonService.get(TJobplanInfo.class, jobplanId);
 					tJobplanInfo.setStatus(Integer.parseInt(no));
 					commonService.updateObject(tJobplanInfo);
 				}
@@ -1764,11 +1368,11 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	public List<Map<String,Object>> getJobdispatchlistByIdAndTime(String nodeid,String taskNum,Date startTime,Date endTime){
 		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		String startTime1 = null;
-		if(startTime!=null && !"".equals(startTime)){
+		if(startTime!=null){
 			startTime1 =  sdf.format(startTime);
 		}
 		String endTime1 = null;
-		if(endTime!=null && !"".equals(endTime)){
+		if(endTime!=null){
 			endTime1 =  sdf.format(endTime);
 		}
 		String hql = "SELECT NEW MAP(" 
@@ -1791,10 +1395,10 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		if(taskNum!=null && !"".equals(taskNum)){
 			hql += " AND taskNum = '"+taskNum+"'  "; 
 		}	
-		if(startTime!=null && !"".equals(startTime)){
+		if(startTime!=null){
 			hql += " AND a.planStarttime >= DATE_FORMAT('"+startTime1+"','%Y-%m-%d %T')  "; 
 		}	
-		if(endTime!=null && !"".equals(endTime)){
+		if(endTime!=null){
 			hql += " AND a.planEndtime <= DATE_FORMAT('"+endTime1+"','%Y-%m-%d %T')  "; 
 		}	
 		hql += " order by a.id asc ";
@@ -1806,31 +1410,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		String hql = "select distinct new Map(taskNum as taskNum) from TJobdispatchlistInfo";
 		return dao.executeQuery(hql);
 	}
-	
-	/**
-	 * 工单队列管理--待分配作业
-	 */
-	public List<Map<String,Object>> getWaitJobList(String nodeid){
-		String hql = "SELECT NEW MAP(" 
-				+" a.id as jobid,"                                                 //作业ID
-				+" a.TProcessInfo.id AS processid,"                                //工序ID
-				+" a.name AS name,"                                                //作业名称
-				+" a.TJobplanInfo.id AS jobplanid,"                                //作业计划ID
-				+" a.TJobplanInfo.name AS jobplanname,"                                //作业计划名称
-				+" a.TProcessInfo.name AS processname,"                                //工序名称
-                +" a.planNum as planNum,"                                          //作业--计划数
-                +" DATE_FORMAT(a.planStarttime,'%Y-%m-%d') AS planStarttime,"   //作业--计划开始时间
-				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d') as planEndtime, "      //作业--计划结束时间
-				+" a.status as status "                                            //作业状态
-				+")"
-				+" FROM TJobInfo a  "
-				+" WHERE (a.status = 10  OR  a.status = 20)   "
-                +" AND  a.TJobplanInfo.nodeid = :nodeid ";  //添加了节点
-         Collection<Parameter> parameters = new HashSet<Parameter>();
-         parameters.add(new Parameter("nodeid",nodeid,Operator.EQ));
-		return dao.executeQuery(hql,parameters);
-	}
-	
+
 	/**
 	 * 工单队列管理--已分配工单清单
 	 */
@@ -1925,39 +1505,14 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	{
 		//Map<String, Object> map = new HashMap<String, Object>();
 		String hql ="select new MAP(productionplan.uplanName as displayfield,productionplan.id as valuefield)" +
-				"from TUserProdctionPlan productionplan where productionplan.TNodes.nodeId='"+nodeid+"'";		
-		List<Map<String, Object>> tempList = dao.executeQuery(hql);
-		
-		return tempList;
+				"from TUserProdctionPlan productionplan where productionplan.TNodes.nodeId='"+nodeid+"'";
+
+        return dao.executeQuery(hql);
 	}
-	
-	/**
-	 * 作业计划队列管理--作业计划清单
-	 */
-	public List<Map<String, Object>> getJobplanList(String nodeid){
-		String hql ="SELECT " 
-				+" a.id AS jobplanid,"                                             //作业计划ID
-				+" IFNULL(a.process,0) AS process,"                                          //进度
-				+" a.planNo AS userProdPlanId,"         //生产计划no
-				+" a.partID AS parttypeid,"                              //零件类型ID
-				+" b.no AS parttypeno,"                                  //零件类型编号
-				+" IFNULL(a.name,'') AS name,"                                                //作业计划名称
-                +" IFNULL(a.planNum,0) as planNum,"                                          //作业计划计划数
-                +" DATE_FORMAT(a.plan_starttime,'%Y-%m-%d') AS planStarttime,"   //作业计划开始时间
-				+" DATE_FORMAT(a.plan_endtime,'%Y-%m-%d') as planEndtime, "      //作业计划结束时间
-				+" IFNULL(a.priority,0) as priority,"                                        //优先级
-				+" IFNULL(a.finishNum,0) as finishNum "                                      //作业计划已完成量
-				+""
-				+" FROM t_jobplan_info a , t_part_type_info b  "
-		        +" WHERE a.partID = b.ID  AND  a.nodeid = :nodeid ";  //添加了节点
-		Collection<Parameter> parameters = new HashSet<Parameter>();
-		parameters.add(new Parameter("nodeid",nodeid,Operator.EQ));
-		return dao.executeNativeQuery(hql,parameters);
-	}
+
 	/**
 	 * 更改作业计划表的状态
 	 */
-	
 	@Override
 	public Boolean updateJobPlanInfoStatus(String jobPlanId,String status) {
 		Date date = new Date();
@@ -2056,105 +1611,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		        +" AND b.onlineProcessId is null  ";
 		return dao.executeQuery(hql);
 	}
-	
-	/**
-	 * 作业计划控制 --工单列表
-	 */
-	public List<Map<String,Object>> getDispatchList(String processplanId){
-		String hql = "SELECT NEW MAP(" 
-				+" a.id as id,"  //工单ID
-				+" a.no as no,"     //工单编号--》首工位工单编号
-				+" b.id as processId,"//工序ID
-				+" b.no as processNo,"//工序编号
-				+" c.name as name,"//作业名称
-				+" a.TEquipmentInfo.equId as equId,"//设备ID
-				+" a.TEquipmentInfo.equName as equName,"//设备名称
-				+" a.processNum as processNum,"  //工单数量
-				+" DATE_FORMAT(a.planStarttime,'%Y-%m-%d') as planStarttime,"  //开始时间
-				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d') as planEndtime" //结束时间     
-				+")"
-				+" FROM TJobdispatchlistInfo a,TProcessInfo b, TJobInfo c   "
-		        +" WHERE a.TJobInfo.id = c.id "
-		        +" AND c.TProcessInfo.id = b.id  "
-		        +" AND b.TProcessplanInfo.id = '"+processplanId+"'   ";
-		List<Map<String,Object>> lst = dao.executeQuery(hql);
-		for(Map<String,Object> m : lst){
-			String no = (String)m.get("processId"); //工序ID
-			List<Map<String,Object>> nolst =  getSerNoByProcessId(no);
-			Map<String,Object> noMap = new HashMap<String,Object>();
-			for(Map<String,Object> n : nolst){
-				if(n.get("equId")!=null && !"".equals(n.get("equId"))){//设备ID
-					noMap.put((String)n.get("equName"),n.get("equId").toString());
-				}
-			}
-			m.put("euqmap", noMap);
-		}
-		
-		return lst;
-	}
-	
-	/**
-	 * 作业计划控制 --修改工单
-	 * @param jobPlanControlBean
-	 */
-	public void updateJobDispatch(JobPlanControlBean jobPlanControlBean){
-		for(Map<String, Object> part:jobPlanControlBean.getSelectedJobdispatch()){			
-			TJobdispatchlistInfo ec  = null;
-			if(!StringUtils.isEmpty(part.get("id").toString())){
-				ec=commonService.get(TJobdispatchlistInfo.class, Long.valueOf(part.get("id").toString()));
-			}
-			ec.setNo((String)part.get("no"));
-			if(part.get("processNum")!=null){
-			ec.setProcessNum(Integer.parseInt(part.get("processNum").toString()));
-			}
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				if(part.get("planStarttime")!=null){
-				ec.setPlanStarttime(sdf.parse((String)part.get("planStarttime")));
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			try {
-				if(part.get("planEndtime")!=null){
-				ec.setPlanEndtime(sdf.parse((String)part.get("planEndtime")));
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			TEquipmentInfo te = null;  //修改设备ID
-			if(!StringUtils.isEmpty(part.get("equId").toString())){
-				te=commonService.get(TEquipmentInfo.class, Long.valueOf(part.get("equId").toString()));
-			}
-			ec.setTEquipmentInfo(te);
-			
-			commonService.updateObject(ec);	
-			
-			//工序设备中间表.. 只能是添加,而且因为如果map重复只会显示1个
-			/*
-			TProcessEquipment te = null;
-			System.out.println("0==============>"+part.get("processId").toString());
-			System.out.println("1==============>"+part.get("equId").toString());
-			if(!StringUtils.isEmpty(part.get("processId").toString())){
-				te=commonService.get(TProcessEquipment.class, Long.valueOf(part.get("processId").toString()));
-				if(!StringUtils.isEmpty(part.get("equId").toString())){ 
-					System.out.println("2==============>"+te);
-					te.setEquipmentId(new Long(part.get("equId").toString()));   //设备ID
-					commonService.update(te);
-				}
-			}
-			//加
-			if(!StringUtils.isEmpty(part.get("processId").toString())&&!StringUtils.isEmpty(part.get("equId").toString())){
-			TProcessEquipment tpe = new TProcessEquipment();
-			tpe.setEquipmentId(new Long(part.get("processId").toString()));   //工序ID
-			tpe.setEquipmentId(new Long(part.get("equId").toString()));   //设备ID
-			commonService.saveObject(tpe);
-			}
-			*/
-			
-		}
-	}
-	
+
 	/**
 	 * 作业计划控制 --保存作业和保存工单
 	 */
@@ -2168,14 +1625,14 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	    String fristDispath ="";  //得到首工位工单号
 	    if(jobPlanControlBean.getJobMaplst().size()>0){
 	    Map<String, Object> fristDispathMap = jobPlanControlBean.getJobMaplst().get(0);
-	    fristDispath = "WO_"+(String)fristDispathMap.get("bianma")+"_"+time+"_"+fristDispathMap.get("id");
+	    fristDispath = "WO_"+fristDispathMap.get("bianma")+"_"+time+"_"+fristDispathMap.get("id");
 	    }
 	    for(Map<String, Object> jobmap : jobPlanControlBean.getJobMaplst()){
 			TJobInfo p = new TJobInfo();
 			p.setNo((String)jobmap.get("no"));
 			p.setName((String)jobmap.get("name"));
 			p.setTheoryWorktime(Integer.parseInt(jobmap.get("theoryWorktime").toString()));
-			p.setPlanNum(Integer.parseInt((String)jobmap.get("processNum").toString())); //计划数量
+			p.setPlanNum(Integer.parseInt((String)jobmap.get("processNum"))); //计划数量
 			p.setFinishNum(0);  //完成数量
 			p.setNodeid(nodeid);
 			try {
@@ -2198,10 +1655,10 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			
 			TJobdispatchlistInfo tp = new TJobdispatchlistInfo();
 			String num = String.valueOf((int)(Math.random()*1000)); //生成随机数
-	   		tp.setNo("WO_"+(String)jobmap.get("bianma")+"_"+time+"_"+jobmap.get("id")+"_"+num); //工单编号
-	   		tp.setName("WO_"+(String)jobmap.get("name")+"_"+time+"_"+num);//工单名称
-	   		tp.setTheoryWorktime(Integer.parseInt((String)jobmap.get("theoryWorktime").toString()));//理论工时
-	   		tp.setProcessNum(Integer.parseInt((String)jobmap.get("processNum").toString())); //计划数量
+	   		tp.setNo("WO_"+jobmap.get("bianma")+"_"+time+"_"+jobmap.get("id")+"_"+num); //工单编号
+	   		tp.setName("WO_"+jobmap.get("name")+"_"+time+"_"+num);//工单名称
+	   		tp.setTheoryWorktime(Integer.parseInt(jobmap.get("theoryWorktime").toString()));//理论工时
+	   		tp.setProcessNum(Integer.parseInt((String)jobmap.get("processNum"))); //计划数量
 	   		tp.setFinishNum(0);    //完成数量
 	   		tp.setGoodQuantity(0); //合格数量
 	   		tp.setBadQuantity(0);  //不合格数量
@@ -2232,29 +1689,29 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			
 			if(tp.getStatus()==40){ //同时启动工单的话作业和作业计划都要修改状态			
 					p.setStatus(40);   //作业状态
-					if(p.getRealStarttime()==null || "".equals(p.getRealStarttime())){//第一次启动工单的话要添加实际启动时间，其余不要
+					if(p.getRealStarttime()==null || "".equals(p.getRealStarttime().toString())){//第一次启动工单的话要添加实际启动时间，其余不要
 					      p.setRealStarttime(new Date());
 					 }
 					commonService.update(p);  //添加完工单后把作业的在台改为30.
 					//作业计划状态也要改，如果是20就改为30，只有这中情况
 					TJobplanInfo tjp = null;
 					if(!StringUtils.isEmpty(jobPlanControlBean.getJobplabid())){
-						tjp=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid().toString()));
+						tjp=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid()));
 					}
 					if(tjp!=null){
-						tjp.setStatus(40);
-						if(tjp.getRealStarttime()==null || "".equals(tjp.getRealStarttime())){//第一次启动工单的话要添加实际启动时间，其余不要
-						     tjp.setRealStarttime(new Date());
-						}
-						commonService.update(tjp);  //保存在20的情况下改30
-					}
+                    tjp.setStatus(40);
+                    if(tjp.getRealStarttime()==null || "".equals(tjp.getRealStarttime().toString())){//第一次启动工单的话要添加实际启动时间，其余不要
+                        tjp.setRealStarttime(new Date());
+                    }
+                    commonService.update(tjp);  //保存在20的情况下改30
+                }
 			}else{			
 				p.setStatus(30);   //作业状态
 				commonService.update(p);  //添加完工单后把作业的在台改为30.
 				//作业计划状态也要改，如果是20就改为30，只有这中情况
 				TJobplanInfo tjp = null;
 				if(!StringUtils.isEmpty(jobPlanControlBean.getJobplabid())){
-					tjp=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid().toString()));
+					tjp=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid()));
 				}
 				if(tjp!=null && tjp.getStatus().equals(20)){
 					tjp.setStatus(30);
@@ -2323,10 +1780,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		
 	}
 	
-	/**
-	 * 作业计划控制 --通过工序ID得到设备序列号
-	 * 
-	 */
 	public List<Map<String,Object>> getSerNoByProcessId(String processNo){//工序ID
 		String hql = "SELECT NEW MAP(" 
 				+" d.equId as equId,"             //设备ID
@@ -2340,9 +1793,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeQuery(hql);
 	}
 	
-	/**
-	 * 作业计划控制 --通过设备ID得到设备名称
-	 */
 	public String getEquNameByEquId(String equId){
 		String hql = "SELECT NEW MAP(" 
 				+" d.equId as equId,"             //设备ID
@@ -2360,11 +1810,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return equName;
 	}
 	
-	
-	/**
-	 * 作业计划控制 --通过作业计划ID和零件类型ID得到作业计划
-	 * 
-	 */
 	public List<Map<String,Object>> getJobPlanByJobIdAndPartId(String nodeid,String jobplanid,String partId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"            //作业计划
@@ -2387,35 +1832,28 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		}	
 		if(partId!=null && !"".equals(partId)){
 			hql += " AND a.TPartTypeInfo.id = '"+partId+"'  "; 
-		}	
-		List<Map<String,Object>> lst = dao.executeQuery(hql);		
-		return lst;	
+		}
+        return dao.executeQuery(hql);
 	}
-	/**
-	 * 获取作业计划父作业计划
-	 * @param batchNo
-	 * @return
-	 */
+
 	public List<TJobplanInfo> getTJobplanInfoByBatchNo(String batchNo,String partTypeId){
 		String hql="from TJobplanInfo where 1=1 "
 				+ " and TPartTypeInfo.id='"+partTypeId+"'"
 				+ "and planType<>2 ";
 		return dao.executeQuery(hql);
 	}
-	/**
-	 * 根据id获取作业计划
-	 * @param id
-	 * @return
-	 */
-	public List<TJobplanInfo> getTJobplanInfoById(String id){
+
+    /**
+     * 通过id查询作业计划信息
+     * @param id 作业计划ID
+     * @return 返回作业计划信息
+     */
+	private List<TJobplanInfo> getTJobplanInfoById(String id){
 		String hql="from TJobplanInfo where id='"+id+"'";
 		return dao.executeQuery(hql);
 	}
 	
-	/**
-	 * 查询plan_type为2的工作计划
-	 * @return
-	 */
+
 	public List<TJobplanInfo> getJobPlan(String nodeId,String partTypeId){
 		String hql = "FROM TJobplanInfo a "
 				+ " where a.planType = 2 and a.nodeid='"+nodeId
@@ -2423,11 +1861,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				+ " and a.status = 40";
 		return dao.executeQuery(hql);
 	}
-	/**
-	 * 获取节点id下的所有工单
-	 * @param nodeid
-	 * @return
-	 */
+
 	public List<Map<String,Object>> getJobdispatchList(String nodeid,String query,String jobplanId){
 		String hql="select new Map("
 				+ " a.id as id,"
@@ -2441,11 +1875,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		}
 		return dao.executeQuery(hql);
 	}
-	/**
-	 * 根据选择的工单号 来算选所需要的数据
-	 * @param jobdispatchNo
-	 * @return
-	 */
+
 	public Map<String,Object> getDataByjobdispatchNo(String jobdispatchNo){
 		Map<String,Object> rsmap=new HashMap<String, Object>();
 		String erplisthql="select new Map("
@@ -2481,11 +1911,12 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			rsmap.put("itemDesc", "");//添加物料描述
 			rsmap.put("toOperationNum", "");//添加 至工序
 		}
+		
 		String sqlgylist="SELECT b.process_order as processOrder,b.theorywork_time as processingTime,b.onlineProcessID,b.offlineProcess,"
 						+ " b.processPlanID as processPlanID,b.id as itemCode,b.name as processName" 
 						+" FROM t_jobdispatchlist_info a,t_process_info b WHERE " 
 						+"	a.processID=b.ID "
-						+"	AND a.batchno IN( "
+						+"	AND a.batchno =( "
 						+"	SELECT  batchno FROM t_jobdispatchlist_info WHERE NO='"+jobdispatchNo+"')"
 						+" order by b.process_order ";
 		List<Map<String,Object>> zrgxrs=dao.executeNativeQuery(sqlgylist);				
@@ -2496,34 +1927,5 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		}
 		return rsmap;
 	}
-	
-	/**
-	 * 根据工单编号 获取工单对象
-	 * @param no
-	 * @return
-	 */
-	public TJobdispatchlistInfo getTJobdispatchlistInfoByNo(String no){
-		String hql="from TJobdispatchlistInfo where no='"+no+"'";
-		List<TJobdispatchlistInfo> rs=dao.executeQuery(hql);
-		if(null!=rs&&rs.size()>0){
-			return rs.get(0);
-		}else{
-			return null;
-		}
-		
-	}
-	/**
-	 * 更新工单
-	 * @param tt
-	 * @return
-	 */
-	public String updateTJobdispatchlistInfo(TJobdispatchlistInfo tt){
-		try {
-			dao.update(TJobdispatchlistInfo.class,tt);
-			return "更新工单成功";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "更新工单失败";
-		}
-	}
+
 }

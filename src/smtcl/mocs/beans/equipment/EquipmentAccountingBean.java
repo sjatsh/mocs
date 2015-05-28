@@ -288,7 +288,8 @@ public class EquipmentAccountingBean  implements Serializable {
     	    	  "x位置",
     	    	  "y位置",
     	    	  "IP地址",
-    	    	  "备注"
+    	    	  "备注",
+    	    	  "操作人"
     	};
     	SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd"); //不能用/杠，找不到路径
     	Date d  = new Date();

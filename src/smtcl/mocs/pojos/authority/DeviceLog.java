@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.google.gson.annotations.Expose;
 
 /**
- * 设备机床关联日志
+ * 设备机床关联日志�?
  * @author gaokun
  * @create Jan 28, 2013 11:34:37 AM
  */

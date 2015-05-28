@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created with IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-11-1
- * Time: ÏÂÎç10:41
+ * Time: ä¸‹åˆ10:41
  */
 @AjaxService ("i18n")
 public class I18nAjax {

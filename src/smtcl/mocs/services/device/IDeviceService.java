@@ -103,7 +103,7 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	 * @param equSerialNos 设备序列号
 	 * @return List
 	 */
-	public List getAllEquName(String equSerialNos);
+	public List<TEquipmentInfo> getAllEquName(String equSerialNos);
 	
 	/**
 	 * 获取当前节点下所有设备和运行状态（包括子节点）
@@ -338,12 +338,13 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取人员信息
 	 */
-	public List<Map<String,Object>> getUserList(String userId);
+	public List<Map<String,Object>> getUserList(String userId,String nodeId);
 	
 	/**
 	 * 保存报工信息
 	 */
-	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo);
+	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo,String isGood,
+			 String depName,String jgCheckUser,String zpCheckUser,String sjCheckUser);
 	
 	/**
 	 * 验证报工数量是否合法
@@ -363,7 +364,12 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取设备序列号集合
 	 */
-	public List<Map<String,Object>> getEquTypeMap();
+	public List<Map<String,Object>> getEquTypeMap(String nodeId);
+
+    /**
+     * 获取设备序列号集合
+     */
+    public List<Map<String,Object>> getEquTypeMap();
 	
 	/**
 	 * 获取设备序列号集合(下拉框)
@@ -373,7 +379,7 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取设备名称集合
 	 */
-	public List<Map<String,Object>> getEquTypeNameMap();
+	public List<Map<String,Object>> getEquTypeNameMapByNodeId(String nodeId);
 	
 	/**
 	 * 获取设备名称集合(下拉框)
@@ -390,7 +396,7 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取member信息
 	 */
-	public List<Map<String, Object>> getMemberInfo(String userId);
+	public List<Map<String, Object>> getMemberInfo(String userId,String nodeId);
 	/**
 	 * 获取单个工单信息
 	 */
@@ -434,8 +440,9 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	 * 成品入库信息保存
 	 * @param num 入库数量
 	 * @param inventoryId库房id
+	 * @param materialPositionId 库位Id
 	 * @param partId 成品ID
 	 * @param dataList列表信息
 	 */
-	public String saveInStockDataInfo(String num,String inventoryId,List<Map<String,Object>> dataList);
+	public String saveInStockDataInfo(String num,String inventoryId,String materialPositionId,String partId,String instockNo,List<Map<String,Object>> dataList);
 }

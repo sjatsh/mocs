@@ -15,7 +15,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.dreamwork.persistence.ServiceFactory;
 
 import smtcl.mocs.services.jobplan.IJobDispatchService;
@@ -36,6 +35,7 @@ import smtcl.mocs.services.jobplan.UpdataJobDispatch;
 @ViewScoped
 public class JobdispatchUpdataBean implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 工单接口实例
 	 */
@@ -96,10 +96,15 @@ public class JobdispatchUpdataBean implements Serializable {
 	 * 零件名称
 	 */
 	private String jobdispatchpartName;
+	/**
+	 * 工单状态
+	 */
+	private String jobStatus;
 	
 	/**
 	 * 构造函数 
 	 */
+	@SuppressWarnings("unchecked")
 	public JobdispatchUpdataBean(){
 		//获取节点ID
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -119,7 +124,7 @@ public class JobdispatchUpdataBean implements Serializable {
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String,Object> map = jobDispatchService.getJobDispatchById(nodeid,id); //通过工单ID得到所有信息
-		List<Map<String,Object>> lst = (List<Map<String, Object>>) map.get("lst");  //工单信息
+		List<Map<String,Object>> lst =  (List<Map<String, Object>>) map.get("lst");  //工单信息
 		
 		if(lst.size()>0){ //工单信息
 			Map<String,Object> dismap = lst.get(0);
@@ -133,6 +138,10 @@ public class JobdispatchUpdataBean implements Serializable {
 			if(dismap.get("partName")!=null){
 				jobdispatchpartName = dismap.get("partName").toString();
 			}
+			if(dismap.get("status")!=null){
+				jobStatus = dismap.get("status").toString();
+			}
+			
 			try {
 				if(dismap.get("planStarttime")!=null){
 					jobdispatchlistStartDate = sdf.parse((String)dismap.get("planStarttime"));
@@ -204,10 +213,6 @@ public class JobdispatchUpdataBean implements Serializable {
 	}
 	
 	/******************************set,get方法**********************************************/
-	
-	public IJobDispatchService getJobDispatchService() {
-		return jobDispatchService;
-	}
 
 	public String getSerailNo() {
 		return serailNo;
@@ -215,10 +220,6 @@ public class JobdispatchUpdataBean implements Serializable {
 
 	public void setSerailNo(String serailNo) {
 		this.serailNo = serailNo;
-	}
-
-	public void setJobDispatchService(IJobDispatchService jobDispatchService) {
-		this.jobDispatchService = jobDispatchService;
 	}
 
 	public IJobPlanService getJobPlanService() {
@@ -322,6 +323,14 @@ public class JobdispatchUpdataBean implements Serializable {
 	}
 	public void setJobdispatchpartName(String jobdispatchpartName) {
 		this.jobdispatchpartName = jobdispatchpartName;
+	}
+
+	public String getJobStatus() {
+		return jobStatus;
+	}
+
+	public void setJobStatus(String jobStatus) {
+		this.jobStatus = jobStatus;
 	}
 
 }

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * ÈÕÖ¾;
+ * æ—¥å¿—;
  * @author gaokun
  * @create Dec 25, 2012 2:32:18 PM
  */

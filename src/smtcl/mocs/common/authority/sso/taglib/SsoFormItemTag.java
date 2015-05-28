@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-9
- * Time: ÏÂÎç6:06
+ * Time: ä¸‹åˆ6:06
  */
 public class SsoFormItemTag extends SimpleTagSupport {
     private String var;

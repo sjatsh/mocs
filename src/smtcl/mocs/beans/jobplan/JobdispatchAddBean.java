@@ -5,30 +5,25 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.dreamwork.persistence.ServiceFactory;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
-import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TJobplanInfo;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.services.device.IPartService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
-import smtcl.mocs.utils.authority.DateUtil;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
@@ -44,7 +39,8 @@ import smtcl.mocs.utils.device.StringUtils;
 @ManagedBean(name="JobdispatchAdd")
 @ViewScoped
 public class JobdispatchAddBean implements Serializable {
-	
+
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 工单接口实例
 	 */
@@ -75,14 +71,6 @@ public class JobdispatchAddBean implements Serializable {
 	 * 零件类型ID
 	 */
 	private String partTypeId;
-	/**
-	 * 工艺方案名称集合
-	 */
-	private Map<String,Object> skillMap = new HashMap<String,Object>();
-	/**
-	 * 工艺方案ID
-	 */
-	private String skillId;
 	/**
 	 * 投料数量
 	 */
@@ -129,11 +117,6 @@ public class JobdispatchAddBean implements Serializable {
 	 * 工单选中的行
 	 */
 	private Map<String,Object>[] selectedJobdispatch;
-	/**
-	 * 工序选中的行的ID
-	 */
-	private String selectdised;
-	
 	/**
 	 * 节点ID
 	 */
@@ -226,7 +209,6 @@ public class JobdispatchAddBean implements Serializable {
 	}
 	
 	private String partTypeId00;   //零件类型ID--真正
-	private String partTypeName00; //零件类型名称--真正
 	/**
 	 * 查询<span>不在使用</span>
 	 */
@@ -265,9 +247,7 @@ public class JobdispatchAddBean implements Serializable {
     		System.out.println("设备类型ID----------->"+equtypeid);
     	}
     }
-    
-    
-    List<Map<String, Object>>  jobMaplst = new  ArrayList<Map<String, Object>>(); //用来放MAP的数据
+
     /**
      * 生成工单
      */
@@ -318,24 +298,10 @@ public class JobdispatchAddBean implements Serializable {
    }
    
    /**
-    * 取消工单
-    */
-	public void delJobDispathList() {
-		System.out.println("取消----------->" + jobdispatchlist.size());
-		for (Map<String, Object> disp : jobdispatchlist) {
-			String equtypeid = disp.get("equTypeId").toString();
-		}
-	}
-   
-   /**
     * 保存工单
     */
    public void saveJobDispatch(){
 	   jobDispatchService.saveDispatch(this);
-	   //将零件名称写入cookie,在作业计划中使用
-//	   HttpServletResponse response = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//	   HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-//	   StringUtils.saveCookie(request, response, "partName", "abc");
    }
    /**
     * 选择作业号后，获取投料数量和任务号，并自动填充
@@ -343,25 +309,30 @@ public class JobdispatchAddBean implements Serializable {
    public void autoComplete(){
 	   num = this.getNum();
 	   if(!planjobId.isEmpty()){
-		   if(planjobId != null){
-				TJobplanInfo t = jobPlanService.geTJobplanInfoById(Long.parseLong(planjobId));
-				this.setTaskNum(t.getName());
-			}
-	   }
+           TJobplanInfo t = jobPlanService.geTJobplanInfoById(Long.parseLong(planjobId));
+           this.setTaskNum(t.getName());
+       }
 	   
    }
    	/*************************private**********************************/
    private String getPartId(String partName){
-	   List<TPartTypeInfo> list = partService.getPartTypeInfo(partTypeId);
+	   List<TPartTypeInfo> list = partService.getPartTypeInfo(partName);
 		for(TPartTypeInfo t : list ){
 			return t.getId().toString();
 		}
 		return null;
    }
-   
+
    private String getSkillid(){
-	   List<Map<String, Object>> lst2 = jobPlanService
-				.getProcessplanMap(this.getPartId(partTypeId));
+       HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+       List<Map<String, Object>> lst2;
+       if(request.getParameter("partId")!=null){
+           lst2 = jobPlanService.getProcessplanMap(request.getParameter("partId").trim());
+       }else{
+           lst2 = jobPlanService.getProcessplanMap(this.getPartId(partTypeId));
+       }
+
+
 		// 默认选择1个工艺方案
 		if (lst2.size() > 0) {
 			Map<String, Object> map = lst2.get(0);
@@ -371,14 +342,6 @@ public class JobdispatchAddBean implements Serializable {
    }
     /********************set,get方法************************************/    
 
-	public IJobDispatchService getJobDispatchService() {
-		return jobDispatchService;
-	}
-	
-	public void setJobDispatchService(IJobDispatchService jobDispatchService) {
-		this.jobDispatchService = jobDispatchService;
-	}
-	
 	public IJobPlanService getJobPlanService() {
 		return jobPlanService;
 	}
@@ -389,10 +352,6 @@ public class JobdispatchAddBean implements Serializable {
 	
 	public Map<String, Object> getPartTypeMap() {
 		return partTypeMap;
-	}
-	
-	public void setPartTypeMap(Map<String, Object> partTypeMap) {
-		this.partTypeMap = partTypeMap;
 	}
 	
 	public String getPartTypeId() {
@@ -413,7 +372,7 @@ public class JobdispatchAddBean implements Serializable {
 					}
 				}
 				String planid = request.getParameter("planId").trim();
-				List<TJobplanInfo> jobPlanList = jobPlanService.getJobPlan(this.getNodeId(),this.getPartId(partTypeId));
+				List<TJobplanInfo> jobPlanList = jobPlanService.getJobPlan(this.getNodeId(),partId);
 				for(TJobplanInfo t:jobPlanList){
 					if(planid.equals(t.getId().toString())){
 						planjobId = t.getId().toString();
@@ -429,23 +388,7 @@ public class JobdispatchAddBean implements Serializable {
 	public void setPartTypeId(String partTypeId) {
 		this.partTypeId = partTypeId;
 	}
-	
-	public Map<String, Object> getSkillMap() {
-		return skillMap;
-	}
-	
-	public void setSkillMap(Map<String, Object> skillMap) {
-		this.skillMap = skillMap;
-	}
-	
-	public String getSkillId() {
-		return skillId;
-	}
-	
-	public void setSkillId(String skillId) {
-		this.skillId = skillId;
-	}
-	
+
 	public String getNum() {
 		if(planjobId != null && !planjobId.isEmpty()){
 			TJobplanInfo t = jobPlanService.geTJobplanInfoById(Long.parseLong(planjobId));
@@ -465,18 +408,10 @@ public class JobdispatchAddBean implements Serializable {
 	public void setTaskNum(String taskNum) {
 		this.taskNum = taskNum;
 	}
-	
-	public List<Map<String, Object>> getProcesslist() {
-		return processlist;
-	}
-	
-	public void setProcesslist(List<Map<String, Object>> processlist) {
-		this.processlist = processlist;
-	}
-	
+
+	@SuppressWarnings("unchecked")
 	public TJobDispatchDataModel getMediumProcessModel() {
 		if(partTypeId!=null && !partTypeId.isEmpty()){
-		
 			// 工艺清单
 			processlist = jobDispatchService.getProcessByProcessPlanId(this.getNodeId(),
 					this.getSkillid());
@@ -556,10 +491,6 @@ public class JobdispatchAddBean implements Serializable {
 		return jobdispatchlist;
 	}
 	
-	public void setJobdispatchlist(List<Map<String, Object>> jobdispatchlist) {
-		this.jobdispatchlist = jobdispatchlist;
-	}
-	
 	public TJobDispatchDataModel getJobdispatchModel() {
 		return jobdispatchModel;
 	}
@@ -584,46 +515,6 @@ public class JobdispatchAddBean implements Serializable {
 		this.nodeid = nodeid;
 	}
 
-	public String getSelectdised() {
-		return selectdised;
-	}
-
-	public void setSelectdised(String selectdised) {
-		this.selectdised = selectdised;
-	}
-
-	public List<Map<String, Object>> getJobMaplst() {
-		return jobMaplst;
-	}
-
-	public void setJobMaplst(List<Map<String, Object>> jobMaplst) {
-		this.jobMaplst = jobMaplst;
-	}
-
-	public String getPartTypeId00() {
-		return partTypeId00;
-	}
-
-	public void setPartTypeId00(String partTypeId00) {
-		this.partTypeId00 = partTypeId00;
-	}
-
-	public String getPartTypeName00() {
-		return partTypeName00;
-	}
-
-	public void setPartTypeName00(String partTypeName00) {
-		this.partTypeName00 = partTypeName00;
-	}
-
-	public Map<String, Object> getEduTypeMapforupdata() {
-		return eduTypeMapforupdata;
-	}
-
-	public void setEduTypeMapforupdata(Map<String, Object> eduTypeMapforupdata) {
-		this.eduTypeMapforupdata = eduTypeMapforupdata;
-	}
-
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -640,13 +531,6 @@ public class JobdispatchAddBean implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public String getEduTypeMapforupdataname() {
-		return eduTypeMapforupdataname;
-	}
-
-	public void setEduTypeMapforupdataname(String eduTypeMapforupdataname) {
-		this.eduTypeMapforupdataname = eduTypeMapforupdataname;
-	}
 	public boolean isOneBool() {
 		return oneBool;
 	}
@@ -668,7 +552,14 @@ public class JobdispatchAddBean implements Serializable {
 	public Map<String, Object> getPlanjobMap() {
 		planjobMap.clear();
 		if(partTypeId!=null && !partTypeId.isEmpty()){
-			List<TJobplanInfo> jobPlanList = jobPlanService.getJobPlan(this.getNodeId(),this.getPartId(partTypeId));
+            HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            List<TJobplanInfo> jobPlanList;
+            if(request.getParameter("partId")!=null){
+                jobPlanList = jobPlanService.getJobPlan(this.getNodeId(),request.getParameter("partId"));
+            }else{
+                jobPlanList = jobPlanService.getJobPlan(this.getNodeId(),this.getPartId(partTypeId));
+            }
+
 			for (TJobplanInfo job : jobPlanList) {
 				planjobMap.put(job.getName(), job.getId());
 			}

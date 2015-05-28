@@ -1,11 +1,8 @@
 package smtcl.mocs.services.device;
 
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.dreamwork.persistence.Parameter;
 
 /**
  * 北展逻辑层接口 * 

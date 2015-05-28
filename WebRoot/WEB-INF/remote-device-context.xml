@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+						   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+   
+   <!-- 加载远程数据库配置，例如：作业计划和工单调度使用的表 -->
+    <bean id="remotePropertyConfigurer" class="smtcl.mocs.common.device.RemoteDBConfigurer">
+     	<property name="order" value="3" />
+     	<property name="ignoreUnresolvablePlaceholders" value="true" />
+    	<property name="location" value="WEB-INF/remoteDBconfig.properties"/> 
+    </bean>
+    
+    <bean id="remotemysqlDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean"
+        init-method="init" destroy-method="close">
+        <property name="uniqueResourceName" value="remote_mysql"/>
+        <property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource" />
+        <property name="xaProperties">
+            <props>
+                <prop key="user">${remote.connection.username}</prop>
+                <prop key="password">${remote.connection.password}</prop>
+                <prop key="url">${remote.connection.url}</prop>
+            </props>
+        </property>
+        <property name="poolSize" value="3" />
+        <!-- 管理 Connection 被占用的时间 -->
+        <!-- 如果不设置这个值，Atomikos使用默认的300秒(即5分钟)，那么在处理大批量数据读取的时候，一旦超过5分钟，就会抛出类似 Resultset is close 的错误 -->
+        <property name="reapTimeout" value="20000"/>
+    </bean>
+
+	<bean id="remoteSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="remotemysqlDataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>smtcl.mocs.pojos.device</value>
+				<value>smtcl.mocs.pojos.authority</value>
+				<value>smtcl.mocs.pojos.job</value>
+				<value>smtcl.mocs.pojos.storage</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+                <prop key="hibernate.connection.driver_class">${remote.connection.driver}</prop>
+                <prop key="hibernate.dialect">${remote.connection.dialect}</prop>
+                <prop key="hibernate.show_sql">${remote.connection.show.sql}</prop>
+                <prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="remoteTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="remoteSessionFactory" />
+	</bean>
+  
+	<!-- transaction manage -->
+	<bean id="remoteBaseService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true" lazy-init="true">
+		<property name="transactionManager" ref="remoteTransactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- generic type magic -->
+	<bean id="remoteAbstractDaoTarget" abstract="true"
+		class="org.dreamwork.persistence.hibernate.dao.impl.GenericHibernateDaoImpl">
+		<property name="sessionFactory" ref="remoteSessionFactory" />
+	</bean>
+
+	<bean id="remoteAbstractServiceTarget" abstract="true"
+		class="org.dreamwork.persistence.GenericServiceSpringImpl" />
+
+	<bean id="remoteGenericDao" class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true" />
+
+	<bean id="remoteGenericService" class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true" />
+
+	<bean id="remoteCommonDao" class="smtcl.mocs.dao.device.impl.CommonDaoImpl">
+		<property name="sessionFactory" ref="remoteSessionFactory" />
+	</bean>
+	
+	<bean id="remoteTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"> 
+      <property name="transactionManager" ref="remoteTransactionManager"/>
+    </bean>
+
+
+    <bean id="remoteCommonService" parent="remoteBaseService">
+        <property name="target">
+            <bean
+                    class="smtcl.mocs.services.device.impl.CommonServiceImpl">
+                <property name="commonDao" ref="remoteCommonDao" />
+                <property name="dao">
+                    <bean parent="remoteAbstractDaoTarget">
+                        <constructor-arg value="java.lang.Object" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    
+ 	<!-- 作业计划SERVICE --> 
+	<bean id="jobPlanService" parent="remoteBaseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.jobplan.impl.JobPlanServiceImpl">
+                <property name="commonDao" ref="remoteCommonDao"/>
+                <property name="commonService" ref="remoteCommonService"/>
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="remoteAbstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.job.TJobplanInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 工单SERVICE -->
+	<bean id="jobDispatchService" parent="remoteBaseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.jobplan.impl.JobDispatchServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="remoteAbstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.job.TJobdispatchlistInfo" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+ 
+	<!-- 报表数据服务  -->
+	<bean id="reportService" parent="remoteBaseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.report.impl.ReportServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="remoteAbstractDaoTarget">
+								<constructor-arg
+									value="java.lang.Object" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+    <!-- UpdataJobDispatch -->
+    <bean id="updataJobDispatch" parent="remoteBaseService">
+        <property name="target">
+            <bean
+                    class="smtcl.mocs.services.jobplan.impl.UpdataJobDispatchImpl">
+                <property name="dao">
+                    <bean parent="genericDao">
+                        <property name="target">
+                            <bean parent="remoteAbstractDaoTarget">
+                                <constructor-arg
+                                        value="smtcl.mocs.pojos.job.TEquJobDispatch" />
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+ 
+</beans>

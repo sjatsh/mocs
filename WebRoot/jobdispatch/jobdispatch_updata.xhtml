@@ -56,6 +56,7 @@ if(800>wjb51){
 	document.getElementById("maskw").style.width = wjb51 + "px";
 </script>
 	<h:inputHidden value="#{JobdispatchUpdata.jobdispatchlistId}" id="jobdispatchlistId"></h:inputHidden>
+	<h:inputHidden id="jobStatus" value="#{JobdispatchUpdata.jobStatus}"></h:inputHidden>
 	<table id="jobtable" align="center">
 		<tr>
 			<td width="100%" align="center">
@@ -392,6 +393,8 @@ if(800>wjb51){
 						var obj=response;
 	 					if(!obj.flag){
 	 						alert("请先点击[派工]按钮,在点击启动工单按钮");
+	 					}else{
+	 						
 	 					}
 	 					flag = obj.flag;
 	 				},
@@ -401,6 +404,7 @@ if(800>wjb51){
 	 			});
 				return flag;
 			}
+			return false;
 			
 		}
 		//更改工单状态
@@ -431,9 +435,14 @@ if(800>wjb51){
 		}
 		
 		function dispatchJob(){
-			if(window.confirm("是否派工？")){
-				var jobdispatchlistId = document.getElementById("myform:jobdispatchlistId").value;
-				changeStatus(jobdispatchlistId,30);
+			var jobStatus = document.getElementById("myform:jobStatus").value;
+			if(jobStatus!="20"){
+				alert("此工单不能派工，请检查工单状态是否为未派工状态！");
+			}else{
+				if(window.confirm("是否派工？")){
+					var jobdispatchlistId = document.getElementById("myform:jobdispatchlistId").value;
+					changeStatus(jobdispatchlistId,30);
+				}
 			}
 			return false;
 		}

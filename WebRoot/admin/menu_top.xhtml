@@ -43,8 +43,11 @@
 			<div class="top_right_split"></div>
 			<div class="top_info_head_right_head"></div>
 			<div class="top_info_head_right_inform">
+				<font style="color: white;margin-right: 10px;">欢迎您  <h:outputText value="#{MenuHeadBean.userName}"/></font> 
 				<a href="../authority/index.jasmine" class="top_info_head_right_inform_a" style="color:#FFFFFF;">权限管理&#160;&#160;&#160;&#160;&#160;</a>
-				<a href="#" class="top_info_head_right_inform_a" style="color:#FFFFFF;">通知中心</a>
+				<h:commandLink  value="退出" style="color: white;margin-right: 10px;font-size:14px;" >
+					<a4j:ajax event="click" listener="#{MenuHeadBean.LogOut}" oncomplete="location.reload()"/>
+				</h:commandLink>
 			</div>
 		</div>
 	</div>
@@ -94,6 +97,15 @@
 						<li class="top_info_foot_menu_ul_li" onclick="headHavigation(3)">
 							<h:outputLabel value="工厂建模" id="top_info_foot_menui_ul_li_a3" 
 								styleClass="#{('工厂建模'==MenuHeadBean.position)?'top_info_foot_menui_ul_li_a3_click':'top_info_foot_menui_ul_li_a3'}">
+								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":myform:leftiframe :top_info_head_left_path" />
+							</h:outputLabel>
+							<div class="top-nav-split"></div>
+						</li>
+					</c:if>
+					<c:if test="#{menu.label=='仓库管理'}">
+						<li class="top_info_foot_menu_ul_li" onclick="headHavigation(4)">
+							<h:outputLabel value="仓库管理" id="top_info_foot_menui_ul_li_a4" 
+								styleClass="#{('仓库管理'==MenuHeadBean.position)?'top_info_foot_menui_ul_li_a4_click':'top_info_foot_menui_ul_li_a4'}">
 								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":myform:leftiframe :top_info_head_left_path" />
 							</h:outputLabel>
 							<div class="top-nav-split"></div>

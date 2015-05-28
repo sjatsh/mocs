@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-9
- * Time: ÏÂÎç5:05
+ * Time: ä¸‹åˆ5:05
  */
 public class JsonUserReceiver implements ISsoReceiver {
     private static final Gson g = new GsonBuilder ().setDateFormat ("yyyy-MM-dd").create ();

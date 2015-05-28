@@ -22,7 +22,7 @@ import static javax.servlet.jsp.PageContext.*;
  * Created with IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-11-1
- * Time: ÏÂÎç9:46
+ * Time: ä¸‹åˆ9:46
  */
 public class I18nTag extends SimpleTagSupport {
     private static final String LOCALE_KEY = "dreamwork.jasmine2.locale";

@@ -13,7 +13,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import org.apache.http.impl.cookie.DateUtils;
 import org.dreamwork.persistence.ServiceFactory;
 
 import smtcl.mocs.services.report.IReportService;
@@ -29,6 +28,8 @@ import smtcl.mocs.utils.device.StringUtils;
 @ViewScoped
 public class PersonDetailBean implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	//报表数据集
 	private List<Map<String,Object>> outData = new ArrayList<Map<String,Object>>();
 	

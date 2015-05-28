@@ -22,9 +22,11 @@
 		<p:commandButton value="查询" actionListener="#{materailDetailConfigBean.MaterailSearch}" 
 		 update=":myform:treeSingle :myform:carList" oncomplete="bgReposition($('.table'));" styleClass="delete"></p:commandButton>
 		<div class="button-split"></div>
+		<ui:remove>
 		<p:commandButton value="新建" oncomplete="addMater.show();bgReposition($('.table'));" styleClass="delete"></p:commandButton>
 		<p:commandButton value="删除" actionListener="#{materailDetailConfigBean.onSelect}" update=":myform:selectRow" oncomplete="deleteRow();bgReposition($('.table'));" styleClass="delete"></p:commandButton>
 		<p:commandButton value="删除" actionListener="#{materailDetailConfigBean.deleteMaterial}" update=":myform:carList :myform:messages" style="display:none" id="deleteRow"></p:commandButton>
+		</ui:remove>
 	</div>
 	<div class="div-content-top-shadow">
 		<img src="../images/demo/right_top_shadow.png" />
@@ -124,9 +126,11 @@
                 </f:facet>
             </p:cellEditor>
         </p:column>
+        <ui:remove>
         <p:column headerText="操作" style="width:5%">
             <p:rowEditor />
         </p:column>
+        </ui:remove>
     </p:dataTable>
     <p:dialog widgetVar="addMater" resizable="false">
     	<table>

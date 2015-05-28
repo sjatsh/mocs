@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+						   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+   
+    <bean id="erpPropertyConfigurer" class="smtcl.mocs.common.device.ERPDBConfigurer">
+     	<property name="order" value="2" />
+     	<property name="ignoreUnresolvablePlaceholders" value="true" />     
+    	<property name="location" value="WEB-INF/ERPDBconfig.properties"/> 
+    </bean>
+    
+    <bean id="oracleDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean">
+		<property name="uniqueResourceName" value="erp_oracle"/>
+		<property name="xaDataSourceClassName" value="oracle.jdbc.xa.client.OracleXADataSource"/>
+		<property name="xaProperties">
+            <props>
+                <prop key="user">${erp.connection.username}</prop>
+                <prop key="password">${erp.connection.password}</prop>
+                <prop key="URL">${erp.connection.url}</prop>
+            </props>
+        </property>
+		<property name="poolSize" value="1"/>
+		<property name="borrowConnectionTimeout" value="60"/>
+	</bean>
+
+	<bean id="erpSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="oracleDataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>smtcl.mocs.pojos.erp</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+                <prop key="hibernate.connection.driver_class">${erp.connection.driver}</prop>
+                <prop key="hibernate.dialect">${erp.connection.dialect}</prop>
+                <prop key="hibernate.show_sql">${erp.connection.show.sql}</prop>
+                <prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="erpTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="erpSessionFactory" />
+	</bean>
+	      
+  
+	<!-- transaction manage -->
+	<bean id="erpBaseService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true" lazy-init="true">
+		<property name="transactionManager" ref="erpTransactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- generic type magic -->
+	<bean id="erpAbstractDaoTarget" abstract="true"
+		class="org.dreamwork.persistence.hibernate.dao.impl.GenericHibernateDaoImpl">
+		<property name="sessionFactory" ref="erpSessionFactory" />
+	</bean>
+
+	<bean id="erpAbstractServiceTarget" abstract="true"
+		class="org.dreamwork.persistence.GenericServiceSpringImpl" />
+
+	<bean id="erpGenericDao" class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true" />
+
+	<bean id="erpGenericService" class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true" />
+
+	<bean id="erpCommonDao" class="smtcl.mocs.dao.device.impl.CommonDaoImpl">
+		<property name="sessionFactory" ref="erpSessionFactory" />
+	</bean>
+	
+	<bean id="erpTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"> 
+      <property name="transactionManager" ref="erpTransactionManager"/>
+    </bean>
+    		
+    <bean id="erpCommonService" class="smtcl.mocs.services.erp.impl.ERPServiceImpl">
+    	<property name="erpCommonDao" ref="erpCommonDao" />
+		<property name="partService" ref="partService"/>
+		<property name="commonDao" ref="commonDao" />
+	</bean>
+	
+	<bean id="importService" parent="erpBaseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.erp.impl.ImportServiceImpl">
+				<property name="erpCommonDao" ref="erpCommonDao" />
+				<property name="commonDao" ref="commonDao" />
+				<property name="commonService" ref="commonService1" />
+                <property name="remoteCommonService" ref="remoteCommonService" />
+				<property name="dao">
+					<bean parent="erpAbstractDaoTarget">
+						<constructor-arg value="java.lang.Object" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+ 
+</beans>

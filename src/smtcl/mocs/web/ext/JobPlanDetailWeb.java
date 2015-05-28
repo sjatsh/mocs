@@ -19,8 +19,9 @@ import smtcl.mocs.services.jobplan.IJobDispatchService;
 
 /**
  * 作业计划-查询条件-ajax方法
- * @author songkaiang
- *
+ * @文件：JobPlanDetailWeb.java
+ * @作者： songkaiang
+ * @创建日期：2014年10月28日
  */
 @Controller
 public class JobPlanDetailWeb {
@@ -35,6 +36,7 @@ public class JobPlanDetailWeb {
 	private IJobDispatchService jobDispatchService = (IJobDispatchService)ServiceFactory.getBean("jobDispatchService");
 	
 	private IDeviceService baogongService=(IDeviceService)ServiceFactory.getBean("deviceService");
+	
 	/**
 	 * 通过ajax获取零件名称
 	 * @param request
@@ -54,7 +56,7 @@ public class JobPlanDetailWeb {
 		}
 		return listMap;
 	}
-	
+
 	/**
 	 * 通过ajax获取任务好
 	 * @param request
@@ -84,4 +86,5 @@ public class JobPlanDetailWeb {
 		
 		return baogongService.getEquTypeNameMap(equName);
 	}
+	
 }

@@ -502,6 +502,13 @@ public class ProductServiceImpl extends GenericServiceSpringImpl<TUserResource, 
 		if(!StringUtils.isEmpty(equid)){
 			hql += " and equ.equId in ("+equid+")";
 		}
+		//时间查询条件
+		if(!StringUtils.isEmpty(startTime)){
+			hql += " and b.planStarttime >= DATE_FORMAT('"+startTime+"','%Y-%m-%d')  "; 
+		}
+		if(!StringUtils.isEmpty(endTime)){
+			hql += " and b.planEndtime <= DATE_FORMAT('"+endTime+"','%Y-%m-%d')"; 
+		}
 		hql += " order by te.equSerialNo,b.taskNum,process.processOrder asc";
 		@SuppressWarnings("unchecked")
 		List<Map<String,Object>> jobDispatchListInfo = dao.executeQuery(hql);
@@ -606,10 +613,10 @@ private List<TEquJobDispatch> getTEquJobDispatchByNo(String jobdispatchNo){
 				   + " and te.status <> 0";
 		//时间查询条件
 		if(!StringUtils.isEmpty(startTime)){
-			hql += " and t.planStarttime >= DATE_FORMAT('"+startTime+"','%Y-%m-%d %T')  "; 
+			hql += " and t.planStarttime >= DATE_FORMAT('"+startTime+"','%Y-%m-%d')  "; 
 		}
 		if(!StringUtils.isEmpty(endTime)){
-			hql += " and t.planEndtime <= DATE_FORMAT('"+endTime+"','%Y-%m-%d %T')"; 
+			hql += " and t.planEndtime <= DATE_FORMAT('"+endTime+"','%Y-%m-%d')"; 
 		}
 		//工单状态
 		if(!StringUtils.isEmpty(jobstatus)){

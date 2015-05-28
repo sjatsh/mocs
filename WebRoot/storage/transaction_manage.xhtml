@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link rel="stylesheet" href="./css/transactionManage.css" type="text/css"></link>
+		<style type="text/css">   
+		/* 保存按钮 */
+		.btn-save {
+			width: 53px;
+			height: 53px;
+			cursor: pointer;
+		}
+		.imagebtn {
+			cursor: pointer;
+       }
+       *{
+       font-weight: normal;
+       font-size:inherit;
+       font-family: "微软雅黑" !important;
+       }
+       .inputText{
+		width:100%;
+		height:80%;
+		line_height:100%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		font-weight: normal;
+		
+	   }
+	    .ui-state-default{
+	      background:#00a040;
+	       
+	    }
+        .ui-dt-c{
+		   font-weight: normal;
+		   color:#333333;
+		}
+		.ui-state-default .ui-dt-c span{
+		   text-shadow:none;
+		   color:white;
+		   font-weight: bold;
+		}
+		.ui-button-text{
+		   color: white;
+		   
+		}
+       </style>
+
+	</h:head>
+
+	<h:body>
+		<h:form id="myform">
+			<div id="maskw"
+				style="position: absolute; z-index: 10; top: 0px; left: 0px; background-color: white;"></div>
+
+			<div style="width: 100%;" align="center" id ="content">
+
+				<table id="inStorage" style="width: 100%">
+					    <tr>
+					         <td id="title" align="center">
+					         <div style="padding-top: 30px"><h:outputText value="物料事务处理"/></div>
+					         </td>
+					    </tr>
+					    <tr>
+					    <td align="center">
+					    <table style="font-weight: normal;">
+						     
+							  <tr>
+							          <td>
+										<div style="margin-top: -1px"><h:outputText id="txtTransFrom" style="float: right;" value="来源类型" /></div>
+									 </td>
+									 <td>
+							          <div id ="divTransFrom"> 
+										<h:selectOneMenu id="transFrom" styleClass="inputText"
+											value="#{TransactionManage.transFromName}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{TransactionManage.transFromTypeList}" var="part" itemLabel="#{part.tansFrom}" itemValue="#{part.tansFrom}"></f:selectItems>
+											<f:ajax event="change" listener="#{TransactionManage.getTransTypeInfo}" execute="@this" 
+											render=":myform:transType"/>
+										</h:selectOneMenu>
+									  </div> 
+							       </td><td style="color: red;font-weight: bold;">*</td>
+							  </tr>
+							  <tr>
+							          <td>
+										<h:outputText id="txtTransType" style="float: right;" value="事务类型" />
+									 </td>
+									 <td>
+							          <div id ="divTransType"> 
+										<h:selectOneMenu id="transType" styleClass="inputText"
+											value="#{TransactionManage.transTypeId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{TransactionManage.transTypeList}" var="part" itemLabel="#{part.tansType}" itemValue="#{part.id}"></f:selectItems>
+											<f:ajax event="change" listener="#{TransactionManage.getTransInfo}" execute="@this" 
+											render=":myform:transTypeName :myform:transActivity"/>
+										</h:selectOneMenu>
+									  </div> 
+							       </td><td style="color: red;font-weight: bold;">*</td>
+							  </tr>
+							  <tr>
+							          <td>
+										<h:outputText id="txtUser" style="float: right;" value="处理人员" />
+									 </td>
+									 <td>
+							          <div id ="divUser"> 
+										<h:selectOneMenu id="user" styleClass="inputText"
+											value="#{TransactionManage.userName}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{TransactionManage.userList}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"></f:selectItems>
+										</h:selectOneMenu>
+									  </div> 
+							       </td><td style="color: red;font-weight: bold;">*</td>
+							  </tr>
+							   <tr>
+							          <td>
+										<h:outputText id="txtDate" style="float: right;" value="处理日期" />
+									 </td>
+									 <td>
+							          <div id ="divDate"> 
+										 <rich:calendar id="date" popup="true"
+													inputClass="inputText" locale="en" 
+													value="#{TransactionManage.dateTime}"
+													datePattern="yyyy-MM-dd" cellWidth="10px"
+													cellHeight="20px" >
+													</rich:calendar>
+									  </div> 
+							       </td><td style="color: red;font-weight: bold;">*</td>
+							  </tr>
+						    </table>
+					    </td>
+					    </tr>
+					    <tr>
+					    <td colspan="3" align="center">
+						    <div id="divPrev2" style="position: relative;">
+								    <p:commandButton value="事务处理 " id="submit" onclick="check()" style="border:0;background-color: #00A040;background-image: url('');color:white;
+										text-shadow:none;" update=":myform:success">
+									</p:commandButton>	
+					        </div>
+					    </td> 
+					    </tr>
+			   </table>
+			   <img src="./images/profile_top_logo.png"
+					style="position: absolute; z-Index: -1; border: 0px solid blue" id="img1" />
+				<h:inputHidden value="#{TransactionManage.success}" id="success"></h:inputHidden>
+				<h:inputHidden value="#{TransactionManage.transTypeName}" id="transTypeName"></h:inputHidden>
+				<h:inputHidden value="#{TransactionManage.transActivity}" id="transActivity"></h:inputHidden>
+				<p:growl id="messages" showDetail="true" />
+			</div>
+			<script type="text/javascript">
+				//<![CDATA[ 
+				 //var wjb51 = 0;
+				 //var hjb51 = 0;
+				// hjb51 = document.body.clientHeight;
+				// wjb51 = document.body.clientWidth;
+				var imgPercent = hjb51 / 1080; //比例 
+				//i5图片的大小
+				var new_image2 = new Image();
+				new_image2.src = document.getElementById("img1").src;
+				var wjbimg2 = new_image2.width;
+				var hjbimg2 = new_image2.height;
+				document.getElementById("img1").style.width = wjbimg2
+						* imgPercent + "px";
+				document.getElementById("img1").style.height = hjbimg2
+						* imgPercent + "px";
+				document.getElementById("img1").style.left = wjb51 * 20 / 1920
+						+ "px";
+				document.getElementById("img1").style.top = wjb51 * 40 / 1920
+						+ "px";
+				//内容高度
+				document.getElementById("title").style.height=hjb51*200/900+"px";
+                document.getElementById("title").style.fontSize=hjb51*45/900+"px";
+                //标题设置
+                document.getElementById("myform:txtTransFrom").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtTransType").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtUser").style.fontSize=hjb51*23/900+"px";
+                document.getElementById("myform:txtDate").style.fontSize=hjb51*23/900+"px";
+                //输入DIV控件 
+                document.getElementById("divTransFrom").style.width = wjb51*270/1500+"px";  
+                document.getElementById("divTransFrom").style.height = hjb51*60/900+"px";
+                document.getElementById("divTransFrom").style.marginLeft = "30px"; 
+                document.getElementById("divTransFrom").style.fontSize = hjb51*23/900+"px";
+                
+                document.getElementById("divTransType").style.width = wjb51*270/1500+"px";  
+                document.getElementById("divTransType").style.height = hjb51*60/900+"px";
+                document.getElementById("divTransType").style.marginLeft = "30px"; 
+                document.getElementById("divTransType").style.fontSize = hjb51*23/900+"px";
+                
+                document.getElementById("divUser").style.width = wjb51*270/1500+"px";  
+                document.getElementById("divUser").style.height = hjb51*60/900+"px";
+                document.getElementById("divUser").style.marginLeft = "30px"; 
+                document.getElementById("divUser").style.fontSize = hjb51*23/900+"px";
+              
+                document.getElementById("divDate").style.width = wjb51*233/1500+"px";  
+                document.getElementById("divDate").style.height = hjb51*60/900+"px";
+                document.getElementById("divDate").style.marginLeft = "30px"; 
+                document.getElementById("divDate").style.fontSize = hjb51*23/900+"px";
+               
+                document.getElementById("myform:submit").style.fontSize = hjb51*25/900+"px";
+                
+                function check(){
+                	var transFrom = document.getElementById("myform:transFrom").value;
+  				    var transTypeId = document.getElementById("myform:transType").value;
+  				    var user = document.getElementById("myform:user").value;
+  				    var date = document.getElementById("myform:dateInputDate").value;
+  				    if(null == transFrom || "" == transFrom) {
+						alert("请选择来源类型！");
+					}
+					else if(null == transTypeId || "" == transTypeId){
+						alert("请选择事务类型！");
+					}
+					else if(null == user || "" == user){
+						alert("请选择处理人员！");
+					}else if(null == date || "" == date){
+						alert("请选择处理日期！");
+					}else{
+						var transTypeName = document.getElementById("myform:transTypeName").value;
+						var transActivity = document.getElementById("myform:transActivity").value;
+						if(transTypeName =="工单发料"){
+							 openUrl("./storage/jobDispatch_material_outStorage.faces?transTypeId="+transTypeId+"&transActivity="+transActivity+"&userId="+user+"&date="+date+"");
+						}else if (transTypeName =="工单退料"){
+							openUrl("./storage/jobDispatch_material_inStorage.faces?transTypeId="+transTypeId+"&transActivity="+transActivity+"&userId="+user+"&date="+date+"");
+						}else if(transTypeName =="完工入库"){
+							openUrl("./storage/product_InStorage.faces?transTypeId="+transTypeId+"&transActivity="+transActivity+"&userId="+user+"&date="+date+"");
+						}else if(transTypeName =="物料杂收"){
+							openUrl("./storage/material_InStorage.faces?transTypeId="+transTypeId+"&transActivity="+transActivity+"&userId="+user+"&date="+date+"");
+						}else if(transTypeName =="物料杂发"){
+							openUrl("./storage/material_OutStorage.faces?transTypeId="+transTypeId+"&transActivity="+transActivity+"&userId="+user+"&date="+date+"");
+						}else if(transTypeName =="子库存转移"){
+							openUrl("./storage/material_transfer.faces?transTypeId="+transTypeId+"&transActivity="+transActivity+"&userId="+user+"&date="+date+"");
+						}
+					}
+                }
+                
+                function openUrl(url) {    
+                    features="height=1080,width=1620,top:200,left:200,status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";             
+                    winId=window.open(url,'addpage2',features); 
+                }
+				function onYZ() {
+				    var mgs = document.getElementById("myform:success").value;
+				    if(mgs =="通过"){
+				    	document.getElementById("myform:submit").click();
+				    }else{
+				    	alert(mgs);
+				    }
+				}
+				function onZZ()  {
+					var msg = document.getElementById("myform:success").value;
+					alert(msg);
+				}
+				function showBatch(){
+					//document.getElementById("myform:show").click();
+				}
+
+				//]]>
+			</script>
+		</h:form>
+	</h:body>
+</ui:composition>

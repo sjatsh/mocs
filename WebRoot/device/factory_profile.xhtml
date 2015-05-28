@@ -66,8 +66,10 @@
 			$(document).ready(function(){
 				//alert("ajax");
 				var ids=document.getElementById("myform:nodeid").value;
-				$("#homemenu").css("display", "block");
 				init(parentid,ids);
+				if(ids != "") {
+					$("#homemenu").css("display", "block");
+				}
 				$(".tohome").click(function(){
 					if($("#homemenu").css("display") == "none") {
 						$("#homemenu").css("display", "block");
@@ -239,6 +241,25 @@
 		<table id="factoptt" cellspacing="0" cellpadding="0" style="width: 100%;height: 100%;">
 			<tr>
 				<td width="100%"  height="30%">
+					<div style="width:8%;height: 31.5%;border: 0px solid red;position: absolute;;right: 0px;z-index: 100;top:0px;" 
+							id="reidiandiv">
+						<div style="width: 100%;height:18%;position: absolute;background-color: rgba(102,102,102,.4);
+							z-index: 9;right: -63%;" id="dianji">
+							<img  src="./images/login_xs.png" style="height: 100%;cursor: pointer;" />
+						</div>
+						<div style="width: 100%;height:70%; right: -100%; position: absolute;font-size: 70%;
+							background-color: rgba(102,102,102,.4);padding-top: 30%;z-index:10;" id="xsdiv" align="center">
+							<div style="height: 25%"><font style="color:white;margin-right: 10px;">欢迎您</font></div>
+							<div style="margin-top: 10px;height: 30%"><h:outputText value="#{MenuHeadBean.userName}" style="color:white;margin-right: 10px;"/></div>
+							<div style="margin-top: 10px;height: 45%">
+							<img src="./images/login_yc.png" alt="隐藏信息" style="cursor: pointer;height:50%;" id="ycinfoimg" />
+							<h:graphicImage url="./images/login_tc.png" alt="退出登录" style="margin-left:10px;cursor: pointer;height:40%;">
+								<a4j:ajax event="click" listener="#{MenuHeadBean.LogOut}" oncomplete="location.reload()"/>
+							</h:graphicImage>
+
+							</div>
+						</div>
+					</div>
 					<table id="profile_top" style="width: 100%">
 						<tr>
 							<td style="width: 20%" align="center">
@@ -405,7 +426,6 @@
 		 			</div>
 					<table width="100%" height="70%" id="kuangkuang">
 						<tr>
-							<td width="5%" height="4%" style="color: red;" id="dtzb"></td>
 							<td width="100%" id="imgbg" style="color: red;">
 								<div id="content" style="position: relative;"></div>
 								<div
@@ -447,6 +467,17 @@
 		</table>
 		<img style="border: 0px;position: absolute;left: 0px;top: 0px;" src="./images/profile_top_logo.png" id="img1" />
 		<script type="text/javascript">
+			 /*退出框*/
+			  $("#dianji").click(function() {
+				  $("#xsdiv").stop();
+				  $("#xsdiv").animate({right:"0"}, 500);
+				  $("#dianji").animate({right:"-100%"}, 500);
+			  });
+			  $("#ycinfoimg").click(function() {
+				  $("#xsdiv").stop();
+				  $("#xsdiv").animate({right:"-100%"}, 500);
+				  $("#dianji").animate({right:"-63%"}, 500);
+			  });
 			//特定的高度
 			document.getElementById("factoptt").style.widht = wjb51 + "px";
 			document.getElementById("factoptt").style.height = hjb51*994/1080+"px"; //继承自父页面，不知道为什么要这样写  

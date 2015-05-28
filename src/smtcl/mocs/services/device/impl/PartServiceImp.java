@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dreamwork.persistence.GenericServiceSpringImpl;
+import org.dreamwork.persistence.Operator;
 import org.dreamwork.persistence.Parameter;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -923,13 +924,21 @@ public class PartServiceImp extends GenericServiceSpringImpl<TNodes, String> imp
 			 */
 			buzhou="保存物料报错";
 			for(MaterialsModel mm:materialList){
-				 TProcessmaterialInfo tpinfo=new TProcessmaterialInfo();
-				 List<TMaterailTypeInfo>  tmaterail=this.getSelectTMaterailTypeInfoByNo(mm.getWlNo());
-				 tpinfo.setTMaterailTypeInfo(tmaterail.get(0));//设置物料类型
-				 tpinfo.setRequirementType(mm.getWlType());
-				 tpinfo.setRequirementNum(Integer.parseInt(mm.getWlNumber()));
-				 tpinfo.setTProcessInfo(tProcessInfo);//设置工序
-				 commonDao.save(tpinfo);//保存物料信息
+				 String mphql=" from TProcessmaterialInfo where TProcessInfo.id="+tProcessInfo.getId()+" "
+				 		    + " and TMaterailTypeInfo.no='"+mm.getWlNo()+"'";
+				 List list=commonDao.executeQuery(mphql);
+				 if(null!=list&&list.size()>0){
+					 return "物料重复";
+				 }else{
+					 TProcessmaterialInfo tpinfo=new TProcessmaterialInfo(); 
+					 List<TMaterailTypeInfo>  tmaterail=this.getSelectTMaterailTypeInfoByNo(mm.getWlNo());
+					 tpinfo.setTMaterailTypeInfo(tmaterail.get(0));//设置物料类型
+					 tpinfo.setRequirementType(mm.getWlType());
+					 tpinfo.setRequirementNum(Integer.parseInt(mm.getWlNumber()));
+					 tpinfo.setTProcessInfo(tProcessInfo);//设置工序
+					 commonDao.save(tpinfo);//保存物料信息
+				 }
+				 
 			 }
 			
 			/**
@@ -1729,6 +1738,7 @@ public class PartServiceImp extends GenericServiceSpringImpl<TNodes, String> imp
   /**
    * 更加查询条件，模糊查询零件名称
    */
+  @SuppressWarnings("unchecked")
   public List<TPartTypeInfo> getAllPartType(String nodeid, String partName){
 	  String hql = "from TPartTypeInfo t where t.nodeid = '"+nodeid+"' and t.name like '%"+partName+"%' and t.status<>'删除' ORDER BY t.name ASC";
 	  return dao.executeQuery(hql);
@@ -1736,11 +1746,19 @@ public class PartServiceImp extends GenericServiceSpringImpl<TNodes, String> imp
   
   /**
    * 更加零件名称查询零件信息
-   * @return
+   * @return 返回零件类型对象
    */
+  @SuppressWarnings("unchecked")
   public List<TPartTypeInfo> getPartTypeInfo(String partName){
-	  String hql = "from TPartTypeInfo t where t.name = '"+partName+"'";
-	  return dao.executeQuery(hql);
+	  String hql = "from TPartTypeInfo t where t.name = :partName";
+      try {
+          Collection<Parameter> parameters = new HashSet<Parameter>();
+          parameters.add(new Parameter("partName",partName, Operator.EQ));
+          return dao.executeQuery(hql, parameters);
+      }catch (Exception e){
+          e.printStackTrace();
+          return null;
+      }
   }
   
   /**

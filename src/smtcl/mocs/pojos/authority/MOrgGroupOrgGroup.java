@@ -48,7 +48,7 @@ public class MOrgGroupOrgGroup implements Serializable {
 
     @JoinColumn(name = "C_ORG_GROUP_ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private OrgGroup createOrgGroup;//用户有权限创建的数据
+    private OrgGroup createOrgGroup;//用户有权限创建的数据�?
 
     @Column(name="FLAG")
     private String flag;

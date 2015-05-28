@@ -33,12 +33,12 @@ import smtcl.mocs.pojos.authority.Page;
 
 /**
  * @author gaokun
- * @create Jul 12, 2011 2:50:52 PM 工具
+ * @create Jul 12, 2011 2:50:52 PM 工具?
  */
 public class HelperUtil {
 
 	/**
-	 * HelperUtil 日志
+	 * HelperUtil 日志?
 	 */
 	private final static Logger logger = Logger.getLogger(HelperUtil.class);
 	
@@ -113,7 +113,7 @@ public class HelperUtil {
 
 
 	/**
-	 * 1.扁平化组织结 2.初始化组织树; 3.初始化公司树;
+	 * 1.扁平化组织结? 2.初始化组织树; 3.初始化公司树;
 	 */
 	public static void flatOrg(String[] objs) {
 		if(objs == null) return;
@@ -125,10 +125,10 @@ public class HelperUtil {
 				treeService.flatOrgTemp(objs[0], objs[1], objs[2]);
 			}else{
 				List<NodeData> list_node = treeService.queryOrgList();
-				// 扁平化组织将数据插入临时
+				// 扁平化组织将数据插入临时?
 				treeService.flatOrgTemp(list_node);
 			}
-			//插入真实
+			//插入真实?
 			treeService.updateFlatOrg();
 			 logger.info(" flat org success..................!");
 		} catch (Exception e) {
@@ -139,7 +139,7 @@ public class HelperUtil {
 	}
 	
 	/**
-	 * 关闭数据库连
+	 * 关闭数据库连?
 	 * 
 	 * @param obj
 	 */

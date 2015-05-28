@@ -18,6 +18,7 @@
 .data {
 	height: 37px;
 	font-weight: normal;
+	width: 80%
 }
 
 .toptab {
@@ -447,7 +448,7 @@ color:#333333;
 														styleClass="btn-save"
 														></h:graphicImage>
 													<p:commandButton value="确定" id="btn_save"
-														style="display:none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+														style="display:none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;" 
 														onclick="onZZ()" update=":myform:bgdispatchNo :myform:bgEquSerial :myform:bgPartNo :myform:bgProcessName :myform:bgProcessOrder 
 														 :myform:bgPlanNum :myform:bgfinishNum :myform:bgNum :myform:bgUser :myform:bgStartTime :myform:bgFinishTime"/>
 													<h:commandButton style="display:none;" id="submitButton1">
@@ -463,6 +464,147 @@ color:#333333;
 											</td>
 										</tr>
 									</table>
+								</div>
+								<div id="editInfo2" style="display: none; overflow: auto"
+									align="center">
+								 <table id="tab4">
+								   <tr>
+								   <td align="right" width="20%"><h:outputText value="报工人员:"
+													/>&nbsp;&nbsp;</td>
+									<td  width="30%"><h:selectOneMenu id="user2"
+													value="#{JobdispatchChange.fhUserId}"
+													style="color:#595959;height:33px;font-weight: normal;width:80%">
+													<f:selectItems value="#{JobdispatchChange.userMap}"
+														var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
+														<f:ajax event="change" listener="#{JobdispatchChange.getUserInfo}" execute="@this" />
+												</h:selectOneMenu></td>
+									<td align="right" width="15%"><h:outputText value="报工数量:"
+													/>&nbsp;&nbsp;</td>
+									<td width="35%"><h:inputText id="txtNum2" value="#{JobdispatchChange.fhNum}"
+														style="color:#595959;height:33px;font-weight: normal;width:80%"
+														required="true"
+														onkeyup="this.value=this.value.replace(/\D/g,'')"
+														onafterpaste="this.value=this.value.replace(/\D/g,'')"
+														requiredMessage="不能为空">
+														<a4j:ajax event="change"
+															listener="#{JobdispatchChange.checkNum2}" execute="@this"
+															render=":myform:isSuccess" oncomplete="checkNum2()"></a4j:ajax>
+													</h:inputText></td>
+								   </tr>
+								   <tr>
+								    <td align="right"><h:outputText  value="开始时间:"
+													/>&nbsp;&nbsp;</td>
+											<td><rich:calendar id="startTime2" popup="true"
+													inputClass="data" locale="en"  style="width:80%"
+													value="#{JobdispatchChange.fhStartTime}"
+													datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
+													cellHeight="20px" /></td>
+									<td align="right"><h:outputText value="结束时间:"
+													/>&nbsp;&nbsp;</td>
+											<td><rich:calendar id="finishTime2" popup="true"
+													inputClass="data" locale="en" style="width:80%"
+													value="#{JobdispatchChange.fhFinishTime}"
+													datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
+													cellHeight="20px" />
+											</td>
+								   </tr>
+								   <tr>
+								   <td align="right"><h:outputText value="是否合格:"
+													/>&nbsp;&nbsp;</td>
+								   <td><h:selectOneMenu id="good"
+													value="#{JobdispatchChange.isGood}"
+													style="color:#595959;height:33px;font-weight: normal;width:80%">
+													<f:selectItem itemLabel="是" itemValue="是"></f:selectItem>
+													<f:selectItem itemLabel="否" itemValue="否"></f:selectItem>
+												</h:selectOneMenu></td>
+								   <td align="right"><h:outputText value="检验部门:"
+													/>&nbsp;&nbsp;</td>
+								   <td><h:selectOneMenu id="checkDep"
+													value="#{JobdispatchChange.checkDep}"
+													style="color:#595959;height:33px;font-weight: normal;width:80%">
+													<f:selectItem itemLabel="CAK运营部" itemValue="CAK运营部"></f:selectItem>
+													<f:selectItem itemLabel="ETC运营部 " itemValue="ETC运营部 "></f:selectItem>
+													<f:selectItem itemLabel="加工运营部 " itemValue="加工运营部 "></f:selectItem>
+													<f:selectItem itemLabel="普车运营部 " itemValue="普车运营部 "></f:selectItem>
+												</h:selectOneMenu></td>
+								   </tr>
+								   <tr>
+								   <td align="right"><h:outputText value="加工检查员:"
+													/>&nbsp;&nbsp;</td>
+								   <td><h:selectOneMenu id="jgcheckUser"
+													value="#{JobdispatchChange.jgCheckUser}"
+													style="color:#595959;height:33px;font-weight: normal;width:80%">
+													<f:selectItem itemLabel="加检01" itemValue="加检01"></f:selectItem>
+													<f:selectItem itemLabel="加检02" itemValue="加检02"></f:selectItem>
+													<f:selectItem itemLabel="加检03" itemValue="加检03"></f:selectItem>
+													<f:selectItem itemLabel="加检09" itemValue="加检09"></f:selectItem>
+													<f:selectItem itemLabel="加检10" itemValue="加检10"></f:selectItem>
+													<f:selectItem itemLabel="加检12" itemValue="加检12"></f:selectItem>
+													<f:selectItem itemLabel="加检15" itemValue="加检15"></f:selectItem>
+													<f:selectItem itemLabel="加检16" itemValue="加检16"></f:selectItem>
+													<f:selectItem itemLabel="加检17" itemValue="加检17"></f:selectItem>
+													<f:selectItem itemLabel="加检18" itemValue="加检18"></f:selectItem>
+													<f:selectItem itemLabel="加检20" itemValue="加检20"></f:selectItem>
+													<f:selectItem itemLabel="加检24" itemValue="加检24"></f:selectItem>
+													<f:selectItem itemLabel="加检25" itemValue="加检25"></f:selectItem>
+													<f:selectItem itemLabel="加检29" itemValue="加检29"></f:selectItem>
+												</h:selectOneMenu></td>
+								   <td align="right"><h:outputText value="装配检查员:"
+													/>&nbsp;&nbsp;</td>
+								   <td><h:selectOneMenu id="zpcheckUser"
+													value="#{JobdispatchChange.zpCheckUser}"
+													style="color:#595959;height:33px;font-weight: normal;width:80%">
+													<f:selectItem itemLabel="CAK检01" itemValue="CAK检01"></f:selectItem>
+													<f:selectItem itemLabel="CAK检06" itemValue="CAK检06"></f:selectItem>
+													<f:selectItem itemLabel="CAK检08" itemValue="CAK检08"></f:selectItem>
+													<f:selectItem itemLabel="CAK检10" itemValue="CAK检10"></f:selectItem>
+													<f:selectItem itemLabel="CAK检15" itemValue="CAK检15"></f:selectItem>
+													<f:selectItem itemLabel="CAK检32" itemValue="CAK检32"></f:selectItem>
+													<f:selectItem itemLabel="CAK检39" itemValue="CAK检39"></f:selectItem>
+													<f:selectItem itemLabel="CAK检40" itemValue="CAK检40"></f:selectItem>
+												</h:selectOneMenu></td>
+								   </tr>
+								   <tr><td align="right"><h:outputText value="商检检查员:"
+													/>&nbsp;&nbsp;</td>
+								   <td><h:selectOneMenu id="sjCheckUser"
+													value="#{JobdispatchChange.sjCheckUser}"
+													style="color:#595959;height:33px;font-weight: normal;width:80%">
+													<f:selectItem itemLabel="商检06" itemValue="商检06"></f:selectItem>
+													<f:selectItem itemLabel="商检08" itemValue="商检08"></f:selectItem>
+													<f:selectItem itemLabel="商检10" itemValue="商检10"></f:selectItem>
+													<f:selectItem itemLabel="商检11" itemValue="商检11"></f:selectItem>
+												</h:selectOneMenu></td>
+								   </tr>
+								   <tr height="10px"></tr>
+										<tr>
+											<td colspan="4">
+												<div id="divPrev3" style="position: relative;">
+													<h:graphicImage alt="prev"
+														url="./images/demo/icons/left.png"
+														onclick="controlScreen(4)" styleClass="btn-prev"
+														style="float: left; margin-left: 20%;"></h:graphicImage><div style="font-weight: normal;position: absolute; top:20px;left: 28%">上一步</div>
+												</div>
+												<div style="font-weight: normal;float: right;position: relative;margin-right: 20%;margin-top: 22px">下一步</div>
+												<div id="divSave2" style="float: right;position: relative;margin-right: 3%">
+													<h:graphicImage alt="save"
+														url="./images/demo/icons/right.png"
+														onclick="subClick('myform:btn_save2')"
+														styleClass="btn-save"
+														></h:graphicImage>
+													<p:commandButton id="btn_save2"
+														style="display:none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
+														onclick="onZZ2()" update=":myform:bgdispatchNo2 :myform:bgEquSerial2 :myform:bgPartNo2 :myform:bgProcessName2 :myform:bgProcessOrder2 
+														 :myform:bgPlanNum2 :myform:bgfinishNum2 :myform:bgNum2 :myform:bgUser2 :myform:bgStartTime2 :myform:bgFinishTime2 :myform:bgGood :myform:bgCheckDep 
+														 :myform:bgJgCheckUser :myform:bgZpCheckUser :myform:bgSjCheckUser"/>
+													
+													<p:commandButton id="submitButton2"
+														actionListener="#{JobdispatchChange.checkNum2}"
+														style="display:none;background-image: url('./images/jobplan/add/open.png');"
+														update=":myform:isSuccess " oncomplete="WZ2()" />
+												</div>
+											</td>
+										</tr>
+								 </table>
 								</div>
 								<div id="comfirm" style="display: none; overflow: auto"
 									align="center">
@@ -530,6 +672,84 @@ color:#333333;
 									</td></tr>
 								    </table>
 							    </div>
+							    <div id="comfirm2" style="display: none; overflow: auto"
+									align="center">
+									<table id="tab5" cellspacing="15px">
+									<tr><td colspan="6" align="center"><div id="title4" style="font-weight:normal;">报工信息确认</div></td>
+									</tr>
+									<tr height="10px"></tr>
+									<tr>
+									  <td width="10%" align="right">报工工单：</td>
+									   <td colspan="5"><h:outputLabel id ="bgdispatchNo2" value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel>
+									   </td>
+									</tr>
+									<tr style="margin-top: 40px">
+									<td width="13%" align="right">报工设备：</td>
+									<td width="20%"><h:outputLabel id ="bgEquSerial2" value ="#{JobdispatchChange.equSerialNo}" style="font-weight:normal"></h:outputLabel></td>
+									<td width="13%" align="right">报工零件：</td>
+									<td width="20%"><h:outputLabel id ="bgPartNo2" value ="#{JobdispatchChange.partNo}" style="font-weight:normal"></h:outputLabel></td>
+									<td width="13%" align="right">报工工序：</td>
+									<td width="20%"><h:outputLabel id ="bgProcessName2" value ="#{JobdispatchChange.processName}" style="font-weight:normal"></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">工序号：</td>
+									<td><h:outputLabel id ="bgProcessOrder2" value ="#{JobdispatchChange.processOrder}" style="font-weight:normal"></h:outputLabel></td>	
+									<td align="right">投料数：</td>
+									<td><h:outputLabel id ="bgPlanNum2" value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">已报工数：</td>
+									<td><h:outputLabel id ="bgfinishNum2" value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">本次报工数：</td>
+									<td><h:outputLabel id ="bgNum2" value ="#{JobdispatchChange.fhNum}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">报工人员：</td>
+									<td><h:outputLabel id ="bgUser2" value ="#{JobdispatchChange.fhUserName}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">开始时间：</td>
+									<td><h:outputLabel id ="bgStartTime2" value ="#{JobdispatchChange.fhStartTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">结束时间：</td>
+									<td><h:outputLabel id ="bgFinishTime2" value ="#{JobdispatchChange.fhFinishTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+									<td align="right">是否合格：</td>
+									<td><h:outputLabel id ="bgGood" value ="#{JobdispatchChange.isGood}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">检验部门：</td>
+									<td><h:outputLabel id ="bgCheckDep" value ="#{JobdispatchChange.checkDep}" style="font-weight:normal"></h:outputLabel></td>
+									</tr>
+									<tr>
+									<td align="right">加工检查员：</td>
+									<td><h:outputLabel id ="bgJgCheckUser" value ="#{JobdispatchChange.jgCheckUser}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">装配检查员：</td>
+									<td><h:outputLabel id ="bgZpCheckUser" value ="#{JobdispatchChange.zpCheckUser}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right">商检检查员：</td>
+									<td><h:outputLabel id ="bgSjCheckUser" value ="#{JobdispatchChange.sjCheckUser}" style="font-weight:normal"></h:outputLabel></td>
+									<td align="right"></td>
+									<td></td>
+									</tr>
+									<tr><td colspan="6">
+									  <div style="position: relative; float: left;margin-left:30%">
+									  <h:graphicImage 
+														url="./images/demo/icons/commit.png"
+														onclick="subClick('myform:btn_commit_400')"
+														styleClass="btn-save"
+														></h:graphicImage>
+													<h:commandButton style="display:none;" id="btn_commit_400">
+														<a4j:ajax event="click"
+															listener="#{JobdispatchChange.saveData}" execute="@form"
+															oncomplete="dlg1.show()" render=":myform:isSuccess myform:dlg1"></a4j:ajax>
+													</h:commandButton>  
+									  </div>
+									  <div style="float: left;font-weight: normal;position: relative; top:20px;left: 3%">确认</div>
+									  <div style="font-weight: normal;float: right;position: relative;margin-right: 30%;margin-top: 20px">取消</div>
+									  <div style="float: right;position: relative;margin-right: 3%">
+									   <h:graphicImage alt="close"
+														url="./images/demo/icons/close.png"
+														onclick ="btnclose()"
+														styleClass="btn-save"
+														></h:graphicImage>
+									  </div>
+									</td></tr>
+								    </table>
+							    </div>
 							</div>
 						</td>
 						<!--下一步控制-->
@@ -554,13 +774,13 @@ color:#333333;
 								<p:commandButton id="btn_next2" value="下一步"
 									actionListener="#{JobdispatchChange.getJobdispatchIdValue}"
 									style="display: none;border:0;background-color:#00A040;background-image: url('');color:white;text-shadow:none;"
-									update=":myform:jobdispatchId :myform:user :myform:selectDispatchNo :myform:selectEquName :myform:maxNum" oncomplete="onXZ()" />
+									update=":myform:jobdispatchId :myform:user :myform:selectDispatchNo :myform:selectEquName :myform:maxNum :myform:selectedprocessOrder :myform:user2" oncomplete="onXZ()" />
 							     <br/><div style="font-weight: normal;">下一步</div>
 							</div>
 						</td>
 					</tr>
 				</table>
-
+                <h:inputHidden value="#{JobdispatchChange.processOrder}" id="selectedprocessOrder"></h:inputHidden>
 				<h:inputHidden value="#{JobdispatchChange.isSuccess}" id="isSuccess"></h:inputHidden>
 				<h:inputHidden value="#{JobdispatchChange.serachEquId}"
 					id="serachEquId"></h:inputHidden>
@@ -666,11 +886,13 @@ color:#333333;
 				//字体
 				document.getElementById("content").style.fontSize = hjb51*16/700+"px";
 				document.getElementById("title3").style.fontSize = hjb51*25/700+"px";
+				document.getElementById("title4").style.fontSize = hjb51*25/700+"px";
 				
 				//table
 				document.getElementById("tab1").style.width = wjb51*35/100+"px";
 				document.getElementById("tab2").style.width = wjb51*40/100+"px";
 				document.getElementById("tab3").style.width = wjb51*60/100+"px";
+				document.getElementById("tab4").style.width = wjb51*60/100+"px";
 				
 				document.getElementById("myform:user").style.width = wjb51*200/1366+"px";
 				document.getElementById("myform:txtNum").style.width = wjb51*200/1366+"px";
@@ -692,8 +914,8 @@ color:#333333;
 				}
 
 				function onXZ() {
-					var dispatchId = document
-							.getElementById("myform:jobdispatchId").value;
+					var dispatchId = document.getElementById("myform:jobdispatchId").value;
+					var flag = document.getElementById("myform:selectedprocessOrder").value;
 					if (null == dispatchId || "" == dispatchId) {
 						alert("请选择工单！");
 					} else {
@@ -702,7 +924,13 @@ color:#333333;
 						document.getElementById("title2").style.display = "none";
 						document.getElementById("getjobdispatch").style.display = "none";
 						document.getElementById("myform:user").style.width = wjb51*200/1366+"px";
-						document.getElementById("editInfo").style.display = "block";
+						
+						if(flag =="400"){
+							document.getElementById("editInfo2").style.display = "block";
+						}else{
+							document.getElementById("editInfo").style.display = "block";
+						}
+						
 						
 						//document.getElementById("myform:next2").click();
 					}
@@ -734,6 +962,31 @@ color:#333333;
 						
 					}
 				}
+				function onZZ2(){
+					var user = document.getElementById("myform:user2").value;
+					var num = document.getElementById("myform:txtNum2").value;
+					var startTime = document
+							.getElementById("myform:startTime2InputDate").value;
+					var finishTime = document
+							.getElementById("myform:finishTime2InputDate").value;
+					var tt = dateCompare(startTime, finishTime);
+					if (null == user || "" == user) {
+						alert("请选择报工人员！");
+					} else if (null == num || "" == num) {
+						alert("请填写报工数量！");
+					} else if (num == 0) {
+						alert("报工数量不能为0!");
+					} else if (null == startTime || "" == startTime) {
+						alert("请选择开始时间！");
+					} else if (null == finishTime || "" == finishTime) {
+						alert("请选择结束时间！");
+					} else if (!tt) {
+						alert("开始时间不能大于结束时间!");
+					} else {
+						document.getElementById("myform:submitButton2").click();
+						
+					}
+				}
 				
 				function WZ(){
 					var isSuccess = document.getElementById("myform:isSuccess").value;
@@ -746,6 +999,21 @@ color:#333333;
 					}else{
 						document.getElementById("editInfo").style.display = "none";
 						document.getElementById("comfirm").style.display = "block";
+					}
+					
+				}
+				
+				function WZ2(){
+					var isSuccess = document.getElementById("myform:isSuccess").value;
+
+					if (null != isSuccess && isSuccess != "符合要求") {
+
+						alert(isSuccess);
+						document.getElementById("myform:txtNum2").value = 1;
+						document.getElementById("myform:txtNum2").focus();
+					}else{
+						document.getElementById("editInfo2").style.display = "none";
+						document.getElementById("comfirm2").style.display = "block";
 					}
 					
 				}
@@ -803,6 +1071,17 @@ color:#333333;
 					//	alert(isSuccess);
 					//}
 				}
+				function checkNum2() {//验证报工数量
+					var isSuccess = document.getElementById("myform:isSuccess").value;
+
+					if (null != isSuccess && isSuccess != "符合要求") {
+
+						alert(isSuccess);
+						document.getElementById("myform:txtNum2").value = 1;
+						document.getElementById("myform:txtNum2").focus();
+					}
+					
+				}
 
 				function controlScreen(type) {//控制画面
 					if (type == 1) {
@@ -831,6 +1110,12 @@ color:#333333;
 						document.getElementById("editInfo").style.display = "none";
 						document.getElementById("getjobdispatch").style.display = "block";
 
+					}else if(type ==4){
+						document.getElementById("divPrev1").style.display = "block";
+						document.getElementById("divNext2").style.display = "block";
+						document.getElementById("title2").style.display = "block";
+						document.getElementById("editInfo2").style.display = "none";
+						document.getElementById("getjobdispatch").style.display = "block";
 					}
 				}
 

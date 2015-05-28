@@ -9,6 +9,7 @@ import java.util.Map;
 
 
 
+
 import org.apache.http.impl.cookie.DateUtils;
 import org.dreamwork.persistence.GenericServiceSpringImpl;
 import org.dreamwork.util.IDataCollection;
@@ -133,16 +134,18 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
  			+ " statusinfo.name as jobst,"//工单状态
 			+ " jobplan.status as jobplanStatus,"//批次状态
 		    + " statusinfo2.name as jobplanst,"//批次状态
-		    + " workevents.operator_no as person"
+		    + " member.name as person"
 		 + " from t_jobplan_info jobplan,"
 		 	+ " t_jobdispatchlist_info job,"
 		 	+ " t_part_type_info part,"
 		 	+ " t_process_info process,"
 		 	+ " t_status_info statusinfo,"
 		 	+ " t_status_info statusinfo2,"
+		 	+ " t_member_info member,"
 		 	+ " t_userequworkevents workevents"
 		 + " where" 
-			+ " job.jobplanID = jobplan.ID" 
+			+ " job.jobplanID = jobplan.ID"
+			+ " and member.no = workevents.operator_no" 
 			+ " and job.processID = process.ID"
 			+ " and job.status = statusinfo.id"
 			+ " and jobplan.status = statusinfo2.id"
@@ -158,7 +161,6 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 			sql += " and part.id="+Integer.parseInt(partNo);
 		}
 		if(!StringUtils.isEmpty(equSerialNo)){
-//			sql += " and equ.equ_ID="+Integer.parseInt(equSerialNo);
 			sql += " and workevents.equ_SerialNo='"+equSerialNo+"'";
 		}
 		if(jobCreateDate!=null){
@@ -174,7 +176,7 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 			sql += " and job.plan_starttime < DATE_FORMAT('"+DateUtils.formatDate(jobStartTimeEnd, "yyyy-MM-dd")+"','%Y-%m-%d %T')";
 		}
 		if(!StringUtils.isEmpty(person)){
-			sql += " and workevents.operator_no='"+person+"'";
+			sql += " and member.id="+Long.parseLong(person);
 		}
 		return dao.executeNativeQuery(sql);
 	}
@@ -246,14 +248,13 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 	}
 
 	@Override
-	public List<Map<String, Object>> getPersonList() {
-		String sql = "select "
-						+ " distinct" 
-						+ " workevents.operator_no as personName,"
-						+ " workevents.operator_no as personValue"
-				   + " from "
-				   		+ " t_userequworkevents workevents" 
-				   		+ " where workevents.operator_no <> '' ";
+	public List<Map<String, Object>> getPersonList(String nodeid) {
+		String sql = "SELECT"
+						+" member. NAME AS personName, "
+						+" member. id AS personValue "
+					+" FROM "
+						+" t_member_info member "
+					+" where member.nodeid= '"+nodeid+"'";
 		return dao.executeNativeQuery(sql);
 	}
 	/**

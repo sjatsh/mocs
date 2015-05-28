@@ -27,6 +27,7 @@ import smtcl.mocs.utils.device.StringUtils;
 @ViewScoped
 public class HistoryTouliaoBean implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	//报表服务接口实例
 	IReportService reportService = (IReportService)ServiceFactory.getBean("reportService");
 	//报表数据集

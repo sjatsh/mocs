@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * Created with IntelliJ IDEA.
  * User: wangli
  * Date: 12-10-23
- * Time: ÏÂÎç6:13
+ * Time: ä¸‹åˆ6:13
  */
 @Entity
 @Table(name = "R_GROUP_ORG")

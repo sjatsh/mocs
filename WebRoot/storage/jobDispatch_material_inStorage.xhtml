@@ -1,0 +1,824 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link rel="stylesheet" href="./css/jobDispatch_material_inStorage.css"
+			type="text/css"></link>
+		<style type="text/css">
+/* 保存按钮 */
+.btn-save {
+	width: 53px;
+	height: 53px;
+	cursor: pointer;
+}
+
+.imagebtn {
+	cursor: pointer;
+}
+
+* {
+	font-weight: normal;
+	font-size: inherit;
+	font-family: "微软雅黑" !important;
+}
+
+.inputText {
+	width: 100%;
+	height: 100%;
+	line_height: 100%;
+	font-size: 100% !important;
+	color: #595959 !important;
+	font-family: "微软雅黑" !important;
+	font-weight: normal;
+}
+
+.ui-state-default {
+	background: #00a040;
+}
+
+.ui-dt-c {
+	font-weight: normal;
+	color: #333333;
+}
+
+.ui-state-default .ui-dt-c span {
+	text-shadow: none;
+	color: white;
+	font-weight: bold;
+}
+
+.ui-button-text {
+	color: white;
+}
+
+.dd .ui-state-default {
+	background: #00a040;
+}
+</style>
+
+	</h:head>
+
+	<h:body>
+		<h:form id="myform">
+			<div id="maskw"
+				style="position: absolute; z-index: 1000000; top: 0px; left: 0px; background-color: white;"></div>
+
+			<div style="width: 100%;" align="center" id="content">
+				<table id="ProductToStock" style="width: 100%">
+					<tr>
+						<td id="title" align="center">
+							<div>
+								<h:outputText value="工单退料" />
+							</div>
+
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="divTransNo" style="position: relative; float: right;">
+								<div id="transNo3" style="top: 0; float: right;">
+									<h:outputText value="#{JobDispatchMaterialInStorage.transNo}" />
+								</div>
+								<div id="transNo2" style="float: right;">
+									<h:outputText value="事务代码:" />
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<table style="font-weight: normal;">
+								<tr>
+									<td style="padding-top: 10px"><h:outputText
+											id="txtJobPlanNo" value="来源" /></td>
+									<td>
+										<div id="divJobPlanId">
+											<h:selectOneMenu id="jobPlanId" styleClass="inputText"
+												value="#{JobDispatchMaterialInStorage.jobPlanId}"
+												style="color:#595959;">
+												<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+												<f:selectItems
+													value="#{JobDispatchMaterialInStorage.jobPlanList}"
+													var="part" itemLabel="#{part.no}" itemValue="#{part.id}"></f:selectItems>
+												<f:ajax event="change"
+													listener="#{JobDispatchMaterialInStorage.getMaterialInfo}"
+													execute="@this" render=":myform:tb" />
+											</h:selectOneMenu>
+											<br />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="material" style="overflow: auto">
+								<p:dataTable id="tb" style="width:100%;" editable="true"
+									value="#{JobDispatchMaterialInStorage.materialInfoList}"
+									var="record" paginator="true" paginatorPosition="bottom"
+									rows="5" selectionMode="single" rowKey="#{record.index}">
+									<p:column headerText="物料编号"
+										style="width:17%;word-break:break-all;text-align: center;">  
+						            #{record.no}  
+						        </p:column>
+									<p:column headerText="物料名称"
+										style="width:20%;word-break:break-all;text-align: center;">  
+						            #{record.name}  
+						        </p:column>
+									<p:column headerText="工单编号"
+										style="width:25%;word-break:break-all;text-align: center;">  
+						            #{record.jobdispatchNo}  
+						        </p:column>
+									<p:column headerText="现有量"
+										style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.receivedNum}  
+						        </p:column>
+									<p:column headerText="退料数"
+										style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.inStorageNum}  
+						        </p:column>
+									<p:column headerText="工序序号"
+										style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.processOrder}  
+						        </p:column>
+									<p:column headerText="操作" style="width:8%;word-break:break-all">
+										<p:commandButton value="操作"
+											action="#{JobDispatchMaterialInStorage.getStorageInfo(record.id,record.processOrder,record.jobdispatchNo,record.price,record.name,record.receivedNum,record.index)}"
+											style="border:0;background-color: #00A040;text-shadow:none;"
+											oncomplete="XZ()"
+											update=":myform:materialName :myform:tb2 :myform:versionId :myform:num :myform:unitId :myform:batchId :myform:batchId2
+						             :myform:storageId">
+
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<div id="button">
+								<p:commandButton value="退料"
+									style="border:0;background-color: #00A040;background-image: url('');color:white;
+							text-shadow:none;"
+									action="#{JobDispatchMaterialInStorage.saveInfo}"
+									update=":myform:tb :myform:success" oncomplete="onXZ()">
+								</p:commandButton>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<p:commandButton id="show3" style="display:none;"
+					onclick="dlg3.show()">
+				</p:commandButton>
+				<p:commandButton id="show2" style="display:none;"
+					onclick="dlg2.show()">
+				</p:commandButton>
+				<p:commandButton id="show1" style="display:none;"
+					onclick="dlg1.show()">
+				</p:commandButton>
+				<h:inputHidden value="#{JobDispatchMaterialInStorage.success}"
+					id="success"></h:inputHidden>
+				<h:inputHidden value="#{JobDispatchMaterialInStorage.positionCtrl}"
+					id="positionCtrl"></h:inputHidden>
+				<h:inputHidden value="#{JobDispatchMaterialInStorage.positionType}"
+					id="positionType"></h:inputHidden>
+				<p:dialog header="入库" widgetVar="dlg1" id="dlg1" modal="true"
+					resizable="false">
+					<table style="width: 100%">
+						<tr>
+							<td align="center">
+								<table style="font-weight: normal;">
+									<tr>
+										<td><h:outputText id="txtPart" style="float: right;"
+												value="物料" /></td>
+										<td>
+											<div id="divMaterialtName" style="float: right;">
+												<h:inputText id="materialName" styleClass="inputText"
+													disabled="true"
+													value="#{JobDispatchMaterialInStorage.selectedMaterialName}"
+													style="color:#595959;background-color: #F0F0F0" />
+											</div>
+										</td>
+										<td><h:outputText id="txtversion" style="float: right;"
+												value="版本" /></td>
+										<td>
+											<div id="divVersion" style="float: right;">
+												<h:selectOneMenu id="versionId" styleClass="inputText"
+													disabled="#{JobDispatchMaterialInStorage.tempVersionCtrl}"
+													value="#{JobDispatchMaterialInStorage.versionId}"
+													style="color:#595959;">
+													<f:selectItems
+														value="#{JobDispatchMaterialInStorage.versionList}"
+														var="tt" itemLabel="#{tt.no}" itemValue="#{tt.id}"></f:selectItems>
+												</h:selectOneMenu>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><h:outputText id="txtNum" style="float: right;"
+												value="可退数" /></td>
+										<td>
+											<div id="divNum" style="float: right;">
+												<h:inputText id="num" styleClass="inputText" disabled="true"
+													value="#{JobDispatchMaterialInStorage.selectedNum}"
+													style="color:#595959;background-color: #F0F0F0" />
+											</div>
+										</td>
+										<td><h:outputText id="txtUnit" style="float: right;"
+												value="单位" /></td>
+										<td><div id="divUnit">
+												<h:selectOneMenu id="unitId" styleClass="inputText"
+													value="#{JobDispatchMaterialInStorage.unitName}"
+													style="color:#595959;">
+													<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+													<f:selectItems
+														value="#{JobDispatchMaterialInStorage.unitList}" var="tt"
+														itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+													<f:ajax event="change"
+														listener="#{JobDispatchMaterialInStorage.unitChange}"
+														execute="@this" render=":myform:num :myform:storageNum" />
+												</h:selectOneMenu>
+											</div></td>
+									</tr>
+									<tr>
+										<td><h:outputText id="txtStorage" style="float: right;"
+												value="库存" /></td>
+										<td>
+											<div id="divStorageId">
+												<h:selectOneMenu id="storageId" styleClass="inputText"
+													value="#{JobDispatchMaterialInStorage.storageId}"
+													label="#{JobDispatchMaterialInStorage.storageNo}"
+													style="color:#595959;">
+													<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+													<f:selectItems
+														value="#{JobDispatchMaterialInStorage.storageInfoList}"
+														var="tt" itemLabel="#{tt.no}" itemValue="#{tt.id}"></f:selectItems>
+													<f:ajax event="change"
+														listener="#{JobDispatchMaterialInStorage.getPositionInfo}"
+														execute="@this"
+														render=":myform:positionId :myform:positionId2 :myform:positionCtrl :myform:positionType" />
+												</h:selectOneMenu>
+											</div>
+										</td>
+										<td><h:outputText id="txtStorageNum"
+												style="float: right;" value="入库数" /></td>
+										<td><div id="divStorageNum">
+												<h:inputText id="storageNum" styleClass="inputText"
+													onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+													onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')"
+													value="#{JobDispatchMaterialInStorage.inStorageNum}"
+													style="color:#595959" />
+											</div></td>
+									</tr>
+									<tr>
+										<td><h:outputText id="txtPosition" style="float: right;"
+												value="库位" /></td>
+										<td>
+											<div id="divPositionId" style="position: relative;">
+												<div id="divPositionId1">
+													<h:selectOneMenu id="positionId" styleClass="inputText"
+														value="#{JobDispatchMaterialInStorage.positionId}"
+														disabled="#{JobDispatchMaterialInStorage.positionCtrl2}"
+														style="color:#595959;">
+														<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+														<f:selectItems
+															value="#{JobDispatchMaterialInStorage.positionInfoList}"
+															var="tt" itemLabel="#{tt.no}" itemValue="#{tt.id}"></f:selectItems>
+														<f:ajax event="change"
+															listener="#{JobDispatchMaterialInStorage.positionIdChange}"
+															execute="@this" render=":myform:positionId2" />
+													</h:selectOneMenu>
+												</div>
+												<div id="divPositionId2"
+													style="position: absolute; top: 0; left: 0">
+													<h:inputText id="positionId2" styleClass="inputText"
+														disabled="#{JobDispatchMaterialInStorage.isEdit}"
+														value="#{JobDispatchMaterialInStorage.editPositionNo}"
+														style="color:#595959; " />
+												</div>
+
+											</div>
+										</td>
+										<td colspan="2" align="center"><p:commandButton
+												value="新增" onclick="check()"
+												style="border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;margin-right:15px">
+
+											</p:commandButton> <p:commandButton id="addInfo"
+												action="#{JobDispatchMaterialInStorage.addInfo}"
+												style="display:none;" update=":myform:tb2"></p:commandButton>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div id="equipment" style="overflow: auto;">
+									<p:dataTable id="tb2" styleClass="dd" style="width:100%;"
+										editable="true" paginator="true" rows="3"
+										value="#{JobDispatchMaterialInStorage.tempMaterialInStorageInfoList}"
+										var="record" paginatorPosition="bottom" selectionMode="single"
+										rowKey="#{record.id}">
+										<p:column headerText="子库存"
+											style="width:15%;word-break:break-all;text-align: center;">  
+						            #{record.storageNo}  
+						        </p:column>
+										<p:column headerText="库位"
+											style="width:15%;word-break:break-all;text-align: center;">  
+						            #{record.positionNo}  
+						        </p:column>
+										<p:column headerText="入库数"
+											style="width:7%;word-break:break-all;text-align: center;">  
+						            #{record.num}  
+						        </p:column>
+										<p:column headerText="单位"
+											style="width:7%;word-break:break-all;text-align: center;">  
+						            #{record.unitName}  
+						        </p:column>
+										<p:column rendered="#{JobDispatchMaterialInStorage.batchCtrl}"
+											headerText="批次" style="width:10%;word-break:break-all">
+											<p:commandButton value="操作"
+												action="#{JobDispatchMaterialInStorage.batchSelectedSet(record.id,record.realNum)}"
+												style="border:0;background-color: #00A040;text-shadow:none;"
+												oncomplete="showBatch()">
+
+											</p:commandButton>
+										</p:column>
+										<p:column rendered="#{JobDispatchMaterialInStorage.seqCtrl}"
+											headerText="序列" style="width:10%;word-break:break-all">
+											<p:commandButton value="操作"
+												action="#{JobDispatchMaterialInStorage.seqSelectedSet(record.id,record.realNum)}"
+												style="border:0;background-color: #00A040;text-shadow:none;"
+												oncomplete="showSeq()"
+												update=":myform:handleNum :myform:endSeq :myform:startSeq :myform:tb2 :myform:materialSeqNo">
+
+											</p:commandButton>
+										</p:column>
+										<p:column headerText="操作"
+											style="width:10%;word-break:break-all">
+											<p:commandButton value="删除"
+												action="#{JobDispatchMaterialInStorage.delInfo(record.id)}"
+												style="border:0;background-color: #00A040;text-shadow:none;"
+												update=":myform:tb2">
+
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">
+								<div id="divPrev2" style="position: relative;">
+									<p:commandButton value="确定 "
+										action="#{JobDispatchMaterialInStorage.checkData}"
+										style="border:0;background-color: #00A040;background-image: url('');color:white;
+										text-shadow:none;"
+										oncomplete="onYZ()" update=":myform:success">
+									</p:commandButton>
+									<p:commandButton id="submit"
+										action="#{JobDispatchMaterialInStorage.editDataListInfo}"
+										oncomplete="dlg1.hide()" style="display:none;"
+										update=":myform:tb">
+									</p:commandButton>
+									<p:commandButton value="关闭"
+										style="border:0;background-color: #00A040;background-image: url('');color:white;
+							         text-shadow:none;"
+										onclick="dlg1.hide()">
+									</p:commandButton>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</p:dialog>
+				<p:dialog header="序列设置" widgetVar="dlg2" id="dlg2" resizable="false"
+					modal="true" width="450" height="400">
+					<table width="100%">
+						<tr>
+							<td align="right">处理数量：</td>
+							<td>
+								<div id="divHandleNum">
+									<h:inputText id="handleNum" styleClass="inputText"
+										readonly="true"
+										value="#{JobDispatchMaterialInStorage.tempSelectedNum2}"
+										style="color:#595959;background-color: #F0F0F0" />
+								</div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td align="right">序列模式：</td>
+							<td>
+								<div id="divSeqModel">
+									<p:selectOneRadio id="seqModel"
+										value="#{JobDispatchMaterialInStorage.seqModel}">
+										<f:selectItem itemLabel="单个" itemValue="单个" />
+										<f:selectItem itemLabel="范围" itemValue="范围" />
+										<f:ajax event="change"
+											listener="#{JobDispatchMaterialInStorage.endSeqCtrl}"
+											execute="@this" onevent="Control()"
+											render=":myform:endSeq :myform:startSeq"></f:ajax>
+									</p:selectOneRadio>
+								</div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td align="right">起始序列：</td>
+							<td>
+								<div id="divStartSeq" style="position: relative;">
+									<div id="divStartSeq1">
+										<h:selectOneMenu id="materialSeqNo" styleClass="inputText"
+											value="#{JobDispatchMaterialInStorage.materialSeqNo}"
+											style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems
+												value="#{JobDispatchMaterialInStorage.materialSeqList}"
+												var="tt" itemLabel="#{tt.no}" itemValue="#{tt.no}"></f:selectItems>
+											<f:ajax event="change"
+												listener="#{JobDispatchMaterialInStorage.seqChange}"
+												execute="@this" render=" :myform:startSeq :myform:endSeq" />
+										</h:selectOneMenu>
+									</div>
+									<div id="divStartSeq2"
+										style="position: absolute; top: 0; left: 0">
+										<h:inputText id="startSeq" styleClass="inputText"
+											value="#{JobDispatchMaterialInStorage.startSeq}"
+											style="color:#595959; ">
+											<f:ajax event="change"
+												listener="#{JobDispatchMaterialInStorage.setSeq}"
+												execute="@this" render=":myform:endSeq :myform:startSeq"></f:ajax>
+										</h:inputText>
+									</div>
+								</div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td align="right">终止序列：</td>
+							<td>
+								<div id="divEndSeq">
+									<h:inputText id="endSeq" styleClass="inputText"
+										readonly="#{JobDispatchMaterialInStorage.endSeqCtrl}"
+										value="#{JobDispatchMaterialInStorage.endSeq}"
+										style="color:#595959;" />
+								</div>
+							</td>
+							<td><p:commandButton id="seqAdd" value="新增"
+									style="border:0;background-color: #00A040;background-image: url('');color:white;
+							text-shadow:none;"
+									action="#{JobDispatchMaterialInStorage.seqAdd}"
+									update=":myform:tb3 :myform:endSeq :myform:startSeq">
+								</p:commandButton></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<div style="overflow: auto; width: 100%">
+									<p:dataTable id="tb3" styleClass="dd" style="width:100%;"
+										editable="true" paginator="true" rows="3"
+										value="#{JobDispatchMaterialInStorage.tempSetSeqList}"
+										var="record" paginatorPosition="bottom" selectionMode="single"
+										rowKey="#{record.id}">
+										<p:column headerText="起始序列"
+											style="width:40%;word-break:break-all;text-align: center;">  
+								            #{record.startSeq}  
+								        </p:column>
+										<p:column headerText="终止序列"
+											style="width:40%;word-break:break-all;text-align: center;">  
+								            #{record.endSeq}  
+								        </p:column>
+										<p:column headerText="数量"
+											style="width:20%;word-break:break-all;text-align: center;">  
+								            #{record.seqNum}  
+								        </p:column>
+									</p:dataTable>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" align="center" style="padding-top: 30px"><p:commandButton
+									value="确认"
+									style="border:0;background-color: #00A040;background-image: url('');color:white;
+							text-shadow:none;"
+									action="#{JobDispatchMaterialInStorage.saveProductSeq}"
+									update=":myform:success" oncomplete="checkSeq()">
+								</p:commandButton> <p:commandButton id="btn3" style="display:none;"
+									onclick="dlg2.hide()">
+								</p:commandButton> <p:commandButton value="关闭"
+									style="border:0;background-color: #00A040;background-image: url('');color:white;
+							text-shadow:none;"
+									onclick="dlg2.hide()">
+								</p:commandButton></td>
+						</tr>
+					</table>
+				</p:dialog>
+
+				<p:dialog header="批次选择" widgetVar="dlg3" id="dlg3" resizable="false"
+					modal="true" width="400" height="150">
+					<table width="100%">
+						<tr>
+							<td width="40%" align="right">生产批次：</td>
+							<td>
+								<div id="divBatchId" style="position: relative;">
+									<div id="divBatchId">
+										<h:selectOneMenu id="batchId" styleClass="inputText"
+											value="#{JobDispatchMaterialInStorage.productBatchId}"
+											style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems
+												value="#{JobDispatchMaterialInStorage.productBatchList}"
+												var="tt" itemLabel="#{tt.no}" itemValue="#{tt.no}"></f:selectItems>
+											<f:ajax event="change"
+												listener="#{JobDispatchMaterialInStorage.setProductBatch}"
+												execute="@this" render=":myform:batchId2" />
+										</h:selectOneMenu>
+									</div>
+									<div id="divBatchId2"
+										style="position: absolute; top: 0; left: 0">
+										<h:inputText id="batchId2" styleClass="inputText"
+											value="#{JobDispatchMaterialInStorage.productBatchNo}"
+											style="color:#595959; " />
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center" style="padding-top: 30px"><p:commandButton
+									value="确认"
+									style="border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;"
+									action="#{JobDispatchMaterialInStorage.saveProductBatch}"
+									update=":myform:tb2" oncomplete="dlg3.hide()">
+								</p:commandButton> <p:commandButton value="关闭"
+									style="border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;"
+									onclick="dlg3.hide()">
+								</p:commandButton></td>
+						</tr>
+					</table>
+				</p:dialog>
+				<p:growl id="messages" showDetail="true" />
+			</div>
+			<script type="text/javascript">
+				//<![CDATA[ 
+				var wjb51 = 0;
+				var hjb51 = 0;
+				hjb51 = document.body.clientHeight;
+				wjb51 = document.body.clientWidth;
+
+				//内容高度
+				document.getElementById("title").style.height = hjb51 * 200
+						/ 900 + "px";
+				document.getElementById("title").style.fontSize = hjb51 * 45
+						/ 900 + "px";
+
+				document.getElementById("material").style.width = "100%";
+				document.getElementById("material").style.align = "center";
+				document.getElementById("material").style.fontSize = hjb51 * 20
+						/ 900 + "px";
+
+				document.getElementById("button").style.fontSize = hjb51 * 20
+						/ 900 + "px";
+				//输入DIV控件 
+				document.getElementById("divTransNo").style.marginRight = wjb51
+						* 350 / 1500 + "px";
+				//标签
+				document.getElementById("myform:txtJobPlanNo").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				document.getElementById("myform:txtPart").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				document.getElementById("myform:txtversion").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				document.getElementById("myform:txtNum").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				document.getElementById("myform:txtUnit").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				document.getElementById("myform:txtStorage").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				document.getElementById("myform:txtStorageNum").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				document.getElementById("myform:txtPosition").style.fontSize = hjb51
+						* 23 / 900 + "px";
+				//输入控件 
+
+				document.getElementById("divJobPlanId").style.width = wjb51
+						* 228 / 1500 + "px";
+				document.getElementById("divJobPlanId").style.height = hjb51
+						* 40 / 900 + "px";
+				document.getElementById("divJobPlanId").style.marginLeft = "30px";
+				document.getElementById("divJobPlanId").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("divMaterialtName").style.width = wjb51
+						* 140 / 1500 + "px";
+				document.getElementById("divMaterialtName").style.height = hjb51
+						* 40 / 900 + "px";
+				document.getElementById("divMaterialtName").style.marginLeft = "30px";
+				document.getElementById("divMaterialtName").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("divVersion").style.width = wjb51 * 140
+						/ 1500 + "px";
+				document.getElementById("divVersion").style.height = hjb51 * 40
+						/ 900 + "px";
+				document.getElementById("divVersion").style.marginLeft = "30px";
+				document.getElementById("divVersion").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("divNum").style.width = wjb51 * 140
+						/ 1500 + "px";
+				document.getElementById("divNum").style.height = hjb51 * 40
+						/ 900 + "px";
+				document.getElementById("divNum").style.marginLeft = "30px";
+				document.getElementById("divNum").style.fontSize = hjb51 * 20
+						/ 900 + "px";
+
+				document.getElementById("divUnit").style.width = wjb51 * 140
+						/ 1500 + "px";
+				document.getElementById("divUnit").style.height = hjb51 * 40
+						/ 900 + "px";
+				document.getElementById("divUnit").style.marginLeft = "30px";
+				document.getElementById("divUnit").style.fontSize = hjb51 * 20
+						/ 900 + "px";
+
+				document.getElementById("divStorageId").style.width = wjb51
+						* 140 / 1500 + "px";
+				document.getElementById("divStorageId").style.height = hjb51
+						* 40 / 900 + "px";
+				document.getElementById("divStorageId").style.marginLeft = "30px";
+				document.getElementById("divStorageId").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("divStorageNum").style.width = wjb51
+						* 140 / 1500 + "px";
+				document.getElementById("divStorageNum").style.height = hjb51
+						* 40 / 900 + "px";
+				document.getElementById("divStorageNum").style.marginLeft = "30px";
+				document.getElementById("divStorageNum").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("divPositionId").style.width = wjb51
+						* 140 / 1500 + "px";
+				document.getElementById("divPositionId").style.marginLeft = "30px";
+				document.getElementById("divPositionId").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("divPositionId1").style.width = wjb51
+						* 140 / 1500 + "px";
+				document.getElementById("divPositionId1").style.height = hjb51
+						* 40 / 900 + "px";
+				document.getElementById("divPositionId2").style.width = wjb51
+						* 123 / 1500 + "px";
+				document.getElementById("divPositionId2").style.height = hjb51
+						* 40 / 900 + "px";
+
+				document.getElementById("myform:dlg1").style.fontSize = hjb51
+						* 25 / 900 + "px";
+				document.getElementById("myform:dlg2").style.fontSize = hjb51
+						* 25 / 900 + "px";
+				document.getElementById("myform:dlg3").style.fontSize = hjb51
+						* 25 / 900 + "px";
+				//批次
+				document.getElementById("divBatchId").style.width = wjb51 * 180
+						/ 1500 + "px";
+				document.getElementById("divBatchId2").style.width = wjb51
+						* 163 / 1500 + "px";
+				//序列
+				document.getElementById("divHandleNum").style.width = wjb51
+						* 180 / 1500 + "px";
+				document.getElementById("divHandleNum").style.height = hjb51
+						* 40 / 900 + "px";
+				document.getElementById("divHandleNum").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("divStartSeq1").style.width = wjb51
+						* 180 / 1500 + "px";
+				document.getElementById("divStartSeq2").style.width = wjb51
+						* 163 / 1500 + "px";
+
+				document.getElementById("divEndSeq").style.width = wjb51 * 180
+						/ 1500 + "px";
+				document.getElementById("divEndSeq").style.height = hjb51 * 40
+						/ 900 + "px";
+				document.getElementById("divEndSeq").style.fontSize = hjb51
+						* 20 / 900 + "px";
+
+				document.getElementById("myform:seqAdd").style.fontSize = hjb51
+						* 20 / 900 + "px";
+				function onYZ() {
+					var msg = document.getElementById("myform:success").value;
+					if (msg == "通过") {
+						document.getElementById("myform:submit").click();
+					} else {
+						alert(msg);
+					}
+
+				}
+
+				function onXZ() {
+					var msg = document.getElementById("myform:success").value;
+					if (msg == "保存成功") {
+						window.close();
+					} else {
+						alert(msg);
+					}
+				}
+				function onZZ() {
+					var msg = document.getElementById("myform:success").value;
+					alert(msg);
+				}
+				function check() {
+					var storageId = document.getElementById("myform:storageId").value;
+					var num = document.getElementById("myform:num").value;
+					var storageNum = document
+							.getElementById("myform:storageNum").value;
+
+					var positionCtrl = document
+							.getElementById("myform:positionCtrl").value;
+					var positionId = document
+							.getElementById("myform:positionId").value;
+					var positionType = document
+							.getElementById("myform:positionType").value;
+
+					if (null == storageId || "" == storageId) {
+						alert("请选择库房号！");
+						return;
+					}
+					if (positionCtrl == "true") {
+						if (positionType == "3") {
+							var positionId2 = document
+									.getElementById("myform:positionId2").value;
+							if (null == positionId2 || "" == positionId2) {
+								alert("请选择库位！");
+								return;
+							}
+						} else {
+							if (null == positionId || "" == positionId) {
+								alert("请选择库位！");
+								return;
+							}
+						}
+
+					}
+					if (null == storageNum || "" == storageNum) {
+						alert("请输入入库数量！");
+						return;
+					}
+					if (storageNum > num) {
+						alert("入库数量不可以大于现有量！");
+						return;
+					}
+
+					document.getElementById("myform:addInfo").click();
+
+				}
+
+				function XZ() {
+					var msg = document.getElementById("myform:success").value;
+					if (msg == "允许") {
+						document.getElementById("myform:show1").click();
+					} else {
+						document.getElementById("myform:show1").click();
+					}
+				}
+
+				function showBatch() {
+					document.getElementById("myform:show3").click();
+				}
+
+				function showSeq() {
+					document.getElementById("myform:show2").click();
+				}
+
+				function Control() {
+					var ctrl = document.getElementById("myform:endSeq").readOnly;
+					if (ctrl) {
+						document.getElementById("myform:endSeq").style.backgroundColor = "#F0F0F0";
+					} else {
+						document.getElementById("myform:endSeq").style.backgroundColor = "#ffffff";
+					}
+				}
+
+				function checkSeq() {
+					var msg = document.getElementById("myform:success").value;
+					if (null == msg || "" == msg) {
+						document.getElementById("myform:btn3").click();
+					} else {
+						alert(msg);
+					}
+				}
+
+				//]]>
+			</script>
+		</h:form>
+	</h:body>
+</ui:composition>

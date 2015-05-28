@@ -14,10 +14,10 @@ import java.util.Map;
 public class DatabaseResourceBundle implements IResourceBundle {
     private Map<String, String> map = new HashMap<String, String> ();
     /**
-     * 获取适配器中，指定名称的区域资源。若为找到，则返code>defaultValue</code>
+     * 获取适配器中，指定名称的区域资源。若为找到，则返�?code>defaultValue</code>
      *
      * @param name         资源名称
-     * @param defaultValue 默认
+     * @param defaultValue 默认�?
      * @return 资源
      */
     @Override

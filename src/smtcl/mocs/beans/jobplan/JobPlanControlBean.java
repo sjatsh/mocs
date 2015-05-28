@@ -1,7 +1,6 @@
 package smtcl.mocs.beans.jobplan;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,10 +21,7 @@ import smtcl.mocs.pojos.device.TEquipmentInfo;
 import smtcl.mocs.pojos.job.TJobInfo;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TJobplanInfo;
-import smtcl.mocs.pojos.job.TProcessInfo;
-import smtcl.mocs.services.device.IOrganizationService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
-import smtcl.mocs.utils.device.StringUtils;
 
 /**
  * 
@@ -41,22 +37,16 @@ import smtcl.mocs.utils.device.StringUtils;
 @ViewScoped
 public class JobPlanControlBean implements Serializable  {
 	
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * 作业计划接口实例
 	 */
 	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
 	/**
-	 * 权限接口实例
-	 */
-	private IOrganizationService organizationService=(IOrganizationService)ServiceFactory.getBean("organizationService");
-	/**
 	 * @描述：作业计划信息数据集
 	 */	
 	private Map<String, Object> jobPlanResults = new HashMap<String,Object>();
-	/**
-	 * @描述：工序清单数据集
-	 */	
-	private List<Map<String, Object>> processResults = new ArrayList<Map<String, Object>>();
 	/**
 	 * 作业计划名称集合
 	 */
@@ -101,8 +91,8 @@ public class JobPlanControlBean implements Serializable  {
 	 * 历次投料批次列表
 	 */
 	private List<Map<String,Object>> batchlist = new ArrayList<Map<String,Object>>();
-	
-	
+
+
 	/**
 	 * 工序dataTable数据    ====>工艺
 	 */
@@ -119,22 +109,6 @@ public class JobPlanControlBean implements Serializable  {
 	 * 工序选中的行的ID
 	 */
 	private String selected;
-	
-	
-	/**
-	 * 作业dataTable数据   =====》作业
-	 */
-	private List<Map<String,Object>> joblist = new ArrayList<Map<String,Object>>();
-	/**
-	 * 作业dataTable数据  外层封装
-	 */
-	private TJobDispatchDataModel mediumJobModel = new TJobDispatchDataModel();
-	/**
-	 * 作业选中的行
-	 */
-	private Map<String,Object>[] selectedJob; 	//把对象TJobInfo改为MAP<String,object>类型就可以2个同时使用
-	
-	
 	/**
 	 * 作业dataTable数据   ====》工单
 	 */
@@ -147,7 +121,7 @@ public class JobPlanControlBean implements Serializable  {
 	 * 作业选中的行
 	 */
 	private Map<String,Object>[] selectedJobdispatch;
-	
+
 	/**
 	 * 节点ID
 	 */
@@ -160,10 +134,11 @@ public class JobPlanControlBean implements Serializable  {
 	 * 是否同时启动工单
 	 */
 	private boolean booleanValue = true;
-	
+
 	/**
 	 * 构造函数
 	 */
+	@SuppressWarnings("unchecked")
 	public  JobPlanControlBean(){
 		//获取节点ID
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -234,20 +209,6 @@ public class JobPlanControlBean implements Serializable  {
 			Map<String, Object> tj = processlist.get(i);
 		   selectedProcess[i] = tj;
 		}
-		//作业清单
-			
-		//工单列表
-		/* 以前的不显示
-		jobdispatchlist = jobPlanService.getDispatchList(skillId);
-		jobdispatchModel = new TJobDispatchDataModel(jobdispatchlist);
-		*/
-		/*
-		selectedJobdispatch = new Map[jobdispatchlist.size()];
-		for(int i=0; i<jobdispatchlist.size();i++){  //设为默认全选
-			Map<String, Object> tj = jobdispatchlist.get(i);
-			selectedJobdispatch[i] = tj;
-		}
-		*/
 		
 	}
 	/**
@@ -283,33 +244,10 @@ public class JobPlanControlBean implements Serializable  {
 	/**
 	 * 工艺方案下拉查询
 	 */
+	@SuppressWarnings("unchecked")
 	public void searchList(){   //有互动的还是要放到互动的方法里面，没有互动的就是放在 get方法里面，各种ajax有冲突,
 		planNum = null;
-	/*	
-        //零件类型ID,下拉框
-		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();	
-		String id = "";
-		if(request.getParameter("editPId")!=null){  //判断是否为空
-		id = request.getParameter("editPId").trim();
-		}
-		if(id!=null && !id.equals("") && !id.equals("undefined")){  //页面url没有传值过来就是原来的
-		jobplabid = id;
-		List<Map<String, Object>> partlst =jobPlanService.getPartIdByJobPlanId(jobplabid);
-		if(partlst.size()>0){
-			Map<String, Object>  map = partlst.get(0);
-			partTypeId = map.get("partId").toString();
-		}
-		}
 		
-		//通过零件过盧工艺方案
-		skillMap.clear();
-		List<Map<String,Object>> lst2 = jobPlanService.getProcessplanMap(partTypeId);
-		for(Map<String,Object> map : lst2){
-			if(map.get("id")!=null && !"".equals(map.get("id"))){//工艺方案名称
-				skillMap.put((String)map.get("name"),map.get("id").toString());
-			}
-		}
-	*/
 		//投料批次列表
 		batchlist = jobPlanService.getBatchList(skillId,jobplabid);
 		
@@ -329,20 +267,6 @@ public class JobPlanControlBean implements Serializable  {
 			Map<String, Object> tj = processlist.get(i);
 		   selectedProcess[i] = tj;
 		}
-		//作业清单
-		
-		//工单列表
-		/* 以前的不显示
-		jobdispatchlist = jobPlanService.getDispatchList(skillId);
-		jobdispatchModel = new TJobDispatchDataModel(jobdispatchlist);
-		*/
-		/*
-		selectedJobdispatch = new Map[jobdispatchlist.size()];
-		for(int i=0; i<jobdispatchlist.size();i++){  //设为默认全选
-			Map<String, Object> tj = jobdispatchlist.get(i);
-			selectedJobdispatch[i] = tj;
-		}
-		*/
 	
 	}	
 
@@ -352,8 +276,6 @@ public class JobPlanControlBean implements Serializable  {
      */
     public void onEdit(RowEditEvent event) {  
     	System.out.println("更新----------->"+jobdispatchlist.size());
-//    	Map<String, Object> map=(Map<String, Object>) event.getObject();        
-//    	jobPlanService.updateJobDispatch(this);  //修改，这里没有保存的，只是修改selectedJobdispatch中的值
     	for(Map<String, Object> disp:jobdispatchlist){		
     		String proid = disp.get("processId").toString();
     		String equid = disp.get("equId").toString();
@@ -365,7 +287,6 @@ public class JobPlanControlBean implements Serializable  {
 			disp.put("equName", equName); //设备名称返回
     		for(Map<String, Object> job:jobMaplst){
     			String id = job.get("id").toString();
-    			String eid = job.get("equId").toString();
     			if(proid.equals(id)){//相同的工序ID,-->从工序列表返回给作业列表
     				job.put("equId", equid);  //把selectedJobdispatch中的设备id改入入jobMaplst中
     				job.put("processNum", processNum);
@@ -386,7 +307,7 @@ public class JobPlanControlBean implements Serializable  {
     public void onCancel(RowEditEvent event) {  
 
     }
-    
+
    private List<TJobInfo>  joblst = new  ArrayList<TJobInfo>(); //用来放对象的数据
    List<Map<String, Object>>  jobMaplst = new  ArrayList<Map<String, Object>>(); //用来放MAP的数据
    private List<TJobdispatchlistInfo>  jobdispatchlst = new  ArrayList<TJobdispatchlistInfo>();
@@ -398,7 +319,7 @@ public class JobPlanControlBean implements Serializable  {
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
 	//工序生成作业
     joblst.clear();
-	List<Map<String, Object>> lst = jobPlanService.getJobByJobPlanId(jobplabid); //作业清单= 数据库中+生成的
+//	List<Map<String, Object>> lst = jobPlanService.getJobByJobPlanId(jobplabid); //作业清单= 数据库中+生成的
 	jobMaplst.clear();
    	for(Map<String, Object> gg:selectedProcess){
    		//生成对象放入列表--无
@@ -509,56 +430,21 @@ public class JobPlanControlBean implements Serializable  {
     
 	/**==================================set,get方法====================================================*/
 
-
 	public IJobPlanService getJobPlanService() {
 		return jobPlanService;
 	}
-
 
 	public void setJobPlanService(IJobPlanService jobPlanService) {
 		this.jobPlanService = jobPlanService;
 	}
 
-
-	public IOrganizationService getOrganizationService() {
-		return organizationService;
-	}
-
-
-	public void setOrganizationService(IOrganizationService organizationService) {
-		this.organizationService = organizationService;
-	}
-
-
-	public Map<String, Object> getJobPlanResults() {
-		return jobPlanResults;
-	}
-
-
-	public void setJobPlanResults(Map<String, Object> jobPlanResults) {
-		this.jobPlanResults = jobPlanResults;
-	}
-
-
-	public List<Map<String, Object>> getProcessResults() {
-		return processResults;
-	}
-
-
-	public void setProcessResults(List<Map<String, Object>> processResults) {
-		this.processResults = processResults;
-	}
-
-
 	public Map<String, Object> getJobPlanNameMap() {
 		return jobPlanNameMap;
 	}
 
-
 	public void setJobPlanNameMap(Map<String, Object> jobPlanNameMap) {
 		this.jobPlanNameMap = jobPlanNameMap;
 	}
-
 
 	public String getJobplabid() {
 		return jobplabid;
@@ -569,11 +455,9 @@ public class JobPlanControlBean implements Serializable  {
 		this.jobplabid = jobplabid;
 	}
 
-
 	public Map<String, Object> getPartTypeMap() {
 		return partTypeMap;
 	}
-
 
 	public void setPartTypeMap(Map<String, Object> partTypeMap) {
 		this.partTypeMap = partTypeMap;
@@ -584,26 +468,21 @@ public class JobPlanControlBean implements Serializable  {
 		return partTypeId;
 	}
 
-
 	public void setPartTypeId(String partTypeId) {
 		this.partTypeId = partTypeId;
 	}
-
 
 	public Map<String, Object> getSkillMap() {
 		return skillMap;
 	}
 
-
 	public void setSkillMap(Map<String, Object> skillMap) {
 		this.skillMap = skillMap;
 	}
 
-
 	public String getSkillId() {
 		return skillId;
 	}
-
 
 	public void setSkillId(String skillId) {
 		this.skillId = skillId;
@@ -614,7 +493,6 @@ public class JobPlanControlBean implements Serializable  {
 		return thisPlanNum;
 	}
 
-
 	public void setThisPlanNum(String thisPlanNum) {
 		this.thisPlanNum = thisPlanNum;
 	}
@@ -624,194 +502,100 @@ public class JobPlanControlBean implements Serializable  {
 		return startTime;
 	}
 
-
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-
 
 	public Date getEndTime() {
 		return endTime;
 	}
 
-
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-
 
 	public List<Map<String, Object>> getBatchlist() {
 		return batchlist;
 	}
 
-
 	public void setBatchlist(List<Map<String, Object>> batchlist) {
 		this.batchlist = batchlist;
 	}
-
-
-	public List<Map<String, Object>> getProcesslist() {
-		return processlist;
-	}
-
-
-	public void setProcesslist(List<Map<String, Object>> processlist) {
-		this.processlist = processlist;
-	}
-
 
 	public TJobDispatchDataModel getMediumProcessModel() {
 		return mediumProcessModel;
 	}
 
-
 	public void setMediumProcessModel(TJobDispatchDataModel mediumProcessModel) {
 		this.mediumProcessModel = mediumProcessModel;
 	}
-
 
 	public Map<String, Object>[] getSelectedProcess() {
 		return selectedProcess;
 	}
 
-
 	public void setSelectedProcess(Map<String, Object>[] selectedProcess) {
 		this.selectedProcess = selectedProcess;
 	}
-
 
 	public String getSelected() {
 		return selected;
 	}
 
-
 	public void setSelected(String selected) {
 		this.selected = selected;
 	}
-
-
-	public List<Map<String, Object>> getJoblist() {
-		return joblist;
-	}
-
-
-	public void setJoblist(List<Map<String, Object>> joblist) {
-		this.joblist = joblist;
-	}
-
-
-	public TJobDispatchDataModel getMediumJobModel() {
-		return mediumJobModel;
-	}
-
-
-	public void setMediumJobModel(TJobDispatchDataModel mediumJobModel) {
-		this.mediumJobModel = mediumJobModel;
-	}
-
-
-	public Map<String, Object>[] getSelectedJob() {
-		return selectedJob;
-	}
-
-
-	public void setSelectedJob(Map<String, Object>[] selectedJob) {
-		this.selectedJob = selectedJob;
-	}
-
-
-	public List<Map<String, Object>> getJobdispatchlist() {
-		return jobdispatchlist;
-	}
-
-
-	public void setJobdispatchlist(List<Map<String, Object>> jobdispatchlist) {
-		this.jobdispatchlist = jobdispatchlist;
-	}
-
 
 	public TJobDispatchDataModel getJobdispatchModel() {
 		return jobdispatchModel;
 	}
 
-
 	public void setJobdispatchModel(TJobDispatchDataModel jobdispatchModel) {
 		this.jobdispatchModel = jobdispatchModel;
 	}
-
 
 	public Map<String, Object>[] getSelectedJobdispatch() {
 		return selectedJobdispatch;
 	}
 
-
 	public void setSelectedJobdispatch(Map<String, Object>[] selectedJobdispatch) {
 		this.selectedJobdispatch = selectedJobdispatch;
 	}
-
 
 	public String getNodeid() {
 		return nodeid;
 	}
 
-
 	public void setNodeid(String nodeid) {
 		this.nodeid = nodeid;
 	}
-
-
-	public List<TJobInfo> getJoblst() {
-		return joblst;
-	}
-
-
-	public void setJoblst(List<TJobInfo> joblst) {
-		this.joblst = joblst;
-	}
-
-
-	public List<TJobdispatchlistInfo> getJobdispatchlst() {
-		return jobdispatchlst;
-	}
-
-
-	public void setJobdispatchlst(List<TJobdispatchlistInfo> jobdispatchlst) {
-		this.jobdispatchlst = jobdispatchlst;
-	}
-
 
 	public List<Map<String, Object>> getJobMaplst() {
 		return jobMaplst;
 	}
 
-
-	public void setJobMaplst(List<Map<String, Object>> jobMaplst) {
-		this.jobMaplst = jobMaplst;
-	}
-
-
 	public String getPlanNum() {
 		return planNum;
 	}
 
-
 	public void setPlanNum(String planNum) {
 		this.planNum = planNum;
 	}
+	
 	public String getSelectDisble() {
 		return selectDisble;
 	}
+	
 	public void setSelectDisble(String selectDisble) {
 		this.selectDisble = selectDisble;
 	}
+	
 	public boolean isBooleanValue() {
 		return booleanValue;
 	}
+	
 	public void setBooleanValue(boolean booleanValue) {
 		this.booleanValue = booleanValue;
 	}		
-
     
-	
-	
 }

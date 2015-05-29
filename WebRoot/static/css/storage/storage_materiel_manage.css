@@ -1,0 +1,269 @@
+@charset "utf-8";
+/* 筛选栏 */
+.filter-bar {
+	position: relative;
+	width: 384px;
+	height: 42px;
+	margin-top: 30px;
+}
+.header-content-4sub .filter-bar:first-child {
+	margin-top: 80px;
+}
+
+/* 筛选标题 */
+.filter-label {
+	float: left;
+	width: 234px;
+	height: 42px;
+	line-height: 42px;
+	font-size: 38px;
+	text-align: right;
+	text-indent: .5em;
+	color: #595959;
+}
+
+/* 筛选输入 */
+.filter-input {
+	width: 150px;
+	height: 42px;
+	float: right;
+	font-size: 20px;
+	line-height: 42px;
+	color: #333333;
+}
+
+.filter-input input[type='text'] {
+	width: 100%;
+	height: 100%;
+	text-indent: 0.5em;
+	border: solid 1px #000000;
+	border-radius: 5px;
+}
+
+.filter-input .filter-select {
+	width: 100%;
+	height: 100%;
+	text-indent: 0.5em;
+	border: solid 1px #000000;
+	border-radius: 5px;
+}
+
+@-moz-document url-prefix() {
+	.filter-select
+	{
+		padding-top: 6px;
+	}
+}
+
+/* 搜索按钮 */
+.filter-submit {
+	position: absolute;
+	left: 110px;
+	top: 58px;
+	width: 164px;
+	height: 164px;
+	cursor: pointer;
+}
+
+.filter-submit img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+
+.filter-submit>.active {
+	display: none;
+}
+
+.filter-submit:active>.active {
+	display: block;
+}
+
+/* 内容 */
+.content-frame {
+	position: relative;
+	width: 1920px;
+	height: 654px;
+	background-image: url('../../images/device_time_tubiao_bg.png');
+	background-repeat: no-repeat;
+	overflow: hidden;
+}
+
+#list-frame {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 1920px;
+	height: 726px;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.table-title
+{
+	position: absolute;
+	left: 8px;
+	right: 8px;
+	height: 31px;
+	z-index: 1;
+}
+
+.table-body
+{
+	width: 100%; 
+	height: 100%;
+	padding: 0px 8px 0px 8px;
+	overflow-y: scroll;
+}
+
+.ui-widget
+{
+	font-family: "微软雅黑";
+	font-size: initial;
+}
+
+/* 表格标题栏  */
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default
+{
+	background-image: url("../../images/device_oee_trend_table_head.png");
+	background-color: null;
+	color: white;
+	text-shadow: none;
+}
+.ui-datatable-odd
+{
+	background: none repeat scroll 0 0 #CCEBF7;
+}
+
+/* 多选框样式 */
+.filter-input .ui-state-default,.ui-selectcheckboxmenu-header .ui-state-default,.ui-selectcheckboxmenu-items .ui-state-default
+{
+	background: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) repeat scroll 0 0 #c4c4c4;
+	color: #4f4f4f;
+	text-shadow: none;
+}
+
+.filter-input .ui-state-hover
+{
+	background: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) repeat scroll 0 0 #c4c4c4;
+	box-shadow: none;
+}
+
+.filter-select-checkbox
+{
+	border: 1px solid #000000;
+    border-radius: 5px;
+    height: 100%;
+    text-indent: 0.5em;
+    width: 100%;
+}
+
+.ui-selectcheckboxmenu .ui-selectcheckboxmenu-label
+{
+	font-size: 12px;
+	display: inline;
+}
+
+.filter-select-checkbox .ui-selectcheckboxmenu-trigger .ui-icon
+{
+	margin-top: 6px;
+}
+
+/*header tab change*/
+.header-content-tab {
+	position: absolute;
+	left: 5px;
+	top: 10px;
+	width: 384px;
+	height: 40px;
+	color: #595959;
+	z-index: 1;
+}
+
+.tab-nav {
+	position: relative;
+	display: inline-block;
+	margin-left: -5px;
+	width: 120px;
+	height: 38px;
+	font-size: 26px;
+	line-height: 38px;
+	border: solid 1px #3CF;
+	text-align: center;
+	cursor: pointer;
+}
+.tab-nav:hover {
+	background: #CCEDFB;
+}
+.tab-nav.cur {
+	color: #FFF;
+	background: #00A040;
+}
+
+.sub-con {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1536px;
+	height: 280px;
+	visibility: hidden;
+}
+.sub-con.cur {
+	visibility: visible;
+}
+
+.sub-con-div {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1920px;
+	height: 726px;
+	visibility: hidden;
+}
+.sub-con-div.cur {
+	visibility: visible;
+}
+
+/* tab2 */
+.sub-nav {
+	position: absolute;
+	left: 10px;
+	top: 0px;
+	width: 384px;
+	height: 40px;
+	color: #595959;
+}
+.sub-con-div-frame {
+	position: absolute;
+	left: 0;
+	top: 40px;
+	width: 1920px;
+	height: 686px;
+}
+.sub-con-div2 {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1920px;
+	height: 686px;
+	visibility: hidden;
+}
+.sub-con-div2.cur {
+	visibility: visible;
+}
+
+/* 多选框调整 */
+.t_select_list_table {
+	top: 44px !important;
+	width: 170px;
+}
+.t_select_list_table td {
+	width: 150px;
+	text-align: left;
+}
+
+/* 表头大小调整 */
+.ui-datatable th div.ui-dt-c {
+		padding: 7px 10px;
+}

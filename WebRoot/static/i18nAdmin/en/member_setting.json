@@ -1,0 +1,61 @@
+{	
+	"page1": {
+		"top": {
+			"title1":"区域 ",
+			"input1":"输入名称/工号",
+			"btn1":"查询",
+			"btn2":"新建",
+			"btn3":"更新",
+			"btn4":"删除"
+		},
+		"user": {
+			"title1":"人员名称",
+			"title2":"工号ID",
+			"title3":"年龄",
+			"title4":"性别",
+			"title5":"出生年月",
+			"title6":"身份证",
+			"title7":"学历",
+			"title8":"联系方式",
+			"title9":"居住地",
+			"title10":"电邮地址",
+			"title11":"职位",
+			"title12":"所属部门",
+			"title13":"所属班组",
+			"title14":"备注",
+			"title15":"政治面貌",
+			"title16":"薪酬",
+			"title17":"关联帐号"
+		},
+		"add": {
+			"main_title":"人员新建"
+		},
+		"edit": {
+			"main_title":"人员更新"
+		},
+		"del": {
+			"alert_msg":"确定删除"
+		},
+		"btn": {
+			"save":"保存",
+			"cancel":"取消",
+			"pls_select":"请选择"
+		},
+		"sex": {
+			"male":"男",
+			"female":"女"
+		},
+		"education": {
+			"item1":"小学",
+			"item2":"初中",
+			"item3":"中专",
+			"item4":"高中",
+			"item5":"大专",
+			"item6":"本科",
+			"item7":"硕士",
+			"item8":"博士",
+			"item9":"博士后",
+			"item10":"其他"
+		}
+	}
+}

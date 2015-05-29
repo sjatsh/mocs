@@ -1,0 +1,31 @@
+{	
+	"top": {
+		"main_title": "产品成套入库"
+	},
+	"content": {
+		"main_title": "入库单号",
+		"title1":"产品名称",
+		"title2":"库房编号",
+		"title3":"本次入库数",
+		"title4":"库位编号",
+		"table_title1":"物料编号",
+		"table_title2":"物料名称",
+		"table_title3":"BOM属性",
+		"table_title4":"BOM数",
+		"table_title5":"工序序号",
+		"table_title6":"生产批号",
+		"table_title7":"入库批号",
+		"table_title8":"可入库数量",
+		"table_title9":"已配套入库数量",
+		"table_title10":"操作",
+		"dlg_main_title":"批次选择",
+		"dlg_title1":"生产批号",
+		"dlg_title2":"入库批号",
+		"dlg_title3":"完成数量",
+		"dlg_title4":"已入库数量",
+		"btn_auto":"计算",
+		"btn_ok":"确认",
+		"btn_close":"关闭",
+		"btn_into":"入库"
+	}
+}

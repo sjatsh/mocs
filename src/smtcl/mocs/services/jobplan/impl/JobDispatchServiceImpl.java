@@ -1,12 +1,14 @@
 package smtcl.mocs.services.jobplan.impl;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.dreamwork.persistence.GenericServiceSpringImpl;
 
@@ -17,9 +19,9 @@ import smtcl.mocs.pojos.job.TEquipmenttypeInfo;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TProcessInfo;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
+import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.StringUtils;
 
-@SuppressWarnings("unchecked")
 public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatchlistInfo, String> implements IJobDispatchService {
 
 	@Override
@@ -53,10 +55,10 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			hql += " and equ.equId in ("+equid+")";
 		}
 		if(!StringUtils.isEmpty(planStime)){
-			hql += " AND job.planStarttime >= DATE_FORMAT('"+planStime+"','%Y-%m-%d %T')  "; 
+			hql += " AND job.planStarttime >= DATE_FORMAT('"+planStime+"','%Y-%m-%d')  "; 
 		}	
 		if(!StringUtils.isEmpty(planEtime)){
-			hql += " AND job.planEndtime <= DATE_FORMAT('"+planEtime+"','%Y-%m-%d %T')  "; 
+			hql += " AND job.planEndtime <= DATE_FORMAT('"+planEtime+"','%Y-%m-%d')  "; 
 		}
 		hql += " ORDER BY equ.equSerialNo ASC";		
 		return dao.executeQuery(hql);		
@@ -100,10 +102,10 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			hql += " AND jobdispatch.taskNum in ("+taskNum+")"; 
 		}	
 		if(!StringUtils.isEmpty(planStime)){
-			hql += " AND jobdispatch.planStarttime >= DATE_FORMAT('"+planStime+"','%Y-%m-%d %T')  "; 
+			hql += " AND jobdispatch.planStarttime >= DATE_FORMAT('"+planStime+"','%Y-%m-%d')  "; 
 		}	
 		if(!StringUtils.isEmpty(planEtime)){
-			hql += " AND jobdispatch.planEndtime <= DATE_FORMAT('"+planEtime+"','%Y-%m-%d %T')  "; 
+			hql += " AND jobdispatch.planEndtime <= DATE_FORMAT('"+planEtime+"','%Y-%m-%d')  "; 
 		}
 		if(!StringUtils.isEmpty(partid)){
 			hql += " and part.id in ("+partid+")";
@@ -699,6 +701,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			tjp.setStatus(20);                                       //状态
 			tjp.setErpScrapNum(0);
 			tjp.setWisScrapNum(0);
+			tjp.setDutyScrapNum(0);
 			dao.save(tjp);
 			
 			/*********************A3增加工单设备后台关联***************************************/
@@ -753,6 +756,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	      String hql = "SELECT NEW MAP(" 
 		        +" j.name as name,"                           //工单名称
 		        +" j.processNum as processNum,"               //工单数量
+		        +" j.status as status,"
 		        +" j.TEquipmenttypeInfo.id as id,"             //设备类型 
 		        +" part.name as partName,"//零件名称
 				+" DATE_FORMAT(j.planStarttime,'%Y-%m-%d %T') AS planStarttime," //开始时间
@@ -768,68 +772,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		        + " and processPlan.TPartTypeInfo.id = part.id"
 		        + " and j.id = '"+disPatchId+"'  ";	
 	    List<Map<String,Object>> lst =  dao.executeQuery(hql);
-		
-//		//通过工单ID得到物料
-//		String hql1 = "SELECT NEW MAP(" 
-//			    	+" t.id as tid,"                         //物料ID
-//				    +" t.TMaterailTypeInfo.no as tno,"       //物料编号
-//			    	+" t.TMaterailTypeInfo.name as tname,"   //物料名称
-//			    	+" t.requirementNum as requirementNum"   //物料需求数      
-//					+")"
-//					+" FROM TJobdispatchlistInfo j ,TProcessInfo c,TProcessmaterialInfo t  "
-//					+" WHERE j.TProcessInfo.id = c.id AND c.id = t.TProcessInfo.id   "
-//				    +" AND  j.id =  '"+disPatchId+"'   "; 
-//		 List<Map<String,Object>> lst1 =  dao.executeQuery(hql1);
-		
-//		 //通过工单ID子工艺详情
-//	    String hql3 = "SELECT NEW MAP(" 
-//			        +" c.TProcessplanInfo.name as pname,"  //工艺方案名称
-//			        +" c.TProcessplanInfo.defaultSelected as defaultSelected," //默认方案
-//			        +" c.TProcessplanInfo.TPartTypeInfo.id as partid,"
-//			        +" c.theoryWorktime as theoryWorktime,"  //工艺节拍时间
-//					+" c.file as file"             //工艺指导文件
-//					+")"
-//					+" FROM TJobdispatchlistInfo j ,TProcessInfo c   "
-//			        +" WHERE j.TProcessInfo.id = c.id  AND  j.id = '"+disPatchId+"'  ";	
-//		List<Map<String,Object>> lst3 =  dao.executeQuery(hql3);
-//		for(Map<String,Object> map3 : lst3){
-//			if(map3.get("defaultSelected")!=null){
-//				String defaultSelectedname = map3.get("defaultSelected").toString();
-//				if(defaultSelectedname.equals("1")){  //判断是否是默认方案
-//					map3.put("defaultSelectedname", (String)map3.get("pname")); //是的话直接放入
-//				}else{                                                          //不是的话通过零件查询得到
-//					String partid = map3.get("partid").toString();
-//					String str = "SELECT NEW MAP(" 
-//							     +" c.name as cname,"  //工艺方案名称
-//		                         +")"
-//		                         +" FROM TProcessplanInfo c   " 
-//		                         +" WHERE   c.TPartTypeInfo.id = '"+partid+"'  ";
-//					List<Map<String,Object>> lst3kk =  dao.executeQuery(str);
-//					String defaultSelected = "";
-//					if(lst3kk.size()>0){
-//						Map<String,Object> map3kk = lst3kk.get(0);
-//						defaultSelected = (String)map3kk.get("cname");
-//					}
-//					map3.put("defaultSelectedname", defaultSelected);
-//				}
-//			}else{
-//				map3.put("defaultSelectedname", "");
-//			}
-//		}
-		
-		//通过工单ID子零件详情
-//		String hql4 = "SELECT NEW MAP(" 
-//			+" b.TPartTypeInfo.path as path"  //零件图片路径	
-//			+")"
-//			+" FROM TJobdispatchlistInfo j ,TProcessplanInfo b ,TProcessInfo c "
-//			+" WHERE j.TProcessInfo.id = c.id  AND  b.id=c.TProcessplanInfo.id "
-//			+ "AND j.id = '"+disPatchId+"' ";
-//        List<Map<String,Object>> lst4 = dao.executeQuery(hql4);
         map.put("lst", lst);
-//        map.put("lst1", lst1);
-//        map.put("lst3", lst3);
-//        map.put("lst4", lst4);
-         
 		return map;
 		
 	}
@@ -1029,7 +972,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	 */
 	@Override
 	public List<Map<String, Object>> getEquJobDispatchList(
-			String id) {
+			String id,HttpSession session) {
 		List<Map<String, Object>> job_dispatch_list = getJobPatchNoById(id);
 		String no = "";
 		for(Map<String, Object> map : job_dispatch_list){
@@ -1039,7 +982,26 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			}
 		}
 		String hql = "select new Map(t.id as ID,t.jobdispatchNo as patchNo,t.equSerialNo as SerialNo,(case when t.status = 0 then '未派' when t.status = 1 then '已派' when t.status = 2 then '加工中' end) as Status, t.status as flagStatus) from TEquJobDispatch t where t.jobdispatchNo='"+no+"'";
-		return dao.executeQuery(hql);
+		List<Map<String, Object>> list=dao.executeQuery(hql);
+		Locale locale=SessionHelper.getCurrentLocale(session);
+		if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+			for(Map<String, Object> map:list){
+			String status =	map.get("Status").toString();
+				if(status.equals("未派")){
+					status="to be Dispatched";
+					map.put("Status", status);
+				}else if(status.equals("已派")){
+					status="Dispatched";
+					map.put("Status", status);
+				}else if(status.equals("加工中")){
+					status="Processing";
+					map.put("Status", status);
+				}
+			}
+		}else{
+			return list;
+		}
+		return list;
 	}
 	@Override
 	public List<Map<String, Object>> getJobPatchNoByName(String name) {
@@ -1060,7 +1022,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	
 	/**
 	 * 通过工单id查询设备
-	 * @param dispatchId
+	 * @param dispatchNo
 	 * @return
 	 */
 	@Override
@@ -1172,4 +1134,5 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	
 		return dao.executeQuery(hql);
 	}
+	
 }

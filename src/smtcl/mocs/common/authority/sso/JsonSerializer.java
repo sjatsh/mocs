@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-9
- * Time: ÏÂÎç4:51
+ * Time: ä¸‹åˆ4:51
  */
 public class JsonSerializer implements ISsoSerializer {
     private static final Gson g = new GsonBuilder ().setDateFormat ("yyyy-MM-dd").create ();

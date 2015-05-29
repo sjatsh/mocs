@@ -6,6 +6,8 @@ import java.util.Map;
 
 import smtcl.mocs.beans.authority.cache.TreeNode;
 import smtcl.mocs.pojos.authority.Module;
+import smtcl.mocs.utils.device.DBHelper;
+import smtcl.mocs.utils.device.JsonUtil;
 
 import com.google.gson.reflect.TypeToken;
 import com.swg.cap.runtime.configure.entry.ServiceType;
@@ -25,7 +27,7 @@ import com.swg.cap.runtime.stub.ICapProxy;
 public class RemoteProxyFactory {
 
 	private static RemoteProxyFactory capProxyFactory = null;
-
+	private String wsAddress="172.16.0.5:8080/machinearchive";
 	/**
 	 * 构造函数	  
 	 * @return RemoteProxyFactory
@@ -125,16 +127,17 @@ public class RemoteProxyFactory {
 	 */
 	public List<String> getButtonsFunctionList(Long userID, String pageID) {
 
-		ICapProxy proxy = CapProxyFactory.newProxy(ServiceType.RMI);
+		ICapProxy proxy = CapProxyFactory.newProxy(ServiceType.JSON);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userID", userID);
 		map.put("pageID", pageID);
 		// 调用并返回远程 Cap 服务结果
 		try {
-			// return (Object)proxy.execute( "passport",
-			// "authority/getAuthorizeButtons", map);
-			return null;
+			return proxy.execute( new TypeToken<List<String>>() {},"passport",
+			"authority/getAuthorizeButtons", map);
+//			return null;
 		} catch (Exception ex) {
+            ex.printStackTrace();
 			return null;
 		}
 	}
@@ -298,4 +301,21 @@ public class RemoteProxyFactory {
 		}
 		
 	}
+	/**
+	 * 地图获取节点接口
+	 * @return
+	 */
+	public List<Map<String,Object>> getMapNode() {
+	       try{
+			DBHelper dbHelper=new DBHelper();
+			Map<String, String> methodParamUserMap =new HashMap<String,String>();
+			String jsonStr=dbHelper.getJsonString("","getChinaData", methodParamUserMap, "MachineService", wsAddress);
+			List<Map<String,Object>>  mapNode=(List<Map<String,Object>>)JsonUtil.transJson_To_Class("List<Map<String,Object>>", jsonStr);
+			return mapNode;
+	       }catch(Exception e) 
+	       {
+	    	   e.printStackTrace();
+	       }
+	       return null;
+		}
 }

@@ -194,7 +194,7 @@ public class DeviceInfoBean implements Serializable {
 		if(null!=list&&list.size()>0){
 			Map map=list.get(0);
 			 if(null!=map){
-				 deviceService.convertData(map);//调用数据转换方法
+				 //deviceService.convertData(map);//调用数据转换方法
 				 double[][] citydata={
 				 {100-(Double.parseDouble(map.get("availability").toString())*100),
 				  100-(Double.parseDouble(map.get("availability").toString())*100),

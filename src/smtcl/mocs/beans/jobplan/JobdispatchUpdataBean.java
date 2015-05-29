@@ -3,11 +3,7 @@ package smtcl.mocs.beans.jobplan;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -15,21 +11,22 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.dreamwork.persistence.ServiceFactory;
 
+import smtcl.mocs.pojos.job.TEquJobDispatch;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.services.jobplan.UpdataJobDispatch;
+import smtcl.mocs.utils.authority.SessionHelper;
 
 /**
  * 
  * 工单修改Bean
- * @作者：yyh
- * @创建时间：2014-2-23
- * @修改者：songkaiang
- * @修改日期：2014-6-17
- * @修改说明：工单修改页面重新设计和开发
+ * @作者 yyh
+ * @创建时间 2014-2-23
+ * @修改者 songkaiang
+ * @修改日期 2014-6-17
+ * @修改说明 工单修改页面重新设计和开发
  * @version V1.0
  */
 @ManagedBean(name="JobdispatchUpdata")
@@ -96,7 +93,15 @@ public class JobdispatchUpdataBean implements Serializable {
 	 * 零件名称
 	 */
 	private String jobdispatchpartName;
+	/**
+	 * 工单状态
+	 */
+	private String jobStatus;
 	
+	/**
+	 * 添加设备提示信息
+	 */
+	private String msg;
 	/**
 	 * 构造函数 
 	 */
@@ -119,7 +124,7 @@ public class JobdispatchUpdataBean implements Serializable {
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String,Object> map = jobDispatchService.getJobDispatchById(nodeid,id); //通过工单ID得到所有信息
-		List<Map<String,Object>> lst = (List<Map<String, Object>>) map.get("lst");  //工单信息
+		List<Map<String,Object>> lst =  (List<Map<String, Object>>) map.get("lst");  //工单信息
 		
 		if(lst.size()>0){ //工单信息
 			Map<String,Object> dismap = lst.get(0);
@@ -133,6 +138,10 @@ public class JobdispatchUpdataBean implements Serializable {
 			if(dismap.get("partName")!=null){
 				jobdispatchpartName = dismap.get("partName").toString();
 			}
+			if(dismap.get("status")!=null){
+				jobStatus = dismap.get("status").toString();
+			}
+			
 			try {
 				if(dismap.get("planStarttime")!=null){
 					jobdispatchlistStartDate = sdf.parse((String)dismap.get("planStarttime"));
@@ -146,7 +155,7 @@ public class JobdispatchUpdataBean implements Serializable {
 		}
 		
 		tequJobDispatchList.clear();
-		tequJobDispatchList = jobDispatchService.getEquJobDispatchList(this.getJobdispatchlistId());
+		tequJobDispatchList = jobDispatchService.getEquJobDispatchList(this.getJobdispatchlistId(),session);
 	}
 	
 
@@ -161,18 +170,31 @@ public class JobdispatchUpdataBean implements Serializable {
 	/**
 	 * 查询工单名称是否重复
 	 */
-	public void getDispatchNameRepeat(){	
-		if(jobdispatchlistName==null ||"".equals(jobdispatchlistName)){
-			    showMsg = "不能为空!";
-		}else{		
-				boolean b = jobDispatchService.getDispatchNameRepeat(jobdispatchlistName);
-				if(b == true){
-					showMsg = "名称重复!";
-				}else{
-					showMsg = "可以使用!";
-				}
-		     }
-	}	
+	public void getDispatchNameRepeat(){
+        if(this.getLocale().toString().equals("en") || this.getLocale().toString().equals("en_US")){
+            if (jobdispatchlistName == null || "".equals(jobdispatchlistName)) {
+                showMsg = "Can not be empty!";
+            } else {
+                boolean b = jobDispatchService.getDispatchNameRepeat(jobdispatchlistName);
+                if (b) {
+                    showMsg = "The name already exists!";
+                } else {
+                    showMsg = "Can use!";
+                }
+            }
+        }else {
+            if (jobdispatchlistName == null || "".equals(jobdispatchlistName)) {
+                showMsg = "不能为空!";
+            } else {
+                boolean b = jobDispatchService.getDispatchNameRepeat(jobdispatchlistName);
+                if (b) {
+                    showMsg = "名称重复!";
+                } else {
+                    showMsg = "可以使用!";
+                }
+            }
+        }
+    }
 	
     /**
      * 修改
@@ -184,10 +206,11 @@ public class JobdispatchUpdataBean implements Serializable {
 	 * 修改TEquJobDispatch表中的数据状态
 	 */
 	public void updataJobDispatch(String serialNo,String status){
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		//更新TEquJobDispatch表的状态
 		updataJobDispat.updataJobDispatchStatus(serialNo,status,this.getJobdispatchlistId());
 		//重新加载数据
-		tequJobDispatchList = jobDispatchService.getEquJobDispatchList(this.getJobdispatchlistId());
+		tequJobDispatchList = jobDispatchService.getEquJobDispatchList(this.getJobdispatchlistId(),session);
 	}
 	
 	private String serailNo;
@@ -195,14 +218,41 @@ public class JobdispatchUpdataBean implements Serializable {
 	/**
 	 * 向TEquJobDispatch表中添加工单和设备关联
 	 */
-	public void save(){
-		if(!serailNo.isEmpty())
+	public String save(){
+		msg="";
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		if(!serailNo.isEmpty()){
+			List<TEquJobDispatch> list=updataJobDispat.getEquJobDispatch(serailNo, getbatchNo(this.getJobdispatchlistId()));
+			if(list.size()<=0){
 			updataJobDispat.save(serailNo,this.getJobdispatchlistId());
+			}else{
+				if(this.getLocale().toString().equals("en") || this.getLocale().toString().equals("en_US")){
+					msg= "The machine serial number already exists";
+				}else{
+					msg="机床序列号已存在";
+				}
+			}
+		}
 		
 		tequJobDispatchList.clear();
-		tequJobDispatchList = jobDispatchService.getEquJobDispatchList(this.getJobdispatchlistId());
+		tequJobDispatchList = jobDispatchService.getEquJobDispatchList(this.getJobdispatchlistId(),session);
+		return msg;
 	}
-	
+
+    private Locale getLocale(){
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return SessionHelper.getCurrentLocale(request.getSession());
+    }
+    private String getbatchNo(String jobdispatchId){
+		List<Map<String, Object>> job_dispatch_list = jobDispatchService.getJobPatchNoById(jobdispatchId);
+		String patchNo = "";
+		for(Map<String, Object> map : job_dispatch_list){
+			if(map.get("Name") != null && !"".equals(map.get("Name"))){
+				return map.get("no").toString();
+			}
+		}
+		return null;
+	}
 	/******************************set,get方法**********************************************/
 	
 	public IJobDispatchService getJobDispatchService() {
@@ -324,4 +374,21 @@ public class JobdispatchUpdataBean implements Serializable {
 		this.jobdispatchpartName = jobdispatchpartName;
 	}
 
+	public String getJobStatus() {
+		return jobStatus;
+	}
+
+	public void setJobStatus(String jobStatus) {
+		this.jobStatus = jobStatus;
+	}
+
+
+	public String getMsg() {
+		return msg;
+	}
+    
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+    
 }

@@ -25,7 +25,7 @@ import smtcl.mocs.utils.authority.AuthorityUtil;
 import smtcl.mocs.utils.authority.IConsant;
 
 /**
- * 角色相关的service
+ * 角色相关的service?
  *
  * User: gjy
  * Date: 2012-10-15

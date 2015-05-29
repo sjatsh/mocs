@@ -1,0 +1,128 @@
+{	
+	"page1": {
+		"top": {
+			"btn1":"Search"
+		},
+		"class": {
+			"title1": "ClassNo",
+			"title2": "ClassName",
+			"title3": "ClassProperty",
+			"title4": "Description",
+			"title5": "Operation"			
+		}
+	},
+	"page2": {
+		"top": {
+			"btn1": "Search",
+			"option1": "Select"
+		},
+		"type": {
+			"title1": "PartNo",
+			"title2": "PartName",
+			"title3": "PartTypeNo",
+			"title4": "Status",
+			"title5": "Description",
+			"title6": "CreateTime",
+			"title7": "UpdateTime",
+			"title8": "UploadImage",
+			"upload": "Upload",
+			"view": "View"
+		}
+	},
+	"page3": {
+		"top": {
+			"btn1": "Searche",
+			"option1": "Select",
+			"btn2": "ProcessManage",
+			"btn3": "CreateProcess",
+			"btn4": "DeleteProcess",
+			"btn5": "Create",
+			"btn6": "Delete",
+			"btn7": "IsDefault",
+			"btn8": "Close"
+		},
+		"process": {
+			"title1": "ProcessNo",
+			"title2": "ProcessName",
+			"title3": "NameEN",
+			"title4": "Description",
+			"title5": "Configure",
+			"title6": "Operation"
+		},
+		"tab": {
+			"tab1": "Process",
+			"tab2": "Cost",
+			"tab3": "Material",
+			"tab4": "Fixture",
+			"tab5": "Cutter",
+			"tab6": "Machine",
+			"tab7": "Quality"
+		},
+		"cb": {
+			"title1": "ProcessNo",
+			"title2": "ProcessName",
+			"title3": "MainCost",
+			"title4": "MaterialCost",
+			"title5": "PersonnelCost",
+			"title6": "EnergyCost",
+			"title7": "EquipmentCost",
+			"title8": "ConsumptionResource",
+			"title9": "Total"
+		},
+		"wl": {
+			"title1": "ProcessNo",
+			"title2": "ProcessName",
+			"title3": "MaterialNo",
+			"title4": "MaterialName",
+			"title5": "MaterialSize",
+			"title6": "MaterialQuantity",
+			"title7": "MaterialType"
+		},
+		"jj": {
+			"title1": "ProcessNo",
+			"title2": "MaterialNo",
+			"title3": "FixtureTypeNo",
+			"title4": "FixtureName",
+			"title5": "LoadTime",
+			"title6": "UnloadTime"
+		},
+		"dj": {
+			"title1": "ProcessNo",
+			"title2": "ProcessName",
+			"title3": "CutterTypeNo",
+			"title4": "CutterName",
+			"title5": "Quantity"
+		},
+		"jt": {
+			"title1": "ProcessNo",
+			"title2": "ProcessName",
+			"title3": "MachineType",
+			"title4": "ProcessProgram",
+			"title5": "ProcessTime",
+			"title6": "TaktTime",
+			"title7": "ExpectedCapacity"
+		},
+		"zj": {
+			"title1": "ProcessNo",
+			"title2": "QualityNo",
+			"title3": "QualityName",
+			"title4": "QualityType",
+			"title5": "IsKey",
+			"title6": "Standard",
+			"title7": "MaxValue",
+			"title8": "MinValue",
+			"title9": "Unit",
+			"title10": "MaxLimit",
+			"title11": "MinLimit",
+			"title12": "Description"
+		},
+		"gyfa": {
+			"title1": "ProcessName",
+			"title2": "Create",
+			"title3": "CreateTime",
+			"title4": "Description",
+			"title5": "IsDefault",
+			"title6": "Operation"
+		}
+	}
+}

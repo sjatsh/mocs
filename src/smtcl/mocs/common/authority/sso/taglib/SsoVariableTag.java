@@ -10,7 +10,7 @@ import java.io.IOException;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-8
- * Time: ÏÂÎç3:59
+ * Time: ä¸‹åˆ3:59
  */
 public class SsoVariableTag extends SimpleTagSupport {
     private String var, target, type = "java.lang.Object";

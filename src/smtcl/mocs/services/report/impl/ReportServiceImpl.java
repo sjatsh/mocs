@@ -1,12 +1,6 @@
 package smtcl.mocs.services.report.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
+import java.util.*;
 
 
 import org.apache.http.impl.cookie.DateUtils;
@@ -16,6 +10,7 @@ import org.dreamwork.util.IDataCollection;
 import smtcl.mocs.pojos.job.TJobplanInfo;
 import smtcl.mocs.services.report.IReportService;
 import smtcl.mocs.utils.authority.DateUtil;
+import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.StringUtils;
 
 public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> implements IReportService{
@@ -112,7 +107,7 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 	@Override
 	public List<Map<String, Object>> dispatchDetailData(String nodeid,String jobplanStatus,
 			String partNo, Date jobCreateDate,Date jobCreateDateEnd, Date jobStartTime,Date jobStartTimeEnd,
-			String equSerialNo, String person) {
+			String equSerialNo, String person, Locale locale) {
 		String sql = "select distinct "
 			+ " job.taskNum as taskNum,"//批次号
 			+ " part.no as partNo,"//零件编号
@@ -133,16 +128,18 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
  			+ " statusinfo.name as jobst,"//工单状态
 			+ " jobplan.status as jobplanStatus,"//批次状态
 		    + " statusinfo2.name as jobplanst,"//批次状态
-		    + " workevents.operator_no as person"
+		    + " member.name as person"
 		 + " from t_jobplan_info jobplan,"
 		 	+ " t_jobdispatchlist_info job,"
 		 	+ " t_part_type_info part,"
 		 	+ " t_process_info process,"
 		 	+ " t_status_info statusinfo,"
 		 	+ " t_status_info statusinfo2,"
+		 	+ " t_member_info member,"
 		 	+ " t_userequworkevents workevents"
 		 + " where" 
-			+ " job.jobplanID = jobplan.ID" 
+			+ " job.jobplanID = jobplan.ID"
+			+ " and member.no = workevents.operator_no" 
 			+ " and job.processID = process.ID"
 			+ " and job.status = statusinfo.id"
 			+ " and jobplan.status = statusinfo2.id"
@@ -151,14 +148,13 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 			+ " and job.no = workevents.cuttingTask"
 			+ " and job.nodeid='"+nodeid+"'";
 		//以下是过滤查询条件
-		if(!StringUtils.isEmpty(jobplanStatus)){
+		if(!StringUtils.isEmpty(jobplanStatus) && !jobplanStatus.equals("0")){
 			sql += " and jobplan.status="+Integer.parseInt(jobplanStatus);
 		}
 		if(!StringUtils.isEmpty(partNo)){
 			sql += " and part.id="+Integer.parseInt(partNo);
 		}
-		if(!StringUtils.isEmpty(equSerialNo)){
-//			sql += " and equ.equ_ID="+Integer.parseInt(equSerialNo);
+		if(!StringUtils.isEmpty(equSerialNo) && !equSerialNo.equals("Select")&& !equSerialNo.equals("请选择")){
 			sql += " and workevents.equ_SerialNo='"+equSerialNo+"'";
 		}
 		if(jobCreateDate!=null){
@@ -173,10 +169,20 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 		if(jobStartTimeEnd != null){
 			sql += " and job.plan_starttime < DATE_FORMAT('"+DateUtils.formatDate(jobStartTimeEnd, "yyyy-MM-dd")+"','%Y-%m-%d %T')";
 		}
-		if(!StringUtils.isEmpty(person)){
-			sql += " and workevents.operator_no='"+person+"'";
+		if(!StringUtils.isEmpty(person) && !person.equals("Select") && !person.equals("请选择")){
+			sql += " and member.id="+Long.parseLong(person);
 		}
-		return dao.executeNativeQuery(sql);
+        List<Map<String,Object>> listMap = dao.executeNativeQuery(sql);
+        if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+            Map<String,String> statusMap = Constants.statusMap;
+            for(Map<String,Object> map : listMap) {
+                String key = map.get("jobst").toString();
+                map.put("jobst", statusMap.get(key));
+                String key1 = map.get("jobplanst").toString();
+                map.put("jobplanst", statusMap.get(key1));
+            }
+        }
+		return listMap;
 	}
 
 	@Override
@@ -246,14 +252,13 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 	}
 
 	@Override
-	public List<Map<String, Object>> getPersonList() {
-		String sql = "select "
-						+ " distinct" 
-						+ " workevents.operator_no as personName,"
-						+ " workevents.operator_no as personValue"
-				   + " from "
-				   		+ " t_userequworkevents workevents" 
-				   		+ " where workevents.operator_no <> '' ";
+	public List<Map<String, Object>> getPersonList(String nodeid) {
+		String sql = "SELECT"
+						+" member. NAME AS personName, "
+						+" member. id AS personValue "
+					+" FROM "
+						+" t_member_info member "
+					+" where member.nodeid= '"+nodeid+"'";
 		return dao.executeNativeQuery(sql);
 	}
 	/**
@@ -326,7 +331,7 @@ public class ReportServiceImpl extends GenericServiceSpringImpl<Object, String> 
 				+ " a.jobdispatchNo as jobdispatchNo,"
 				+ " a.processNum as processNum,"
 				+ " a.operatorNo as operatorNo,"
-				+ " DATE_FORMAT(a.operateDate,'%Y-%m-%d %T') as operateDate,"
+				+ " a.operateDate as operateDate,"
 				+ " a.operateReason as operateReason,"
 				+ " b.name as partName,"
 				+ " a.equSerialNo as equSerialNo,"

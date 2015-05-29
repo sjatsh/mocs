@@ -1,0 +1,22 @@
+{	
+	"top": {
+		"select_title":"产品型号",
+		"title1":"零件成本",
+		"title2":"分项成本",
+		"title3":"机台成本",
+		"pls_select":"请选择"
+	},
+	"content": {
+		"table": {
+			"title1":"产品号",
+			"title2":"人工",
+			"title3":"辅料",
+			"title4":"能源",
+			"title5":"折旧",
+			"title6":"主料"
+		},
+		"pie": {
+			"total":"合计"
+		}
+	}
+}

@@ -1,0 +1,237 @@
+/* 顶部工具栏 */
+.toolbar>.txt-toolbar {
+	margin-left: 0.57rem;
+}
+.toolbar>.input-toolbar {
+	margin-left: 0.25rem;
+	width: auto !important;
+}
+
+/* 内容区域 */
+.processlist {
+	position: relative;
+	width: 100%;
+	height: 8.22rem;
+}
+/* tab栏 */
+.tabbar {
+	position: relative;
+	width: 100%;
+	height: 0.55rem;
+	background: -ms-linear-gradient(top, #fcfdfe, #e1ecf0);        /* IE 10 */
+	background: -moz-linear-gradient(top, #fcfdfe, #e1ecf0);/*火狐*/ 
+	background: -webkit-linear-gradient(top, #fcfdfe, #e1ecf0);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(top, #fcfdfe, #e1ecf0);  /*Opera 11.10+*/
+	border: solid 1px #999;
+}
+.menu-tabbar {
+	position: relative;
+	float: left;
+	margin-top: 0.09rem;
+	margin-left: 0.08rem;
+	width: 1.35rem;
+	height: 0.45rem;
+	background: -ms-linear-gradient(bottom, #fcfdfe, #e1ecf0);        /* IE 10 */
+	background: -moz-linear-gradient(bottom, #fcfdfe, #e1ecf0);/*火狐*/ 
+	background: -webkit-linear-gradient(bottom, #fcfdfe, #e1ecf0);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(bottom, #fcfdfe, #e1ecf0);  /*Opera 11.10+*/
+	border: solid 1px #999;
+	border-radius: 0.08rem 0.08rem 0 0;
+	text-align: center;
+	font-size: 0.18rem;
+	line-height: 0.45rem;
+	color: #656565;
+	cursor: pointer;
+}
+.menu-tabbar.act {
+	margin-top: 0.06rem;
+	width: 1.7rem;
+	height: 0.48rem;
+	background: #fff;
+	border-bottom: none;
+	cursor: default;
+}
+/* 内容栏 */
+.processlist-content {
+	position: relative;
+	width: 100%;
+	height: 7.67rem;
+	display: none;
+}
+
+/* 内容行 */
+.processlist-content-line {
+	position: relative;
+	width: 100%;
+	padding: 0.36rem 0;
+	border-bottom: solid 1px #999;
+}
+.processlist-content-line.high {
+	height: 1.68rem;
+}
+.processlist-content-line.jtTable {
+	padding: 0;
+	height: 4.05rem;
+}
+.processlist-content-line.wlTable {
+	padding: 0;
+	height: 6.43rem;
+}
+.processlist-content-line.zyTable {
+	padding: 0;
+	height: 2.39rem;
+}
+.processlist-content-line.cbSpace {
+	padding: 0;
+	height: 4.63rem;
+}
+.processlist-content-line>.txt-toolbar {
+	margin-left: 3.5%;
+}
+.processlist-content-line>.require {
+	margin: 0 0.06rem;
+	font-size: 0.3rem;
+	line-height: 0.42rem;
+	vertical-align: middle;
+	color: red;
+}
+.processlist-content-line>input[type="text"].input-toolbar,.processlist-content-line>select.select-toolbar {
+	margin-top: 0;
+	width: 20.4%;
+}
+.div-upload {
+	position: absolute;
+	display: inline-block;
+	width: 81.5%;
+	height: 0.96rem;
+}
+.div-upload .rf-fu-hdr {
+	border: none 0;
+	border-bottom: solid 1px #D4CFC7;
+	background: #eee;
+}
+.div-upload .rf-fu-btn-add {
+	width: 1.27rem;
+	height: 0.29rem;
+	background-color: transparent;
+	background-image: url(../../images/admin/btn_upload_bg.png);
+	background-size: 100% 100%;
+	border: none 0;
+}
+.div-upload .rf-fu-btn-cnt-add {
+	margin-top: 0.04rem;
+	background-image: none;
+	font-size: 0.14rem;
+	text-indent: 1em;
+	color: #fff;
+}
+.div-upload .rf-fu-lst {
+	height: 0.58rem !important;
+}
+textarea.textarea {
+	width: 81.5%;
+	height: 0.96rem;
+	font-size: 0.18rem;
+}
+
+/* 流程控制栏 */
+.div-conctrl {
+	width: 100%;
+	height: 0.74rem;
+	background: -ms-linear-gradient(top, #fff, #e8ebed);        /* IE 10 */
+	background: -moz-linear-gradient(top, #fff, #e8ebed);/*火狐*/ 
+	background: -webkit-linear-gradient(top, #fff, #e8ebed);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(top, #fff, #e8ebed);  /*Opera 11.10+*/
+	text-align: center;
+}
+.div-conctrl-content {
+	display: inline-block;
+	width: auto;
+	padding: 0.12rem 0.5rem !important;
+	height: 0.5rem;
+	margin-top: 0.13rem;
+	background: #fff;
+	border: solid 1px #7c7c7c;
+}
+.btn-conctrl {
+	position: relative;
+	display: inline-block;
+	margin: 0 0.4rem;
+	height: 0.22rem;
+	font-family: inherit;
+	font-size: 0.22rem;
+	line-height: 0.22rem;
+	text-decoration: none;
+	color: #656565 !important;
+	cursor: pointer;
+	z-index: 0;
+}
+.btn-conctrl:active {
+	color: #333 !important;
+}
+.btn-save:before {
+	content: '';
+	display: inline-block;
+	margin-right: 0.1rem;
+	width: 0.23rem;
+	height: 0.22rem;
+	vertical-align: top;
+	background-image: url(../../images/admin/icon_save.png);
+	background-size: 100% 100%;
+	z-index: 0;
+}
+.btn-prev:before {
+	content: '';
+	display: inline-block;
+	margin-right: 0.1rem;
+	width: 0.23rem;
+	height: 0.22rem;
+	vertical-align: top;
+	background-image: url(../../images/admin/icon_arrow_prev.png);
+	background-size: 100% 100%;
+	z-index: 0;
+}
+.btn-next:after {
+	content: '';
+	display: inline-block;
+	margin-left: 0.1rem;
+	width: 0.23rem;
+	height: 0.22rem;
+	vertical-align: top;
+	background-image: url(../../images/admin/icon_arrow_next.png);
+	background-size: 100% 100%;
+	z-index: 0;
+ }
+.btn-cur {
+	color: #fff !important;
+}
+.btn-cur:after {
+	position: absolute;
+	width: 200%;
+	height: 0.65rem;
+	content: '';
+	background-image: url(../../images/admin/icon_btn_current.png);
+	left: -50%;
+	top: -0.25rem;
+	background-size: 100% 100%;
+	z-index: -1;
+}
+
+/* 表格底部栏 */
+.toolbar-bottom {
+	position: relative;
+	width: 100%;
+	height: 0.5rem;
+	background: -ms-linear-gradient(bottom, #fff, #e8ebed);        /* IE 10 */
+	background: -moz-linear-gradient(bottom, #fff, #e8ebed);/*火狐*/ 
+	background: -webkit-linear-gradient(bottom, #fff, #e8ebed);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(bottom, #fff, #e8ebed);  /*Opera 11.10+*/
+	border-bottom: solid 1px #999;
+}
+.toolbar-bottom>.btn-toolbar {
+	width: 0.8rem;
+	height: 0.38rem;
+	line-height: 0.38rem;
+	margin-left: 0.57rem;
+	margin-top: 0.06rem;
+}

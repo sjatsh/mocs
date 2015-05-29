@@ -1,0 +1,34 @@
+{	"zwxxinfo":"no info.",
+	"top": {
+		"title1":"Processing Task",
+		"title2":"Efficiency",
+		"title3":"Output"
+	},
+	"content": {
+		"gd":"Work Order:",
+		"wcjh":" Actual/Target:",
+		"sysj":"Time Remain:",
+		"kkyl":"Availability ",
+		"bxx":"Performance",
+		"zlzs":"Quality",
+		"rcl":"Daily Output ",
+		"jjsd":"Feed Rate",
+		"sjfb":"Time Distribution",
+		"dqgj":"Current Part",
+		"ycl":"Monthly Output",
+		"zzzs":"Spindle Rate",
+		"qxsj":"Cutting Time",
+		"fzsj":"Idle Running Time",
+		"zbsj":"Auxiliary Time",
+		"kxsj":"Idle Time",
+		"tzsj":"Stopping Time",
+		"gjid":"Part ID:",
+		"gjmc":"Part Name:",
+		"gxmc":"Process Name:",
+		"timesj":"Hours",
+		"lj":"Part",
+		"gx":"Process",
+		"sl":"Quantity",
+		"bfb":"Percent"
+	}
+}

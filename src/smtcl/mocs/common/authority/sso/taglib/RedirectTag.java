@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-8
- * Time: …œŒÁ11:47
+ * Time: ‰∏äÂçà11:47
  */
 public class RedirectTag extends SimpleTagSupport {
     public static final String AUTO_REDIRECT_FORM = "__auto_form";

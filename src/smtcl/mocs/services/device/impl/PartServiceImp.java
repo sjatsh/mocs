@@ -923,13 +923,21 @@ public class PartServiceImp extends GenericServiceSpringImpl<TNodes, String> imp
 			 */
 			buzhou="保存物料报错";
 			for(MaterialsModel mm:materialList){
-				 TProcessmaterialInfo tpinfo=new TProcessmaterialInfo();
-				 List<TMaterailTypeInfo>  tmaterail=this.getSelectTMaterailTypeInfoByNo(mm.getWlNo());
-				 tpinfo.setTMaterailTypeInfo(tmaterail.get(0));//设置物料类型
-				 tpinfo.setRequirementType(mm.getWlType());
-				 tpinfo.setRequirementNum(Integer.parseInt(mm.getWlNumber()));
-				 tpinfo.setTProcessInfo(tProcessInfo);//设置工序
-				 commonDao.save(tpinfo);//保存物料信息
+				 String mphql=" from TProcessmaterialInfo where TProcessInfo.id="+tProcessInfo.getId()+" "
+				 		    + " and TMaterailTypeInfo.no='"+mm.getWlNo()+"'";
+				 List list=commonDao.executeQuery(mphql);
+				 if(null!=list&&list.size()>0){
+					 return "物料重复";
+				 }else{
+					 TProcessmaterialInfo tpinfo=new TProcessmaterialInfo(); 
+					 List<TMaterailTypeInfo>  tmaterail=this.getSelectTMaterailTypeInfoByNo(mm.getWlNo());
+					 tpinfo.setTMaterailTypeInfo(tmaterail.get(0));//设置物料类型
+					 tpinfo.setRequirementType(mm.getWlType());
+					 tpinfo.setRequirementNum(Integer.parseInt(mm.getWlNumber()));
+					 tpinfo.setTProcessInfo(tProcessInfo);//设置工序
+					 commonDao.save(tpinfo);//保存物料信息
+				 }
+				 
 			 }
 			
 			/**

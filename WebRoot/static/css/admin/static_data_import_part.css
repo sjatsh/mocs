@@ -1,0 +1,33 @@
+.toolbar>.input-toolbar,.toolbar>.select-toolbar,.toolbar>.btn-toolbar {
+	margin-left: 0.57rem;
+}
+.toolbar>.select-toolbar {
+	width: 2rem;
+}
+
+/* 左侧表格 */
+.div-input,.div-output {
+	position: relative;
+	float: left;
+	margin: 0 5%;
+	width: 40%;
+	height: 8.22rem;
+	border: solid 1px #666;
+}
+/* 右侧表格 */
+.div-output {
+	margin-top: 0.66rem;
+	height: 7.56rem;
+}
+/* 中间图标 */
+.div-middle {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 1.05rem;
+	height: 0.74rem;
+	margin-top: -0.53rem;
+	margin-left: -0.53rem;
+	background-image: url(../../images/admin/icon_arrow_import.png);
+	background-size: 100% 100%;
+}

@@ -13,7 +13,7 @@ import org.dreamwork.persistence.Sort;
 import org.dreamwork.util.IDataCollection;
 
 /**
- * 角色相关的service
+ * 角色相关的service?
  *
  * User: gjy
  * Date: 2012-10-15
@@ -22,7 +22,7 @@ public interface IRoleService extends IGenericService<Role, String> {
 	public<T> List<T> find (Class<T> type, List<Sort> sort, Collection<Parameter> parameters);
     public<T> List<T> find (Class<T> type, List<Sort> sort, Parameter... parameters);
     /**
-     * 根据当前用户获取权限树节
+     * 根据当前用户获取权限树节?
      * @param locale 
      * @param userId 
      */
@@ -36,7 +36,7 @@ public interface IRoleService extends IGenericService<Role, String> {
 
     public List<RRolePage> queryPermissionByRoleId(String roleId);
 	/**
-     * 根据角色id获取已设置用户列
+     * 根据角色id获取已设置用户列?
      */
 	public IDataCollection<RUserRoleOrgGroup> queryUsersByRoleId(int pageNo,int pageSize,String roleId, String userId);
 	/**
@@ -49,15 +49,15 @@ public interface IRoleService extends IGenericService<Role, String> {
      */
 //	public boolean saveButtonsByRoleId(Long roleId, String buttonIds);
 	/**
-     * 根据角色id设置页面权限和按钮权
+     * 根据角色id设置页面权限和按钮权?
      */
 //	public boolean savePermissionByRoleId(Long roleId, String nodeId);
 	/**
-	 * 删除当前角色下的按钮;
+	 * 删除当前角色下的?按钮;
 	 */
 	public void deleteButtonsByRoleId(String roleId,String pageId);
 	/**
-	 * 删除当前角色下的用户;
+	 * 删除当前角色下的?用户;
 	 */
 //	public void deleteUsersByRoleId(Long roleId);
 	/**
@@ -69,7 +69,7 @@ public interface IRoleService extends IGenericService<Role, String> {
     public void saveOrUpdate(Role role, List<RUserRoleOrgGroup> relList, List<RRoleButton> rbtnList, List<RRolePage> rpageList);
 
     /**
-    * 根据角色id删除角色及关联数
+    * 根据角色id删除角色及关联数?
     * @param roleId
     * @return
     */

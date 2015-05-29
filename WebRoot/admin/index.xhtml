@@ -2,60 +2,52 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
-	
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<!-- Mimic Internet Explorer 8 -->
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
 	<title>车间管理系统</title>
 
-<h:outputScript library="js" name="common_page.js"></h:outputScript>
-<h:outputScript library="js" name="common.js"></h:outputScript>
-<h:outputScript library="js/JqueryUi" name="jquery-ui-1.10.3.custom.js"></h:outputScript>
-<!-- hightChart JS加载 -->
-<h:outputScript library="js" name="highcharts.js"></h:outputScript>
-<h:outputScript library="js" name="exporting.js"></h:outputScript>
-
-<link rel="stylesheet" href="../css/com_richfaces_overwrite.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/common_page_info.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/common.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/jquery.mCustomScrollbar.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/other.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/stat.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/view.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/compare.css" type="text/css"></link>
-<link rel="stylesheet" href="../css/demo.css" type="text/css"></link>
-
-<script language="javascript" type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
-<script language="javascript">
-function imgdragstart(){return false;}
-function openUrl(url) {    
-    features="status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";             
-    winId=window.open(url,'newwindow',features);
-}
-</script>
+	<!-- <link rel="stylesheet" href="../css/com_richfaces_overwrite.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/common_page_info.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/common.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/jquery.mCustomScrollbar.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/other.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/stat.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/view.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/compare.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/demo.css" type="text/css"></link> -->
+	<link rel="stylesheet" href="../css/admin/font-awesome.min.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/admin/general.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/admin/index.css" type="text/css"></link>
+	
+	<!-- <h:outputScript library="js/JqueryUi" name="jquery-ui-1.10.3.custom.js"></h:outputScript>
+	hightChart JS加载
+	<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+	<h:outputScript library="js" name="exporting.js"></h:outputScript> -->
+	<!-- 通用 JS加载 -->
+	<h:outputScript library="js" name="common.js"></h:outputScript>
+	<h:outputScript library="js" name="common_page.js"></h:outputScript>
+	<!-- i18next JS加载 -->
+	<h:outputScript library="js" name="i18next-1.7.4.min.js"></h:outputScript>
+	<!-- 日期控件 JS加载 -->
+	<script language="javascript" type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
+	<!-- 框架 JS加载 -->
+	<h:outputScript library="js/admin" name="index.js"></h:outputScript>
 </h:head>
 
-<h:body onload="showClock()">
+<h:body>
 	<h:form id="myform">
 		<div class="wrapper">
-			<div style="width:1024px; margin: 0 auto; height: 100%;display: none;z-index:20;
-				position: absolute;" id="loadbtjpg" onclick="javascript:alert('请不要重复点击');">
-				<div style="position: absolute;width: 300px;height: 300px;
-					 margin-left: -70px;margin-top: 310px;" >
-					<img src="images/order/loading.gif" alt="请等待!" />
-				 </div>
-			</div>
-			
-			
 			<div class="frame-body">
-				<h:panelGroup id="topiframe">
-					<ui:include src="menu_top.xhtml" />
-				</h:panelGroup>
+				<div class="frame-top">
+					<h:panelGroup id="topiframe">
+						<ui:include src="menu_top.xhtml" />
+					</h:panelGroup>
+				</div>
 			
 				<div class="frame-content">
 					<div class="div-left">
@@ -75,25 +67,36 @@ function openUrl(url) {
 					</div>
 				</div>
 				
-				<div class="div-bottom">
-					<h:panelGroup id="footiframe">
-						<ui:include src="menu_foot.xhtml" />
-					</h:panelGroup>
-				</div>
-				<div class="div-bottom-shadow">
-					<img src="../images/demo/bottom_shadow.png" />
-				</div>
+				<ui:remove>
+					<div class="div-bottom">
+						<h:panelGroup id="footiframe">
+							<ui:include src="menu_foot.xhtml" />
+						</h:panelGroup>
+					</div>
+				</ui:remove>
 			</div>
-			
 		</div>
 		<!-- 初始化RICHFACES部分组件 -->
-	
+		<rich:calendar popup="true" locale="en" value="#{organizeMaterielManageBean.startTime}" datePattern="yyyy-MM-dd"
+			cellWidth="10px" cellHeight="20px" style="display:none;"/> 
 	</h:form>
 	<div style="display: none;">
 	<rich:fileUpload></rich:fileUpload>
 	</div>
-<script language="javascript">
-	for(i in document.images)document.images[i].ondragstart=imgdragstart;
-</script>	
+	<script language="javascript">
+		$(document).ready(function() {
+			document.documentElement.style.fontSize = 100 / 1080 * hjb51 + "px";
+			//调整框架大小
+			$(".wrapper").width(wjb51).height(hjb51);
+			//禁用图片拖拽
+			for(i in document.images) {
+				document.images[i].ondragstart = function() {
+					return false;
+				}	
+			}
+			//显示当前时间
+			showClock();
+		})
+	</script>	
 </h:body>
 </html>

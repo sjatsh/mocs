@@ -1,6 +1,7 @@
 package smtcl.mocs.beans.device;
 
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,12 +12,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.dreamwork.persistence.ServiceFactory;
 
 import smtcl.mocs.pojos.device.TNodes;
 import smtcl.mocs.pojos.device.TUser;
+import smtcl.mocs.services.device.IAuthorizeService;
 import smtcl.mocs.services.device.ICostManageService;
 import smtcl.mocs.services.device.IDeviceService;
 import smtcl.mocs.services.device.IOrganizationService;
@@ -35,7 +38,8 @@ import smtcl.mocs.utils.device.StringUtils;
  */
 @ManagedBean(name="factoryProfileBean")
 @SessionScoped
-public class FactoryProfileBean {
+public class FactoryProfileBean implements Serializable{
+	private String loadmenu;
 	/**
 	 * 设备业务逻辑
 	 */
@@ -44,8 +48,9 @@ public class FactoryProfileBean {
 	 * 权限接口实例
 	*/
 	private IOrganizationService organizationService=(IOrganizationService)ServiceFactory.getBean("organizationService");//获取注入;
+	private IAuthorizeService authorizeService = (IAuthorizeService) ServiceFactory.getBean("authorizeService");
 	    
-	/**
+	/** 
 	 * x轴坐标
 	 */
 	private String xz; 
@@ -149,7 +154,6 @@ public class FactoryProfileBean {
 	 * 构造方法
 	 */
 	public FactoryProfileBean(){
-	   
 		//获取用户的权限验证 
 		 TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
 		 workshop=organizationService.returnWorkshop(user.getUserId(),Constants.SBZL_PAGE_ID);
@@ -163,10 +167,10 @@ public class FactoryProfileBean {
 	     HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();		
       	 Map<String, String> mmm = StringUtils.getUrl(request.getServletContext());
 //      defnodeid = (String)mmm.get("defaultNode");
+      	
       	 String defaultNode=(String)mmm.get("defaultNode");
         
-		 HttpSession session = (HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(true);
+		 HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
       	 
 	   	for (int i=0;i<workshop.size();i++) {
 	   		TNodes t=(TNodes)workshop.get(i);
@@ -181,7 +185,7 @@ public class FactoryProfileBean {
 	   	}
 	    	 
    	if(StringUtils.listIsNull(workshop)){
-   		 TNodes t=(TNodes)workshop.get(0);
+   		 //TNodes t=(TNodes)workshop.get(0);
    		 String nodeid=(String)session.getAttribute("nodeid"); //替换上一行
    		 if(!StringUtils.isEmpty(nodeid))
    		 {
@@ -239,6 +243,10 @@ public class FactoryProfileBean {
 				//把节点ID存入session
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 			session.setAttribute("nodeid", nodeid);
+			
+			HttpServletResponse response = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			StringUtils.delCookie(request,response, "equSerialNo");
 		}
 	}
 	
@@ -276,7 +284,7 @@ public class FactoryProfileBean {
 	 * @param nodeid
 	 */
 	public void refreshData(){
-		 System.out.println("-----------------定时刷新方法调用-----------------");
+		 System.out.println("----------------------------------定时刷新方法调用----------------------------------");
 		 if(null!=selectTNodesId){
 			 equipmentName="";
 	    	 xz="";
@@ -293,6 +301,7 @@ public class FactoryProfileBean {
 				 setDate(list);
 	    	 }
 		 }
+		System.out.println("----------------------------------定时刷新方法调用结束----------------------------------");
 	}
 	/**
 	 * 定时刷新调用方法
@@ -445,6 +454,9 @@ public class FactoryProfileBean {
 			 String path="";
 			 if(null!=tf.get("path")&&!"".equals(tf.get("path"))){
 				 String sbimgUrl=tf.get("path")+"";
+				 //测试代码
+//				 String sbimgUrl="equ.png";
+						 
 				 pathThree=pathThree+","+sbimgUrl;
 				 Date da=new Date();
 				 if(null==tf.get("updateTime")||"".equals(tf.get("updateTime"))){
@@ -659,6 +671,8 @@ public class FactoryProfileBean {
 		this.parentId = parentId;
 	}
 	public String getBgpath() {
+		
+		
 		return bgpath;
 	}
 	public void setBgpath(String bgpath) {
@@ -669,6 +683,78 @@ public class FactoryProfileBean {
 	}
 	public void setEquInventory(List<Map<String, Object>> equInventory) {
 		this.equInventory = equInventory;
+	}
+	public String getLoadmenu() {
+		// 获取cook并设置默认节点
+		TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		
+		String defNode = StringUtils.getCookie(request, "defNode");
+		if (null != defNode && !"".equals(defNode)) {
+			try {
+				List<smtcl.mocs.beans.authority.cache.TreeNode> list = authorizeService.getAuthorizedChildNodes(user.getUserId(), "mocs.sbgl.page.sbgl","-999");
+				for (int i = 0; i < list.size(); i++) {
+					smtcl.mocs.beans.authority.cache.TreeNode t = (smtcl.mocs.beans.authority.cache.TreeNode) list.get(i);
+					String name = t.getNodeId();
+					if (name != null && name.equals(defNode)) { // 得到默认的节点
+						selectName = t.getNodeName();
+						
+						//bgpath = t.getPath();// 获取节点背景图
+						String nodeid = t.getNodeId();
+						session.setAttribute("nodeid", nodeid);
+						List nlist=deviceService.getNodeName(nodeid);
+						Map<String,Object> nMap=(Map<String,Object>)nlist.get(0);
+						bgpath=null==nMap.get("path")?"":nMap.get("path").toString();
+						break;
+					}
+				}
+				
+				if (StringUtils.listIsNull(list)) {
+					// TNodes t=(TNodes)workshop.get(0);
+					String nodeid = (String) session.getAttribute("nodeid"); // 替换上一行
+					if (!StringUtils.isEmpty(nodeid)) {
+						String nodeids = deviceService.getNodeAllId(nodeid);
+						ppcr = getpper(nodeid);
+						nodp = getDayNumber(nodeid);
+						equday = getEquEfficiency(nodeids);
+						// rcr=df.format(Double.parseDouble(costManageService.getRCR(nodeid))*100);
+						selectTNodesId = nodeid;
+						if (nodeids.length() > 0) {
+							List<Map<String, Object>> list2 = deviceService.getNodesAllEquNameStruts(nodeids);
+							if (null != list2 && list2.size() > 0) {
+								setDate(list2);
+							} else {
+								equipmentName = "";
+								xz = "";
+								yz = "";
+								image = "";
+								ipAddress = "";
+								pathThree = "";
+							}
+						}
+					}
+					equInventory=deviceService.getEquInventoryInfo(selectTNodesId);
+				   	parentId = deviceService.getParentIdByNodeid(selectTNodesId);
+					
+				}
+				// StringUtils.se
+				StringUtils.saveCookie(request, response, "defNode", "");
+				// StringUtils.delCookie(request, response, "defNode");
+				String dd = StringUtils.getCookie(request, "defNode");
+				System.out.println("defNode" + dd);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+			
+		}
+		return loadmenu;
+	}
+	public void setLoadmenu(String loadmenu) {
+		this.loadmenu = loadmenu;
 	}
 	
 }

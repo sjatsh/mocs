@@ -1,0 +1,15 @@
+{	
+	"top": {
+		"title1":"Feed Batch Report",
+		"title2":"Date From",
+		"title3":"Date To",
+		"title4":"Search"
+	},
+	"content": {
+		"ljh":"Part No.",
+		"pch":"Batch No.",
+		"tlsl":"Feed Qty",
+		"kcsl":"Stock Qty",
+		"wcsl":"Completed Qty"
+	}
+}

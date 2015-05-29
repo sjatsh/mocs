@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-9-29
- * Time: ÏÂÎç2:36
+ * Time: ä¸‹åˆ2:36
  */
 public class SsoScanner extends Thread {
     public static final Object locker = new Object ();

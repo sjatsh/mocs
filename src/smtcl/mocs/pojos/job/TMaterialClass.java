@@ -2,12 +2,15 @@ package smtcl.mocs.pojos.job;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OrderBy;
+
 
 /**
  * TMaterialClass entity. @author MyEclipse Persistence Tools
@@ -25,16 +29,16 @@ public class TMaterialClass implements java.io.Serializable {
 
 	// Fields
 
-	private Long MClassid;
-	private TMaterialClass TMaterialClass;
-	private String MClassname;
-	private String MClassno;
-	private String MClasstype;
-	private String MMemo;
-	private Integer MClasslevel;
-	private Integer MStatus;
-	private Double MDensity;
-	private String nodeId;
+	private Long MClassid;//物料类别id
+	private TMaterialClass TMaterialClass;//父节点id
+	private String MClassname;//物料类别名称
+	private String MClassno;//物料类别编码
+	private String MClasstype;//'物料类别型号/牌号
+	private String MMemo;//备注
+	private Integer MClasslevel;//物料类别级别(预留)
+	private Integer MStatus;//当前状态
+	private Double MDensity;//密度
+	private String nodeId;//节点ID----------------------------------(A3)
 	private Set<TMaterialClass> TMaterialClasses = new HashSet<TMaterialClass>(
 			0);
 
@@ -61,6 +65,24 @@ public class TMaterialClass implements java.io.Serializable {
 		this.MMemo = MMemo;
 		this.MClasslevel = MClasslevel;
 		this.MStatus = MStatus;
+		this.TMaterialClasses = TMaterialClasses;
+	}
+	
+	/** full constructor */
+	public TMaterialClass(TMaterialClass TMaterialClass, String MClassname,
+			String MClassno, String MClasstype, String MMemo,
+			Integer MClasslevel, Integer MStatus, Double MDensity,
+			String nodeId, Set<TMaterialClass> TMaterialClasses,
+			Set<TMaterailTypeInfo> TMaterailTypeInfos) {
+		this.TMaterialClass = TMaterialClass;
+		this.MClassname = MClassname;
+		this.MClassno = MClassno;
+		this.MClasstype = MClasstype;
+		this.MMemo = MMemo;
+		this.MClasslevel = MClasslevel;
+		this.MStatus = MStatus;
+		this.MDensity = MDensity;
+		this.nodeId = nodeId;
 		this.TMaterialClasses = TMaterialClasses;
 	}
 

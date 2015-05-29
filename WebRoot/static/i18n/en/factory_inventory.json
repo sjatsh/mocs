@@ -1,0 +1,17 @@
+{	
+	"top": {
+		"title1":"Plan Completion Rate",
+		"title2":"Production Quantity Today",
+		"title3":"Complete Set Rate",
+		"title4":"Overall Equipment Efficiency"
+	},
+	"content": {
+		"table_title1":"Machine Name",
+		"table_title2":"Serial Number",
+		"table_title3":"Status",
+		"table_title4":"Mode",
+		"table_title5":"Process",
+		"table_title6":"Part No",
+		"table_title7":"Staff"
+	}
+}

@@ -34,7 +34,7 @@ public class WSDiagnoseServiceMVC {
 	
 	/**
 	 * 获取设备诊断信息
-	 * @param equSerialNo 
+	 * @param equSerialNo 机床设备序列号
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/getDiagnoseInfo", method = RequestMethod.GET)
@@ -64,7 +64,7 @@ public class WSDiagnoseServiceMVC {
 	
 	/**
 	 * 获取机床部件信息
-	 * @param equSerialNo 
+	 * @param equSerialNo 机床设备序列号
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/getMachineComponentInfo", method = RequestMethod.POST)
@@ -86,7 +86,7 @@ public class WSDiagnoseServiceMVC {
 	
 	/**
 	 * 获取机床报修列表
-	 * @param equSerialNo 
+	 * @param equSerialNo 机床设备序列号
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/getDiagnoseList", method = RequestMethod.POST)

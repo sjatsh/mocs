@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+	<meta charset="UTF-8"></meta>
+	<title>车间管理</title>
+	
+	<link rel="stylesheet" type="text/css" href="../css/general.css"></link>
+    <link rel="stylesheet" type="text/css" href="../css/map.css" />
+    
+	<h:outputScript library="js" name="jquery-1.9.1.min.js"></h:outputScript>
+	<h:outputScript library="js" name="common.js"></h:outputScript>
+	<h:outputScript library="js" name="autosize.js"></h:outputScript>
+	<h:outputScript library="js" name="i18next-1.7.4.min.js"></h:outputScript>
+</h:head>
+<h:body>
+	<div class="wrapper">
+		<div id="mapAni">
+			<object type="application/x-shockwave-flash" data="../images/map/mapAni_2.swf" width="1920" height="1080"></object>
+		</div> 
+		<img class="mapBg hidden" id="map_all" src="../images/map/map_all.png" />
+		<div class="mapDatas"></div>
+		<img class="mapBg hidden" id="map_china" src="../images/map/map_china.png" />
+		<div class="mapPoints"></div>
+		</div>
+</h:body>
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js/page" name="map.js"></h:outputScript>
+</html>

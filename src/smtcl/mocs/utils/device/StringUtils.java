@@ -1,4 +1,4 @@
-package smtcl.mocs.utils.device;
+ package smtcl.mocs.utils.device;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -12,13 +12,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +21,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.richfaces.model.UploadedFile;
 
@@ -149,7 +145,30 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 		second=(int)number%60;
 		return  day+"天 "+hour+"小时 "+minute+"分钟 "+second+"秒";
 	}
-	
+
+    /**
+     * 输入一个n秒的参数  返回一个字符串
+     * @param object 根据需要可重写该方法 改变参数类型的不同
+     * @return String 格式为 xx天xx小时xx分钟xx秒
+     */
+    public static String SecondIsDDmmss(Object object,Locale locale) {
+        long second=Long.parseLong(object.toString());
+        int day, hour, minute;
+
+        double number;
+        day=(int)second/86400;
+        number=(second%86400);
+        hour=(int)number/3600;
+        number=number%3600;
+        minute=(int)number/60;
+        second=(int)number%60;
+        if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+            return day+"d "+hour+"h "+minute+"m "+second+"s";
+        }else {
+            return day + "天 " + hour + "小时 " + minute + "分钟 " + second + "秒";
+        }
+    }
+
 	/**
 	 * 根据传入的字符串时间，返回它的秒数
 	 * @param str   格式为 xx天xx小时xx分钟xx秒
@@ -461,6 +480,7 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
         Cookie cookie = new Cookie(name,value);
     	//cookie的有效期  30天
         cookie.setMaxAge(30*24*60*60*1000);
+        cookie.setPath("/");
         response.addCookie(cookie);
 	}
 	
@@ -627,6 +647,87 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 		}
 		return proMap;
 	}
+
+	/**
+	 * 获取属性文件传入的属性  
+	 * ps  如果传入参数为null 则默认读取所有属性
+	 * @param context 上下文
+	 * @param Url  属性文件路劲
+	 * @param parm 需要获取的属性名字
+	 * @return
+	 */
+	public static Map<String, String> getUrlForAll(ServletContext context,String Url,String ...parm) {
+		Map<String, String> proMap = new HashMap<String, String>();
+		String configPath = "/WEB-INF/"+Url;
+		String base = context.getRealPath ("/");
+		Properties p;
+		InputStream inputStream;
+		try {
+			//读取配置文件里的url
+			inputStream = new BufferedInputStream(new FileInputStream(base + configPath));
+			p = new Properties();
+			p.load(inputStream);
+			if(null!=parm&&parm.length>0){
+				for(int i=0;i<parm.length;i++){
+					proMap.put( parm[i],p.getProperty(parm[i]));
+				}
+			}else{
+				Iterator itr =p.entrySet().iterator();//遍历
+				while (itr.hasNext()) {
+				Entry e = (Entry)itr.next();
+				//System.err.println(e.getKey()+":"+e.getValue());//获取对应的值
+				proMap.put(e.getKey()+"",e.getValue()+"");
+				}
+			}
+			
+			inputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return proMap;
+		
+		//获取属性文件全部属性
+//		 HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();		
+//   	 Map<String, String> map=StringUtils.getUrlForAll(request.getServletContext(), "ErpParm.properties", null);
+//   	 Collection<String> c = map.values();
+//        Iterator it = c.iterator();
+//        for (; it.hasNext();) {
+//            System.out.println(it.next());
+//        }
+		//获取属性文件部分属性
+//        Map<String, String> map2=StringUtils.getUrlForAll(request.getServletContext(), "ErpParm.properties","test1","test2","test3");
+//        Collection<String> d = map2.values();
+//        Iterator itd = d.iterator();
+//        for (; itd.hasNext();) {
+//            System.out.println(itd.next());
+//        }
+	}
+	/**
+	 * 获取属性文件单条属性
+	 * @param context 上下文
+	 * @param Url  属性文件路劲
+	 * @param parm 需要获取的属性名字
+	 * @return
+	 */
+	public static String getUrlForOne(ServletContext context,String Url,String parm) {
+		String proMap = "";
+		String configPath = "/WEB-INF/"+Url;
+		String base = context.getRealPath ("/");
+		Properties p;
+		InputStream inputStream;
+		try {
+			//读取配置文件里的url
+			inputStream = new BufferedInputStream(new FileInputStream(base + configPath));
+			p = new Properties();
+			p.load(inputStream);
+			proMap=p.getProperty(parm);
+			inputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return proMap;
+	}
+	
 	
 	/**
 	 * 手机合法性验证

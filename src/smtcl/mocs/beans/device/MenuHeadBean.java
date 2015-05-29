@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.dreamwork.jasmine2.web.IWebControl;
 import org.dreamwork.persistence.Operator;
 import org.dreamwork.persistence.Parameter;
 import org.dreamwork.persistence.ServiceFactory;
@@ -104,6 +105,7 @@ public class MenuHeadBean implements Serializable {
 	 * 权限接口实例
 	 */
 	private IAuthorizeService authorizeService = (IAuthorizeService) ServiceFactory.getBean("authorizeService");
+	private String userName;
 
 	public String getUrlPath() {
 		System.out.println(urlPath);
@@ -264,10 +266,52 @@ public class MenuHeadBean implements Serializable {
 			urlPath = "../product/product_process_list.xhtml";
 		}else if(parm!=null&&parm.indexOf("gczlsj")>=0){
 			urlPath = "../product/process_quality_list.xhtml";
+		}else if(parm!=null&&parm.indexOf("sunInfo")>=0){
+			urlPath = "../storage/set_unit_Info.xhtml";
+		}else if(parm!=null&&parm.indexOf("sunconver")>=0){
+			urlPath = "../storage/set_conversion_Info.xhtml";
+		}else if(parm!=null&&parm.indexOf("sun")>=0){
+			urlPath = "../storage/set_unit.xhtml";
+		}else if(parm!=null&&parm.indexOf("xjzzwl")>=0){
+			urlPath = "../storage/organize_materiel_add.xhtml";
+		}else if(parm!=null&&parm.indexOf("bzzzwl")>=0){
+			session.setAttribute("organizeMateriel",parmTwo);
+			urlPath = "../storage/organize_materiel_update.xhtml";
+		}else if(parm!=null&&parm.indexOf("fhzzwlcx")>=0){
+			urlPath = "../storage/organize_materiel_manage.xhtml";
 		}
 		
 	}
-	
+	/**
+	 * 退出登录
+	 */
+	public void LogOut(){
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		/*Enumeration em = session.getAttributeNames();
+		 while(em.hasMoreElements()){
+			   System.out.println(em.nextElement().toString());
+		}*/
+		session.setAttribute(Constants.USER_SESSION_KEY, null);
+		session.setAttribute(Constants.APPLICATION_ID, null);
+		session.setAttribute("nodeid", null);
+		session.setAttribute("swg.authority.session.user", null);
+		session.setAttribute("factoryProfileBean", null);
+		//session.setAttribute("javax.faces.request.charset", null);
+		session.setAttribute("tsControlBean", null);
+		//session.setAttribute("MenuHeadBean", null);
+		//session.setAttribute("dreamwork.jasmine2.locale", null);
+		//session.setAttribute("menuBean", null);
+		//session.setAttribute("URLMAPPING", null);
+		session.setAttribute("nodeid2", null);
+		//session.setAttribute("com.sun.faces.renderkit.ServerSideStateHelper.LogicalViewMap", null);
+		//	清除cookie
+		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		HttpServletResponse response = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		StringUtils.saveCookie(request, response, "menuActive", "");
+		StringUtils.saveCookie(request, response, "defNode", "");
+//		StringUtils.delCookie(request, response, "menuActive");
+//		StringUtils.delCookie(request, response, "defNode");
+	}
 	
 	/**
 	 * 无参构造函数 用来获取树结构
@@ -275,13 +319,19 @@ public class MenuHeadBean implements Serializable {
 	@SuppressWarnings({ "unchecked" })
 	public MenuHeadBean() {		
 		TUser tUser = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
-		menuList = (List<Module>) authorizeService.getMenu(tUser.getUserId(),Constants.APPLICATION_ID,null);
+		userName=tUser.getLoginName();
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+//		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		
+		menuList = (List<Module>) authorizeService.getMenu(tUser.getUserId(),
+				Constants.APPLICATION_ID,
+				IWebControl.LOCALE_KEY);
 		clickMenuList("工厂建模");	
 		for(Module tt:menuList){
 			System.out.println(tt.getLabel()+"---gouzao");
 		}
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		
 		String nodeId  = StringUtils.getCookie(request,"nodeidvalue");
 		root = organizationService.returnTree(tUser.getUserId() , pageId );
 		
@@ -292,7 +342,7 @@ public class MenuHeadBean implements Serializable {
 		String nodeName=temp.get("defaultNode");
 		
 		List nodeidlist=new ArrayList();//验证默认节点
-		List list = authorizeService.getAuthorizedNodeTree(tUser.getUserId(), pageId);
+		List<smtcl.mocs.beans.authority.cache.TreeNode> list = authorizeService.getAuthorizedNodeTree(tUser.getUserId(), pageId);
 		if (null != list & list.size() > 0) {
 			smtcl.mocs.beans.authority.cache.TreeNode tnodes = (smtcl.mocs.beans.authority.cache.TreeNode) list.get(0);
 			nodeidlist=this.getNodesAllId(tnodes, nodeidlist); 
@@ -303,7 +353,7 @@ public class MenuHeadBean implements Serializable {
 		if(null!=dnode&&dnode.size()>0){
 			Map<String, Object> nodemap=dnode.get(0);
 			if(nodeidlist.contains(nodemap.get("nodeId")+"")){
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+//				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 				session.setAttribute("nodeid2", nodemap.get("nodeId"));
 				this.thisNodeName=nodeName;
 			}
@@ -419,6 +469,14 @@ public class MenuHeadBean implements Serializable {
 
 	public void setSelectedNode(TreeNode selectedNode) {
 		this.selectedNode = selectedNode;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 }

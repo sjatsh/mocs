@@ -30,7 +30,7 @@ public class OrgGroup implements java.io.Serializable {
 	private String orgGroupId;
 
     @Column(name = "CODE")
-    private String code;//数据组代
+    private String code;//数据组代�?
 
 	@Column(name="GROUP_NAME")
 	private String groupName;

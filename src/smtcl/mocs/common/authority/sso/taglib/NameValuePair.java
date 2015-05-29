@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-9
- * Time: ÏÂÎç6:10
+ * Time: ä¸‹åˆ6:10
  */
 public class NameValuePair implements Serializable {
     private String name;

@@ -1,0 +1,14 @@
+{	
+	"top": {
+		"title1":"Plan Completion Rate",
+		"title2":"Production Quantity Today",
+		"title3":"Complete Set Rate",
+		"title4":"Overall Equipment Efficiency"
+	},
+	"content": {
+		"s_yx":"Running",
+		"s_kx":"Idle/Maintain",
+		"s_gz":"Error/Alarm",
+		"s_tj":"Power Off/Offline"
+	}
+}

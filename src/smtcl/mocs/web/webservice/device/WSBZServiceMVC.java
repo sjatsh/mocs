@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.GsonBuilder;
-
 import smtcl.mocs.services.device.IWSBZService;
 import smtcl.mocs.utils.device.Constants;
 

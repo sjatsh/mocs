@@ -1,0 +1,26 @@
+{	"zwxxts":"No data, please modify the node or the query conditions",
+	"top": {
+		"title1":"OEE Analysis",
+		"title2":"Machine Name:",
+		"startTime":"Date From:",
+		"endTime":"Date To:",
+		"title3":" Search "
+	},
+	"content": {
+		"lb":"List",
+		"tb":"Chart",
+		"tbtitle":"Analysis of Overall Equipment Efficiency",
+		"sjyxsj":"Actual Running Time:",
+		"kyl":"Availability:",
+		"hgcl":"Qualified Yield:",
+		"jhyxsj":"Planned Running Time:",
+		"sblyl":"Utilization Rate:",
+		"sjcl":"Actual Yield:",
+		"sjclllhs":"Theoretical Time Cost:",
+		"zlzs":"Quality:",
+		"oee":"OEE:",
+		"zsc":"Duration:",
+		"bxx":"Performance:",
+		"teep":"TEEP:"
+	}
+}

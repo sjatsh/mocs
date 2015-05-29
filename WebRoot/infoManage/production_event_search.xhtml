@@ -11,190 +11,196 @@
 <link rel="stylesheet" href="css/common.css" type="text/css"></link>
 <link rel="stylesheet" href="css/stat.css" type="text/css"></link>
 <link rel="stylesheet" href="css/com_richfaces_overwrite.css" type="text/css"></link>
-<style type="text/css">
-	*{margin:0px;}
-</style>
-<link rel="stylesheet" href="css/jobdispatch_detail_report.css" type="text/css"></link>
-<div class="title-bar">
-	<div class="logo-img">
-		<img src="images/profile_top_logo.png" />
-	</div>
-	<div class="title-text">事件查询</div>
-	<div class="filter-frame">
-		<div class="filter-bar">
-			<div class="filter-label">开始时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="startTime" popup="true" locale="en" cellWidth="10px" cellHeight="20px" 
-					value="#{productionEventSearchBean.startTime}" datePattern="yyyy-MM-dd" />
+
+<link rel="stylesheet" href="css/general.css" type="text/css"></link>
+<link rel="stylesheet" href="css/production_event_search.css" type="text/css"></link>
+<h:outputScript>
+    var curDt = new Date();
+    curDt.setFullYear(2014);
+    curDt.setMonth(10);
+    curDt.setDate(30);
+    function disablementFunction(day){
+    if (day.isWeekend) return false;
+    if (curDt==undefined){
+    curDt = day.date.getDate();
+    }
+    var timeLong = curDt.getTime() - day.date.getTime();
+    if ( 0 > timeLong) return true; else return false;
+    }
+</h:outputScript>
+
+<div class="show-frame"></div>
+<div class="header-bar">
+	<div class="logo-img"><img src="./images/profile_top_logo.png" /></div>
+	<div class="header-content">
+		<div class="header-content-4sub">
+			<div class="title-text" data-i18n="top.main_title"></div>
+		</div>
+		<div class="header-content-4sub">
+			<div class="filter-bar">
+				<div class="filter-label"><span data-i18n="top.title1"></span>:</div>
+				<div class="filter-input">
+					<rich:calendar id="startTime" dayDisableFunction="disablementFunction" popup="true" locale="en" cellWidth="10px" cellHeight="20px"
+						value="#{productionEventSearchBean.startTime}" datePattern="yyyy-MM-dd" />
+				</div>
+			</div>
+			<div class="filter-bar">
+				<div class="filter-label"><span data-i18n="top.title2"></span>:</div>
+				<div class="filter-input">
+					<h:selectOneMenu id="jobplanStatus" value="#{productionEventSearchBean.eventType}" styleClass="filter-select">
+						<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<f:selectItem itemLabel="工废" itemValue="1"></f:selectItem>
+						<f:selectItem itemLabel="料废" itemValue="4"></f:selectItem>
+						<f:selectItem itemLabel="手动" itemValue="2"></f:selectItem>
+						<f:selectItem itemLabel="修改" itemValue="3"></f:selectItem>
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="filter-bar">
+				<div class="filter-label"><span data-i18n="top.title3"></span>:</div>
+				<div class="filter-input">
+					<h:selectOneMenu  style="color:#595959;" value="#{productionEventSearchBean.jobPlanId}" styleClass="filter-select" id="pclist">
+						<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<f:selectItems value="#{productionEventSearchBean.jobPlanList}" var="user" itemLabel="#{user.name}" 
+							itemValue="#{user.id}"></f:selectItems>
+						<f:ajax event="change" listener="#{productionEventSearchBean.selectJobPlanChange}" execute="@this" 
+						render=":myform:jobtest :myform:jobtree"></f:ajax>
+					</h:selectOneMenu>
+				</div>
 			</div>
 		</div>
-		<div class="filter-bar">
-			<div class="filter-label">事件类型:</div>
-			<div class="filter-input">
-				<h:selectOneMenu id="jobplanStatus" value="#{productionEventSearchBean.eventType}" styleClass="filter-select">
-					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-					<f:selectItem itemLabel="工废" itemValue="1"></f:selectItem>
-					<f:selectItem itemLabel="料废" itemValue="4"></f:selectItem>
-					<f:selectItem itemLabel="手动" itemValue="2"></f:selectItem>
-					<f:selectItem itemLabel="修改" itemValue="3"></f:selectItem>
-				</h:selectOneMenu>
+		<div class="header-content-4sub">
+			<div class="filter-bar">
+				<div class="filter-label"><span data-i18n="top.title4"></span>:</div>
+				<div class="filter-input">
+					<rich:calendar id="endDate" popup="true" locale="en" cellWidth="10px" cellHeight="20px" 
+						value="#{productionEventSearchBean.endTime}" datePattern="yyyy-MM-dd" />
+				</div>
+			</div>
+			<div class="filter-bar">
+				<div class="filter-label"><span data-i18n="top.title5"></span>:</div>
+				<div class="filter-input">
+					<h:selectOneMenu  style="color:#595959;" value="#{productionEventSearchBean.partId}"  id="wlname" styleClass="filter-select">
+						<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<f:selectItems value="#{productionEventSearchBean.partList}" var="part" itemLabel="#{part.Name}" 
+							itemValue="#{part.Id}"></f:selectItems>
+						<f:ajax event="change" listener="#{productionEventSearchBean.selectPartChange}" execute="@this" 
+						render=":myform:pclist :myform:jobtest :myform:jobtree"></f:ajax>
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="filter-bar">
+				<div class="filter-label"><span data-i18n="top.title6"></span>:</div>
+				<div class="filter-input">
+					<h:inputText value="#{productionEventSearchBean.jobdispatchNo}" id="jobtest" 
+							onfocus="onfocusJobList()" onkeyup="onkeyupJObList()" autocomplete="off"></h:inputText>
+						<div style="width:89%;height:200px;position: absolute;display: none;font-size:100%;z-index:10;overflow: auto;" 
+							id="joblist">
+							<p:tree value="#{productionEventSearchBean.jobroot}" var="node" id="jobtree" style="font-size:70%;widht:100%;"
+								selectionMode="single" selection="#{productionEventSearchBean.jobselectroot}">
+								<p:ajax event="select" listener="#{productionEventSearchBean.OnTreeNodeSelect}"
+									update=":myform:jobtest "  
+									oncomplete="treeOnclick()"/>
+						        <p:treeNode>
+						            <h:outputText value="#{node.no}" styleClass="jobtreeclass"/>
+						        </p:treeNode>
+						    </p:tree>	  
+						</div>
+						<h:commandButton value=""  id="jobbtn" style="display:none;">
+								<a4j:ajax listener="#{productionEventSearchBean.onkeyupJobList}"
+									 event="click" execute="jobtest" 
+									 render=":myform:jobtree" />
+						</h:commandButton>
+				</div>
 			</div>
 		</div>
-		<div class="filter-bar">
-			<div class="filter-label">批次计划:</div>
-			<div class="filter-input">
-				<h:selectOneMenu  style="color:#595959;" value="#{productionEventSearchBean.jobPlanId}" styleClass="filter-select" id="pclist">
-					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-					<f:selectItems value="#{productionEventSearchBean.jobPlanList}" var="user" itemLabel="#{user.name}" 
-						itemValue="#{user.id}"></f:selectItems>
-					<f:ajax event="change" listener="#{productionEventSearchBean.selectJobPlanChange}" execute="@this" 
-					render=":myform:jobtest :myform:jobtree"></f:ajax>
-				</h:selectOneMenu>
+		<div class="header-content-4sub">
+			<div class="filter-submit">
+				<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
+					<a4j:ajax listener="#{productionEventSearchBean.Search}" event="click" 
+						execute="jobplanStatus startTime wlname pclist endDate gdlist" render=":myform:datatable" oncomplete="resizeTable()"></a4j:ajax>
+				</h:graphicImage>
 			</div>
 		</div>
-	</div>
-	<div class="filter-frame2">
-		<div class="filter-bar">
-			<div class="filter-label">结束时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="endDate" popup="true" locale="en" cellWidth="10px" cellHeight="20px" 
-					value="#{productionEventSearchBean.endTime}" datePattern="yyyy-MM-dd" />
-			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">产品名称:</div>
-			<div class="filter-input">
-				<h:selectOneMenu  style="color:#595959;" value="#{productionEventSearchBean.partId}"  id="wlname" styleClass="filter-select">
-					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-					<f:selectItems value="#{productionEventSearchBean.partList}" var="part" itemLabel="#{part.Name}" 
-						itemValue="#{part.Id}"></f:selectItems>
-					<f:ajax event="change" listener="#{productionEventSearchBean.selectPartChange}" execute="@this" 
-					render=":myform:pclist :myform:jobtest :myform:jobtree"></f:ajax>
-				</h:selectOneMenu>
-			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">工单号:</div>
-			<div class="filter-input">
-				<h:inputText value="#{productionEventSearchBean.jobdispatchNo}" id="jobtest" 
-						onfocus="onfocusJobList()" onkeyup="onkeyupJObList()" autocomplete="off"></h:inputText>
-					<div style="width:89%;height:200px;position: absolute;display: none;font-size:100%;z-index:10;overflow: auto;" 
-						id="joblist">
-						<p:tree value="#{productionEventSearchBean.jobroot}" var="node" id="jobtree" style="font-size:70%;widht:100%;"
-							selectionMode="single" selection="#{productionEventSearchBean.jobselectroot}">
-							<p:ajax event="select" listener="#{productionEventSearchBean.OnTreeNodeSelect}"
-								update=":myform:jobtest "  
-								oncomplete="treeOnclick()"/>
-					        <p:treeNode>
-					            <h:outputText value="#{node.no}" styleClass="jobtreeclass"/>
-					        </p:treeNode>
-					    </p:tree>	  
-					</div>
-					<h:commandButton value=""  id="jobbtn" style="display:none;">
-							<a4j:ajax listener="#{productionEventSearchBean.onkeyupJobList}"
-								 event="click" execute="jobtest" 
-								 render=":myform:jobtree" />
-					</h:commandButton>
-			</div>
-		</div>
-	</div>
-	<div class="filter-submit">
-		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
-			<a4j:ajax listener="#{productionEventSearchBean.Search}" event="click" 
-				execute="jobplanStatus startTime wlname pclist endDate gdlist" render=":myform:datatable" oncomplete="resizeTable()"></a4j:ajax>
-		</h:graphicImage>
 	</div>
 </div>
-<script language="javascript">
-	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
-	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080);
-	$(".title-text").css("left", wjb51 * 300 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 50 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
-	$(".filter-frame").css("left", wjb51 * 650 / 1920 + "px").css("top", hjb51 * 10 / 1080 + "px");
-	$(".filter-frame2").css("left", wjb51 * 1100 / 1920 + "px").css("top", hjb51 * 10 / 1080 + "px");
-	$(".filter-bar").css("width", wjb51 * 400 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 24 / 1080 + "px");
-	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
-	$(".filter-input").css("width", wjb51 * 200 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
-	$(".filter-input .rf-cal-extr").css("width", wjb51 * 150 / 1920 + "px");
-	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 27 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
-	$(".filter-export").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 200 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-</script>
-
-<div class="content-frame">
+<div class="main-content">
 	<div id="list-frame">
 		<div class="table-frame" id="tab1" >
 			<rich:dataTable value="#{productionEventSearchBean.defaultDataModel}" var="pip" id="datatable"
 				rows="15" cellpadding="0" rowClasses="even-row, odd-row" 
-				rowIndexVar="index" cellspacing="0" style="width:100%; height:100%;"  border="0">
+				rowIndexVar="index" cellspacing="0" style="width:100%; height:auto;"  border="0">
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						事件编号
+						<span data-i18n="content.table_title1"></span>
 					</f:facet>
 					<h:outputText value="#{pip.eventNo}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						事件类型
+						<span data-i18n="content.table_title2"></span>
 					</f:facet>
 					<h:outputText value="#{pip.eventType}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						工单编号
+						<span data-i18n="content.table_title3"></span>
 					</f:facet>
 					<h:outputText value="#{pip.jobdispatchNo}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						处理数量
+						<span data-i18n="content.table_title4"></span>
 					</f:facet>
 					<h:outputText value="#{pip.processNum}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						处理人员
+						<span data-i18n="content.table_title5"></span>
 					</f:facet>
 					<h:outputText value="#{pip.operatorNo}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						处理时间
+						<span data-i18n="content.table_title6"></span>
 					</f:facet>
-					<h:outputText value="#{pip.operateDate}" />
+					<h:outputText value="#{pip.operateDate}" >
+							<f:convertDateTime pattern="yyyy-MM-dd"></f:convertDateTime>
+					</h:outputText>
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						处理原因
+						<span data-i18n="content.table_title7"></span>
 					</f:facet>
 					<h:outputText value="#{pip.operateReason}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						零件名称
+						<span data-i18n="content.table_title8"></span>
 					</f:facet>
 					<h:outputText value="#{pip.partName}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						设备序列号
+						<span data-i18n="content.table_title9"></span>
 					</f:facet>
 					<h:outputText value="#{pip.equSerialNo}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						责任人
+						<span data-i18n="content.table_title10"></span>
 					</f:facet>
 					<h:outputText value="#{pip.responseNo}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						责任工序
+						<span data-i18n="content.table_title11"></span>
 					</f:facet>
 					<h:outputText value="#{pip.responseProcessNo}" />
 				</rich:column>
 				<rich:column style="white-space: nowrap;">
 					<f:facet name="header">
-						责任日期
+						<span data-i18n="content.table_title12"></span>
 					</f:facet>
 					<h:outputText value="#{pip.responseDate}" />
 				</rich:column>
@@ -202,7 +208,7 @@
 		</div>
 		<div id="scroller_div">
 			<rich:dataScroller for="datatable" id="ds" renderIfSinglePage="true"
-				render=":myform:datatable">
+				render=":myform:datatable" oncomplete="resizeTable();">
 					<f:facet name="first">
 						<h:outputText value="|◄◄" />
 					</f:facet>
@@ -227,16 +233,30 @@
 		</div>
 	</div>
 </div>
+
+
 <script language="javascript">
-	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
-	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
-	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
-	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px").css("font-size", hjb51 * 30 / 1080 + "px");
-	$(".table-frame").css("height", hjb51 * 711 / 1080 - 23 + "px")
+	$(document).ready(function(){
+		//国际化
+		var option = {resGetPath:"static/i18n/__lng__/production_event_search.json"};
+	    i18n.init(option, function(t) { $("*[data-i18n]").i18n();});
+	    
+		//页面大小调整
+		$.autosizeExclude($(".filter-submit>img")[0], false);
+		$.autosizeExclude($(".table-frame>table")[0], true);
+		$.autosizeExclude($("#scroller_div")[0], true);
+		$.autosizeAll();
+		$.autosizeReturn(resizeTable);
+		
+		//显示页面
+		$(".show-frame").hide();
+	});
+	
 	function resizeTable() {
+		$("#list-frame th span").i18n();
 		$("#list-frame th").css("height", hjb51 * 44 / 1080 + "px");
+		$("#list-frame #myform\\:datatable\\:tb td").css("height", hjb51 * 44 / 1080 + "px");
 	}
-	resizeTable();
 	function onkeyupJObList(){
 		document.getElementById("myform:jobbtn").click();
 		document.getElementById("joblist").style.display="block";

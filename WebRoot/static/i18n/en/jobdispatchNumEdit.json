@@ -1,0 +1,26 @@
+{	
+	"top": {
+		"main_title": "Work Data Modify"
+	},
+	"content": {
+		"title1":"Work Modify No",
+		"title2":"Product Name",
+		"title3":"Batch Plan No",
+		"title4":"Job No",
+		"title5":"Feeding Count",
+		"title6":"Process No",
+		"title7":"Work Staff",
+		"title8":"Work Date",
+		"title9":"Change Count",
+		"title10":"Process Reason",
+		"title11":"Work No",
+		"title12":"Device No",
+		"table_title1":"No",
+		"table_title2":"Device No",
+		"table_title3":"Device Name",
+		"table_title4":"Worked Count",
+		"confirm_ok":"OK",
+		"confirm_cancel":"Cancel",
+		"dlg_title":"Confirmation"
+	}
+}

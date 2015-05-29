@@ -1,0 +1,30 @@
+{	
+	"top": {
+		"title1":"Create a New Plan",
+		"ljmc":"Part Name",
+		"jhlx":"Plan Type" ,
+		"fzyjh":"Master Plan",
+		"jhbh":"Plan No.",
+		"jhmc":"Plan Name",
+		"jhzt":"Plan Status",
+		"yxj":"Priority",
+		"jhkssj":"Start Time",
+		"jhjssj":"Finish Time",
+		"jhsj":"Delivery Time",
+		"jhsl":"Quantity",
+		"dfprwsl":"Unassigned",
+		"bc":"Create",
+		"qx":"Cancel",
+		"select":"Select",
+		"msg1":"Plan No. already exists!",
+		"msg2":"Created successfully",
+		"msg3":"Start time cannot be empty!",
+		"msg4":"Finish time cannot be empty!",
+		"msg5":"The start time cannot be greater than the finish time!",
+		"msg6":"Please select a plan type!",
+		"msg7":"Please select a master plan!",
+        "msg8":"Delivery time cannot be empty!"
+		
+	}
+	
+}

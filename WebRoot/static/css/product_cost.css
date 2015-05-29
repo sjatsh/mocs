@@ -1,184 +1,171 @@
-
-.input_class{
-	line-height:40px;
-	width: 245px;
-	height:40px;
-	background-image: url("/mocs/images/cbgl_seach.png");
+/* 选择文字 */
+.zl-content-top-selectTitle {
+	position: absolute;
+	left: 69px;
+	top: 42px;
+	width: 342px;
+	height: 24px;
+	text-align: left;
+	font-size: 24px;
+	line-height: 24px;
 }
-.top_li_one{
-	width:384px;
-	font-size:36px;
-	line-height:50px;	
-	margin-left:20px;
+.zl-content-top-selectInfo {
+	position: absolute;
+	left: 69px;
+	top: 77px;
+	width: 310px;
+	height: 34px;
 }
-.top_li_two{
-	line-height:40px;
-	width: 245px;
-	margin-left:20px;
-}
-.top_li_three{
-	width:384px;
-	font-size:75px;
-	line-height:174px;	
-}
-.top_li_fx{
-	width:384px;
-	font-size:75px;
-	line-height:174px;	
-	margin-top:90px;
-}
-
-.pro_content{
-	width: 1920px;
-	height:725px;
-	background-image: url("/mocs/images/cost_content_bg.png");
-	
-}
-.pro_content_left{
+.zl-iconSelect-bg-center {
 	float: left;
-	width: 768px;
-	height:725px;
+	width: 240px;
+	height: 34px;
 }
-.pro_content_right{
-	width: 1152px;
-	float: left;
-}
-
-.pro_content_right_machineCost_chart{
-	width: 1152px;
-	height:538px;
+/* 选择框 */
+.zl-content-top-selectInfo>select {
+	width: 380px;
+	height: 30px;;
 	margin-left: 10px;
+	font-size: initial;
+	color: #6f8474;
+}
+.zl-iconSelect select {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 3px;;
+	border: none 0px;
+    padding-left: 31px;
+    padding-right: 0;
+	font-family: "微软雅黑";
+	line-height: 24px;
+	background: none;
+    z-index: 1;
+}
+
+/* 内容区域左侧 */
+.zl-content-info-left {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 960px;
+	height: 720px;
+	background: rgba(131,183,148,.1);
+}
+
+/* 表格 */
+.zl-content-info-left-table {
+	position: absolute;
+	left: 16px;
+	top: 26px;
+	width: 922px;
+	height: 444px;
+	font-size: 18px;
+	color: #565656;
+	border: solid 1px rgba(67,147,141,.5);
+	background: #FFF;
 	overflow: hidden;
 }
-.machineCost_chart_pie{
-	float: left;
-	width: 765px;
+.zl-content-info-left-tableInner {
+	position: absolute;
+	left: 0;
+	right: -17px;
+	height: 100%;
+	overflow-x: visible;
+	overflow-y: scroll;
 }
-
-.machineCost_chart_bar{
-	float: left;
-	width: 387px;
+/* 标题 */
+.zl-content-info-left-tableHead {
+	position: absolute;
+	left: 0;
+	right: 0;
+	z-index: 1;
 }
-
-
-.hdts1{
-	font-family:微软雅黑;
-	font-weight:bold;
+.ui-state-default {
+	background: #e4eae6;
+}
+/* 内容文字 */
+.zl-content-info-left-table td .ui-dt-c,.zl-content-info-left-table td .ui-dt-c>a {
+	font-size: 14px;
 	text-align: center;
-	font-size:28px;
-	font-weight: bold;
+	text-decoration: none;
+	color: #6d6d6d;
 }
-.hdts2{
-	width: 130px;
-	padding-left: 5px;
-	font-size:28px;
-	font-weight: bold;
-}
-.hdts3{
-	width: 88px;
-	padding-left: 5px;
-	font-size:28px;
-	font-weight: bold;
+.zl-content-info-left-table td .ui-dt-c>a {
+	color: #6f8474;
 }
 
-.machineCost{
-	width: 1112px;
-	margin: 10 auto;
-	background:rgba(255, 255, 255, 0.8) none repeat scroll 0 0 !important;
-	filter:Alpha(opacity=80); background:#fff;
+/* 左侧图表 */
+.zl-content-info-left-chart {
+	position: absolute;
+	left: 16px;
+	top: 485px;
+	width: 922px;
+	height: 220px;
 }
 
-.rf-p{
-	border: 0px;
+/* 右侧框架 */
+.zl-content-info-right {
+	position: absolute;
+	left: 960px;
+	top: 0;
+	width: 960px;
+	height: 720px;
 }
 
-
-.datatable_row{
-	font-size:25px;
+/* 右侧饼图区域 */
+.zl-content-info-right-top {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 960px;
+	height: 440px;
 }
-.datable_body{
-	font-family:微软雅黑;
-	font-weight:bold;
-	background-color: white;
+#productcosttwoChart {
+	position: relative;
+	z-index: 1;
 }
-
-.column_body{
-	border: 1px #C3C6CB solid;
+/* 饼图背景 */
+.zl-content-info-right-top-bg {
+	position: absolute;
+	left: 335px;
+	top: 0;
+	width: 290px;
+	height: auto !important;
 }
-
-.head_body{
-	border: 1px #C3C6CB solid;
-}
-
-.row_body{
-	border: 1px #C3C6CB solid;
-}
-
-.dtc_1{
-	width: 238px;
+/* 饼图合计文字 */
+.zl-content-info-right-top-total {
+	position: absolute;
+	left: 0;
+	top: 170px;
 	text-align: center;
+	color: #689976;
+	z-index: 0;
 }
-.dtc_2{
-	width: 130px;
-	padding-left: 5px;
+.zl-content-info-right-top-total-label {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 960px;
+	height: 40px;
+	font-size: 40px;
+	line-height: 40px;
 }
-.dtc_3{
-	
-	width: 88px;
-	padding-left: 5px;
-}
-
-.dtable_row{
-	background:rgba(255, 255, 255, 0.8) none repeat scroll 0 0 !important;
-	filter:Alpha(opacity=80); background:#fff;
-	
-}
-.dtable_body{
-border-left: 1px solid #ADAAAD;
-}
-.dtable_body_jp{
-border-left: 1px solid #ADAAAD;
-margin-left: 10px;
-width: 1380px;
-}
-.dt_jb_1{
-	border-right: 1px solid #ADAAAD;
-	border-bottom: 1px solid #ADAAAD;
-	width: 400px;
-	padding-left: 15px;
-	height:35px;
-}
-.dt_jb_2{
-	border-right: 1px solid #ADAAAD;
-	border-bottom: 1px solid #ADAAAD;
-	width: 200px;
-	text-align:center;
-	height:35px;
+.zl-content-info-right-top-total-value {
+	position: absolute;
+	left: 0;
+	top: 60px;
+	width: 960px;
+	height: 24px;
+	font-size: 24px;
+	line-height: 24px;
 }
 
-.dt_c_1{
-	border-right: 1px solid #ADAAAD;
-	border-bottom: 1px solid #ADAAAD;	
-}
-.dt_c_2{
-	border-right: 1px solid #ADAAAD;
-	border-bottom: 1px solid #ADAAAD;
-}
-.datable_head_jp{
-	font-size:28px;
-	background:RGB(204,234,217) none repeat scroll 0 0 !important;
-	filter:Alpha(opacity=80); background:#fff;
-	font-weight: bold;
-	border-right: 1px solid #ADAAAD;
-	border-bottom: 1px solid #ADAAAD;
-	border-top: 1px solid #ADAAAD;
-	height:55px;
-}
-.datable_head{
-	background:rgba(255, 255, 255, 0.8) none repeat scroll 0 0 !important;
-	filter:Alpha(opacity=80); background:#fff;
-	font-weight: bold;
-	border-right: 1px solid #ADAAAD;
-	border-bottom: 1px solid #ADAAAD;
-	border-top: 1px solid #ADAAAD;
+/* 右侧柱状图区域 */
+.zl-content-info-right-bottom {
+	position: absolute;
+	left: 0;
+	top: 440px;
+	width: 960px;
+	height: 280px;
 }

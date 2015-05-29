@@ -1,0 +1,29 @@
+{	
+	"top": {
+		"main_title": "在制品报表",
+		"select_title1":"开始时间",
+		"select_title2":"结束时间",
+		"select_title3":"零件名称",
+		"select_title4":"批次号",
+		"select_title5":"统计类型",
+		"select_title6":"查询",
+		"select_title7":"请选择"
+	},
+	"content": {
+		"tab1":"批次统计",
+		"tab2":"工序统计",
+		"table_title1":"零件名称",
+		"table_title2":"批次号",
+		"table_title3":"计划数量",
+		"table_title4":"完成数量",
+		"table_title5":"在制品数量",
+		"table_title6":"开始时间",
+		"table_title7":"结束时间",
+		"table_title8":"操作",
+		"table_title9":"工序",
+		"table_title10":"设备",
+		"table_title11":"人员",
+		"table_title12":"产量",
+		"table_content1":"详细"
+	}
+}

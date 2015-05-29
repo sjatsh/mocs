@@ -1,0 +1,761 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:form id="myform">
+		<link rel="stylesheet" href="css/common.css" type="text/css"></link>
+		<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
+		<link rel="stylesheet" href="css/storage/jquery-selectbox.css" type="text/css" />
+		
+    	<link href="./css/general.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="css/storage/storage_materiel_manage.css" type="text/css"></link>
+		  
+		<script src="js/storage/jquery-selectbox.js" type="text/javascript"></script>
+		
+		<div class="show-frame"></div>
+		<div class="header-bar">
+			<div class="logo-img"><img src="./images/profile_top_logo.png" /></div>
+			<div class="header-content">
+				<div class="header-content-tab">
+					<div class="tab-nav cur" data-i18n="top.tab1"></div>
+					<div class="tab-nav" data-i18n="top.tab2"></div>
+					<div class="tab-nav" data-i18n="top.tab3"></div>
+				</div>
+				<div class="header-content-filter">
+					<!-- 物料存量 -->
+					<div class="sub-con cur">
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title1"></span>:</div>
+								<div class="filter-input" id="materielNo_storage_id_div">
+									<table id="table_materielNo_storage_id">
+										<c:forEach items="#{storageMaterielBean.materiellist}" var="materiel">
+											<tr>
+												<td>                                 
+										        	<label>
+										        		<input type="checkbox" name="materielNo_storage_id_div" 
+										        			onclick="s.changeSelected(this,event);" value="#{materiel.id}" 
+										        			onblur="s.hiddenList()"/>
+										        		<span>#{materiel.no}</span>
+										        	</label>
+									        	</td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title2"></span>:</div>
+								<div class="filter-input" id="materielDesc_id_div">
+									<table id="table_materielDesc_id">
+										<c:forEach items="#{storageMaterielBean.materiellist}" var="materiel">
+											<tr>
+												<td>                           
+										        	<label>
+											        	<input type="checkbox" name="materielDesc_id_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{materiel.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{materiel.name}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title3"></span>:</div>
+								<div class="filter-input" id="materiel_storage_id_div">
+									<table id="table_materiel_storage_id">
+										<c:forEach items="#{storageMaterielBean.storageNoList}" var="storageNos">
+											<tr>
+												<td style="width:180px;">                                 
+									        		<label>
+									        			<input type="checkbox" name="materiel_storage_id_div" 
+									        				onclick="s.changeSelected(this,event);" value="#{storageNos.id}" 
+									        				onblur="s.hiddenList()"/>
+									        			<span>#{storageNos.storageNo}</span>
+									        		</label>
+									        	</td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title4"></span>:</div>
+								<div class="filter-input" id="materiel_positon_Id_div">
+									<table id="table_materiel_positon_Id">
+										<c:forEach items="#{storageMaterielBean.positionNolist}" var="position">
+											<tr>
+												<td style="width:180px;">                                 
+										        	<label>
+											        	<input type="checkbox" name="materiel_positon_Id_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{position.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{position.positionNo}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title5"></span>:</div>
+								<div class="filter-input" id="materiel_Version">
+									<table id="table_materiel_Version">
+										<c:forEach items="#{storageMaterielBean.materielVersionList}" var="version">
+											<tr>
+												<td style="width:180px;">                                 
+										        	<label>
+											        	<input type="checkbox" name="materiel_Version" 
+											        		onclick="s.changeSelected(this,event);" value="#{version.versionNo}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{version.versionNo}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title6"></span>:</div>
+								<div class="filter-input" id="status_id_div">
+									<table id="table_status_id">
+										<c:forEach items="#{storageMaterielBean.statusList}" var="status">
+											<tr>
+												<td style="width:180px;">                                 
+										        	<label>
+											        	<input type="checkbox" name="status_id_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{status.value}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{status.label}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-submit">
+								<h:graphicImage id="btn_search_materiel" alt="search" url="images/jobplan/list/jobpaln_button.png">
+									<a4j:ajax listener="#{storageMaterielBean.materielQuery}" event="click" onbeforesubmit="setValueMaterial();"
+										execute="materielstorageNo materielNo materielpositonId materielVersion materielDesc status tabChange" 
+										render=":myform:materielStock :myform:materielStock_detail" oncomplete="tableTranslate();"></a4j:ajax>
+								</h:graphicImage>
+							</div>
+						</div>
+						<h:inputHidden id="materielstorageNo" value="#{storageMaterielBean.storageId}"></h:inputHidden>
+						<h:inputHidden id="materielNo" value="#{storageMaterielBean.materielId}"></h:inputHidden>
+						<h:inputHidden id="materielpositonId" value="#{storageMaterielBean.positionNo}" ></h:inputHidden>
+						<h:inputHidden id="materielVersion" value="#{storageMaterielBean.materielVersion}"></h:inputHidden>
+						<h:inputHidden id="materielDesc" value="#{storageMaterielBean.materielDesc}" ></h:inputHidden>
+						<h:inputHidden id="status" value="#{storageMaterielBean.status}"></h:inputHidden>
+					</div>
+					
+					<!-- 批次存量 -->
+					<div class="sub-con">
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title1"></span>:</div>
+								<div class="filter-input" id="materielNo_batch_storage_id_div">
+									<table id="table_materielNo_batch_storage_id">
+										<c:forEach items="#{storageMaterielBean.materiellist}" var="materiel">
+											<tr>
+												<td>                                 
+										        	<label>
+										        		<input type="checkbox" name="materielNo_batch_storage_id_div" 
+										        			onclick="s.changeSelected(this,event);" value="#{materiel.id}" 
+										        			onblur="s.hiddenList()"/>
+										        		<span>#{materiel.no}</span>
+										        	</label>
+									        	</td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title2"></span>:</div>
+								<div class="filter-input" id="batch_materielDesc_id_div">
+									<table id="table_batch_materielDesc_id">
+										<c:forEach items="#{storageMaterielBean.materiellist}" var="materiel">
+											<tr>
+												<td>                                 
+										        	<label>
+											        	<input type="checkbox" name="batch_materielDesc_id_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{materiel.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{materiel.name}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title3"></span>:</div>
+								<div class="filter-input" id="storageNo_Batch_div">
+									<table id="table_storageNo_Batch">
+										<c:forEach items="#{storageMaterielBean.storageNoList}" var="storageNos">
+											<tr>
+												<td>                                 
+										        	<label>
+											        	<input type="checkbox" name="storageNo_Batch_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{storageNos.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{storageNos.storageNo}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title4"></span>:</div>
+								<div class="filter-input" id="positonId_Batch_div">
+									<table id="table_positonId_Batch">
+										<c:forEach items="#{storageMaterielBean.positionNolist}" var="position">
+											<tr>
+												<td>                                 
+										        	<label>
+											        	<input type="checkbox" name="positonId_Batch_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{position.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{position.positionNo}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title7"></span>:</div>
+								<div class="filter-input">
+									<h:selectOneMenu id="batchStart" value="#{storageMaterielBean.batchStart}" styleClass="filter-select">
+										<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+										<f:selectItems value="#{storageMaterielBean.batchList}" var="batch" 
+											itemLabel="#{batch.batchNo}" itemValue="#{batch.batchNo}"/>
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title8"></span>:</div>
+								<div class="filter-input">
+									<h:selectOneMenu id="seqEnd" value="#{storageMaterielBean.batchEnd}" styleClass="filter-select">
+										<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+										<f:selectItems value="#{storageMaterielBean.batchList}" var="batch" 
+											itemLabel="#{batch.batchNo}" itemValue="#{batch.batchNo}"/>
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title9"></span>:</div>
+								<div class="filter-input">
+									<h:selectOneMenu id="seq_waixie" value="#{storageMaterielBean.waixieid}" styleClass="filter-select">
+										<f:selectItem itemLabel="不显示外协" itemValue="0"></f:selectItem>
+										<f:selectItem itemLabel="只显示外协" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="显示全部" itemValue="2"></f:selectItem>
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-submit">
+								<h:graphicImage id="btn_search_batch" alt="search" url="images/jobplan/list/jobpaln_button.png">
+									<a4j:ajax listener="#{storageMaterielBean.batchQuery}" event="click" onbeforesubmit="setValueBatch();"
+										execute="seq_waixie materielDescBatch materielNoBatch storageNoBatch batchStart positonIdBatch seqEnd" 
+										render=":myform:materielStockBatch" oncomplete="tableTranslate();"></a4j:ajax>
+								</h:graphicImage>
+							</div>
+						</div>
+						<h:inputHidden id="storageNoBatch" value="#{storageMaterielBean.storageId}"></h:inputHidden>
+						<h:inputHidden id="positonIdBatch" value="#{storageMaterielBean.positionNo}"></h:inputHidden>
+						<h:inputHidden id="materielNoBatch" value="#{storageMaterielBean.materielId}"></h:inputHidden>
+						<h:inputHidden id="materielDescBatch" value="#{storageMaterielBean.materielDesc}" ></h:inputHidden>
+					</div>
+					
+					<!-- 序列存量 -->
+					<div class="sub-con">
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title1"></span>:</div>
+								<div class="filter-input" id="materielNo_seq_storage_id_div">
+									<table id="table_materielNo_seq_storage_id">
+										<c:forEach items="#{storageMaterielBean.materiellist}" var="materiel">
+											<tr>
+												<td>                                 
+										        	<label>
+										        		<input type="checkbox" name="materielNo_seq_storage_id_div" 
+										        			onclick="s.changeSelected(this,event);" value="#{materiel.id}" 
+										        			onblur="s.hiddenList()"/>
+										        		<span>#{materiel.no}</span>
+										        	</label>
+									        	</td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title2"></span>:</div>
+								<div class="filter-input" id="seq_materielDesc_id_div">
+									<table id="table_seq_materielDesc_id">
+										<c:forEach items="#{storageMaterielBean.materiellist}" var="materiel">
+											<tr>
+												<td>                                 
+										        	<label>
+											        	<input type="checkbox" name="seq_materielDesc_id_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{materiel.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{materiel.name}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title3"></span>:</div>
+								<div class="filter-input" id="storageNo_Seq_div">
+									<table id="table_storageNo_Seq">
+										<c:forEach items="#{storageMaterielBean.storageNoList}" var="storageNos">
+											<tr>
+												<td>                                 
+										        	<label>
+											        	<input type="checkbox" name="table_storageNo_Seq" 
+											        		onclick="s.changeSelected(this,event);" value="#{storageNos.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{storageNos.storageNo}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title4"></span>:</div>
+								<div class="filter-input" id="positonId_Seq_div">
+									<table id="table_positonId_Seq">
+										<c:forEach items="#{storageMaterielBean.positionNolist}" var="position">
+											<tr>
+												<td>                                 
+										        	<label>
+											        	<input type="checkbox" name="positonId_Seq_div" 
+											        		onclick="s.changeSelected(this,event);" value="#{position.id}" 
+											        		onblur="s.hiddenList()"/>
+											        	<span>#{position.positionNo}</span>
+										        	</label>
+										        </td>
+									        </tr>
+								        </c:forEach>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title10"></span>:</div>
+								<div class="filter-input">
+									<h:selectOneMenu id="seqNoStart" value="#{storageMaterielBean.seqStart}" styleClass="filter-select">
+										<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+										<f:selectItems value="#{storageMaterielBean.seqNoList}" var="seqNo" 
+											itemLabel="#{seqNo.seqNo}" itemValue="#{seqNo.seqNo}"/>
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="filter-bar">
+								<div class="filter-label"><span data-i18n="top.title11"></span>:</div>
+								<div class="filter-input">
+									<h:selectOneMenu id="seqNoEnd" value="#{storageMaterielBean.seqEnd}" styleClass="filter-select">
+										<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+										<f:selectItems value="#{storageMaterielBean.seqNoList}" var="seqNo" 
+											itemLabel="#{seqNo.seqNo}" itemValue="#{seqNo.seqNo}"/>
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<div class="header-content-4sub">
+							<div class="filter-submit">
+								<h:graphicImage id="btn_search_seqNo" alt="search" url="images/jobplan/list/jobpaln_button.png">
+									<a4j:ajax listener="#{storageMaterielBean.seqNoQuery}" event="click" onbeforesubmit="setValueSeq();" 
+										execute="materielDescSeq materielNoSeq storageNoSeq seqNoStart positonIdSeq seqNoEnd" render=":myform:materielStockSeq" 
+										oncomplete="tableTranslate();"></a4j:ajax>
+								</h:graphicImage>
+							</div>
+						</div>
+						<h:inputHidden id="storageNoSeq" value="#{storageMaterielBean.storageId}"></h:inputHidden>
+						<h:inputHidden id="positonIdSeq" value="#{storageMaterielBean.positionNo}"></h:inputHidden>
+						<h:inputHidden id="materielNoSeq" value="#{storageMaterielBean.materielId}"></h:inputHidden>
+						<h:inputHidden id="materielDescSeq" value="#{storageMaterielBean.materielDesc}" ></h:inputHidden>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="main-content">
+			<div id="list-frame">
+				<!-- 物料存量 -->
+				<div class="sub-con-div cur">
+					<div class="sub-nav">
+						<div class="tab-nav cur" onclick="changeTab('stock')" data-i18n="content.tab1"></div>
+						<div class="tab-nav" onclick="changeTab('detail')" data-i18n="content.tab2"></div>
+						<h:inputHidden id="tabChange" value="#{storageMaterielBean.tabChange}"></h:inputHidden>
+					</div>
+					<div class="sub-con-div-frame">
+						<div class="sub-con-div2 cur">
+							<div class="ui-datatable ui-widget table-title">
+								<table style="width: 100%; height: 100%;">
+									<tr>
+										<th class="ui-state-default" width="10%" data-i18n="content.title1"></th>
+										<th class="ui-state-default" width="30%" data-i18n="content.title2"></th>
+										<th class="ui-state-default" width="30%" data-i18n="content.title3"></th>
+										<th class="ui-state-default" width="10%" data-i18n="content.title4"></th>
+										<th class="ui-state-default" width="10%" data-i18n="content.title5"></th>
+										<th class="ui-state-default" width="10%" data-i18n="content.title6"></th>
+									</tr>
+								</table>
+							</div>
+							<div class="table-body">
+								<p:dataTable id="materielStock" value="#{storageMaterielBean.materielStock}" var="var">
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title1"></span>
+										</f:facet>
+										<h:outputText value="#{var.rownum}" />
+									</p:column>
+									<p:column style="width:30%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title2"></span>
+										</f:facet>
+										<h:outputText value="#{var.no}" />
+									</p:column>
+									<p:column style="width:30%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title3"></span>
+										</f:facet>
+										<h:outputText value="#{var.name}" />
+									</p:column>
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title4"></span>
+										</f:facet>
+										<h:outputText value="#{var.totalNum}" />
+									</p:column>
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title5"></span>
+										</f:facet>
+										<h:outputText value="#{var.retainNum}" />
+									</p:column>
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title6"></span>
+										</f:facet>
+										<h:outputText value="#{var.availableNum}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+						<div class="sub-con-div2">
+							<div class="ui-datatable ui-widget table-title">
+								<table style="width: 100%; height: 100%;">
+									<tr>
+										<th class="ui-state-default" width="10%" data-i18n="content.title1"></th>
+										<th class="ui-state-default" width="25%" data-i18n="content.title2"></th>
+										<th class="ui-state-default" width="25%" data-i18n="content.title3"></th>
+										<th class="ui-state-default" width="10%" data-i18n="content.title7"></th>
+										<th class="ui-state-default" width="10%" data-i18n="content.title8"></th>
+										<th class="ui-state-default" width="10%" data-i18n="content.title9"></th>
+										<th class="ui-state-default" width="10%" data-i18n="content.title10"></th>
+									</tr>
+								</table>
+							</div>
+							<div class="table-body">
+								<p:dataTable id="materielStock_detail" value="#{storageMaterielBean.materielDetailStock}" var="var">
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title1"></span>
+										</f:facet>
+										<h:outputText value="#{var.rownum}" />
+									</p:column>
+									<p:column style="width:25%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title2"></span>
+										</f:facet>
+										<h:outputText value="#{var.no}" />
+									</p:column>
+									<p:column style="width:25%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title3"></span>
+										</f:facet>
+										<h:outputText value="#{var.name}" />
+									</p:column>
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title7"></span>
+										</f:facet>
+										<h:outputText value="#{var.storageNo}" />
+									</p:column>
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title8"></span>
+										</f:facet>
+										<h:outputText value="#{var.positionNo}" />
+									</p:column>
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title9"></span>
+										</f:facet>
+										<h:outputText value="#{var.unitName}" />
+									</p:column>
+									<p:column style="width:10%;word-break: break-all;">
+										<f:facet name="header">
+											<span data-i18n="content.title10"></span>
+										</f:facet>
+										<h:outputText value="#{var.availableNum}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- 批次存量 -->
+				<div class="sub-con-div"><div class="ui-datatable ui-widget table-title">
+						<table style="width: 100%; height: 100%;">
+							<tr>
+								<th class="ui-state-default" width="5%" data-i18n="content.title1"></th>
+								<th class="ui-state-default" width="25%" data-i18n="content.title11"></th>
+								<th class="ui-state-default" width="26%" data-i18n="content.title2"></th>
+								<th class="ui-state-default" width="23%" data-i18n="content.title3"></th>
+								<th class="ui-state-default" width="5%" data-i18n="content.title9"></th>
+								<th class="ui-state-default" width="8%" data-i18n="content.title12"></th>
+								<th class="ui-state-default" width="8%" data-i18n="content.title10"></th>
+							</tr>
+						</table>
+					</div>
+					<div class="table-body">
+						<p:dataTable id="materielStockBatch" value="#{storageMaterielBean.materielStockBatch}" var="var">
+							<p:column style="width:5%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title1"></span>
+								</f:facet>
+								<h:outputText value="#{var.rownum}" />
+							</p:column>
+							<p:column style="width:25%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title11"></span>
+								</f:facet>
+								<h:outputText value="#{var.batchNo}" />
+							</p:column>
+							<p:column style="width:26%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title2"></span>
+								</f:facet>
+								<h:outputText value="#{var.no}" />
+							</p:column>
+							<p:column style="width:23%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title3"></span>
+								</f:facet>
+								<h:outputText value="#{var.name}" />
+							</p:column>
+							<p:column style="width:5%;word-break: break-all;text-align: center;">
+								<f:facet name="header">
+									<span data-i18n="content.title9"></span>
+								</f:facet>
+								<h:outputText value="#{var.unitName}" />
+							</p:column>
+							<p:column style="width:8%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title12"></span>
+								</f:facet>
+								<h:outputText value="#{var.available_num}" />
+							</p:column>
+							<p:column style="width:8%;word-break: break-all;text-align: center;">
+								<f:facet name="header">
+									<span data-i18n="content.title10"></span>
+								</f:facet>
+								<h:outputText value="#{var.totalNum}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<div class="sub-con-div">
+					<div class="ui-datatable ui-widget table-title">
+						<table style="width: 100%; height: 100%;">
+							<tr>
+								<th class="ui-state-default" width="10%" data-i18n="content.title1"></th>
+								<th class="ui-state-default" width="16%" data-i18n="content.title13"></th>
+								<th class="ui-state-default" width="16%" data-i18n="content.title2"></th>
+								<th class="ui-state-default" width="16%" data-i18n="content.title3"></th>
+								<th class="ui-state-default" width="10%" data-i18n="content.title9"></th>
+								<th class="ui-state-default" width="16%" data-i18n="content.title7"></th>
+								<th class="ui-state-default" width="16%" data-i18n="content.title8"></th>
+							</tr>
+						</table>
+					</div>
+					<div class="table-body">
+						<p:dataTable id="materielStockSeq" value="#{storageMaterielBean.materielStockSeq}" var="var">
+							<p:column style="width:10%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title1"></span>
+								</f:facet>
+								<h:outputText value="#{var.rownum}" />
+							</p:column>
+							<p:column style="width:16%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title13"></span>
+								</f:facet>
+								<h:outputText value="#{var.seqNo}" />
+							</p:column>
+							<p:column style="width:16%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title2"></span>
+								</f:facet>
+								<h:outputText value="#{var.no}" />
+							</p:column>
+							<p:column style="width:16%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title3"></span>
+								</f:facet>
+								<h:outputText value="#{var.name}" />
+							</p:column>
+							<p:column style="width:10%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title9"></span>
+								</f:facet>
+								<h:outputText value="#{var.unitName}" />
+							</p:column>
+							<p:column style="width:16%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title7"></span>
+								</f:facet>
+								<h:outputText value="#{var.storageNo}" />
+							</p:column>
+							<p:column style="width:16%;word-break: break-all;">
+								<f:facet name="header">
+									<span data-i18n="content.title8"></span>
+								</f:facet>
+								<h:outputText value="#{var.positionNo}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script language="javascript">
+			$(document).ready(function(){
+				//国际化
+				var option = {resGetPath:"static/i18n/__lng__/storage_materiel_manage.json"};
+			    i18n.init(option, function(t) { $("*[data-i18n]").i18n();});
+			    
+				//页面选择器加载
+				$("#materielNo_storage_id_div").selectboxs();//物料存量-物料编号
+				$("#materielDesc_id_div").selectboxs();//物料存量-物料描述
+				$("#materiel_storage_id_div").selectboxs();//物料存量-库房
+				$("#materiel_positon_Id_div").selectboxs();//物料存量-库位
+				$("#materiel_Version").selectboxs();//物料存量-版本
+				$("#status_id_div").selectboxs();//物料存量-状态
+				
+				$("#storageNo_Batch_div").selectboxs();//批次存量-物料编号
+				$("#batch_materielDesc_id_div").selectboxs();//批次存量-物料描述
+				$("#materielNo_batch_storage_id_div").selectboxs();//批次存量-库房
+				$("#positonId_Batch_div").selectboxs();//批次存量-库位
+
+				$("#storageNo_Seq_div").selectboxs();//序列存量-物料编号
+				$("#seq_materielDesc_id_div").selectboxs();//序列存量-物料描述
+				$("#materielNo_seq_storage_id_div").selectboxs();//序列存量-库房
+				$("#positonId_Seq_div").selectboxs();//序列存量-库位
+				
+	
+				//页面大小调整
+				$(".table-title,.table-body,.filter-submit>img").each(function() {
+					$.autosizeExclude(this, true);
+				})
+				$.autosizeAll();
+				
+				//显示页面
+				$(".show-frame").hide();
+			});
+			
+			//tab1
+			$(".header-content-tab .tab-nav").click(function() {
+				$(".header-content-tab .tab-nav").removeClass("cur");
+				$(this).addClass("cur");
+				$(".header-content-filter .sub-con").removeClass("cur");
+				$(".header-content-filter .sub-con:eq(" + $(this).index() + ")").addClass("cur");
+				$("#list-frame>.sub-con-div").removeClass("cur").hide();
+				$("#list-frame>.sub-con-div:eq(" + $(this).index() + ")").addClass("cur").show();
+			});
+
+			//sub-tab
+			$(".sub-nav .tab-nav").click(function() {
+				$(".sub-nav .tab-nav").removeClass("cur");
+				$(this).addClass("cur");
+				$(".sub-con-div-frame>.sub-con-div2").removeClass("cur");
+				$(".sub-con-div-frame>.sub-con-div2:eq(" + $(this).index() + ")").addClass("cur");
+			});
+			
+			//tab标签切换赋值
+			function changeTab(tabName){
+				$("#myform\\:tabChange").val(tabName);
+			}
+			
+			//物料存量赋值
+			function setValueMaterial(){
+				$("#myform\\:materielNo").val($("#materielNo_storage_id_div_hdn").val());
+				$("#myform\\:materielDesc").val($("#materielDesc_id_div_hdn").val());
+				$("#myform\\:materielstorageNo").val($("#materiel_storage_id_div_hdn").val());
+				$("#myform\\:materielpositonId").val($("#materiel_positon_Id_div_hdn").val());
+				$("#myform\\:materielVersion").val($("#materiel_Version_hdn").val());
+				$("#myform\\:status").val($("#status_id_div_hdn").val());
+			}
+
+			//批次存量赋值
+			function setValueBatch(){
+				$("#myform\\:storageNoBatch").val($("#storageNo_Batch_div_hdn").val());
+				$("#myform\\:positonIdBatch").val($("#positonId_Batch_div_hdn").val());
+				$("#myform\\:materielNoBatch").val($("#materielNo_batch_storage_id_div_hdn").val());
+				$("#myform\\:materielDescBatch").val($("#batch_materielDesc_id_div_hdn").val());
+			}
+
+			//序列存量赋值
+			function setValueSeq(){
+				$("#myform\\:materielNoSeq").val($("#materielNo_seq_storage_id_div_hdn").val());
+				$("#myform\\:materielDescSeq").val($("#seq_materielDesc_id_div_hdn").val());
+				$("#myform\\:storageNoSeq").val($("#storageNo_Seq_div_hdn").val());
+				$("#myform\\:positonIdSeq").val($("#positonId_Seq_div_hdn").val());
+			}
+			
+			//表格翻译
+			function tableTranslate() {
+				$(".table-body th span[data-i18n]").i18n();
+			}
+		</script>
+	</h:form>
+</ui:composition>

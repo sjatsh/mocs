@@ -502,6 +502,7 @@ public class WSBZServiceImpl extends GenericServiceSpringImpl<TNodes, String> im
 			tu.setWorkTime(Long.parseLong(workTime));
 			tu.setWorkResult(workResult);
 			tu.setTheoryCycletime(Long.parseLong(theoryCycletime));
+			tu.setFlag(0L);//是否导入erp标记位，1：已导入，0：未导入
 			//查询机床
 			String mode="";
 			String hql=" from TEquipmentInfo t1 where t1.equSerialNo='"+equSerialNo+"'";
@@ -534,6 +535,13 @@ public class WSBZServiceImpl extends GenericServiceSpringImpl<TNodes, String> im
 				// 构造一个线程池  
 				if("1".equals(mode)){  //自动模式统计工单计数
 				threadPool.execute(new EquWorkEventProcess(tu.getId(),"")); 
+				 String temppath = this.getClass().getClassLoader().getResource("").getPath(); 
+				 temppath= new File(new File(temppath).getParent()).getParent();
+				 File file1= new File(temppath+Constants.configPath);
+				 if(file1.exists()){
+					// threadPool.execute(new WisTransferThread(tu.getId()));
+				 }
+				
 				}
 //				EquWorkEventProcess equWorkEventProcess=new EquWorkEventProcess(tu.getId());
 //				Thread childThread = new Thread(equWorkEventProcess);

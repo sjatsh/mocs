@@ -12,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import smtcl.mocs.pojos.job.TMaterailTypeInfo;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.services.device.IDeviceService;
 import smtcl.mocs.services.device.IPartService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
+import smtcl.mocs.services.storage.ISetUnitServcie;
 
 /**
  * 作业计划-查询条件-ajax方法
@@ -36,6 +38,10 @@ public class JobPlanDetailWeb {
 	
 	private IDeviceService baogongService=(IDeviceService)ServiceFactory.getBean("deviceService");
 	/**
+	 * 单位设置接口
+	 */
+	private  ISetUnitServcie setunitService=(ISetUnitServcie) ServiceFactory.getBean("setunitService");
+	/**
 	 * 通过ajax获取零件名称
 	 * @param request
 	 * @param partName
@@ -54,7 +60,7 @@ public class JobPlanDetailWeb {
 		}
 		return listMap;
 	}
-	
+
 	/**
 	 * 通过ajax获取任务好
 	 * @param request
@@ -84,4 +90,5 @@ public class JobPlanDetailWeb {
 		
 		return baogongService.getEquTypeNameMap(equName);
 	}
+	
 }

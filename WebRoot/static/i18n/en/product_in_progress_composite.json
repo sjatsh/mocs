@@ -1,0 +1,29 @@
+{	
+	"top": {
+		"main_title": "WIP Report",
+		"select_title1":"Date From",
+		"select_title2":"Date To",
+		"select_title3":"Product",
+		"select_title4":"Batch No.",
+		"select_title5":"TotalType",
+		"select_title6":"Search",
+		"select_title7":"Please Select"
+	},
+	"content": {
+		"tab1":"Batch",
+		"tab2":"Process",
+		"table_title1":"Product",
+		"table_title2":"Batch No.",
+		"table_title3":"Plan Qty",
+		"table_title4":"Finish Qty",
+		"table_title5":"WIP Qty",
+		"table_title6":"Start Time",
+		"table_title7":"Finish Time",
+		"table_title8":"Operation",
+		"table_title9":"Process",
+		"table_title10":"Parts",
+		"table_title11":"Personnel",
+		"table_title12":"Yield",
+		"table_content1":"Detail"
+	}
+}

@@ -1,0 +1,122 @@
+/* 保存按钮 */
+.btn-save {
+	width: 53px;
+	height: 53px;
+	cursor: pointer;
+}
+
+.imagebtn {
+	cursor: pointer;
+}
+
+.inputText{
+	width: 100%;
+	height: 85%;
+	color: #595959 !important;
+	font-family: "微软雅黑" !important;
+}
+.inputText2{
+	width: 79%;
+	height: 85%;
+	color: #595959 !important;
+	font-family: "微软雅黑" !important;
+	vertical-align: top;
+}
+.ui-button .ui-button-text{
+	line-height: 100%;
+}
+.inputTextNoChange{
+	width:100%;
+	height:85%;
+	line_height:85%;
+	font-size:100% ;
+	color: #595959 !important;
+	font-family: "微软雅黑" !important;
+	background-color: #F0F0F0 !important;
+	background-image: url("") !important;
+}
+
+*{
+	color: #595959;
+}
+
+.main-title{
+	position: absolute;
+	left: 0;
+	top: 119px;
+	width: 384px;
+	height: 50px;
+	font-size: 40px;
+	line-height: 50px;
+}
+
+.content-wrapper{
+	position: absolute;
+	left: 384px;
+	top: 0;
+	width: 1152px;
+	height: 726px;
+}
+
+.input-title{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 24px;
+	font-size: 20px;
+	line-height: 24px;
+}
+
+.input-content{
+	position: absolute;
+	left: 0;
+	top: 24px;
+	width: 100%;
+	height: 34px;
+	font-size: 16px;
+	line-height: 30px;
+}
+.input-content>button {
+	width: 20%;
+	height: 85%;
+	border:0;
+	background-color: #00A040;
+	background-image: url('');
+	color:white;
+	text-shadow:none;
+}
+
+.input-line-1{
+	position: relative;
+	margin-left: 8px;
+	width: 1144px;
+	height: 80px;
+	text-align: center;
+}
+
+.input-line-2{
+	position: relative;
+	float: left;
+	margin-left: 8px;
+	width: 568px;
+	text-align: left;
+	height: 80px;
+}
+
+.content-table{
+	position: relative;
+	margin-left: 8px;
+	margin-top: 10px;
+	width: 1144px;
+	height: 185px;
+	overflow: auto;
+}
+
+.content-table .ui-paginator .ui-icon,.content-table .ui-paginator .ui-paginator-page{
+	height: 18px;
+}
+
+.content-table .colum-title{
+	display: none;
+}

@@ -24,7 +24,7 @@ import smtcl.mocs.services.authority.ICommonService;
  */
 public class CommonServiceImpl extends GenericServiceSpringImpl<Object, String> implements ICommonService {
 	/**
-	 * CommonServiceImpl 日志
+	 * CommonServiceImpl 日志?
 	 */
 	private final static Logger logger = Logger.getLogger(CommonServiceImpl.class);
 	

@@ -1,9 +1,8 @@
 package smtcl.mocs.services.device;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
+
+import net.sf.cglib.core.Local;
 
 import org.dreamwork.persistence.IGenericService;
 import org.dreamwork.persistence.Parameter;
@@ -163,14 +162,14 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	 * @param parameters 查询条件集合
 	 * @return IDataCollection<Map<String, Object>>
 	 */
-	public IDataCollection<Map<String, Object>> getDeviceMachineEventStat( int pageNo, int pageSize, Collection<Parameter> parameters);
+	public IDataCollection<Map<String, Object>> getDeviceMachineEventStat(Locale locale, int pageNo, int pageSize, Collection<Parameter> parameters,Map<String,String> eventMap);
 
 	/**
 	 * 获取数据库的机床事件信息
 	 * @param parameters 查询条件集合
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> getDeviceMachineEventStatChart(Collection<Parameter> parameters);
+	public List<Map<String, Object>> getDeviceMachineEventStatChart(Locale locale,Collection<Parameter> parameters,Map<String,String> eventMap);
 	public List<Map<String, Object>> getDeviceMachineEventStatChartDateCount(Collection<Parameter> parameters);
 	/**
 	 * 用户查询多台机床之间的 OEE走势比较结果 
@@ -186,14 +185,14 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	 * 单台设备时间段分析属性换算
 	 * @param map 需要换算的数据
 	 */
-	 public void convertData(Map<String, Object> map);
+	 public void convertData(Map<String, Object> map,Locale locale);
 	 
 	/**
 	 * 根据节点ID获取节点名称
 	 * @param nodeid 节点id
 	 * @return List
 	 */
-	public List getNodeName(String nodeid);
+	public List<Map<String,Object>> getNodeName(String nodeid);
 
 	/**
 	 * 根据节点id 查询子节点下所有设备信息
@@ -338,12 +337,13 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取人员信息
 	 */
-	public List<Map<String,Object>> getUserList(String userId);
+	public List<Map<String,Object>> getUserList(String userId,String nodeId);
 	
 	/**
 	 * 保存报工信息
 	 */
-	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo);
+	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo,String isGood,
+			 String depName,String jgCheckUser,String zpCheckUser,String sjCheckUser);
 	
 	/**
 	 * 验证报工数量是否合法
@@ -390,7 +390,7 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取member信息
 	 */
-	public List<Map<String, Object>> getMemberInfo(String userId);
+	public List<Map<String, Object>> getMemberInfo(String userId,String nodeId);
 	/**
 	 * 获取单个工单信息
 	 */
@@ -434,8 +434,9 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	 * 成品入库信息保存
 	 * @param num 入库数量
 	 * @param inventoryId库房id
+	 * @param materialPositionId 库位Id
 	 * @param partId 成品ID
 	 * @param dataList列表信息
 	 */
-	public String saveInStockDataInfo(String num,String inventoryId,List<Map<String,Object>> dataList);
+	public String saveInStockDataInfo(String num,String inventoryId,String materialPositionId,String partId,String instockNo,List<Map<String,Object>> dataList);
 }

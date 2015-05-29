@@ -1,0 +1,22 @@
+{	"zwxxts":"暂无数据,请更换节点或查询条件",
+	"top": {
+		"title1":"OEE趋势分析",
+		"title2":"设备名称:",
+		"title3":"时间单位:",
+		"startTime":"开始时间:",
+		"endTime":"结束时间:",
+		"title4":" 查询 "
+	},
+	"content": {
+		"lb":"列表",
+		"tb":"图表",
+		"tbtitle":"OEE趋势分析图",
+		"xh":"序号",
+		"sjsj":"事件时间  ",
+		"kyl":"可用率",
+		"bxx":"表现性",
+		"zl":"质量",
+		"oee":"OEE",
+		"teep":"TEEP"
+	}
+}

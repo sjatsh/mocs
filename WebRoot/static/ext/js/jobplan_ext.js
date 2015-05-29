@@ -14,15 +14,17 @@ var priId;
 var planType;
 
 //控制长宽的大小
-var createWidth = wjb51*1894/1920;
-var createHeight = hjb51*685/1080;
-var createRowHeight = hjb51*39/1080;
-var createColumnWidth = wjb51*374/1920;
-var fieldStyle = "font-size:"+wjb51*25/1920+"px;";
+var createWidth = wjb51*1920/1920;
+var createHeight = hjb51*720/1080;
+var createRowHeight = hjb51*40/1080;
+var createColumnWidth = wjb51*480/1920;
+/*
+ * 未知代码
+ * var fieldStyle = "font-size:"+wjb51*25/1920+"px;";
 var fieldWidth = wjb51*200/1920;
 var defineWidth = wjb51*490/1920;
 var defineHeight = hjb51*350/1080;
-var fsize = 5;
+var fsize = 5;*/
 var resourceStore;
 var eventStore;
 
@@ -72,7 +74,7 @@ Ext.onReady(function () {
 						planStatus:document.getElementById("select_box_hdn").value,
 						startTime:Ext.Date.format(date, "Y-m-d"),
 						endTime:Ext.Date.format(date1, "Y-m-d"),
-						isexpand:'false'//tree甘特图是否折叠，true为展开
+						isexpand:'true'//tree甘特图是否折叠，true为展开
 					},
 	                url:'./jobplan/getjobplanName.action'//获取产品名称信息
 	            },
@@ -104,7 +106,19 @@ Ext.onReady(function () {
 		 //加载数据信息
 		 resourceStore.load();
 		 eventStore.load();
-	    
+
+		//设置弹出模版文字
+		var tooltipTitle1,tooltipTitle2,tooltipTitle3,tooltipTitle4,tooltipTitle5,tooltipTitle6,tooltipTitle7,tooltipUnit;
+		dataTranslate("jobplan_detail", function(t) { 
+			tooltipTitle1 = t("content.tooltip_1"); 
+			tooltipTitle2 = t("content.tooltip_2"); 
+			tooltipTitle3 = t("content.tooltip_3"); 
+			tooltipTitle4 = t("content.tooltip_4"); 
+			tooltipTitle5 = t("content.tooltip_5"); 
+			tooltipTitle6 = t("content.tooltip_6"); 
+			tooltipTitle7 = t("content.tooltip_7");
+			tooltipUnit = t("content.tooltipUnit");
+		});
 	  //创建panel grid
 	    ds = Ext.create('Sch.panel.SchedulerTree', {
 	    	renderTo    : 'example-container',
@@ -114,8 +128,11 @@ Ext.onReady(function () {
 	        eventStore      : eventStore,
 	        resourceStore   : resourceStore,
 	        constrainDragToResource:true,
-	        useArrows       : true,
-	        viewPreset  : 'monthAndYear',//月和年刻度
+	        useArrows       : false,
+	        icon 			: null,
+	        rootVisible		: true,
+	    	viewPreset  : 'monthAndYear',
+	        //viewPreset  : 'weekAndDay',
 	        startDate   : start,
 			endDate     : end,
 	        multiSelect     : true,
@@ -131,9 +148,9 @@ Ext.onReady(function () {
 	        columns: [
 	            {
 	                xtype       : 'treecolumn', //this is so we know which column will show the tree
-	                text        : '<span style="font-size: 18.6px;">产品名称</span>',
-	                width:createColumnWidth,
-	                sortable    : true,
+	                text        : '<span data-i18n="content.tree_title"></span>',
+	                width		: createColumnWidth - 2,
+	                sortable    : false,
 	                dataIndex   : 'Name'
 	            }
 	        ],
@@ -143,21 +160,22 @@ Ext.onReady(function () {
 	        ).compile(),
 	        
 	      //鼠标移动提示
-		     tooltipTpl: new Ext.XTemplate(
-		        '<dl class="eventTip">',
-		        	'<dt class="blocking">零件名称:{partName}</dt>',
-		            '<dt class="icon-clock">开始时间:{[Ext.Date.format(values.StartDate, "Y-m-d G:i")]} </dt>',
-		            '<dt class="icon-clock">结束时间:{[Ext.Date.format(values.EndDate, "Y-m-d G:i")]} </dt>',
-		            '<dt class="icon-task">计划名称:{Name}</dt>',
-		            '<dt class="connecting">计划数量:{planNum} 个</dt>',
-	                '<dt class="blocking">完成数量:{finishNum} 个</dt>',
-	                '<dt class="blocking">状态:{statusName}</dt>',
-	            '</dl>'
-		    ).compile(),
-	        
+		    tooltipTpl: new Ext.XTemplate(
+					'<dt class="blocking">' + tooltipTitle1 + ': {partName}</dt>',
+					'<dt class="icon-clock">' + tooltipTitle2 + ': {[Ext.Date.format(values.StartDate, "Y-m-d G:i")]} </dt>',
+					'<dt class="icon-clock">' + tooltipTitle3 + ': {[Ext.Date.format(values.EndDate, "Y-m-d G:i")]} </dt>',
+					'<dt class="icon-task">' + tooltipTitle4 + ': {Name}</dt>',
+					'<dt class="connecting">' + tooltipTitle5 + ': {planNum} ' + tooltipUnit + '</dt>',
+					'<dt class="blocking">' + tooltipTitle6 + ': {finishNum} ' + tooltipUnit + '</dt>',
+					'<dt class="blocking">' + tooltipTitle7 + ': {statusName}</dt>',
+					'</dl>'
+				).compile()
 	    });
 
 	ds.scrollToDate(new Date(),true);
+	//局部翻译
+	dataTranslate("jobplan_detail", function(t) { $("#example-container *[data-i18n]").i18n();});
+	
 	
 	//改变作业计划长度
 	ds.on("eventresizeend",function(scheduler, record, eOpts){
@@ -205,11 +223,17 @@ Ext.onReady(function () {
 	
 	//点击产品名称时，将新建按按钮->新增作业计划
 	ds.on("select",function(this1,record, eOpts ){
+		
 		if(record.id.indexOf("Resource")>=0){
 			var id = record.data.Id;
-			document.getElementById("herf").href="javascript:openUrl('./jobplan/jobplan_add.faces?partId="+id+"')";
-			document.getElementById("img2").title="新增作业计划";
-		}
+			document.getElementById("myform:flgId").value=id;
+			$("#control_add").parent().addClass("active");
+			 
+		    //document.getElementById("control_add").href="javascript:openUrl('./jobplan/jobplan_add.faces?partId="+id+"')";
+			//document.getElementById("control_add").click();
+			//document.getElementById("img2").title="新增作业计划";
+			
+		} 
 	});
 	//点击具体的作业计划对应后台操作
 	ds.on("eventclick",function(scheduler,eventRecord,e,eOpts){
@@ -219,39 +243,56 @@ Ext.onReady(function () {
 		var partId = eventRecord.data.partId;
 		editPlanId=planId;
 		
+		document.getElementById("myform:plantype").value=eventRecord.data.planType;
 		var StartDate = Ext.Date.format(eventRecord.data.StartDate, "Y-m-d G:i");
 		var EndDate = Ext.Date.format(eventRecord.data.EndDate, "Y-m-d G:i");
-//		alert(planType);
+		
+		//重置按钮状态
+		$(".zl-content-top-info-down-btn").removeClass("active");
+		//控制按钮权限
+	    if($("#myform\\:viewDisabled").val() == "false") {
+	    	return;
+	    }
+	    
+		//常开按钮
+		$("#control_edit,#control_week,#control_month,#control_year,#control_big,#control_small").parent().addClass("active");
+
+		//新增
+		var addTitle1, addTitle2;
+		dataTranslate("jobplan_detail", function(t) {
+			addTitle1 = t("top.btn1");
+			addTitle2 = t("top.btn1_2");
+		});
 		if(planType == 1){
-			document.getElementById("herf").href="javascript:openUrl('./jobplan/jobplan_add.faces?planId="+planId+"')";
-			document.getElementById("img2").title="新增作业计划";
+			$("#control_add").attr("title", addTitle1).parent().addClass("active");
+			$("#control_add").attr("href", "javascript:void(1);");
+			document.getElementById("myform:planId").value=planId;
+			
 		}else if(planType == 2){
-			document.getElementById("herf").href="javascript:openUrl('./jobdispatch/jobdispatch_add.faces?partId="+partId+"&StartDate="+StartDate+"&EndDate="+EndDate+"&planId="+planId+"')";
-			document.getElementById("img2").title="新增工单";	
+			$("#control_add").attr("title", addTitle2).parent().addClass("active");
+			if(statusId==10)
+	    	{
+				$("#control_del").parent().addClass("active");
+	    	}
+			document.getElementById("myform:planId").value=planId;
+			document.getElementById("myform:partId1").value=partId;
+			document.getElementById("myform:subjobplanStartDate").value=StartDate;
+			document.getElementById("myform:subjobplanEndDate").value=EndDate;
 		}
+
+		//状态
 		if(eventRecord.data.planType ==1 )
-		 {
-			 document.getElementById("jobplanimg").src="./images/jobplan/dispatchstart_un.png";
-		     document.getElementById("jobplanaid").title="作业计划启动";//与xhtml有关 
-	     }else
-	     {
-		 if(statusId==10)
-		 {
-			document.getElementById("jobplanimg").src="./images/jobplan/dispatchstart.png";
-	        document.getElementById("jobplanaid").title="作业计划启动";//与xhtml有关
-			 
-		 }
-		 else if(statusId==40)
-	     {
-	        document.getElementById("jobplanimg").src="./images/jobplan/dispatchstop.png";
-	        document.getElementById("jobplanaid").title="作业计划停止";
-			 
-	      }
-	     }
+		{
+	    }else {
+	    	if(statusId==10)
+	    	{
+				$("#control_status").parent().addClass("active");
+	    	}
+	    }
 		jobName=eventRecord.data.Name;
 	});
 	
-	});
+});
 
 	App.Scheduler = {
 		init: function () {

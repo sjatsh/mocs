@@ -8,105 +8,137 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:form id="myform">
-<link rel="stylesheet" href="css/common.css" type="text/css"></link>
-<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
-<style type="text/css">
-	*{margin:0px;}
-</style>
-<link rel="stylesheet" href="css/history_touliao_chaxun_report.css" type="text/css"></link>
-<div class="title-bar">
-	<div class="logo-img">
-		<img src="images/profile_top_logo.png" />
+<!-- <link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet"	type="text/css" />
+<link rel="stylesheet" href="css/history_touliao_chaxun_report.css" type="text/css"></link> -->
+<link rel="stylesheet" href="css/publish/historyTouliaoChaxunReport.min.css" type="text/css"></link>
+    <h:outputScript>
+        var curDt = new Date();
+        curDt.setFullYear(2014);
+        curDt.setMonth(10);
+        curDt.setDate(30);
+        function disablementFunction(day){
+        if (day.isWeekend) return false;
+        if (curDt==undefined){
+        curDt = day.date.getDate();
+        }
+        var timeLong = curDt.getTime() - day.date.getTime();
+        if ( 0 > timeLong) return true; else return false;
+        }
+    </h:outputScript>
+<div class="zl-content-top" >
+	<!--头部背景 -->
+	<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+	<!--标题 -->
+	<div class="zl-content-top-title">
+		<span data-i18n="top.title1" />
 	</div>
-	<div class="title-text">历史投料批次查询</div>
-	<div class="filter-frame">
-		<div class="filter-bar">
-			<div class="filter-label">批次开始时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="startTime" tabindex="3" popup="true" inputClass="inputText" locale="en" value="#{historyTouliaoBean.startTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
-			</div>
+	<div class="zl-content-top-info-up2">
+		<div class="zl-content-label"><span data-i18n="top.title2" /></div>
+		<div class="zl-content-select zl-dateBox">
+		      <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<rich:calendar id="startTime" dayDisableFunction="disablementFunction" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+			    value="#{historyTouliaoBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+		    <h:message for="startTime" style="color:red" />
 		</div>
-		<div class="filter-bar">
-			<div class="filter-label">批次结束时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="endTime" tabindex="3" popup="true" inputClass="inputText" locale="en" value="#{historyTouliaoBean.endTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
-			</div>
+		<div class="zl-content-label"><span data-i18n="top.title3" /></div>
+		<div class="zl-content-select zl-dateBox">
+	        <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<rich:calendar id="endTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+		    value="#{historyTouliaoBean.endTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+	        <h:message for="endTime" style="color:red" />
 		</div>
 	</div>
-	<div class="filter-submit">
-		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
-			<a4j:ajax listener="#{historyTouliaoBean.SubmitSearch}" event="click" execute="startTime endTime" render=":myform:datatable"></a4j:ajax>
+	<!--查询按钮 -->
+	<div class="auto-size zl-content-top-info-search2">
+		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png" style="display:none;">
+			<a4j:ajax event="click" listener="#{historyTouliaoBean.SubmitSearch}" execute="startTime endTime" render=":myform:datatable"
+			 oncomplete="resizeTable()"></a4j:ajax>
 		</h:graphicImage>
+		<!-- 查找按钮 -->
+		<div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
+			<img class="zl-buttonBG" src="images/input/button.png"/>
+			<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+			<div class="zl-button-text">
+				<img class="zl-button-icon" src="images/input/icon_search.png" />
+				<span data-i18n="top.title4"></span>
+			</div>
+		</div>
 	</div>
 </div>
-<script language="javascript">
-	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
-	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080);
-	$(".title-text").css("left", wjb51 * 450 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
-	$(".filter-frame").css("left", wjb51 * 928 / 1920 + "px").css("top", hjb51 * 30 / 1080 + "px");
-	$(".filter-bar").css("width", wjb51 * 524 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 40 / 1080 + "px");
-	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
-	$(".filter-input").css("width", wjb51 * 246 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
-	$(".filter-input .rf-cal-extr").css("width", wjb51 * 246 / 1920 + "px");
-	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 47 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
-</script>
-
-<div class="content-frame">
-	<div id="list-frame">
-		<div class="ui-datatable ui-widget table-title">
-			<table style="width: 100%; height: 100%;">
-				<tr>
-					<th class="ui-state-default" width="30%">零件号</th>
-					<th class="ui-state-default" width="30%">批次号</th>
-					<th class="ui-state-default" width="20%">投料数量</th>
-					<th class="ui-state-default" width="10%">库存数量</th>
-					<th class="ui-state-default" width="10%">完成数量</th>
-				</tr>
+<div class="zl-content-info">
+	<div class="table-title ui-datatable ui-widget">
+			<table>
+			    <thead>
+			      <tr>
+					<th class="ui-state-default" width="30%">
+					   <div class="ui-dt-c">
+					     <span data-i18n="content.ljh" />
+					    </div>
+					 </th>
+					<th class="ui-state-default" width="30%">
+					    <div class="ui-dt-c">
+					      <span data-i18n="content.pch" />
+					     </div>
+					   </th>
+					<th class="ui-state-default" width="20%">
+					     <div class="ui-dt-c">
+					       <span data-i18n="content.tlsl" />
+					     </div>
+					   </th>
+					<th class="ui-state-default" width="10%">
+					    <div class="ui-dt-c">
+					       <span data-i18n="content.kcsl" />
+					    </div>
+					</th>
+					<th class="ui-state-default" width="10%">
+					     <div class="ui-dt-c">
+					        <span data-i18n="content.wcsl" />
+					     </div>
+					</th>
+				  </tr>
+				</thead>
 			</table>
 		</div>
 		<div class="table-body">
-			<p:dataTable value="#{historyTouliaoBean.outData}" var="pip" id="datatable" >
+		  <p:dataTable value="#{historyTouliaoBean.outData}" var="pip" id="datatable" >
 				<p:column style="width:30%; ">
 					<f:facet name="header">
-						零件号
+						.
 					</f:facet>
 					<h:outputText value="#{pip.partName}" />
 				</p:column>
 				<p:column style="width:30%; ">
 					<f:facet name="header">
-						批次号
+					   .
 					</f:facet>
 					<h:outputText value="#{pip.jobplanNo}" />
 				</p:column>
 				<p:column style="width:20%; ">
 					<f:facet name="header">
-						投料数量
+						.
 					</f:facet>
 					<h:outputText value="#{pip.touliaoNum}" />
 				</p:column>
 				<p:column style="width:10%; ">
 					<f:facet name="header">
-						库存数量
-					</f:facet>
+					  .
+					</f:facet>	
 					<h:outputText/>
 				</p:column>
 				<p:column style="width:10%; ">
 					<f:facet name="header">
-						完成数量
+						.
 					</f:facet>
 					<h:outputText value="#{pip.finishNum}" />
 				</p:column>
 			</p:dataTable>
 		</div>
 	</div>
-</div>
-<script language="javascript">
-	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
-	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
-	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
-	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px").css("font-size", hjb51 * 30 / 1080 + "px");
-	$("#list-frame th").css("height", hjb51 * 44 / 1080 + "px");
-</script>
+
+<h:outputScript library="js" name="jquery.mCustomScrollbar.concat.min.js"></h:outputScript>
+
+<!-- <h:outputScript library="js/page" name="history_touliao_chaxun_report.js"></h:outputScript> -->
+<h:outputScript library="js/publish" name="historyTouliaoChaxunReport.min.js"></h:outputScript>
 </h:form>
 </ui:composition>

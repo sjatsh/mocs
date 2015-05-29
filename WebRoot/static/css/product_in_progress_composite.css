@@ -1,229 +1,51 @@
-@charset "utf-8";
-body {
-	margin: 0;
-	font-family: "微软雅黑";
-}
-
-a {
-	font-family: "微软雅黑";
-}
-/* 标题栏 */
-.title-bar {
-	position: relative;
-	width: 1920px;
-	height: 362px;
-}
-
-/* logo */
-.logo-img {
-	position: absolute;
-	left: 102px;
-	top: 74px;
-	width: 300px;
-	height: 229px;
-	cursor: pointer;
-}
-
-.logo-img img {
-	height: 100%;
-}
-
-/* 标题 */
-.title-text {
-	position: absolute;
-	left: 568px;
-	top: 157px;
-	line-height: 52px;
-	font-size: 52px;
-	font-weight: bold;
-	color: #595959;
-}
-
-/* 筛选栏 */
-.filter-frame {
-	position: absolute;
-	left: 968px;
-	top: 24px;
-}
-.filter-frame2 {
-	position: absolute;
-	left: 1368px;
-	top: 24px;
-}
-
-.filter-bar {
-	position: relative;
-	width: 484px;
-	height: 42px;
-	margin-top: 50px;
-}
-
-/* 筛选标题 */
-.filter-label {
+/* 文本位置 */
+.zl-content-label {
 	float: left;
-	line-height: 42px;
-	font-size: 38px;
-	color: #595959;
+	margin-left:30px;
+	margin-top: 40px;
+	width: 75px;
+	font-size: 18px;
+	line-height: 18px;
+	color: #828282;
+	white-space: nowrap;
+	text-align: right;
 }
-
-/* 筛选输入 */
-.filter-input {
-	width: 246px;
-	height: 42px;
-	float: right;
-	font-size: 20px;
-	color: #333333;
+/* 时间选择框位置 */
+.zl-content-select {
+	float: left;
+	margin-left: 20px;
+	margin-top: 32px;
 }
-
-.filter-input input[type='text'] {
-	width: 100%;
-	height: 100%;
-	text-indent: 0.5em;
-	border: solid 1px #000000;
-	border-radius: 5px;
+/* 下拉框位置 */
+.zl-select-lt{
+	float: left;
+	margin-left: 30px;
+	margin-top: 32px;
 }
-
-.filter-input .filter-select {
-	width: 100%;
-	height: 100%;
-	text-indent: 0.5em;
-	border: solid 1px #000000;
-	border-radius: 5px;
-	padding-right: 0.5em;
+/* 表头 */
+.content-info-tubiao {
+	font-size: 18px;
 }
-
-@-moz-document url-prefix() {
-	.filter-select
-	{
-		padding-top: 6px;
-	}
-}
-
-/* 搜索按钮 */
-.filter-submit {
+.table-title {
 	position: absolute;
-	left: 1613px;
-	top: 107px;
-	width: 164px;
-	height: 164px;
-	cursor: pointer;
-}
-
-.filter-submit img {
-	position: absolute;
-	top: 0;
 	left: 0;
-	height: 100%;
-}
-
-.filter-submit>.active {
-	display: none;
-}
-
-.filter-submit:active>.active {
-	display: block;
-}
-
-/* 内容 */
-.content-frame {
-	position: relative;
+	top: 0;
 	width: 1920px;
-	height: 654px;
-	background-image: url('../images/device_time_tubiao_bg.png');
-	background-repeat: no-repeat;
-	overflow: hidden;
+	font-size: 100%;
+	z-index: 1;
 }
-
-.tab-bar {
-	width: 100%;
-	height: 56px;
-}
-
-.tab-btn {
-	position: relative;
-	float: left;
-	width: 168px;
-	height: 100%;
-	background-image: -moz-linear-gradient(top, #cccccc, #ffffff);
-	/* Firefox */
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(.1, #cccccc),
-		color-stop(1, #ffffff)); /* Saf4+, Chrome */
-	font-size: 30px;
-	line-height: 56px;
-	color: #595959;
-	text-align: center;
-	z-index: 2;
-}
-
-.tab-btn:hover {
-	background-image: -moz-linear-gradient(top, #00A040, #ffffff);
-	/* Firefox */
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(.1, #00A040),
-		color-stop(1, #ffffff)); /* Saf4+, Chrome */
-	cursor: pointer;
-}
-
-.tab-btn.active,.tab-btn.active:hover {
-	background-image: none;
-	background-color: #00A040;
-	color: #ffffff;
-	font-weight: bold;
-	cursor: default;
-}
-
-#list-frame {
+/*表格内容*/
+.table-body {
 	position: absolute;
-	left: 0px;
-	top: 60px;
+	left: 0;
+	top: 40px;
 	width: 1920px;
-	height: 598px;
+	height: 678px;
+	font-size: 100%;
 	overflow: auto;
-	z-index: 1;
-	overflow: hidden;
+	z-index: 0;
 }
-
-.table-title
-{
-	position: absolute;
-	left: 8px;
-	right: 8px;
-	height: 31px;
-	z-index: 1;
-}
-
-.table-body
-{
-	width: 100%; 
-	height: 100%;
-	padding: 0px 8px 0px 8px;
-	overflow-y: scroll;
-}
-
-.ui-widget
-{
-	font-family: "微软雅黑";
-	font-size: inherit;
-}
-
-/* 表格标题栏  */
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default
-{
-	background-image: url("../images/device_oee_trend_table_head.png");
-	background-color: null;
-	color: white;
-	text-shadow: none;
-}
-.ui-datatable-odd
-{
-	background: none repeat scroll 0 0 #CCEBF7;
-}
-
-#chart-frame {
-	position: absolute;
-	left: 0px;
-	top: 56px;
-	width: 1920px;
-	height: 598px;
-	overflow: hidden;
-	z-index: 1;
+.table-body .ui-widget {
+	font-size: 100%;
+	border-bottom: solid 1px rgba(67, 147, 141, 0.25);
 }

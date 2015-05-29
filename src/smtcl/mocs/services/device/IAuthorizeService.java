@@ -3,6 +3,8 @@ package smtcl.mocs.services.device;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import smtcl.mocs.beans.authority.cache.TreeNode;
 import smtcl.mocs.pojos.authority.Module;
 
@@ -127,6 +129,6 @@ public interface IAuthorizeService {
 	 * @param appId
 	 * @return
 	 */
-	public List<Map<String,Object>> getMenu(String userId, String appId);
+	public List<Map<String,Object>> getMenu(HttpSession session,String userId, String appId);
 	
 }

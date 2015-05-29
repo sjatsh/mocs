@@ -7,828 +7,689 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-	<h:outputScript library="js" name="part_process_guide.js"></h:outputScript>
-	<style type="text/css">
-	.text{
-		border: 1px black solid !important;
-	}
-	</style>
-	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
-	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
-	<div class="guide_kuangDiv">
+	
+	<link rel="stylesheet" href="../css/admin/part_process_guide.css" type="text/css"></link>
+	
+	<div class="toolbar">
 		<h:inputHidden value="#{partProcessGuideUpdateBean.loadData}"></h:inputHidden>
-		<div class="guide_kuangDiv_head">
-			<div class="guide_ljbh_head">
-				<h:outputText value="零件编号:" styleClass="guide_text_label"></h:outputText>
-				<h:inputText value="#{partProcessGuideUpdateBean.selectProcess}"  readonly="true" styleClass="guide_text"></h:inputText>
-				<h:outputText value="工艺方案:" styleClass="guide_text_label" style="margin-left: 4%"></h:outputText>
-				<h:inputText value="#{partProcessGuideUpdateBean.selectProcessPlan}" readonly="true" styleClass="guide_text">
-				</h:inputText>
-			</div>
-			<div class="guide_xd">
-				<div class="headDiv2">
-				 	<div class="process_config_menuDiv active" id="xsjbxx" style="margin-left: 2%" onclick="menuClick('jbxx')"><span>基本信息</span></div>
-				 	<div class="process_config_menuDiv" id="xsjt" onclick="menuClick('jt')"><span>机台</span></div>
-				 	<div class="process_config_menuDiv" id="xswl" onclick="menuClick('wl')"><span>物料</span></div>
-				 	<div class="process_config_menuDiv" id="xszy" onclick="menuClick('zy')"><span>资源</span></div>
-				 	<div class="process_config_menuDiv" id="xscb" onclick="menuClick('cb')"><span>成本</span></div>
-				 	<div class="process_config_menuDiv" id="xszj" onclick="menuClick('zj')"><span>质检</span></div>
-			    </div>
-				<div class="guide_menu_bottom"></div>
-			    
-			    <div id="jbxx">
-			    	<h:panelGroup id="jbxx">
-				    	<h:inputHidden value="#{partProcessGuideUpdateBean.part.id}"  styleClass="guide_text"></h:inputHidden>
-				    	<div style="width: 100%; margin-top: 36px; font-size: 12px;">
-				    		<div class="guide_text_label" style="float: left; width: 10%; margin-left: 5%;">
-				    			<h:outputText value="工序编号:"></h:outputText><font style="color:red;">*</font>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-top: -14px;">
-				    			<h:inputText value="#{partProcessGuideUpdateBean.part.no}" id="partNo" styleClass="guide_text" readonly="true" />
-				    		</div>
-				    		<div class="guide_text_label" style="float: left; width: 10%;">
-				    			<h:outputText value="工序序号:"></h:outputText><font style="color:red;">*</font>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-left: 2%; margin-top: -14px;'">
-		    					OP-<h:inputText value="#{partProcessGuideUpdateBean.part.processOrder}" styleClass="guide_text" id="processOrder" style="width: 90px;"></h:inputText>
-	    					</div>
-				    		<div class="guide_text_label" style="float: left; width: 10%;">
-				    			<h:outputText value="工序名称:"></h:outputText><font style="color:red;">*</font>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-top: -14px;'">
-				    			<h:inputText value="#{partProcessGuideUpdateBean.part.name}" id="partName" styleClass="guide_text"></h:inputText>
-				    		</div>
-	    					<div style="width: 100%; height: 40px;"></div>
-	    					
-				    		
-				    		<div class="guide_text_label" style="float: left; width: 10%; margin-left: 5%;">
-				    			<h:outputText value="工序类型:"></h:outputText><font style="color:red;">*</font>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-top: -4px;">
-				    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.processType}" styleClass="select" 
-				    					style="border:0px;font-size:14px;" id="processType">
-					    				   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-									       <f:selectItem itemLabel="投料" itemValue="1" ></f:selectItem>
-									       <f:selectItem itemLabel="加工" itemValue="2" ></f:selectItem>
-									       <f:selectItem itemLabel="检验" itemValue="3" ></f:selectItem>
-									       <f:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.processTypeChange}" 
-									       render=":myform:offlineProcess"></f:ajax>
-									</h:selectOneMenu> 
-				    		</div>
-				    		<div class="guide_text_label" style="float: left; width: 10%;">
-				    			<h:outputText value="前序编号:"></h:outputText>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-left: 2%; margin-top: -4px;'">
-			    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.onlineProcessID}" styleClass="select" 
-			    					style="border:0px;font-size:14px;">
-				    				   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-								       <f:selectItems value="#{partProcessGuideUpdateBean.pprs}"  
-								           var="equ"  itemLabel="#{equ.name}"  itemValue="#{equ.id}" /> 
-								</h:selectOneMenu> 
-	    					</div>
-				    		<div class="guide_text_label" style="float: left; width: 10%;">
-				    			<h:outputText value="是否尾序:"></h:outputText>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-top: -4px;'">
-				    			<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.offlineProcess}" styleClass="select" 
-				    				style="border:0px;font-size:14px;" id="offlineProcess">
-				    				   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-								       <f:selectItem itemLabel="是" itemValue="1" ></f:selectItem>
-								       <f:selectItem itemLabel="否" itemValue="0" ></f:selectItem>
-								</h:selectOneMenu> 
-				    		</div>
-	    					<div style="width: 100%; height: 40px;"></div>
-	    					
-				    		
-				    		<div class="guide_text_label" style="float: left; width: 10%; margin-left: 5%;">
-				    			<h:outputText value="工序连续:"></h:outputText>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-top: -4px;">
-			    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.processDuration}" styleClass="select" 
-			    					style="border:0px;font-size:14px;">
-				    				   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-								       <f:selectItem itemLabel="是" itemValue="1" ></f:selectItem>
-								       <f:selectItem itemLabel="否" itemValue="0" ></f:selectItem>
-								</h:selectOneMenu> 
-				    		</div>
-				    		<div class="guide_text_label" style="float: left; width: 10%;">
-				    			<h:outputText value="是否必检:"></h:outputText><font style="color:red;">*</font>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-left: 2%; margin-top: -4px;'">
-				    			<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.ischeck}" styleClass="select" 
-				    				style="border:0px;font-size:14px;" id="ischeck">
-				    				   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-								       <f:selectItem itemLabel="是" itemValue="1" ></f:selectItem>
-								       <f:selectItem itemLabel="否" itemValue="0" ></f:selectItem>
-								</h:selectOneMenu> 
-	    					</div>
-				    		<div class="guide_text_label" style="float: left; width: 10%;">
-				    			<h:outputText value="检验类型:"></h:outputText>
-				    		</div>
-				    		<div style="float: left; width: 18%; margin-top: -4px;'">
-			    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.checktype}" styleClass="select" 
-			    					style="border:0px;font-size:14px;">
-				    				   <f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-								       <f:selectItem itemLabel="首检" itemValue="201" ></f:selectItem>
-								       <f:selectItem itemLabel="尾检" itemValue="202" ></f:selectItem>
-								       <f:selectItem itemLabel="巡检" itemValue="203" ></f:selectItem>
-								       <f:selectItem itemLabel="首尾检" itemValue="204" ></f:selectItem>
-								       <f:selectItem itemLabel="首巡检" itemValue="205" ></f:selectItem>
-								       <f:selectItem itemLabel="尾巡检" itemValue="206" ></f:selectItem>
-								       <f:selectItem itemLabel="首尾巡检" itemValue="207" ></f:selectItem>
-								</h:selectOneMenu> 
-				    		</div>
-	    					<div style="width: 100%; height: 40px;"></div>
-	    					
-				    		<div class="guide_text_label" style="float: left; width: 10%; margin-left: 5%;">
-				    			<h:outputText value="指导文件:"></h:outputText>
-				    		</div>
-		    				<div style="width:72%;height:90px;overflow:auto; ">
-		    					<rich:fileUpload doneLabel="文件上传成功"
-									        noDuplicate="true"
-								 			serverErrorLabel="文件过大,导致文件上传失败"
-											fileUploadListener="#{partProcessGuideUpdateBean.Upload}"
-											id="upload" acceptedTypes="jpg,pdf"
-											ontyperejected="alert('添加文件格式为jpg,pdf');" 
-											clearLabel="clear" deleteLabel="删除" addLabel="添加文件"
-											uploadLabel="上传文件" 
-											style="width:99%;height:88px;border-right: 1px solid white;">
-											<f:ajax event="uploadcomplete" execute="@none" render="myform:file"></f:ajax>
-					       		</rich:fileUpload>
-		    				</div>
-		    				<h:inputText value="#{partProcessGuideUpdateBean.part.file}" id="file" styleClass="guide_text" style="display:none;"></h:inputText>
-	    					<div style="width: 100%; height: 40px;"></div>
-	    					
-				    		<div class="guide_text_label" style="float: left; width: 10%; margin-left: 5%;">
-				    			<h:outputText value="工序描述:"></h:outputText>
-				    		</div>
-				    		<div style="float: left; width: 72%; margin-top: -9px;">
-				    			<h:inputTextarea value="#{partProcessGuideUpdateBean.part.description}" style="width: 100%;"></h:inputTextarea>
-				    		</div>
-	    					<div style="width: 100%; height: 40px;"></div>
-				    	</div>
-			    	</h:panelGroup>
-			    	<div style="width: 100%;margin-top: 7px; text-align: center;">  
-			    		<p:commandButton id="btn_next_jbxx" value="下一步"  styleClass="btn-next" onclick="jbxxNext()" style="display: none"></p:commandButton>
-			    		<p:commandButton id="btn_save" value="保存" actionListener="#{partProcessGuideUpdateBean.Save}"  
-			    			update=":myform:messages :myform:updateSuccess" oncomplete="navigation()" 
-			    		styleClass="delete" style="display: none;" ></p:commandButton>
-			    		
-			    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" styleClass="btn-save" style="float: left; margin-left: 1%;"></h:graphicImage>
-			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_jbxx')" styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage> 
-			    	</div>
-			    </div>
-			    <div id="jt" style="display: none;">
-			    	<div style="position: absolute;display: none;" id="processDetal">
-			    	  	<h:panelGroup id="processDetal">
-				    		<table style="border:1px solid red;background-color: gray;">
-				    			<tr>
-				    				<td>程序编号</td>
-				    				<td></td>
-				    			</tr>
-				    			<tr>
-				    				<td>程序名称</td>
-				    				<td></td>
-				    			</tr>
-				    			<tr>
-				    			
-				    				<td>程序内容</td>
-				    				<td></td>
-				    			</tr>
-				    		</table>
-			    		</h:panelGroup>
-			    	</div>
-			    	<div style="width: 100%; margin-top: 20px;">
-				    	<div class="guide_text_label" style="float: left; width: 10%; line-height: 22px; margin-left: 5%;">
-			    			<h:outputText value="加工程序:"></h:outputText><font style="color:red;">*</font>
-			    		</div>
-			    		<div style="float: left; width: 20%; margin-left: 2%;">
-		    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.programID}" id="programID"  styleClass="select" 
-		    					style="border:0px;font-size:14px;">
-		    				   <f:selectItem  itemLabel="请选择" itemValue="请选择"></f:selectItem>
-						       <f:selectItems value="#{partProcessGuideUpdateBean.ncprogsList}"  
-						           var="ncp"  itemLabel="#{ncp.progName}"  itemValue="#{ncp.id}" />  
-						    </h:selectOneMenu> 
-			    		</div>
-			    		
-				    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 2%; line-height: 22px;">
-			    			<h:outputText value="加工时间:"></h:outputText>
-			    		</div>
-			    		<div style="float: left; width: 30%; margin-left: 2%;">
-		    				<h:inputText value="#{partProcessGuideUpdateBean.part.processingTime}" id="processingTime" styleClass="guide_text" style="margin-top: 0;" >
-		    				</h:inputText>
-			    		</div>
-			    		<div style="width: 100%; height: 40px;"></div>
-			    		
-				    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 5%; line-height: 22px;">
-			    			<h:outputText value="节拍时间:"></h:outputText><font style="color:red;">*</font>
-			    		</div>
-			    		<div style="float: left; width: 20%; margin-left: 2%;">
-		    				<h:inputText value="#{partProcessGuideUpdateBean.part.theoryWorktime}" id="theoryWorktime" styleClass="guide_text" style="margin-top: 0;" >
-		    				</h:inputText>
-			    		</div>
-			    		
-				    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 2%; line-height: 22px;">
-			    			<h:outputText value="预计产能:"></h:outputText>
-			    		</div>
-			    		<div style="float: left; width: 30%; margin-left: 2%;">
-		    				<h:inputText value="#{partProcessGuideUpdateBean.part.capacity}" styleClass="guide_text" id="capacity" style="margin-top: 0;">
-		    				</h:inputText> 
-			    			<font style="font-size:10px;">件/小时 </font>
-			    		</div>
-			    		<div style="width: 100%; height: 40px;"></div>
-			    	</div>
-					<div class="div-content-top-shadow">
-						<img src="../images/demo/bottom_shadow.png" />
-					</div>
-			    	
-			    	<div class="tableprocess" style="margin-top: 0; height: 186px;">
-						<p:dataTable var="sb" value="#{partProcessGuideUpdateBean.tpeqModel}" 
-				    	  editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowEqu}" 
-				    	  paginator="false" paginatorPosition="bottom" id="sblist">
-				   			<p:column selectionMode="multiple"  />
-						  	<p:column headerText="设备类型"   >
-			                    <h:outputText value="#{sb.equipmentTypeName}" />
-					        </p:column>
-					        <p:column headerText="设备序列号">
-			                    <h:outputText value="#{sb.equipmentName}" />
-					        </p:column>
-						  </p:dataTable>
-				  		 <p:dialog widgetVar="addSB" height="260" id="addsb" resizable="false">
-						  	<table>
-						  		<tr>
-						  			<td style="height:30px;">设备类型</td>
-						  			<td style="height: 30px;">
-						  			  <h:inputText value="#{partProcessGuideUpdateBean.addtpEqu.equipmentTypeName}"  styleClass="text" onfocus="of()" 
-						  			  id="treetxt"/>
-						  			  <div id="tree" style="display:none;position: absolute;z-index: 100;width: 130px;height: 200px;
-						  			  			border:1px black solid;overflow: auto;">
-							  			  <p:tree id="treeSingle" value="#{partProcessGuideUpdateBean.root}" var="node"  
-										            selection="#{partProcessGuideUpdateBean.selectedNode}"   selectionMode="single" style="width:150px;"> 
-										        <p:ajax event="select" listener="#{partProcessGuideUpdateBean.onNodeSelect}" 
-										        	update=":myform:treeSingle :myform:equinfo :myform:treetxt" oncomplete="cc()"/>  
-										        <p:treeNode>  
-										            <h:outputText value="#{node.equipmentType}" />  
-										        </p:treeNode>  
-										   </p:tree>
-									   </div>  
-						  			</td>
-						  			<td>设备序列号</td><td>
-						  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addtpEqu.equipmentName}"  id="equinfo" styleClass="select">
-						  				   <f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-									       <f:selectItems value="#{partProcessGuideUpdateBean.equinfolist}"  
-									           var="equ"  itemLabel="#{equ.equName}"  itemValue="#{equ.equSerialNo}" />  
-									    </h:selectOneMenu> 
-						  			</td>
-						  		</tr>
-						  	</table>
-      						<div class="headDivduan">
-      							<p:commandButton value="增加"  styleClass="delete" onclick="AddEqu()"></p:commandButton>
-				  				<p:commandButton value="增加"  style="display:none;" actionListener="#{partProcessGuideUpdateBean.onaddEqu}" 
-				  				 update=":myform:sblist :myform:treetxt :myform:equinfo " oncomplete="addSB.hide()" id="AddEquBtn"></p:commandButton> 
-      						</div>
-						  </p:dialog>
-					</div>
-			    	<div class="headDivduan">
-						<div style="width: 100%;height: 4px;"></div>
-					    <p:commandButton value="新建"  oncomplete="addSB.show()" styleClass="delete" />
-				    	<p:commandButton value="删除"  actionListener="#{partProcessGuideUpdateBean.ondelEqu}" styleClass="delete" 
-				    		update=":myform:sblist"></p:commandButton>
-					</div>
-			    	<div style="width: 100%;margin-top: 10px; text-align: center;">
-				    	<p:commandButton id="btn_prev_jt" value="上一步"  onclick="jtBack()" styleClass="delete" style="display:none"></p:commandButton> 
-				    	<p:commandButton id="btn_next_jt" value="下一步"  onclick="jtNext()" styleClass="delete" style="display:none"></p:commandButton> 
-				    	<p:commandButton value="保存" actionListener="#{partProcessGuideUpdateBean.Save}" 
-				    		update=":myform:messages :myform:updateSuccess" styleClass="delete" oncomplete="navigation()" style="display:none"></p:commandButton>
-				    		
-			    		<h:graphicImage alt="prev" url="../images/demo/icons/btn-prev.png" onclick="subClick('myform:btn_prev_jt')" styleClass="btn-prev" style="float: left; margin-left: 1%;"></h:graphicImage>
-			    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" styleClass="btn-save" style="margin: 0 auto;"></h:graphicImage>
-			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_jt')" styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage> 
-			    	</div>
-			    </div>
-			    <div id="wl" style="display: none">		
-			    	<div style="width: 100%; height: 20px;"></div>	
-					<div class="div-content-top-shadow">
-						<img src="../images/demo/bottom_shadow.png" />
-					</div>			
-					<div class="tableprocess" style="margin-top: 0; height: 266px;">					
-				    	<p:dataTable var="wl" value="#{partProcessGuideUpdateBean.mediumPartModel}" id="wld"
-				    	  editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowPart}" 
-				    	  paginator="false" paginatorPosition="bottom" >
-				   			<p:column selectionMode="multiple"  />
-						  	<p:column headerText="物料编号"   >
-					                    <h:outputText value="#{wl.wlNo}" />
-					        </p:column>
-					        <p:column headerText="物料名称" >
-					                    <h:outputText value="#{wl.wlName}" />
-					        </p:column>
-					        <p:column headerText="物料规格"   >
-					                    <h:outputText value="#{wl.wlnorm}" />
-					        </p:column>
-					        <p:column headerText="需求类型"   >
-					                    <h:outputText value="#{wl.wlType}" />
-					        </p:column>
-					        <p:column headerText="需求数量"   >
-					                    <h:outputText value="#{wl.wlNumber}" />
-					        </p:column>
-						  </p:dataTable>
-						  <p:dialog widgetVar="addWl" resizable="false">
-						  	<table>
-						  		<tr>
-						  			<td>物料编号</td>
-						  			<td>物料名称</td>
-						  			<td>物料规格</td>
-						  			<td>需求类型</td>
-						  			<td>需求数量</td>
-						  		</tr>
-						  		<tr>
-						  			<td>
-						  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addWL.wlNo}" id="wlNo" styleClass="select">
-									        <f:selectItems value="#{partProcessGuideUpdateBean.selectWL}"  
-									           var="wls"  itemLabel="#{wls.no}"  itemValue="#{wls.no}" />  
-									       <f:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectWLChange}" 
-									       	render=":myform:wlname :myform:wlnorm"></f:ajax>
-									    </h:selectOneMenu> 
-						  			</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.addWL.wlName}" id="wlname" readonly="true" styleClass="text"/></td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.addWL.wlnorm}" id="wlnorm" readonly="true" styleClass="text"/></td>
-						  			<td>
-						  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addWL.wlType}" id="wlType" styleClass="select">
-						  					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-						  					<f:selectItem itemLabel="主料" itemValue="主料"></f:selectItem>
-						  					<f:selectItem itemLabel="辅料" itemValue="辅料"></f:selectItem>
-						  					<f:selectItem itemLabel="前序物料" itemValue="前序物料"></f:selectItem>
-									    </h:selectOneMenu> 
-							    	</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.addWL.wlNumber}" id="wlNumber" styleClass="text"/></td>
-						  		</tr>
-						  	</table>
-      						<div class="headDivduan">
-		  						<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.AddWlPojo}" 
-			  						update=":myform:wld :myform:wlNo :myform:wlname :myform:wlnorm :myform:wlType :myform:wlNumber " 
-				  					style="display:none;" id="wladd" oncomplete="addWl.hide()"/>
-				  				<p:commandButton value="新增" onclick="wuisnull()" />
-      						</div>
-						  </p:dialog>
-					</div>
-			    	<div class="headDivduan">
-						<div style="width: 100%;height: 4px;"></div>
-					    <p:commandButton value="新建"  oncomplete="addWl.show()" styleClass="delete" />
-				    	<p:commandButton value="删除"  actionListener="#{partProcessGuideUpdateBean.onDelete}" styleClass="delete" update=":myform:wld" />
-					</div>		
+		
+		<span class="txt-toolbar" data-i18n="page4.top.title1"></span>
+		<h:inputText value="#{partProcessGuideUpdateBean.selectProcess}"  readonly="true" styleClass="input-toolbar"></h:inputText>
+		<span class="txt-toolbar" data-i18n="page4.top.title2"></span>
+		<h:inputText value="#{partProcessGuideUpdateBean.selectProcessPlan}" readonly="true" styleClass="input-toolbar"></h:inputText>
+	</div>
+	<div class="processlist">
+		<div class="tabbar">
+		 	<div class="menu-tabbar act" id="btnjbxx"><span data-i18n="page4.tab.title1"></span></div>
+		 	<div class="menu-tabbar" id="btnjt"><span data-i18n="page4.tab.title2"></span></div>
+		 	<div class="menu-tabbar" id="btnwl"><span data-i18n="page4.tab.title3"></span></div>
+		 	<div class="menu-tabbar" id="btnzy"><span data-i18n="page4.tab.title4"></span></div>
+		 	<div class="menu-tabbar" id="btncb"><span data-i18n="page4.tab.title5"></span></div>
+		 	<div class="menu-tabbar" id="btnzj"><span data-i18n="page4.tab.title6"></span></div>
+		</div>
+		<!-- 基本信息 -->
+		<div class="processlist-content" id="jbxx" style="display: block;">
+	    	<h:panelGroup id="jbxx">
+				<h:inputHidden value="#{partProcessGuideUpdateBean.part.id}"></h:inputHidden>
+		    	<div class="processlist-content-line">
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title1"></span>
+		    		<span class="require">*</span>
+		    		<h:inputText value="#{partProcessGuideUpdateBean.part.no}" id="partNo" styleClass="input-toolbar" readonly="true"/>
+		    		
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title2"></span>
+		    		<span class="require">*</span>
+		    		<span class="txt-toolbar" style="margin-left: 0;">OP-</span><h:inputText value="#{partProcessGuideUpdateBean.part.processOrder}" styleClass="input-toolbar" style="width: 18%;" id="processOrder"></h:inputText>
+		    		
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title3"></span>
+		    		<span class="require">*</span>
+		    		<h:inputText value="#{partProcessGuideUpdateBean.part.name}" id="partName" styleClass="input-toolbar"/>
+		    	</div>
+		    	<div class="processlist-content-line">
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title4"></span>
+		    		<span class="require">*</span>
+		    		<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.processType}" styleClass="select-toolbar"  id="processType">
+	    				   <f:selectItem itemLabel="page4.jbxx.option" itemValue="" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option1" itemValue="1" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option2" itemValue="2" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option3" itemValue="3" ></f:selectItem>
+					       <a4j:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.processTypeChange}" 
+					       render=":myform:offlineProcess" oncomplete="translateReady();"></a4j:ajax>
+					</h:selectOneMenu>
 					
-			    	<div style="width: 100%;margin-top: 10px; text-align: center;">
-					    <p:commandButton id="btn_prev_wl" value="上一步" onclick="wlBack()" styleClass="delete" style="display: none;"></p:commandButton> 
-			    		<p:commandButton id="btn_next_wl" value="下一步" onclick="wlNext()" styleClass="delete" style="display: none;"></p:commandButton>
-					    <p:commandButton value="保存" actionListener="#{partProcessGuideUpdateBean.Save}" 
-					    update=":myform:messages :myform:updateSuccess" styleClass="delete" oncomplete="navigation()" style="display: none;"></p:commandButton>
-					    
-					    <h:graphicImage alt="prev" url="../images/demo/icons/btn-prev.png" onclick="subClick('myform:btn_prev_wl')" styleClass="btn-prev" style="float: left; margin-left: 1%;"></h:graphicImage>
-			    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" styleClass="btn-save" style="margin: 0 auto;"></h:graphicImage>
-			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_wl')" styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage>
-					</div>
-			    </div>
-			    <div id="zy" style="display: none;font-size: 16px;">
-				    <div style="width: 100%; margin-top: 20px;">
-				    	<div class="guide_text_label" style="float: left; width: 10%; line-height: 22px; margin-left: 5%;">
-			    			<h:outputText value="装夹时间:"></h:outputText>
-			    		</div>
-			    		<div style="float: left; width: 20%; margin-left: 2%;">
-			   				<h:inputText value="#{partProcessGuideUpdateBean.part.installTime}" styleClass="guide_text" id="installTime" style="margin-top: 0;"></h:inputText>
-			    		</div>
-			    		
-				    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 2%; line-height: 22px;">
-			    			<h:outputText value="卸载时间:"></h:outputText>
-			    		</div>
-			    		<div style="float: left; width: 30%; margin-left: 2%;">
-			   				<h:inputText value="#{partProcessGuideUpdateBean.part.uninstallTime}" styleClass="guide_text" id="uninstallTime" style="margin-top: 0;"></h:inputText>
-			    		</div>
-			    		<div style="width: 100%; height: 40px;"></div>
-			    	</div>
-			    	
-			    	
-					<div class="div-content-top-shadow">
-						<img src="../images/demo/bottom_shadow.png" />
-					</div>
-					<div class="tableprocess" style="margin-top: 0; height: 80px;">	
-				   		<p:dataTable var="jj" value="#{partProcessGuideUpdateBean.tpftdm}" id="djj"
-				    	  editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectRowJJ}" 
-				    	  paginator="false" paginatorPosition="bottom" >
-				   			<p:column selectionMode="multiple"  />
-						  	<p:column headerText="夹具类型编号"   >
-			                    <h:outputText value="#{jj.fixtureNO}" />
-					        </p:column>
-					        <p:column headerText="夹具类型名称"   >
-			                    <h:outputText value="#{jj.fixtureName}" />
-					        </p:column>
-						 </p:dataTable>
-						 <p:dialog widgetVar="addJJdata" resizable="">
-						 	<table>
-						 		<tr>
-						 			<td>夹具类别</td>
-						 			<td>
-						 				<h:selectOneMenu value="#{partProcessGuideUpdateBean.jjflb}"  styleClass="select" 
-					    				style="border:0px;font-size:16px;" id="partClassId">
-						  					<f:selectItem itemLabel="请选择"  itemValue="" /> 
-									        <f:selectItems value="#{partProcessGuideUpdateBean.jjlblist}"  
-									           var="jj"  itemLabel="#{jj.name}"  itemValue="#{jj.id}" />  
-									       <f:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectJJLBChange}" 
-									       	render=":myform:jjName :myform:jjNo"></f:ajax>
-									    </h:selectOneMenu>
-						 			</td>
-					    			<td width="80px;" height="34px;">夹具类型编号:</td>
-					    			<td width="235px;">
-					    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addtftm.fixturetypeId}" id="jjNo" styleClass="select" 
-					    				style="border:0px;font-size:16px;">
-						  					<f:selectItem itemLabel="请选择"  itemValue="" /> 
-									        <f:selectItems value="#{partProcessGuideUpdateBean.jjlist}"  
-									           var="jj"  itemLabel="#{jj.fixturesNo}"  itemValue="#{jj.id}" />  
-									       <f:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectJJChange}" 
-									       	render=":myform:jjName :myform:jjNo"></f:ajax>
-									    </h:selectOneMenu>
-					    			</td>
-					    			<td width="80px;">夹具类型名称:</td>
-					    			<td><h:inputText value="#{partProcessGuideUpdateBean.addtftm.fixtureName}" id="jjName" readonly="true" 
-					    				styleClass="" ></h:inputText> </td>
-					    		</tr>
-						 	</table>
-						 	<div class="headDivduan">
-							 	<p:commandButton value="新增" onclick="AddJJData()" styleClass="delete"></p:commandButton>
-		    					<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.addJJ}" 
-			    					update=":myform:djj :myform:jjNo :myform:jjName" oncomplete="addJJdata.hide()" 
-			    					style="display:none;" id="AddJJBtn"/>
-						 	</div>
-						 </p:dialog> 
-					</div>
-			    	<div class="headDivduan">
-						<div style="width: 100%;height: 4px;"></div>
-				    	<p:commandButton value="新建"  oncomplete="addJJdata.show()" styleClass="delete"></p:commandButton>
-				    	<p:commandButton value="删除"   actionListener="#{partProcessGuideUpdateBean.delJJ}" styleClass="delete" update=":myform:djj">
-				    	</p:commandButton>
-			    	</div>
-			    	
-			    	<div style="width: 100%; height: 30px;"></div>
-			    	
-					<div class="div-content-top-shadow">
-						<img src="../images/demo/bottom_shadow.png" />
-					</div>
-					<div class="tableprocess" style="margin-top: 0; height: 80px;">	
-				    	<p:dataTable var="dj" value="#{partProcessGuideUpdateBean.mediumDJModel}" id="djd"
-				    	  editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowDJ}" 
-				    	  paginator="false" paginatorPosition="bottom" >
-				   			<p:column selectionMode="multiple"  />
-						  	<p:column headerText="刀具类型编号"   >
-			                    <h:outputText value="#{dj.no}" />
-					        </p:column>
-					        <p:column headerText="刀具类型名称"   >
-			                    <h:outputText value="#{dj.name}" />
-					        </p:column>
-					        <p:column headerText="需求数量"   >
-			                    <h:outputText value="#{dj.requirementNum}" />
-					        </p:column>
-						  </p:dataTable>
-						  <p:dialog widgetVar="addZY" resizable="false">
-						  	<table>
-						  		<tr>
-						  			<td>刀具编号</td>
-						  			<td>刀具名称</td>
-						  			<td>需求数量</td>
-						  		</tr>
-						  		<tr>
-						  			<td>
-						  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addDJ.no}" id="djselect" styleClass="select">
-									        <f:selectItems value="#{partProcessGuideUpdateBean.selectDJ}"  
-									           var="djs"  itemLabel="#{djs.no}"  itemValue="#{djs.no}" />  
-									       <f:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectDJChange}" render=":myform:djname"></f:ajax>
-									    </h:selectOneMenu> 
-						  			</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.addDJ.name}" id="djname" readonly="true" styleClass="text"/></td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.addDJ.requirementNum}" styleClass="text" id="djNum"/></td>
-						  		</tr>
-						  	</table>
-						  	<div class="headDivduan">
-				  				<p:commandButton value="新增" onclick="AddDJData()" styleClass="delete"></p:commandButton>
-				  				<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.AddDjPojo}" 
-				  					update=":myform:djd :myform:djselect :myform:djname :myform:djNum"  oncomplete="addZY.hide()" 
-				  					id="AddDjBtn" style="display:none;"/>
-						  	</div>
-						  </p:dialog>
-					</div>
-			    	<div class="headDivduan">
-						<div style="width: 100%;height: 4px;"></div>
-				    	<p:commandButton value="新建"  oncomplete="addZY.show()" styleClass="delete"></p:commandButton>
-				    	<p:commandButton value="删除" update=":myform:djd"  actionListener="#{partProcessGuideUpdateBean.onZYDelete}" styleClass="delete" />
-			    	</div>
-					  
-			    	<div style="width: 100%;margin-top: 9px; text-align: center;">
-					    <p:commandButton id="btn_prev_zy" value="上一步"  onclick="zyBack()" styleClass="delete" style="display:none;"></p:commandButton> 
-			    		<p:commandButton id="btn_next_zy" value="下一步"  onclick="zyNext()" styleClass="delete" style="display:none;"></p:commandButton>
-					    <p:commandButton value="保存" actionListener="#{partProcessGuideUpdateBean.Save}" 
-					    update=":myform:messages :myform:updateSuccess" styleClass="delete" oncomplete="navigation()" style="display:none;"></p:commandButton>
-					    
-					    <h:graphicImage alt="prev" url="../images/demo/icons/btn-prev.png" onclick="subClick('myform:btn_prev_zy')" styleClass="btn-prev" style="float: left; margin-left: 1%;"></h:graphicImage>
-			    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" styleClass="btn-save" style="margin: 0 auto;"></h:graphicImage>
-			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_zy')" styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage>
-					</div>
-			    </div>
-			    <div id="cb" style="display: none;">
-			    	<div style="width: 100%; height: 80px;"></div>
-			    
-			    	<div class="guide_text_label" style="float: left; width: 10%; line-height: 22px; margin-left: 5%;">
-		    			<h:outputText value="主料成本:"></h:outputText>
-		    		</div>
-		    		<div style="float: left; width: 18%; margin-left: 2%;">
-		   				<h:inputText value="#{partProcessGuideUpdateBean.part.mainMaterialCost}" styleClass="guide_text" id="mainMaterialCost" style="margin-top: 0;"></h:inputText>
-		    		</div>
-			    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 2%; line-height: 22px;">
-		    			<h:outputText value="人工成本:"></h:outputText>
-		    		</div>
-		    		<div style="float: left; width: 18%; margin-left: 2%;">
-		   				<h:inputText value="#{partProcessGuideUpdateBean.part.peopleCost}" styleClass="guide_text" id="peopleCost" style="margin-top: 0;"></h:inputText>
-		    		</div>
-			    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 2%; line-height: 22px;">
-		    			<h:outputText value="辅料成本:"></h:outputText>
-		    		</div>
-		    		<div style="float: left; width: 18%; margin-left: 2%;">
-		   				<h:inputText value="#{partProcessGuideUpdateBean.part.subsidiaryMaterialCost}" styleClass="guide_text" id="subsidiaryMaterialCost" style="margin-top: 0;"></h:inputText>
-		    		</div>
-			    	<div style="width: 100%; height: 80px;"></div>
-			    	
-			    	<div class="guide_text_label" style="float: left; width: 10%; line-height: 22px; margin-left: 5%;">
-		    			<h:outputText value="能源成本:"></h:outputText>
-		    		</div>
-		    		<div style="float: left; width: 18%; margin-left: 2%;">
-		   				<h:inputText value="#{partProcessGuideUpdateBean.part.energyCost}" styleClass="guide_text" id="energyCost" style="margin-top: 0;"></h:inputText>
-		    		</div>
-			    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 2%; line-height: 22px;">
-		    			<h:outputText value="设备折旧:"></h:outputText>
-		    		</div>
-		    		<div style="float: left; width: 18%; margin-left: 2%;">
-		   				<h:inputText value="#{partProcessGuideUpdateBean.part.deviceCost}" styleClass="guide_text" id="deviceCost" style="margin-top: 0;"></h:inputText>
-		    		</div>
-			    	<div class="guide_text_label" style="float: left; width: 10%; margin-left: 2%; line-height: 22px;">
-		    			<h:outputText value="资源消耗:"></h:outputText>
-		    		</div>
-		    		<div style="float: left; width: 18%; margin-left: 2%;">
-		   				<h:inputText value="#{partProcessGuideUpdateBean.part.resourceCost}" styleClass="guide_text" id="resourceCost" style="margin-top: 0;"></h:inputText>
-		    		</div>
-			    	<div style="width: 100%; height: 80px;"></div>
-			    	
-			    	<div style="width: 100%;margin-top: 93px; text-align: center;">
-			    		<p:commandButton id="btn_prev_cb" value="上一步"  onclick="cbBack()" styleClass="delete" style="display: none;"></p:commandButton> 
-			    		<p:commandButton id="btn_next_cb" value="下一步"  onclick="cbNext()" styleClass="delete" style="display: none;"></p:commandButton>
-			    		<p:commandButton value="保存" actionListener="#{partProcessGuideUpdateBean.Save}" 
-			    		update=":myform:messages :myform:updateSuccess" styleClass="delete" oncomplete="navigation()" style="display: none;"></p:commandButton>
-			    		
-					    <h:graphicImage alt="prev" url="../images/demo/icons/btn-prev.png" onclick="subClick('myform:btn_prev_cb')" styleClass="btn-prev" style="float: left; margin-left: 1%;"></h:graphicImage>
-			    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" styleClass="btn-save" style="margin: 0 auto;"></h:graphicImage>
-			    		<h:graphicImage alt="next" url="../images/demo/icons/btn-next.png" onclick="subClick('myform:btn_next_cb')" styleClass="btn-next" style="float: right; margin-right: 1%;"></h:graphicImage>
-			    	</div>
-			    </div>
-			    <div id="zj" style="display: none;overflow: auto;">
-			    	<div style="width: 100%; height: 20px;"></div>	
-					<div class="div-content-top-shadow">
-						<img src="../images/demo/bottom_shadow.png" />
-					</div>			
-					<div class="tableprocess" style="margin-top: 0; height: 266px;">	
-				    	<p:dataTable var="zj" value="#{partProcessGuideUpdateBean.tqpdModel}" id="zj"
-				    	  editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowtqp}" 
-				    	  paginator="false" paginatorPosition="bottom" >
-				   			<p:column selectionMode="multiple"  />
-						  	<p:column headerText="检验参数编号"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.qualityNo}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.qualityNo}" style="width:100%" />
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					        <p:column headerText="检验参数名称"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.qualityName}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.qualityName}" style="width:100%" readonly="true"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					        <p:column headerText="是否关键检验项"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.isKey}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.isKey}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					          <p:column headerText="标准值"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.standardValue}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.standardValue}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					          <p:column headerText="上限值"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.maxValue}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.maxValue}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					          <p:column headerText="下限值"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.minValue}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.minValue}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					          <p:column headerText="单位"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.unit}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.unit}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					        <p:column headerText="允差上限"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.maxTolerance}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.maxTolerance}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					        <p:column headerText="允差下限"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.minTolerance}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.minTolerance}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					         <p:column headerText="检验描述"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.description}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.description}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					         <p:column headerText="检验工时"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.checkTime}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.checkTime}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-					         <p:column headerText="检验参数类型"   >
-					            <p:cellEditor>
-					                <f:facet name="output">
-					                    <h:outputText value="#{zj.checkType}" />
-					                </f:facet>
-					                <f:facet name="input">
-					                    <p:inputText value="#{zj.checkType}" style="width:100%"/>
-					                </f:facet>
-					            </p:cellEditor>
-					        </p:column>
-						  </p:dataTable>
-						  <p:dialog widgetVar="addZJ" resizable="false">
-						  	<table style="text-align: left;">
-						  		<tr>
-						  			<td>检验参数编号</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.qualityNo}" styleClass="text" id="zjno"/></td>
-						  			<td>检验参数名称</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.qualityName}" styleClass="text" id="zjname"/></td>
-						  		</tr>
-						  		<tr>
-						  			<td>是否关键检验项</td>
-						  			<td>
-						  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.tqp.isKey}" id="zjiskey" styleClass="select">
-						  					<f:selectItem itemLabel="请选择"  itemValue="" /> 
-									     	<f:selectItem itemLabel="是"  itemValue="1" /> 
-									     	<f:selectItem itemLabel="否"  itemValue="0" /> 
-									    </h:selectOneMenu> 
-						  			</td>
-						  			<td>标准值</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.standardValue}" styleClass="text" id="zjsv"/></td>
-						  		</tr>
-						  		<tr>
-						  			<td>上限值</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.maxValue}" styleClass="text" id="zjmaxv"/></td>
-						  			<td>下限值</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.minValue}" styleClass="text" id="zjminv"/></td>
-						  		</tr>
-						  		<tr>
-						  			<td>允差上限</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.maxTolerance}" styleClass="text" id="zjto"/></td>
-						  			<td>允差下限</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.minTolerance}" styleClass="text" id="zjto2"/></td>
-						  		</tr>
-						  		<tr>
-						  			<td>检验工时</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.checkTime}" styleClass="text" id="zjctime"/></td>
-						  			<td>检验参数类型</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.checkType}" styleClass="text" id="zjctype"/></td>
-						  		</tr>
-						  		<tr>
-						  			<td>单位</td>
-						  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.unit}" styleClass="text" id="zjunit"/></td>
-						  			<td></td>
-						  			<td></td>
-						  		</tr>
-						  		<tr>
-						  			<td>检验描述</td>
-						  			<td colspan="3"><h:inputText value="#{partProcessGuideUpdateBean.tqp.description}" styleClass="text" 
-						  				id="zjdes"/></td>
-						  		</tr>
-						  	</table>
-						  	<div class="headDivduan">
-					  			<p:commandButton value="新增" styleClass="delete" onclick="AddZJData()"></p:commandButton>
-				  				<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.addzj}" 
-				  					update=":myform:zj :myform:zjno :myform:zjname :myform:zjiskey :myform:zjsv :myform:zjmaxv :myform:zjminv 
-				  					:myform:zjunit :myform:zjto :myform:zjto2 :myform:zjctime :myform:zjctype :myform:zjdes"  
-				  					oncomplete="addZJ.hide()" id="AddZjBtn" style="display:none;"/>
-						  	</div>
-						  </p:dialog>
-					</div>
-			    	<div class="headDivduan">
-						<div style="width: 100%;height: 4px;"></div>
-				    	<p:commandButton value="新建" oncomplete="addZJ.show()" styleClass="delete"></p:commandButton>
-				    	<p:commandButton value="删除"  styleClass="delete" actionListener="#{partProcessGuideUpdateBean.deletezj}" update=":myform:zj" />
-			    	</div>
-			    	
-			    	<div style="width: 100%;margin-top: 10px; text-align: center;">
-			    		<p:commandButton id="btn_prev_zj" value="上一步" onclick="zjBack()" styleClass="delete" style="display: none;"></p:commandButton> 
-			    		<p:commandButton value="保存" actionListener="#{partProcessGuideUpdateBean.Save}" 
-			    			update=":myform:messages :myform:updateSuccess" styleClass="delete" oncomplete="navigation()" style="display: none;"></p:commandButton>
-			    		
-					    <h:graphicImage alt="prev" url="../images/demo/icons/btn-prev.png" onclick="subClick('myform:btn_prev_zj')" styleClass="btn-prev" style="float: left; margin-left: 1%;"></h:graphicImage>
-			    		<h:graphicImage alt="save" url="../images/demo/icons/btn-save.png" onclick="subClick('myform:btn_save')" styleClass="btn-save" style="float: right; margin-right: 1%;"></h:graphicImage>
-			    	</div>
-			    </div>
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title5"></span>
+		    		<span class="require"></span><span class="require"></span>
+    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.onlineProcessID}" styleClass="select-toolbar">
+	    				   <f:selectItem itemLabel="page4.jbxx.option" itemValue="" ></f:selectItem>
+					       <f:selectItems value="#{partProcessGuideUpdateBean.pprs}"  
+					           var="equ"  itemLabel="#{equ.name}"  itemValue="#{equ.id}" /> 
+					</h:selectOneMenu>
+					
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title6"></span>
+		    		<span class="require"></span><span class="require"></span>
+	    			<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.offlineProcess}" styleClass="select-toolbar" id="offlineProcess">
+	    				   <f:selectItem itemLabel="page4.jbxx.option" itemValue="" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option4" itemValue="1" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option5" itemValue="0" ></f:selectItem>
+					</h:selectOneMenu>
+		    	</div>
+		    	<div class="processlist-content-line">
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title7"></span>
+		    		<span class="require"></span><span class="require"></span>
+	    			<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.processDuration}" styleClass="select-toolbar">
+	    				   <f:selectItem itemLabel="page4.jbxx.option" itemValue="" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option4" itemValue="1" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option5" itemValue="0" ></f:selectItem>
+					</h:selectOneMenu>
+					
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title8"></span>
+		    		<span class="require">*</span>
+	    			<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.ischeck}" styleClass="select-toolbar" id="ischeck">
+	    				   <f:selectItem itemLabel="page4.jbxx.option" itemValue="" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option4" itemValue="1" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option5" itemValue="0" ></f:selectItem>
+					</h:selectOneMenu>
+					
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title9"></span>
+		    		<span class="require"></span><span class="require"></span>
+    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.checktype}" styleClass="select-toolbar">
+	    				   <f:selectItem itemLabel="page4.jbxx.option" itemValue="" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option6" itemValue="201" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option7" itemValue="202" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option8" itemValue="203" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option9" itemValue="204" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option10" itemValue="205" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option11" itemValue="206" ></f:selectItem>
+					       <f:selectItem itemLabel="page4.jbxx.option12" itemValue="207" ></f:selectItem>
+					</h:selectOneMenu>
+		    	</div>
+		    	<div class="processlist-content-line high">
+		    		<span class="txt-toolbar" data-i18n="page4.jbxx.title10"></span>
+		    		<span class="require"></span><span class="require"></span>
+		    		<rich:fileUpload doneLabel="文件上传成功"
+				        noDuplicate="true"
+			 			serverErrorLabel="文件过大,导致文件上传失败"
+						fileUploadListener="#{partProcessGuideUpdateBean.Upload}"
+						id="upload" acceptedTypes="jpg,pdf"
+						ontyperejected="alert('添加文件格式为jpg,pdf');" 
+						clearLabel="clear" deleteLabel="删除" addLabel="添加文件"
+						uploadLabel="上传文件" 
+						styleClass="div-upload">
+						<f:ajax event="uploadcomplete" execute="@none" render="myform:file"></f:ajax>
+		       		</rich:fileUpload>
+    				<h:inputText value="#{partProcessGuideUpdateBean.part.file}" id="file" style="display:none;"></h:inputText>
+		    	</div>
+		    	<div class="processlist-content-line high">
+		    		<span class="txt-toolbar" style="vertical-align: top;" data-i18n="page4.jbxx.title11"></span>
+		    		<span class="require"></span><span class="require"></span>
+		    		<h:inputTextarea value="#{partProcessGuideUpdateBean.part.description}" styleClass="textarea"></h:inputTextarea>
+		    	</div>
+	    	</h:panelGroup>
+	    	<div class="div-conctrl">
+	    		<div class="div-conctrl-content">
+		    		<p:commandLink id="btn_save" value="page4.conctrl.btn2" actionListener="#{partProcessGuideUpdateBean.Save}"  
+		    			update=":myform:messages :myform:updateSuccess" oncomplete="navigation()" 
+		    		styleClass="btn-conctrl btn-save btn-cur"></p:commandLink>
+		    		<p:commandLink value="page4.conctrl.btn3"  styleClass="btn-conctrl btn-next" onclick="jbxxNext()"></p:commandLink>
+	    		</div>
 	    	</div>
-	    	<p:commandButton style="display:none" value=" " 
+	    </div>
+		<!-- 机台 -->
+	    <div class="processlist-content" id="jt">
+	    	<div class="processlist-content-line">
+	    		<span class="txt-toolbar" data-i18n="page4.jt.title1"></span>
+	    		<span class="require">*</span>
+   				<h:selectOneMenu value="#{partProcessGuideUpdateBean.part.programID}" id="programID"  styleClass="select-toolbar">
+   				   <f:selectItem itemLabel="page4.jt.option" itemValue="请选择"></f:selectItem>
+			       <f:selectItems value="#{partProcessGuideUpdateBean.ncprogsList}"  
+			           var="ncp"  itemLabel="#{ncp.progName}"  itemValue="#{ncp.id}" />  
+			    </h:selectOneMenu> 
+	    		
+	    		<span class="txt-toolbar" data-i18n="page4.jt.title2"></span>
+	    		<span class="require"></span><span class="require"></span>
+   				<h:inputText value="#{partProcessGuideUpdateBean.part.processingTime}" id="processingTime" styleClass="input-toolbar">
+   				</h:inputText>
+    		</div>
+	    	<div class="processlist-content-line">
+	    		<span class="txt-toolbar" data-i18n="page4.jt.title3"></span>
+	    		<span class="require">*</span>
+   				<h:inputText value="#{partProcessGuideUpdateBean.part.theoryWorktime}" id="theoryWorktime" styleClass="input-toolbar">
+   				</h:inputText>
+	    		
+	    		<span class="txt-toolbar" data-i18n="page4.jt.title4"></span>
+	    		<span class="require"></span><span class="require"></span>
+   				<h:inputText value="#{partProcessGuideUpdateBean.part.capacity}" id="capacity" styleClass="input-toolbar">
+   				</h:inputText> 
+    			<span class="txt-toolbar" style="margin-left: 0;" data-i18n="page4.jt.title5"></span>
+	    	</div>
+	    	<div class="processlist-content-line jtTable">
+	    		<div class="table-p-bg"></div>
+				<p:dataTable var="sb" value="#{partProcessGuideUpdateBean.tpeqModel}" 
+			    	editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowEqu}" 
+			    	paginator="false" paginatorPosition="bottom" id="sblist" styleClass="table-p">
+		   			<p:column selectionMode="multiple"  />
+				  	<p:column headerText="page4.jt.title6"   >
+						<h:outputText value="#{sb.equipmentTypeName}" />
+			        </p:column>
+			        <p:column headerText="page4.jt.title7">
+						<h:outputText value="#{sb.equipmentName}" />
+			        </p:column>
+				</p:dataTable>
+		  		<p:dialog widgetVar="addSB" id="addsb" styleClass="div-dialog" resizable="false">
+				  	<table>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.jt.title6"></span></td>
+				  			<td>
+				  				<h:inputText value="#{partProcessGuideUpdateBean.addtpEqu.equipmentTypeName}"  styleClass="input-toolbar" onfocus="of()" 
+				  					id="treetxt"/>
+				  				<div id="tree" style="display:none;">
+					  				<p:tree id="treeSingle" value="#{partProcessGuideUpdateBean.root}" var="node"  
+								    	selection="#{partProcessGuideUpdateBean.selectedNode}" selectionMode="single"> 
+								        <p:ajax event="select" listener="#{partProcessGuideUpdateBean.onNodeSelect}" 
+								        	update=":myform:treeSingle :myform:equinfo :myform:treetxt" oncomplete="cc();"/>  
+								        <p:treeNode>  
+								            <h:outputText value="#{node.equipmentType}" />  
+								        </p:treeNode>  
+								   </p:tree>
+							   </div>  
+				  			</td>
+			  			</tr>
+			  			<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.jt.title7"></span></td>
+				  			<td>
+				  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addtpEqu.equipmentName}"  id="equinfo" styleClass="select-toolbar">
+				  				   <f:selectItem itemLabel="page4.jt.option" itemValue=""></f:selectItem>
+							       <f:selectItems value="#{partProcessGuideUpdateBean.equinfolist}"  
+							           var="equ"  itemLabel="#{equ.equName}"  itemValue="#{equ.equSerialNo}" />  
+							    </h:selectOneMenu> 
+				  			</td>
+				  		</tr>
+				  	</table>
+				  	<div class="dialog-bottomBar">
+		  				<p:commandButton value="page4.toolbarBottom.btn1"  styleClass="btn-toolbar" onclick="AddEqu()"></p:commandButton>
+		  				<p:commandButton value="page4.toolbarBottom.btn1"  style="display:none;" actionListener="#{partProcessGuideUpdateBean.onaddEqu}" 
+		  				 update=":myform:sblist :myform:treetxt :myform:equinfo " oncomplete="addSB.hide();translateReady();" id="AddEquBtn"></p:commandButton>
+				  	</div>
+				</p:dialog>
+			</div>
+	    	<div class="toolbar-bottom">
+			    <p:commandButton value="page4.toolbarBottom.btn1" oncomplete="addSB.show()" styleClass="btn-toolbar" />
+		    	<p:commandButton value="page4.toolbarBottom.btn2" actionListener="#{partProcessGuideUpdateBean.ondelEqu}" styleClass="btn-toolbar" 
+		    		update=":myform:sblist" oncomplete="translateReady();"></p:commandButton>
+			</div>
+	    	<div class="div-conctrl">
+	    		<div class="div-conctrl-content">
+			    	<p:commandLink id="btn_prev_jt" value="page4.conctrl.btn1"  onclick="jtBack()" styleClass="btn-conctrl btn-prev"></p:commandLink>
+			    	<p:commandLink value="page4.conctrl.btn2" actionListener="#{partProcessGuideUpdateBean.Save}" 
+			    		update=":myform:messages :myform:updateSuccess" styleClass="btn-conctrl btn-save btn-cur" oncomplete="navigation()"></p:commandLink>
+			    	<p:commandLink id="btn_next_jt" value="page4.conctrl.btn3"  onclick="jtNext()" styleClass="btn-conctrl btn-next"></p:commandLink>
+		    	</div>
+	    	</div>
+	    </div>
+		<!-- 物料 -->
+	    <div class="processlist-content" id="wl">
+			<div class="processlist-content-line wlTable">	
+	    		<div class="table-p-bg"></div>				
+		    	<p:dataTable var="wl" value="#{partProcessGuideUpdateBean.mediumPartModel}" id="wld"
+			    	editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowPart}" 
+			    	paginator="false" paginatorPosition="bottom" styleClass="table-p">
+		   			<p:column selectionMode="multiple"  />
+				  	<p:column headerText="page4.wl.title1"   >
+			        	<h:outputText value="#{wl.wlNo}" />
+			        </p:column>
+			        <p:column headerText="page4.wl.title2" >
+			        	<h:outputText value="#{wl.wlName}" />
+			        </p:column>
+			        <p:column headerText="page4.wl.title3"   >
+		        		<h:outputText value="#{wl.wlnorm}" />
+			        </p:column>
+			        <p:column headerText="page4.wl.title4"   >
+			        	<h:outputText value="#{wl.wlType}" />
+			        </p:column>
+			        <p:column headerText="page4.wl.title5"   >
+			        	<h:outputText value="#{wl.wlNumber}" />
+			        </p:column>
+				</p:dataTable>
+				<p:dialog widgetVar="addWl" resizable="false" styleClass="div-dialog">
+				  	<table>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.wl.title1"></span></td>
+				  			<td>
+				  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addWL.wlNo}" id="wlNo" styleClass="select-toolbar">
+							    	<f:selectItems value="#{partProcessGuideUpdateBean.selectWL}"  
+							        	var="wls"  itemLabel="#{wls.no}"  itemValue="#{wls.no}" />  
+							       	<f:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectWLChange}" 
+							       		render=":myform:wlname :myform:wlnorm"></f:ajax>
+							    </h:selectOneMenu> 
+				  			</td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.wl.title2"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.addWL.wlName}" id="wlname" readonly="true" styleClass="input-toolbar"/></td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.wl.title3"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.addWL.wlnorm}" id="wlnorm" readonly="true" styleClass="input-toolbar"/></td>
+				  		</tr>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.wl.title4"></span></td>
+				  			<td>
+				  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addWL.wlType}" id="wlType" styleClass="select-toolbar">
+				  					<f:selectItem itemLabel="page4.wl.option" itemValue=""></f:selectItem>
+				  					<f:selectItem itemLabel="page4.wl.option1" itemValue="主料"></f:selectItem>
+				  					<f:selectItem itemLabel="page4.wl.option2" itemValue="辅料"></f:selectItem>
+				  					<f:selectItem itemLabel="page4.wl.option3" itemValue="前序物料"></f:selectItem>
+							    </h:selectOneMenu> 
+						    </td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.wl.title5"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.addWL.wlNumber}" id="wlNumber" styleClass="input-toolbar"/></td>
+				  		</tr>
+				  	</table>
+				  	<div class="dialog-bottomBar">
+		  				<p:commandButton value="page4.toolbarBottom.btn1" styleClass="btn-toolbar" onclick="wuisnull()" />
+		  				<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.AddWlPojo}" 
+			  				update=":myform:wld :myform:wlNo :myform:wlname :myform:wlnorm :myform:wlType :myform:wlNumber " 
+			  				style="display:none;" id="wladd" oncomplete="addWl.hide();translateReady();"/>
+		  			</div>
+				</p:dialog>
+			</div>
+	    	<div class="toolbar-bottom">
+			    <p:commandButton value="page4.toolbarBottom.btn1"  oncomplete="addWl.show()" styleClass="btn-toolbar" />
+		    	<p:commandButton value="page4.toolbarBottom.btn2"  actionListener="#{partProcessGuideUpdateBean.onDelete}" styleClass="btn-toolbar" 
+		    		update=":myform:wld" oncomplete="translateReady();"/>
+			</div>
+	    	<div class="div-conctrl">
+	    		<div class="div-conctrl-content">
+				    <p:commandLink id="btn_prev_wl" value="page4.conctrl.btn1" onclick="wlBack()" styleClass="btn-conctrl btn-prev"></p:commandLink>
+				    <p:commandLink value="page4.conctrl.btn2" actionListener="#{partProcessGuideUpdateBean.Save}" 
+				    update=":myform:messages :myform:updateSuccess" styleClass="btn-conctrl btn-save btn-cur" oncomplete="navigation()"></p:commandLink> 
+		    		<p:commandLink id="btn_next_wl" value="page4.conctrl.btn3" onclick="wlNext()" styleClass="btn-conctrl btn-next"></p:commandLink>
+			   </div>
+	    	</div>
+	    </div>
+		<!-- 资源 -->
+	    <div class="processlist-content" id="zy">
+	    	<div class="processlist-content-line">
+	    		<span class="txt-toolbar" data-i18n="page4.zy.title1"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.installTime}" styleClass="input-toolbar" id="installTime"></h:inputText>
+	    		<span class="txt-toolbar" data-i18n="page4.zy.title2"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.uninstallTime}" styleClass="input-toolbar" id="uninstallTime"></h:inputText>
+	    	</div>
+			<div class="processlist-content-line zyTable">
+				<div class="table-p-bg"></div>
+		   		<p:dataTable var="jj" value="#{partProcessGuideUpdateBean.tpftdm}" id="djj"
+			    	editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectRowJJ}" 
+			    	paginator="false" paginatorPosition="bottom" styleClass="table-p">
+		   			<p:column selectionMode="multiple"  />
+				  	<p:column headerText="page4.zy.title3"   >
+	                    <h:outputText value="#{jj.fixtureNO}" />
+			        </p:column>
+			        <p:column headerText="page4.zy.title4"   >
+	                    <h:outputText value="#{jj.fixtureName}" />
+			        </p:column>
+				 </p:dataTable>
+				 <p:dialog widgetVar="addJJdata" styleClass="div-dialog" resizable="false">
+				 	<table>
+				 		<tr>
+				 			<td><span class="txt-toolbar" data-i18n="page4.zy.title8"></span></td>
+				 			<td>
+				 				<h:selectOneMenu value="#{partProcessGuideUpdateBean.jjflb}" styleClass="select-toolbar" 
+			    					id="partClassId">
+				  					<f:selectItem itemLabel="page4.zy.option"  itemValue="" /> 
+							        <f:selectItems value="#{partProcessGuideUpdateBean.jjlblist}"  
+							        	var="jj"  itemLabel="#{jj.name}"  itemValue="#{jj.id}" />  
+							       	<a4j:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectJJLBChange}" 
+							       		render=":myform:jjName :myform:jjNo" oncomplete="translateReady();"></a4j:ajax>
+							    </h:selectOneMenu>
+				 			</td>
+			    			<td><span class="txt-toolbar" data-i18n="page4.zy.title3"></span></td>
+			    			<td>
+			    				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addtftm.fixturetypeId}" styleClass="select-toolbar" 
+			    					id="jjNo">
+				  					<f:selectItem itemLabel="page4.zy.option"  itemValue="" /> 
+							        <f:selectItems value="#{partProcessGuideUpdateBean.jjlist}"  
+							        	var="jj"  itemLabel="#{jj.fixturesNo}"  itemValue="#{jj.id}" />  
+							    	<a4j:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectJJChange}" 
+							       		render=":myform:jjName :myform:jjNo" oncomplete="translateReady();"></a4j:ajax>
+							    </h:selectOneMenu>
+			    			</td>
+			    			<td><span class="txt-toolbar" data-i18n="page4.zy.title4"></span></td>
+			    			<td><h:inputText value="#{partProcessGuideUpdateBean.addtftm.fixtureName}" id="jjName" readonly="true" 
+			    				styleClass="input-toolbar" ></h:inputText> </td>
+			    		</tr>
+				 	</table>
+				 	<div class="dialog-bottomBar">
+	    				<p:commandButton value="page4.toolbarBottom.btn1" onclick="AddJJData()" styleClass="btn-toolbar"></p:commandButton>
+	    				<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.addJJ}" 
+	    					update=":myform:djj :myform:jjNo :myform:jjName" oncomplete="addJJdata.hide();translateReady();" 
+	    					style="display:none;" id="AddJJBtn"/>
+				 	</div>
+				 </p:dialog> 
+			</div>
+	    	<div class="toolbar-bottom">
+		    	<p:commandButton value="page4.toolbarBottom.btn1"  oncomplete="addJJdata.show()" styleClass="btn-toolbar"></p:commandButton>
+		    	<p:commandButton value="page4.toolbarBottom.btn2"  actionListener="#{partProcessGuideUpdateBean.delJJ}" 
+		    		styleClass="btn-toolbar" update=":myform:djj" oncomplete="translateReady();">
+		    	</p:commandButton>
+	    	</div>
+			<div class="processlist-content-line zyTable">
+				<div class="table-p-bg"></div>
+		    	<p:dataTable var="dj" value="#{partProcessGuideUpdateBean.mediumDJModel}" id="djd"
+			    	editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowDJ}" 
+			    	paginator="false" paginatorPosition="bottom" styleClass="table-p">
+		   			<p:column selectionMode="multiple"  />
+				  	<p:column headerText="page4.zy.title5">
+	                    <h:outputText value="#{dj.no}" />
+			        </p:column>
+			        <p:column headerText="page4.zy.title6">
+	                    <h:outputText value="#{dj.name}" />
+			        </p:column>
+			        <p:column headerText="page4.zy.title7">
+	                    <h:outputText value="#{dj.requirementNum}" />
+			        </p:column>
+				</p:dataTable>
+				<p:dialog widgetVar="addZY" styleClass="div-dialog" resizable="false">
+				  	<table>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zy.title5"></span></td>
+				  			<td>
+				  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.addDJ.no}" id="djselect" styleClass="select-toolbar">
+							    	<f:selectItems value="#{partProcessGuideUpdateBean.selectDJ}"  
+							        	var="djs"  itemLabel="#{djs.no}"  itemValue="#{djs.no}" />  
+							    	<a4j:ajax event="valueChange" listener="#{partProcessGuideUpdateBean.selectDJChange}" render=":myform:djname" oncomplete="translateReady();"></a4j:ajax>
+							    </h:selectOneMenu> 
+				  			</td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zy.title6"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.addDJ.name}" id="djname" readonly="true" styleClass="input-toolbar"/></td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zy.title7"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.addDJ.requirementNum}" styleClass="input-toolbar" id="djNum"/></td>
+				  		</tr>
+				  	</table>
+				  	<div class="dialog-bottomBar">
+		  				<p:commandButton value="page4.toolbarBottom.btn1" onclick="AddDJData()" styleClass="btn-toolbar"></p:commandButton>
+		  				<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.AddDjPojo}" 
+		  					update=":myform:djd :myform:djselect :myform:djname :myform:djNum"  oncomplete="addZY.hide();translateReady();" 
+		  					id="AddDjBtn" style="display:none;"/>
+				  	</div>
+				  </p:dialog>
+			</div>
+	    	<div class="toolbar-bottom">
+		    	<p:commandButton value="page4.toolbarBottom.btn1"  oncomplete="addZY.show()" styleClass="btn-toolbar"></p:commandButton>
+		    	<p:commandButton value="page4.toolbarBottom.btn2" oncomplete="translateReady();" update=":myform:djd"  actionListener="#{partProcessGuideUpdateBean.onZYDelete}" styleClass="btn-toolbar" />
+	    	</div>
+	    	<div class="div-conctrl">
+	    		<div class="div-conctrl-content">
+				    <p:commandLink id="btn_prev_zy" value="page4.conctrl.btn1" onclick="zyBack()" styleClass="btn-conctrl btn-prev"></p:commandLink>
+				    <p:commandLink value="page4.conctrl.btn2" actionListener="#{partProcessGuideUpdateBean.Save}" 
+				    	update=":myform:messages :myform:updateSuccess" styleClass="btn-conctrl btn-save btn-cur" oncomplete="navigation()"></p:commandLink> 
+		    		<p:commandLink id="btn_next_zy" value="page4.conctrl.btn3" onclick="zyNext()" styleClass="btn-conctrl btn-next"></p:commandLink>
+			   </div>
+	    	</div>
+	    </div>
+	    <!-- 成本 -->
+	    <div class="processlist-content" id="cb">
+	    	<div class="processlist-content-line">
+	    		<span class="txt-toolbar" data-i18n="page4.cb.title1"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.mainMaterialCost}" styleClass="input-toolbar" id="mainMaterialCost"></h:inputText>
+	    		
+	    		<span class="txt-toolbar" data-i18n="page4.cb.title2"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.peopleCost}" styleClass="input-toolbar" id="peopleCost"></h:inputText>
+	    		
+	    		<span class="txt-toolbar" data-i18n="page4.cb.title3"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.subsidiaryMaterialCost}" styleClass="input-toolbar" id="subsidiaryMaterialCost"></h:inputText>
+	    	</div>
+	    	<div class="processlist-content-line">
+	    		<span class="txt-toolbar" data-i18n="page4.cb.title4"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.energyCost}" styleClass="input-toolbar" id="energyCost"></h:inputText>
+	    		
+	    		<span class="txt-toolbar" data-i18n="page4.cb.title5"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.deviceCost}" styleClass="input-toolbar" id="deviceCost"></h:inputText>
+	    		
+	    		<span class="txt-toolbar" data-i18n="page4.cb.title6"></span>
+	    		<span class="require"></span><span class="require"></span>
+	    		<h:inputText value="#{partProcessGuideUpdateBean.part.resourceCost}" styleClass="input-toolbar" id="resourceCost"></h:inputText>
+	    	</div>
+	    	<div class="processlist-content-line cbSpace"></div>
+	    	<div class="div-conctrl">
+	    		<div class="div-conctrl-content">
+	    			<p:commandLink id="btn_prev_cb" value="page4.conctrl.btn1"  onclick="cbBack()" styleClass="btn-conctrl btn-prev" ></p:commandLink> 
+	    			<p:commandLink value="page4.conctrl.btn2" actionListener="#{partProcessGuideUpdateBean.Save}" 
+	    				update=":myform:messages :myform:updateSuccess" styleClass="btn-conctrl btn-save btn-cur" oncomplete="navigation()"></p:commandLink>
+	    			<p:commandLink id="btn_next_cb" value="page4.conctrl.btn3"  onclick="cbNext()" styleClass="btn-conctrl btn-next"></p:commandLink>
+			   </div>
+	    	</div>
+	    </div>
+	    <!-- 质检 -->
+	    <div class="processlist-content" id="zj">
+			<div class="processlist-content-line wlTable">
+				<div class="table-p-bg"></div>
+		    	<p:dataTable var="zj" value="#{partProcessGuideUpdateBean.tqpdModel}" id="zj"
+		    		editable="true" sortMode="multiple" dynamic="true" selection="#{partProcessGuideUpdateBean.selectedRowtqp}" 
+		    		paginator="false" paginatorPosition="bottom" styleClass="table-p">
+		   			<p:column selectionMode="multiple"  />
+				  	<p:column headerText="page4.zj.title1">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.qualityNo}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.qualityNo}" style="width:100%" />
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			        <p:column headerText="page4.zj.title2">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.qualityName}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.qualityName}" style="width:100%" readonly="true"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			        <p:column headerText="page4.zj.title3">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.isKey}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.isKey}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			          <p:column headerText="page4.zj.title4">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.standardValue}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.standardValue}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			          <p:column headerText="page4.zj.title5">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.maxValue}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.maxValue}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			          <p:column headerText="page4.zj.title6">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.minValue}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.minValue}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			          <p:column headerText="page4.zj.title7">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.unit}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.unit}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			        <p:column headerText="page4.zj.title8">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.maxTolerance}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.maxTolerance}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			        <p:column headerText="page4.zj.title9">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.minTolerance}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.minTolerance}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			         <p:column headerText="page4.zj.title10">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.description}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.description}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			         <p:column headerText="page4.zj.title11">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.checkTime}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.checkTime}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			         <p:column headerText="page4.zj.title12">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{zj.checkType}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{zj.checkType}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+				  </p:dataTable>
+				  <p:dialog widgetVar="addZJ" styleClass="div-dialog high" resizable="false">
+				  	<table>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title1"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.qualityNo}" styleClass="input-toolbar" id="zjno"/></td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title2"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.qualityName}" styleClass="input-toolbar" id="zjname"/></td>
+				  		</tr>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title3"></span></td>
+				  			<td>
+				  				<h:selectOneMenu value="#{partProcessGuideUpdateBean.tqp.isKey}" id="zjiskey" styleClass="select-toolbar">
+				  					<f:selectItem itemLabel="page4.zj.option"  itemValue="" /> 
+							     	<f:selectItem itemLabel="page4.zj.option1"  itemValue="1" /> 
+							     	<f:selectItem itemLabel="page4.zj.option2"  itemValue="0" /> 
+							    </h:selectOneMenu> 
+				  			</td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title4"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.standardValue}" styleClass="input-toolbar" id="zjsv"/></td>
+				  		</tr>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title5"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.maxValue}" styleClass="input-toolbar" id="zjmaxv"/></td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title6"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.minValue}" styleClass="input-toolbar" id="zjminv"/></td>
+				  		</tr>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title8"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.maxTolerance}" styleClass="input-toolbar" id="zjto"/></td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title9"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.minTolerance}" styleClass="input-toolbar" id="zjto2"/></td>
+				  		</tr>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title11"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.checkTime}" styleClass="input-toolbar" id="zjctime"/></td>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title12"></span></td>
+				  			<td><h:inputText value="#{partProcessGuideUpdateBean.tqp.checkType}" styleClass="input-toolbar" id="zjctype"/></td>
+				  		</tr>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title7"></span></td>
+				  			<td colspan="3"><h:inputText value="#{partProcessGuideUpdateBean.tqp.unit}" styleClass="input-toolbar" id="zjunit"/></td>
+				  		</tr>
+				  		<tr>
+				  			<td><span class="txt-toolbar" data-i18n="page4.zj.title10"></span></td>
+				  			<td colspan="3"><h:inputText value="#{partProcessGuideUpdateBean.tqp.description}" styleClass="input-toolbar" 
+				  				id="zjdes"/></td>
+				  		</tr>
+				  	</table>
+				  	<div class="dialog-bottomBar">
+			  			<p:commandButton value="page4.toolbarBottom.btn1" styleClass="btn-toolbar" onclick="AddZJData()"></p:commandButton>
+		  				<p:commandButton value="新增" actionListener="#{partProcessGuideUpdateBean.addzj}" 
+		  					update=":myform:zj :myform:zjno :myform:zjname :myform:zjiskey :myform:zjsv :myform:zjmaxv :myform:zjminv 
+		  					:myform:zjunit :myform:zjto :myform:zjto2 :myform:zjctime :myform:zjctype :myform:zjdes"  
+		  					oncomplete="addZJ.hide();translateReady();" id="AddZjBtn" style="display:none;"/>
+				  	</div>
+				  </p:dialog>
+			</div>
+	    	<div class="toolbar-bottom">
+		    	<p:commandButton value="page4.toolbarBottom.btn1" oncomplete="addZJ.show()" styleClass="btn-toolbar"></p:commandButton>
+		    	<p:commandButton value="page4.toolbarBottom.btn2" oncomplete="translateReady();" styleClass="btn-toolbar" actionListener="#{partProcessGuideUpdateBean.deletezj}" update=":myform:zj" />
+	    	</div>
+	    	<div class="div-conctrl">
+	    		<div class="div-conctrl-content">
+	    			<p:commandLink id="btn_prev_zj" value="page4.conctrl.btn1" onclick="zjBack()" styleClass="btn-conctrl btn-prev"></p:commandLink>
+	    			<p:commandLink value="page4.conctrl.btn2" actionListener="#{partProcessGuideUpdateBean.Save}" 
+		    			update=":myform:messages :myform:updateSuccess" styleClass="btn-conctrl btn-save btn-cur" oncomplete="navigation()"></p:commandLink>
+			   </div>
+	    	</div>
+	    	<!-- 返回 -->
+	   		<p:commandButton style="display:none" value=" " 
 	   			actionListener="#{MenuHeadBean.clickMenu('/mocs/parts/part_process_config.faces','零件配置,零件工序配置')}" 
 	   			update=":myform:rightiframe" id="navigation">
 	   		</p:commandButton>
 	   		<h:inputHidden value="#{partProcessGuideUpdateBean.updateSuccess}" id="updateSuccess"></h:inputHidden>
-	    	<p:growl id="messages" showDetail="true"/>  
+	    	<p:growl id="messages" showDetail="true"/>
 	    </div>
     </div>
-        <script type="text/javascript">
+	<h:outputScript library="js/admin" name="part_process_guide.js"></h:outputScript>
+    <script type="text/javascript">
 	//<![CDATA[
-	       function navigation(){
-	    	   var updateSuccess=document.getElementById("myform:updateSuccess").value;
-	    	    //alert(updateSuccess);
-	        	if(updateSuccess=="更新成功"){
-	        		 document.getElementById("myform:navigation").click();
-	        	}
-	        	
-	         }   
-	         
-			function menuClick(id){
-				var arr=new Array("jbxx","jt","wl","zy","cb","zj");
-				for(var i=0;i<arr.length;i++) {
-					if(arr[i] == id) {
-				  			document.getElementById(arr[i]).style.display = "block";
-						document.getElementById("xs" + arr[i]).className = "process_config_menuDiv active";
-					} else {
-				  			document.getElementById(arr[i]).style.display = "none";
-						document.getElementById("xs" + arr[i]).className = "process_config_menuDiv";
-					}
-				}
-				document.getElementById(id).click();
-				for(var index = 0; index < $("#" + id + " .tableprocess").length; index++) {
-					bgReposition($("#" + id + " .tableprocess")[index]);	
-				}
-			}
+		function navigation(){
+    		var updateSuccess=document.getElementById("myform:updateSuccess").value;
+    	    //alert(updateSuccess);
+        	if(updateSuccess=="更新成功"){
+        		 document.getElementById("myform:navigation").click();
+        	}
+		}
+		$(document).ready(function() {
+			//tab切换
+			$(".menu-tabbar").click(function() {
+				var id = this.id.replace("btn", "");
+				//tab样式
+				$("#btn" + id).addClass("act").siblings(".menu-tabbar").removeClass("act");
+				//内容样式
+				$("#" + id).show().siblings(".processlist-content").hide();
+			});
 			
+			//国际化
+			translateReady();
+		});
 	//]]>
 	</script>
-	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
-
 </ui:composition>

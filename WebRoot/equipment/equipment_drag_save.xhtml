@@ -330,13 +330,13 @@
         	var xPercent = wjb51/2050;
 			var yPercent = hjb51/1080;
             var htmlstring  = '<div id="mb_' +equSerialNo + '" style="position:absolute; left:0px; top:0px;">'
-			            + '	 <img src="../images/device/tjA31321298.png" style="z-index: 9;" '
+			            + '	 <img src="../images/device/tj'+equSerialNo+'.png" style="z-index: 9;" '
 			            + '	 	id="'+equSerialNo+'" />' 
 			            + '</div>';
 			document.getElementById("mybox").innerHTML += htmlstring;
 
 			//先获取原图片的大小，不是屏幕大小，然后用原图片大小来等比例缩小或者放大。
-			imgReady('../images/device/tjA31321298.png', function () { 
+			imgReady('../images/device/tj'+equSerialNo+'.png', function () { 
 				  var imgwjb51=this.width;
 			   	  var imghjb51=this.height;
 			   	  var imgPercent = wjb51/2150; //缩小比例为浏览器宽度/1920. 用高的比例来缩小 
@@ -348,8 +348,6 @@
 			 //禁止图片拖动到新窗口打开
 	        for (i in document.images) document.images[i].ondragstart = imgdragstart;
 	        function imgdragstart() { return false; } 
-	        
-
 	       
 	        new SimpleDrag("mb_" + equSerialNo);
 	       

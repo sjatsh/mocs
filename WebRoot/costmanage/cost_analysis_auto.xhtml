@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" >
+
+<script type="text/javascript" src="./js/jquery.blockUI.js" ></script>
+<!-- hightChart JS加载 -->
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="highcharts-more.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+<h:outputScript library="js" name="cost_analysis.js"></h:outputScript>
+<h:outputScript library="js" name="common.js"></h:outputScript>
+<link rel="stylesheet" href="./css/cost_analysis.css" type="text/css"></link>
+<link rel="stylesheet" href="./css/mocs_page.css" type="text/css"></link>
+<h:form id="myform">
+<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
+<script type="text/javascript">	
+	document.getElementById("maskw").style.height = hjb51 + "px";
+	document.getElementById("maskw").style.width = wjb51 + "px";
+</script>
+
+<table id="analcontains" width="100%">
+<tr><td id="analcontainstop">
+    <table>
+    <tr><td id="topimg" width="30%" valign="top">
+		<img
+		src="./images/profile_top_logo.png" 
+		style="position: absolute;z-Index: -1; border: 0px solid blue"
+		id="img1" />
+		<script type="text/javascript">
+		document.getElementById("img1").style.top = hjb51* 30 / 1080 + "px";
+		document.getElementById("img1").style.left = wjb51* 40 / 1920 + "px";
+		</script>
+    </td><td width="20%" id="manage_top_left" style="font-weight:bold;
+    	     text-align:left;vertical-align:middle;color:#505050;">		
+    	                成本分析
+    </td><td width="20%">
+            <table>	
+    		<tr><td id="top_li_type"  style="font-weight:bold;
+	                    vertical-align:middle;color:#505050;">
+	            <span id="top_li_type_div1">产品类型</span>
+	          </td></tr>
+	          <tr><td id="top_li_type2" style="text-align:left;
+            	        color:#505050;vertical-align:middle;">                                   
+            		
+            			<h:commandButton value=" " id="button1" image="./images/cost_btn_bg.png" >
+							<a4j:ajax listener="#{CostAnalysis.searchList}" event="click"
+								render=":myform" execute="type" />
+						</h:commandButton>
+                        <h:selectOneMenu id="type"
+							value="#{CostAnalysis.partTypeNo}"
+							style="color:#444444;  border-width: 0px;
+					    	position: absolute;border: 1px solid #BFBFBF;font-family:微软雅黑,Microsoft YaHei,simhei;">
+							<f:selectItems value="#{CostAnalysis.typeMap}"></f:selectItems>
+							<a4j:ajax event="change" listener="#{CostAnalysis.sub}"
+										render=":myform:productcostoneChart1 :myform:productcosttwoChart1 :myform:productcostthreeChart1 :myform:machine :myform:type" execute="@this"></a4j:ajax>
+						</h:selectOneMenu>
+						
+            </td></tr>
+            </table>
+     </td><td width="30%" align="center">	
+            <table>	
+    		<tr><td id="top_li_type3"  style="font-weight:bold;
+	                    vertical-align:middle;color:#505050;">
+	             <span id="top_li_type_div2">产品编号</span>
+	          </td></tr>
+	          <tr><td id="top_li_type4" style="text-align:left;
+            	        color:#505050;vertical-align:middle;">   
+            	        
+            			<h:commandButton value=" " id="button2" image="./images/cost_btn_bg.png">
+							<a4j:ajax listener="#{CostAnalysis.searchList}" event="click"
+								render=":myform" execute="machine" />
+						</h:commandButton>
+            			<h:selectOneMenu id="machine"
+							value="#{CostAnalysis.partNo}"
+							style="color:#444444;  border-width: 0px;
+					    	position: absolute;border: 1px solid #BFBFBF;font-family:微软雅黑,Microsoft YaHei,simhei;">
+							<f:selectItems value="#{CostAnalysis.machineMap}"></f:selectItems>
+							<a4j:ajax event="change" listener="#{CostAnalysis.searchList}"
+										render=":myform:productcosttwoChart1 :myform:productcostthreeChart1 :myform:type" execute="@this"></a4j:ajax>
+						</h:selectOneMenu>
+
+               </td></tr>
+            </table>
+    </td></tr>	
+    </table>	
+</td>
+</tr><tr>
+<td id="analcontainscenter">   
+    <img id="centerbg" style="position:absolute;left:0px;z-Index:-1; 
+	      border:0px solid blue;display:none;" src="./images/cost_analysis_bg.png" />
+    <table id="analcontainscentertable">
+     <tr><td>
+	     <div id="nexttab" style="position: absolute;z-index: 100">
+			<img id="img2" src="./images/nextTab.png" onclick="jumpto('/mocs/costmanage/machine_cost.xhtml')" style="cursor: pointer"/>
+		</div>
+		<div id="backtab" style="position: absolute;z-index: 100">
+			<img id="img3" src="./images/brackTab.png" onclick="jumpto('/mocs/costmanage/product_cost.xhtml')" style="cursor: pointer"/>
+		</div>	
+		<table id="analcontainscenter1" >
+		    <tr><td id="analcontainscenter1td1" style="font-weight: bold;float: left;">			
+			            理论成本
+			</td><td>
+			<rich:panel id="productcostoneChart1">
+			<h:inputHidden value="#{CostAnalysis.twoLineJsonData}" id="beanvalue" />
+			<div id="productcostoneChart" style="float: left;"/>
+				<script type="text/javascript">
+				loadBeanValue();
+	           </script>
+			</rich:panel>
+			</td></tr>
+		</table>
+	</td></tr>	
+	<tr><td valign="top">
+		    <table>
+            <tr><td id="analcontainscenter2" align="center" valign="top" width="40%">
+
+			<rich:panel id="productcosttwoChart1">
+			<h:inputHidden value="#{CostAnalysis.polarJsonData}" id="beanvalue1" />
+			<div id="productcosttwoChart" />
+			   <script type="text/javascript">
+			   loadBeanValue1();
+	           </script>	         
+			</rich:panel>
+			
+			<div id="analcontainscenter2td1" style="position: absolute;z-index: 1;">
+			<div id="twochart1" style="position: absolute;font-weight: bold;"> 成本偏差</div>
+			<div id="twochart2" style="position: absolute;">主料</div>
+			<div id="twochart3" style="position: absolute;">折旧</div>
+			<div id="twochart4" style="position: absolute;">人工</div>
+			<div id="twochart5" style="position: absolute;">辅料</div>
+			<div id="twochart6" style="position: absolute;">能源</div>
+			</div>
+
+		</td><td id="analcontainscenter3" valign="top" width="60%">
+			
+			<div id="analcontainscenter3td1div" style="font-weight: bold;">单项对比</div>
+			
+			<rich:panel id="productcostthreeChart1">
+			<h:inputHidden value="#{CostAnalysis.twoColumnJsonData}"
+					id="beanvalue2" />
+			<div id="productcostthreeChart" />
+			   <script type="text/javascript">
+			   loadBeanValue2();
+	           </script>
+	 		
+<script type="text/javascript">
+var imgPercent = hjb51/1080; //比例 
+
+//头部表格宽高 
+document.getElementById("analcontains").style.width=wjb51+"px";
+document.getElementById("analcontains").style.height=hjb51*90/100+"px";
+document.getElementById("analcontainstop").style.width=wjb51+"px";
+document.getElementById("analcontainstop").style.height=hjb51*265/1080+"px";
+document.getElementById("analcontainscenter").style.width=wjb51+"px";
+//document.getElementById("analcontainscenter").style.height=hjb51*725/1080+"px";
+
+document.getElementById("topimg").style.width=wjb51*30/100+"px";	
+document.getElementById("manage_top_left").style.width=wjb51*20/100+"px";	
+document.getElementById("manage_top_left").style.fontSize=hjb51*55/1080+"px";	
+document.getElementById("manage_top_left").style.lineHeight=hjb51*20/100+"px";
+
+document.getElementById("top_li_type").style.width=wjb51*384/1920+"px";	
+document.getElementById("top_li_type").style.fontSize=hjb51*40/1080+"px";	
+document.getElementById("top_li_type").style.lineHeight=hjb51*45/1080+"px";
+document.getElementById("top_li_type").style.marginTop=hjb51*70/1080+"px";
+document.getElementById("top_li_type2").style.width=wjb51*384/1920+"px";	
+document.getElementById("top_li_type2").style.fontSize=hjb51*30/1080+"px";	
+document.getElementById("top_li_type2").style.lineHeight=hjb51*45/1080+"px";
+document.getElementById("top_li_type3").style.width=wjb51*384/1920+"px";	
+document.getElementById("top_li_type3").style.fontSize=hjb51*40/1080+"px";	
+document.getElementById("top_li_type3").style.lineHeight=hjb51*45/1080+"px";
+document.getElementById("top_li_type3").style.marginTop=hjb51*70/1080+"px";
+document.getElementById("top_li_type4").style.width=wjb51*384/1920+"px";	
+document.getElementById("top_li_type4").style.fontSize=hjb51*30/1080+"px";	
+document.getElementById("top_li_type4").style.lineHeight=hjb51*45/1080+"px";
+document.getElementById("top_li_type_div1").style.marginLeft=wjb51*55/1920+"px";
+document.getElementById("top_li_type_div2").style.marginLeft=wjb51*55/1920+"px";
+
+//按钮的大小 
+document.getElementById("myform:button1").style.width = 40*imgPercent+"px"; //是40和36大小 
+document.getElementById("myform:button1").style.height = 36*imgPercent+"px";
+document.getElementById("myform:button1").style.marginLeft = "0px";
+document.getElementById("myform:type").style.width = 270*imgPercent+"px";  //是270和36大小 
+document.getElementById("myform:type").style.height = 36*imgPercent+"px";
+document.getElementById("myform:type").style.lineHeight = hjb51*36/1080+"px";
+document.getElementById("myform:type").style.marginLeft = "0px"; //离左边为左边图片的宽度 
+document.getElementById("myform:type").style.fontSize = hjb51*28/1080+"px";
+document.getElementById("myform:button2").style.width = 40*imgPercent+"px"; //是40和36大小 
+document.getElementById("myform:button2").style.height = 36*imgPercent+"px";
+document.getElementById("myform:button2").style.marginLeft = "0px";
+document.getElementById("myform:machine").style.width = 270*imgPercent+"px";  //是270和36大小 
+document.getElementById("myform:machine").style.height = 36*imgPercent+"px";
+document.getElementById("myform:machine").style.lineHeight = hjb51*36/1080+"px";
+document.getElementById("myform:machine").style.marginLeft = "0px"; //离左边为左边图片的宽度 
+document.getElementById("myform:machine").style.fontSize = hjb51*28/1080+"px";
+
+//中间宽高 
+document.getElementById("analcontainscentertable").style.height=hjb51*710/1080+"px";//控制中间的高度 
+document.getElementById("analcontainscenter1").style.width=wjb51+"px";
+document.getElementById("analcontainscenter1").style.height=hjb51*270/1080+"px";
+document.getElementById("analcontainscenter1td1").style.fontSize=hjb51*30/1080+"px";	
+document.getElementById("analcontainscenter1td1").style.marginLeft=wjb51*30/1920+"px";	
+document.getElementById("productcostoneChart").style.marginLeft=wjb51*30/1920+"px";	
+document.getElementById("analcontainscenter2").style.width=wjb51*765/1920+"px";
+document.getElementById("analcontainscenter3").style.width=wjb51*1100/1920+"px";
+
+
+document.getElementById("analcontainscenter2td1").style.width=wjb51*765/1920+"px";	
+document.getElementById("analcontainscenter2td1").style.top=hjb51*535/1080+"px";	
+document.getElementById("analcontainscenter2td1").style.left="0px";	
+
+document.getElementById("analcontainscenter3td1div").style.marginLeft=wjb51*55/1920+"px";	
+document.getElementById("analcontainscenter3td1div").style.marginTop= "-"+hjb51*20/1080+"px";	
+document.getElementById("analcontainscenter3td1div").style.fontSize=hjb51*30/1080+"px";	
+document.getElementById("myform:productcostthreeChart1").style.marginTop= "-"+hjb51*27/1080+"px";	
+
+document.getElementById("nexttab").style.marginTop=hjb51*200/1080+"px";
+document.getElementById("nexttab").style.marginLeft=wjb51*1840/1920+"px";	
+document.getElementById("backtab").style.marginTop=hjb51*200/1080+"px";
+document.getElementById("backtab").style.marginLeft=wjb51*5/1920+"px";
+
+document.getElementById("twochart1").style.marginLeft=wjb51*25/1920+"px"
+document.getElementById("twochart1").style.marginTop=hjb51*10/1080+"px";
+document.getElementById("twochart1").style.fontSize=hjb51*30/1080+"px";
+document.getElementById("twochart2").style.marginLeft=wjb51*200/1920+"px"
+document.getElementById("twochart2").style.marginTop=hjb51*363/1080+"px";
+document.getElementById("twochart2").style.fontSize=hjb51*26/1080+"px";
+document.getElementById("twochart3").style.marginLeft=wjb51*563/1920+"px"
+document.getElementById("twochart3").style.marginTop=hjb51*147/1080+"px";
+document.getElementById("twochart3").style.fontSize=hjb51*26/1080+"px";
+document.getElementById("twochart4").style.marginLeft=wjb51*390/1920+"px"
+document.getElementById("twochart4").style.marginTop=hjb51*2/1080+"px";
+document.getElementById("twochart4").style.fontSize=hjb51*26/1080+"px";
+document.getElementById("twochart5").style.marginLeft=wjb51*140/1920+"px"
+document.getElementById("twochart5").style.marginTop=hjb51*129/1080+"px";
+document.getElementById("twochart5").style.fontSize=hjb51*26/1080+"px";
+document.getElementById("twochart6").style.marginLeft=wjb51*500/1920+"px"
+document.getElementById("twochart6").style.marginTop=hjb51*370/1080+"px";
+document.getElementById("twochart6").style.fontSize=hjb51*26/1080+"px";
+
+document.getElementById("productcosttwoChart").style.marginTop="-"+hjb51*10/1080+"px";
+document.getElementById("productcostthreeChart").style.marginTop="-"+hjb51*20/1080+"px";
+
+//图片大小 
+for(var i=1;4>i;i++){
+	var new_image = new Image();
+	new_image.src = document.getElementById("img"+i).src;
+	var wjbimg= new_image.width;
+	var hjbimg= new_image.height;
+	
+	document.getElementById("img"+i).style.width=wjbimg*imgPercent+"px";
+	document.getElementById("img"+i).style.height=hjbimg*imgPercent+"px";
+}
+
+imgReady('./images/profile_top_logo.png', function () { 
+	  var imgwjb51=this.width;
+ 	  var imghjb51=this.height;
+	  document.getElementById("img1").style.width=imgwjb51*imgPercent+"px";
+	  document.getElementById("img1").style.height=imghjb51*imgPercent+"px";										
+	  //document.getElementById("img1").style.top=hjb51*30/1080+"px";
+	  //document.getElementById("img1").style.left=wjb51*25/1920+"px";
+	  if(wjb51==800)
+	  {
+		  document.getElementById("img1").style.width=imgwjb51*45/100+"px";
+		  document.getElementById("img1").style.height=imghjb51*45/100+"px";  
+	  }
+});
+imgReady('./images/nextTab.png', function () { 
+	  var imgwjb51=this.width;
+	  var imghjb51=this.height;
+	  document.getElementById("img2").style.width=imgwjb51*imgPercent+"px";
+	  document.getElementById("img2").style.height=imghjb51*imgPercent+"px";										
+});
+imgReady('./images/brackTab.png', function () { 
+	  var imgwjb51=this.width;
+	  var imghjb51=this.height;
+	  document.getElementById("img3").style.width=imgwjb51*imgPercent+"px";
+	  document.getElementById("img3").style.height=imghjb51*imgPercent+"px";										
+});
+
+//图片背景 
+document.getElementById("centerbg").style.top=hjb51*265/1080+"px";
+document.getElementById("centerbg").style.width=wjb51+"px";
+document.getElementById("centerbg").style.height=hjb51*710/1080+"px";
+
+</script>	
+	
+	<script type="text/javascript">
+		loadData();//放最后
+		
+		/*
+		function f(){
+			var sel2=document.getElementById("myform:type");
+				sel2.size=10;
+				sel2.style.display="block";
+				document.getElementById("myform:type").onmouseout=function(event){
+					var s =event.relatedTarget;
+		        	if (!this.contains(s)) {
+		        		this.style.display="none";
+		        	}            
+				};
+				
+		}
+		function c(){
+			var text=document.getElementById("myform:typetext");
+			var sel2=document.getElementById("myform:type");
+			var i=sel2.selectedIndex>0 ?sel2.selectedIndex :0;
+			var name =sel2.options[i].innerHTML;
+			text.value=name;
+			sel2.style.display="none";
+		}
+		function fa(){
+			var sel2=document.getElementById("myform:machine");
+				sel2.size=10;
+				sel2.style.display="block";
+		}
+		function ca(){
+			var text=document.getElementById("myform:typetexta");
+			var sel2=document.getElementById("myform:machine");
+			var i=sel2.selectedIndex>0 ?sel2.selectedIndex :0;
+			var name =sel2.options[i].innerHTML;
+			text.value=name;
+			sel2.style.display="none";
+		}
+		document.getElementById("myform:type").onmouseout=function(event){
+				var s =event.relatedTarget;
+	        	if (!this.contains(s)) {
+	        		this.style.display="none";
+	        	}            
+		};
+		document.getElementById("myform:machine").onmouseout=function(event){
+				var s =event.relatedTarget;
+	        	if (!this.contains(s)) {
+	        		this.style.display="none";
+	        	}            
+		};
+		*/
+	</script>
+		 <script type="text/javascript">
+				setTimeout(function(){
+				//document.getElementById("maskw").style.display="none";
+				document.getElementById("centerbg").style.display="block";
+				$("#maskw").fadeOut(fadeouttime);
+				},settimeout);
+     	</script>
+	           
+	           
+			</rich:panel>
+	
+		</td></tr>	
+     </table>
+		
+	  </td></tr>	
+    </table>	
+		
+	</td></tr>
+	</table>
+	
+	    </h:form>
+
+</ui:composition>

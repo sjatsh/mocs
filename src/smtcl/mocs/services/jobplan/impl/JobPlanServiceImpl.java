@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
@@ -18,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import org.dreamwork.persistence.GenericServiceSpringImpl;
 import org.dreamwork.persistence.Operator;
 import org.dreamwork.persistence.Parameter;
-import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.ibm.faces.util.StringUtil;
@@ -39,23 +39,22 @@ import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.pojos.job.TProcessInfo;
 import smtcl.mocs.services.device.ICommonService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
+import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.FaceContextUtil;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
  * 作业计划管理SERVICE接口实现类
- * @作者：Jf
- * @创建时间：2013-05-06
- * @修改者：songkaiang
- * @修改日期：
- * @修改说明：
+ * @作者 Jf
+ * @创建时间 2013-05-06
+ * @修改者 songkaiang
+ * @修改日期
+ * @修改说明
  * @version V1.0
  */
-@SuppressWarnings("unchecked")
 public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, String> implements IJobPlanService {
-	
-	
+
 	@Override
 	public List<Map<String, Object>> findAllJobPlanAndPartInfo(String nodeId) {
 		String hql="SELECT d.id AS Id,  d.typeNo AS Cls,d.name AS Name " +
@@ -65,7 +64,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeNativeQuery(hql);
 	}
 	
-	public Map<String, Object> getAllJobPlanAndPartInfo(String nodeId,String partName,String planStatus,String startTime,String endTime,String isexpand){
+	public Map<String, Object> getAllJobPlanAndPartInfo(String nodeId,String partName,String planStatus,String startTime,String endTime,String isexpand,String locale){
 		String sql="SELECT"
 				+ " a.id as partId,"
 				+ " a.name AS partName,"
@@ -94,26 +93,35 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		
 		sql += " ORDER BY a.name,b.plan_type,b.name";
 		List<Map<String, Object>> ds=dao.executeNativeQuery(sql);
-		List prlist=new ArrayList();
+		List<String> prlist = new ArrayList<String>();
 		List<Map<String, Object>> rs=new ArrayList<Map<String, Object>>();
 		boolean iszk=Boolean.parseBoolean(isexpand);
 		//iszk=true;
 		for(Map<String, Object> map:ds){
 			if(null!=map.get("partId")&&!prlist.contains(map.get("partId").toString())){
 				
-				List<Map<String, Object>> san=new ArrayList();
+				List<Map<String, Object>> san=new ArrayList<Map<String, Object>>();
 				Map<String, Object> pc=new HashMap<String, Object>();
 				pc.put("Id",map.get("partId")+"0000002");
-				pc.put("Name","批次计划");
+                if(locale.equals("en") || locale.equals("en_US")){
+                    pc.put("Name","Batch Plan");
+                }else{
+                    pc.put("Name","批次计划");
+                }
+
 				pc.put("expanded",iszk);
 				pc.put("children",new ArrayList());
 				pc.put("leaf",true);
 				san.add(pc);//添加第二层批次计划
 				
-				List<Map<String, Object>> er=new ArrayList(); //第二层
+				List<Map<String, Object>> er=new ArrayList<Map<String, Object>>(); //第二层
 				Map<String, Object> zy=new HashMap<String, Object>();
 				zy.put("Id",map.get("partId")+"0000001");
-				zy.put("Name","作业计划");
+                if(locale.equals("en") || locale.equals("en_US")){
+                    zy.put("Name", "Production Plan");
+                }else {
+                    zy.put("Name", "作业计划");
+                }
 				zy.put("expanded",iszk);
 				zy.put("children",san);
 				zy.put("leaf",false);
@@ -425,8 +433,9 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	}*/
 	//查询所有作业计划
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Map<String, Object>> findAllJobPlan(String nodeId,String partid,String planStatus,String startTime,String endTime) {
-		List<Map<String, Object>> result=new ArrayList();
+		List<Map<String, Object>> result=new ArrayList<Map<String, Object>>();
 		String hql = "SELECT NEW MAP(a.id AS Id,a.no AS No," 
 				+"a.name AS Name," 
 				+"a.status AS Status,"
@@ -465,12 +474,11 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				}
 				hql=hql+" order by a.id desc";		
 						
-	    List<Map<String, Object>> rs=dao.executeQuery(hql);
+	    List<Map<String, Object>> rs = dao.executeQuery(hql);
 		if(null!=rs&&rs.size()>0){
 			for(Map<String, Object> tt:rs){
 				Map<String, Object> mm=new HashMap<String, Object>();
 				//创建  待派工 已派工 
-				//System.out.println("status:"+tt.get("Status")+"---planType:"+tt.get("planType"));
 				if("10".equals(tt.get("Status").toString())||"20".equals(tt.get("Status").toString())||"30".equals(tt.get("Status").toString())){
 					mm.put("Id",tt.get("Id"));
 					mm.put("Name",tt.get("Name"));
@@ -507,7 +515,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 					}
 					mm.put("planNum",tt.get("planNum"));
 					mm.put("finishNum",tt.get("finishNum"));
-					Date date=new Date();
 					double rr=Double.parseDouble(tt.get("finishNum").toString())/Double.parseDouble(tt.get("planNum").toString())*100;
 					DecimalFormat df=new DecimalFormat("0.00"); 
 					mm.put("Percentage",df.format(rr));
@@ -546,11 +553,11 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		}
 		return result;
     }
-	
-	@Override
+
 	/**
 	 * 根据产品id，查询作业计划信息
 	 */
+    @Override
 	public Map<String, Object> findJobPlanDetail(String jobNo) {
 		String hql="select new MAP(jobPlan.id as jobPlanId,jobPlan.no as No," +
 				"jobPlan.name as jobPlanName," +
@@ -573,10 +580,10 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return null;
 	}
 	
-	@Override
 	/**
 	 * 作业计划详情默认取一条记录
 	 */
+    @Override
 	public Map<String, Object> findJobPlanDetailDefault() {
 		String hql="select new MAP(jobPlan.id as jobPlanId,jobPlan.no as No," +
 				"jobPlan.name as jobPlanName," +
@@ -683,6 +690,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				+" a.name AS name," 
 				+" a.no AS no," 
 				+" a.status AS status,"
+				+ "s.name as statusName,"
 				+" DATE_FORMAT(a.planStarttime,'%Y-%m-%d %T') AS planStarttime,"
 				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d %T') as planEndtime, "
 				+" DATE_FORMAT(a.finishDate,'%Y-%m-%d %T') as finishDate, "
@@ -701,8 +709,9 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				+" b.version as version,"
 				+" b.source as source"
 				+")"
-				+" FROM TJobplanInfo a , TPartTypeInfo b "
-				+" WHERE a.TPartTypeInfo.id=b.id   ";
+				+" FROM TJobplanInfo a , TPartTypeInfo b,TStatusInfo s "
+				+" WHERE a.TPartTypeInfo.id=b.id   "
+				+" and s.id=a.status";
 		if(jobplabid!=null && !"".equals(jobplabid)){
 			hql += " AND a.id = '"+jobplabid+"'  "; 
 		}		
@@ -799,14 +808,14 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			System.out.println("jobPlanAddBean.getNo().length():"+jobPlanAddBean.getNo().length());
 			jpi.setNo(jobPlanAddBean.getNo());
 			//如果是作业计划,默认状态为40
-			if("1".equals(jobPlanAddBean.getPlanType().toString())) 
+			if("1".equals(jobPlanAddBean.getPlanType()))
 				{ 
 				   jpi.setStatus(40);
 				   jpi.setRealStarttime(jobPlanAddBean.getPlanStarttime()); //计划开始时间就是实际开始时间
 				}
 			else 
 				jpi.setStatus(10);  //批次计划创建是默认是10
-			//jpi.setTUserProdctionPlan(tUserProdctionPlan);     //从属生产计划名称
+//			jpi.setTUserProdctionPlan(tUserProdctionPlan);     //从属生产计划名称、
 			jpi.setPlanNo(proPlanNo);     //生产计划编号
 			jpi.setName(jobPlanAddBean.getName());
 			jpi.setPlanStarttime(jobPlanAddBean.getPlanStarttime());
@@ -818,7 +827,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			jpi.setFinishNum(0);
 			jpi.setQualifiedNum(0);
 			jpi.setTPartTypeInfo(tPartTypeInfo);     //零件名称
-			jpi.setProcess(new Double(0));
+			jpi.setProcess((double) 0);
 			jpi.setChildrenTotalNum(0);
 			jpi.setAllocatedNum(Integer.parseInt(jobPlanAddBean.getAllocatedNum()));
 			if(!StringUtils.isEmpty(jobPlanAddBean.getPriority())){
@@ -851,11 +860,23 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 					commonService.saveObject(taskinfo); //添加分配任务
 				}
 			}
-			return "添加成功";
+			Locale locale=SessionHelper.getCurrentLocale(session);
+			if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+				  return "Created successfully";
+			}else{
+			      return "创建成功";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return "添加失败";
+			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			Locale locale=SessionHelper.getCurrentLocale(session);
+			if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+				return "Failed to add";
+			}else{
+				return "添加失败";
+			}
+			
 		}		
 	}
 	/**
@@ -974,6 +995,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	 */
 	public String updataJobPlan(JobPlanUpdataBean jobPlanAddBean){
 		try {
+			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 			 TJobplanInfo jpi = null;
 				if(!StringUtils.isEmpty(jobPlanAddBean.getId())){
 					jpi=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanAddBean.getId()));
@@ -987,7 +1009,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				}
 
 				jpi.setNo(jobPlanAddBean.getNo());
-				jpi.setStatus(10);  //创建10状态下才能修改
+//				jpi.setStatus(10);  //创建10状态下才能修改
 				jpi.setPlanNo(proPlanNo);   //生产计划编号
 				jpi.setName(jobPlanAddBean.getName());
 				jpi.setPlanStarttime(jobPlanAddBean.getPlanStarttime());
@@ -1060,11 +1082,23 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 						
 					}
 				}
-			return "修改成功";
+		    Locale locale=SessionHelper.getCurrentLocale(session);
+		    if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+				  return "Update successfully";
+			}else{
+			      return "修改成功!";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return "修改失败";
+			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			Locale locale=SessionHelper.getCurrentLocale(session);
+		    if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+				  return "failed to Update";
+			}else{
+				return "修改失败";
+			}
+			
 		}
 	   
 		
@@ -1960,22 +1994,18 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	
 	@Override
 	public Boolean updateJobPlanInfoStatus(String jobPlanId,String status) {
-		Date date = new Date();
-		String nowDate=StringUtils.formatDate(date,3);
-		try{
-			String sql ="";
-			if("40".equals(status))
-			{
-			     sql="update t_jobplan_info t set t.status="+Integer.valueOf(status) + ",t.real_starttime='" +nowDate + "' where t.id="+Long.valueOf(jobPlanId);
-			}	
-			if("60".equals(status))
-			 sql="update t_jobplan_info t set t.status="+Integer.valueOf(status) + ",t.real_endtime='" +nowDate + "' where t.id="+Long.valueOf(jobPlanId);
-			
-			dao.executeNativeUpdate(sql);
-		    return true;
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+        if ("40".equals(status)) {
+            TJobplanInfo jobplan = dao.get(TJobplanInfo.class,Long.parseLong(jobPlanId));
+            jobplan.setStatus(Integer.parseInt(status));
+            jobplan.setRealStarttime(new Date());
+            dao.update(TJobplanInfo.class,jobplan);
+        }
+        if ("60".equals(status)) {
+            TJobplanInfo jobplan = dao.get(TJobplanInfo.class,Long.parseLong(jobPlanId));
+            jobplan.setStatus(Integer.parseInt(status));
+            jobplan.setRealEndtime(new Date());
+            dao.update(TJobplanInfo.class,jobplan);
+        }
 		return false;
 	}
 	
@@ -2481,11 +2511,12 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			rsmap.put("itemDesc", "");//添加物料描述
 			rsmap.put("toOperationNum", "");//添加 至工序
 		}
+		
 		String sqlgylist="SELECT b.process_order as processOrder,b.theorywork_time as processingTime,b.onlineProcessID,b.offlineProcess,"
 						+ " b.processPlanID as processPlanID,b.id as itemCode,b.name as processName" 
 						+" FROM t_jobdispatchlist_info a,t_process_info b WHERE " 
 						+"	a.processID=b.ID "
-						+"	AND a.batchno IN( "
+						+"	AND a.batchno =( "
 						+"	SELECT  batchno FROM t_jobdispatchlist_info WHERE NO='"+jobdispatchNo+"')"
 						+" order by b.process_order ";
 		List<Map<String,Object>> zrgxrs=dao.executeNativeQuery(sqlgylist);				

@@ -293,7 +293,7 @@ public class ProductServiceImpl extends GenericServiceSpringImpl<TUserResource, 
    */
   public List<TPartTypeInfo> getTPartTypeInfoByNodeId(String nodeId,String procuct){
 	  String hql="from TPartTypeInfo where nodeid='"+nodeId+"'";
-	  if(!StringUtils.isEmpty(procuct)){
+	  if(!StringUtils.isEmpty(procuct) && !procuct.equals("请选择")){
 		  hql=hql+" and id='"+procuct+"'";
 	  }
 	  return dao.executeQuery(hql);
@@ -502,6 +502,13 @@ public class ProductServiceImpl extends GenericServiceSpringImpl<TUserResource, 
 		if(!StringUtils.isEmpty(equid)){
 			hql += " and equ.equId in ("+equid+")";
 		}
+		//时间查询条件
+		if(!StringUtils.isEmpty(startTime)){
+			hql += " and b.planStarttime >= DATE_FORMAT('"+startTime+"','%Y-%m-%d')  "; 
+		}
+		if(!StringUtils.isEmpty(endTime)){
+			hql += " and b.planEndtime <= DATE_FORMAT('"+endTime+"','%Y-%m-%d')"; 
+		}
 		hql += " order by te.equSerialNo,b.taskNum,process.processOrder asc";
 		@SuppressWarnings("unchecked")
 		List<Map<String,Object>> jobDispatchListInfo = dao.executeQuery(hql);
@@ -523,6 +530,7 @@ private List<TEquJobDispatch> getTEquJobDispatchByNo(String jobdispatchNo){
 	@Override
 	public TreeNode getBaseJobListTree(String nodeId,String startTime,String endTime,String taskNum,String jobstatus, String partid,String equid) {
 		TreeNode root =new DefaultTreeNode(new JobListModel("","","", "", "", "", "", "", "", "","", "","","","",""),null);
+//		root.setExpanded(true);
 		//通过参数查询工单信息
 		List<Map<String, Object>> list = this.getJobdispatchInfo(nodeId,startTime,endTime,taskNum, jobstatus, partid, equid);
 		String tasknum = "";
@@ -530,6 +538,7 @@ private List<TEquJobDispatch> getTEquJobDispatchByNo(String jobdispatchNo){
 		for(Map<String,Object> map : list){
 			if(!map.get("taskNum").toString().equals(tasknum)){
 				root2 = new DefaultTreeNode(new JobListModel("","",map.get("taskNum").toString(), "", "", "", "", "", "", "","","","","","",""),root);
+//				root2.setExpanded(true);
 			}
 			tasknum = map.get("taskNum").toString();
 			String wisScrapNum=null;
@@ -552,6 +561,7 @@ private List<TEquJobDispatch> getTEquJobDispatchByNo(String jobdispatchNo){
 						map.get("partName").toString(),
 						map.get("No").toString(),
 						map.get("goodQuantity").toString(),wisScrapNum), root2);
+//			root21.setExpanded(true);
 		}
 		
 		return root;
@@ -606,10 +616,10 @@ private List<TEquJobDispatch> getTEquJobDispatchByNo(String jobdispatchNo){
 				   + " and te.status <> 0";
 		//时间查询条件
 		if(!StringUtils.isEmpty(startTime)){
-			hql += " and t.planStarttime >= DATE_FORMAT('"+startTime+"','%Y-%m-%d %T')  "; 
+			hql += " and t.planStarttime >= DATE_FORMAT('"+startTime+"','%Y-%m-%d')  "; 
 		}
 		if(!StringUtils.isEmpty(endTime)){
-			hql += " and t.planEndtime <= DATE_FORMAT('"+endTime+"','%Y-%m-%d %T')"; 
+			hql += " and t.planEndtime <= DATE_FORMAT('"+endTime+"','%Y-%m-%d')"; 
 		}
 		//工单状态
 		if(!StringUtils.isEmpty(jobstatus)){

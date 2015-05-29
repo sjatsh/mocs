@@ -9,7 +9,7 @@ function loadData() {
 		generateLineChart(barModel);
 	}else{
 		document.getElementById("chart").innerHTML += "<div style=\"font-size:"+hjb51*30/1080+"px;text-align:center;" +
-		"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\">没有数据，<BR/>请更换节点或查询条件<br/></div>";
+		"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
 	}
 }
 
@@ -30,11 +30,16 @@ function generateLineChart(barModel) {
 		chart: {
 			renderTo : 'chart',
 			zoomType : "x",
-			width : wjb51 - 20,
+			width:wjb51-wjb51*(460/1920),
 			height : hjb51*500/1080,
-			backgroundColor:{linearGradient: [800, 0, 800, 500],
-	        stops: [[0, 'rgba(225,225,225,1)'] , [1, 'rgba(255,255,255,0)']]},
-	        borderRadius: 0
+			plotBorderWidth: 1,
+	        plotBackgroundImage: null,
+	        backgroundColor: 'rgba(255, 255, 255, 0)',
+            plotBorderColor : null,
+            plotBackgroundColor: null,
+            plotBackgroundImage:null,
+            plotBorderWidth: null,
+            plotShadow: false
         },
         exporting : {
 			enabled : false
@@ -43,7 +48,10 @@ function generateLineChart(barModel) {
 			  enabled: false  
 		}, 
         title: {
-            text: barModel.title
+            text: barModel.title,
+            style:{  		
+        		color:'#7A7A7A'
+        	 }
         },
         subtitle: {
             text: null
@@ -83,6 +91,13 @@ function generateLineChart(barModel) {
 				}
 			}
         },
+        colors:[          
+			'rgba(108,204,71,1)',
+			'rgba(0,129,206,1)',
+			'rgba(244,221,12,1)',
+			'rgba(160,160,160,1)',
+			'rgba(251,117,0,1)'
+        ],
         series:devices
     
 	});

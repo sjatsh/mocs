@@ -5,40 +5,38 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.dreamwork.persistence.ServiceFactory;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
-import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TJobplanInfo;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.services.device.IPartService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
-import smtcl.mocs.utils.authority.DateUtil;
+import smtcl.mocs.utils.BundleUtils;
+import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
  * 
  * 工单添加Bean
- * @作者：yyh
- * @创建时间：2014-2-23
- * @修改者：yyh
- * @修改日期：
- * @修改说明：
+ * 作者 yyh
+ * 创建时间 2014-2-23
+ * 修改者 yyh,songkaiang
+ * 修改日期 2015-3-13
+ * 修改说明 使用jsf的国际化
  * @version V1.0
  */
 @ManagedBean(name="JobdispatchAdd")
@@ -146,7 +144,10 @@ public class JobdispatchAddBean implements Serializable {
 	 * 作业计划号集合
 	 */
 	private Map<String,Object> planjobMap = new TreeMap<String,Object>();
-	
+	/**
+	 * 提示信息
+	 */
+	private String isSuccess;
 	/****************************************************************/
 	/**
 	 * 作业清单的选中框
@@ -166,7 +167,7 @@ public class JobdispatchAddBean implements Serializable {
 	 * 控制多选框的全选与否
 	 */
 	public void editCheckBox(){
-		if(oneBool == true){
+		if(oneBool){
 			for (Map<String, Object> gg : jobdispatchlist) {
 				gg.put("bool", true);
 			}
@@ -185,7 +186,7 @@ public class JobdispatchAddBean implements Serializable {
 		for(Map<String,Object> map : jobdispatchlist){
 			String jn = map.get("dno").toString();
 			boolean b = Boolean.parseBoolean(map.get("bool").toString());	
-			if(jn.equals(jobNo) && b == false){  // 确定了哪个和 b是否选中
+			if(jn.equals(jobNo) && !b){  // 确定了哪个和 b是否选中
 				lst.add(map); //不能遍历的时候删除，只能把要删除的放入list,然后在删除这个list
 			}
 		}
@@ -194,21 +195,21 @@ public class JobdispatchAddBean implements Serializable {
 	/**
 	 * 删除点击的工单清单列表
 	 */
-	public void delList(){
-		jobdispatchlist.removeAll(lst);			
-		lst.clear();	
-		jobdispatchModel = new TJobDispatchDataModel(jobdispatchlist);
-	}
+//	public void delList(){
+//		jobdispatchlist.removeAll(lst);
+//		lst.clear();
+//		jobdispatchModel = new TJobDispatchDataModel(jobdispatchlist);
+//	}
 	
 	/****************************************************************/	
 	
 	/**
 	 * 获取节点id
-	 * @return
+	 * @return 返回nodeid
 	 */
 	private String getNodeId(){
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		return session.getAttribute("nodeid")+"";
+		return (String)session.getAttribute("nodeid");
 	}
 	
 	/**
@@ -231,7 +232,7 @@ public class JobdispatchAddBean implements Serializable {
 	 * 查询<span>不在使用</span>
 	 */
 	public void searchList() {
-
+		
 	}
 	
     /**
@@ -322,20 +323,25 @@ public class JobdispatchAddBean implements Serializable {
     */
 	public void delJobDispathList() {
 		System.out.println("取消----------->" + jobdispatchlist.size());
-		for (Map<String, Object> disp : jobdispatchlist) {
+		jobdispatchlist.clear();
+		/*for (Map<String, Object> disp : jobdispatchlist) {
 			String equtypeid = disp.get("equTypeId").toString();
-		}
+		}*/
 	}
    
    /**
     * 保存工单
     */
-   public void saveJobDispatch(){
-	   jobDispatchService.saveDispatch(this);
-	   //将零件名称写入cookie,在作业计划中使用
-//	   HttpServletResponse response = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//	   HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-//	   StringUtils.saveCookie(request, response, "partName", "abc");
+   public String saveJobDispatch(){
+       isSuccess = BundleUtils.getStringFromBundle("faild.add", this.getLocale(), "jobdispatch");
+       if(this.getJobdispatchlist().size()<=0){
+           return isSuccess;
+       }else{
+           jobDispatchService.saveDispatch(this);
+           isSuccess = BundleUtils.getStringFromBundle("add.success", this.getLocale(), "jobdispatch");
+           return isSuccess;
+       }
+
    }
    /**
     * 选择作业号后，获取投料数量和任务号，并自动填充
@@ -343,11 +349,9 @@ public class JobdispatchAddBean implements Serializable {
    public void autoComplete(){
 	   num = this.getNum();
 	   if(!planjobId.isEmpty()){
-		   if(planjobId != null){
-				TJobplanInfo t = jobPlanService.geTJobplanInfoById(Long.parseLong(planjobId));
-				this.setTaskNum(t.getName());
-			}
-	   }
+           TJobplanInfo t = jobPlanService.geTJobplanInfoById(Long.parseLong(planjobId));
+           this.setTaskNum(t.getName());
+       }
 	   
    }
    	/*************************private**********************************/
@@ -368,6 +372,10 @@ public class JobdispatchAddBean implements Serializable {
 			return map.get("id").toString();
 		}
 		return null;
+   }
+   private Locale getLocale(){
+       HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+       return SessionHelper.getCurrentLocale(request.getSession());
    }
     /********************set,get方法************************************/    
 
@@ -417,11 +425,13 @@ public class JobdispatchAddBean implements Serializable {
 				for(TJobplanInfo t:jobPlanList){
 					if(planid.equals(t.getId().toString())){
 						planjobId = t.getId().toString();
+						
 						taskNum = t.getName();
 						break;
 					}
 				}
 			}
+			
 		}
 		return partTypeId;
 	}
@@ -663,6 +673,7 @@ public class JobdispatchAddBean implements Serializable {
 		return planjobId;
 	}
 	public void setPlanjobId(String planjobId) {
+		this.getPlanjobMap();
 		this.planjobId = planjobId;
 	}
 	public Map<String, Object> getPlanjobMap() {
@@ -670,13 +681,23 @@ public class JobdispatchAddBean implements Serializable {
 		if(partTypeId!=null && !partTypeId.isEmpty()){
 			List<TJobplanInfo> jobPlanList = jobPlanService.getJobPlan(this.getNodeId(),this.getPartId(partTypeId));
 			for (TJobplanInfo job : jobPlanList) {
+				
 				planjobMap.put(job.getName(), job.getId());
 			}
 		}
+		
 		return planjobMap;
 	}
 	public void setPlanjobMap(Map<String, Object> planjobMap) {
 		this.planjobMap = planjobMap;
 	}
 
+	public String getIsSuccess() {
+		return isSuccess;
+	}
+
+	public void setIsSuccess(String isSuccess) {
+		this.isSuccess = isSuccess;
+	}
+   
 }

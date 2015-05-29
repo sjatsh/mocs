@@ -2,17 +2,7 @@ package smtcl.mocs.services.device.impl;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import jxl.write.DateTime;
+import java.util.*;
 
 import org.dreamwork.persistence.GenericServiceSpringImpl;
 import org.dreamwork.persistence.Operator;
@@ -23,7 +13,6 @@ import org.dreamwork.util.IDataCollection;
 import org.dreamwork.util.ListDataCollection;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import smtcl.mocs.beans.device.JobdispatchChangeBean;
 import smtcl.mocs.model.DeviceInfoModel;
 import smtcl.mocs.pojos.device.TEquipmentInfo;
 import smtcl.mocs.pojos.device.TNodeProductionProfiles;
@@ -39,11 +28,15 @@ import smtcl.mocs.utils.device.DateUtils;
 import smtcl.mocs.utils.device.StringUtils;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TJobplanInfo;
+import smtcl.mocs.pojos.job.TMaterailTypeInfo;
 import smtcl.mocs.pojos.job.TPartBasicInfo;
 import smtcl.mocs.pojos.job.TProcessInfo;
 import smtcl.mocs.pojos.job.TProductionEvents;
-
-
+import smtcl.mocs.pojos.storage.TMaterialStorage;
+import smtcl.mocs.pojos.storage.TMaterialVersion;
+import smtcl.mocs.pojos.storage.TStorageInfo;
+import smtcl.mocs.pojos.storage.TTransaction;
+import smtcl.mocs.pojos.storage.TTransactionRelation;
 
 /**
  * 用户查看设备总览实现层
@@ -240,11 +233,13 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		return dim;
 	}
 
-	/**
-	 * 时间统计查询
-	 * @param parameters 查询条件集合
-	 * @return List<Map<String, Object>>
-	 */
+    /**
+     * 时间统计查询
+     * @param equSerialNo
+     * @param startTime
+     * @param endTime
+     * @return
+     */
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> findIHisroryStatistics(String equSerialNo,String startTime,String endTime) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
@@ -475,17 +470,16 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	 * @param dateType 时间类型
 	 * @return IDataCollection<DeviceInfoModel> 
 	 */
+    @SuppressWarnings("unchecked")
 	public IDataCollection<DeviceInfoModel> getOEETEEP(int pageNo,
 			int pageSize, Date start, Date end, String name, String dateType) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		DecimalFormat f = new DecimalFormat("0.00");
 		List<DeviceInfoModel> rdim = new ArrayList<DeviceInfoModel>();// 返回的设备list
 		ListDataCollection<DeviceInfoModel> result = new ListDataCollection<DeviceInfoModel>();
-		System.out.println("开始时间：" + start + "--结束时间：" + end + "--设备名字：" + name
-				+ "--时间类型：" + dateType);
-		try {
 
-			if ("天".equals(dateType)) {
+		try {
+			if ("天".equals(dateType) || dateType.equals("Day")) {
 				String hql = "from TUserEquOeedaily "
 						+ "where caclDate>=:start" 
 						+ " and caclDate<=:end"
@@ -494,10 +488,9 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 				parameters.add(new Parameter("end", end, Operator.EQ));
 				IDataCollection<TUserEquOeedaily> rs = dao.executeQuery(pageNo,pageSize, hql, parameters);
 				int id = 1;
-				System.out.println("rs的长度为：" + rs.getData().size());
 				for (TUserEquOeedaily tueo : rs.getData()) {
 					DeviceInfoModel dim = new DeviceInfoModel();
-
+               
 					Long worktimeFact = tueo.getWorktimeFact(); // 实际开机时间
 					Long worktimePlan = tueo.getWorktimePlan(); // 计划开机时间
 					Long acturalOutputTheorytime = tueo
@@ -549,7 +542,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 				String[] st = s.split("-");
 				String[] en = e.split("-");
 
-				if ("周".equals(dateType)) {
+				if ("周".equals(dateType) || dateType.equals("Week")) {
 					hql=hql+" and concat(year,case when length(weekofYear)<2 then concat('0',weekofYear) "+
 	                        "   when  length(weekofYear)>1 then concat('',weekofYear) end) "+
 							"<='"+StringUtils.getYearWeek(end)+"' "+
@@ -559,7 +552,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 							">='"+StringUtils.getYearWeek(start)+"' "+
 							" and month=0 and weekofYear!=0 "+
 							" order by year,weekofYear";
-				} else if ("月".equals(dateType)) {
+				} else if ("月".equals(dateType) || dateType.equals("Month")) {
 					hql=hql+" and concat(year,case when length(month)<2 then concat('0',month) "+
 	                        "   when  length(month)>1 then concat('',month) end) "+
 							"<='"+(en[0] + en[1])+"' "+
@@ -569,7 +562,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 							">='"+(st[0] + st[1])+"' "+
 							" and weekofYear=0 and month!=0 "+
 							" order by year,month";
-				} else if ("年".equals(dateType)) {
+				} else if ("年".equals(dateType) || dateType.equals("Year")) {
 					hql = hql + " and year>=:syear " + " and year<=:eyear "
 							+ " and month=0 " + " and weekofYear=0 and year!=0"
 							+ "  order by year";
@@ -624,12 +617,12 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 					dim.setId(id);
 					dim.setDayOeevalue(tueo.getTotalOeevalue() + "");
 					dim.setDayTeepvalue(tueo.getTotalTeepvalue() + "");
-					if ("周".equals(dateType)) {
+					if ("周".equals(dateType) || dateType.equals("Week")) {
 						dim.setOeeTime(tueo.getYear() + "-"
 								+ tueo.getWeekofYear());
-					} else if ("月".equals(dateType)) {
+					} else if ("月".equals(dateType) || dateType.equals("Month")) {
 						dim.setOeeTime(tueo.getYear() + "-" + tueo.getMonth());
-					} else if ("年".equals(dateType)) {
+					} else if ("年".equals(dateType) || dateType.equals("Year")) {
 						dim.setOeeTime(tueo.getYear() + "");
 					}
 					rdim.add(dim);
@@ -783,7 +776,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	 */
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public IDataCollection<Map<String, Object>> getDeviceMachineEventStat(int pageNo, int pageSize, Collection<Parameter> parameters) {
+	public IDataCollection<Map<String, Object>> getDeviceMachineEventStat(Locale locale,int pageNo, int pageSize, Collection<Parameter> parameters,Map<String,String> eventMap) {
 		String hql = "SELECT NEW MAP(  c.nodeId AS nodeId,"
 				+ " b.equName AS equName,"
 				+ " a.equSerialNo AS equSerialNo,"
@@ -800,7 +793,24 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 			hql += " AND " + p;
 		}
 		hql += " ORDER BY a.eventId  ASC ";
-		return dao.executeQuery(pageNo, pageSize, hql, parameters);
+        IDataCollection<Map<String, Object>> list = dao.executeQuery(pageNo, pageSize, hql, parameters);
+        if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+            List<Map<String,Object>> listMap = list.getData();
+            for(Map<String, Object> map : listMap){
+                String key = map.get("eventName").toString();
+                String value = eventMap.get(key);
+                map.put("eventName", value);
+
+            }
+
+            for(Map<String, Object> map : listMap){
+                if("NULL".equals((String)map.get("eventMemo"))){
+                    map.put("eventMemo","");
+                }
+            }
+            return list;
+        }
+		return list;
 	}
 
 	/**
@@ -810,7 +820,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	 */
 	@Override
 	public List<Map<String, Object>> getDeviceMachineEventStatChart(
-			Collection<Parameter> parameters) {
+            Locale locale,Collection<Parameter> parameters,Map<String,String> eventMap) {
 		String hql = "SELECT NEW MAP( "
 				+ " a.equSerialNo AS EQUSERIALNO,"
 				+ " DATE_FORMAT(a.eventTime ,'%Y-%m-%d %T') AS EVENTTIME,"
@@ -821,7 +831,16 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 			hql += " AND " + p;
 		}
 		hql += " ORDER BY a.eventTime  DESC ";
-		return dao.executeQuery(hql, parameters);
+        List<Map<String, Object>> list = dao.executeQuery(hql, parameters);
+        if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+            for(Map<String, Object> map : list){
+                String key = map.get("EVENTNAME").toString();
+                String value = eventMap.get(key);
+                map.put("EVENTNAME", value);
+            }
+            return list;
+        }
+        return list;
 	}
 	
 	public List<Map<String, Object>> getDeviceMachineEventStatChartDateCount(
@@ -853,7 +872,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		// 根据传入的参数定义不同的HQL
-		if (dateTimeType.equals("天")) {
+		if (dateTimeType.equals("天") || dateTimeType.equals("Day")) {
 			String hql =" FROM TUserEquOeedaily WHERE DATE_FORMAT(caclDate,'%Y-%m-%d %T')>='"+StringUtils.formatDate(startTime, 2)+"' "
 					+ " AND DATE_FORMAT(caclDate,'%Y-%m-%d %T')<='"+StringUtils.formatDate(endTime, 2)+"' AND equSerialNo IN (";
 			for (int i = 0; i < serNames.length; i++) {
@@ -896,7 +915,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 			String[] starts = start.split("-");
 			String[] ends = end.split("-");
 			
-			if (dateTimeType.equals("周")) {		
+			if (dateTimeType.equals("周") || dateTimeType.equals("Week")) {
 				System.out.println( StringUtils.getYearWeek(startTime) +"-------------"+StringUtils.getYearWeek(endTime));
 				hql=hql+" and concat(year,case when length(weekofYear)<2 then concat('0',weekofYear) "+
                         "   when  length(weekofYear)>1 then concat('',weekofYear) end) "+
@@ -908,7 +927,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						" and month=0 and weekofYear!=0 "+
 						" order by year,weekofYear";
 
-			} else if (dateTimeType.equals("月")) {
+			} else if (dateTimeType.equals("月") || dateTimeType.equals("Month")) {
 				
 				
 				hql=hql+" and concat(year,case when length(month)<2 then concat('0',month) "+
@@ -920,7 +939,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						">='"+(starts[0] + starts[1])+"' "+
 						" and weekofYear=0 and month!=0 "+
 						" order by year,month";
-			} else if (dateTimeType.equals("年")) {
+			} else if (dateTimeType.equals("年") || dateTimeType.equals("Year")) {
 				
 				
 				hql = hql + " and year>=:syear " + " and year<=:eyear "
@@ -940,11 +959,11 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 				dm.setEquSerialNo(te.getEquSerialNo());
 				dm.setDayOeevalue(te.getTotalOeevalue().toString());
 				dm.setDayTeepvalue(te.getTotalTeepvalue().toString());
-				if ("周".equals(dateTimeType)) {
+				if ("周".equals(dateTimeType) || dateTimeType.equals("Week")) {
 					dm.setOeeTime(te.getYear() + "-" + te.getWeekofYear());
-				} else if ("月".equals(dateTimeType)) {
+				} else if ("月".equals(dateTimeType) || dateTimeType.equals("Month")) {
 					dm.setOeeTime(te.getYear() + "-" + te.getMonth());
-				} else if ("年".equals(dateTimeType)) {
+				} else if ("年".equals(dateTimeType) || dateTimeType.equals("Year")) {
 					dm.setOeeTime(te.getYear() + "");
 				}
 				result.add(dm);
@@ -960,7 +979,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	 * 单台设备时间段分析  属性换算
 	 * @param map 需要转换的数据
 	 */
-	public void convertData(Map<String, Object> map) {
+	public void convertData(Map<String, Object> map,Locale locale) {
 
 		DecimalFormat decimal = new DecimalFormat("#.##");// 留小数点2位
 		/*
@@ -1055,22 +1074,22 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		 * 修改key后，实际运行时间，计划运行时间，实际产量理论耗时
 		 */
 		if (null != worktimeFact && 0 != worktimeFact) {
-			map.put("worktimeFacta", StringUtils.SecondIsDDmmss(worktimeFact));
+			map.put("worktimeFacta", StringUtils.SecondIsDDmmss(worktimeFact,locale));
 		} else {
-			map.put("worktimeFacta", StringUtils.SecondIsDDmmss(0));
+			map.put("worktimeFacta", StringUtils.SecondIsDDmmss(0,locale));
 		}
 
 		if (null != worktimePlan && 0 != worktimePlan) {
-			map.put("worktimePlana", StringUtils.SecondIsDDmmss(worktimePlan));
+			map.put("worktimePlana", StringUtils.SecondIsDDmmss(worktimePlan,locale));
 		} else {
-			map.put("worktimePlana", StringUtils.SecondIsDDmmss(0));
+			map.put("worktimePlana", StringUtils.SecondIsDDmmss(0,locale));
 		}
 
 		if (null != acturalOutputTheorytime && 0 != acturalOutputTheorytime) {
 			map.put("acturalOutputTheorytimea",
-					StringUtils.SecondIsDDmmss(acturalOutputTheorytime));
+					StringUtils.SecondIsDDmmss(acturalOutputTheorytime,locale));
 		} else {
-			map.put("acturalOutputTheorytimea", StringUtils.SecondIsDDmmss(0));
+			map.put("acturalOutputTheorytimea", StringUtils.SecondIsDDmmss(0,locale));
 		}
 
 	}
@@ -1081,9 +1100,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	 * @return List
 	 */
 	@Override
-	public List getNodeName(String nodeid) {
-		// TODO Auto-generated method stub
-		String hql = "SELECT a.nodeName " + "FROM TNodes a "
+	public List<Map<String,Object>> getNodeName(String nodeid) {
+		String hql = "SELECT new Map(a.nodeName as nodeName ,a.path as path)" + " FROM TNodes a "
 				+ "where a.nodeId = " + "'" + nodeid + "'";
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		return dao.executeQuery(hql, parameters);
@@ -1334,6 +1352,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		Collection<Parameter> parameters = new HashSet<Parameter>(); 
 		String sql="SELECT a. equ_serialno AS equSerialNo,"+
 			       " a.status as status,"+ 
+			       " a.updateTime as updateTime,"+ 
 			       " ROUND(a.xfeed,3) AS xfeed,"+
 			       " ROUND(a.yfeed,3) AS yfeed,"+
 			       " ROUND(a.zfeed,3) AS zfeed,"+
@@ -1606,21 +1625,25 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	/**
 	 * 手动报工信息处理
 	 */
-	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo) {
+	public String saveInfo(int num,String userId,String equId,String dispatchId,Date startTime,Date finishTime,String partNo,String loginUserNo,String isGood,
+			 String depName,String jgCheckUser,String zpCheckUser,String sjCheckUser) {
 		try{
 			Collection<Parameter> parameters = new HashSet<Parameter>();
 			String sql = "";
 			String tempEventNo ="";
 			int partId =0;
+			String partName ="";
 			List<Map<String,Object>> jobDispatchInfo = dao.executeNativeQuery("select no,processNum,finishNum,jobplanID,batchNo,nodeid,processID,wisScrapNum from T_JOBDISPATCHLIST_INFO where ID ="+dispatchId+"", parameters);
-			List<Map<String,Object>> memberInfo = dao.executeNativeQuery("select no from t_member_info where ID ="+userId+"", parameters);
-			List<Map<String,Object>> partInfo = dao.executeNativeQuery("select ID from t_part_type_info where no ='"+partNo+"'", parameters);
+			List<Map<String,Object>> memberInfo = dao.executeNativeQuery("select no,name from t_member_info where ID ="+userId+"", parameters);
+			List<Map<String,Object>> partInfo = dao.executeNativeQuery("select ID,name from t_part_type_info where no ='"+partNo+"'", parameters);
 			List<Map<String,Object>> equInfo = dao.executeNativeQuery("select equ_SerialNo from t_equipmentaddinfo where equ_ID ="+equId+"", parameters);
 			
 			String userNo = memberInfo.get(0).get("no").toString();
+			String userName = memberInfo.get(0).get("name").toString();
 			String equ_SerialNo = equInfo.get(0).get("equ_SerialNo").toString();
 			if(partInfo.size()>0){
 			   partId = Integer.parseInt(partInfo.get(0).get("ID").toString());
+			   partName = partInfo.get(0).get("name").toString();
 			}
 			
 			String jobdispatchNo = jobDispatchInfo.get(0).get("no").toString();
@@ -2005,6 +2028,20 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						   }
 					}
 				}
+				try{
+					//插入ERP中间库				
+					/*IImportService importService = (IImportService)ServiceFactory.getBean("importService");
+					if(importService!=null)
+					{
+						importService.insertWisTransfer(tproductionEvents.getId());
+						if(processOrder.equals("400")){
+						importService.insertWisQaCheck(num, partNo, partName, jobdispatchNo, isGood, depName, jgCheckUser, zpCheckUser,sjCheckUser, userName);
+						}
+					}*/
+				}catch(Exception e){
+					
+				}
+				
 				return "添加成功"+tempEventNo;
 
 			}
@@ -2085,9 +2122,9 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
     
 
 	@Override
-	public List<Map<String, Object>> getUserList(String userId) {
+	public List<Map<String, Object>> getUserList(String userId,String nodeId) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		String sql = "select id,name from T_Member_INFO where status =0 ";
+		String sql = "select id,name from T_Member_INFO where status =0 and nodeid ='"+nodeId+"' ";
 		if(!StringUtils.isEmpty(userId)){
 			sql += " and ID ="+userId+"";
 		}
@@ -2111,7 +2148,6 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		
 		return dataList;
 	}
-
 
 	@Override
 	/**
@@ -2183,11 +2219,11 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	/**
 	 * 获取member信息
 	 */
-	public List<Map<String, Object>> getMemberInfo(String userId) {
+	public List<Map<String, Object>> getMemberInfo(String userId,String nodeId) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String sql = "select id,name,no from t_member_info inner join t_user"
 				+ " on t_user.memberID =t_member_info.id "
-				+ " where  t_user.UserID ='"+userId+"' ";
+				+ " where  t_user.UserID ='"+userId+"' and t_member_info.nodeid ='"+nodeId+"' ";
 		
 		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
 		
@@ -2748,6 +2784,17 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 						   }
 					}
 				}
+				try{
+					//插入ERP中间库				
+					/*IImportService importService = (IImportService)ServiceFactory.getBean("importService");
+					if(importService!=null)
+					{
+						importService.insertWisTransfer(tproductionEvents.getId());
+					}*/
+				}catch(Exception e){
+					
+				}
+				
 				return "添加成功";
 
 			}
@@ -2772,18 +2819,116 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	/**
 	 * 保存成品入库数据
 	 */
-	public String saveInStockDataInfo(String num,String instockNo,List<Map<String,Object>> dataList){
+	public String saveInStockDataInfo(String num,String inventoryId,String materialPositionId,String partId,String instockNo,List<Map<String,Object>> dataList){
 		    //String planNo;
 		   // Integer stockNUm;
 			try{ 
 				Collection<Parameter> parameters = new HashSet<Parameter>();
 				for(Map<String,Object> dd:dataList){
-					if(null !=dd.get("num") && null !=num && null !=dd.get("jobplanNo") && !dd.get("finishNum").equals("不可用")){
+					if(null !=dd.get("num") && null !=num){
 						String no = dd.get("jobplanNo").toString();
-						int bomNum =Integer.parseInt(dd.get("num").toString());
-						int instockNum =Integer.parseInt(dd.get("instockNum").toString());
-						String sql="update t_jobplan_info set instockNum ="+(instockNum+(bomNum*Integer.parseInt(num)))+" where no ='"+no+"'";
-						dao.executeNativeUpdate(sql,parameters);
+						String storageNo = dd.get("storageNo").toString(); //入库批次号
+						int bomNum =0;
+						if(!no.equals("不可用") && !dd.get("instockNum").toString().equals("不可用")){//更新批次入库数量
+						    bomNum =Integer.parseInt(dd.get("num").toString());
+							int instockNum =Integer.parseInt(dd.get("instockNum").toString());
+							String sql="update t_jobplan_info set instockNum ="+(instockNum+(bomNum*Integer.parseInt(num)))+" where no ='"+no+"'";
+							dao.executeNativeUpdate(sql,parameters);
+						}
+						String partTypeId ="";
+						String hql ="";
+						if(null !=dd.get("type") && dd.get("type").toString().equals("主料")){
+							partTypeId = partId;
+							hql="select new Map(materialType.id as id) from TPartTypeInfo parttype,TMaterailTypeInfo materialType" +
+									" where materialType.no=parttype.no"+
+									" and parttype.id="+partTypeId;
+						}else{
+							partTypeId = dd.get("materailId").toString();
+							hql="select new Map(materialType.id as id) from TMaterailTypeInfo materialType" +
+									" where materialType.id="+partTypeId+"";
+						}
+						//if(null !=dd.get("type") && dd.get("type").toString().equals("主料")){
+							//入库存业务处理
+						Collection<Parameter> parameters1 = new HashSet<Parameter>();				
+						List<Map<String,Object>> parttypetemp=dao.executeQuery(hql,parameters1);
+						if(parttypetemp.size()>0){//成品在物料类型中存在
+							String materialId = parttypetemp.get(0).get("id").toString();
+							TMaterialStorage tMaterialStorage =new TMaterialStorage();
+							List<Map<String,Object>> temp=dao.executeNativeQuery("select id from t_material_storage"
+									+ " where batchNo ='"+storageNo+"' and storage_id ="+inventoryId+" and material_id ="+materialId+"",parameters1);
+							//获取物料信息
+							TMaterailTypeInfo tMaterailTypeInfo = commonService.get(TMaterailTypeInfo.class,Long.parseLong(materialId));
+							//获取库房信息
+							TStorageInfo tStorageInfo = commonService.get(TStorageInfo.class,Integer.parseInt(inventoryId));
+						    //获取版本信息
+							TMaterialVersion tMaterialVersion = new TMaterialVersion();
+							if(null !=tMaterailTypeInfo.getVersionId()){
+								tMaterialVersion =commonService.get(TMaterialVersion.class,tMaterailTypeInfo.getVersionId());
+							}
+							//库存信息
+							if(temp.size()>0){
+								tMaterialStorage = commonService.get(TMaterialStorage.class,Integer.parseInt(temp.get(0).get("id").toString()));
+								Double i = tMaterialStorage.getAvailableNum();
+								tMaterialStorage.setAvailableNum(i+Double.parseDouble(num));
+								commonService.update(tMaterialStorage);
+							}else{
+								tMaterialStorage.setTMaterailTypeInfo(tMaterailTypeInfo);//物料
+								tMaterialStorage.setTStorageInfo(tStorageInfo);//库房
+								tMaterialStorage.setPositonId(Integer.parseInt(materialPositionId));//货位ID
+								tMaterialStorage.setBatchNo(storageNo);//入库批次
+								tMaterialStorage.setAvailableNum(Double.parseDouble(num));//现有量
+								tMaterialStorage.setUnitName(tMaterailTypeInfo.getUnit());//单位
+								tMaterialStorage.setVersionNo(tMaterialVersion.getVersionNo());//版本
+								tMaterialStorage.setRetainNum(0.00);
+								tMaterialStorage.setProcessDate(new Date());//处理日期
+								commonService.save(tMaterialStorage);
+								
+							}
+							//入库事务处理
+							TTransaction tTransaction = new TTransaction();
+							tTransaction.setTransNo(instockNo);//入库单号
+							tTransaction.setTMaterailTypeInfo(tMaterailTypeInfo);//物料
+							tTransaction.setTStorageInfo(tStorageInfo);//库房
+							tTransaction.setPositionId(Integer.parseInt(materialPositionId));//库位
+							tTransaction.setVersionNo(tMaterialVersion.getVersionNo());
+							tTransaction.setProcessNum(Double.parseDouble(num));//数量
+							tTransaction.setUnitName(tMaterailTypeInfo.getUnit());
+							tTransaction.setBatchNo(storageNo);
+							//工单，事务关系 TODO
+							//事务关系
+							List<TTransactionRelation> list = new ArrayList<TTransactionRelation>();
+							String strHql ="from TTransactionRelation where tansType ='成品入库'";
+							list = commonService.executeQuery(strHql);
+							for(TTransactionRelation tt:list){
+								tTransaction.setTTransactionRelation(tt);//事务关系
+							}
+							
+							//工单
+							String strSql ="select t_jobdispatchlist_info.no as no from t_jobdispatchlist_info "
+									+ " inner join t_process_info on t_process_info.id =t_jobdispatchlist_info.processID"
+									+ " where t_jobdispatchlist_info.taskNum ='"+no+"' and t_process_info.offlineProcess =1";
+							List<Map<String,Object>> list2 = commonService.executeNativeQuery(strSql);
+							for(Map<String,Object> ss:list2){
+								tTransaction.setJobdispatchNo(ss.get("no").toString());//工单号
+							}
+							
+							tTransaction.setTransDate(new Date());//事务处理时间
+							commonService.save(tTransaction);
+							
+							//中间库（只处理主料）
+							if(null !=dd.get("type") && dd.get("type").toString().equals("主料")){
+								try{
+									//插入ERP中间库				
+									/*IImportService importService = (IImportService)ServiceFactory.getBean("importService");
+									if(importService!=null)
+									{
+										importService.inStockinsertWisTransfer(bomNum*Integer.parseInt(num), no, instockNo);
+									}*/
+								}catch(Exception e){
+									
+								}
+							}
+						}
 					}
 				}
 				

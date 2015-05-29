@@ -16,7 +16,7 @@ import java.util.Date;
 public class DateUtil {
 	
 	/**
-	 * 时分00:00:00;
+	 * 时分?00:00:00;
 	 * @param date
 	 * @return
 	 */

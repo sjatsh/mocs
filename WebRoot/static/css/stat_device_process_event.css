@@ -1,214 +1,34 @@
-@charset "utf-8";
-body {
-	margin: 0;
-	font-family: "微软雅黑";
-}
-
-a {
-	font-family: "微软雅黑";
-}
-/* 标题栏 */
-.title-bar {
-	position: relative;
-	width: 1920px;
-	height: 362px;
-}
-
-/* logo */
-.logo-img {
-	position: absolute;
-	left: 102px;
-	top: 74px;
-	width: 300px;
-	height: 229px;
-	cursor: pointer;
-}
-
-.logo-img img {
-	height: 100%;
-}
-
-/* 标题 */
-.title-text {
-	position: absolute;
-	left: 568px;
-	top: 157px;
-	line-height: 52px;
-	font-size: 52px;
-	font-weight: bold;
-	color: #595959;
-}
-
-/* 筛选栏 */
-.filter-frame {
-	position: absolute;
-	left: 968px;
-	top: 24px;
-}
-
-.filter-bar {
-	position: relative;
-	width: 484px;
-	height: 42px;
-	margin-top: 50px;
-}
-
-/* 筛选标题 */
-.filter-label {
+/* ����λ�ü� */
+.zl-content-label {
 	float: left;
-	line-height: 42px;
-	font-size: 38px;
-	color: #595959;
-}
-
-/* 筛选输入 */
-.filter-input {
-	width: 246px;
-	height: 42px;
-	float: right;
-	font-size: 20px;
-	color: #333333;
-}
-
-.filter-input input[type='text'] {
-	width: 100%;
-	height: 100%;
-	text-indent: 0.5em;
-	border: solid 1px #000000;
-	border-radius: 5px;
-}
-
-.filter-input .filter-select {
-	width: 100%;
-	height: 100%;
-	text-indent: 0.5em;
-	border: solid 1px #000000;
-	border-radius: 5px;
-	padding-right: 0.5em;
-}
-
-@-moz-document url-prefix() {
-	.filter-select
-	{
-		padding-top: 6px;
-	}
-}
-
-/* 搜索按钮 */
-.filter-submit {
-	position: absolute;
-	left: 1613px;
-	top: 107px;
-	width: 164px;
-	height: 164px;
-	cursor: pointer;
-}
-
-.filter-submit img {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 100%;
-}
-
-.filter-submit>.active {
-	display: none;
-}
-
-.filter-submit:active>.active {
-	display: block;
-}
-
-/* 内容 */
-.content-frame {
-	position: relative;
-	width: 1920px;
-	height: 654px;
-	background-image: url('../images/device_time_tubiao_bg.png');
-	background-repeat: no-repeat;
-	overflow: hidden;
-}
-
-.tab-bar {
-	width: 100%;
-	height: 56px;
-}
-
-.tab-btn {
-	position: relative;
-	float: left;
-	width: 168px;
-	height: 100%;
-	background-image: -moz-linear-gradient(top, #cccccc, #ffffff);
-	/* Firefox */
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(.1, #cccccc),
-		color-stop(1, #ffffff)); /* Saf4+, Chrome */
-	font-size: 30px;
-	line-height: 56px;
-	color: #595959;
-	text-align: center;
-	z-index: 2;
-}
-
-.tab-btn:hover {
-	background-image: -moz-linear-gradient(top, #00A040, #ffffff);
-	/* Firefox */
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(.1, #00A040),
-		color-stop(1, #ffffff)); /* Saf4+, Chrome */
-	cursor: pointer;
-}
-
-.tab-btn.active,.tab-btn.active:hover {
-	background-image: none;
-	background-color: #00A040;
-	color: #ffffff;
-	font-weight: bold;
-	cursor: default;
-}
-
-#list-frame {
-	position: absolute;
-	left: 0px;
-	top: 60px;
-	width: 1920px;
-	height: 598px;
-	overflow: auto;
-	text-align: center;
-	z-index: 1;
-}
-
-#list-frame td {
+	margin-left: 60px;
+	margin-top: 35px;
+	width: 75px;
+	font-size: 18px;
+	line-height: 18px;
+	color: #828282;
 	white-space: nowrap;
-	text-indent: 0.5em;
+	text-align: right;
+}
+/* ʱ���λ�� */
+.zl-content-select {
+	float: left;
+	margin-left: 30px;
+	margin-top: 27px;
+}
+/* ������λ�� */
+.zl-select-lt{
+	float: left;
+	margin-left: 60px;
+	margin-top: 27px;
+}
+.tab-hig-bar{
+	width: 1920px;
+	height: 683px;
+	left: 0px;
+	top: 0px;
+}
+.tab-table{
+	width: 1920px;
 }
 
-.rf-dt-shdr-c {
-	background-image: url("../images/device_oee_trend_table_head.png") !important;
-	background-color: null !important;
-	color: white !important;
-	font-size: inherit;
-	font-family: '微软雅黑';
-}
-
-.rf-dt-c, .rf-dt {
-	font-size: inherit;
-	font-family: '微软雅黑';
-	padding-left: 0px !important;
-}
-
-.even-row {
-	background-image: none !important;
-	background: none repeat scroll 0 0 #FFFFFF;
-}
-
-.odd-row {
-	background-image: none !important;
-	background: none repeat scroll 0 0 #CCEBF7;
-}
-*.rf-ds
-{
-	text-align: center;
-	width: 100%;
-	background-image: url('../img/common_info_img/common_number_bg.png');
-	left:0px;
-}

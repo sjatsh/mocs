@@ -2,9 +2,9 @@ package smtcl.mocs.beans.infoManage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Date;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +13,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import org.dreamwork.persistence.Operator;
-import org.dreamwork.persistence.Parameter;
+
 import org.dreamwork.persistence.ServiceFactory;
 import org.dreamwork.util.IDataCollection;
 import org.primefaces.event.NodeSelectEvent;
@@ -24,11 +23,9 @@ import org.primefaces.model.TreeNode;
 import smtcl.mocs.common.device.pages.DataPage;
 import smtcl.mocs.common.device.pages.PageListBaseBean;
 import smtcl.mocs.common.device.pages.PageListDataModel;
-import smtcl.mocs.pojos.job.TProductionEvents;
 import smtcl.mocs.services.device.IPartService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.services.report.IReportService;
-import smtcl.mocs.utils.device.StringUtils;
 
 
 

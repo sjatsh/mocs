@@ -1,0 +1,85 @@
+.toolbar .input-toolbar {
+	vertical-align: top !important;
+}
+.toolbar>.select-toolbar {
+	width: 4.5rem;
+}
+.toolbar img.rf-cal-btn {
+	display: none;
+}
+
+.toolbar .input-toolbar,.toolbar>.select-toolbar,.toolbar>.btn-toolbar {
+	margin-left: 0.57rem;
+}
+
+/* 列表标题 */
+.div-title {
+	position: absolute;
+	font-size: 0.21rem;
+	line-height: 0.21rem;
+	color: #666;
+}
+.title-left {
+	left: 7.5%;
+	top: 1.3rem;
+}
+.title-right {
+	left: 57.5%;
+	top: 1.3rem;
+}
+/* 列表区域 */
+.div-list {
+	position: relative;
+	float: left;
+	margin: 1rem 7.5%;
+	width: 35%;
+	height: 6.22rem;
+	border: solid 1px #666;
+}
+.div-list>.ui-tree {
+	width: 100%;
+	height: 100%;
+}
+/* 中间图标 */
+.div-middle {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 15%;
+	height: 4rem;
+	margin-top: -0.53rem;
+	margin-left: -7.5%;
+}
+.img-import {
+	margin: 0 auto;
+	width: 1.05rem;
+	height: 0.74rem;
+	background-image: url(../../images/admin/icon_arrow_import.png);
+	background-size: 100% 100%;
+}
+.icon-middle {
+	float: left;
+	margin: 0.2rem 0.1rem 0 0.3rem;
+	width: 0.44rem;
+	height: 0.33rem;
+	clear: left;
+}
+.color-89c56e {
+	background-color: #89c56e;
+}
+.color-ffc166 {
+	background-color: #ffc166;
+}
+.color-dddddd {
+	background-color: #dddddd;
+}
+.txt-middle {
+	float: left;
+	margin-top: 0.2rem;
+	font-size: 0.18rem;
+	line-height: 0.33rem;
+	color: #666;
+}
+.top-first {
+	margin-top: 1.8rem;
+}

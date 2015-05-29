@@ -216,13 +216,13 @@ public class JobdispatchNumEditBean implements Serializable {
 		//用户名绑定
 		TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
 		 String id= user.getUserId();
-		 List<Map<String, Object>> list = deviceService.getMemberInfo(id);
+		 List<Map<String, Object>> list = deviceService.getMemberInfo(id,noteId);
 		 if(list!=null&&list.size()>0){
 		   userId = list.get(0).get("id").toString();
 		   userName = list.get(0).get("name").toString();
 		   loginUserNo = list.get(0).get("no").toString();
 		 }
-		 userMap = deviceService.getUserList("");
+		 userMap = deviceService.getUserList("",noteId);
 	}
 	
 	 public void onRowSelect(SelectEvent event) {
@@ -359,7 +359,7 @@ public class JobdispatchNumEditBean implements Serializable {
 		
 	}
 	public void getUserInfo(){
-		List<Map<String, Object>> list = deviceService.getUserList(userId);
+		List<Map<String, Object>> list = deviceService.getUserList(userId,noteId);
 		if(list!=null&&list.size()>0){
 			   userName = list.get(0).get("name").toString();
 			 }

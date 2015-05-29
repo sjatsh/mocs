@@ -1,3 +1,19 @@
+function loadBeanValue(){
+	//alert(1);
+	var twoLineJsonData = document.getElementById("myform:beanvalue").value;
+	var twoLineJsonData = eval('(' + twoLineJsonData + ')');
+	ajaxclickChart(twoLineJsonData);
+}
+function loadBeanValue1(){
+	var polarJsonData = document.getElementById("myform:beanvalue1").value;
+	var polarJsonData = eval('(' + polarJsonData + ')');
+	polarChart(polarJsonData);
+}
+function loadBeanValue2(){
+	var twoColumnJsonData = document.getElementById("myform:beanvalue2").value;
+	var twoColumnJsonData = eval('(' + twoColumnJsonData + ')');
+	coumndataChart(twoColumnJsonData);
+}
 function loadData() {
 //alert("11111111======>"+document.getElementById("myform:beanvalue").value);
 var twoLineJsonData = document.getElementById("myform:beanvalue").value; //jQuery("#beanvalue").attr('value');
@@ -7,6 +23,7 @@ var twoColumnJsonData = document.getElementById("myform:beanvalue2").value;
 var twoLineJsonData = eval('(' + twoLineJsonData + ')');
 var polarJsonData = eval('(' + polarJsonData + ')');
 var twoColumnJsonData = eval('(' + twoColumnJsonData + ')');
+
 ajaxclickChart(twoLineJsonData);
 polarChart(polarJsonData);
 coumndataChart(twoColumnJsonData);
@@ -146,6 +163,7 @@ function polarChart(barModel) {
 	    	renderTo : 'productcosttwoChart',
 	        polar: true,
 	        height:polarheight,
+	        width:wjb51*765/1920,
 	        backgroundColor: 'rgba(255, 255, 255, 0)',
             plotBorderColor : null,
             plotBackgroundColor: null,

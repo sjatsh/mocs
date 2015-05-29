@@ -2,6 +2,7 @@ package smtcl.mocs.services.report;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.dreamwork.util.IDataCollection;
@@ -56,9 +57,11 @@ public interface IReportService {
 	 * @param equSerialNo //设备
 	 * @return
 	 */
-	public List<Map<String,Object>> dispatchDetailData(String nodeid,String jobplanStatus,String partNo,Date jobCreateDate,Date jobCreateDateEnd,Date jobStartTime,Date jobStartTimeEnd,String equSerialNo,String person);
-	
-	/**
+    public List<Map<String, Object>> dispatchDetailData(String nodeid, String jobplanStatus, String partNo, Date jobCreateDate,
+                                                        Date jobCreateDateEnd, Date jobStartTime, Date jobStartTimeEnd,
+                                                        String equSerialNo, String person, Locale locale);
+
+    /**
 	 * 获取人员明细表信息
 	 */
 	public List<Map<String,Object>> getPersonDetailInfo(String nodeid,String startTime,String endTime);
@@ -79,7 +82,7 @@ public interface IReportService {
 	 * 获取人员编号信息
 	 * @return
 	 */
-	public List<Map<String,Object>> getPersonList();
+	public List<Map<String,Object>> getPersonList(String nodeid);
 	/**
 	 * 根据时间查询生产报废报表数据
 	 * @param start

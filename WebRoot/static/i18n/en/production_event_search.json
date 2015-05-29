@@ -1,0 +1,25 @@
+{	
+	"top": {
+		"main_title": "Event Search",
+		"title1":"Start Time",
+		"title2":"Event Type",
+		"title3":"Batch Plan",
+		"title4":"Finish Time",
+		"title5":"Product Name",
+		"title6":"Job No"
+	},
+	"content": {
+		"table_title1":"Event No",
+		"table_title2":"Event Type",
+		"table_title3":"Job No",
+		"table_title4":"Amount",
+		"table_title5":"Operator",
+		"table_title6":"Process Date",
+		"table_title7":"Process Reason",
+		"table_title8":"Part Name",
+		"table_title9":"Machine No.",
+		"table_title10":"Cause Of Defect:Personnel",
+		"table_title11":"Cause Of Defect:Process",
+		"table_title12":"Date"
+	}
+}

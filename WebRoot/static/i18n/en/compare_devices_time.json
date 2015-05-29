@@ -1,0 +1,12 @@
+{	"zwxxts":"No data, please modify the node or the query conditions",
+	"top": {
+		"title1":"Time Comparison",
+		"title2":"Date From",
+		"title3":"Date To",
+		"title4":"Search"
+	},
+	"content": {
+		"bjdx":"Object(Machine Serial Number)",
+		"tsxx":"Select 5 machines at most"
+	}
+}

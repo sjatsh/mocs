@@ -1,26 +1,4 @@
 // JavaScript Document
-
-/**
- * 获取时间
- */
-function showClock() {
-	document.getElementById("loadbtjpg").style.zIndex=0;
-	document.getElementById("loadbtjpg").style.display="none";
-
-	d = new Date();
-	hours = d.getHours();
-	minutes = d.getMinutes();
-	seconds = d.getSeconds();
-	clck = (hours >= 12) ? "下午" : "上午";
-	hours = (hours > 12) ? hours - 12 : hours;
-	hours = (10 > hours) ? "0" + hours : hours;
-	minutes = (10 > minutes) ? "0" + minutes : minutes;
-	seconds = (10 > seconds) ? "0" + seconds : seconds;
-	time = clck + " " + hours + ":" + minutes + ":" + seconds;
-	thisTime.innerHTML = time;
-	setTimeout("showClock()", 1000);
-}
-
 /**
  * 时间格式转换
  * @param seconda
@@ -79,7 +57,7 @@ function SetCookie(name,value){
     var Days = 30; 
     var exp  = new Date();    
     exp.setTime(exp.getTime() + Days*24*60*60*1000);
-    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    document.cookie = name + "="+ escape (value) + ";path=/;expires=" + exp.toGMTString();
 }
 
 /**
@@ -270,3 +248,77 @@ function tableAddLine(tableObj, frameObj, pageObj) {
 function searchBtn() {
 	tableAddLine($("#list-frame table")[0], $("#list-frame .table-frame")[0], $("#list-frame .rf-ds"));	
 }
+
+/* 部分透明遮罩方法 */
+function disableFrameShow(obj) {
+	var FRAME_ID = "disable_frame";
+	var objWidth = $(obj).width();
+	var objHeight = $(obj).height();
+	var objLeft = $(obj).offset().left;
+	var objTop = $(obj).offset().top;
+	
+	var disableFrame = null;
+	if($("#" + FRAME_ID).length == 0) {
+		disableFrame = document.createElement("div");
+		disableFrame.id = FRAME_ID;
+		disableFrame = $(disableFrame);
+		$("body").append(disableFrame);
+	}
+	else {
+		disableFrame = $("#" + FRAME_ID);
+	}
+
+	disableFrame.css({
+		position: "absolute",
+		background: "rgba(0,0,0,.1)",
+		zIndex: "30",
+		width: objWidth,
+		height: objHeight,
+		left: objLeft,
+		top: objTop
+	}).show();
+}
+function disableFrameHide() {
+	var FRAME_ID = "disable_frame";
+	$("#" + FRAME_ID).hide();
+}
+
+/*
+ * 国际化翻译通用方法
+ * _filename: 翻译文件名
+ * _fallback: 加载后回调方法
+ * _basePath: 翻译文件目录调整参数
+ */
+function dataTranslate(_filename, _fallback) {
+	var resBasePath = "static/i18n";
+	if(arguments.length > 2) {
+		resBasePath = arguments[2];
+	}
+	var option = {resGetPath: resBasePath + "/__lng__/" + _filename + ".json", fallbackLng: false, lngWhitelist: ['zh', 'en'], getAsync: false};
+	i18n.init(option, _fallback);
+}
+
+/*
+ * 自定义控件-选择框省略方法
+ * _length: 开始省略文字长度
+ */
+(function($) {
+	$.fn.selectAutoHide = function(_length) {
+		function autoHide(obj) {
+			var currentText = $(obj).find("option:selected").text();
+			if(currentText.length > _length) {
+				currentText = currentText.substr(0, _length - 2) + "...";
+			}
+			$(obj).siblings("input[type='text']").val(currentText);
+		}
+		//增加显示层
+		$(this).parent().append("<input type='text' readonly/>");
+		this.each(function() {
+			autoHide(this);
+		})
+		//隐藏原文字,显示缩略文字
+		$(this).css("color", "rgba(0,0,0,0)").change(function() {
+			autoHide(this);
+		});
+	}
+})(jQuery);

@@ -1,0 +1,13 @@
+/* ¹¤¾ßÀ¸°´Å¥ */
+.toolbar>.iconBtn-toolbar,.toolbar>.txt-toolbar {
+	margin-left: 0.57rem;
+}
+.toolbar>.split-toolbar {
+	display: inline-block;
+	vertical-align: top;
+	width:1px;
+	margin-left: 0.57rem;
+}
+.toolbar>.txt-first{
+	  margin-left:0.25rem;
+}

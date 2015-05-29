@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
 import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +39,8 @@ public class JobDispatchUpdateWeb {
 	 */
 	@RequestMapping(value ="/jobdispatch/checkEquSerialNum.action")
 	public @ResponseBody Map<String,Object> checkEquSerialNum(String jobdispatchlistId){
-		List<Map<String,Object>> mapList = jobDispatchService.getEquJobDispatchList(jobdispatchlistId);
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		List<Map<String,Object>> mapList = jobDispatchService.getEquJobDispatchList(jobdispatchlistId,session);
 		Map<String,Object> map = new HashMap<String,Object>();
 		boolean flag = false;
 		for(Map<String,Object> map1: mapList){
@@ -57,11 +61,14 @@ public class JobDispatchUpdateWeb {
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<TJobdispatchlistInfo> list = jobDispatchService.getJobDispatchInfo(jobdispatchlistId);
 		boolean flag = false;
+		String jobStatus = "";
 		for(TJobdispatchlistInfo t : list){
+			jobStatus = t.getStatus().toString();
 			if(t.getStatus() == 30)
 				flag = true;
 		}
 		map.put("flag", flag);
+		map.put("jobStatus", jobStatus);
 		return map;
 	}
 	

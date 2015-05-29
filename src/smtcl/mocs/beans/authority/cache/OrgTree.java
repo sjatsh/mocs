@@ -50,6 +50,7 @@ public class OrgTree extends Tree {
 			try{
 				treeNode.setNodeId(n.getOrgId());
 				treeNode.setNodeName(n.getName());
+                treeNode.setEnNodeName(n.getEnName());
 				treeNode.setParentId(n.getParentId() == null ? null : n.getParentId());
 				treeNode.setSeq(n.getSeq());
 				treeNode.setNocheck(nocheck);

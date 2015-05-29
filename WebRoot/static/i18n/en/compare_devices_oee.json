@@ -1,0 +1,14 @@
+{	"zwxxts":"No data, please modify the node or the query conditions",
+	"top": {
+		"title1":"OEE Trend Comparison",
+		"title2":"Comparison",
+		"title3":"Time Unit",
+		"title4":"Date From",
+		"title5":"Date to" ,
+		"title6":"Search"
+		
+	},
+	"content": {
+		"bjdx":"Object(Machine Serial Number)"
+	}
+}

@@ -20,14 +20,14 @@ import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
 /**
- * Velocity 工具
+ * Velocity 工具?
  * @author gaokun
  * @create Oct 18, 2012 11:42:25 AM
  */
 public class VelocityHelper {
 	
 	/**
-	 * VelocityHelper 日志
+	 * VelocityHelper 日志?
 	 */
 	private final static Logger logger = Logger.getLogger(VelocityHelper.class);
 	

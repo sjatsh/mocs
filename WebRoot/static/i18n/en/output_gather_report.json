@@ -1,0 +1,15 @@
+{	
+	"top": {
+		"title1":"Product Report",
+		"title2":"Date",
+		"title3":"Search"
+	},
+	"content": {
+		"ljh":"Part No",
+		"jhsl":"Plan Qty",
+		"tlsl":"Feed Qty",
+		"wcsl":"Completed Qty",
+		"zzsl":"WIP",
+		"cpkc":"Stock Qty"
+	}
+}

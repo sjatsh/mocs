@@ -43,122 +43,6 @@
 	}
 	
 	/**
-	 * 树形结构控制
-	 */
-	function showMenu() {
-		var display=document.getElementById("DropdownMenuBackground").style.display;
-		if (display=="" || display=="none") {
-			
-			var Sys = {};
-			var ua = navigator.userAgent.toLowerCase();
-			var s;
-			(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] : (s = ua
-					.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] : (s = ua
-					.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] : (s = ua
-					.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] : (s = ua
-					.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
-
-			if (Sys.ie) {
-				if (document.documentElement.getBoundingClientRect) {
-					var x = document.getElementById("tre").getBoundingClientRect().left + document.documentElement.scrollLeft;
-					var y = document.getElementById("tre").getBoundingClientRect().top + document.documentElement.scrollTop	+ document.getElementById("tre").offsetHeight;
-					
-					document.getElementById("DropdownMenuBackground").style.left = x;
-					document.getElementById("DropdownMenuBackground").style.top = y;
-					document.getElementById("DropdownMenuBackground").style.display = "block";
-				}
-			}else if(Sys.firefox){
-				var x = document.getElementById("tre").getBoundingClientRect().left + document.documentElement.scrollLeft;
-				var y = document.getElementById("tre").getBoundingClientRect().top + document.documentElement.scrollTop + document.getElementById("tre").offsetHeight;
-
-				document.getElementById("DropdownMenuBackground").style.left = x + "px";
-				document.getElementById("DropdownMenuBackground").style.top = y + "px";
-				document.getElementById("DropdownMenuBackground").style.display = "block";
-			}else if(Sys.chrome){
-				var x = document.getElementById("tre").getBoundingClientRect().left + document.documentElement.scrollLeft;
-				var y = document.getElementById("tre").getBoundingClientRect().top + document.documentElement.scrollTop + document.getElementById("tre").offsetHeight;
-
-				document.getElementById("DropdownMenuBackground").style.left = x+ "px";
-				document.getElementById("DropdownMenuBackground").style.top = y+ "px";
-				document.getElementById("DropdownMenuBackground").style.display = "block";
-				
-			}else if(Sys.safari){
-				var x = document.getElementById("tre").getBoundingClientRect().left + document.documentElement.scrollLeft;
-				var y = document.getElementById("tre").getBoundingClientRect().top + document.documentElement.scrollTop + document.getElementById("tre").offsetHeight;
-
-				document.getElementById("DropdownMenuBackground").style.left = x+"px";
-				document.getElementById("DropdownMenuBackground").style.top = y+"px";
-				document.getElementById("DropdownMenuBackground").style.display = "block";
-				
-			}else{
-				var x = document.getElementById("tre").getBoundingClientRect().left + document.documentElement.scrollLeft;
-				var y = document.getElementById("tre").getBoundingClientRect().top + document.documentElement.scrollTop + document.getElementById("tre").offsetHeight;
-
-				document.getElementById("DropdownMenuBackground").style.left = x+"px";
-				document.getElementById("DropdownMenuBackground").style.top = y+"px";
-				document.getElementById("DropdownMenuBackground").style.display = "block";
-			}
-		}else{
-			document.getElementById("DropdownMenuBackground").style.display = "none";
-		}
-	}
-	
-	/**
-	 * 树形结构控制
-	 */
-	function closeTreeDiv(){
-		var Sys = {};
-		var ua = navigator.userAgent.toLowerCase();
-		var s;
-		(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] : (s = ua
-				.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] : (s = ua
-				.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] : (s = ua
-				.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] : (s = ua
-				.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
-
-		if (Sys.ie) {
-			document.getElementById("DropdownMenuBackground").onmouseout=function(event){
-				event = event ||window.event;
-				var t=event.toElement;
-	            if (!this.contains(t)) {
-	            	this.style.display="none";
-	            } 
-            };
-		}else if(Sys.firefox){
-			document.getElementById("DropdownMenuBackground").onmouseout=function(event){
-				var s =event.relatedTarget;
-	        	if (!this.contains(s)) {
-	        		this.style.display="none";
-	        	}            
-			};
-		}else if(Sys.chrome){
-			document.getElementById("DropdownMenuBackground").onmouseout=function(event){
-				event = event ||window.event;
-				var t=event.toElement;
-	            if (!this.contains(t)) {
-	            	this.style.display="none";
-	            } 
-            };
-		}else if(Sys.safari){
-			document.getElementById("DropdownMenuBackground").onmouseout=function(event){
-				event = event ||window.event;
-				var t=event.relatedTarget;
-	            if (!this.contains(t)) {
-	            	this.style.display="none";
-	            } 
-		}
-	}else{
-		document.getElementById("DropdownMenuBackground").onmouseout=function(event){
-				event = event ||window.event;
-				var t=event.toElement;
-	            if (!this.contains(t)) {
-	            	this.style.display="none";
-	            } 
-            };
-		}
-	} 
-	
-	/**
 	 * 显示吉祥物
 	 */
 	function showMascot(){
@@ -181,18 +65,18 @@
 		case 2:
 			document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2_click";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4";
 			break;
 		case 3:
-			document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3_click";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4";
 			break;
 		case 4:
-			document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
-			document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a1").className = "top_info_foot_menui_ul_li_a1_change";
+			//document.getElementById("myform:top_info_foot_menui_ul_li_a2").className = "top_info_foot_menui_ul_li_a2";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a3").className = "top_info_foot_menui_ul_li_a3";
 			document.getElementById("myform:top_info_foot_menui_ul_li_a4").className = "top_info_foot_menui_ul_li_a4_click";
 			break;

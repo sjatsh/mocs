@@ -1,0 +1,157 @@
+@charset "utf-8";
+/* 颜色 */
+.color-green {
+	color: rgb(0, 176, 80);
+}
+.color-yellow {
+	color: rgb(254, 212, 0);
+}
+.color-red {
+	color: rgb(255, 0, 0);
+}
+/* 分格 */
+.header-content-4sub {
+	text-align: left;
+}
+
+.profile_top_right_split{
+	width:3px;
+	height:100%;
+}
+
+/* 头部内容 */
+.top-title {
+	position: absolute;
+	left: 3px;
+	top: 0;
+	width: 381px;
+	height: 40px;
+	font-size: 27px;
+	line-height: 40px;
+	font-weight: bold;
+}
+.top-info {
+	position: absolute;
+	left: 3px;
+	top: 55px;
+	width: 381px;
+	height: 170px;
+	text-align: center;
+	font-size: 76px;
+	line-height: 170px;
+	font-weight: bold;
+}
+.top-unit {
+	position: absolute;
+	left: 3px;
+	top: 225px;
+	width: 381px;
+	height: 40px;
+	text-align: right;
+	font-size: 27px;
+	line-height: 40px;
+	font-weight: bold;
+}
+
+/* 内容 */
+.prev-btn {
+	position: absolute;
+	left: 0;
+	top: 150px;
+	width: 50px;
+	height: 124px;
+	z-index: 10;
+}
+.prev-btn>img {
+	cursor: pointer; 
+	width: 50px; 
+	height: 124px;
+}
+
+#list-frame {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 1920px;
+	height: 726px;
+	overflow: hidden;
+	text-align: center;
+	z-index: 1;
+}
+
+.table-title {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
+
+.table-content {
+	position: absolute;
+	left: 0;
+	top:0;
+	width: 1920px;
+	height: 726px;
+	z-index: 0;
+	overflow: auto;
+}
+
+#list-frame td {
+	white-space: nowrap;
+	text-indent: 0.5em;
+}
+
+.rf-dt-shdr-c {
+	background-image: url("../images/device_oee_trend_table_head.png") !important;
+	background-color: null !important;
+	color: white !important;
+	font-size: inherit;
+	font-family: "微软雅黑";
+	font-weight: normal;
+}
+.rf-dt-c, .rf-dt {
+	font-size: inherit;
+	font-family: '微软雅黑';
+	padding-left: 0px !important;
+}
+
+.even-row {
+	background-image: none !important;
+	background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.odd-row {
+	background-image: none !important;
+	background: none repeat scroll 0 0 #CCEBF7;
+}
+
+*.rf-ds
+{
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	background-image: url('../img/common_info_img/common_number_bg.png');
+	left: 0;
+}
+
+.yx{
+	color: #37A338;
+}
+.tj{
+	color: #626262;
+}
+.zb{
+	color: #FED400;
+}
+.gz{
+	color: #FF0000;
+}
+.kx{
+	color:#FED400;
+}
+
+/* 表格滚动条 */
+.mCSB_container {
+	margin-right: 0;
+}

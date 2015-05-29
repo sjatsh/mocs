@@ -1,0 +1,33 @@
+{	
+	"top": {
+		"title1":"Scrap Report",
+		"title2":"From",
+		"title3":"To",
+		"title4":"Type",
+		"btn1":"search",
+		"option1":"please select",
+		"option2":"Waste",
+		"option3":"Scrap"
+		
+	},
+	"content": {
+		"bfxx":"Scrap Info",
+		"zgx":"To Process",
+		"zrgx":"Duty Process",
+		"cp":"Product",
+		"gs":"Work Hours",
+		"rq":"Date",
+		"bh":"SN",
+		"lx":"Type",
+		"sl":"Count",
+		"zrr":"R/F",
+		"mc":"Name",
+		"xh":"No",
+		"bm":"Code",
+		"lj":"Total",
+		"hj":"TotalAll",
+		"dj":"Single",
+		"dx":"Order",
+		"xxyy":"Detail"
+	}
+}

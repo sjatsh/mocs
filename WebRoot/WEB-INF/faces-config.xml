@@ -106,4 +106,11 @@
 		<validator-id>yidongMobileValidator</validator-id>
 		<validator-class>smtcl.mocs.utils.device.YidongMobileValidator</validator-class>
 	</validator>
+    <application>
+        <locale-config>
+            <default-locale>zh</default-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+    </application>
+
 </faces-config>

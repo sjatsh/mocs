@@ -8,7 +8,6 @@ import java.util.Map;
 import org.dreamwork.persistence.GenericServiceSpringImpl;
 import org.dreamwork.persistence.Parameter;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import smtcl.mocs.pojos.device.TNodes;
 import smtcl.mocs.pojos.device.TUser;

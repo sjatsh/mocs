@@ -1,0 +1,17 @@
+{	
+	"top": {
+		"title1":"工单准时率",
+		"title2":"当日车间加工数量",
+		"title3":"产品成套率",
+		"title4":"综合效率"
+	},
+	"content": {
+		"table_title1":"机床名称",
+		"table_title2":"序列号",
+		"table_title3":"当前状态",
+		"table_title4":"运行模式",
+		"table_title5":"当前工序",
+		"table_title6":"零件编号",
+		"table_title7":"操作者"
+	}
+}

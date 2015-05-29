@@ -21,20 +21,20 @@ import java.util.List;
 public interface IOrgGroupService extends IGenericService<OrgGroup, String> {
 
     /**
-     * 数据组删
-     * @param groupId 数据组编
+     * 数据组删?
+     * @param groupId 数据组编?
      */
     public List<OrgGroup> delete(String... groupId);
 
     /**
      * 完全删除
-     * @param groupId 数据组编
+     * @param groupId 数据组编?
      */
     public void deleteAll(String... groupId);
 
     /**
      * 数据组及权限保存
-     * @param group 数据
+     * @param group 数据?
      * @param relList 权限
      * @param gRelList 组织架构
      */

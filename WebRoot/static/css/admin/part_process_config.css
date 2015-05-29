@@ -1,0 +1,120 @@
+/* 工具栏 */
+.toolbar>.input-toolbar {
+	margin-left: 0.25rem;
+}
+.toolbar>.iconBtn-toolbar,.toolbar>.select-toolbar,.toolbar>.btn-toolbar {
+	margin-left: 0.57rem;
+}
+#divtree {
+	position: absolute;
+	left: 0.25rem;
+	top: 0.53rem;
+	z-index: 1;
+	display: none;
+}
+/* 工艺列表 */
+.tableprocess {
+	position: relative;
+	width: 100%;
+	height: 4rem;
+}
+/* 分类标签 */
+.processlist {
+	position: relative;
+	width: 100%;
+	height: 4.22rem;
+}
+.tabbar {
+	position: relative;
+	width: 100%;
+	height: 0.55rem;
+	background: -ms-linear-gradient(top, #fcfdfe, #e1ecf0);        /* IE 10 */
+	background: -moz-linear-gradient(top, #fcfdfe, #e1ecf0);/*火狐*/ 
+	background: -webkit-linear-gradient(top, #fcfdfe, #e1ecf0);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(top, #fcfdfe, #e1ecf0);  /*Opera 11.10+*/
+	border: solid 1px #999;
+}
+.menu-tabbar {
+	position: relative;
+	float: left;
+	margin-top: 0.09rem;
+	margin-left: 0.08rem;
+	width: 1.35rem;
+	height: 0.45rem;
+	background: -ms-linear-gradient(bottom, #fcfdfe, #e1ecf0);        /* IE 10 */
+	background: -moz-linear-gradient(bottom, #fcfdfe, #e1ecf0);/*火狐*/ 
+	background: -webkit-linear-gradient(bottom, #fcfdfe, #e1ecf0);   /*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(bottom, #fcfdfe, #e1ecf0);  /*Opera 11.10+*/
+	border: solid 1px #999;
+	border-radius: 0.08rem 0.08rem 0 0;
+	text-align: center;
+	font-size: 0.18rem;
+	line-height: 0.45rem;
+	color: #656565;
+	cursor: pointer;
+}
+.menu-tabbar.act {
+	margin-top: 0.06rem;
+	width: 1.7rem;
+	height: 0.48rem;
+	background: #fff;
+	border-bottom: none;
+	cursor: default;
+}
+/* 分类内容 */
+.processlist-content {
+	position: relative;
+	width: 100%;
+	height: 3.67rem;
+	display: none;
+}
+.processslist-info {
+	position: relative;
+	float: left;
+	margin-top: 0.8rem;
+	margin-left: 0.32rem;
+	width: 1.13rem;
+	height: 1.4rem;
+	background-image: url(../../images/admin/icon_process.png);
+	background-size: 100% 1.2rem;
+	background-repeat: no-repeat;
+	padding-top: 1.2rem;
+	text-align: center;
+	font-size: 0.18rem;
+	line-height: 0.2rem;
+	color: #656565;
+	white-space: nowrap;
+}
+.processslist-arrow {
+	position: relative;
+	float: left;
+	margin-top: 1.1rem;
+	margin-left: 0.32rem;
+	width: 0.49rem;
+	height: 0.42rem;
+	background-image: url(../../images/admin/icon_process_arrow.png);
+	background-size: 100% 100%;
+}
+
+/* 弹出层 */
+.div-dialog {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	z-index: 0;
+	display: none;
+}
+
+/* 新增工艺方案 */
+.dialogTable td{
+	height: 0.5rem;
+	font-size: 0.18rem;
+	line-height: 0.5rem;
+	color: #656565;
+}
+.dialogTable input[type='text'].input-toolbar {
+	margin-top: 0.04rem;
+}

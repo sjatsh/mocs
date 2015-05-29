@@ -1,6 +1,7 @@
 package smtcl.mocs.services.device;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,9 @@ import org.dreamwork.persistence.Parameter;
 import org.dreamwork.util.IDataCollection;
 import org.primefaces.model.TreeNode;
 
+import smtcl.mocs.beans.storage.OrganizeMaterielAddBean;
+import smtcl.mocs.beans.storage.OrganizeMaterielManageBean;
+import smtcl.mocs.beans.storage.OrganizeMaterielUpdateBean;
 import smtcl.mocs.model.CuttertypeModel;
 import smtcl.mocs.model.TFixtureModel;
 import smtcl.mocs.pojos.device.TFixtureClassInfo;
@@ -128,6 +132,7 @@ public interface IResourceService extends IGenericService<TUserResource, String>
 	 * @return
 	 */
 	public List<TMaterialClass> getTMaterialClassByName(String search);
+	public List<Map<String,Object>> getTMaterialClassByAll();
 	/**
 	 * 根据id查询物料类别
 	 * @param search
@@ -157,6 +162,21 @@ public interface IResourceService extends IGenericService<TUserResource, String>
 	 * @return
 	 */
 	public List<TMaterailTypeInfo> getTMaterailTypeInfoByPid(String pid,String nodeid,String search);
+	/**
+	 * 查询物料信息
+	 * @param pid
+	 * @param nodeid
+	 * @param type
+	 * @param no
+	 * @param desc
+	 * @param status
+	 * @param unit
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<Map<String,Object>> getTMaterailTypeInfo(String pid,String nodeid,String type,String no,String desc,
+			String status,String unit,Date startTime,Date endTime);
 	/**
 	 * 保存零件详细
 	 * @param tmti
@@ -287,6 +307,53 @@ public interface IResourceService extends IGenericService<TUserResource, String>
 	 * @return
 	 */
 	public String updateCutterManage(CuttertypeModel cutt);
-	
-	
+	/**
+	 * 获取所有单位
+	 * @return
+	 */
+	public List<Map<String,Object>> getUnitInfo(String unitType);
+	/**
+	 * 获取辅助单位
+	 * @param unitId
+	 * @return
+	 */
+	public List<Map<String,Object>> getUnitInfoOnAssis(String unitId);
+	/**
+	 * 获取子库存
+	 * @return
+	 */
+	public List<Map<String,Object>> getStockOnAll();
+	/**
+	 * 获取子库存
+	 */
+	public List<Map<String,Object>> getPostionByStockNo(String stockNo);
+	/**
+	 * 获取人员
+	 * @return
+	 */
+	public List<Map<String,Object>> getBuyerList();
+	/**
+	 * 新增组织物料
+	 * @param oma
+	 * @return
+	 */
+	public String SaveOrganizeMateriel(OrganizeMaterielAddBean oma);
+	/**
+	 * 根据Param(字段名)
+	 *    materialId(值)
+	 * 获取   obj (对象)
+	 */
+	public Object getObject(String materialId,String Param,Object obj);
+	/**
+	 * 修改组织物料
+	 * @param omm
+	 * @return
+	 */
+	public String UpdateOrganizeMateriel(OrganizeMaterielUpdateBean oma);
+	/**
+	 * 返回物料版本
+	 * @param mno
+	 * @return
+	 */
+	public List<Map<String,Object>> getMaterielVersion(String mno);
 }

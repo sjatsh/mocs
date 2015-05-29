@@ -1,0 +1,15 @@
+{	
+	"top": {
+		"title1":"Labor Report",
+		"title2":"Date From",
+		"title3":"Date To",
+		"title4":" Search "
+	},
+	"content": {
+		"rybh":"Staff ID",
+		"rymc":"Staff Name",
+		"ljmc":"Part Name",
+		"gxmc":"Process Name",
+		"wcsl":"Completed Qty"
+	}
+}

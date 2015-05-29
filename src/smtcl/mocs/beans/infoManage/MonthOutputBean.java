@@ -1,10 +1,7 @@
 package smtcl.mocs.beans.infoManage;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -33,9 +30,14 @@ public class MonthOutputBean implements Serializable{
 	
 	//报表数据所在的月份
 	private Date startTime;
+
+    private Date rangeBegin;
 	
 	public MonthOutputBean(){
 		startTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2014,11,1);
+        rangeBegin = calendar.getTime();
 		this.SubmitSearch();
 	}
 
@@ -71,4 +73,12 @@ public class MonthOutputBean implements Serializable{
 		this.startTime = startTime;
 	}
 
+    public Date getRangeBegin() {
+        return rangeBegin;
+    }
+
+    public void setRangeBegin(Date rangeBegin) {
+
+        this.rangeBegin = rangeBegin;
+    }
 }

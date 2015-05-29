@@ -1,0 +1,44 @@
+{	
+	"top": {
+		"title1":"Job Edit",
+		"title2":"Essential Info",
+		"title3":"Facility Info",
+		"gdmc":"Job Name",
+		"ljmc":"Part Name",
+		"bgsl":"Report Number" ,
+		"kssj":"Start Time",
+		"jssj":"Finish Time",
+		"sblx":"Machine Type",
+		"sbxlh":"Machine SN"
+		
+	},
+	"content": {
+		"sbxlh1":"Machine SN",
+		"zt":"Status",
+		"cz":"Operation",
+		"pg":"Dispatch",
+		"qd":"Start",
+		"bc":"Save",
+		"qx":"Cancel",
+		"sc":"Delete",
+		"hf":"Recover",
+		"msg":"Job order started successfully!",
+		"msg1":"Job order must be sent to one machine at least!",
+		"msg2":"Operation failed!",
+		"msg3":"Do you want to start this job order?",
+		"msg4":"Please click on the Dispatch button first.",
+		"msg5":"The job order is dispatched.",
+		"msg6":"Dispatching failed!",
+		"msg7":"The job order in current status cannot be dispatched!",
+		"msg8":"Do you want to dispatch this job order?",
+		"msg9":"Machine SN already exists.",
+		"msg10":"Save Successfully!",
+		"msg11":"Please enter the name of job order.",
+		"msg12":"Please enter the name of part",
+		"msg13":"Please enter the number of report",
+		"msg14":"Please enter a start time",
+		"msg15":"Please enter an end time",
+		"msg16":"The start time cannot be greater than the end time!"
+	}
+	
+}

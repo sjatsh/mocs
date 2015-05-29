@@ -8,610 +8,281 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<link href="./ext/css/ext-theme-classic-all.css" rel="stylesheet"	type="text/css"></link>
+	<!-- <link href="./ext/css/ext-theme-classic-all.css" rel="stylesheet"	type="text/css"></link>
 	<link href="./ext/css/sch-all.css" rel="stylesheet"	type="text/css" />
 	<link href="./ext/css/app.css" rel="stylesheet" type="text/css" />
-	<link href="./ext/css/performance.css" rel="stylesheet"	type="text/css" />
-	<link href="./css/jobplan.css" rel="stylesheet"	type="text/css" />
-	<link href="./ext/css/jquery-selectbox.css" rel="stylesheet"	type="text/css" />
-    <h:outputScript library="js" name="common.js"></h:outputScript>
-    <script src="./ext/js/base/ext-all.js" type="text/javascript"></script>
-	<script src="./ext/js/base/sch-all-debug.js" type="text/javascript"></script>
-	<script src="./ext/js/base/ext-lang-zh_CN.js" type="text/javascript"></script>
-	<script src="./ext/js/base/scheduler-zh_CN.js"	type="text/javascript"></script>
-	<script src="./ext/js/base/examples-shared.js" type="text/javascript"></script>
-	<script src="./ext/js/base/performance.js"	type="text/javascript"></script>
-<!-- 	<script src="./js/jquery-1.9.1.min.js" type="text/javascript"></script> -->
-<!-- 	<script src="./ext/js/jquery-selectbox.js" type="text/javascript"></script> -->
-	<script src="./ext/js/jobplan_ext.js" type="text/javascript"></script>
-    <script src="./ext/js/query_jobplan.js" type="text/javascript"></script>
-    <style type="text/css">
-.toptab{
-display:block !important;
-}		
-		
-.jobplan_top_right_third ul li {
-	float: left;
-}
-
-* {
-	padding: 0px;
-	margin: 0px;
-	font-family: "微软雅黑";
-	color: #595959;
-	font-weight: bold;
-}
-
-caption,th {
-	text-align: center;
-	font-size: 30px;
-	font-weight: bold;
-}
-
-.thsc1 {
-	font-size: 20px;
-	color: #525252;
-	font-weight: bold;
-	height: 40px;
-	width: 290px;
-	text-align: center;
-}
-
-.thsc2 {
-	font-size: 20px;
-	color: #525252;
-	font-weight: bold;
-	height: 40px;
-	width: 150px;
-	text-align: center;
-}
-
-.thsc3 {
-	font-size: 20px;
-	color: #525252;
-	font-weight: bold;
-	height: 40px;
-	width: 145px;
-	text-align: center;
-}
-
-.thsc4 {
-	font-size: 20px;
-	color: #525252;
-	font-weight: bold;
-	height: 40px;
-	width: 145px;
-	text-align: center;
-}
-
-.thsc5 {
-	font-size: 20px;
-	color: #525252;
-	font-weight: bold;
-	height: 40px;
-	width: 145px;
-	text-align: center;
-}
-
-.thsc6 {
-	font-size: 20px;
-	color: #525252;
-	font-weight: bold;
-	height: 40px;
-	width: 145px;
-	text-align: center;
-}
-
-.thsc7 {
-	font-size: 20px;
-	color: #525252;
-	font-weight: bold;
-	height: 40px;
-	width: 120px;
-	text-align: center;
-}
-
-.eventTip{
-	width:300px;
-	font-size:16px;
-}
-.jobplanA {
-	font-size: 300px;
-}
-.x-column-header-inner {
-    height: 47.63px;
-    font-size: 27.6px;
-    line-height: 47.63px;
-}
-.sch-header-row {
-    height: 23.47px;
-    font-size: 13.8px;
-    line-height: 23.47px;
-}
-.rf-au-btn-arrow {
-    width: 19px;
-    height: 22px;
-}
-.t_selected {
-    float: left;
-    overflow: hidden;
-    line-height: 22px;
-    text-align: left;
-    position: relative;
-    z-index: 1;
-    cursor: pointer;
-    display: block;
-    margin-left: 20px;
-    width: 200px;
-	height: 25px;
-}
-</style>
+	<link href="./ext/css/jquery-selectbox.css" rel="stylesheet" type="text/css" /> -->
+	<link href="./ext/publish/ext-sch.min.css" rel="stylesheet" type="text/css" />
+	
+	<!-- <link href="./css/jobplan.css" rel="stylesheet"	type="text/css" />
+	<link href="./css/jobplan_add.css" rel="stylesheet"	type="text/css" />
+	<link href="./css/jobdispatch_add.css" rel="stylesheet"	type="text/css" />
+	<link href="./css/jobplan_update.css" rel="stylesheet"	type="text/css" />
+	<link href="./css/import_add.css" rel="stylesheet" type="text/css"/> -->
+	<link href="./css/publish/jobplan.min.css" rel="stylesheet" type="text/css"/>
+   
 </h:head>
 	<h:body>
 		<h:form id="myform">
-		<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
-		<script type="text/javascript">	
-			document.getElementById("maskw").style.height = hjb51 + "px";
-			document.getElementById("maskw").style.width = wjb51 + "px";
-			$(document).ready(function(){
-				$("#select_box").selectboxs();
-			});
-			$(document).ready(function(){
-				$("#select_box_part").selectboxs();
-			});
-		</script>	
-			<table id="jobtable">
-				<tr>
-					<td id="detailtop" valign="top">
-						<table id="topleftright">
-							<tr>
-								<td id="topleft" valign="middle" align="left" >
-								</td>
-								<td id="topright" valign="top">
-									<table id="tabmenu" class="toptab">
-									<tr height="20px"></tr>
-									<tr width="100%">
-										<td style="font-weight:bold;" id="biaoti">
-											<h:outputLabel value="计划调度管理"/>
-										</td>
-										<td id="tiaojian">
-										<table>
-										<tr>
-										<td style="width: 40px;"><h:outputText value="零件" id="partNameText"/></td>
-										<td>
-											<div id="select_box_part">
-												<table id="table_part">
-													<c:forEach items="#{JobPlanDetail.partTypeList}" var="part">
-														<tr><td style="width:180px;">                                 
-												        	<label><input type="checkbox" name="select_box_part" onclick="s.changeSelected(this,event);" value="#{part.id}" onblur="s.hiddenList()"/><span>#{part.name}</span></label>
-												        </td></tr>
-											        </c:forEach>
-												</table>
-											</div>
-										</td>
-										</tr><tr height="10px"></tr>
-										<tr>
-										<td style="width: 40px;"><h:outputText value="状态"/></td>
-										<td>
-											<div id="select_box">
-												<table>
-													<c:forEach items="#{JobPlanDetail.statusList}" var="status">
-														<tr><td style="width:180px;">                                 
-												        	<label><input type="checkbox" name="select_box" onclick="s.changeSelected(this,event);" value="#{status.id}" onblur="s.hiddenList()"/><span>#{status.value}</span></label>
-												        </td></tr>
-											        </c:forEach>
-												</table>
-											</div>
-										</td>
-										</tr>
-										</table>
-										</td>
-										<td id="shijian">
-											<table>
-											<tr>
-											<td style="width: 80px;"><h:outputText value="开始时间"  /></td>
-											<td><rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
-														value=""  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
-												<h:message for="start" style="color:red" />
-												</td>
-											</tr><tr height="10px"></tr>
-											<tr>
-											<td style="width: 80px;"><h:outputLabel value="结束时间"/></td>
-											<td><rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
-													value="" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
-												<h:message for="end" style="color:red" /></td>
-											</tr>
-											</table>
-										</td>
-										<td id="button">
-										<div id="button1" style="cursor: pointer;"  onclick="query(false)" align="center">
-				 							<img src="./images/jobplan/list/jobpaln_button.png"  style="width: 60px;height: 65px;"/>
-										</div>
-										</td>
-									</tr><tr height="20px"></tr>
-									<tr>
-									<td id="detailcentertd1" align="right">
-										
-									</td>
-									<td colspan="2">
-									<table>
-									<tr>
-										<td id="detailcentertd2"><a id="herf" 
-											href="javascript:openUrl('./jobplan/jobplan_add.faces')"
-											title="新增作业计划"><img
-												src="./images/jobplan/jobplan_17.png" id="img2" /></a></td>
-										<td id="detailcentertd3"><a
-											onclick="pageRelocation('edit')" href="javascript:void(0);" title="编辑作业计划"><img
-												src="./images/jobplan/jobplan_14.png" id="img3" /></a></td>
-										<td id="detailcentertd4">
-											<a onclick="deljobPlan()" href="javascript:void(0);" title="删除作业计划">
-												<img src="./images/jobplan/jobplan_20.png" id="img4" />
-											</a>
-										</td>
-										<td id="detailcentertd5">
-											<a onclick="switchStatus()" title="作业计划启动" href="javascript:void(0);" id="jobplanaid">
-												<img id="jobplanimg" src="./images/jobplan/dispatchstart.png"  />
-											</a>
-										</td>
-										<td id="detailcentertd6">
-											<div class="gttxsWeek">
-												<a onclick="switchV('week')" title="甘特图周显示"><img
-													src="./images/jobplan/jobplan_30.png" id="img5" /></a>
-											</div>
-										</td>
-										<td id="detailcentertd7">
-											<div class="gttxsMonth">
-												<a onclick="switchV('month')" title="甘特图月显示"><img
-													src="./images/jobplan/jobplan_32.png" id="img6" /></a>
-											</div>
-										</td>
-										<td id="detailcentertd8">
-											<div class="gttxsYear">
-												<a onclick="switchV('year')" title="甘特图年显示"><img
-													src="./images/jobplan/jobplan_35.png" id="img7" /></a>
-											</div>
-										</td>
-										<td id="detailcentertd9">
-											<div class="gttxsBig">
-												<a onclick="query('false')" title="全部折叠"><img
-													src="./images/jobplan/jobplan_37.png" id="img8" /></a>
-											</div>
-										</td>
-										<td id="detailcentertd10">
-											<div class="gttxsSmall">
-												<a onclick="query('true')" title="全部展开"><img
-													src="./images/jobplan/jobplan_39.png" id="img9" /></a>
-											</div>
-										</td>
-									</tr>
-									</table>
-									</td>
-										
-									</tr>
-									</table>
-								</td>
-							</tr>
-						</table> 
-
-					</td>
-				</tr>
-				<tr><td style="background-color: #F4F6F5;">
-				
-				<input type="hidden" id="maxId" value="0" /> <input
-						type="hidden" id="newTaskName" value="0" /> <input type="hidden"
-						id="hplanId" value="0" /> <input type="hidden" id="hpriorityId"
-						value="0" /> <input type="hidden" id="hplanStartTime" value="0" />
-						<input type="hidden" id="hhighlightadd" value="0" />
-						<div id="jobplan_content" class="jobplan_content">
-						   <div id="jobplanheight" style="background-color: #F4F6F5;"></div>
-							<div id="example-container" class="example-container" style="padding-top: 0px;"></div>
+			<h:inputHidden value="#{JobPlanDetail.viewDisabled}" id="viewDisabled"></h:inputHidden>
+			<h:inputHidden value="#{JobPlanDetail.plantype}" id="plantype"></h:inputHidden>
+			<h:inputHidden value="#{JobPlanDetail.flgId}" id="flgId"></h:inputHidden>
+			<h:inputHidden value="#{JobPlanDetail.planId}" id="planId"></h:inputHidden>
+			<h:inputHidden value="#{JobPlanDetail.partId1}" id="partId1"></h:inputHidden>
+			<h:inputHidden value="#{JobPlanDetail.subjobplanStartDate}" id="subjobplanStartDate"></h:inputHidden>
+			<h:inputHidden value="#{JobPlanDetail.subjobplanEndDate}" id="subjobplanEndDate"></h:inputHidden>
+			<div class="zl-content-top">
+				<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+				<div class="zl-content-top-title">
+					<span data-i18n="top.main_title"></span>
+				</div>
+				<div class="zl-content-top-info-up">
+					<!-- 零件选择 -->
+					<div class="zl-content-label">
+						<span data-i18n="top.select_title1"></span>
+					</div>
+					<div class="zl-content-select zl-selectMoreBox">
+						<img class="zl-selectMoreBox-bg-left" src="images/input/box_left.png" />
+						<img class="zl-selectMoreBox-bg-center" src="images/input/box_center.png" />
+						<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
+						<div id="select_box_part" title="">
+							<table id="table_part">
+								<c:forEach items="#{JobPlanDetail.partTypeList}" var="part">
+									<tr><td style="width:180px;">                                 
+							        	<label><input type="checkbox" name="select_box_part" onclick="s.changeSelected(this,event);" value="#{part.id}" onblur="s.hiddenList()"/><span>#{part.name}</span></label>
+							        </td></tr>
+						        </c:forEach>
+							</table>
 						</div>
-				</td></tr>
-			</table>
-			<img style="border: 0px solid; position: absolute;left: 0px;top:0px;" src="./images/profile_top_logo.png" id="img1" />
-		</h:form>
-		<script type="text/javascript">
-		document.getElementById("biaoti").style.width="20%";
-		document.getElementById("biaoti").style.fontSize=38/1080*hjb51+"px";
-		document.getElementById("tiaojian").style.width="25%";
-		document.getElementById("tiaojian").style.fontSize=22/1080*hjb51+"px";
-		document.getElementById("shijian").style.width="25%";
-		document.getElementById("shijian").style.fontSize=22/1080*hjb51+"px";
-		document.getElementById("button").style.width="25%";
-		document.getElementById("myform:startInputDate").style.width=wjb51*155/1600+"px";
-		document.getElementById("myform:startInputDate").style.height=hjb51*30/900+"px";
-		document.getElementById("myform:endInputDate").style.width=wjb51*155/1600+"px";
-		document.getElementById("myform:endInputDate").style.height=hjb51*30/900+"px";
-		</script>
-		<script type="text/javascript">
-			var imgPercent = hjb51 / 1080; //比例 
-			//特定的高度
+					</div>
+					<!-- 状态选择 -->
+					<div class="zl-content-label">
+						<span data-i18n="top.select_title3"></span>
+					</div>
+					<div class="zl-content-select zl-selectMoreBox">
+						<img class="zl-selectMoreBox-bg-left" src="images/input/box_left.png" />
+						<img class="zl-selectMoreBox-bg-center" src="images/input/box_center.png" />
+						<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
+						<div id="select_box">
+							<table>
+								<c:forEach items="#{JobPlanDetail.statusList}" var="status">
+									<tr><td style="width:180px;">                                 
+							        	<label><input type="checkbox" name="select_box" onclick="s.changeSelected(this,event);" value="#{status.id}" onblur="s.hiddenList()"/><span>#{status.value}</span></label>
+							        </td></tr>
+						        </c:forEach>
+							</table>
+						</div>
+					</div>
+					<!-- 开始时间选择 -->
+					<div class="zl-content-label">
+						<span data-i18n="top.select_title2"></span>
+					</div>
+					<div class="zl-content-select zl-dateBox">
+						<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+						<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+						<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
+						<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+							value=" "  datePattern="yyyy-MM-dd" required="true"/>
+						<h:message for="start" style="color:red" />
+					</div>
+					<!-- 结束时间选择 -->
+					<div class="zl-content-label">
+						<span data-i18n="top.select_title4"></span>
+					</div>
+					<div class="zl-content-select zl-dateBox">
+						<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+						<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+						<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
+						<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en" 
+							value=" " datePattern="yyyy-MM-dd" required="true" />
+						<h:message for="end" style="color:red" />
+					</div>
+					<!-- 查找按钮 -->
+					<div class="zl-content-btn zl-button" id="button1" onclick="query('true')">
+						<img class="zl-buttonBG" src="images/input/button.png"/>
+						<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+						<div class="zl-button-text">
+							<img class="zl-button-icon" src="images/input/icon_search.png" />
+							<span data-i18n="top.btn11"></span>
+						</div>
+					</div>
+				</div>
+				<div class="zl-content-top-info-down">
+					<div id="viewDisabled">
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<a id="control_add" onclick="jobplanadd1();"  href="javascript:void(1);" title=" " data-i18n="[title]top.btn1" >
+							    <img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+								<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+								<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_add.png" />
+							</a>
 
-			document.getElementById("jobtable").style.height = hjb51* 994 / 1080 + "px";//控制中间和上面的和的高度 
-			document.getElementById("jobtable").style.width = wjb51 + "px";
-
-			document.getElementById("jobplan_content").style.height = hjb51	* 63 / 100 + "px";//甘特图高  
-			document.getElementById("jobplan_content").style.width = wjb51	+ "px";
-	
-			document.getElementById("jobplanheight").style.width = wjb51 +"px";	
-			document.getElementById("jobplanheight").style.height = hjb51*10/1080 +"px";
-			document.getElementById("example-container").style.height = hjb51 * 63 / 100 - 40 + "px";//甘特图高 
-			document.getElementById("example-container").style.width = wjb51+ "px";
-
-			document.getElementById("topleftright").style.width = wjb51 + "px";
-			document.getElementById("topleftright").style.height = hjb51 * 23/ 100 + "px";
-			document.getElementById("topleft").style.width = wjb51 * 20 / 100	+ "px"; //为什么减90？ 
-			document.getElementById("topleft").style.height = hjb51 * 23 / 100	+ "px";
-			document.getElementById("topright").style.width = wjb51 * 80 / 100 + "px";
-			document.getElementById("topright").style.height = hjb51 * 23 / 100 + "px";
-			document.getElementById("tabmenu").style.width = wjb51 * 80 / 100 + "px";
-			document.getElementById("tabmenu").style.height = hjb51 * 23 / 100 + "px";
-			//中间的宽度 
-
-			document.getElementById("detailcentertd2").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd3").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd4").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd5").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd6").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd7").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd8").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd9").style.width = wjb51*10/192+"px";
-			document.getElementById("detailcentertd10").style.width = wjb51*10/192+"px";
-
-			//图片大小 
-			for ( var i = 2; 10 > i; i++) {
-				var new_image = new Image();
-				new_image.src = document.getElementById("img" + i).src;
-				var wjbimg = new_image.width;
-				var hjbimg = new_image.height;
-
-				document.getElementById("img" + i).style.width = wjbimg
-						* imgPercent + "px";
-				document.getElementById("img" + i).style.height = hjbimg
-						* imgPercent + "px";
-			}			
-			var new_image = new Image();
-			new_image.src = document.getElementById("jobplanimg").src;
-			var wjbimg = new_image.width;
-			var hjbimg = new_image.height;
-			document.getElementById("jobplanimg").style.width = wjbimg
-					* imgPercent + "px";
-			document.getElementById("jobplanimg").style.height = hjbimg
-					* imgPercent + "px";
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<a id="control_edit" onclick="pageRelocation('edit')" href="javascript:void(1);" title=" " data-i18n="[title]top.btn2">
+								<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+								<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+								<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_edit.png" />
+							</a>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<a id="control_del" onclick="deljobPlan()" href="javascript:void(0);" title=" " data-i18n="[title]top.btn3">
+								<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+								<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+								<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_delete.png" />
+							</a>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<a id="control_status" onclick="switchStatus()" title=" " href="javascript:void(0);" data-i18n="[title]top.btn4">
+								<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+								<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+								<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_play.png" />
+							</a>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<div id="control_week" class="gttxsWeek" onclick="switchV('week')">
+								<a title=" " data-i18n="[title]top.btn5">
+									<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+									<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+									<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_week.png" />
+								</a>
+							</div>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<div id="control_month" class="gttxsMonth" onclick="switchV('month')">
+								<a title=" " data-i18n="[title]top.btn6">
+									<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+									<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+									<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_month.png" />
+								</a>
+							</div>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<div id="control_year" class="gttxsYear" onclick="switchV('year')">
+								<a title=" " data-i18n="[title]top.btn7">
+									<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+									<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+									<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_year.png" />
+								</a>
+							</div>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<div id="control_big" class="gttxsBig" onclick="query('false')">
+								<a title=" " data-i18n="[title]top.btn8">
+									<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+									<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+									<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_plus.png" />
+								</a>
+							</div>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+				    	<div class="zl-content-top-info-down-btn">
+							<div id="control_small" class="gttxsSmall" onclick="query('true')">
+								<a title=" " data-i18n="[title]top.btn9">
+									<img class="zl-content-top-info-down-btn-bg" src="images/jobplan/icon_bg.png" />
+									<img class="zl-content-top-info-down-btn-bg-active" src="images/jobplan/icon_bg_active.png" />
+									<img class="zl-content-top-info-down-btn-img" src="images/jobplan/icon_minus.png" />
+								</a>
+							</div>
+				    	</div>
+						<div class="zl-content-top-info-down-split"></div>
+						<!-- 批次导入按钮 -->
+                        <ui:remove>
+						<div class="zl-content-btn zl-button" id="control_import" onclick="importadd()" style="display: none;">
+							<img class="zl-buttonBG" src="images/input/button.png"/>
+							<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+							<div class="zl-button-text">
+								<span data-i18n="top.btn10"></span>
+							</div>
+						</div>
+                        </ui:remove>
+				    </div>
+				</div>
+			</div>
+			<div class="zl-content-info">
+				<input type="hidden" id="maxId" value="0" /> 
+				<input type="hidden" id="newTaskName" value="0" /> 
+				<input type="hidden" id="hplanId" value="0" /> 
+				<input type="hidden" id="hpriorityId" value="0" />
+				<input type="hidden" id="hplanStartTime" value="0" />
+				<input type="hidden" id="hhighlightadd" value="0" />
+				
+				<div id="jobplan_content" class="jobplan_content">
+					<div id="example-container" class="example-container"></div>
+				</div>
+	    	</div>
+		    <div id="jobaddshadow" class="jobplan-add-shadow" style="display: none;" >
 			
-			
-			imgReady('./images/profile_top_logo.png', function () { 
-				  var imgwjb51=this.width;
-			   	  var imghjb51=this.height;
-				  document.getElementById("img1").style.width=imgwjb51*imgPercent+"px";
-				  document.getElementById("img1").style.height=imghjb51*imgPercent+"px";										
-				  document.getElementById("img1").style.top=hjb51*30/1080+"px";
-				  document.getElementById("img1").style.left=wjb51*25/1920+"px";
-				  if(wjb51==800)
-				  {
-					  document.getElementById("img1").style.width=imgwjb51*45/100+"px";
-					  document.getElementById("img1").style.height=imghjb51*45/100+"px";  
-				  }
-			});  
-
-		</script>
-
+			<iframe id="jobplanadd2"  src="" class="jobplan-add-out" frameborder="0" name="jobplanadd2"></iframe>
+	    </div>	
+	    <div id="jobupdateshadow" class="jobplan-update-shadow" style="display: none;">
+		
+		<iframe id="jobplanupdate2"  src="" class="jobplan-update-out" frameborder="0" name="jobplanupdate2"></iframe>
+	   
+	    </div>	
+	    <div id="jobdispatchaddshadow" class="jobdispatch-add-shadow" style="display: none;">
+		 
+		<iframe id="jobdispatchadd2"  src="" class="jobdispatch-add-out" frameborder="0" name="jobdispatchadd2"></iframe>
+	    
+	    </div>	
+	    <div id="taskimportshadow" class="taskimport-shadow" style="display: none;">
+		
+		<iframe id="taskimport2"  src="" class="taskimport-out" frameborder="0" name="taskimport2"></iframe>
+	   
+	    </div>					
+       </h:form>
+		<!-- ext JS -->
+		<!-- <script src="./ext/base/ext-all.js" type="text/javascript"></script>
+		<script src="./ext/base/sch-all-debug.js" type="text/javascript"></script> -->
+	    <!-- <script src="./ext/publish/ext-all.js.gzjs" type="text/javascript"></script>
+		<script src="./ext/publish/sch-all-debug.js.gzjs" type="text/javascript"></script> -->
+		<!-- <script src="./ext/js/base/examples-shared.js" type="text/javascript"></script>
+		<script src="./ext/js/base/performance.js"	type="text/javascript"></script>
+	    <script src="./ext/js/jquery-selectbox.js" type="text/javascript"></script> -->
 		<script type="text/javascript">
-			var zflag = 1;
-
-			function switchV() {
-				switch (arguments[0]) {
-				case "week":
-					ds.switchViewPreset("weekAndDay", start, end);
-					zflag = 1;
-					ds.scrollToDate(new Date(), true);
-					break;
-				case "month":
-					ds.switchViewPreset("monthAndYear", start, end);
-					zflag = 2;
-					ds.scrollToDate(new Date(), true);
-					break;
-				case "year":
-					ds.switchViewPreset("year", start, end);
-					zflag = 3;
-					ds.scrollToDate(new Date(), true);
-					break;
-				}
-			}
-
-			function pageRelocation() {
-				switch (arguments[0]) {
-				case "edit":
-					if (editPlanId == -1) {
-						 alert("请选择一条记录!");
-					} else {
-						if(planType==1){//当为作业计划时，不判断状态
-							openUrl("./jobplan/jobplan_updata.faces?editPId="+editPlanId);
-							editPlanId = -1;
-						}else{
-							if (statusId == 60 || statusId == 70) {
-								alert("此状态不能编辑!");
-							} else {
-								openUrl("./jobplan/jobplan_updata.faces?editPId="+editPlanId);
-								editPlanId = -1;
-							}
-						}
+		//<![CDATA[
+			//ext框架加载
+			if(window.localStorage.getItem("ext_sch_js") == null || window.localStorage.getItem("ext_sch_js") == "") {
+				$.ajax({
+					url: "./ext/js/base/ext-sch.txt",
+					type: "get",
+					async: false,
+					dataType: "text",
+					success: function(data, TS) {
+						window.localStorage.setItem("ext_sch_js", data);
 					}
-					break;
-				case "control":
-					if (editPlanId == -1) {
-						Ext.Msg.alert("提示", "请选择一条作业计划记录!", function() {
-						});
-					} else {
-						openUrl("./jobplan/jobplan_control.faces?editPId="+ editPlanId);
-						editPlanId = -1;
-					}
-					break;
-				case "statistic":
-					openUrl("./jobplan/jobplan_statistics.faces");
-					editPlanId = -1;
-					break;
+				});
+			}
+			try{
+				eval(window.localStorage.getItem("ext_sch_js"));
+			}
+			catch(e){
+				console.log(e);
+			}
+			//ext语言加载
+			dataTranslate("jobplan_detail", function(t) {
+				//动态加载语言包
+				if(i18n.options.lng == 'zh') {
+					var file1 = document.createElement('script');
+					$(file1).attr('type', 'text/javascript').attr('src', './ext/publish/ext_zh.min.js').appendTo("body");
 				}
-			}
-
-			function deljobPlan() {
-				if (editPlanId == -1) {
-					alert("请选择一条计划记录!");
-				} else {
-					if (statusId == 10) {
-						if(!window.confirm("是否确认删除该计划！")){
-							return;
-						}
-					
-						Ext.Ajax.request({
-											url : "./jobplan/delete.action",
-											method : "post",
-											params : {
-												id : editPlanId
-											},
-											success : function(response,opts) {
-												 var obj = Ext.decode(response.responseText);
-												        if(obj.success) {
-												        	alert("计划删除成功!");
-												        	editPlanId == -1;
-															ds.getEventStore().reload();															
-												        }else {
-												        	alert("已有工单关联,计划删除失败!");
-												        }
-										             },
-											failure : function(response,opts) {
-													 alert("计划删除失败!");
-											}											
-										});
-
-					} else {
-						alert("此状态不能删除!");
-
-					}
-				}
-			}
-
-			function openUrl(url) {
-				features = "height=900,width=1500,top:200,left:200,status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";
-				winId = window.open(url, 'addpage', features);
-			}
-
-			function switchStatus() {
-				if (!(editPlanId == -1)) {
-					if(planType == 1 ) { alert("作业计划不可启动,请选择相应的批次计划！");return;}
-					if (statusId == 10 || statusId == 20) {
-						if(!window.confirm("是否确认启动该批次计划！")){
-							return;
-						}
-						if (statusId == 10) {
-							Ext.Ajax
-									.request({
-										url : "./jobplan/updateJobPlanInfoStatus.action",
-										method : "post",
-										params : {
-											jobPlanId : editPlanId,
-											status : 40
-										},
-										success : function(response) {
-											var result = response.responseText;
-											if (result == "true") {
-												alert("作业计划启动成功!");
-												ds.getEventStore().reload();
-												 //1,状态更改成功后，还选中甘特图数据
-												 //2,状态更改后更新当前状态。
-												 statusId = 40;
-// 												editPlanId = -1;
-														
-											} else if (result == "false") {
-												alert("作业计划启动失败!");
-														
-											}
-										},
-										failure : function(response, opts) {
-											alert("操作失败!");
-										}
-									});
-
-						} else if (statusId == 70) {
-							Ext.Ajax
-									.request({
-										url : "./jobplan/updateJobPlanInfoStatus.action",
-										method : "post",
-										params : {
-											jobPlanId : editPlanId,
-											status : 60
-										},
-										success : function(response) {
-											var result = response.responseText;
-											if (result == "true") {
-												Ext.Msg.alert("提示",
-														"作业计划停止成功!",
-														function() {
-															ds.getEventStore()
-																	.reload();
-															//1,状态更改成功后，还选中甘特图数据
-															 //2,状态更改后更新当前状态。
-															statusId = 60;
-// 															editPlanId = -1;
-														});
-											} else if (result == "false") {
-												alert("作业计划停止失败!");
-														
-											}
-										},
-										failure : function(response, opts) {
-											alert("操作失败!");
-										}
-									});
-
-						}
-					} else {
-						alert("此状态不能操作!");
-					}
-
-				} else {
-					alert("请选择一条记录!");
-				}
-			}
-
-			function showNewPage(arg) {
-				var url = "";
-				switch (arg) {
-				case "statistic":
-					url = "./jobplan/jobplan_statistics.faces";
-					break;
-				}
-				;
-
-				$("#showDiv").show();
-				$("#disableAll").show();
-				$("#ifContent").attr("src", url);
-
-			}
-
-			function closeIf() {
-				$("#showDiv").hide();
-				$("#disableAll").hide();
-				$("#ifContent").attr("src", "");
-			}
+			});
+			//ext杂项加载
+			var fileExtOther = document.createElement('script');
+			$(fileExtOther).attr('type', 'text/javascript').attr('src', './ext/publish/ext_other.min.js').appendTo("body");
+		//]]> 
 		</script>
-
-		<script type="text/javascript">
-			//<![CDATA[ 
-			
-			(function() {
-			})();
-
-			setTimeout(
-				function(){
-					$("#maskw").fadeOut(fadeouttime);
-				},
-				settimeout
-			);
-			
-
-			//]]>
-		</script>
-		<script src="./ext/js/jquery-selectbox.js" type="text/javascript"></script><!-- 将js文件引入放在这个解决jquery多次引用将jquery-selectbox.js覆盖 -->
+	    
+	    <!-- <script src="./ext/js/query_jobplan.js" type="text/javascript"></script>
+	    <script src="./ext/js/jobplan_ext.js" type="text/javascript"></script>
+    	<h:outputScript library="js/page" name="jobplan_detail.js"></h:outputScript> -->
+    	<h:outputScript library="js/publish" name="jobplan_detail.min.js"></h:outputScript>
 	</h:body>
 </ui:composition>

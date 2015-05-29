@@ -99,7 +99,7 @@ Ext.onReady(function () {
 			endDate     : end,
 		    endDate : Sch.util.Date.add(start,Sch.util.Date.DAY, 105),//结束时间往后推迟3个月
 			columns: [
-				{header:'<span class="job_manager_textstyle">设备名称</span>',sortable:true,width:createColumnWidth,dataIndex:'Name'}
+				{header:'<span class="job_manager_textstyle" data-i18n="content.tree_title"></span>',sortable:true,width:createColumnWidth,dataIndex:'Name'}
 			],
 			eventBodyTemplate : new Ext.XTemplate(
 				'<div class="sch-percent-allocated-bara" style="width:50%"></div>'

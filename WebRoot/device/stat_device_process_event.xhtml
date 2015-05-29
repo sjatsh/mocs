@@ -6,170 +6,203 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:f="http://java.sun.com/jsf/core">
 <h:form id="myform">
-
-<h:inputHidden value="#{StatDeviceProcessEventBean.nodeStr}" id="nodeStr" />
-<h:outputScript library="js" name="common.js"></h:outputScript>
-<link rel="stylesheet" href="css/common.css" type="text/css"></link>
-<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
-<link rel="stylesheet" href="css/rich_table_ds.css" type="text/css"></link>
-<style type="text/css">
-*{margin:0px;}
-</style>
+<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="css/stat_device_process_event.css" type="text/css"></link>
-
-<div class="title-bar">
-	<div class="logo-img">
-		<img src="images/profile_top_logo.png" />
+<h:inputHidden value="#{StatDeviceProcessEventBean.nodeStr}" id="nodeStr" />
+<div class="zl-content-top" >
+   <img class="zl-content-top-bg" src="images/content_top_bg.png" />
+	<div class="zl-content-top-title">
+		<span data-i18n="top.title1"/>
 	</div>
-	<div class="title-text">加工事件分析</div>
-	<div class="filter-frame">
-		<div class="filter-bar">
-			<div class="filter-label">机床名称:</div>
-			<div class="filter-input">
-				<h:selectOneMenu id="toolName" styleClass="filter-select" value="#{StatDeviceProcessEventBean.machineName}" immediate="true" valueChangeListener="#{StatDeviceProcessEventBean.machineNameValueChange}">
+	 <div class="zl-content-top-info-up2">
+		<div class="zl-content-label">
+			<span data-i18n="top.title2" />
+		</div>
+	   <div class="zl-content-top-selectInfo zl-select zl-select-lt">
+			<img class="zl-select-bg-left" src="images/input/box_left.png" />
+			<img class="zl-select-bg-center" src="images/input/box_center.png" />
+			<img class="zl-select-bg-right" src="images/input/box_right_select.png" />
+				<h:selectOneMenu id="toolName" value="#{StatDeviceProcessEventBean.machineName}" >
 					<f:selectItems value="#{StatDeviceProcessEventBean.machineNameList}" />
-					<f:ajax event="valueChange" render="partName" immediate="true" />
+					<a4j:ajax event="valueChange" listener="#{StatDeviceProcessEventBean.machineNameValueChange}" execute="toolName partName"
+					render="partName" oncomplete="onselectchane()"></a4j:ajax>
 				</h:selectOneMenu>
 			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">零件名称:</div>
-			<div class="filter-input">
-				<h:selectOneMenu id="partName" styleClass="filter-select" value="#{StatDeviceProcessEventBean.partName}">
-					<f:selectItems value="#{StatDeviceProcessEventBean.partNameList}" />
-				</h:selectOneMenu>
+			<div class="zl-content-label"><span data-i18n="top.startTime"></span></div>
+		    <div class="zl-content-select zl-dateBox">
+			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+				<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				            value="#{StatDeviceProcessEventBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			     <h:message for="start" style="color:red" />
+				</div>
+			
+			<div class="zl-content-label"><span data-i18n="top.endTime" /></div>
+		     <div class="zl-content-select zl-dateBox">
+			        <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+					<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				       value="#{StatDeviceProcessEventBean.finishTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			         <h:message for="start" style="color:red" />
+				</div>
+		   <div style="clear: left"></div>
+		    <div class="zl-content-label">
+			     <span data-i18n="top.title3" />
+		    </div>
+		   <div class="zl-select2 zl-select-lt">
+			  <img class="zl-select-bg-left2" src="images/input/box_left.png" />
+			   <img class="zl-select-bg-center2" src="images/input/box_center.png" />
+			   <img class="zl-select-bg-right2" src="images/input/box_right_select.png" />
+					<h:selectOneMenu id="partName"  value="#{StatDeviceProcessEventBean.partName}">
+						<f:selectItems value="#{StatDeviceProcessEventBean.partNameList}" />
+					</h:selectOneMenu>
+				</div>
 			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">开始时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="start" tabindex="3" popup="true" inputClass="inputText" locale="en" value="#{StatDeviceProcessEventBean.startTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
-			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">结束时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="end"   tabindex="3"  popup="true" inputClass="inputText"	locale="en" value="#{StatDeviceProcessEventBean.finishTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" />
-			</div>
-		</div>
-	</div>
-	<div class="filter-submit">
-		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
-			<a4j:ajax event="click" listener="#{StatDeviceProcessEventBean.getDeviceProcessEeventStartAction}" 
-			render=":myform:stable :myform:foot" execute="toolName partName start end" oncomplete="searchBtn()"></a4j:ajax>
-		</h:graphicImage>
-	</div>
-</div>
-<script language="javascript">
-	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
-	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080 + "px");
-	$(".title-text").css("left", wjb51 * 500 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
-	$(".filter-frame").css("left", wjb51 * 968 / 1920 + "px").css("top", hjb51 * 19 / 1080 + "px");
-	$(".filter-bar").css("width", wjb51 * 484 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 10 / 1080 + "px");
-	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
-	$(".filter-input").css("width", wjb51 * 246 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
-	$(".filter-input .rf-cal-extr").css("width", wjb51 * 246 / 1920 + "px");
-	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 47 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
-</script>
-
-<div class="content-frame">
-	<div id="list-frame">
-		<rich:dataTable id="stable" value="#{StatDeviceProcessEventBean.defaultDataModel}" rows="13"
-			rowClasses="even-row, odd-row" cellpadding="0"
-			styleClass="" cellspacing="0" style="width:100%;" border="0" var="pro">
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="设备ID" />
-				</f:facet>
-				<h:outputText value="#{pro.equSerialNo}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="加工事件ID" />
-				</f:facet>
-				<h:outputText value="#{pro.cuttingeventId}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="开始时间" />
-				</f:facet>
-				<h:outputText value="#{pro.starttime}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="结束时间" />
-				</f:facet>
-				<h:outputText value="#{pro.finishtime}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="加工任务" />
-				</f:facet>
-				<h:outputText value="#{pro.cuttingTask}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="零件名称" />
-				</f:facet>
-				<h:outputText value="#{pro.partName}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="理论加工时间" />
-				</f:facet>
-				<h:outputText value="#{pro.theoryWorktime}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="切削时间" />
-				</f:facet>
-				<h:outputText value="#{pro.cuttingTime}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="换刀时间" />
-				</f:facet>
-				<h:outputText value="#{pro.toolchangeTime}" />
-			</rich:column>
-			<rich:column>
-				<f:facet name="header">
-					<h:outputText value="加工用时" />
-				</f:facet>
-				<h:outputText value="#{pro.workTime}" />
-			</rich:column>
-		</rich:dataTable>
 		
-		<rich:dataScroller for="stable" id="foot" maxPages="10"
-			page="#{StatDeviceProcessEventBean.scrollerPage}" renderIfSinglePage="true"
-			render=":myform">
-			<f:facet name="first">
-				<h:outputText value="|◄◄" />
-			</f:facet>
-			<f:facet name="last">
-				<h:outputText  value="►►|" />
-			</f:facet>
-			<f:facet name="fastForward">
-				<h:outputText value="►►" />
-			</f:facet>
-			<f:facet name="fastRewind">
-				<h:outputText value="►►" />
-			</f:facet>
-			<f:facet name="next">
-				<h:outputText value="►" />
-			</f:facet>
-			<f:facet name="previous">
-				<h:outputText value="◄" />
-			</f:facet>
-		</rich:dataScroller>
+		<div class="auto-size zl-content-top-info-search2">
+		<h:graphicImage id="btn_search" style="display:none">
+					<a4j:ajax event="click" listener="#{StatDeviceProcessEventBean.getDeviceProcessEeventStartAction}" 
+					render=":myform:tablelist" execute="toolName partName start end" oncomplete="resizeListFrame();"></a4j:ajax>
+		</h:graphicImage>
+			<div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
+			<img class="zl-buttonBG" src="images/input/button.png"/>
+			<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+			<div class="zl-button-text">
+				<img class="zl-button-icon" src="images/input/icon_search.png" />
+				<span data-i18n="top.title4"></span>
+			</div>
+		   </div>
+		</div>
 	</div>
+<div class="zl-content-info">
+    <div class="content-info-top">
+    	<div id="tab-list" class="tab-btn active"><span data-i18n="content.lb"></span></div>
+    </div>
+	<div class="content-info-tubiao" id="list-frame">
+		<h:panelGroup id="tablelist" styleClass="content-info-tab-area">
+			<rich:dataTable id="stable" value="#{StatDeviceProcessEventBean.defaultDataModel}" rows="14"
+				 cellpadding="0" cellspacing="0"  border="0" var="pro" style="width:100%;">
+				<rich:column>
+					<f:facet name="header" >
+						<span data-i18n="content.sbid" />
+					</f:facet>
+					<h:outputText value="#{pro.equSerialNo}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<span data-i18n="content.jgsjid" />
+					</f:facet>
+					<h:outputText value="#{pro.cuttingeventId}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<span data-i18n="content.kssj" />
+					</f:facet>
+					<h:outputText value="#{pro.starttime}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<span data-i18n="content.jssj" />
+					</f:facet>
+					<h:outputText value="#{pro.finishtime}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<span data-i18n="content.jgrw" />
+					</f:facet>
+					<h:outputText value="#{pro.cuttingTask}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<span data-i18n="content.ljmc" />
+					</f:facet>
+					<h:outputText value="#{pro.partName}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<span data-i18n="content.lljgsj" />
+					</f:facet>
+					<h:outputText value="#{pro.theoryWorktime}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<span data-i18n="content.qxsj" />
+					</f:facet>
+					<h:outputText value="#{pro.cuttingTime}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<span data-i18n="content.hdsj" />
+					</f:facet>
+					<h:outputText value="#{pro.toolchangeTime}" />
+				</rich:column>
+				<rich:column style="width:160px;">
+					<f:facet name="header">
+						<span data-i18n="content.jgys" />
+					</f:facet>
+					<h:outputText value="#{pro.workTime}" />
+				</rich:column>
+			</rich:dataTable>
+			<rich:dataScroller for="stable" id="foot" maxPages="10"
+				page="#{StatDeviceProcessEventBean.scrollerPage}" renderIfSinglePage="true"
+				render=":myform:tablelist" oncomplete="resizeListFrame()">
+				<f:facet name="first">
+						<h:graphicImage value="./images/page/icon_page_first.png" ></h:graphicImage>
+					</f:facet>
+					<f:facet name="last">
+						<h:graphicImage value="./images/page/icon_page_last.png" ></h:graphicImage>
+					</f:facet>
+					<f:facet name="fastForward">
+						<h:graphicImage value="./images/page/icon_page_next2.png" ></h:graphicImage>
+					</f:facet>
+					<f:facet name="fastRewind">
+						<h:graphicImage value="./images/page/icon_page_back2.png" ></h:graphicImage>
+					</f:facet>
+					
+					<f:facet name="next">
+						<h:graphicImage value="./images/page/icon_page_next.png" ></h:graphicImage>
+					</f:facet>
+					<f:facet name="previous">
+						<h:graphicImage value="./images/page/icon_page_back.png" ></h:graphicImage>
+					</f:facet>
+			</rich:dataScroller>
+			<script language="javascript">
+			dataTranslate("stat_device_process_event", function(t) { $("span").i18n();});	 
+			</script>
+		</h:panelGroup>
+	</div>
+	
 </div>
+
+
 <script language="javascript">
-	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
-	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
-	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
-	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px").css("font-size", hjb51 * 23 / 1080 + "px");
-	searchBtn();
+	//searchBtn();
+	$(document).ready(function() {
+		//选择框过长省略
+		$(".zl-select select").selectAutoHide();
+		
+		$("option").attr("data-i18n", function() {
+			return $(this).text();
+		});
+	 	dataTranslate("stat_device_process_event", function(t) { $("span").i18n();});
+	 	
+	 	$.autosizeExclude($("#myform\\:stable"),true);
+	 	$.autosizeExclude($("#myform\\:partName"), true);
+	})
+	 	
+	//提交按钮
+ 	function querybtn(){
+  		document.getElementById("myform:btn_search").click();
+  	}
+	function onselectchane(){
+		$.autosizeFrame(false);
+		$("#myform\\:partName").each(function() {
+			$.autosizeElement(this,true);
+		});
+	}
+	function resizeListFrame(){
+		$.autosizeElement($("#myform\\:foot"),true);
+		$.autosizeElement($(".content-info-tab-area"),false);
+	}
+	 	
 </script>
 </h:form>
 </ui:composition>

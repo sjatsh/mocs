@@ -11,27 +11,58 @@
 	                       http://www.springframework.org/schema/aop 
 	                       http://www.springframework.org/schema/aop/spring-aop.xsd">
    
-    <!--  <bean id="propertyConfigurer" class="smtcl.mocs.common.device.DBConfigurer">
-       <property name="location" value="WEB-INF/DBconfig.properties"/>
-    </bean>  -->
-   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-       <property name="location" value="WEB-INF/DBconfig.properties" /> 
-  </bean> 
+    <bean id="propertyConfigurer" class="smtcl.mocs.common.device.DBConfigurer">
+       <property name="order" value="1" />
+       <property name="ignoreUnresolvablePlaceholders" value="true" />     
+       <property name="location" value="WEB-INF/DBconfig.properties"/> 
+    </bean>
     
+    <bean id="mysqlDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean" 
+        init-method="init" destroy-method="close">
+        <!-- Set unique name for this DataSource -->  
+        <property name="uniqueResourceName">
+        	<value>bpm</value>
+        </property>
+        <!-- Set XADatasource class name-->  
+        <property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource" />
+        <property name="xaProperties">
+            <props>
+                <prop key="user">${connection.username}</prop>
+                <prop key="password">${connection.password}</prop>
+                <prop key="url">${connection.url}</prop>
+            </props>
+        </property>
+        <!-- set properties for datasource connection pool -->  
+        <property name="poolSize" value="3" />
+        <!-- 管理 Connection 被占用的时间 -->
+        <!-- 如果不设置这个值，Atomikos使用默认的300秒(即5分钟)，那么在处理大批量数据读取的时候，一旦超过5分钟，就会抛出类似 Resultset is close 的错误 -->
+        <property name="reapTimeout"><value>20000</value></property>  
+    </bean>
+    <!-- <bean id="multipleDataSource" class="smtcl.mocs.dao.device.impl.MultipleDataSource">
+		<property name="defaultTargetDataSource" ref="dataSource0" />
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="dataSource0" key="dataSource0" />
+				<entry value-ref="dataSource1" key="dataSource1" />
+			</map>
+		</property>
+	</bean> -->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="mysqlDataSource" />
 		<property name="packagesToScan">
 			<list>
 				<value>smtcl.mocs.pojos.device</value>
 				<value>smtcl.mocs.pojos.authority</value>
 				<value>smtcl.mocs.pojos.job</value>
+				<value>smtcl.mocs.pojos.storage</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
 			<props>
-			    <prop key="hibernate.connection.url">${connection.url}</prop>
+<!-- 			    <prop key="hibernate.connection.url">${connection.url}</prop> -->
                 <prop key="hibernate.connection.driver_class">${connection.driver}</prop>
-                <prop key="hibernate.connection.username">${connection.username}</prop>
-                <prop key="hibernate.connection.password">${connection.password}</prop>
+<!--                 <prop key="hibernate.connection.username">${connection.username}</prop> -->
+<!--                 <prop key="hibernate.connection.password">${connection.password}</prop> -->
                 <prop key="hibernate.dialect">${connection.dialect}</prop>
                 <prop key="hibernate.show_sql">${connection.show.sql}</prop>
                 <prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
@@ -39,6 +70,35 @@
 		</property>
 	</bean>
 
+	<!-- atomikos事务管理器 -->
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" 
+        init-method="init" destroy-method="close">
+        <property name="forceShutdown">
+            <value>true</value>
+        </property>
+    </bean>
+
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+        <property name="transactionTimeout" value="300" />
+    </bean>
+
+    <!-- spring 事务管理器 -->
+    <bean id="springTransactionManager"
+        class="org.springframework.transaction.jta.JtaTransactionManager">
+        <property name="transactionManager" ref="atomikosTransactionManager"/>
+        <property name="userTransaction" ref="atomikosUserTransaction" />
+        <property name="allowCustomIsolationLevels" value="true"/> 
+    </bean>
+
+    <!-- 使用annotation定义事务，对于要加入事物的类，只需对该类加 @Transactional  -->
+    <tx:annotation-driven transaction-manager="springTransactionManager" />
+
+<!--     hibernate Dao层模板 -->
+<!--     <bean id="transactionManager" -->
+<!--         class="org.springframework.orm.hibernate3.HibernateTemplate"> -->
+<!--         <property name="sessionFactory" ref="sessionFactory"></property> -->
+<!--     </bean> -->
+    
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -56,21 +116,6 @@
 			</props>
 		</property>
 	</bean>
-	<!-- end of transaction manage -->
-	<!-- 零件事物开始 -->
-	
-	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="*" propagation="REQUIRED" />
-        </tx:attributes>
-    </tx:advice>
-    
-    <aop:config>
-        <aop:pointcut id="interceptorPointCuts"  expression="execution(* smtcl.mocs.services.device.impl.PartServiceImp.*(..))" />
-        <aop:advisor advice-ref="txAdvice"  pointcut-ref="interceptorPointCuts" />        
-    </aop:config> -->      
-	<!-- 零件事物结束 -->
-
 
 	<bean id="beanFactory" class="org.dreamwork.persistence.ServiceFactory" />
 
@@ -449,12 +494,10 @@
 			</bean>
 		</property>
 	</bean>
-	
-	<!-- 报废servic  -->
-	<bean id="scrapService" parent="baseService">
+	<!-- 库存物料查询 -->
+		<bean id="materielManageService" parent="baseService">
 		<property name="target">
-			<bean class="smtcl.mocs.services.jobplan.impl.ScrapServiceImpl">
-				<property name="commonDao" ref="commonDao" />
+			<bean class="smtcl.mocs.services.storage.impl.MaterielManageServiceImpl">
 				<property name="dao">
 					<bean parent="genericDao">
 						<property name="target">
@@ -468,7 +511,40 @@
 			</bean>
 		</property>
 	</bean>
-	
+	<!-- 库房库存管理Service -->
+	<bean id="storageManage" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.storage.impl.StorageManageImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="java.lang.Object" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+<!-- 单位设置SERVICE -->
+	<bean id="setunitService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.storage.impl.SetUnitServiceImpl">
+			<property name="commonService" ref="commonService1" />	
+			<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg value="smtcl.mocs.pojos.storage.TUnitType" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
 	<!-- 定时器配置start -->
 	 <!--  
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  

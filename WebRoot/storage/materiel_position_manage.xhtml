@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<link rel="stylesheet" href="../css/admin/storage_manage.css" type="text/css"></link>
+	
+	<div class="toolbar">
+		<h:inputText id="txt" value="#{MaterielPositionManage.query}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 
+		<p:commandLink value="page1.top.btn1" actionListener="#{MaterielPositionManage.queryData}" update=":myform:materialPositionList" oncomplete="translateReady();" styleClass="iconBtn-toolbar iconBtn-search" > </p:commandLink>
+		
+		<p:commandLink id="add" value="page1.top.btn2" update=":myform:amaterial" oncomplete="addInfo.show();translateReady();" styleClass="iconBtn-toolbar iconBtn-add" > </p:commandLink>
+		
+		<p:commandLink  value="page1.top.btn3" styleClass="iconBtn-toolbar iconBtn-del"  update=":myform:sed" actionListener="#{MaterielPositionManage.onSelected}" oncomplete="ondelete()" > </p:commandLink>
+		<p:commandButton id="delete" value="删除" update=":myform:materialPositionList :myform:displayMulti"  actionListener="#{MaterielPositionManage.onDelete}"  style="display: none;" oncomplete="translateReady();"/> 
+	</div>
+	
+	<div class="table-p-bg"></div>
+    <p:dataTable var="info" value="#{MaterielPositionManage.data}" id="materialPositionList" editable="true" rowKey="#{info.id}"
+    	  sortMode="multiple" dynamic="true" selection="#{MaterielPositionManage.selectedMaterial}" paginator="true" rows="22"
+    	  paginatorPosition="bottom" styleClass="table-p">
+        
+        <p:ajax event="rowEdit" listener="#{MaterielPositionManage.onEdit}" update=":myform:materialPositionList :myform:messages" oncomplete="translateReady();"/>
+        <p:ajax event="rowEditCancel" listener="#{MaterielPositionManage.onCancel}" update=":myform:materialPositionList" oncomplete="translateReady();"/>
+ 		<p:ajax event="rowSelect" update=":myform:multiDialog"  />  
+ 		
+		<p:column selectionMode="multiple" style="width:2%;text-align: center;" />
+
+        <p:column headerText="page2.content.title1"  style="width:8%;">
+              #{info.positionNo}  
+        </p:column>
+        <p:column headerText="page2.content.title2"  style="width:8%;">
+              #{info.positionName}  
+        </p:column>
+        <p:column headerText="page2.content.title3"  style="width:8%;">
+          #{info.storageName}  
+        </p:column>
+
+        <p:column headerText="page2.content.title4"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.positionStatus}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:selectOneMenu value="#{info.positionStatus}" >  
+                       <f:selectItem itemLabel="page2.content.option1" itemValue="1"/>
+                       <f:selectItem itemLabel="page2.content.option2" itemValue="2"/>
+                    </h:selectOneMenu>  
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="page2.content.title5"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.quantitySize}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{info.quantitySize}" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+						onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+       <p:column headerText="page2.content.title6"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.quantityUnit}" />
+                </f:facet>
+                <f:facet name="input">
+                	 <h:selectOneMenu value="#{info.quantityUnit}"  >  
+                        	 <f:selectItem itemLabel="page2.content.option" itemValue=""/>          
+							<f:selectItems value="#{MaterielPositionManage.quantityUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="page2.content.title7"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.capacitySize}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{info.capacitySize}" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+						onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+       <p:column headerText="page2.content.title8"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.capacityUnit}" />
+                </f:facet>
+                <f:facet name="input">
+                	 <h:selectOneMenu value="#{info.capacityUnit}"  >    
+                	      <f:selectItem itemLabel="page2.content.option" itemValue=""/>        
+							<f:selectItems value="#{MaterielPositionManage.capacityUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="page2.content.title9"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.weightSize}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText value="#{info.weightSize}" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+						onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+       <p:column headerText="page2.content.title10"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.weightUnit}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:selectOneMenu value="#{info.weightUnit}"  >   
+                	       <f:selectItem itemLabel="page2.content.option" itemValue=""/>         
+							<f:selectItems value="#{MaterielPositionManage.weightUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="page2.content.title11"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.dimensionSize}" />
+                </f:facet>
+                <f:facet name="input">
+                	  <p:inputText value="#{info.dimensionSize}" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+       <p:column headerText="page2.content.title12"   style="width:8%;">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{info.dimensionUnit}" />
+                </f:facet>
+                <f:facet name="input">
+                	<h:selectOneMenu value="#{info.dimensionUnit}"  >            
+							<f:selectItems value="#{MaterielPositionManage.dimensionUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+       
+        <p:column headerText="page2.content.title13" style="width:6%;">
+            <p:rowEditor />
+        </p:column>
+		
+    </p:dataTable>
+    <p:dialog id="addlog" widgetVar="addInfo" resizable="false" styleClass="div-dialog">
+    	<h:panelGroup id="amaterial">
+	      	<table>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title1"></span><font style="color:red;">*</font></td>
+	      			<td><h:inputText value="#{MaterielPositionManage.no}" id="addNo" styleClass="input-toolbar"></h:inputText></td>
+	      			<td><div style="color: gray;">例：li_ceshi_001</div></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title2"></span><font style="color:red;">*</font></td>
+	      			<td><h:inputText value="#{MaterielPositionManage.name}" id="addName" styleClass="input-toolbar"></h:inputText></td>
+	      			<td><div style="color: gray;">例：A库位</div></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title3"></span><font style="color:red;">*</font></td>
+	      			<td>
+	      				<h:selectOneMenu value="#{MaterielPositionManage.storageId}" id="addStorageId" styleClass="select-toolbar">   
+      			        	<f:selectItem itemLabel="请选择" itemValue="请选择"/>         
+							<f:selectItems value="#{MaterielPositionManage.storageList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
+					    </h:selectOneMenu>
+	      			</td>
+	      			<td></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title4"></span><font style="color:red;">*</font></td>
+	      			<td>
+	      				<h:selectOneMenu value="#{MaterielPositionManage.status}" id="addStatus" styleClass="select-toolbar">  
+	                       <f:selectItem itemLabel="请选择" itemValue=""/>
+	                       <f:selectItem itemLabel="活动" itemValue="1"/>
+	                       <f:selectItem itemLabel="禁用" itemValue="2"/>
+	                    </h:selectOneMenu>  
+	      			</td>
+	      			<td></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title5"></span></td>
+	      			<td><h:inputText value="#{MaterielPositionManage.quantitySize}" id="addQuantitySize" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+							onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" styleClass="input-toolbar"></h:inputText></td>
+	      			<td></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title6"></span></td>
+	      			<td>
+	      				<h:selectOneMenu value="#{MaterielPositionManage.quantityUnit}" id="addQuantityUnit" styleClass="select-toolbar">   
+      			        	<f:selectItem itemLabel="请选择" itemValue=""/>         
+							<f:selectItems value="#{MaterielPositionManage.quantityUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+	      			</td>
+	      			<td></td>
+	      		</tr>
+	      		
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title7"></span></td>
+	      			<td><h:inputText value="#{MaterielPositionManage.capacitySize}" id="addCapacitySize" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+							onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" styleClass="input-toolbar"></h:inputText></td>
+	      			<td></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title8"></span></td>
+	      			<td>
+	      				<h:selectOneMenu value="#{MaterielPositionManage.capacityUnit}" id="addCapacityUnit" styleClass="select-toolbar">   
+      			        	<f:selectItem itemLabel="请选择" itemValue=""/>         
+							<f:selectItems value="#{MaterielPositionManage.capacityUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+	      			</td>
+	      			<td></td>
+	      		</tr>
+	      		
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title9"></span></td>
+	      			<td><h:inputText value="#{MaterielPositionManage.weightSize}" id="addWeightSize" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+							onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" styleClass="input-toolbar"></h:inputText></td>
+	      			<td></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title10"></span></td>
+	      			<td>
+	      				<h:selectOneMenu value="#{MaterielPositionManage.weightUnit}" id="addWeightUnit" styleClass="select-toolbar">   
+      			        	<f:selectItem itemLabel="请选择" itemValue=""/>         
+							<f:selectItems value="#{MaterielPositionManage.weightUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+	      			</td>
+	      			<td></td>
+	      		</tr>
+	      		
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title11"></span></td>
+	      			<td><h:inputText value="#{MaterielPositionManage.dimensionSize}" id="addDimensionSize" styleClass="input-toolbar"></h:inputText></td>
+	      			<td></td>
+	      		</tr>
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title12"></span></td>
+	      			<td>
+	      				<h:selectOneMenu value="#{MaterielPositionManage.dimensionUnit}" id="addDimensionUnit" styleClass="select-toolbar">   
+      			        	<f:selectItem itemLabel="请选择" itemValue=""/>         
+							<f:selectItems value="#{MaterielPositionManage.dimensionUnitList}" var="tt" itemLabel="#{tt.name}" itemValue="#{tt.name}"></f:selectItems>
+					    </h:selectOneMenu>
+	      			</td>
+	      			<td></td>
+	      		</tr>
+	      		
+	      		
+	      		<tr>
+	      			<td><span class="txt-toolbar" data-i18n="page2.content.title13"></span></td>
+	      			<td><h:inputText value="#{MaterielPositionManage.axis}" id="addAxis" styleClass="input-toolbar"></h:inputText></td>
+	      			<td></td>
+	      		</tr>
+	      		
+	      	</table>
+	      	<div class="dialog-bottomBar">
+				<p:commandButton onclick="onAdd()" value="page1.top.btn2" styleClass="btn-toolbar"></p:commandButton>
+				<p:commandButton actionListener="#{MaterielPositionManage.saveMaterialPositionInfo}" id="addMaterialPositionInfo"  
+				 	value="增加" update=":myform:isSuccess" style="display:none;" 
+				 	oncomplete="result()">
+				</p:commandButton>
+				<p:commandButton id="btn2" onclick="addInfo.hide()" oncomplete="translateReady();" update=":myform:materialPositionList" style="display:none;" ></p:commandButton>
+				<p:growl id="messages" showDetail="true"/> 
+			</div>
+	    </h:panelGroup>
+    </p:dialog>
+    <h:inputHidden id="isSuccess" value="#{MaterielPositionManage.success}"></h:inputHidden>
+     <p:dialog id="multiDialog"  widgetVar="multiCarDialog"  height="200" showEffect="fade" hideEffect="explode" >
+        <p:dataList id="displayMulti" value="#{MaterielPositionManage.selectedMaterial}" var="part"> 
+        </p:dataList>  
+    </p:dialog>
+    <h:inputHidden value="#{MaterielPositionManage.selected}" id="sed"></h:inputHidden>
+    <script type="text/javascript">
+	//<![CDATA[
+		$(document).ready(function() {
+			//国际化
+			translateReady();
+		});
+		
+		function translateReady() {	//国际化方法
+			$(".iconBtn-toolbar,.btn-toolbar>span,.table-p th,option").attr("data-i18n", function() {return $(this).text();});
+			dataTranslate("storage", function(t) {
+				$("*[data-i18n]").i18n();
+			}, "../static/i18nAdmin");
+		}
+	       function result(){
+	    	   var str = document.getElementById("myform:isSuccess").value;
+	    	   if(str =="成功"){
+	    		   document.getElementById("myform:btn2").click();
+	    	   }else{
+	    		   alert(str);
+	    		   return false;
+	    	   }
+	       }
+	       
+	       function ondelete(){
+	    	  
+	    	   var temp=document.getElementById("myform:sed").value;
+	    	   if(null!=temp&&""!=temp){
+	    		   if(confirm("是否确认删除此数据！")){
+		    		   document.getElementById("myform:delete").click();
+		    	   } 
+	    	   }else{
+	    		   alert("请选择一条数据进行删除！");
+	    	   }
+	       }
+	       function onClear(){
+	    	   if(confirm("是否确认要清空数据,请慎重选择！")){
+	    		   document.getElementById("myform:clear").click();
+	    	   }
+	       }
+	       function onAdd(){
+	    	   var addno=document.getElementById("myform:addNo").value;
+	    	   var addName=document.getElementById("myform:addName").value;
+	    	   var addStorageId=document.getElementById("myform:addStorageId").value;
+	    	   var addStatus=document.getElementById("myform:addStatus").value;
+	    	   var addQuantitySize=document.getElementById("myform:addQuantitySize").value;
+	    	   var addQuantityUnit=document.getElementById("myform:addQuantityUnit").value;
+	    	   var addCapacitySize=document.getElementById("myform:addCapacitySize").value;
+	    	   var addCapacityUnit=document.getElementById("myform:addCapacityUnit").value;
+	    	   var addWeightSize=document.getElementById("myform:addWeightSize").value;
+	    	   var addWeightUnit=document.getElementById("myform:addWeightUnit").value;
+	    	   var addDimensionSize=document.getElementById("myform:addDimensionSize").value;
+	    	   var addDimensionUnit=document.getElementById("myform:addDimensionUnit").value;
+	    	   var addAxis=document.getElementById("myform:addAxis").value;
+	    	   if(null==addno||""==addno){
+	    		   alert("请输入库位编号");
+	    		   return false;
+	    	   }else if(null==addName||""==addName){
+	    		   alert("请输入库位名称");
+	    		   return false;
+	    	   }else if(null==addStorageId||""==addStorageId||"请选择"==addStorageId){
+	    		   alert("请选择库房");
+	    		   return false;
+	    	   }else if(null==addStatus||""==addStatus||"请选择"==addStatus){
+	    		   alert("请选择库房状态");
+	    		   return false;
+	    	   }else{
+	    		   document.getElementById("myform:addMaterialPositionInfo").click();
+	    	   }
+	       }
+	       function searchFocus(id){
+				if(document.getElementById(id).value=="输入编号/名称")
+					document.getElementById(id).value=""
+			}
+			
+			function searchBlur(id){
+				if(document.getElementById(id).value=="")
+					document.getElementById(id).value="输入编号/名称"
+			}
+			document.getElementById("myform:txt").value="输入编号/名称";
+			
+	//]]>
+	</script>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript>
+</ui:composition>

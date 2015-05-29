@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<style>
+		.toolbar>.iconBtn-toolbar {
+			margin-left: 0.57rem;
+		}
+	</style>
+	
+	<div class="toolbar">
+		<p:commandLink value="新建" oncomplete="addUnitType.show()" styleClass="iconBtn-toolbar iconBtn-add"></p:commandLink>
+		<p:commandButton   id="shuaxin"  actionListener="#{SetUnitBean.searchList}" update=":myform:dataTable1" style="display:none;"></p:commandButton>
+		<p:commandLink value="删除" update=":myform:select" styleClass="iconBtn-toolbar iconBtn-del" oncomplete="ondelete()" actionListener="#{SetUnitBean.onSelected}"></p:commandLink>
+		<p:commandButton id="delete" value="删除" update=":myform:dataTable1 :myform:displayMulti"  actionListener="#{SetUnitBean.deleteTUnitType}"  style="display: none;"/> 
+	</div>
+	<div class="table-p-bg"></div>
+    <p:dataTable var="var" value="#{SetUnitBean.mediumTUnitTypeModel}" id="dataTable1" styleClass="table-p"
+		 editable="true" dynamic="true" sortMode="multiple" selection="#{SetUnitBean.selectedType}" paginator="true" paginatorPosition="bottom" rows="22" >
+		<p:ajax event="rowEdit" listener="#{SetUnitBean.updateTUnitType}" update=":myform:dataTable1 :myform:messages" />
+	     <p:ajax event="rowEditCancel" listener="#{SetUnitBean.onCancel}" update=":myform:dataTable1" />
+	                    <p:column selectionMode="multiple" />
+	                    <p:column headerText="分类名称">
+						   <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unittypename}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                          <p:inputText value="#{var.unittypename}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="分类说明">
+						 <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unittypedesc}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                       <p:inputText value="#{var.unittypedesc}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="基准单位">
+						 <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unit}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <p:inputText value="#{var.unit}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>
+						</p:column>
+						<p:column headerText="单位缩写">
+						  <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.unitshort}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                        <p:inputText value="#{var.unitshort}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>	
+						</p:column>
+						<p:column headerText="失效日期">
+						    <p:cellEditor >
+	                        <f:facet name="output" >
+	                         <h:outputText value="#{var.invadate}" />
+	                         </f:facet>
+	                      <f:facet name="input" >
+	                         <p:inputText value="#{var.invadate}" styleClass="input"/>
+	                        </f:facet>
+	                      </p:cellEditor>	
+						</p:column>
+						<p:column headerText="操作">
+							<p:rowEditor />
+						</p:column>
+		 </p:dataTable>
+		<p:dialog widgetVar="addUnitType" resizable="false"  >
+	     <div style="width:300px;height: 380px;">
+    	<table>
+    	       <tr>
+    				<td>分类名称：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SetUnitBean.unittypename}" id="unittypename" style="border:1px black solid;"></h:inputText></td>
+    			</tr>
+    		    <tr>
+    				<td>分类说明：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SetUnitBean.unittypedesc}" id="unittypedesc" style="border:1px black solid;"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>基准单位：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SetUnitBean.unit}" id="unit" style="border:1px black solid;"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>单位缩写：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{SetUnitBean.unitshort}" id="unitShort" style="border:1px black solid;"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>失效日期：</td>
+    				<td><rich:calendar id="invadate"  popup="true" locale="en"   value="#{SetUnitBean.invadate}"  inputClass="common_calendar"  cellWidth="118px"  cellHeight="25px" datePattern="yyyy-MM-dd" style="width: 100%;" /></td>
+    			</tr>
+    		</table>
+    		</div>
+	    	<div class="headDivduan">
+			<p:commandButton value="新增" styleClass="delete" onclick="yinc()" ></p:commandButton>
+			<p:commandButton value="新增" id="addType" actionListener="#{SetUnitBean.addTUnitType}" 
+				update=":myform:dataTable1 :myform:messages "   oncomplete="addUnitType.hide()" 
+				style="display:none"/>
+    	    </div>
+    	<p:growl id="messages" showDetail="true"/> 
+     </p:dialog>
+       <!-- 删除 -->
+    <p:dialog id="multiDialog" height="200" showEffect="fade" hideEffect="explode"  widgetVar="multiCarDialog">
+        <p:dataList id="displayMulti" value="#{SetUnitBean.selectedType}" var="tun"></p:dataList>  
+    </p:dialog>    
+      <h:inputHidden value="#{SetUnitBean.selected}" id="select"></h:inputHidden>
+    <script type="text/javascript">
+	//<![CDATA[
+	  document.getElementById("myform:shuaxin").click();
+	  //删除
+	 	 function ondelete(){
+	  	   var temp = document.getElementById("myform:select").value;
+	  	   if(null!=temp&&""!=temp){
+	  		   if(confirm("是否确认删除此数据！")){
+		    	   document.getElementById("myform:delete").click();
+		    	} 
+	  	   }else{
+	  		   alert("请选择一条数据进行删除！");
+	  	   }
+	     }
+	  
+       function yinc(){
+    	   
+    	   var unittypename=document.getElementById("myform:unittypename").value;
+    	   var unittypedesc=document.getElementById("myform:unittypedesc").value;   
+    	   var unit=document.getElementById("myform:unit").value;
+    	   var unitShort=document.getElementById("myform:unitShort").value;
+    	   /* var invadate=document.getElementById("myform:invadate").value; */
+    	   
+    	   
+    	   if(null==unittypename||""==unittypename){
+    		   alert("请输入单位分类名称！");
+    	   }else if(null==unittypedesc||""==unittypedesc){
+    		   alert("请输入单位分类说明！")
+    	   }else if(null==unit||""==unit){
+    		   alert("请输入单位名称！")
+    	   }else if(null==unitShort||""==unitShort){
+    		   alert("请输入单位缩写！")
+    	   }else{
+    		   document.getElementById("myform:addType").click();
+    	   }
+    	   
+       }
+ 
+
+      //]]>
+	</script>
+</ui:composition>	
+	  
+

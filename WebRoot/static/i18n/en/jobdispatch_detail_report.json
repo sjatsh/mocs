@@ -1,0 +1,34 @@
+{	
+	"top": {
+		"title1":"Job Order Report",
+		"title2":"partName",
+		"title3":"Job Create Time",
+		"title4":"Job Start Time",
+		"title5":"Equ",
+		"title6":"staff",
+		"title7":"BatchStatus",
+		"title8":"Search",
+		"title9":"Export data"
+	},
+	"content": {
+		"pch":"Batch",
+		"ljbh":"PartNo",
+		"ljmc":"PartName",
+		"gdh":"JobNo",
+		"gx":"Process",
+		"gxmc":"ProcessName",
+		"gdsl":"JobNumber",
+		"fpsl":"DNumber",
+		"wcsl":"FNumber",
+		"bfsl":"ScrapNumber",
+		"sbh":"equNo",
+		"jhks":"PlanStart",
+		"jhjs":"PlanFinish",
+		"sjks":"Actual Start Time",
+		"sjjs":"Actual Finish Time",
+		"gdzt":"JobStatus",
+		"pczt":"BatchStatus",
+		"erp":"ERP",
+		"ry":"staff"
+	}
+}

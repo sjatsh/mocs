@@ -1,0 +1,30 @@
+{	
+	"top": {
+		"title1":"Plan Edit",
+		"ljmc":"Part Name",
+		"jhlx":"Plan Type" ,
+		"fzyjh":"Master Plan",
+		"jhbh":"Plan No.",
+		"jhmc":"Plan Name",
+		"jhzt":"Plan Status",
+		"yxj":"Priority",
+		"jhkssj":"Start Time",
+		"jhjssj":"Finish Time",
+		"jhsj":"Delivery Time",
+		"jhsl":"Quantity",
+		"dfprwsl":"Unassigned",
+		"bc":"Save",
+		"qx":"Cancel",
+		"msg2":"Update successfully",
+		"msg3":"Start time cannot be empty!",
+		"msg4":"Finish time cannot be empty!",
+		"msg5":"The start time cannot be greater than the finish time!",
+		"msg6":"Please select a plan type!",
+		"msg7":"Please select a master plan!",
+		"msg9":"Please enter the name of the plan!",
+		"msg11":"Please choose the delivery time!",
+		"msg12":"The quantity cannot be empty!"
+		
+	}
+	
+}

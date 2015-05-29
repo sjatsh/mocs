@@ -1,0 +1,24 @@
+{	"zwxxts":"No data, please nmodify the node or the query conditions",
+	"top": {
+		"title1":"Processing Events",
+		"title2":"Machine Name",
+		"title3":"Event Name",
+		"startTime":"Date From",
+		"endTime":"Date To",
+		"title4":"Search"
+	},
+	"content": {
+		"lb":"List",
+		"sbid":"Machine SN",
+		"jgsjid":"Event ID",
+		"kssj":"Start Time",
+		"jssj":"End Time",
+		"jgrw":"Processing Task",
+		"ljmc":"Part Name",
+		"lljgsj":"Theoretical Time",
+		"qxsj":"Cutting Time",
+		"hdsj":"Tool Changing Time",
+		"jgys":"Actual Time",
+		"lljpsj":"Theoretical Takt Time"
+	}
+}

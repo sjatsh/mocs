@@ -1,0 +1,31 @@
+{	
+	"top": {
+		"main_title": "Product Storage"
+	},
+	"content": {
+		"main_title": "Storage No",
+		"title1":"Product Name",
+		"title2":"Warehouse No",
+		"title3":"Current Storage Count",
+		"title4":"Library No",
+		"table_title1":"Material No",
+		"table_title2":"Material Name",
+		"table_title3":"BOM Attribute",
+		"table_title4":"BOM Count",
+		"table_title5":"Process No",
+		"table_title6":"Batch Production",
+		"table_title7":"Batch Storage",
+		"table_title8":"Ready Storage Count",
+		"table_title9":"Finish Storage Count",
+		"table_title10":"Operation",
+		"dlg_main_title":"Batch Select",
+		"dlg_title1":"Batch Production",
+		"dlg_title2":"Batch Storage",
+		"dlg_title3":"Finish Count",
+		"dlg_title4":"Storage Count",
+		"btn_auto":"Calculation",
+		"btn_ok":"OK",
+		"btn_close":"Close",
+		"btn_into":"Storage"
+	}
+}

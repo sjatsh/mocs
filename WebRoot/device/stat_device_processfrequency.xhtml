@@ -6,175 +6,179 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
-<h:form id="myform">	
+
 <h:outputScript library="js" name="highcharts.js"></h:outputScript>
 <h:outputScript library="js" name="exporting.js"></h:outputScript>
 <h:outputScript library="js" name="stat_device_processfrequency.js"></h:outputScript>
-<h:outputScript library="js" name="common.js"></h:outputScript>
-<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
-<link rel="stylesheet" href="css/common.css" type="text/css"></link>
-<link rel="stylesheet" href="css/rich_table_ds.css" type="text/css"></link>
-<h:inputHidden value="#{StatDeviceProFrequencyBean.nodeID}" />
-<style type="text/css">
-*{margin:0px;}
-</style>
+<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="css/stat_device_processfrequency.css" type="text/css"></link>
 
-<div class="title-bar">
-	<div class="logo-img">
-		<img src="images/profile_top_logo.png" />
+<h:form id="myform">	
+<h:inputHidden value="#{StatDeviceProFrequencyBean.nodeID}" />
+<div class="zl-content-top" >
+	<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+	<div class="zl-content-top-title">
+		<span data-i18n="top.title1"/>
 	</div>
-	<div class="title-text">节拍分析</div>
-	<div class="filter-frame">
-		<div class="filter-bar">
-			<div class="filter-label">设备名称:</div>
-			<div class="filter-input">
-				<h:selectOneMenu value="#{StatDeviceProFrequencyBean.nameSelected}" id="equipName" styleClass="filter-select" immediate="true" valueChangeListener="#{StatDeviceProFrequencyBean.equipmentSelect}">
+	<div class="zl-content-top-info-up2">
+		<div class="zl-content-label">
+			<span data-i18n="top.title2" />
+		</div>
+		   <div class="zl-select zl-select-lt">
+			<img class="zl-select-bg-left" src="images/input/box_left.png" />
+			<img class="zl-select-bg-center" src="images/input/box_center.png" />
+			<img class="zl-select-bg-right" src="images/input/box_right_select.png" />
+				<h:selectOneMenu value="#{StatDeviceProFrequencyBean.nameSelected}" id="equipName" >
 					<f:selectItems value="#{StatDeviceProFrequencyBean.nameList}"></f:selectItems>
-					<f:ajax event="valueChange" render="name1" immediate="true" />
+					<a4j:ajax event="valueChange" render=":myform:name1" execute="@this" 
+						listener="#{StatDeviceProFrequencyBean.equipmentSelect}" oncomplete="onselectchane()"></a4j:ajax>
 				</h:selectOneMenu>
 			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">工件名:</div>
-			<div class="filter-input">
-				<h:selectOneMenu value="#{StatDeviceProFrequencyBean.toolName}"  id="name1" styleClass="filter-select">
-					<f:selectItems value="#{StatDeviceProFrequencyBean.toolNameList}"></f:selectItems>
-				</h:selectOneMenu>
+			
+			<div class="zl-content-label"><span data-i18n="top.startTime"></span></div>
+			<div class="zl-content-select zl-dateBox">
+			    <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+					<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				       value="#{StatDeviceProFrequencyBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			       <h:message for="start" style="color:red" />
 			</div>
+			
+			<div class="zl-content-label"><span data-i18n="top.endTime" /></div>
+				<div class="zl-content-select zl-dateBox">
+			     <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+					<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				      value="#{StatDeviceProFrequencyBean.endTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			        <h:message for="start" style="color:red" />
+			    </div>
+			<div style="clear: left"></div>
+		    <div class="zl-content-label">
+			    <span data-i18n="top.title3" />
+		   </div>
+			<div class="zl-select2 zl-select-lt">
+			<img class="zl-select-bg-left2" src="images/input/box_left.png" />
+			<img class="zl-select-bg-center2" src="images/input/box_center.png" />
+			<img class="zl-select-bg-right2" src="images/input/box_right_select.png" />
+			<h:selectOneMenu value="#{StatDeviceProFrequencyBean.toolName}"  id="name1" >
+				<f:selectItems value="#{StatDeviceProFrequencyBean.toolNameList}"></f:selectItems>
+			 </h:selectOneMenu>
+		  </div>
 		</div>
-		<div class="filter-bar">
-			<div class="filter-label">开始时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="start" tabindex="3" popup="true" inputClass="inputText" locale="en" value="#{StatDeviceProFrequencyBean.startTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="false" requiredMessage="必须填写时间" />
-			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">结束时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="end"   tabindex="3"  popup="true" inputClass="inputText"	locale="en" value="#{StatDeviceProFrequencyBean.endTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="false" />
-			</div>
-		</div>
-	</div>
-	<div class="filter-submit">
-		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
-			<a4j:ajax event="click" listener="#{StatDeviceProFrequencyBean.getDeviceProFrequenceStatAction}" 
-			render=":myform:charPane :myform:datatable1 :myform:ds" execute="equipName name1 start end" oncomplete="searchBtn()"></a4j:ajax>
-		</h:graphicImage>
+		<div class="auto-size zl-content-top-info-search2">
+	        <h:graphicImage id="btn_search" style="display:none">
+				<a4j:ajax event="click" listener="#{StatDeviceProFrequencyBean.getDeviceProFrequenceStatAction}" 
+				render=":myform:charPane :myform:tablelist" execute="equipName name1 start end" oncomplete="resizeListFrame()"></a4j:ajax>
+			</h:graphicImage>
+		<div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
+		     <img class="zl-buttonBG" src="images/input/button.png"/>
+		     <img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+		     <div class="zl-button-text">
+			   <img class="zl-button-icon" src="images/input/icon_search.png" />
+			   <span data-i18n="top.title4"></span>
+		     </div>
+		  </div>
 	</div>
 </div>
-<script language="javascript">
-$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
-$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080 + "px");
-$(".title-text").css("left", wjb51 * 500 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
-$(".filter-frame").css("left", wjb51 * 968 / 1920 + "px").css("top", hjb51 * 19 / 1080 + "px");
-$(".filter-bar").css("width", wjb51 * 484 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 10 / 1080 + "px");
-$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
-$(".filter-input").css("width", wjb51 * 246 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
-$(".filter-input .rf-cal-extr").css("width", wjb51 * 246 / 1920 + "px");
-$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 47 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
-</script>
-
-<div class="content-frame">
-	<div class="tab-bar">
-		<div id="tab-list" class="tab-btn active">列表</div>
-		<div id="tab-chart" class="tab-btn">图表</div>
+<div class="zl-content-info">
+	<div class="content-info-top">
+		<div id="tab-list" class="tab-btn active"><span data-i18n="content.lb"></span></div>
+		<div id="tab-chart" class="tab-btn"><span data-i18n="content.tb"></span></div>
 	</div>
-	<div id="list-frame">
-		<rich:dataTable id="datatable1" value="#{StatDeviceProFrequencyBean.defaultDataModel}" rows="13"
-			rowClasses="even-row, odd-row" cellpadding="0" styleClass="dataTableEx" cellspacing="0" 
-			style="width:100%;text-align:center;" border="0" var="record">
-			<rich:column id="column2">
-				<f:facet name="header">
-					<h:outputText value="加工事件ID" />
+	<div class="content-info-tubiao" id="list-frame">
+		<h:panelGroup id="tablelist" styleClass="content-info-tab-area">
+		<rich:dataTable id="datatable1" value="#{StatDeviceProFrequencyBean.defaultDataModel}" rows="14"
+			 cellpadding="0"  cellspacing="0" border="0" var="record" style="width:100%;">
+			<rich:column>
+				<f:facet name="header" >
+					<span data-i18n="content.jgsjid"></span>
 				</f:facet>
 				<h:outputText value="#{record.cuttingeventId}"></h:outputText>
 			</rich:column>
-			<rich:column id="column3">
-				<f:facet name="header">
-					<h:outputText value="开始时间" />
+			<rich:column >
+				<f:facet name="header" >
+					<span data-i18n="content.kssj"></span>
 				</f:facet>
 				<h:outputText value="#{record.starttime}"></h:outputText>
 			</rich:column>
-			<rich:column id="column4">
-				<f:facet name="header">
-					<h:outputText value="结束时间" />
+			<rich:column >
+				<f:facet name="header" >
+					<span data-i18n="content.jssj"></span>
 				</f:facet>
 				<h:outputText value="#{record.finishtime}"></h:outputText>
 			</rich:column>
-			<rich:column id="column5">
+			<rich:column >
 				<f:facet name="header">
-					<h:outputText value="加工任务" />
+					<span data-i18n="content.jgrw"></span>
 				</f:facet>
 				<h:outputText value="#{record.cuttingTask}"></h:outputText>
 			</rich:column>
-			<rich:column id="column6">
-				<f:facet name="header">
-					<h:outputText value="零件名称" />
+			<rich:column >
+				<f:facet name="header" >
+					<span data-i18n="content.ljmc"></span>
 				</f:facet>
 				<h:outputText value="#{record.partName}"></h:outputText>
 			</rich:column>
-			<rich:column id="column7" styleClass="width:81px;">
-				<f:facet name="header">
-					<h:outputText value="理论加工时间" />
+			<rich:column >
+				<f:facet name="header" >
+					<span data-i18n="content.lljgsj"></span>
 				</f:facet>
 				<h:outputText value="#{record.theoryWorktime}"></h:outputText>
 			</rich:column>
-			<rich:column id="column8">
+			<rich:column >
 				<f:facet name="header">
-					<h:outputText value="切削时间" />
+					<span data-i18n="content.qxsj"></span>
 				</f:facet>
 				<h:outputText value="#{record.cuttingTime}"></h:outputText>
 			</rich:column>
-			<rich:column id="column9">
-				<f:facet name="header">
-					<h:outputText value="换刀时间" />
+			<rich:column >
+				<f:facet name="header" >
+					<span data-i18n="content.hdsj"></span>
 				</f:facet>
 				<h:outputText value="#{record.toolchangeTime}"></h:outputText>
 			</rich:column>
-			<rich:column id="column10">
-				<f:facet name="header">
-					<h:outputText value="加工用时" />
+			<rich:column >
+				<f:facet name="header" >
+					<span data-i18n="content.jgys"></span>
 				</f:facet>
 				<h:outputText value="#{record.workTime}"></h:outputText>
 			</rich:column>
-			<rich:column id="column11">
-				<f:facet name="header">
-					<h:outputText value="理论节拍时间" />
+			<rich:column >
+				<f:facet name="header" >
+					<span data-i18n="content.lljpsj"></span>
 				</f:facet>
 				<h:outputText value="#{record.theoryCycletime}"></h:outputText>
 			</rich:column>
 		</rich:dataTable>
+		
 		<rich:dataScroller for="datatable1" id="ds" maxPages="10"
 				page="#{StatDeviceProFrequencyBean.scrollerPage}" renderIfSinglePage="true"
-				  render=":myform">
+				  render=":myform:charPane :myform:tablelist" oncomplete="resizeListFrame()">
 				<f:facet name="first">
-						<h:outputText value="|◄◄" />
-					</f:facet>
-					<f:facet name="last">
-						<h:outputText value="►►|" />
-					</f:facet>
-					<f:facet name="fastForward">
-						<h:outputText value="►►" />
-					</f:facet>
-					<f:facet name="fastRewind">
-						<h:outputText value="◄◄" />
-					</f:facet>
-					<f:facet name="next">
-						<h:outputText value="►" />
-					</f:facet>
-					<f:facet name="previous">
-						<h:outputText value="◄" />
-					</f:facet>
-		</rich:dataScroller>
+					<h:graphicImage value="./images/page/icon_page_first.png" ></h:graphicImage>
+				</f:facet>
+				<f:facet name="last">
+					<h:graphicImage value="./images/page/icon_page_last.png" ></h:graphicImage>
+				</f:facet>
+				<f:facet name="fastForward">
+					<h:graphicImage value="./images/page/icon_page_next2.png" ></h:graphicImage>
+				</f:facet>
+				<f:facet name="fastRewind">
+					<h:graphicImage value="./images/page/icon_page_back2.png" ></h:graphicImage>
+				</f:facet>
+				<f:facet name="next">
+					<h:graphicImage value="./images/page/icon_page_next.png" ></h:graphicImage>
+				</f:facet>
+				<f:facet name="previous">
+					<h:graphicImage value="./images/page/icon_page_back.png" ></h:graphicImage>
+				</f:facet>
+			</rich:dataScroller>
+		</h:panelGroup>
 	</div>
-	<div id="chart-frame">
+	<div id="chart-frame" class="content-info-tubiao">
 		<h:inputHidden value="#{statDeviceOEETrendBean.lineData}" id="lineChart"/>
 		<h:panelGroup id="charPane"> 
 			<h:inputHidden value="#{StatDeviceProFrequencyBean.lineChartData}" id="beanvalue" />
             <h:inputHidden value="#{StatDeviceProFrequencyBean.barChartData}" id="beanvalue1" />
-			<table style="width: 100%;height: 100%" border="0" cellpadding="0" cellspacing="0">
+			<table style="width: 100%;height: 100%" border="0" cellpadding="0" cellspacing="0"  class="auto-size-exclude">
 				<tr>
 					<td style="width: 50%">
 						<div id="lineChart" />
@@ -186,42 +190,70 @@ $(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 4
 			</table>
 			<script type="text/javascript">
 				loadData();
+				dataTranslate("stat_device_processfrequency", function(t) { $("span").i18n();});
 			</script>
 		</h:panelGroup>
 	</div>
 </div>
-<script language="javascript">
-	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
-	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
-	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
-	$("#list-frame").css("top", hjb51 * 60 / 1080 + "px").css("width", wjb51 + "px").css("height", hjb51 * 656 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-	$("#chart-frame").css("left", wjb51 * 168 / 1920 + "px").css("top", "0px").css("width", wjb51 * 168 / 1920 + "px").css("height", hjb51 * 56 / 1080 + "px");
-	//$("#chart-frame").css("top", hjb51 * 56 / 1080 + "px").css("width", wjb51 + "px").css("height", hjb51 * 544 / 1080 + "px").css("display", "none");
-	
-	var smallWidth = wjb51 * 168 / 1920;
-	var smallHeight = hjb51 * 56 / 1080;
-	var bigTop = hjb51 * 60 / 1080;
-	var bigWidth = wjb51;
-	var bigHeight = hjb51 * 656 / 1080;
-	$("#tab-list").click(function() {
-		if($("#tab-list").attr("class") == "tab-btn active") {return;}
-		
-		$("#tab-list").addClass("active");
-		$("#tab-chart").removeClass("active");
 
-		$("#list-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
-		$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 200);
+
+<script language="javascript">
+var smallWidth = wjb51 * 130/ 1920;
+var smallHeight = hjb51 * 40 / 1080;
+var bigTop = hjb51 * 40 / 1080;
+var bigWidth = wjb51;
+var bigHeight = hjb51 * 683 / 1080;
+
+$("#tab-list").click(function() {
+	if($("#tab-list").attr("class") == "tab-btn active") {return;}
+	
+	$("#tab-list").addClass("active");
+	$("#tab-chart").removeClass("active");
+	$("#chart-frame").css("z-index","1");
+	$("#list-frame").show().animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 300);
+	$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 300, "linear", function() {
+		$(this).hide();
 	});
-	$("#tab-chart").click(function() {
-		if($("#tab-chart").attr("class") == "tab-btn active") {return;}
-		
-		$("#tab-list").removeClass("active");
-		$("#tab-chart").addClass("active");
-		
-		$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 200);
-		$("#chart-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
+	$("#list-frame").css("z-index","2");
+});
+$("#tab-chart").click(function() {
+	if($("#tab-chart").attr("class") == "tab-btn active") {return;}
+	$("#tab-list").removeClass("active");
+	$("#tab-chart").addClass("active");
+
+	$("#list-frame").css("z-index","1");
+	$("#chart-frame").show().animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 300);
+	$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 300, "linear", function() {
+		$(this).hide();
 	});
-	searchBtn();
+	$("#chart-frame").css("z-index","2");
+});
+	
+	$(document).ready(function() {
+		//选择框过长省略
+		$(".zl-select select").selectAutoHide();
+		
+		$("#chart-frame").hide();
+		dataTranslate("stat_device_processfrequency", function(t) { $("span").i18n();});
+		
+		$.autosizeExclude($("#myform\\:charPane> *"), true);
+		$.autosizeExclude($("#myform\\:datatable1"),true);
+ 	})
+ 	//提交按钮
+  	function querybtn(){
+   		document.getElementById("myform:btn_search").click();
+   	}
+	
+	function onselectchane(){
+		$.autosizeFrame(false);
+		$("#myform\\:name1").each(function() {
+			$.autosizeElement(this,true);
+		});
+	}
+  	function resizeListFrame(){
+  		$.autosizeElement($("#myform\\:ds"),true);
+		$.autosizeElement($(".content-info-tab-area"),false);
+	}
 </script>
 
 </h:form>

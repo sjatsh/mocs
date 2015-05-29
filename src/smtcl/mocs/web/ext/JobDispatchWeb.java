@@ -1,22 +1,11 @@
 package smtcl.mocs.web.ext;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
 
-
-
-
-
-
-
-import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,8 +16,7 @@ import smtcl.mocs.pojos.job.TEquJobDispatch;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.services.authority.ICommonService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
-import smtcl.mocs.services.jobplan.IJobPlanService;
-import smtcl.mocs.services.jobplan.UpdataJobDispatch;
+import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.StringUtils;
 
@@ -41,7 +29,6 @@ public class JobDispatchWeb {
 	private  Gson gson = new GsonBuilder().serializeNulls().create();
 	
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-	private UpdataJobDispatch updataJobDispat = (UpdataJobDispatch)ServiceFactory.getBean("updataJobDispatch");
 	/**
 	 * 工单接口实例
 	 */
@@ -52,19 +39,13 @@ public class JobDispatchWeb {
 	private ICommonService commonService;
 	
 	/**
-	 * 作业计划接口实例
-	 */
-	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
-	
-	/**
 	 * 获取设备资源信息
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/getDevicesList.action")
-	public @ResponseBody Map<String, ? extends Object> getTestsExtData(HttpServletRequest request,String taskNum,String jobstatus, String partid,String equid,String planStime,String planEtime) throws Exception{
+	public @ResponseBody Map<String, Object> getTestsExtData(HttpServletRequest request,String taskNum,String jobstatus, String partid,String equid,String planStime,String planEtime) throws Exception{
 		String nodeid=(String)request.getSession().getAttribute("nodeid");
-		List<Map<String, Object>> tempData = (List<Map<String,Object>>) jobDispatchService.getDevicesInfo(nodeid,formatTaskNum(taskNum),jobstatus, partid,equid, planStime, planEtime);
+		List<Map<String, Object>> tempData = jobDispatchService.getDevicesInfo(nodeid,formatTaskNum(taskNum),jobstatus, partid,equid, planStime, planEtime);
 		List<Map<String, Object>> newData = new ArrayList<Map<String,Object>>();
 		for(Map<String,Object> map : tempData){
 			Map<String,Object> newMap = new HashMap<String,Object>();
@@ -78,8 +59,6 @@ public class JobDispatchWeb {
 
 	/**
 	 * 格式taskNum
-	 * @param taskNum
-	 * @return
 	 */
 	private String formatTaskNum(String taskNum) {
 		if(!StringUtils.isEmpty(taskNum)){
@@ -98,7 +77,7 @@ public class JobDispatchWeb {
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<TEquJobDispatch> mapList = jobDispatchService.getJobDispatchById(dispatchNo);
 		boolean flag = false;
-		StringBuffer sb = new StringBuffer("");
+		StringBuilder sb = new StringBuilder("");
 		for(TEquJobDispatch t : mapList){
 			sb.append(t.getEquSerialNo()).append(",");
 		}
@@ -111,69 +90,66 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 获取工单信息
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/getjobDispatchList.action")
-	public @ResponseBody Map<String, ? extends Object> getTestsEvent(String taskNum,String jobstatus, String partid,String equid,String planStime,String planEtime,HttpServletRequest request,String ishighlight) throws Exception{
+	public @ResponseBody Map<String, Object> getTestsEvent(String taskNum,String jobstatus, String partid,String equid,String planStime,String planEtime,HttpServletRequest request,String ishighlight) throws Exception{
 		String nodeid=(String)request.getSession().getAttribute("nodeid");
 		List<Map<String, Object>> tempData = new ArrayList<Map<String,Object>>();
-		
 		String fs=StringUtils.getCookie(request, "fs");
 		String fe=StringUtils.getCookie(request, "fe");
-		
 		if(null!=fs&&!"".equals(fs)){
 			planStime=fs;
 		}
 		if(null!=fe&&!"".equals(fe)){
 			planEtime=fe;
 		}
-		
-		List<Map<String, Object>> temp = (List<Map<String,Object>>) jobDispatchService.getJobDispatchsInfo(nodeid,formatTaskNum(taskNum),jobstatus,partid,equid,planStime,planEtime);
+        Locale locale = SessionHelper.getCurrentLocale(request.getSession());
+		List<Map<String, Object>> temp = jobDispatchService.getJobDispatchsInfo(nodeid,formatTaskNum(taskNum),jobstatus,partid,equid,planStime,planEtime);
 		long maxId=0;
-		if(temp.size()>0 && temp!=null){
+		if(temp!=null && temp.size()>0){
+            Map<String,String> statusMap = Constants.statusMap;
 			for(Map<String, Object> map : temp){
 				if(map==null ||map.get("Status")==null)
 					continue;
 			    Integer start = Integer.parseInt(map.get("Status").toString());
-			    
+
 			    map.put("StatusName", this.returnStatus(start));
+                if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+                    String key = map.get("StatusName").toString();
+                    map.put("StatusName",statusMap.get(key));
+                }
 			    if(maxId==0) maxId=Long.parseLong(map.get("Id").toString());	//获取最大值
 				map.remove("Start");
 				switch (start) {
-				case 30://创建
-					if(maxId==((Long)map.get("Id")).longValue())
-						if(ishighlight!=null)
-						{
-					        map.put("Cls", "ext_chuangjian_maxId");
-						}
-					    else
-					    {
-					    	map.put("Cls", "ext_chuangjian");
-					    }
-					else {
-					map.put("Cls", "ext_chuangjian");
-					}
-					break;
-				case 40://上线
-					map.put("Cls", "ext_shangxian");
-					break;
-				case 50://加工
-					map.put("Cls", "ext_jiagong");
-					break;
-				case 60://结束
-					map.put("Cls", "ext_jieshu");
-					break;
-				case 70://完成
-					map.put("Cls", "ext_wancheng");
-					break;
-				case 80://暂停/恢复
-					map.put("Cls", "ext_pause");
-					break;
-				default:
-					map.put("Cls", "ext_defult");
-					break;
-			}
+                    case 10:// 创建(点击作业计划，作业计划的初始状态为新建)
+                        map.put("Cls", "ext_chuangjian");
+                        break;
+                    case 20:// 待派工
+                        map.put("Cls", "ext_daipaigong");
+                        break;
+                    case 30:// 已派工
+                        map.put("Cls", "ext_yipaigong");
+                        break;
+                    case 40://上线
+                        map.put("Cls", "ext_shangxian");
+                        break;
+                    case 50://加工
+                        map.put("Cls", "ext_jiagong");
+                        break;
+                    case 60://结束
+                        map.put("Cls", "ext_jieshu");
+                        break;
+                    case 70://完成
+                        map.put("Cls", "ext_wancheng");
+                        break;
+                    case 80://暂停/恢复
+                        map.put("Cls", "ext_pause");
+                        break;
+                    default:
+                        map.put("Cls", "ext_default");
+                        break;
+			    }
 				tempData.add(map);
 			}
 		}
@@ -202,19 +178,16 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 获取一条工单信息
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/getJobDispatchsInfoOne.action")
-	public @ResponseBody Map<String, ? extends Object> getJobDispatchsInfoOne(String jobdispatchId) throws Exception{
+	public @ResponseBody Map<String, Object> getJobDispatchsInfoOne(String jobdispatchId) throws Exception{
 	
 		List<Map<String, Object>> tempData = new ArrayList<Map<String,Object>>();
-		//临时数据
-		//List<Map<String, Object>> temp = (List<Map<String,Object>>) jobDispatchService.getJobDispatchsInfo("8a8abc973f1dc2dc013f1dc3d7dc0001","");
-		List<Map<String, Object>> temp = (List<Map<String,Object>>) jobDispatchService.getJobDispatchsInfoOne(jobdispatchId);
+		List<Map<String, Object>> temp = jobDispatchService.getJobDispatchsInfoOne(jobdispatchId);
 		System.out.println(gson.toJson(temp));
 		long maxId=0;
-		if(temp.size()>0 && temp!=null){
+		if(temp!=null && temp.size()>0){
 			for(Map<String, Object> map : temp){
 			    Integer start = Integer.parseInt(map.get("Status").toString());
 			    if(maxId==0) maxId=Long.parseLong(map.get("Id").toString());	//获取最大值
@@ -258,34 +231,27 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 根据最大工单编号查找响应的作业计划
-	 * @param p
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/findJobPlanDetailDefaultBYDispatchIdDefault.action")
-	public @ResponseBody Map<String, ? extends Object> getJobplanDetail() throws Exception{
-		Map<String, Object> tempData= jobDispatchService.findJobPlanDetailDefaultBYDispatchIdDefault();
-		return tempData;
+	public @ResponseBody Map<String, Object> getJobplanDetail() throws Exception{
+        return jobDispatchService.findJobPlanDetailDefaultBYDispatchIdDefault();
 	}
 	
 	/**
 	 * 获取作业计划详细
-	 * @param p
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/jobplanDetail.action")
-	public @ResponseBody Map<String, ? extends Object> getJobplanDetail(String p) throws Exception{
-		Map<String, Object> tempData= jobDispatchService.getJobPlanDetail(p);
-		return tempData;
+	public @ResponseBody Map<String, Object> getJobplanDetail(String p) throws Exception{
+        return jobDispatchService.getJobPlanDetail(p);
 	}
 	
 	/**
 	 * 添加工单
-	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/save.action")
-	public @ResponseBody Map<String, ? extends Object> saveJobdispatch(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String num,String theoryWorktime,HttpServletRequest request){
+	public @ResponseBody Map<String, Object> saveJobdispatch(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String num,String theoryWorktime,HttpServletRequest request){
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
 			
@@ -360,7 +326,7 @@ public class JobDispatchWeb {
 	
 	
 	@RequestMapping(value="/jobdispatch/updateBasicJobdispatch.action")
-	public @ResponseBody Map<String, ? extends Object> updateBasicJobPlanInfo(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String num,HttpServletRequest request){
+	public @ResponseBody Map<String, Object> updateBasicJobPlanInfo(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String num,HttpServletRequest request){
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
 			String nodeid=(String)request.getSession().getAttribute("nodeid");
@@ -400,18 +366,13 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 修改工单
-	 * @param startTime
-	 * @param endTime
-	 * @param id
-	 * @param resourceId
-	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/update.action")
-	public @ResponseBody Map<String, ? extends Object> updateJobdispatch(String startTime ,String endTime,String id,String resourceId,String statusId,String num){
+	public @ResponseBody Map<String, Object> updateJobdispatch(String startTime ,String endTime,String id,String resourceId,String statusId,String num){
 		try {
 			if(startTime!=null && endTime!=null && id!=null){
 				TJobdispatchlistInfo tJobdispatchlistInfo = commonService.get(TJobdispatchlistInfo.class,Long.valueOf(id));
-				if(statusId=="40"||statusId=="50")
+				if(statusId.equals("40") || statusId.equals("50"))
 				{
 					tJobdispatchlistInfo.setPlanEndtime(format.parse(endTime));
 			    }
@@ -439,9 +400,6 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 拆分预留方法
-	 * @param id
-	 * @param time
-	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/split.action")
 	public @ResponseBody Map<String, Object> SplitJobPlan(String id,String time){
@@ -475,13 +433,12 @@ public class JobDispatchWeb {
 		
 		return null;
 	}
+
 	/**
 	 * 删除工单信息
-	 * @param id
-	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/delete.action")
-	public @ResponseBody Map<String, ? extends Object> deleteJobplan(String dispatchId){
+	public @ResponseBody Map<String, Object> deleteJobplan(String dispatchId){
 		try {
 			TJobdispatchlistInfo tJobdispatchlistInfo = commonService.get(TJobdispatchlistInfo.class,Long.parseLong(dispatchId));
 			if(tJobdispatchlistInfo!=null) jobDispatchService.deleteJobDispatchInfo(tJobdispatchlistInfo);		
@@ -493,14 +450,12 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 获取工单表中当前最大的ID
-	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/getMaxJobDispatchId.action")
 	public @ResponseBody String getMaxJobPlanInfoId(){
 		try{
-			String mID=jobDispatchService.getMaxJobDispatchId();
-			return mID;
-		} catch (Exception e) {
+            return jobDispatchService.getMaxJobDispatchId();
+		} catch (Exception ignored) {
 			
 		}
 		
@@ -509,36 +464,33 @@ public class JobDispatchWeb {
 
 	/**
 	 * 获取作业计划下拉列表
-	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/getJobplanList.action")
-	public @ResponseBody  Map<String, ? extends Object> getJobPlanList(){
+	public @ResponseBody  Map<String, Object> getJobPlanList(){
 		try{
 			List<Map<String,Object>> tempData=jobDispatchService.getJobPlanList("8a8abc973f1dc2dc013f1dc3d7dc0001");
 			return  getListMap(tempData);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 		return null;
 	}
 	
 	/**
 	 * 获取作业下拉列表
-	 * @return
 	 */
 	@RequestMapping(value="/jobdispatch/getJobMap.action")
-	public @ResponseBody  Map<String, ? extends Object> getJobMap(HttpServletRequest request){
+	public @ResponseBody  Map<String, Object> getJobMap(HttpServletRequest request){
 		try{
 			String nodeid=(String)request.getSession().getAttribute("nodeid");
 			List<Map<String,Object>> tempData=jobDispatchService.getJobInfoMap(nodeid);
 			return  getListMap1(tempData);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 		return null;
 	}
 	
 	/**
 	 * 获取设备资源信息
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/updateJobdispatchStatus.action")
@@ -558,10 +510,8 @@ public class JobDispatchWeb {
 		return false;
 	}
 	
-	
 	/**
 	 * 更改工单状态当停止时
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/updateJobDispatchWhenStop.action")
@@ -582,14 +532,10 @@ public class JobDispatchWeb {
 	
 	/**
 	 * 工单暂停
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/updateJobDispatchWhenPause.action")
 	public @ResponseBody Boolean updateJobDispatchWhenPause(String dispatchId,String status,String flag) throws Exception{
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date now=new Date();
-		String nowDateString=formatDate.format(now);
 		try
 		{
 			jobDispatchService.setStatusToOldstatus(dispatchId,status,flag);
@@ -601,17 +547,12 @@ public class JobDispatchWeb {
 		return false;
 	}
 	
-
 	/**
 	 * 工单恢复
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobdispatch/updateJobdispatchWhenRecover.action")
 	public @ResponseBody Boolean updateJobdispatchWhenRecover(String dispatchId,String status,String flag) throws Exception{
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date now=new Date();
-		String nowDateString=formatDate.format(now);
 		try
 		{
 			jobDispatchService.updateJobdispatchWhenRecover(dispatchId,status,flag);
@@ -621,19 +562,6 @@ public class JobDispatchWeb {
 			e.printStackTrace();
 		}
 		return false;
-	}
-	
-	
-	@RequestMapping(value="/jobdispatch/setSessionId.action")
-	public @ResponseBody void setSessionId(String sessionId){
-		try {
-			    String id=sessionId; 
-			}
-		 catch (Exception e) {
-			e.printStackTrace();
-			
-		} 
-		
 	}
 	
 	@RequestMapping(value="/jobdispatch/getDispatchStatusByEquId.action")

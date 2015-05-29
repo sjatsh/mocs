@@ -1,0 +1,36 @@
+{	
+	"page1": {
+		"top": {
+			"btn1":"新建",
+			"btn2":"删除",
+			"btn3":"导出"
+		},
+		"equip_type": {
+			"title1":"设备类型名称",
+			"title2":"分类编码",
+			"title3":"型号/牌号",
+			"title4":"数控系统",
+			"title5":"能力组号",
+			"title6":"能力描述",
+			"title7":"类型描述",
+			"title8":"操作",
+			"title9":"父设备类型"
+		},
+		"add": {
+			"alert_msg_parent":"请选择父设备类型",
+			"alert_msg_name":"请输入设备类型名称",
+			"alert_msg_code":"请输入分类编码",
+			"alert_msg_repeat":"类型已存在，不要重复添加!"
+		},
+		"del": {
+			"alert_msg":"是否确认删除此数据！",
+			"alert_msg_not":"类型已使用，无法删除！",
+			"alert_msg_select":"请选择一条数据进行删除！"
+		},
+		"btn": {
+			"add":"增加",
+			"cancel":"取消",
+			"pls_select":"请选择"
+		}
+	}
+}

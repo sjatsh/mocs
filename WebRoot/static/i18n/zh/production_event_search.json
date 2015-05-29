@@ -1,0 +1,25 @@
+{	
+	"top": {
+		"main_title": "事件查询",
+		"title1":"开始时间",
+		"title2":"事件类型",
+		"title3":"批次计划",
+		"title4":"结束时间",
+		"title5":"产品名称",
+		"title6":"工单号"
+	},
+	"content": {
+		"table_title1":"事件编号",
+		"table_title2":"事件类型",
+		"table_title3":"工单编号",
+		"table_title4":"处理数量",
+		"table_title5":"处理人员",
+		"table_title6":"处理时间",
+		"table_title7":"处理原因",
+		"table_title8":"零件名称",
+		"table_title9":"设备序列号",
+		"table_title10":"责任人",
+		"table_title11":"责任工序",
+		"table_title12":"责任日期"
+	}
+}

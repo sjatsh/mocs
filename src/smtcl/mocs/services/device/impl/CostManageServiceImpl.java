@@ -193,7 +193,8 @@ public class CostManageServiceImpl extends GenericServiceSpringImpl<TNodes, Stri
 				{	
 					seq++;
 					long between=StringUtils.dateTimeBetween(record_last.get("finishtime").toString(),record.get("starttime").toString());
-				    int installtime=(Integer)record.get("installtime"); //装夹时间
+				    int installtime=Integer.parseInt((record.get("installtime") == null || record.get("installtime").toString().equals("")) ? "0" : record.get("installtime").toString()); //装夹时间
+				    
 				    if(between<installtime&&between>0) preparttime=between;
 				    else preparttime=installtime;
 				}
@@ -246,7 +247,7 @@ public class CostManageServiceImpl extends GenericServiceSpringImpl<TNodes, Stri
 				List<Map<String,Object>> energycostDetailList= new ArrayList<Map<String,Object>>();
 				for(Map<String,Object> rec:tempList)
 				  {
-					  if(rec.get("partNo").equals(partNo))
+					  if(null!=rec.get("partNo")&&rec.get("partNo").equals(partNo))
 					  {
 						   Map<String,Object> energycost=new HashMap<String,Object>();
 						   energycost.put("equSerialNo", rec.get("equSerialNo"));						 
@@ -274,9 +275,10 @@ public class CostManageServiceImpl extends GenericServiceSpringImpl<TNodes, Stri
 	     }
 					
 			Collections.reverse(rs);//rs 倒排	
-			for(Map<String,Object> rec:rs)
+			/*for(Map<String,Object> rec:rs)
 				 System.err.println("----------partNo:"+rec.get("partNo")+"--peopleCost:"+rec.get("peopleCost")+"--mainMaterialCost:"
 	                       +rec.get("mainMaterialCost")+"--accMaterialCost:"+rec.get("accMaterialCost")+"--oldCost:"+rec.get("oldCost")+"--energyCost:"+rec.get("energyCost"));
+	                       */
 			return rs;
 	}   	   	
 	
@@ -797,7 +799,7 @@ public class CostManageServiceImpl extends GenericServiceSpringImpl<TNodes, Stri
 	public List<Map<String, Object>> getPartTypeList(String nodeid) {
 		// TODO Auto-generated method stub
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		String hql="select new Map(t.no as parttypeNo) from TPartTypeInfo t WHERE t.nodeid='"+nodeid+"'  order by t.no asc";
+		String hql="select new Map(t.no as parttypeNo) from TPartTypeInfo t WHERE t.nodeid='"+nodeid+"' and t.status<> '删除' order by t.no asc";
 		return dao.executeQuery(hql, parameters);
 	}
 

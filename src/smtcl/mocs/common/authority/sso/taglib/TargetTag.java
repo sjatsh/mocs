@@ -12,7 +12,7 @@ import java.util.List;
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-10-8
- * Time: ÉÏÎç11:31
+ * Time: ä¸Šåˆ11:31
  */
 public class TargetTag extends SimpleTagSupport {
     @Override

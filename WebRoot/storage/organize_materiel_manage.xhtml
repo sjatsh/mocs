@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
+	<style>
+	/* 导航栏 */
+	.headDiv
+	{
+		height: 82px;
+		background-image: url('../images/demo/right_top_bg_2x.png');
+	}
+	
+	.materail_class_treeDiv,.materail_class_rightDiv
+	{
+		top: 82px;
+	}
+	.martop{
+		margin-top: 10px;
+	}
+	.rf-cal-extr{
+		z-index: 9 !important;
+	}
+	</style>
+<div style="width: 100%;height: 100%; position:relative;">
+	<div class="headDiv">
+		<h:outputText value="物料类型:" styleClass="guide_text_label"/>
+		<h:selectOneMenu  style="color:#595959;" value="#{organizeMaterielManageBean.type}" styleClass="select">
+			<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+			<f:selectItems value="#{organizeMaterielManageBean.typelist}" var="tp" itemLabel="#{tp.value}" 
+				itemValue="#{tp.id}"></f:selectItems>
+		</h:selectOneMenu>
+		<h:outputText value="物料编号:" styleClass="guide_text_label"/>
+		<h:inputText value="#{organizeMaterielManageBean.no}" styleClass="textBg" />
+		<h:outputText value="物料说明:" styleClass="guide_text_label"/>
+		<h:inputText value="#{organizeMaterielManageBean.desc}" styleClass="textBg" />
+		<h:outputText value="物料状态:" styleClass="guide_text_label"/>
+		<h:selectOneMenu   value="#{organizeMaterielManageBean.status}" styleClass="select">
+			<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+			<f:selectItem itemLabel="开启" itemValue="0"></f:selectItem>
+			<f:selectItem itemLabel="关闭" itemValue="1"></f:selectItem>
+		</h:selectOneMenu>
+		<p:commandButton value="查询" styleClass="delete martop" action="#{organizeMaterielManageBean.SearchMateriel}" update=":myform:stable"/>
+		<p:commandButton value="新建"  actionListener="#{MenuHeadBean.onClick('xjzzwl','0')}" styleClass="delete" 
+			update=":myform:rightiframe" />
+		<br/>
+		<h:outputText value="物料单位:" styleClass="guide_text_label"/>
+		<h:selectOneMenu  value="#{organizeMaterielManageBean.unit}" styleClass="select">
+			<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+			<f:selectItems value="#{organizeMaterielManageBean.unitList}" var="ut" itemLabel="#{ut.unitName}" 
+				itemValue="#{ut.id}"></f:selectItems>
+		</h:selectOneMenu>
+		<h:outputText value="起止日期:" styleClass="guide_text_label"/>
+		<rich:calendar popup="true" locale="en" value="#{organizeMaterielManageBean.startTime}" datePattern="yyyy-MM-dd"
+			cellWidth="10px" cellHeight="20px" inputClass="textBg"/> 
+		<h:outputText value="--" styleClass="guide_text_label"/>
+		<rich:calendar popup="true" locale="en" value="#{organizeMaterielManageBean.endTime}" datePattern="yyyy-MM-dd"
+			cellWidth="10px" cellHeight="20px"  inputClass="textBg"/> 
+		
+	</div>
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+	<div class="materail_class_treeDiv">
+		<div class="tree-head"></div>
+		<div class="tree-body">
+		    <p:tree id="matree" value="#{organizeMaterielManageBean.root}" var="node"  
+	            selection="#{organizeMaterielManageBean.selectedNode}"   selectionMode="single" style="width:150px;"> 
+		        <p:ajax event="select" listener="#{organizeMaterielManageBean.onNodeSelect}"  
+		        	update=":myform:stable" oncomplete="bgReposition($('.table'));"/> 
+		        <p:treeNode>  
+		            <h:outputText value="#{node.MClassname}" />  
+		        </p:treeNode>  
+		   	</p:tree>  
+		</div>
+		<div class="tree-foot"></div>
+		<div class="div_tree_border_shadow">
+			<img src="../images/demo/tree_border_shadow.png" />
+		</div>
+		<div id="tree_move_btn" class="btn_tree_show"></div>
+	</div>
+	<div class="materail_class_rightDiv hidden">
+		<p:dataTable id="stable" value="#{organizeMaterielManageBean.materiellist}" 
+			  cellpadding="0"  cellspacing="0" rows="16"  paginator="true" paginatorPosition="bottom"
+			style="width:100%;" border="0" var="materiel" styleClass="table">
+			<p:column headerText="物料编码">
+				<h:outputText value="#{materiel.no}"></h:outputText>
+			</p:column>
+			<p:column headerText="物料说明">
+				<h:outputText value="#{materiel.name}"></h:outputText>
+			</p:column>
+			<p:column headerText="规格尺寸">
+				<h:outputText value="#{materiel.norm}"></h:outputText>
+			</p:column>
+			<p:column headerText="型号牌号">
+				<h:outputText value="#{materiel.typeno}"></h:outputText>
+			</p:column>
+			<p:column headerText="物料类型">
+				<h:outputText value="#{materiel.className}"></h:outputText>
+			</p:column>
+			<p:column headerText="物料类别">
+				<h:outputText value="#{materiel.MClassname}"></h:outputText>
+			</p:column>
+			<p:column headerText="操作">
+				<h:commandLink value="" ></h:commandLink>
+				<h:outputLink value="">
+					<h:outputText value="[编辑]" />
+					<f:ajax listener="#{MenuHeadBean.onClick('bzzzwl',materiel.id)}" event="click" render=":myform:rightiframe" />
+			</h:outputLink>
+			</p:column>
+		</p:dataTable>
+	</div>
+</div>
+	<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
+	<script language="javascript">
+		$(document).ready(function() {
+			bgReposition($('.table'));
+		});
+	</script>
+</ui:composition>

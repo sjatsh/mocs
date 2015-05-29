@@ -1,0 +1,38 @@
+{	"zwxxts":"暂无数据,请更换节点或查询条件",
+	"top": {
+		"main_title": "机床事件分析",
+		"title1":"机床名称",
+		"title2":"事件名称",
+		"title3":"开始时间",
+		"title4":"结束时间",
+		"title5":" 查询"
+	},
+	"content": {
+		"tab1":"列表",
+		"tab2":"图表",
+		"tabtitle":"机床事件时间段分析图",
+		"table_title1":"设备机床ID",
+		"table_title2":"事件ID",
+		"table_title3":"事件时间",
+		"table_title4":"事件名",
+		"table_title5":"程序名",
+		"table_title6":"操作人员",
+		"table_title7":"备注",
+		"chart_tip1":"准备时间",
+		"chart_tip2":"运行时间",
+		"chart_tip3":"空闲时间",
+		"chart_tip4":"关机时间",
+		"chart_tip5":"开机时间",
+		"chart_tip6":"故障时间",
+		"chart_tip7":"加工时间",
+		"chart_tip8":"中断时间",
+		"chart_tip9":"急停时间",
+		"chart_tip10":"复位时间",
+		"chart_tip11":"保持时间",
+		"chart_btn1":"前一天",
+		"chart_btn2":"后一天",
+		"xiaoshi":"小时",
+		"fenzhong":"分钟",
+		"miao":"秒"
+	}
+}

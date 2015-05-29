@@ -17,12 +17,12 @@ var goodQuantity;
 var dispatchNo;
 
 //控制长宽的大小
-var createWidth = wjb51*1620/1620;
-var createHeight = hjb51*685/1080;
-var createRowHeight = hjb51*39/1080;
-var createColumnWidth = wjb51*320/1620;
-var fieldWidth = wjb51*200/1620;
-var defineWidth = wjb51*395/1620;
+var createWidth = wjb51*1920/1920;
+var createHeight = hjb51*642/1080;
+var createRowHeight = hjb51*40/1080;
+var createColumnWidth = wjb51*480/1920;
+var fieldWidth = wjb51*200/1920;
+var defineWidth = wjb51*395/1920;
 var defineHeight = hjb51*350/1080;
 var fsize = 5;
 var resourceStore;
@@ -90,11 +90,10 @@ Ext.onReady(function () {
 	end=date1;
 	
 	 //加载数据信息
-	resourceStore.load();
-	eventStore.load({
+	resourceStore.load({
 		params: {
 			taskNum : '',//任务编号默认为空
-			jobstatus : '10,30,40,50,80',//工单状态id
+			jobstatus : '',//工单状态id
 			partid:'',
 			planStime : start,
 			planEtime : end
@@ -105,21 +104,67 @@ Ext.onReady(function () {
 		scope: this,
 		add:false
 	});
-	
+	eventStore.load({
+		params: {
+			taskNum : '',//任务编号默认为空
+			jobstatus : '',//工单状态id
+			partid:'',
+			planStime : start,
+			planEtime : end
+		}, 
+		callback: function(records, options, success) {
+			changetr();
+		},
+		scope: this,
+		add:false
+	});
+
+	//设置弹出模版文字
+	var tooltipTitle1,tooltipTitle2,tooltipTitle3,tooltipTitle4,tooltipTitle5,tooltipTitle6,tooltipTitle7,tooltipTitle8,tooltipUnit;
+	var controlBtn1,controlBtn2,controlBtn3,controlBtn4;
+	dataTranslate("jobdispatch", function(t) { 
+		tooltipTitle1 = t("content.tooltip_1"); 
+		tooltipTitle2 = t("content.tooltip_2"); 
+		tooltipTitle3 = t("content.tooltip_3"); 
+		tooltipTitle4 = t("content.tooltip_4"); 
+		tooltipTitle5 = t("content.tooltip_5"); 
+		tooltipTitle6 = t("content.tooltip_6"); 
+		tooltipTitle7 = t("content.tooltip_7");
+		tooltipTitle8 = t("content.tooltip_8");
+		tooltipUnit = t("content.tooltipUnit");
+		controlBtn1 = t("top.btn7");
+		controlBtn2 = t("top.btn7-2");
+		controlBtn3 = t("top.btn8");
+		controlBtn4 = t("top.btn8-2");
+	});
    ds = Ext.create("Sch.panel.SchedulerGrid", {
 	renderTo    : 'example-container',
 	width:createWidth,
 	height:createHeight,
     rowHeight:createRowHeight,
-	resourceStore   : resourceStore,
 	eventStore      : eventStore,
+	resourceStore   : resourceStore,
 	constrainDragToResource:true,
+    useArrows       : false,
+    icon 			: null,
+    rootVisible		: true,
 	viewPreset  : 'monthAndYear',
+    //viewPreset  : 'weekAndDay',
 	startDate   : start,
 	endDate     : end,
-	readOnly : false,//禁止拖动和改变长度	
+    multiSelect     : true,
+    columnLines     : false,
+    rowLines        : true,      
+    enableDragCreation:false,  //禁止鼠标拖动新建
+    enableEventDragDrop:false, //禁止拖动
 	columns: [
-		{header:'<span class="job_manager_textstyle">设备名称</span>',sortable:true,width:createColumnWidth,dataIndex:'Name'}
+		{
+            text        : '<span data-i18n="content.tree_title"></span>',
+            width		: createColumnWidth - 2,
+            sortable    : false,
+            menuDisabled:true,
+            dataIndex   : 'Name'
+		}
 	],
 	
 	//工单里面的字体
@@ -130,36 +175,41 @@ Ext.onReady(function () {
 	//鼠标移动提示
      tooltipTpl: new Ext.XTemplate(
         '<dl class="eventTip" style="font-size:16px;">',
-            '<dt class="icon-clock">开始时间:{[Ext.Date.format(values.StartDate, "Y-m-d G:i")]} </dt>',
-            '<dt class="icon-clock">结束时间:{[Ext.Date.format(values.EndDate, "Y-m-d G:i")]} </dt>',
-            '<dt class="icon-task">零件名称:{partName}</dt>',
-            '<dt class="icon-task">工序名称:{TprocessName}</dt>',
-            '<dt class="icon-task">计划数量:{planNum} 个</dt>',
-            '<dt class="icon-task">完成数量:{finishNum} 个</dt>',
-            '<dt class="icon-task">状态:{StatusName}</dt>',
+            '<dt class="icon-clock">' + tooltipTitle2 + ':{[Ext.Date.format(values.StartDate, "Y-m-d G:i")]} </dt>',
+            '<dt class="icon-clock">' + tooltipTitle3 + ':{[Ext.Date.format(values.EndDate, "Y-m-d G:i")]} </dt>',
+            '<dt class="icon-task">' + tooltipTitle1 + ':{partName}</dt>',
+            '<dt class="icon-task">' + tooltipTitle4 + ':{TprocessName}</dt>',
+            '<dt class="icon-task">' + tooltipTitle5 + ':{planNum} </dt>',
+            '<dt class="icon-task">' + tooltipTitle6 + ':{finishNum} </dt>',
+            '<dt class="icon-task">' + tooltipTitle7 + ':{StatusName}</dt>',
         '</dl>'
     ).compile(),
     
     //鼠标双击编辑
-    plugins: [
-        this.editor = Ext.create("App.DemoEditor", {
-
-        }),
-        
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })            
-    ],
+//    plugins: [
+//        this.editor = Ext.create("App.DemoEditor", {
+//
+//        }),
+//
+//        Ext.create('Ext.grid.plugin.CellEditing', {
+//            clicksToEdit: 1
+//        })
+//    ],
     //创建新任务
     onEventCreated : function(newEventRecord) {
-
+    	 
     }
 });
 
+   //局部翻译
+   dataTranslate("jobdispatch", function(t) { $("#example-container *[data-i18n]").i18n();});
+   //table表格字体剧中的问题
+   //changetr();
      //右键菜单
     ds.on("eventcontextmenu",function(scheduler, eventRecord, e, eOpts ){
 	   var dispatchid=eventRecord.data.Id;
 	   e.stopEvent();
+	  
     });
      
  	//禁止作业计划的拖动
@@ -179,105 +229,78 @@ Ext.onReady(function () {
 		    
 	 //点击具体的作业计划对应后台操作
 	ds.on("eventclick",function(scheduler, eventRecord, e, eOpts ){
+		//重置按钮状态
+		$(".zl-content-top-info-down-btn").removeClass("active");
+		//控制按钮权限
+	    if($("#myform\\:viewDisabled").val() == "false") {
+	    	return;
+	    }
+	    
+		//常开按钮
+		//$("#control_info_edit,#control_scrap,#control_add,#control_week,#control_month,#control_year").parent().addClass("active");
+		$("#control_add,#control_week,#control_month,#control_year").parent().addClass("active");
+		//报废按钮
+		//从后台得到数据
+		titleField.setValue(eventRecord.data.no);//工单编号
+		locationField.setValue(eventRecord.data.partName);//工单名称
+		planNumField.setValue(eventRecord.data.planNum);//工单数量
+		editPlanId=eventRecord.data.Id;
+		rId=eventRecord.data.rId;//rId:TEquipmentInfo.equId
+		dispatchNo=eventRecord.data.no;//工单编号
+		equSerialNo=eventRecord.data.equSerialNo;//设备序列号
+		partName = eventRecord.data.partName;//零件名称
+		planNum=eventRecord.data.planNum;//计划数量
+        processNum = eventRecord.data.planNum;
+        goodQuantity = eventRecord.data.finishNum;
+		/*var jobdispatchNO = eventRecord.data.no;
+		document.getElementById("control_scrap").href="javascript:openUrl('./erp/production_scrap_add.faces?jobdispatchNO="+jobdispatchNO+"')";
+		$("#control_scrap").attr("href", "javascript:openUrl('./erp/production_scrap_add.faces?jobdispatchNO="+jobdispatchNO+"')").parent().addClass("active");*/
+
 		statusId = eventRecord.data.Status;
-		if(statusId == 20){
-			//启动按钮
-			document.getElementById("img8").src="./images/jobplan/jobplan_20.png";	
-			//派工绿色
-			document.getElementById("img7").src = "././images/jobplan/dispatch.png";
+		if(statusId == 20){	//待派工
 			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14.png";
-			//工单暂停
-			document.getElementById("dispatchimages").src = "./images/jobplan/dispatchpause_un.png";
-			document.getElementById("dispatch").title = "工单暂停";
+			$("#control_edit").parent().addClass("active");
+			//删除按钮
+			$("#control_delete").parent().addClass("active");
+			//派工按钮
+			$("#control_ok").parent().addClass("active");
 		}
-		if(statusId == 30){
-			//启动按钮
-			document.getElementById("img8").src="./images/jobplan/jobplan_20.png";
-			//派工灰色
-			document.getElementById("img7").src = "././images/jobplan/dispatch_un.png";
+		if(statusId == 30){	//已派工
 			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14.png";
-			//工单暂停
-			document.getElementById("dispatchimages").src = "./images/jobplan/dispatchpause_un.png";
-			document.getElementById("dispatch").title = "工单暂停";
-			//工单启动
-			document.getElementById("dispatchimg").src = "./images/jobplan/dispatchstart.png";
-			document.getElementById("dispatchaid").title = "工单启动";
+			$("#control_edit").parent().addClass("active");
+			//删除按钮
+			$("#control_delete").parent().addClass("active");
+			//开始按钮
+			$("#control_start").attr("title", controlBtn1).parent().addClass("active").find(".zl-content-top-info-down-btn-img").attr("src", "images/jobplan/icon_play.png");
 		}
-		if(statusId == 40){
-			//启动按钮
-			document.getElementById("img8").src="./images/jobplan/jobplan_20_un.png";
-			//工单停止
-			document.getElementById("dispatchimg").src = "./images/jobplan/dispatchstop_un.png";
-			document.getElementById("dispatchaid").title = "工单停止";
-			//派工灰色
-			document.getElementById("img7").src = "././images/jobplan/dispatch_un.png";
-			//工单暂停
-			document.getElementById("dispatchimages").src = "./images/jobplan/dispatchpause.png";
-			document.getElementById("dispatch").title = "工单暂停";
+		if(statusId == 40){	//上线
+			//开始按钮
+			$("#control_start").attr("title", controlBtn1).find(".zl-content-top-info-down-btn-img").attr("src", "images/jobdispatch/icon_stop.png");
+			//暂停按钮
+			$("#control_pause").attr("title", controlBtn3).parent().addClass("active").find(".zl-content-top-info-down-btn-img").attr("src", "images/jobdispatch/icon_pause.png");
+		}
+		if(statusId == 50){	//加工
+			//暂停按钮
+			$("#control_pause").attr("title", controlBtn3).parent().addClass("active").find(".zl-content-top-info-down-btn-img").attr("src", "images/jobdispatch/icon_pause.png");
+		}
+		if(statusId == 60){	//结束
+		}
+		if(statusId == 70){	//完成
+			//派工按钮
+			$("#control_ok").parent().addClass("active");
+			//开始按钮
+			$("#control_start").attr("title", controlBtn2).parent().addClass("active").find(".zl-content-top-info-down-btn-img").attr("src", "images/jobdispatch/icon_stop.png");
+			//暂停按钮
+			$("#control_pause").attr("title", controlBtn3).parent().addClass("active").find(".zl-content-top-info-down-btn-img").attr("src", "images/jobdispatch/icon_pause.png");
+		}
+		if(statusId == 80){	//暂停
 			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14_un.png";
+			$("#control_edit").parent().addClass("active");
+			//开始按钮
+			$("#control_start").attr("title", controlBtn2).parent().addClass("active").find(".zl-content-top-info-down-btn-img").attr("src", "images/jobdispatch/icon_stop.png");
+			//暂停按钮
+			$("#control_pause").attr("title", controlBtn4).parent().addClass("active").find(".zl-content-top-info-down-btn-img").attr("src", "images/jobdispatch/icon_restart.png");
 		}
-		if(statusId == 50){
-			//启动按钮
-			document.getElementById("img8").src="./images/jobplan/jobplan_20_un.png";
-			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14_un.png";
-			//启动按钮
-			document.getElementById("dispatchimg").src = "./images/jobplan/dispatchstart_un.png";
-			//工单暂停
-			document.getElementById("dispatchimages").src = "./images/jobplan/dispatchpause.png";
-			document.getElementById("dispatch").title = "工单暂停";
-			//派工灰色
-			document.getElementById("img7").src = "././images/jobplan/dispatch_un.png";
-		}
-		if(statusId == 60){
-			//启动按钮
-			document.getElementById("img8").src="./images/jobplan/jobplan_20_un.png";
-			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14_un.png";
-			//派工灰色
-			document.getElementById("img7").src = "././images/jobplan/dispatch_un.png";
-		}
-		if(statusId == 70){
-			//启动按钮
-			document.getElementById("img8").src="./images/jobplan/jobplan_20_un.png";
-			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14_un.png";
-			//工单停止
-			document.getElementById("dispatchimg").src = "./images/jobplan/dispatchstop.png";
-			document.getElementById("dispatchaid").title = "工单停止";
-			//派工灰色
-			document.getElementById("img7").src = "././images/jobplan/dispatch_un.png";
-		}
-		if(statusId == 80){
-			//启动按钮
-			document.getElementById("img8").src="./images/jobplan/jobplan_20_un.png";
-			//工单停止
-			document.getElementById("dispatchimg").src = "./images/jobplan/dispatchstop.png";
-			document.getElementById("dispatchaid").title = "工单停止";
-			//工单恢复
-			document.getElementById("dispatchimages").src = "./images/jobplan/dispatchrecover.png";
-			document.getElementById("dispatch").title = "工单恢复";
-			//编辑按钮
-			document.getElementById("img3").src = "./images/jobplan/jobplan_14_un.png";
-			//派工灰色
-			document.getElementById("img7").src = "././images/jobplan/dispatch_un.png";
-		}
-		 
-		 //从后台得到数据
-		 titleField.setValue(eventRecord.data.no);//工单编号
-		 locationField.setValue(eventRecord.data.partName);//工单名称
-		 planNumField.setValue(eventRecord.data.planNum);//工单数量
-		 editPlanId=eventRecord.data.Id;
-		 rId=eventRecord.data.rId;//rId:TEquipmentInfo.equId
-		 dispatchNo=eventRecord.data.no;//工单编号
-		 equSerialNo=eventRecord.data.equSerialNo;//设备序列号
-		 partName = eventRecord.data.partName;//零件名称
-		 planNum=eventRecord.data.planNum;//计划数量
-		 var jobdispatchNO = eventRecord.data.no;
-		 document.getElementById("importButton").href="javascript:openUrl('./jobdispatch/production_scrap_add.faces?jobdispatchNO="+jobdispatchNO+"')";
 	});
 		
 	 //工单编号
@@ -309,170 +332,170 @@ Ext.onReady(function () {
 });
 
 //定义编辑类
-Ext.define('App.DemoEditor',  {
-    extend : "Sch.plugin.EventEditor",
-    height: defineHeight,
-    width:270,
-    initComponent : function() {
-        Ext.apply(this, { 
-            timeConfig      : {
-                minValue    : '00:00',
-                maxValue    : '24:00'
-            },
-            buttonAlign     : 'center',
-            saveText		:'确定',
-            cancelText 		:'取消',
-            
-            buildButtons : function() {
-                this.saveButton = new Ext.Button({
-                    text        : this.L('saveText'),
-                    scope       : this,
-                    handler     : this.onSaveClick
-                });
-                this.cancelButton = new Ext.Button({
-                    text        : this.L('cancelText'),
-                    scope       : this,
-                    handler     : this.onCancelClick
-                });
-                return [ this.saveButton, this.cancelButton ];
-            },
-            
-            // panel with form fields
-            fieldsPanelConfig : {
-            	    xtype       : 'container',                
-	                layout      : 'card',  
-	                width       : defineWidth, 
-	                items       : [
-            	       {
-            	    	EventType   : 'Appointment',
-                        xtype       : 'form',
-                        style:'background:rgb(220,220,220)',
-                        border      : false,
-                        padding     : 16,
-                        html:"<div id='editdiv' style='background:rgb(220,220,220);padding-top:10px;height:130px;'>" +
-                		"<table>" +
-                    		"<tr>" +
-                        		"<td>" +
-                        			"<div id='editdiv1'>工单编号:</div>" +
-                        		"</td>" +
-                        		"<td>" +
-                        			"<div id='tjpId'></div>" +
-                        		"</td>" +
-                        	"</tr>" +
-                        	"<tr>" +
-                        		"<td>" +
-                        			"<div id='editdiv2'>工单名称:</div>" +
-                        		"</td>" +
-                        		"<td>" +
-                        			"<div id='tjpName'></div>" +
-                        		"</td>" +
-                        	"</tr>" +
-                        	"<tr>" +
-                        		"<td>" +
-                        			"<div id='editdiv3'>数量:</div>" +
-                        		"</td>" +
-                        		"<td>" +
-                        			"<div id='tjpnum'></div>" +
-                        		"</td>" +
-                    		"</tr>" +
-                		"</table>" +
-                		
-                		"<script type='text/javascript'> " +
-                    		" document.getElementById('editdiv').style.MarginTop=hjb51*20/1080+'px'; " +
-                    		" document.getElementById('editdiv').style.height=hjb51*250/1080+'px'; " +
-                    		
-                    		" document.getElementById('editdiv1').style.width=wjb51*160/1920+'px'; " +
-                    		" document.getElementById('editdiv1').style.fontSize=wjb51*19/1920+'px'; " +
-                    		" document.getElementById('editdiv1').style.height=hjb51*60/1080+'px'; " +
-                    		" document.getElementById('editdiv1').style.MarginLeft=wjb51*72/1920+'px'; " +
-                    		" document.getElementById('editdiv1').style.MarginTop='-'+hjb51*4/1080+'px'; " +
-                    		" document.getElementById('tjpId').style.width=wjb51*480/1920+'px'; " +
-                    		" document.getElementById('tjpId').style.MarginTop='-'+hjb51*28/1080+'px'; " +
-                    		" document.getElementById('tjpId').style.MarginLeft='-'+wjb51*80/1920+'px'; " +
-                    		
-                    		" document.getElementById('editdiv2').style.width=wjb51*160/1920+'px'; " +
-                    		" document.getElementById('editdiv2').style.fontSize=wjb51*19/1920+'px'; " +
-                    		" document.getElementById('editdiv2').style.height=hjb51*60/1080+'px'; " +
-                    		" document.getElementById('editdiv2').style.MarginLeft=wjb51*72/1920+'px'; " +
-                    		" document.getElementById('editdiv2').style.MarginTop='-'+hjb51*15/1080+'px'; " +
-                    		" document.getElementById('tjpName').style.width=wjb51*480/1920+'px'; " +
-                    		" document.getElementById('tjpName').style.MarginTop='-'+hjb51*34/1080+'px'; " +
-                    		" document.getElementById('tjpName').style.MarginLeft='-'+wjb51*80/1920+'px'; " +
-                    		
-                    		" document.getElementById('editdiv3').style.width=wjb51*160/1920+'px'; " +
-                    		" document.getElementById('editdiv3').style.fontSize=wjb51*19/1920+'px'; " +
-                    		" document.getElementById('editdiv3').style.height=hjb51*60/1080+'px'; " +
-                    		" document.getElementById('editdiv3').style.MarginLeft=wjb51*34/1920+'px'; " +
-                    		" document.getElementById('editdiv3').style.MarginTop='-'+hjb51*14/1080+'px'; " +
-                    		" document.getElementById('tproId').style.width=wjb51*480/1920+'px'; " +
-                    		" document.getElementById('tproId').style.MarginTop='-'+hjb51*35/1080+'px'; " +
-                    		" document.getElementById('tproId').style.MarginLeft='-'+wjb51*80/1920+'px'; " +
-                    	
-                		"</script> " +
-            		"</div>",
-                     items       : [
-                                       
-                                 ]                    
-                    }
-            	]
-           }
-        });
-        this.callParent(arguments);
-        
-        //点击保存按钮的操作
-      this.on("beforeeventsave" ,function(editor, eventRecord, eOpts){ 
-    		statusId = eventRecord.data.Status;
-    		if(statusId == 30){
-    			//编辑作业计划
-    			if(this.eventRecord.getId() != null){
-    	    		Ext.Ajax.request({
-    					url:"./jobdispatch/updateBasicJobdispatch.action",
-    					method:"post",
-    					success:function(response){
-    					    alert("工单编辑成功！");
-					    	 ds.getEventStore().reload({params:{
-						    	ishighlight: "true"//设置鼠标移动到图表上面，是否高亮。不过这个反应很慢。
-					    	 }});
-    				    },
-    					failure:function(response,opts){Ext.Msg.alert("failure");},
-    					params:{
-    						startTime:this.startTimeField.getValue(),
-    						startDate:this.startDateField.getValue(),
-    						durationTime:this.durationField.getValue(),
-    						id:this.eventRecord.getId(),
-    						resourceId:	this.eventRecord.getResourceId(),//设备附加信息--》equ.equId==resourceId					
-    						name:locationField.getValue(),
-    						num:planNumField.getValue(),
-    						no:titleField.getValue()
-    				    }
-    			    });
-    			}
-    		}else{
-    			alert("此状态不能编辑！");
-    			return false;
-    		}
-    }); 
-    
-    },
-
-    show : function(eventRecord) {
-       Ext.Ajax.request({
-			url:"./jobdispatch/getMaxJobDispatchId.action",//获取工单表中当前最大的ID
-			method:"post",
-			success:function(response,opts){
-				var eventId=parseInt(Ext.decode(response.responseText))+1;
-				document.getElementById("maxId").value=eventId;
-			},
-			failure:function(response,opts){
-				Ext.Msg.alert("请求失败!");
-			},
-	    });
-        
-       var resourceId = eventRecord.getResourceId();
-       var Id = document.getElementById("maxId").value;
-       this.callParent(arguments);
-    }
-});
+//Ext.define('App.DemoEditor',  {
+//    extend : "Sch.plugin.EventEditor",
+//    height: defineHeight,
+//    width:270,
+//    initComponent : function() {
+//        Ext.apply(this, {
+//            timeConfig      : {
+//                minValue    : '00:00',
+//                maxValue    : '24:00'
+//            },
+//            buttonAlign     : 'center',
+//            saveText		:'确定',
+//            cancelText 		:'取消',
+//
+//            buildButtons : function() {
+//                this.saveButton = new Ext.Button({
+//                    text        : this.L('saveText'),
+//                    scope       : this,
+//                    handler     : this.onSaveClick
+//                });
+//                this.cancelButton = new Ext.Button({
+//                    text        : this.L('cancelText'),
+//                    scope       : this,
+//                    handler     : this.onCancelClick
+//                });
+//                return [ this.saveButton, this.cancelButton ];
+//            },
+//
+//            // panel with form fields
+//            fieldsPanelConfig : {
+//            	    xtype       : 'container',
+//	                layout      : 'card',
+//	                width       : defineWidth,
+//	                items       : [
+//            	       {
+//            	    	EventType   : 'Appointment',
+//                        xtype       : 'form',
+//                        style:'background:rgb(220,220,220)',
+//                        border      : false,
+//                        padding     : 16,
+//                        html:"<div id='editdiv' style='background:rgb(220,220,220);padding-top:10px;height:130px;'>" +
+//                		"<table>" +
+//                    		"<tr>" +
+//                        		"<td>" +
+//                        			"<div id='editdiv1'>工单编号:</div>" +
+//                        		"</td>" +
+//                        		"<td>" +
+//                        			"<div id='tjpId'></div>" +
+//                        		"</td>" +
+//                        	"</tr>" +
+//                        	"<tr>" +
+//                        		"<td>" +
+//                        			"<div id='editdiv2'>工单名称:</div>" +
+//                        		"</td>" +
+//                        		"<td>" +
+//                        			"<div id='tjpName'></div>" +
+//                        		"</td>" +
+//                        	"</tr>" +
+//                        	"<tr>" +
+//                        		"<td>" +
+//                        			"<div id='editdiv3'>数量:</div>" +
+//                        		"</td>" +
+//                        		"<td>" +
+//                        			"<div id='tjpnum'></div>" +
+//                        		"</td>" +
+//                    		"</tr>" +
+//                		"</table>" +
+//
+//                		"<script type='text/javascript'> " +
+//                    		" document.getElementById('editdiv').style.MarginTop=hjb51*20/1080+'px'; " +
+//                    		" document.getElementById('editdiv').style.height=hjb51*250/1080+'px'; " +
+//
+//                    		" document.getElementById('editdiv1').style.width=wjb51*160/1920+'px'; " +
+//                    		" document.getElementById('editdiv1').style.fontSize=wjb51*19/1920+'px'; " +
+//                    		" document.getElementById('editdiv1').style.height=hjb51*60/1080+'px'; " +
+//                    		" document.getElementById('editdiv1').style.MarginLeft=wjb51*72/1920+'px'; " +
+//                    		" document.getElementById('editdiv1').style.MarginTop='-'+hjb51*4/1080+'px'; " +
+//                    		" document.getElementById('tjpId').style.width=wjb51*480/1920+'px'; " +
+//                    		" document.getElementById('tjpId').style.MarginTop='-'+hjb51*28/1080+'px'; " +
+//                    		" document.getElementById('tjpId').style.MarginLeft='-'+wjb51*80/1920+'px'; " +
+//
+//                    		" document.getElementById('editdiv2').style.width=wjb51*160/1920+'px'; " +
+//                    		" document.getElementById('editdiv2').style.fontSize=wjb51*19/1920+'px'; " +
+//                    		" document.getElementById('editdiv2').style.height=hjb51*60/1080+'px'; " +
+//                    		" document.getElementById('editdiv2').style.MarginLeft=wjb51*72/1920+'px'; " +
+//                    		" document.getElementById('editdiv2').style.MarginTop='-'+hjb51*15/1080+'px'; " +
+//                    		" document.getElementById('tjpName').style.width=wjb51*480/1920+'px'; " +
+//                    		" document.getElementById('tjpName').style.MarginTop='-'+hjb51*34/1080+'px'; " +
+//                    		" document.getElementById('tjpName').style.MarginLeft='-'+wjb51*80/1920+'px'; " +
+//
+//                    		" document.getElementById('editdiv3').style.width=wjb51*160/1920+'px'; " +
+//                    		" document.getElementById('editdiv3').style.fontSize=wjb51*19/1920+'px'; " +
+//                    		" document.getElementById('editdiv3').style.height=hjb51*60/1080+'px'; " +
+//                    		" document.getElementById('editdiv3').style.MarginLeft=wjb51*34/1920+'px'; " +
+//                    		" document.getElementById('editdiv3').style.MarginTop='-'+hjb51*14/1080+'px'; " +
+//                    		" document.getElementById('tproId').style.width=wjb51*480/1920+'px'; " +
+//                    		" document.getElementById('tproId').style.MarginTop='-'+hjb51*35/1080+'px'; " +
+//                    		" document.getElementById('tproId').style.MarginLeft='-'+wjb51*80/1920+'px'; " +
+//
+//                		"</script> " +
+//            		"</div>",
+//                     items       : [
+//
+//                                 ]
+//                    }
+//            	]
+//           }
+//        });
+//        this.callParent(arguments);
+//
+//        //点击保存按钮的操作
+//      this.on("beforeeventsave" ,function(editor, eventRecord, eOpts){
+//    		statusId = eventRecord.data.Status;
+//    		if(statusId == 30){
+//    			//编辑作业计划
+//    			if(this.eventRecord.getId() != null){
+//    	    		Ext.Ajax.request({
+//    					url:"./jobdispatch/updateBasicJobdispatch.action",
+//    					method:"post",
+//    					success:function(response){
+//    					    jAlert("工单编辑成功！");
+//					    	 ds.getEventStore().reload({params:{
+//						    	ishighlight: "true"//设置鼠标移动到图表上面，是否高亮。不过这个反应很慢。
+//					    	 }});
+//    				    },
+//    					failure:function(response,opts){Ext.Msg.alert("failure");},
+//    					params:{
+//    						startTime:this.startTimeField.getValue(),
+//    						startDate:this.startDateField.getValue(),
+//    						durationTime:this.durationField.getValue(),
+//    						id:this.eventRecord.getId(),
+//    						resourceId:	this.eventRecord.getResourceId(),//设备附加信息--》equ.equId==resourceId
+//    						name:locationField.getValue(),
+//    						num:planNumField.getValue(),
+//    						no:titleField.getValue()
+//    				    }
+//    			    });
+//    			}
+//    		}else{
+//    			alert("此状态不能编辑！");
+//    			return false;
+//    		}
+//    });
+//
+//    },
+//
+//    show : function(eventRecord) {
+//       Ext.Ajax.request({
+//			url:"./jobdispatch/getMaxJobDispatchId.action",//获取工单表中当前最大的ID
+//			method:"post",
+//			success:function(response,opts){
+//				var eventId=parseInt(Ext.decode(response.responseText))+1;
+//				document.getElementById("maxId").value=eventId;
+//			},
+//			failure:function(response,opts){
+//				Ext.Msg.alert("请求失败!");
+//			},
+//	    });
+//
+//       var resourceId = eventRecord.getResourceId();
+//       var Id = document.getElementById("maxId").value;
+//       this.callParent(arguments);
+//    }
+//});
 
 App.Scheduler = {
 	init: function () {
@@ -482,6 +505,26 @@ App.Scheduler = {
 		return ds;
 	}
 };
+
+/**
+ * 判断开始实现是否大于结束时间
+ * @param startdate 开始时间
+ * @param enddate 结束时间
+ * @returns {boolean}
+ */
+function dateCompare(startdate,enddate){
+    var arr=startdate.split("-");
+    var starttime=new Date(arr[0],arr[1],arr[2]);
+    var starttimes=starttime.getTime();
+
+    var arrs=enddate.split("-");
+    var lktime=new Date(arrs[0],arrs[1],arrs[2]);
+    var lktimes=lktime.getTime();
+
+    return starttimes <= lktimes;
+
+}
+
 var flag = true;
 var eventData;
 function jobchaxun(){//查询过滤
@@ -491,39 +534,48 @@ function jobchaxun(){//查询过滤
 	var taskNum = document.getElementById("select_box_job_taskNum_hdn").value;
 	var startTime = document.getElementById("myform:startInputDate").value;
 	var endTime = document.getElementById("myform:endInputDate").value;
-	//根据参数重新获取甘特图信息
-	this.eventStore.load({
-		params: {
-			taskNum : taskNum,//任务编号默认为空
-			jobstatus : jobState,//工单状态id
-			partid : partid,
-			equid:equid,
-			planStime : startTime,
-			planEtime : endTime
-		}, 
-		callback: function(records, options, success) {//根据查询结果将甘特图上的时间调整为时间数据的时间
-			 ds.setStart(new Date(Date.parse(startTime.replace(/-/g, "/"))));
-			 ds.setEnd(new Date(Date.parse(endTime.replace(/-/g, "/"))));
-		},
-		scope: this,
-		add:false
-	});
-	//根据参数重新获取设备名称信息
-	this.resourceStore.load({
-		params: {
-			taskNum : taskNum,//任务编号默认为空
-			jobstatus : jobState,//工单状态id
-			partid : partid,
-			equid:equid,
-			planStime : start,
-			planEtime : end
-		}, 
-		callback: function(records, options, success) {
-			 
-		},
-		scope: this,
-		add:false
-	});
+
+    if(!dateCompare(startTime,endTime)){
+        jAlert(ext_tip23);
+
+    }else {
+
+        //根据参数重新获取甘特图信息
+        this.eventStore.load({
+
+            params: {
+                taskNum: taskNum,//任务编号默认为空
+                jobstatus: jobState,//工单状态id
+                partid: partid,
+                equid: equid,
+                planStime: startTime,
+                planEtime: endTime
+            },
+            callback: function (records, options, success) {//根据查询结果将甘特图上的时间调整为时间数据的时间
+                ds.setStart(new Date(Date.parse(startTime.replace(/-/g, "/"))));
+                ds.setEnd(new Date(Date.parse(endTime.replace(/-/g, "/"))));
+
+            },
+            scope: this,
+            add: false
+        });
+        //根据参数重新获取设备名称信息
+        this.resourceStore.load({
+            params: {
+                taskNum: taskNum,//任务编号默认为空
+                jobstatus: jobState,//工单状态id
+                partid: partid,
+                equid: equid,
+                planStime: start,
+                planEtime: end
+            },
+            callback: function (records, options, success) {
+                changetr();
+            },
+            scope: this,
+            add: false
+        });
+    }
 }
 
 function loadCookie(){

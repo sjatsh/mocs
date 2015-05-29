@@ -1,0 +1,26 @@
+{	
+	"top": {
+		"main_title": "报工数据修改"
+	},
+	"content": {
+		"title1":"报工修改单号",
+		"title2":"产品名称",
+		"title3":"批次计划号",
+		"title4":"工单编号",
+		"title5":"投料数",
+		"title6":"工序号",
+		"title7":"报工人员",
+		"title8":"报工日期",
+		"title9":"更改数量",
+		"title10":"处理原因",
+		"title11":"报工单号",
+		"title12":"设备编号",
+		"table_title1":"序号",
+		"table_title2":"设备序列号",
+		"table_title3":"设备名称",
+		"table_title4":"已报工数量",
+		"confirm_ok":"确认",
+		"confirm_cancel":"取消",
+		"dlg_title":"确认信息"
+	}
+}

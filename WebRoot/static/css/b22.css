@@ -742,6 +742,12 @@
 	padding: .5em 1em;
 	margin-bottom: 30px;
 }
+/* 表格例外 */
+.ui-dialog .ui-widget-content table.rf-cal-extr {
+	width: auto;
+	padding: 0;
+	margin: 0;
+}
 /* 底部 */
 .ui-dialog .headDivduan
 {

@@ -1,0 +1,22 @@
+{	
+	"top": {
+		"serachTime":"Search Time",
+		"title2":"Process Flag",
+		"title3":"Search" ,
+		"title4":"Cancel" ,
+		"title5":"Import"
+	},
+	"content": {
+		"rwh":"Job No",
+		"tfsl":"Put Quantity",
+		"ljmc":"Part name",
+		"ljbh":"Part No",
+		"kssj":"Start Time",
+		"jssj":"Finish Time",
+		"ffsj":"Grant Time",
+		"clbz":"Process Flag",
+		"scsj":"Upload Time"
+		
+	}
+	
+}

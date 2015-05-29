@@ -14,7 +14,7 @@ import java.util.TreeSet;
  * Created with IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-11-1
- * Time: 涓嬪崍8:02
+ * Time: 下午8:02
  */
 public class DatabaseResourceAdapter extends AbstractResourceAdapter {
     private Locale defaultLocale;
@@ -24,10 +24,10 @@ public class DatabaseResourceAdapter extends AbstractResourceAdapter {
     }
 
     /**
-     * 瑁呰浇鎸囧畾鍚嶇О鍜屽尯鍩熻缃殑璧勬簮缁戝畾
+     * 装载指定名称和区域设置的资源绑定文件
      *
-     * @param locale 鍖哄煙璁剧疆
-     * @return 璧勬簮缁戝畾
+     * @param locale 区域设置
+     * @return 资源绑定信息
      */
     @Override
     protected IResourceBundle loadResourceByLocale (Locale locale) {

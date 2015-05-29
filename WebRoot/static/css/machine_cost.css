@@ -59,5 +59,125 @@ input[type="text"]{
 	width: 260px;
 }
 
+.rf-p{
+	border-width: 0px;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+.rf-p-b {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
 
+.header-content-main-title {
+	font-size: 55px;
+	line-height: 280px;
+}
 
+.header-filter-title {
+	position: absolute;
+	left: 0;
+	top: 70px;
+	width: 384px;
+	height: 45px;
+	font-size: 40px;
+	line-height: 45px;
+}
+
+.header-filter-select {
+	position: absolute;
+	left: 0;
+	top: 115px;
+	width: 384px;
+	height: 40px;
+	text-align: center;
+}
+.header-filter-select input[type='text'] {
+	width: 260px;
+	height: 40px;
+	font-size: 30px;
+}
+.header-filter-select img.rf-cal-btn {
+	display: none;
+}
+
+.header-filter-search {
+	position: absolute;
+	left: 110px;
+	top: 58px;
+	width: 164px;
+	height: 164px;
+}
+.header-filter-search>input[type='image'] {
+	height: 100%;
+}
+
+.content-bg {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+}
+
+#backtab {
+	position: absolute;
+	left: 5px;
+	top: 200px;
+	z-index: 100
+}
+
+#img2 {
+	cursor: pointer;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 73px;
+	height: 181px;
+}
+
+#tabpage {
+	position: absolute;
+	left: 56px;
+	top: 28px;
+	width: 550px;
+	height: 55px;
+	cursor: pointer;
+	white-space: nowrap;
+	z-index: 100
+}
+#tabpage>img {
+	height: 100%;
+}
+
+.frame-chart {
+	position: absolute;
+	top: 83px;
+	left: 105px;
+	width: 1700px;
+	height: 540px;
+}
+
+.frame-chart-detail {
+	width: 1700px;
+	height: 540px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+#selectone {
+	position: absolute;
+	left: 1330px;
+	top: -60px;
+	z-index: 100;
+}
+#selectone>select {
+	width: 415px;
+	height: 50px;
+	font-size: 30px;
+}

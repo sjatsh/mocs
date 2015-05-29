@@ -1,0 +1,27 @@
+{	"zwxxts":"No data, please modify the node or the query conditions",
+	"top": {
+		"title1":"Time Statistics",
+		"title2":"Machine",
+		"startTime":"Date From",
+		"endTime":"Date To",
+		"title3":" Search "
+	},
+	"content": {
+		"lb":"List",
+		"tb":"Chart",
+		"tbtitle":"Machine Historical Time Distribution",
+		"kjsj":"Power On Time:",
+		"gjsj":"Power Off Time:",
+		"zbsj":"Preparation Time:",
+		"jgsj":"Processing Time:",
+		"kxdjsj":"Idle Time:",
+		"gzsj":"Error Time:",
+		"kyxsj":"Idle Running Time:",
+		"qxsj":"Cutting Time:",
+		"sdyxsj":"Manual Operating Time:",
+		"sxlsj":"Baiting Time:",
+		"qtsj":"Other Time:",
+		"qjngjjs":"Interval Work Counter:",
+		"hdsj":"Tool Changing Time:"
+	}
+}

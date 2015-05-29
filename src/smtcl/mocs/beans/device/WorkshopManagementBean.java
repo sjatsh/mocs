@@ -1,9 +1,10 @@
 package smtcl.mocs.beans.device;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
@@ -14,9 +15,9 @@ import javax.servlet.http.HttpSession;
 
 import org.dreamwork.persistence.ServiceFactory;
 
-import smtcl.mocs.services.device.ICostManageService;
 import smtcl.mocs.services.device.IDeviceService;
-import smtcl.mocs.services.device.IOrganizationService;
+import smtcl.mocs.utils.authority.SessionHelper;
+import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.StringUtils;
 
 import com.google.gson.Gson;
@@ -26,8 +27,8 @@ import com.google.gson.GsonBuilder;
  * 设备管理
  * @创建时间 2013-06-06
  * @作者 liguoqiang
- * @修改者： 
- * @修改日期： 
+ * @修改者
+ * @修改日期
  * @修改说明
  * @version V1.0
  */
@@ -35,20 +36,11 @@ import com.google.gson.GsonBuilder;
 @ViewScoped
 public class WorkshopManagementBean { 
 
-
-	/**
-	 * 权限接口实例
-	 */
-    private IOrganizationService organizationService=(IOrganizationService)ServiceFactory.getBean("organizationService");//获取注入;
+	private String nodeSwitchLoad;
     /**
 	 * 设备业务逻辑
 	 */
     private IDeviceService deviceService =(IDeviceService)ServiceFactory.getBean("deviceService"); //获取注入;
-    
-    /**
-     * 获取service
-     */
-    private ICostManageService costManageService=(ICostManageService)ServiceFactory.getBean("costManageService");
     
     /**
      * 机床状态
@@ -100,20 +92,42 @@ public class WorkshopManagementBean {
 	 * 构造方法
 	 */
 	public WorkshopManagementBean() {
+		loadData();
+	} 
+	/**
+	 * 用于构造方法加载数据或者节点切换的时候重新加载数据
+	 */
+	public void loadData(){
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		String equ=StringUtils.getCookie(request, "equSerialNo");
-		if(null!=equ&&!"".equals(equ)){
-			equSerialNo=equ;
-		}else{
-			 HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-			String startnodeid=session.getAttribute("nodeid")+"";
-			if(null!=startnodeid&&!"".equals(startnodeid)&&!"null".equals(startnodeid)){
-				List tt=deviceService.getTEquipmentInfoByPId(startnodeid);
-				if(null!=tt&&tt.size()>0){
-					equSerialNo=tt.get(0)+"";
-				}
-			}
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		String startnodeid=session.getAttribute("nodeid")+"";
+		if(null==nodeSwitchLoad){
+			nodeSwitchLoad=startnodeid;
 		}
+		 if(!startnodeid.equals(nodeSwitchLoad)){
+			 nodeSwitchLoad=startnodeid;
+			 equSerialNo="";
+			 if(!StringUtils.isEmpty(startnodeid)){
+					List tt=deviceService.getTEquipmentInfoByPId(startnodeid);
+					if(null!=tt&&tt.size()>0){
+						equSerialNo=tt.get(0)+"";
+					}
+				}
+		 }else{
+			  String equ=StringUtils.getCookie(request, "equSerialNo");
+				if(null!=equ&&!"".equals(equ)){
+					equSerialNo=equ;
+				}else{
+					if(!StringUtils.isEmpty(startnodeid)){
+						List tt=deviceService.getTEquipmentInfoByPId(startnodeid);
+						if(null!=tt&&tt.size()>0){
+							equSerialNo=tt.get(0)+"";
+						}
+					}
+				}
+		 }
+			
+		
 		if(!StringUtils.isEmpty(equSerialNo)){
 			List iplist=deviceService.getipAddress(equSerialNo);
 			if(null!=iplist&&iplist.size()>0)
@@ -125,10 +139,16 @@ public class WorkshopManagementBean {
 			List<Map<String,Object>> mtsrs=deviceService.getMachineToolStatus(equSerialNo);
 			mts=StringUtils.listIsNull(mtsrs)?mtsrs.get(0):null;
 			if(StringUtils.listIsNull(mtsrs)){
-				if(mts.get("status").toString().equals("运行")){
-					if(StringUtils.isValid(ipAddress)<0){
+				Date da=new Date();
+				String status=mts.get("status").toString();
+				if(da.getTime()-((Date)mts.get("updateTime")).getTime()>Constants.CONTROL_TUOJI_TIME){
+					status="脱机";
+				}
+				
+				if(status.equals("运行")){
+					/*f(StringUtils.isValid(ipAddress)<0){
 						ipAddress=null;
-					}
+					}*/
 				}
 				mts.put("cuttingTime", df.format(Double.parseDouble(mts.get("cuttingTime")+"")/3600));
 				mts.put("assistedTime", df.format(Double.parseDouble(mts.get("assistedTime")+"")/3600));
@@ -144,15 +164,12 @@ public class WorkshopManagementBean {
 				mts.put("stopTime", df.format(totol));
 				
 			}else{
-				mts =new HashMap();
+				mts =new HashMap<String,Object>();
 				mts.put("equSerialNo", equSerialNo);
 			}
 			List<Map<String,Object>> mtrs=deviceService.getMachiningTask(equSerialNo);
 			mt=StringUtils.listIsNull(mtrs)?mtrs.get(0):null;
 			if(StringUtils.listIsNull(mtrs)){
-				if((mt.get("jobDispatchListNo")+"").length()>6){
-					//mt.put("jobDispatchListNo", StringUtils.getSubString(mt.get("jobDispatchListNo")+"","1") );
-				}
 				if(null==mt.get("estimateLastTime")){
 					mt.put("estimateLastTime", d.format(0));
 				}else{
@@ -167,24 +184,28 @@ public class WorkshopManagementBean {
 			}
 			ee=deviceService.getEquipmentEfficiency(equSerialNo);
 			pie=loadPieData(mts);
-			/*try {
-				List<Map<String,Object>> temp=costManageService.queryLastPartCost(equSerialNo);
-				if(null!=temp&&temp.size()>0)
-				{
-				    Map<String,Object> zmt=temp.get(0);
-					if(null!=zmt&&zmt.size()>0){
-						//piecb=loadPieDataTwo(zmt);
-						//piecbtwo=loadPieDataThree(zmt);//成本
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}*/
+			
 			piecbtwo=loadRCLData(equSerialNo,1);//日产量
 			piecb=loadRCLData(equSerialNo,2);//月产量
+		}else{
+			ipAddress=null;
+			mts=null;
+			mt=null;
+			ee=null;
+			pie=null;
+			piecbtwo=null;
+			piecb=null;
+			
 		}
-	}  
-	
+	}
+	/**
+	 * 节点切换数据更换
+	 * @return
+	 */
+	public String getNodeSwitchLoad() {
+		 loadData();
+		return nodeSwitchLoad;
+	}
 	/**
 	 * 定时刷新
 	 */
@@ -197,9 +218,6 @@ public class WorkshopManagementBean {
 			List<Map<String,Object>> mtrs=deviceService.getMachiningTask(equSerialNo);
 			mt=StringUtils.listIsNull(mtrs)?mtrs.get(0):null;
 			if(StringUtils.listIsNull(mtrs)){
-				if((mt.get("jobDispatchListNo")+"").length()>6){
-					//mt.put("jobDispatchListNo", StringUtils.getSubString(mt.get("jobDispatchListNo")+"","1") );
-				}
 				if(null==mt.get("estimateLastTime")){
 					mt.put("estimateLastTime", d.format(0));
 				}else{
@@ -312,11 +330,15 @@ public class WorkshopManagementBean {
 		}
 		 return null;
 	 }
-	 
+	 private Locale getLocale(){
+	        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+	        return SessionHelper.getCurrentLocale(request.getSession());
+	 }
 	 public String loadRCLData(String equSerialNo,int type){
+		 Locale locale = this.getLocale();
 		 //var abc="[{name:'Chrome',y:12.8},{name:'test1',y:12.8},{name:'test2',y:12.8}]";
 		 List<Map<String,Object>> rs=deviceService.getRCLData(equSerialNo,type);
-		 String[] color={"#009E39","#BDBEBD","#08AEFF","#FFDB00","#5A595A"};
+		 String[] color={"rgba(108,204,71,1)","rgba(108,204,71,0.4)","rgba(0,129,206,1)","rgba(0,129,206,0.4)","rgba(160,160,160,1)"};
 		 int i=0;
 		 String result="[";
 		 int other=0;
@@ -331,7 +353,12 @@ public class WorkshopManagementBean {
 			 i++;
 		 }
 		 if(other>0){
-			 result+="{name:'其他零件,其他工序',y:"+other+",color:'"+color[4]+"'}";
+			 if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+				 result+="{name:'Other Part,Other Process',y:"+other+",color:'"+color[4]+"'}";
+			 }else{
+				 result+="{name:'其他零件,其他工序',y:"+other+",color:'"+color[4]+"'}";
+			 }
+			 
 		 }
 		 //result=result.substring(0, result.length()-1);
 		 result+="]";
@@ -400,6 +427,12 @@ public class WorkshopManagementBean {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+
+	
+
+	public void setNodeSwitchLoad(String nodeSwitchLoad) {
+		this.nodeSwitchLoad = nodeSwitchLoad;
 	}
 
 

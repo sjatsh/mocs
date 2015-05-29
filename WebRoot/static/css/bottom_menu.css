@@ -1,0 +1,250 @@
+/* 分割线 */
+.line-689976 {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1920px;
+	height: 5px;
+	background: #689976;
+}
+/* 菜单按钮区域 */
+.zl-bottom-bar {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 1920px;
+	height: 64px;
+}
+/* 左箭头 */
+.zl-bottom-bar-left {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 84px;
+	height: 64px;
+	background: #BFBEBD;
+	cursor: pointer;
+}
+.zl-bottom-bar-left.disable {
+	background: #FFF;
+	cursor: default;
+}
+.zl-bottom-bar-left>img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 84px;
+	height: 64px;
+}
+/* 右箭头 */
+.zl-bottom-bar-right {
+	position: absolute;
+	left: 1836px;
+	top: 0;
+	width: 84px;
+	height: 64px;
+	background: #BFBEBD;
+	cursor: pointer;
+}
+.zl-bottom-bar-right.disable {
+	background: #FFF;
+	cursor: default;
+}
+.zl-bottom-bar-right>img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 84px;
+	height: 64px;
+}
+
+/* 菜单内容区域 */
+.zl-bottom-bar-center {
+	position: absolute;
+	left: 108px;
+	top: 0;
+	width: 1712px;
+	height: 64px;
+	overflow: hidden;
+}
+.zl-bottom-bar-center>#bottom_menus {
+	width: auto;
+	height: 64px;
+	white-space: nowrap;
+	font-weight: bold;
+}
+/* 根级单个菜单按钮 */
+#bottom_menus .main-menu {
+	position: relative;
+	float: left;
+	margin-right: 8px;
+	width: 206px;
+	height: 64px;
+	background: #F7F7F7;
+	text-align: center;
+	font-size: 17px;
+	line-height: 55px;
+	color: #858585;
+	cursor: pointer;
+}
+#bottom_menus .main-menu .menu-cur {
+	display: block;
+	position: absolute;
+	left: 90px;
+	top: 1px;
+	width: 26px;
+	height: 14px;
+	visibility: hidden;
+}
+.main-menu .menu-icon {
+	display: block;
+	position: absolute;
+	left: 66px;
+	top: 56px;
+	width: 74px;
+	height: 74px;
+	visibility: hidden;
+}
+.menu-icon .menu-icon-bg {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 74px;
+	height: auto !important;
+	visibility: hidden;
+}
+.menu-icon .menu-icon-bgDisable {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 74px;
+	height: auto !important;
+}
+.menu-icon .menu-icon-info {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 68px;
+	height: auto !important;
+}
+.main-menu .menu-foot {
+	display: block;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	width: 43px;
+	height: 21px;
+}
+#bottom_menus .main-menu.cur .menu-cur {
+	visibility: visible;
+}
+#bottom_menus .main-menu.cur {
+	background: #FFF;
+}
+#bottom_menus .main-menu.cur .menu-icon.show .menu-icon-bg {
+	visibility: visible;
+}
+#bottom_menus .main-menu.cur .menu-icon-bgDisable{
+	visibility: hidden;
+}
+.main-menu .menu-icon.show {
+	visibility: visible;
+}
+
+/* 子级菜单按钮区域 */
+#bottom_menus .child-menus {
+	position: fixed;
+	left: 0;
+	top: 946px;
+	width: 1920px;
+	height: 58px;
+	background: rgba(255,255,255,.75);
+	z-index: 1;
+	cursor: default;
+	visibility: hidden;
+}
+#bottom_menus .child-menus .child-menus-bg {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1920px;
+	height: 58px;
+	background: rgba(131,178,140,.5);
+}
+/* 子级菜单ICON */
+#bottom_menus .child-menus .child-menus-icon {
+	position: relative;
+	float: left;
+	margin: 14px;
+	width: 36px;
+	height: 30px;
+	cursor: pointer;
+}
+/* 子级菜单单个按钮 */
+#bottom_menus .child-menu {
+	position: relative;
+	float: left;
+	width: 260px;
+	height: 58px;
+	border-left: solid 1px rgba(104,153,118,0.5);
+	font-size: 21px;
+	line-height: 58px;
+	color: #8E8E8E;
+	cursor: pointer;
+}
+#bottom_menus .main-menu.cur .child-menus,#bottom_menus .main-menu.show .child-menus {
+	visibility: visible;
+}
+#bottom_menus .child-menu.cur {
+	background: rgba(255,255,255,.25);
+	border-top: solid 1px #BFBFBF;
+}
+
+/* 次子级菜单按钮区域 */
+#bottom_menus .sub-menus {
+	position: fixed;
+	left: 0;
+	top: 884px;
+	width: 1920px;
+	height: 58px;
+	background: rgba(255,255,255,.75);
+	border-top: solid 4px #BFBFBF;
+	cursor: default;
+	visibility: hidden;
+}
+#bottom_menus .sub-menus .child-menus-bg {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1920px;
+	height: 58px;
+	background: rgba(131,178,140,.25);
+}
+/* 次子级菜单单个按钮 */
+#bottom_menus .sub-menu {
+	position: relative;
+	float: left;
+	width: 260px;
+	height: 58px;
+	border-left: solid 1px rgba(104,153,118,0.5);
+	cursor: pointer;
+}
+#bottom_menus .child-menu .sub-menus .sub-menu:nth-child(2) {
+	margin-left: 64px;
+}
+#bottom_menus .main-menu.cur .child-menu.cur .sub-menus {
+	visibility: visible;
+}
+
+#bottom_menus {
+	font-family: "微软雅黑","Microsoft YaHei","simhei";
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#bottom-bar>ul {
+	display: inline-block;
+}
+#bottom-bar>ul>li {
+	display: inline-block;
+}

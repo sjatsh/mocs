@@ -20,7 +20,7 @@ import smtcl.mocs.utils.authority.DateUtil;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
- * 信息管理-人员明细表
+ * 信息管理-设备明细表
  * @author songkaiang
  *
  */

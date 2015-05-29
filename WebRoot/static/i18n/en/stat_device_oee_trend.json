@@ -1,0 +1,22 @@
+{	"zwxxts":"No data, please replace the node or the query conditions",
+	"top": {
+		"title1":"OEE Trend Analysis",
+		"title2":"Machine Name:",
+		"title3":"Time Unit:",
+		"startTime":"Date From",
+		"endTime":"Date To",
+		"title4":"Search"
+	},
+	"content": {
+		"lb":"List",
+		"tb":"Chart",
+		"tbtitle":"OEE Trend Analysis ",
+		"xh":"Number",
+		"sjsj":"Date",
+		"kyl":"Availability",
+		"bxx":"Performance",
+		"zl":"Quality",
+		"oee":"OEE",
+		"teep":"TEEP"
+	}
+}

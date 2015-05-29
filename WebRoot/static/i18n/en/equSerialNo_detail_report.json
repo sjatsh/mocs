@@ -1,0 +1,14 @@
+{	
+	"top": {
+		"title1":"Equipment Report",
+		"title2":"Date From",
+		"title3":"Date To",
+		"title4":" Search "
+	},
+	"content": {
+		"sb":"Equipment",
+		"ljmc":"Part Name",
+		"gxmc":"Process Name",
+		"wcsl":"Completed Qty"
+	}
+}

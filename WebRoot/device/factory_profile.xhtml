@@ -7,952 +7,138 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <link rel="stylesheet" type="text/css" href="./css/jquery.mCustomScrollbar.css"/>
-	<h:outputScript library="js" name="jquery.mCustomScrollbar.js"></h:outputScript>
+	<!-- <link rel="stylesheet" href="./css/factory_profile.css" type="text/css"></link> -->
+	<link rel="stylesheet" href="./css/publish/factory_profile.min.css" type="text/css"></link>
+<style>
+
+</style>
+<h:form id="myform">
+<!-- 颜色标识区域 -->
+<ui:remove>
+<div class="equstatus2">
+	<div class="yanse_WH2 yanse_LT11" >
+		<img src="./images/status_green.png" style="height: 100%;"></img>
+	</div>
+	<div class="auto-size-absolute font_WH2 font_LT11"><span data-i18n="content.s_yx"></span></div>
 	
-	<h:outputScript library="js" name="factory_profile.js"></h:outputScript>
-	<h:outputScript library="js" name="common.js"></h:outputScript>
-	<link rel="stylesheet" href="./css/factory_profile.css" type="text/css"></link>
-	<style>
-	.homemenu{
-		position: fixed;
-		z-index:99;
-		display: none;
-		overflow: visible;
-	}
-	.homemenu .kk{
-		bottom: 0px;
-		top: 0px;
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
-	.tohome{
-		position:absolute;z-index:200000;
-	}
-	</style>
-	<h:form id="myform">
-		<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
-		<script type="text/javascript">	
-			document.getElementById("maskw").style.height = hjb51 + "px";
-			document.getElementById("maskw").style.width = wjb51 + "px";
-		</script>
-	    <h:inputHidden id="parentid" value="#{factoryProfileBean.parentId}"/>
-	    <h:inputHidden id="userid" value="#{factoryProfileBean.userId}"/>
-		<h:inputHidden id="nodeid" value="#{factoryProfileBean.selectTNodesId}"/>
-		<h:inputHidden id="bgpath" value="#{factoryProfileBean.bgpath}"/>
-		<h:commandButton id="update" action="#{factoryProfileBean.getData1}" style="display:none;"/>
-		<div id="homemenu" class="homemenu" >
-		</div>
-		<img class="tohome" src="./img/menu/2_16.png"/>
-		<script type="text/javascript">
-		//<![CDATA[	
-			var currentName;
-		    var imgPercent = hjb51 / 1080; //比例 	 
-			var whval = 29 * imgPercent;
-		    var userid= document.getElementById("myform:userid").value;
-		    var parentid = document.getElementById("myform:parentid").value;
-			var parentNode="-999";
-			var url="WSUserService/getAllNodesByParentNodeId.json";
-			//整个块的索引
-			var thisSub=0;
-			var lastSub=-1;
-			//选中块的节点id
-			var node=parentNode;
-			var selectedNode;
-			//层级
-			var layer=1;
-			//是否选中
-			var selected=false;
-			$(document).ready(function(){
-				//alert("ajax");
-				var ids=document.getElementById("myform:nodeid").value;
-				$("#homemenu").css("display", "block");
-				init(parentid,ids);
-				$(".tohome").click(function(){
-					if($("#homemenu").css("display") == "none") {
-						$("#homemenu").css("display", "block");
-						thisSub=0;
-						selected=true;
-						$("#homemenu").html("");
-						init(parentNode,ids);
-					}
-					else {
-						$("#homemenu").css("display", "none");
-					}
-				});
-			});
-			function init(node,ids){
-				 $.ajax({
-					url: url,
-					data: "nodeId="+node+"&userId="+userid,
-					cache: false,
-					dataType: 'text',
-					success: function (returnData) {
-						var a=JSON.parse(returnData);
-						var data=a.data;					
-						//菜单位置
-						var position;
-						var fontSize;
-						if(selected==true){
-							position=0;
-							layer=1;
-						}
-						else{
-							position = -wjb51 * 223 / 1920* (layer - 1);
-						}
-						var content='<div class="kk" id="submenu'+layer+'" style="left:'+position+'px;position:absolute;">';
-						for(var i=data.length-1;i>=0;i--){
-						//for(var i=0;i<data.length;i++){
-							var nodeId=data[i].nodeId;
-							var name=data[i].name;							
-							var num=data[i].childNodesNum;
-							var l=name.length;
-							//var parentId = data[i].parentId;  //得到父ID
-							if(layer==1){
-								if(l<=6)
-									fontSize = hjb51 * 30 / 1080;
-								else
-									fontSize = hjb51 * 30 / 1080
-									- (l - 6) * 3;	
-							}else{
-								    fontSize = hjb51 * 22 / 1080;
-							}
-							var top=hjb51*900/1080-hjb51*80/1080*(i+1);//这里
-							if(node != "-999") {
-								top = hjb51 * 602 / 1080 - hjb51 * 80 / 1080 * (i + 1);
-							}
-							//var top=990-101*(i+1);
-							//node当前父节点id,nodeId当前节点id
-							content+='<div class="ss select'+layer+'" no="'+(data.length-1-i)+'" node="'+node+'" name="'+name+'" nodeId="'+nodeId+'" v="'+layer+'" style="position:relative;font-weight:bold;font-size:'+fontSize+'px;background-image:url(./img/menu/2_14.png);">';
-							if(num==0){
-								content += '<span class="dd" style="cursor:pointer;" >'
-									+ name + '</span>';
-							}else{
-								content+='<img class="mm subselect'+layer+'" v="'+layer+'" node='+nodeId+' style="z-index:10001;" src="./img/menu/2_03.png"/>';
-								content+='<span class="selectmar" style="cursor:pointer;">'+name+'</span>';
-							}
-							content+='</div>';
-						}
-						content+='</div>';
-						$("#homemenu").append(content);
-						$(".kk").css('width', wjb51 * 223 / 1920 + "px");
-						$(".ss").css('width', wjb51 * 223 / 1920 + "px");
-						$(".ss").css('height',hjb51 * 80 / 1080 + "px");
-						$(".ss").css('line-height',hjb51 * 80 / 1080 + "px");
-						$(".mm").css('width', whval + "px");
-						$(".mm").css('height', whval + "px");
-						$(".mm").css('line-height',hjb51 * 80 / 1080 + "px");
-						$(".mm").css('margin-left',wjb51 * 20 / 1920 + "px");
-						$(".dd").css('margin-left',wjb51 * 30 / 1920 + "px");
-						$(".selectmar").css('margin-left',wjb51 * 20 / 1920 + "px");
-						$(".kk:last").each(function() {
-							$(this).scrollTop(10);  //操作滚动条
-							if($(this).scrollTop() > 0) { //判断是否有滚动
-								$(this).css("top", "0");
-							}
-							else {
-								$(this).css("top", "auto");
-							}
-							$(this).scrollTop(0);   //滚动条返回顶部
-		
-						});
-						
-						//滚动条隐藏
-						var kkFrame = document.createElement("div");
-						$(kkFrame).width($("#homemenu .kk").width()).height($("#homemenu .kk").height()).css({position:"absolute", bottom:"0", overflow:"hidden"});
-						$("#homemenu .kk").width($("#homemenu .kk").width() +17);
-						$(kkFrame).append($("#homemenu .kk")[0]);
-						$("#homemenu").append($(kkFrame)[0]);
-						
-						//选中项背景改变
-						for ( var i = 0; i < data.length; i++) {
-							var id1=data[i].nodeId;
-							if (id1==ids){
-								thisSub=data.length-1-i;
-								break;
-							}
-						}
-						selected=false;
-						$(".select"+layer).eq(thisSub).css("background-image","url(./img/menu/2_11.png)");
-
-						//显示高度调整
-						var parentKKBottom = $(".kk:last").offset().top + $(".kk:last").height();
-						$(".kk:last .ss").each(function() {
-							if($(this).css("background-image").indexOf("2_11.png") > -1) {
-								var currentSSBottom = $(this).offset().top + $(this).height();
-								if(currentSSBottom > parentKKBottom) {
-									$(".kk:last").scrollTop(currentSSBottom - parentKKBottom);
-								}
-							}
-						});
-						
-						$(".select"+layer).click(function(){
-							$(".select"+layer).css("background-image","url(./img/menu/2_14.png)");
-							$(this).css("background-image","url(./img/menu/2_11.png)");
-							//当前菜单级数
-							var v=parseInt($(this).attr("v"));
-							selectedNode=$(this).attr("node");
-							$("#homemenu").html("");
-							selected=true;
-							//thisSub=$(this).index();
-							thisSub=parseInt($(this).attr("no"));
-							var n=$(this).attr("nodeId");
-							//alert(n);
-							//仅供沈阳车间展示使用
-							currentName=$(this).attr("name");
-							if(currentName == "沈阳") location.href="http://10.10.140.58:8080/mocs/index.faces";
-							else 
-							   {
-							      document.getElementById("myform:nodeid").value = n;
-							      document.getElementById("myform:update").click();
-							   }
-							init(selectedNode,n);
-						});	
-						$(".subselect"+layer).click(function(e){
-							e.stopPropagation();
-							//$(".subselect").attr("src","./img/menu/2_03.png");
-							//$(this).Children(".subselect").attr("src","./img/menu/2_07.png");
-							//当前菜单级数
-							var v=parseInt($(this).attr("v"));
-							if(v==layer){
-								layer++;
-							}else if(v<layer){
-								for(var i=v+1;i<=layer;i++){
-									$("#submenu"+i).remove();
-								}
-								layer=v+1;
-							}
-							$(".subselect"+v).attr("src","./img/menu/2_03.png");
-							$(this).attr("src","./img/menu/2_07.png");
-							//alert(v);
-							$(".select"+v).css("background-image","url(./img/menu/2_14.png)");
-							$(this).parents(".select"+v).css("background-image","url(./img/menu/2_11.png)");
-							node=$(this).attr("node");
-							init(node,node);
-						});
-					}
-				});
-			}
-		//]]>	
-		</script>
-		
-		<table id="factoptt" cellspacing="0" cellpadding="0" style="width: 100%;height: 100%;">
-			<tr>
-				<td width="100%"  height="30%">
-					<table id="profile_top" style="width: 100%">
-						<tr>
-							<td style="width: 20%" align="center">
-								<div style="cursor: pointer; position: absolute;"
-									onclick="javascript:window.location.href='home.faces'"></div> 								
-							</td>
-							<td style="width: 20%">
-								<table height="100%" width="100%">
-									<tr>
-										<td align="left">
-											<img src="./images/profile_top_split.png" id="img2" class="profile_top_right_split" />
-										</td>
-										<td align="center" valign="center">
-											<table height="100%" width="100%">
-												<tr>
-													<td valign="top">
-														<div id="textname1" style="font-weight: bold; color: #00b050;">工单准时率</div>
-													</td>
-												</tr>
-												<tr>
-													<td style="font-weight: bold; color: #fed400;" id="ppf" align="center">95</td>
-												</tr>
-												<tr>
-													<td valign="bottom"
-														style="font-weight: bold; color: #fed400;"
-														id="textpercent1" align="right">%</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td style="width: 20%">
-								<table style="width: 100%;height: 100%;">
-									<tr>
-										<td align="left">
-											<img src="./images/profile_top_split.png" id="img3" class="profile_top_right_split" />
-										</td>
-										<td align="center" valign="center">
-											<table height="100%" width="100%">
-												<tr>
-													<td valign="top" id="textname2"
-														style=" font-weight: bold; color: #00b050;">
-														<div id="textname2title">当日车间加工数量</div>
-													</td>
-													
-												</tr>
-												<tr>
-													<td style="font-weight: bold; color: #00b050;" id="pit" align="center">209</td>
-													
-												</tr>
-												<tr>
-													<td valign="bottom"
-														style="font-weight: bold; color: #267422;"
-														id="textpercent2" align="right"><font style="color: white;">&#160;</font>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td style="width: 20%">
-								<table height="100%" width="100%">
-									<tr>
-										<td align="left"><img
-											src="./images/profile_top_split.png" id="img4"
-											class="profile_top_right_split" /></td>
-										<td align="center" valign="center">
-											<table height="100%" width="100%">
-												<tr>
-													<td valign="top" id="textname3"
-														style=" font-weight: bold; color: #00b050;">
-														<div id="textname3title">产品成套率</div>
-													</td>
-													
-												</tr>
-												<tr>
-													<td style="font-weight: bold; color: #ff0000;" id="rcr" align="center">0</td>
-												</tr>
-												<tr>
-													<td valign="bottom"
-														style="font-weight: bold; color: #fed400"
-														id="textpercent3" align="right">%</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td style="width: 20%">
-								<table height="100%" width="100%">
-									<tr>
-										<td align="left"><img
-											src="./images/profile_top_split.png" id="img5"
-											class="profile_top_right_split" /></td>
-										<td align="center" valign="center">
-											<table height="100%" width="100%">
-												<tr>
-													<td valign="top" id="textname4"
-														style=" font-weight: bold; color: #00b050;">
-														<div id="textname4title">综合效率</div>
-													</td>
-												</tr>
-												<tr>
-													<td style="font-weight: bold; color: #fed400;" id="ee" align="center">65</td>
-												</tr>
-												<tr>
-													<td valign="bottom"
-														style="font-weight: bold; color: #fed400;"
-														id="textpercent4" align="right">%</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table> <h:panelGroup></h:panelGroup>
-				</td>
-			</tr>
-			<tr >
-				<td align="left" style="height: 70%;">
-					<img id="centerbg"
-					style="position: absolute; left: 0px; z-Index: -1; border: 0px solid blue;display:none;left:0px;"
-					src="./images/WIS2_content_bg.png" />
-					<div id="nexttab" style="position: absolute;z-index: 100;margin-top:7%;right: 0px;">
-						<img id="img2" onclick="jumpto('/mocs/device/factory_inventory.xhtml')" 
-						style="cursor: pointer; width: 50px; height: 124px;" src="./images/nextTab.png" />
-					</div>
-					<div style="position:absolute;width: 100%;height: 100%;font-size: 14px;">
-						<table style="width: 17%;height: 8%;position: absolute;bottom:34%;left:1%;
-							font-size:80%;color:#5A5A5A;" 
-							id="fontsizeone" >
-			 				<tr>
-			 					<td style="width: 10%;height: 50%">
-			 						<div id="yanse1" style="width: 80%;height:60%;background-color:#37A338;"></div>
-			 					</td>
-			 					<td style="width:40%;">
-			 						运行
-			 					</td>
-			 					<td style="width: 10%;">
-			 						<div id="yanse2" style="background-color:#FED400;width: 80%;height: 60%;"></div>
-			 					</td>
-			 					<td style="width: 40%;">
-			 						空闲/准备
-			 					</td>
-			 				</tr>
-			 				<tr>
-			 					<td >
-			 						<div  id="yanse3" style="background-color:#FF0000;width: 80%;height:60%;"></div>
-			 					</td>
-			 					<td >
-			 						故障/急停
-			 					</td>
-			 					<td>
-			 						<div  id="yanse4" style="background-color:#626262;width: 80%;height:60%;"></div>
-			 					</td>
-			 					<td>
-			 						停机/脱机
-			 					</td>
-			 				</tr>
-			 			</table>
-		 			</div>
-					<table width="100%" height="70%" id="kuangkuang">
-						<tr>
-							<td width="5%" height="4%" style="color: red;" id="dtzb"></td>
-							<td width="100%" id="imgbg" style="color: red;">
-								<div id="content" style="position: relative;"></div>
-								<div
-									style="background-color: white; position: relative; background-repeat: no-repeat;"
-									id="bigceng" onclick="yingcan()">
-								</div>
-							</td>
-						</tr>
-					</table> <h:inputHidden value="#{factoryProfileBean.selectName}"
-						id="selectName" /> <h:inputHidden
-						value="#{factoryProfileBean.syurl}" id="syurl" /> <h:inputHidden
-						value="#{factoryProfileBean.shurl}" id="shurl" /> 
-					<ui:remove></ui:remove> 
-					<a4j:poll action="#{factoryProfileBean.refreshData}" interval="5000" render="reload" oncomplete="reloadEqu()"></a4j:poll>
-					<a4j:outputPanel id="reload">
-						<h:inputHidden id="image" value="#{factoryProfileBean.image}" />
-						<h:inputHidden id="xz" value="#{factoryProfileBean.xz}"></h:inputHidden>
-						<h:inputHidden id="yz" value="#{factoryProfileBean.yz}"></h:inputHidden>
-						<h:inputHidden id="equipmentName" value="#{factoryProfileBean.equipmentName}"></h:inputHidden>
-						<h:inputHidden value="#{factoryProfileBean.ppcr}" id="ppcrValue" />
-						<h:inputHidden value="#{factoryProfileBean.nodp}" id="nodpValue" />
-						<h:inputHidden value="#{factoryProfileBean.equday}" id="equdayValue" />
-						<h:inputHidden value="#{factoryProfileBean.ipAddress}" id="ipAddressValue" />
-						<h:inputHidden value="#{factoryProfileBean.rcr}" id="rcrValue" />
-						<h:inputHidden value="#{factoryProfileBean.pathThree}" id="pathThreeValue" />
-						<h:inputHidden value="#{factoryProfileBean.ssoControl}" id="ssoControl" />
-					</a4j:outputPanel> 
-					<h:inputHidden id="fp" value="#{factoryProfileBean.sef}" /> 
-					<h:inputHidden id="eif" value="#{factoryProfileBean.equInformation}" /> 
-					<p:commandButton value="tt"
-						actionListener="#{factoryProfileBean.getSeveralEquInformation}"
-						id="equInformation" update=":myform:fp :myform:eif"
-						style="display:none;" oncomplete="onCompleteClick()">
-					</p:commandButton> 
-					<p:commandButton actionListener="#{menuBean.getSelectItem('b21.sbgl')}" id="sbglys"
-						value=" " style="display:none;"></p:commandButton>
-				</td>
-			</tr>
-		</table>
-		<img style="border: 0px;position: absolute;left: 0px;top: 0px;" src="./images/profile_top_logo.png" id="img1" />
-		<script type="text/javascript">
-			//特定的高度
-			document.getElementById("factoptt").style.widht = wjb51 + "px";
-			document.getElementById("factoptt").style.height = hjb51*994/1080+"px"; //继承自父页面，不知道为什么要这样写  
-			document.getElementById("content").style.height = hjb51* 703 / 1080 + "px";
-			document.getElementById("content").style.widht = wjb51 + "px";
-			document.getElementById("bigceng").style.height = 0 + "px";
-		//	document.getElementById("kuangkuang").style.height = hjb51* 708 / 1080 + "px"; //控制中间的高度  
-			
-			//document.getElementById("textname1").style.marginTop=""+hjb51*20/1080+"px"
-			//document.getElementById("textname1").style.marginTop=""+hjb51*20/1080+"px"
-			//document.getElementById("textname2title").style.marginTop="-"+hjb51*20/1080+"px"
-			//document.getElementById("textname3title").style.marginTop="-"+hjb51*20/1080+"px"
-			//document.getElementById("textname4title").style.marginTop="-"+hjb51*20/1080+"px"
-			
-			//图片大小 
-			for ( var i = 2; 6 > i; i++) {
-				var new_image = new Image();
-				new_image.src = document
-						.getElementById("img" + i).src;
-				var wjbimg = new_image.width;
-				var hjbimg = new_image.height;
-
-				document.getElementById("img" + i).style.width = wjbimg
-						* imgPercent + "px";
-				document.getElementById("img" + i).style.height = hjbimg
-						* imgPercent + "px";
-			}
-		imgReady('./images/profile_top_logo.png', function () { 
-		  var imgwjb51=this.width;
-	   	  var imghjb51=this.height;
-		  document.getElementById("img1").style.width=imgwjb51*imgPercent-30+"px";
-		  document.getElementById("img1").style.height=imghjb51*imgPercent-30+"px";										
-		  document.getElementById("img1").style.top=hjb51*30/1080+"px";
-		  document.getElementById("img1").style.left=wjb51*25/1920+"px";
-		  if(wjb51==800)
-		  {
-			  document.getElementById("img1").style.width=imgwjb51*45/100+"px";
-			  document.getElementById("img1").style.height=imghjb51*45/100+"px";  
-		  }
-          });
-		
-		  var bgpath=document.getElementById("myform:bgpath").value+"";
-			if(null!=bgpath){
-				//alert(bgpath);
-				if(""!=bgpath){
-					//alert(bgpath);
-					document.getElementById("centerbg").src="./images/"+bgpath;
-				}
-			}else{
-				document.getElementById("centerbg").src="./images/WIS2_content_bg.png";
-				
-			}
-			//图片背景 
-			//document.getElementById("centerbg").style.top = hjb51* 280 / 1080 + "px";
-			document.getElementById("centerbg").style.width = wjb51+ "px";
-			document.getElementById("centerbg").style.height = hjb51* 720 / 1080 + "px";
-			
-			
-			
-			/*
-			 var a=document.getElementById("imgbg");
-			 var style="";
-			 style=document.defaultView.getComputedStyle(a);
-
-			 alert(style.backgroundImage);
-			
-			 var new_image1 = new Image();
-			 new_image1.src = style.backgroundImage;
-			 var wjbimg1= new_image1.width;
-			 var hjbimg1= new_image1.height;
-			 alert(wjbimg1);
-			 */
-			//字体大小 
-			for ( var i = 1; 5 > i; i++) {
-				document.getElementById("textname"+ i).style.fontSize = wjb51* 14 / 1000 + "px";
-				document.getElementById("textpercent"+ i).style.fontSize = wjb51* 18 / 1000 + "px";
-			}
-			document.getElementById("ppf").style.fontSize = wjb51* 40 / 1000 + "px";
-			document.getElementById("pit").style.fontSize = wjb51* 40 / 1000 + "px";
-			document.getElementById("rcr").style.fontSize = wjb51* 40 / 1000 + "px";
-			document.getElementById("ee").style.fontSize = wjb51* 40 / 1000 + "px";
-			//地址字体大小 
-			/*
-			 document.getElementById("shstyle").style.fontSize=wjb51*26/1000+"px";
-			 document.getElementById("systyle").style.fontSize=wjb51*26/1000+"px";
-			 document.getElementById("shstyle").style.LineHeight=wjb51*42/1000+"px";
-			 document.getElementById("systyle").style.LineHeight=wjb51*42/1000+"px";
-			 document.getElementById("shstyle").style.width=wjb51*64/1000+"px";
-			 document.getElementById("systyle").style.width=wjb51*64/1000+"px";
-			 document.getElementById("shstyle").style.MarginLeft=wjb51*6/1000+"px";
-			 document.getElementById("systyle").style.MarginLeft=wjb51*6/1000+"px";
-			 */
-
-			//地址菜单 
-			//document.getElementById("main").style.width=wjb51+"px";
-			//document.getElementById("main").style.height=hjb51+"px";
-			$("#homemenu").css({
-				width:wjb51* 223 / 1920 + "px",
-				left:wjb51* 1680 / 1920 + "px",
-				top:hjb51 * 285 / 1080 + "px",
-				bottom:hjb51 * 180 / 1080 + "px"
-			});
-			$(".tohome").css("width",wjb51 * 223 / 1920 + "px");
-			$(".tohome").css("left",wjb51 * 1680 / 1920 + "px");
-			$(".tohome").css("top",hjb51 * 902 / 1080 + "px"); //这里
-			$(".tohome").css("height",hjb51 * 80 / 1080 + "px");
-		</script>
-		<script type="text/javascript">
-			//<![CDATA[
-			var a = document.getElementById("myform:xz").value; //x坐标
-			var b = document.getElementById("myform:yz").value;//y坐标
-			var c = document.getElementById("myform:equipmentName").value;//当前节点下的设备序列号集合
-			var f = document.getElementById("myform:image").value;//当前节点下的设备的图片名字结合
-			var g = document.getElementById("myform:ppcrValue").value;//ppf值
-			var k = document.getElementById("myform:nodpValue").value;//pit值
-			var m = document.getElementById("myform:equdayValue").value;//oee值
-			var o = document.getElementById("myform:rcrValue").value;//rcr值
-			var p = document.getElementById("myform:pathThreeValue").value;//三维仿真背景图
-			var q = document.getElementById("myform:ipAddressValue").value;//三维仿真地址
-
-			var xc = a.split(",");
-			var yc = b.split(",");
-			var vc = c.split(",");
-			var fc = f.split(",");
-			var gc = g.split(",");
-			var hc = (gc[0] + "").split(":");
-			var kc = k.split(",");
-			var lc = (kc[0] + "").split(":");
-			var mc = m.split(",");
-			var nc = (mc[0] + "").split(":");
-			var pc = p.split(",");
-			var qc = q.split(",");
-			document.getElementById("ppf").innerHTML = hc[1];
-			document.getElementById("ppf").style.color=returnColor(parseInt(hc[1]));
-			document.getElementById("pit").innerHTML = lc[1];
-			//document.getElementById("pit").style.color=returnColor(parseInt(lc[1]));
-			document.getElementById("ee").innerHTML = nc[1];
-			document.getElementById("ee").style.color=returnColor(parseInt(nc[1]));
-			//document.getElementById("rcr").innerHTML = o;
-			//document.getElementById("rcr").style.color=returnColor(parseInt(o));
-			document.getElementById("content").innerHTML = "";
-			if ("" != xc && xc.length > 0) {
-				for ( var i = 0; i < xc.length; i++) {
-					insertElement(parseInt(xc[i]), parseInt(yc[i]), fc[i] + "",vc[i] + "", pc[i] + "", qc[i] + "");//将设备插入到页面的指定坐标点
-				}
-				var sname = document.getElementById("myform:selectName").value;
-				//if(null!=sname&&sname=="沈阳"){
-				//	document.getElementById("content").innerHTML+="<div style='left:510px;top:250px;background:transparent;position:absolute;height:126px;width:138px;z-index: 10;'>"+
-				//											 		 "<img src='/mocs/images/jixieshou.png' />"+
-				//											 	"<div>";
-				//}
-
-			}
-			//自动刷新调用方法
-			function reloadEqu() { 
-				var a = document.getElementById("myform:xz").value;
-				var b = document.getElementById("myform:yz").value;
-				var c = document.getElementById("myform:equipmentName").value;
-				var f = document.getElementById("myform:image").value;
-				var g = document.getElementById("myform:ppcrValue").value;
-				var k = document.getElementById("myform:nodpValue").value;
-				var m = document.getElementById("myform:equdayValue").value;
-				var o = document.getElementById("myform:rcrValue").value;
-				var p = document.getElementById("myform:pathThreeValue").value;
-				var q = document.getElementById("myform:ipAddressValue").value;
-
-				var xc = a.split(",");
-				var yc = b.split(",");
-				var vc = c.split(",");
-				var fc = f.split(",");
-				var gc = g.split(",");
-				var hc = (gc[0] + "").split(":");
-				var kc = k.split(",");
-				var lc = (kc[0] + "").split(":");
-				var mc = m.split(",");
-				var nc = (mc[0] + "").split(":");
-				var pc = p.split(",");
-				var qc = q.split(",");
-				
-				document.getElementById("ppf").innerHTML = hc[1];			
-				document.getElementById("ppf").style.color=returnColor(parseInt(hc[1]));
-				document.getElementById("pit").innerHTML = lc[1];
-				//document.getElementById("pit").style.color=returnColor(parseInt(lc[1]));
-				document.getElementById("ee").innerHTML = nc[1];
-				document.getElementById("ee").style.color=returnColor(parseInt(nc[1]));
-
-				document.getElementById("rcr").innerHTML = o;
-				document.getElementById("content").innerHTML = "";
-				//document.getElementById("content").style.height = hjb51* 703 / 1080 + "px";
-				//document.getElementById("content").style.widht = wjb51 + "px";
-				if ("" != xc && xc.length > 0) {
-					for ( var i = 0; i < xc.length; i++) {
-						insertElement(parseInt(xc[i]), parseInt(yc[i]), fc[i] + "",vc[i] + "", pc[i] + "", qc[i] + "");
-					}
-					var sname = document.getElementById("myform:selectName").value;
-					for(i in document.images)document.images[i].ondragstart=imgdragstart;
-				}
-				
-			}
-
-			
-			var TimeFn = null;
-			function doubleClick(equSerialNo, pathThree, ipAddress, status) {
-				document.getElementById("bigceng").innerHTML = "";
-				clearTimeout(TimeFn);
-				var tvalue = rtrim(equSerialNo);
-				if (null != status && "gz" == status) {
-					send(equSerialNo);
-					//error_chip.jpg
-					document.getElementById("bigceng").style.backgroundImage = "url('./images/device/error_"+ pathThree + "')";
-					//alert(document.getElementById("bigceng").style.backgroundImage);
-					document.getElementById("bigceng").style.display = "block";
-					document.getElementById("myform:fp").value = equSerialNo;
-					document.getElementById("myform:equInformation").click();
-
-				} else {
-					if (tvalue == "HTC2050i-SYB21-01"|| tvalue == "ETC3650-SYB21-02"|| tvalue == "TC500R-SYB21-03") {
-						//document.getElementById("bigceng").style.backgroundImage="url('/mocs/images/hetbg.png')";
-						document.getElementById("bigceng").style.backgroundImage = "url('./images/device/swfz_"+ pathThree + "')";
-						document.getElementById("bigceng").style.display = "block";
-						document.getElementById("myform:fp").value = "TC500R-SYB21-03,ETC3650-SYB21-02,HTC2050i-SYB21-01";
-						document.getElementById("myform:equInformation").click();
-						var ipV = document.getElementById("myform:ipAddressValue").value;
-						var ip = ipV.split(",");
-						document.getElementById("bigceng").innerHTML = "<div id='bigchartpanel' class='profile_bigceng_equ_div_one'>"
-								+ "<iframe id='myif1'  frameborder='0' scrolling='no' class='profile_fram' src='"+ip[0]+"'></iframe>"
-								+ "</div>"
-								+ "<div id='bigchartpane2' class='profile_bigceng_equ_div_two'>"
-								+ "<iframe id='myif2'  frameborder='0' scrolling='no' class='profile_fram' src='"+ip[1]+"'></iframe>"
-								+ "</div>"
-								+ "<div id='bigchartpane3' class='profile_bigceng_equ_div_three'>"
-								+ "<iframe id='myif3'  frameborder='0' scrolling='no' class='profile_fram' src='"+ip[2]+"'></iframe>"
-								+ "</div>"
-								+ "<div class='profile_bigceng_equ_div_four'><img src='images/one_two_three.png'></div>";
-					} else {
-						document.getElementById("bigceng").style.backgroundImage = "url('./images/device/swfz"+ pathThree + "')";
-						//document.getElementById("bigceng").style.backgroundImage="url('/mocs/images/swfzbg_one.png')";
-						document.getElementById("bigceng").style.display = "block";
-						document.getElementById("myform:fp").value = equSerialNo;
-						document.getElementById("myform:equInformation")
-								.click();
-						//document.getElementById("bigceng").innerHTML="<div id='bigchartpanel' style='position: absolute;left: 785px;top:30px;z-index:60000;width:745px;height:500px;background-color:transparent;'>"+
-						//											"<iframe id='myif1'  frameborder='0' scrolling='no' class='profile_fram' src='/mocs/images/"+ipAddress+"'></iframe>"+
-						//										 "</div>";
-						document.getElementById("bigceng").innerHTML = "<div id='bigchartpanel' class='profile_bigceng_equ_div_one'>"
-								+ "<iframe id='myif1'  frameborder='0' scrolling='no' class='profile_fram' src='"+ipAddress+"'></iframe>"
-								+ "</div>";
-
-					}
-				}
-			}
-			function rtrim(s) {
-				return s.replace(/(\s*$)/, "");
-			}
-			function yingcan() {
-				document.getElementById("bigceng").style.display = "none";
-			}
-
-			function oneTClick(equSerialNo, status) {
-				clearTimeout(TimeFn);
-				TimeFn = setTimeout(
-						function() {
-							if (null != status && "yx" == status) {
-							//	SetCookie("equSerialNo", rtrim(equSerialNo));
-								SetCookie("equSerialNo", rtrim(equSerialNo));
-								act(3);
-								//window.location.href = "#{facesContext.externalContext.requestContextPath}/index.faces?page=./device/workshop_management_new.xhtml";
-								//window.location='index.faces?page=./device/workshop_management_new.xhtml';
-								//SetCookie("menufirst",remember('/mocs/device/workshop_management.xhtml'));
-								jumpto('/mocs/device/workshop_management_new.xhtml');
-								document.getElementById("myform:sbglys")
-										.click();
-							} else {
-								SetCookie("equSerialNo", rtrim(equSerialNo));
-								act(3);
-								//SetCookie("menufirst",remember('/mocs/device/workshop_management.xhtml'));
-								//window.location.href = "#{facesContext.externalContext.requestContextPath}/index.faces?page=./device/workshop_management.xhtml";
-								//window.location='index.faces?page=./device/workshop_management.xhtml';
-								jumpto('/mocs/device/workshop_management.xhtml');
-								document.getElementById("myform:sbglys")
-										.click();
-
-							}
-
-						}, 300);
-			}
-			function toPage(cs) {
-				//alert(a);
-				var syurl = document.getElementById("myform:syurl").value;
-				var shurl = document.getElementById("myform:shurl").value;
-				if (cs == "sy") {
-					window.location.href = syurl;
-				}
-				if (cs == "sh") {
-					window.location.href = shurl;
-				}
-
-			}
-
-			function onCompleteClick() {
-				var ef = document.getElementById("myform:eif").value;
-				var tvb = document.getElementById("myform:fp").value;
-				var tvc = tvb.split(",");
-				var tva = tvc[0];
-				var f = document.getElementById("myform:image").value;
-				var g = f.indexOf(tva);
-
-				var str = f.substring(g - 2, g);
-				if (null != tvb && tvb != "") {
-					var ei = ef.split(",");
-					if (null != str && "gz" == str) {
-						document.getElementById("bigceng").innerHTML += "<div class='profile_bigceng_font_div_one' align='center'><font class='profile_bigceng_font'>加工进度</font>"
-								+ "<br/><font class='profile_bigceng_font_green'>"
-								+ (typeof ei[0] == "undefined" ? "0" : ei[0])
-								+ "%</font>"
-								+ "</div>"
-								+ "<div class='profile_bigceng_font_div_two_two' align='center'><font class='profile_bigceng_font'>完成工件数</font>"
-								+ "<br/><font class='profile_bigceng_font_green'>"
-								+ (typeof ei[1] == "undefined" ? "0" : ei[1])
-								+ "</font>"
-								+ "</div>"
-								+ "<div class='profile_bigceng_font_div_three' align='center'><font class='profile_bigceng_font'>总能耗</font>"
-								+ "<br/><font class='profile_bigceng_font_red'>"
-								+ (typeof ei[2] == "undefined" ? "0" : ei[2])
-								+ "</font>"
-								+ "</div>"
-								+ "<div class='profile_bigceng_font_div_four' align='center'><font class='profile_bigceng_font'>单件成本</font>"
-								+ "<br/><font class='profile_bigceng_font_yellow'>￥"
-								+ (typeof ei[3] == "undefined" ? "0" : ei[3])
-								+ "</font>" + "</div>";
-					} else {
-						if (tva == "HTC2050i-SYB21-01"
-								|| tva == "ETC3650-SYB21-02"
-								|| tva == "TC500R-SYB21-03") {
-							document.getElementById("bigceng").innerHTML += "<div class='profile_bigceng_font_div_one_two' align='center'><font class='profile_bigceng_font'>加工进度</font>"
-									+ "<br/><font class='profile_bigceng_font_green'>"
-									+ (typeof ei[0] == "undefined" ? "0"
-											: ei[0])
-									+ "%</font>"
-									+ "</div>"
-									+ "<div class='profile_bigceng_font_div_two' align='center'><font class='profile_bigceng_font'>完成工件数</font>"
-									+ "<br/><font class='profile_bigceng_font_green'>"
-									+ (typeof ei[1] == "undefined" ? "0"
-											: ei[1])
-									+ "</font>"
-									+ "</div>"
-									+ "<div class='profile_bigceng_font_div_three' align='center'><font class='profile_bigceng_font'>总能耗</font>"
-									+ "<br/><font class='profile_bigceng_font_red'>"
-									+ (typeof ei[2] == "undefined" ? "0"
-											: ei[2])
-									+ "</font>"
-									+ "</div>"
-									+ "<div class='profile_bigceng_font_div_four' align='center'><font class='profile_bigceng_font'>单件成本</font>"
-									+ "<br/><font class='profile_bigceng_font_yellow'>￥"
-									+ (typeof ei[3] == "undefined" ? "0"
-											: ei[3]) + "</font>" + "</div>";
-						} else {
-							document.getElementById("bigceng").innerHTML += "<div class='profile_bigceng_font_div_one' align='center'><font class='profile_bigceng_font'>加工进度</font>"
-									+ "<br/><font class='profile_bigceng_font_green'>"
-									+ (typeof ei[0] == "undefined" ? "0"
-											: ei[0])
-									+ "%</font>"
-									+ "</div>"
-									+ "<div class='profile_bigceng_font_div_two_two' align='center'><font class='profile_bigceng_font'>完成工件数</font>"
-									+ "<br/><font class='profile_bigceng_font_green'>"
-									+ (typeof ei[1] == "undefined" ? "0"
-											: ei[1])
-									+ "</font>"
-									+ "</div>"
-									+ "<div class='profile_bigceng_font_div_three' align='center'><font class='profile_bigceng_font'>总能耗</font>"
-									+ "<br/><font class='profile_bigceng_font_red'>"
-									+ (typeof ei[2] == "undefined" ? "0"
-											: ei[2])
-									+ "</font>"
-									+ "</div>"
-									+ "<div class='profile_bigceng_font_div_four' align='center'><font class='profile_bigceng_font'>单件成本</font>"
-									+ "<br/><font class='profile_bigceng_font_yellow'>￥"
-									+ (typeof ei[3] == "undefined" ? "0"
-											: ei[3]) + "</font>" + "</div>";
-						}
-					}
-				}
-			}
-
-			function loadXML(xmlString) {
-
-				var xmlDoc = null;
-				//判断浏览器的类型
-				//支持IE浏览器 
-				if (!window.DOMParser && window.ActiveXObject) { //window.DOMParser 判断是否是非ie浏览器
-					var xmlDomVersions = [ 'MSXML.2.DOMDocument.6.0',
-							'MSXML.2.DOMDocument.3.0', 'Microsoft.XMLDOM' ];
-					for ( var i = 0; i < xmlDomVersions.length; i++) {
-						try {
-							xmlDoc = new ActiveXObject(xmlDomVersions[i]);
-							xmlDoc.async = false;
-							xmlDoc.loadXML(xmlString); //loadXML方法载入xml字符串
-							break;
-						} catch (e) {
-						}
-					}
-				}
-				//支持Mozilla浏览器
-				else if (window.DOMParser && document.implementation
-						&& document.implementation.createDocument) {
-					try {
-						/* DOMParser 对象解析 XML 文本并返回一个 XML Document 对象。
-						 * 要使用 DOMParser，使用不带参数的构造函数来实例化它，然后调用其 parseFromString() 方法
-						 * parseFromString(text, contentType) 参数text:要解析的 XML 标记 参数contentType文本的内容类型
-						 * 可能是 "text/xml" 、"application/xml" 或 "application/xhtml+xml" 中的一个。注意，不支持 "text/html"。
-						 */
-						domParser = new DOMParser();
-						xmlDoc = domParser.parseFromString(xmlString,
-								'text/xml');
-					} catch (e) {
-					}
-				} else {
-					return null;
-				}
-
-				return xmlDoc;
-			}
-
-			function send(equSerialNo) {
-				var data = new Array();
-				data[0] = "";
-				data[1] = "";
-				data[2] = "";
-				//var macTemp="TC500R-SYB21-03";
-				var macTemp = equSerialNo;
-				var infoTemp = "";
-
-				$
-						.ajax({
-							url : 'http://192.168.2.19:8080/mocs/WSBZService/Portal.json?method=DiagnosticMessage',
-							data : 'parms=' + macTemp,
-							cache : false,
-							dataType : 'text',
-							success : function(xml) {
-								alert(xml);
-								var a = JSON.parse(xml);
-
-								var xmldoc = loadXML(a.data);
-
-								var x = xmldoc.documentElement.childNodes;
-								alert(xml);
-								for (i = 0; i < x.length; i++) {
-									if (x[i].nodeType == 1) {
-										infoTemp = "error_" + x[i].nodeName
-												+ ".png";
-										// alert(infoTemp);
-										// x[i].getAttribute("alertInfo");
-										//infoTemp=x[i].getAttribute("alertInfo");	
-										var a = (x[i].childNodes);
-										for (j = 0; j < a.length; j++) {
-											var cause = a[j]
-													.getAttribute("cause");
-											data[j] = j + 1 + "." + cause;
-										}
-										break;
-									}
-								}
-								//alert(infoTemp+"2");
-								var error = document.getElementById("bigceng");
-								error.innerHTML += "<div  style='margin-left:775px;margin-top:280px;width:370px;height:255px;position: absolute;font-family:微软雅黑;color: #595959;'  align='center'>"
-										+ "<div style='width:370px;height:25px;'></div>"
-										+ "<b><font style='font-size:30px;'>"
-										+ data[0]
-										+ "</font></b>"
-										+ "</div>"
-										+ "<div  style='margin-left:1160px;margin-top:280px;width:370px;height:255px;position: absolute;font-family:微软雅黑;color: #595959;'  align='center'>"
-										+ "<div style='width:370px;height:25px;'></div>"
-										+ "<b><font style='font-size:30px;'>"
-										+ data[1]
-										+ "</font></b>"
-										+ "</div>"
-										+ "<div style='margin-left:1540px;margin-top:280px;width:370px;height:255px;position: absolute;font-family:微软雅黑;color: #595959;' align='center'>"
-										+ "<div style='width:370px;height:25px;'></div>"
-										+ "<b><font style='font-size:30px;'>"
-										+ data[2] + "</font></b>" + "</div>";
-								error.innerHTML += "<div  style='margin-left:775px;margin-top:10px;width:370px;height:255px;position: absolute;font-family:微软雅黑;color: #595959;'  align='center'>"
-										+ "<div style='width:370px;height:80px;'></div>"
-										+ "<b><font style='font-size:60px;'>故障分析</font></b>"
-										+ "</div>"
-										+ "<div  style='margin-left:1160px;margin-top:10px;width:370px;height:255px;position: absolute;background-image: url(/mocs/images/device/"
-										+ infoTemp
-										+ ");'  >"
-										+ "</div>"
-										+ "<div style='margin-left:1540px;margin-top:10px;width:370px;height:255px;position: absolute;font-family:微软雅黑;color: #595959;' align='center'>"
-										+ "<div style='width:370px;height:80px;'></div>"
-										+ "<b><font style='font-size:40px;'>故障信息已推送给</font></b><br/><br/>"
-										+ "<b><font style='font-size:40px;color:green;'>王晓明</font></b>"
-										+ "</div>";
-							}
-						});
-			}			
-			
-			//]]>
-		</script>
-	</h:form>
+	<div class="yanse_WH2 yanse_LT22">
+		<img src="./images/status_yellow.png" style="height: 100%;"></img>
+	</div>
+	<div class="font_WH2 font_LT22"><span data-i18n="content.s_kx"></span></div>
 	
-	<script type="text/javascript">
-				setTimeout(function(){
-				//document.getElementById("maskw").style.display="none";
-				document.getElementById("centerbg").style.display="block";
-				$("#maskw").fadeOut(fadeouttime);
-				},settimeout);
-	</script>
+	
+	<div  class="yanse_WH2 yanse_LT33">
+		<img src="./images/status_red.png" style="height: 100%;"></img>
+	</div>
+	<div class="font_WH2 font_LT33"><span data-i18n="content.s_gz"></span></div>
+	
+	<div  class="yanse_WH2 yanse_LT44">
+		<img src="./images/status_gray.png" style="height: 100%;"></img>
+	</div>
+	<div class="font_WH2 font_LT44"><span data-i18n="content.s_tj"></span></div>
+	
+</div>
+</ui:remove>
+<div class="equstatus2">
+	<div class="yanse_WH2" >
+		<img src="./images/status_green.png" style="height: 100%;"></img>
+	</div>
+	<div class="font_WH2"><span data-i18n="content.s_yx"></span></div>
+	
+	<div class="yanse_WH2">
+		<img src="./images/status_yellow.png" style="height: 100%;"></img>
+	</div>
+	<div class="font_WH2"><span data-i18n="content.s_kx"></span></div>
+	
+	<div  class="yanse_WH2">
+		<img src="./images/status_red.png" style="height: 100%;"></img>
+	</div>
+	<div class="font_WH2"><span data-i18n="content.s_gz"></span></div>
+	
+	<div  class="yanse_WH2">
+		<img src="./images/status_gray.png" style="height: 100%;"></img>
+	</div>
+	<div class="font_WH2"><span data-i18n="content.s_tj"></span></div>
+	<div style="clear: left;"></div>
+</div>
+<!-- 进入下个页面的漂浮层 -->
+<div id="nexttab" class="auto-size next-page">
+	<img id="img2" onclick="jumpto('/mocs/device/factory_inventory.xhtml')" 
+		style="cursor: pointer; width: 100%; height: 100%;" src="./images/nextTab.png" />
+</div>
+
+<!-- 内容头部  -->
+<div class="auto-size zl-content-top" >
+	<div style="position: absolute;z-index: -2;width: 100%;height: 100%;">
+		<img src="./images/content_top_bg.png" alt="" style="width: 100%; height: 100%;"/>
+	</div>
+	
+	<div class="auto-size txt-wh txt1-lt">
+		<div class="auto-size-absolute titletxt"><span data-i18n="top.title1"></span></div>
+		<div id="ppf" class="auto-size-absolute titleconten">95</div>
+	</div>
+	<div class="auto-size space-wh space1-lt"></div>
+	
+	<div class="auto-size txt-wh txt2-lt">
+		<div class="auto-size-absolute titletxt"><span data-i18n="top.title2"></span></div>
+		<div id="pit" class="auto-size-absolute titleconten">95</div>
+	</div>
+	<div class="auto-size space-wh space2-lt"></div>
+	
+	<div class="auto-size txt-wh txt3-lt">
+		<div class="auto-size-absolute titletxt"><span data-i18n="top.title3"></span></div>
+		<div id="rcr" class="auto-size-absolute titleconten">95<span class="titlecontenspan" >%</span></div>
+	</div>
+	<div class="auto-size space-wh space3-lt"></div>
+	
+	<div class="auto-size txt-wh txt4-lt">
+		<div class="auto-size-absolute titletxt"><span data-i18n="top.title4"></span></div>
+		<div id="ee" class="auto-size-absolute titleconten">95</div>
+	</div>
+	
+	<div class="auto-size vertical-line"></div>
+</div>
+
+<!-- 内容主体 -->
+<div class="auto-size zl-content-info">
+	<!-- 	背景图 -->
+	<div class="auto-size-absolute content-info-bg">
+		<img id="centerbg" style="height: 100%;width: 100%;" src="" />
+	</div>
+	<div id="content1"  class="auto-size-absolute content-info-qy" style="visibility:hidden;"/>
+	<div id="content2"  class="auto-size-absolute content-info-qy" style="visibility:hidden;"/>
+	<div class="auto-size-absolute content-info-doubleClick" id="bigceng" onclick="yingcan()" />
+	
+</div>  
+
+<h:inputHidden id="bgpath" value="#{factoryProfileBean.bgpath}"/>
+<h:inputHidden value="#{factoryProfileBean.selectName}" id="selectName" /> 
+<h:inputHidden value="#{factoryProfileBean.syurl}" id="syurl" /> 
+<h:inputHidden value="#{factoryProfileBean.shurl}" id="shurl" /> 
+<h:inputHidden id="fp" value="#{factoryProfileBean.sef}" /> 
+<h:inputHidden id="eif" value="#{factoryProfileBean.equInformation}" /> 
+
+<a4j:poll action="#{factoryProfileBean.refreshData}" interval="5000" render="reload" oncomplete="reloadEqu()"></a4j:poll>
+<a4j:outputPanel id="reload">
+	<h:inputHidden id="image" value="#{factoryProfileBean.image}" />
+	<h:inputHidden id="xz" value="#{factoryProfileBean.xz}"></h:inputHidden>
+	<h:inputHidden id="yz" value="#{factoryProfileBean.yz}"></h:inputHidden>
+	<h:inputHidden id="equipmentName" value="#{factoryProfileBean.equipmentName}"></h:inputHidden>
+	<h:inputHidden value="#{factoryProfileBean.ppcr}" id="ppcrValue" />
+	<h:inputHidden value="#{factoryProfileBean.nodp}" id="nodpValue" />
+	<h:inputHidden value="#{factoryProfileBean.equday}" id="equdayValue" />
+	<h:inputHidden value="#{factoryProfileBean.ipAddress}" id="ipAddressValue" />
+	<h:inputHidden value="#{factoryProfileBean.rcr}" id="rcrValue" />
+	<h:inputHidden value="#{factoryProfileBean.pathThree}" id="pathThreeValue" />
+	<h:inputHidden value="#{factoryProfileBean.ssoControl}" id="ssoControl" />
+</a4j:outputPanel> 
+
+<p:commandButton value="tt" actionListener="#{factoryProfileBean.getSeveralEquInformation}" id="equInformation" 
+	update=":myform:fp :myform:eif" style="display:none;" oncomplete="onCompleteClick()" >
+</p:commandButton> 
+<p:commandButton actionListener="#{menuBean.getSelectItem('b21.sbgl')}" id="sbglys" style="display:none;" />
+<h:commandButton id="update" action="#{factoryProfileBean.getData1}" style="display:none;"/>
+</h:form>
+	<!-- <h:outputScript library="js" name="factory_profile.js"></h:outputScript> -->
+	<h:outputScript library="js/publish" name="factory_profile.min.js"></h:outputScript>
 </ui:composition>

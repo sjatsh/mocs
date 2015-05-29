@@ -10,7 +10,7 @@ function loadData() {
 
 	}else{
 		document.getElementById("highchartChart").innerHTML += "<div style=\"font-size:"+hjb51*30/1080+"px;text-align:center;" +
-				"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\">没有数据，<BR/>请更换节点或查询条件<br/></div>";
+				"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
 	}
 }
 
@@ -18,13 +18,15 @@ function loadData() {
  * 
  * @param barModel
  */
+var textStr = "content.tbtitle";
+dataTranslate("stat_device_time", function(t) { textStr = t(textStr);});
 function generateChart(barModel) {
     var chart;
     chart = new Highcharts.Chart({
         chart: {
             renderTo: 'highchartChart',
-            width:wjb51,
-            height:hjb51*475/1080,
+            width:wjb51-wjb51*(460/1920),
+            height:hjb51*(550/1080),
             type: 'bar',
             backgroundColor: 'rgba(255, 255, 255, 0)',
             plotBorderColor : null,
@@ -34,35 +36,45 @@ function generateChart(barModel) {
             plotShadow: false 
         },
          title: {
-            text: null
+            text: textStr,
+            style:{  		
+        		color:'#7A7A7A'
+        	 }
         },
         xAxis: {
             categories: null,
             title: {
                 text: null
             },
-            lineColor: "#ffffff",
+            labels: {
+            	enabled:false
+            },
+            /*lineColor: "#ffffff",
             labels: {
                 style: {
                     color: '#ffffff'
                 }
-            }
+            }*/
         },
         yAxis: {
             title: {
                 text: null
             },
-            gridLineColor: "#ffffff"
+            labels: {
+            	enabled:false
+            },
+            /*gridLineColor: "#ffffff"
             	 , labels: {
                      style: {
                          color: '#ffffff'
                      }
-             }
+            }*/
         },
         legend: {
             backgroundColor: '#FFFFFF',
             reversed: true,
             width:500,
+            height:40,
             borderWidth: 0,
         },
         tooltip: {
@@ -89,55 +101,55 @@ function generateChart(barModel) {
             name: barModel.rowKeys[10],
             data: barModel.data9,
             stack: 'female',
-            color:'#6173F9'
+            color:'rgba(160,160,160,0.6)'
         }, {
             name: barModel.rowKeys[9],
             data: barModel.data8,
             stack: 'female',
-            color:'#DD3EFA'
+            color:'rgba(244,221,12,0.6)'
         }, {
             name: barModel.rowKeys[8],
             data: barModel.data10,
             stack: 'female',
-            color:'#90B977'
+            color:'rgba(251,117,0,0.6)'
         }, {
             name: barModel.rowKeys[7],
             data: barModel.data6,
             stack: 'female',
-            color:'#32632B'
+            color:'rgba(160,160,160,0.4)'
         }, {
             name: barModel.rowKeys[6],
             data: barModel.data7,
             stack: 'female',
-            color:'#5E984E'
+            color:'rgba(108,204,71,1)'
         }, {
             name: barModel.rowKeys[5],
             data: barModel.data5,
             stack: 'male',
-            color:'#FC3E3E'
+            color:'rgba(251,117,0,1)'
         }, {
             name: barModel.rowKeys[4],
             data: barModel.data4,
             stack: 'male',
-            color:'#F9CC3B'
+            color:'rgba(244,221,12,1)'
         }, {
             name: barModel.rowKeys[3],
             data: barModel.data2,
             stack: 'male',
-            color:'#9861FA'
+            color:'rgba(0,129,206,0.4)'
         }, {
             name: barModel.rowKeys[2],
             data: barModel.data3,
             stack: 'male',
-            color:'#96D261'
-        }, {
+            color:'rgba(108,204,71,0.4)'
+        }, { 
             name: barModel.rowKeys[1],
             data: barModel.data1,
-            color:'#AAAAAA'
+            color:'rgba(160,160,160,1)'
         }, {
             name: barModel.rowKeys[0],
             data: barModel.data0,
-            color:'#52D8FB'
+            color:'rgba(0,129,206,1)'
         }]
     });
 };

@@ -78,5 +78,7 @@
             </props>
         </property>
     </bean>
-        
+    <!-- 解决使用@ResponseBody 的中文乱码。 -->
+    <bean class="smtcl.mocs.common.device.UTF8StringBeanPostProcessor">
+    </bean>
 </beans>

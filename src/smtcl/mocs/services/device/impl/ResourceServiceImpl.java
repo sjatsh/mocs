@@ -13,6 +13,9 @@ import org.dreamwork.util.IDataCollection;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import smtcl.mocs.beans.storage.OrganizeMaterielAddBean;
+import smtcl.mocs.beans.storage.OrganizeMaterielManageBean;
+import smtcl.mocs.beans.storage.OrganizeMaterielUpdateBean;
 import smtcl.mocs.model.CuttertypeModel;
 import smtcl.mocs.model.TFixtureModel;
 import smtcl.mocs.pojos.device.TFixtureClassInfo;
@@ -24,7 +27,12 @@ import smtcl.mocs.pojos.job.TFixtureTypeInfo;
 import smtcl.mocs.pojos.job.TMaterailTypeInfo;
 import smtcl.mocs.pojos.job.TMaterialClass;
 import smtcl.mocs.pojos.job.TPartClassInfo;
+import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.pojos.job.TProgramInfo;
+import smtcl.mocs.pojos.storage.TMaterialExtendOrder;
+import smtcl.mocs.pojos.storage.TMaterialExtendPlan;
+import smtcl.mocs.pojos.storage.TMaterialExtendStorage;
+import smtcl.mocs.pojos.storage.TMaterialVersion;
 import smtcl.mocs.services.device.ICommonService;
 import smtcl.mocs.services.device.IResourceService;
 import smtcl.mocs.utils.device.StringUtils;
@@ -353,6 +361,14 @@ public class ResourceServiceImpl extends GenericServiceSpringImpl<TUserResource,
 		List<TMaterialClass> tmclist=dao.executeQuery(hql, parameters);
 		return tmclist;
 	}
+	public List<Map<String,Object>> getTMaterialClassByAll(){
+		String hql="select new Map("
+				+ " a.MClassid as id,"
+				+ " a.MClassname as name)"
+				+ " from TMaterialClass a"
+				+ " where MStatus=0";
+		return dao.executeQuery(hql);
+	}
 	/**
 	 * 根据id查询物料类别
 	 * @param search
@@ -442,6 +458,78 @@ public class ResourceServiceImpl extends GenericServiceSpringImpl<TUserResource,
 			hql=hql+"and (name like '%"+search+"%' or no like '%"+search+"%' or typeno like '%"+search+"%')";
 		}
 		List<TMaterailTypeInfo> tmclist=dao.executeQuery(hql, parameters);
+		return tmclist;
+	}
+	/**
+	 * 查询物料信息
+	 * @param pid
+	 * @param nodeid
+	 * @param type
+	 * @param no
+	 * @param desc
+	 * @param status
+	 * @param unit
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<Map<String,Object>> getTMaterailTypeInfo(String pid,String nodeid,String type,String no,String desc,
+			String status,String unit,Date startTime,Date endTime){
+		String hql="select new Map("
+				+ " a.id as id,"
+				+ " a.no as no,"
+				+ " a.name as name,"
+				+ " a.norm as norm,"
+				+ " a.typeno as typeno,"
+				+ " case when a.className = 1 then '原材料' "
+				+ "		 when a.className = 2 then '半成品' "
+				+ "		 when a.className = 3 then '成品' "
+				+ "      when a.className = 4 then '消耗品' "
+				+ "      when a.className = 5 then '后台维护' "
+				+ " end as className ,"
+				+ " a.PId as pid,"
+				+ " b.MClassname as MClassname)"
+				+ " from TMaterailTypeInfo a ,TMaterialClass b"
+				+ " where a.PId=b.MClassid "
+				+ " and a.nodeId='"+nodeid+"' ";
+		
+		if(null!=pid&&!pid.equals("")){
+			hql+=" and a. PId="+pid;
+		}	
+		if(null!=type&&!type.equals("")){
+			hql+=" and a.className='"+type+"'";
+		}
+		if(null!=no&&!no.equals("")){
+			hql+=" and a.no";
+			if(no.indexOf("%")>-1){
+				hql+=" like '"+no+"'";
+			}else{
+				hql+=" ='"+no+"'";
+			}
+		}
+		if(null!=desc&&!desc.equals("")){
+			hql+=" and a.name ";
+			if(desc.indexOf("%")>-1){
+				hql+="  like '"+desc+"'";
+			}else{
+				hql+="  ='"+desc+"'";
+			}
+		}
+		if(null!=status&&!status.equals("")){
+			hql+=" and a.status ="+status+"";
+		}
+		if(null!=unit&&!unit.equals("")){
+			hql+=" and a.unit ='"+unit+"'";
+		}
+		if(null!=startTime&&!startTime.toString().equals("")){
+			hql+=" and DATE_FORMAT(a.createTime,'%Y-%m-%d %T')>='"+StringUtils.formatDate(startTime, 2)+"'";
+		}
+		if(null!=endTime&&!endTime.toString().equals("")){
+			hql+=" and DATE_FORMAT(a.createTime,'%Y-%m-%d %T')<='"+StringUtils.formatDate(endTime, 2)+"'";
+		}
+		
+		hql+=" order by a.id desc";
+		List<Map<String,Object>> tmclist=dao.executeQuery(hql);
 		return tmclist;
 	}
 	
@@ -884,6 +972,254 @@ public class ResourceServiceImpl extends GenericServiceSpringImpl<TUserResource,
 		}
 			
 	}
-
-
+	/**
+	 * 获取所有单位
+	 * @return
+	 */
+	public List<Map<String,Object>> getUnitInfo(String unitType){
+		String hql="select new Map("
+				+ " a.unitName as unitName,"
+				+ " a.id as id)"
+				+ " from TUnitInfo a";
+		if(null!=unitType&&!unitType.equals("")){
+			hql+=" where unitClass="+unitType;
+		}
+		return dao.executeQuery(hql);
+	}
+	/**
+	 * 获取辅助单位
+	 * @param unitId
+	 * @return
+	 */
+	public List<Map<String,Object>> getUnitInfoOnAssis(String unitId){
+		String sql="SELECT a.id,a.unit_name AS unitName FROM t_unit_info a "
+				+ " WHERE a.unit_typeid=(SELECT unit_typeid FROM t_unit_info WHERE id="+unitId+")"
+				+ " AND a.unit_class=2 ";
+		return dao.executeNativeQuery(sql);
+	}
+	/**
+	 * 获取子库存
+	 */
+	public List<Map<String,Object>> getStockOnAll(){
+		String hql="select new Map("
+				+ " storageNo as storageNo,"
+				+ " storageName as storageName)"
+				+ " from TStorageInfo "
+				+ " where storageStatus <> '禁止' "
+				+ " ";
+		return dao.executeQuery(hql);
+	}
+	/**
+	 * 获取子库存
+	 */
+	public List<Map<String,Object>> getPostionByStockNo(String stockNo){
+		String hql="select new Map("
+				+ " a.TMaterielPositionInfo.positionNo as positionNo,"
+				+ " a.TMaterielPositionInfo.positionName as positionName)"
+				+ " from RStoragePosition a "
+				+ " where a.TStorageInfo.storageNo='"+stockNo+"' "
+				+ " and a.TMaterielPositionInfo.positionStatus=1 ";
+		return dao.executeQuery(hql);
+	}
+	/**
+	 * 获取人员
+	 * @return
+	 */
+	public List<Map<String,Object>> getBuyerList(){
+		String hql="select new Map("
+				+ " no as no,"
+				+ " name as name)"
+				+ " from TMemberInfo ";
+		return dao.executeQuery(hql);
+	}
+	/**
+	 * 新增组织物料
+	 * @param omm
+	 * @return
+	 */
+	public String SaveOrganizeMateriel(OrganizeMaterielAddBean oma){
+		try {
+			TMaterailTypeInfo tti=oma.getTti();//物料主属性
+			//单位转换属性 暂时不做
+			//是否允许BOM 暂时不做
+			String hql="from TMaterailTypeInfo where no='"+tti.getNo()+"'";
+			List<TMaterailTypeInfo> tmlist=dao.executeQuery(hql);
+			if(null!=tmlist&&tmlist.size()>0){
+				return "该物料已经存在";
+			}
+				tti.setCreateTime(new Date());
+				dao.save(TMaterailTypeInfo.class, tti);
+			if(tti.getClassName().equals("3")){
+				TPartTypeInfo tpi=new TPartTypeInfo();
+					tpi.setNo(tti.getNo());
+					tpi.setName(tti.getName());
+					tpi.setStatus("新建");
+					tpi.setCreateDate(new Date());
+					tpi.setUpdateDate(new Date());
+					tpi.setNodeid(tti.getNodeId());
+					dao.save(TPartTypeInfo.class,tpi);
+			}
+			TMaterialVersion tmv=oma.getTmv();
+				tmv.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
+				tmv.setStartDate(new Date());
+				tmv.setIsDefault(1);
+				dao.save(TMaterialVersion.class,tmv);
+				
+			TMaterialExtendStorage tmes=oma.getTmes();//库存
+				tmes.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
+				//设置是否库存物料 版本控制 可存储 可处理 可保留
+				List<String> kcItem=new ArrayList<String>();
+				kcItem.add("库存物料");
+				kcItem.add("版本控制");
+				kcItem.add("可存储");
+				kcItem.add("可处理");
+				kcItem.add("可保留");
+				for(String kc:kcItem){
+					int i=0;
+					if(oma.getIsKuCun().contains(kc)){
+						i=1;
+					}
+					if(kc.equals("库存物料")){
+						tmes.setIsStock(i);
+						continue;
+					}else if(kc.equals("版本控制")){
+						tmes.setIsVersionCtrl(i);
+						continue;
+					}else if(kc.equals("可存储")){
+						tmes.setIsStorage(i);
+						continue;
+					}else if(kc.equals("可处理")){
+						tmes.setIsProcess(i);
+						continue;
+					}else if(kc.equals("可保留")){
+						tmes.setIsRetain(i);
+						continue;
+					}
+				}
+				dao.save(TMaterialExtendStorage.class, tmes);
+				
+			TMaterialExtendOrder tmio=new TMaterialExtendOrder();//采购
+				tmio.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
+				if(null!=oma.getPrice()&&!"".equals(oma.getPrice())){
+					tmio.setPrice(Double.parseDouble(oma.getPrice()));
+				}
+				tmio.setBuyer(oma.getBuyer());
+				dao.save(TMaterialExtendOrder.class, tmio);
+				
+			TMaterialExtendPlan tmep=oma.getTmep();//计划
+				tmep=oma.getTmep();
+				tmep.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
+				dao.save(TMaterialExtendPlan.class, tmep);
+				
+				return "添加成功";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "添加失败";
+		}
+	}
+	/**
+	 * 根据Param(字段名)
+	 *    materialId(值)
+	 * 获取   obj (对象)
+	 */
+	public Object getObject(String materialId,String Param,Object obj){
+		String hql="from "+obj.getClass().getName()+" where "+Param+"="+materialId;
+		List<Object> list=dao.executeQuery(hql);
+		if(null!=list&&list.size()>0){
+			obj=list.get(0);
+		}
+		return obj; 
+	}
+	/**
+	 * 修改组织物料
+	 * @param omm
+	 * @return
+	 */
+	public String UpdateOrganizeMateriel(OrganizeMaterielUpdateBean oma){
+		try {
+			TMaterailTypeInfo tti=oma.getTti();//物料主属性
+			//单位转换属性 暂时不做
+			//是否允许BOM 暂时不做
+			String hql="from TMaterailTypeInfo where no='"+tti.getNo()+"' and id!="+tti.getId();
+			List<TMaterailTypeInfo> tmlist=dao.executeQuery(hql);
+			if(null!=tmlist&&tmlist.size()>0){
+				return "该物料已经存在";
+			}
+				dao.update(TMaterailTypeInfo.class, tti);
+				
+			TMaterialExtendStorage tmes=oma.getTmes();//库存
+				//tmes.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
+				//设置是否库存物料 版本控制 可存储 可处理 可保留
+				List<String> kcItem=new ArrayList<String>();
+				kcItem.add("库存物料");
+				kcItem.add("版本控制");
+				kcItem.add("可存储");
+				kcItem.add("可处理");
+				kcItem.add("可保留");
+				for(String kc:kcItem){
+					int i=0;
+					if(oma.getIsKuCun().contains(kc)){
+						i=1;
+					}
+					if(kc.equals("库存物料")){
+						tmes.setIsStock(i);
+						continue;
+					}else if(kc.equals("版本控制")){
+						tmes.setIsVersionCtrl(i);
+						continue;
+					}else if(kc.equals("可存储")){
+						tmes.setIsStorage(i);
+						continue;
+					}else if(kc.equals("可处理")){
+						tmes.setIsProcess(i);
+						continue;
+					}else if(kc.equals("可保留")){
+						tmes.setIsRetain(i);
+						continue;
+					}
+				}
+				dao.update(TMaterialExtendStorage.class, tmes);
+				
+			TMaterialExtendOrder tmio=oma.getTmio();//采购
+				//tmio.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
+				if(null!=oma.getPrice()&&!"".equals(oma.getPrice())){
+					tmio.setPrice(Double.parseDouble(oma.getPrice()));
+				}
+				tmio.setBuyer(oma.getBuyer());
+				dao.update(TMaterialExtendOrder.class, tmio);
+				
+			TMaterialExtendPlan tmep=oma.getTmep();//计划
+				tmep=oma.getTmep();
+				//tmep.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
+				dao.update(TMaterialExtendPlan.class, tmep);
+				
+				return "更新成功";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "更新失败";
+		}
+	}
+	/**
+	 * 返回物料版本
+	 * @param mno
+	 * @return
+	 */
+	public List<Map<String,Object>> getMaterielVersion(String mno){
+		String hql="select new Map("
+				+ " a.versionNo as versionNo,"
+				+ " a.versionDesc as versionDesc,"
+				+ " DATE_FORMAT(a.startDate,'%Y-%m-%d %T') as dateTime,"
+				+ " b.no as mno)"
+				+ " from TMaterialVersion a,TMaterailTypeInfo b"
+				+ " where a.materialId=b.id";
+		if(null!=mno&&!mno.equals("")){
+			if(mno.indexOf("%")>0){
+				hql+=" and b.no like '"+mno+"' ";
+			}else{
+				hql+=" and b.no ='"+mno+"' ";
+			}
+		}
+		hql+=" order by a.versionNo desc";
+		return dao.executeQuery(hql);
+	}
 }

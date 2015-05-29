@@ -41,7 +41,11 @@ public class Organization implements java.io.Serializable {
 	@Expose
 	@Column(name="NODENAME")
 	private String name;
-	
+
+    @Expose
+    @Column(name="ENNODENAME")
+    private String enName;
+
 	@Column(name="P_NODEID")
 	@Expose
 	private String parentId;
@@ -352,4 +356,12 @@ public class Organization implements java.io.Serializable {
 	public void setDevice(Device device) {
 		this.device = device;
 	}
+
+    public String getEnName() {
+        return enName;
+    }
+
+    public void setEnName(String enName) {
+        this.enName = enName;
+    }
 }

@@ -1,0 +1,25 @@
+{	"zwxxts":"No data, please modify the node or the query conditions",
+	"top": {
+		"title1":"Takt Time Analysis",
+		"title2":"Machine Name",
+		"title3":"Part Name",
+		"startTime":"Date From",
+		"endTime":"Date To",
+		"title4":"Search",
+		"title5":"----- ALL -----"
+	},
+	"content": {
+		"lb":"List",
+		"tb":"Chart",
+		"jgsjid":"ID",
+		"kssj":"Start Time",
+		"jssj":"End Time",
+		"jgrw":"Processing Task",
+		"ljmc":"Part Name",
+		"lljgsj":"Theoretical",
+		"qxsj":"Cutting",
+		"hdsj":"Tool Changing",
+		"jgys":"Actual",
+		"lljpsj":"Theoretical Takt"
+	}
+}

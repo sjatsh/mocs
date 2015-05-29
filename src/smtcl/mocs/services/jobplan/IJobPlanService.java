@@ -12,6 +12,7 @@ import smtcl.mocs.beans.jobplan.JobdispatchlistUpdataBean;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TJobplanInfo;
 import smtcl.mocs.pojos.job.TJobplanTaskInfo;
+import smtcl.mocs.pojos.job.TProductionScrapInfo;
 
 /**
  * 作业计划管理SERVICE接口类
@@ -32,30 +33,22 @@ public interface IJobPlanService {
 	public List<Map<String, Object>> findAllJobPlanAndPartInfo(String nodeId);
 	/**
 	 * 查询作业计划-零件名称
-	 * @param nodeId
-	 * @param partName
-	 * @param planStatus
-	 * @param startTime
-	 * @param endTime
-	 * @return
+	 * @param nodeId 节点ID
+	 * @param partid 零件类型ID
+	 * @param planStatus 计划状态
+	 * @param startTime 开始时间
+	 * @param endTime 结束时间
+     * @param locale 语言标记
+	 * @return 返回作业计划list
 	 */
-	public Map<String, Object> getAllJobPlanAndPartInfo(String nodeId,String partid,String planStatus,String startTime,String endTime,String isexpand);
+	public Map<String, Object> getAllJobPlanAndPartInfo(String nodeId,String partid,String planStatus,String startTime,String endTime,String isexpand,String locale);
 	
 	/**
 	 * 查找所有的工作计划
 	 * @return
 	 */
 	public List<Map<String, Object>> findAllJobPlan(String nodeId,String partid,String planStatus,String startTime,String endTime);
-	
-	/**
-	 * 根据车间查询所有产品及计划任务信息
-	 * @param partId
-	 * @return
-	 */
-//	public List<Map<String, Object>> findJobPlanByPartInfoId(int partId);
-	
-	
-	
+
 	/**
 	 * 根据产品ID，查询作业计划信息
 	 * @param jobNo

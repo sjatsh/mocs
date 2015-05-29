@@ -1,0 +1,38 @@
+{	"zwxxts":"No data, please modify the node or query conditions",
+	"top": {
+		"main_title": "Machine Events",
+		"title1":"Machine Name",
+		"title2":"Event Name",
+		"title3":"Date From",
+		"title4":"Date To",
+		"title5":"Search"
+	},
+	"content": {
+		"tab1":"List",
+		"tab2":"Chart",
+		"tabtitle":"Machine Events Analysis",
+		"table_title1":"Machine Tool Equipment ID",
+		"table_title2":"Event ID",
+		"table_title3":"Event Time",
+		"table_title4":"Event Name",
+		"table_title5":"Program Name",
+		"table_title6":"Operator",
+		"table_title7":"Memo",
+		"chart_tip1":"Preparing",
+		"chart_tip2":"Running",
+		"chart_tip3":"Idle",
+		"chart_tip4":"Power Off",
+		"chart_tip5":"Power On",
+		"chart_tip6":"Error",
+		"chart_tip7":"Processing",
+		"chart_tip8":"Suspended",
+		"chart_tip9":"Emergency",
+		"chart_tip10":"Reset",
+		"chart_tip11":"Maintain",
+		"chart_btn1":"Last Day",
+		"chart_btn2":"Next Day",
+		"xiaoshi":"h",
+		"fenzhong":"m",
+		"miao":"s"
+	}
+}

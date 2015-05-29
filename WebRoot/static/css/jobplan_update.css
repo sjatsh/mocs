@@ -1,0 +1,187 @@
+.jobplan-update-shadow
+{
+	position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,.8);
+    z-index: 9;
+ }
+.jobplan-update-out{
+position: absolute;	
+float:left;
+width: 1331px;
+height: 570px;
+margin-top:110px;
+margin-left:350px;
+background-color: white;
+visibility:hidden; 
+z-index:10;
+}
+.jobplan-update-in{
+position: absolute;	
+width: 1315px;
+height: 480px;
+margin-left: auto; 
+margin-right: auto; 
+left:0px;
+top:0px;
+border: #689976 solid 5px; 
+}
+
+.jobplan-update-tou{
+     width: 1315px;
+     height: 90px;
+     position: absolute;
+     
+}
+.jobplan-update-image{
+     position:absolute;
+     width: 1315px;
+     height: 90px;
+}
+.jobplan-update-title{
+    width: 100%;
+    height: 45px;
+    position:absolute;
+    font-size: 36px;
+    color: #828282;
+     left: 520px;
+     top: 20px;
+}
+.middle_xian{
+position: relative;
+width:1315px; 
+height:6px;
+top: 90px;
+
+}
+.zhongjian_shuju{
+position: relative;
+width:1315px; 
+height:75px;
+top: 91px;
+background-color: #E3E8E4
+}
+.zhongjian_shuju1{
+position: relative;
+width:1314px; 
+height:75px;
+top: 89px;
+background-color: #E3E8E4
+}
+.zhongjian_shuju2{
+position: relative;
+width:1315px; 
+height:75px;
+top: 87px;
+background-color: #E3E8E4
+}
+.zhongjian_shuju3{
+position: relative;
+width:1315px; 
+height:75px;
+top: 85px;
+background-color: #E3E8E4
+}
+.jobplanupdate-content-label {
+	float: left;
+	margin-left:85px;
+	margin-top: 23px;
+	width: 120px;
+	font-size: 18px;
+	line-height: 18px;
+	color: #828282;
+	text-align:right;
+	white-space: nowrap;
+	
+}
+.jobplanupdate-content-select {
+	float: left;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+.jobplanupdate-select-lt{
+	float: left;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+.jobplanupdate-text-lt{
+     float: left;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+.zl-select input[type='text'] {
+	display: block;
+	position: absolute;
+	left: 18px;
+	top: 4px;
+	border: none 0px;
+    padding-left: 0;
+    padding-right: 0;
+	width: 123px;
+	height: 28px;
+	font-family: "微软雅黑";
+	font-size: 19px;
+	color: #595959;
+	line-height: 28px;
+	background: #ffffff;
+    z-index: 1;
+    
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.wei_xian{
+position: absolute;
+width:1314px; 
+height:99px;
+bottom:0px;
+background-color: #E3E8E4;
+z-index: 0;
+
+}
+.import{
+position: relative;
+width:141px; 
+height:34px;
+top:25px;
+left:450px;
+z-index: 1;
+}
+.import1{
+position: absolute;
+width:141px; 
+height:34px;
+top:25px;
+left:700px;
+z-index: 1;
+}
+.import_image{
+
+width:141px; 
+height:34px;
+
+}
+.jobplanupdate-button1 {
+float: left;
+width: 141px;
+height: 34px;
+position: absolute;
+}
+.jobplanupdate-content-btn3{
+float: left;
+left:2px;
+top: 0px;
+}
+.jobplanupdate-button-text1 {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 141px;
+	height: 34px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 34px;
+	color: #5B5B5B;
+	cursor: pointer;
+}

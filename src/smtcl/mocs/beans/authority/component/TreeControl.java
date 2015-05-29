@@ -62,7 +62,7 @@ public class TreeControl extends WebContainer {
 	}
 
 	/**
-	 * 点击节点回调函数;
+	 * 鐐瑰嚮鑺傜偣鍥炶皟鍑芥暟;
 	 */
 	protected String callback;
 	

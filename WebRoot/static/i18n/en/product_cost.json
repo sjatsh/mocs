@@ -1,0 +1,22 @@
+{	
+	"top": {
+		"select_title":"Product Model",
+		"title1":"Part Cost",
+		"title2":"Sub item cost",
+		"title3":"Machine Cost",
+		"pls_select":"Please Select"
+	},
+	"content": {
+		"table": {
+			"title1":"Product No.",
+			"title2":"Labor",
+			"title3":"Accessories",
+			"title4":"Energy",
+			"title5":"Depreciation",
+			"title6":"Material"
+		},
+		"pie": {
+			"total":"total"
+		}
+	}
+}

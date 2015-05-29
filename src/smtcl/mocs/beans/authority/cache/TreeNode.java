@@ -21,7 +21,10 @@ public class TreeNode{
 	@Expose
 	@SerializedName(value="name")
 	private String nodeName;
-	
+
+    @Expose
+    private String enNodeName;
+
 	@Expose
 	private String nodeType;
 	
@@ -151,4 +154,12 @@ public class TreeNode{
 	public void setParent(Boolean parent) {
 		this.parent = parent;
 	}
+
+    public String getEnNodeName() {
+        return enNodeName;
+    }
+
+    public void setEnNodeName(String enNodeName) {
+        this.enNodeName = enNodeName;
+    }
 }

@@ -1,0 +1,29 @@
+.t_selected {
+	float: left;
+	overflow: hidden;
+	width: 182px;
+	height: 15px;
+	line-height: 22px;
+	color: #000;
+	
+	font-size: 12px;
+	text-align: left;
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+	display:block;
+}
+
+.t_select_list_table {
+	 position: absolute;
+	 border: #8686ae 1px solid;
+	 background: #f7f7fe;
+	 height:300px;
+	 z-index:2;
+	 overflow:auto;
+	 width:200px;
+	 display: none;
+	 line-height: 150%;
+	 font-size: 12px;
+	 height:115px;
+}

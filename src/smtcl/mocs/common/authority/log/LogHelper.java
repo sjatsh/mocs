@@ -5,18 +5,18 @@ import org.apache.log4j.Logger;
 import smtcl.mocs.pojos.authority.Log;
 
 /**
- * 日志工具
+ * 日志工具�?
  * @author gaokun
  * @create Sep 4, 2012 4:48:53 PM
  */
 public class LogHelper {
 	/**
-	 * LogHelper 日志
+	 * LogHelper 日志�?
 	 */
 	private static Logger logger = Logger.getLogger(ILogFinal.CATEGORY_NAME);
 	
 	/**
-	 * 日志记录用在登录
+	 * 日志记录用在登录�?��!
 	 * @param loginName
 	 * @param ip
 	 * @param pageId

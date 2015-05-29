@@ -20,23 +20,30 @@ function loadDate_two(){
 	generatetwoChart(columTwoJsonData);
 }
 
-var generheight = hjb51*510/1080; 
-var generseries = wjb51*70/1920; 
-var generitemWidth = wjb51*150/1920; 
-var generwidth = wjb51*130/1920; 
-var genersymbolWidth = wjb51*32/1920; 
-var generlegendx = wjb51*200/1920; 
-var generfontSize = hjb51*20/1080;
 
 
 function generateoneChart(barModel) {  
+	/*var generwidth = wjb51*130/1920; 
+	var generheight = hjb51*510/1080; 
+	var generseries = wjb51*70/1920; 
+	var generitemWidth = wjb51*150/1920; 
+	var genersymbolWidth = wjb51*32/1920; 
+	var generlegendx = wjb51*200/1920; 
+	var generfontSize = hjb51*20/1080;*/
+	var generwidth = $('#frameChart1').width(); 
+	var generheight = $('#frameChart1').height(); 
+	var generseries = generwidth / 24.286; 
+	var generitemWidth = generwidth / 11.33; 
+	var genersymbolWidth = generwidth / 53.125; 
+	var generlegendx = generwidth / 8.5; 
+	var generfontSize = generheight / 27;
 	chart = new Highcharts.Chart({
 		
 		 chart: {
 	         type: 'column',
 	         renderTo : 'productcostoneChart',
 	         height:generheight,
-	         width: barModel.rowkeys.length<31?50*33:50*barModel.rowkeys.length,
+	         width: generwidth,
 	         backgroundColor: 'rgba(255, 255, 255, 0)',
             plotBorderColor : null,
             plotBackgroundColor: null,
@@ -129,12 +136,16 @@ function generateoneChart(barModel) {
 
    }
 
-var twoheight = hjb51*510/1080;
-var width90 = wjb51*90/1920; 
-var twopointWidth = wjb51*70/1920; 
 
 function generatetwoChart(barModel) {  
 
+	/*var twoheight = hjb51*510/1080;
+	var width90 = wjb51*90/1920; 
+	var twopointWidth = wjb51*70/1920; */
+	var twowidth = $('#frameChart2').width();
+	var twoheight = $('#frameChart2').height() - 40;	//减去滚动条高度
+	var width90 = twowidth / 18.889;
+	var twopointWidth = twowidth / 24.256; 
 	
 	chart = new Highcharts.Chart({
 		

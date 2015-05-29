@@ -10,6 +10,8 @@ import org.primefaces.model.TreeNode;
 
 import smtcl.mocs.pojos.device.TNodes;
 
+import javax.servlet.http.HttpSession;
+
 
 /**
  * 组织结构树接口类
@@ -66,7 +68,7 @@ public interface IOrganizationService extends IGenericService<TNodes, String> {
 	 * @param userId 用户id
 	 * @return List<Map<String, Object>>
 	 */
-	public List<Map<String, Object>> getAllNodesByParentNodeId(String nodeId,String userId);
+	public List<Map<String, Object>> getAllNodesByParentNodeId(HttpSession session,String nodeId,String userId);
 
 	/**
 	 * 根据nodeclass获取节点

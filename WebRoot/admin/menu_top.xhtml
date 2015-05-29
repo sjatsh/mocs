@@ -2,114 +2,103 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-
-<div id="top_info_head" class="top_info">
+<div id="top_info_head" class="top-info">
+	<img class="top-info-bg" src="../images/admin/top_bg.png"/>
 	<!--start top head-->
-	<div class="top_info_head">
-		<div class="top_info_head_left_frame">
-			<div class="top_info_head_link">
-				<a href="" class="top_info_head_link_a">
-					<img src="../img/common_info_img/top_info_head_link.png" />
-				</a>
-			</div>
-			
-			<div class="top_info_head_left" >
-			<a4j:outputPanel ajaxRendered="true"  >
-					<div class="top_info_head_left_path" id="top_info_head_left_path">
-						<ul class="top_info_head_path_ui">
-							<li class="top_info_head_path_li_olf"><span class="top_info_head_path_a_olf">车间管理</span></li>
-	
-							<ui:repeat var="te" value="#{MenuHeadBean.thisPosition}">
-								<li class="top_info_head_path_li">
-									<span class="top_info_head_path_a"><h:outputText value="> " style="font-size: 14px;" /><h:outputText value="#{te}" /></span>
-								</li>
-							</ui:repeat>
-						</ul>
-					</div>
-			</a4j:outputPanel>
-			</div>
-			
-			<div class="top_info_head_right_time">
-				<span class="thisTimeShow" id="thisTime"></span>
-			</div>
+	<div class="top-info-head">
+		<!-- LOGO -->
+		<div class="top-info-head-logo">
+			<img src="../images/admin/logo.png" />
 		</div>
-
-		<div class="top_info_head_right">
-			<div class="top_right_split"></div>
-			<div class="top_info_head_right_head"></div>
-			<div class="top_info_head_right_inform">
-				<a href="../authority/index.jasmine" class="top_info_head_right_inform_a" style="color:#FFFFFF;">权限管理&#160;&#160;&#160;&#160;&#160;</a>
-				<a href="#" class="top_info_head_right_inform_a" style="color:#FFFFFF;">通知中心</a>
-			</div>
-		</div>
-	</div>
-	<div class="div-top-shadow">
-		<img src="../images/demo/top_shadow.png" />
-	</div>
-	<div class="clear_top"></div>
-
-	<!--start top menu-->
-	<div class="top_info_foot">
-	<a4j:outputPanel ajaxRendered="true"  >
-		<div class="top_info_foot_down_list" id="top_info_foot_down_list">
-			<a href="javascript:;" class="top_info_foot_down_list_a" onclick="showMenu()" id="tre">
-				 <h:outputText id="nodeName" value="#{MenuHeadBean.thisNodeName}" /> 
-			</a>
-		</div>
-	</a4j:outputPanel>
-			<div id="DropdownMenuBackground" style="left:192px;top:83px;">
-				<p:tree value="#{MenuHeadBean.root}" var="node" selectionMode="single"  id="tree2" styleClass="tree" >
-					<a4j:ajax event="select" render=":myform:rightiframe :myform:footiframe :top_info_foot_down_list" 
-						listener="#{MenuHeadBean.onNodeSelect}" />
-					<p:treeNode styleClass="spanhover">
-						<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
-					</p:treeNode>
-				</p:tree>
-				<a4j:outputPanel ajaxRendered="true"  >
-				<script type="text/javascript" >
-				//<![CDATA[
-					checked();
-					closeTreeDiv();
-					function checked(){	
-						$(".usercheck").parents("span").addClass("spanhover");	
-					}
-					$(".usernocheck").click(function(){
-						document.getElementById("DropdownMenuBackground").style.display = "none";
-					});
-				//]]>
-				</script>
+		<!-- Bread Crumb -->
+		<div class="top-info-head-crumb" >
+			<div class="top-info-head-crumb-div" id="top_info_head_left_path">
+				<span class="top-info-head-crumb-a" data-i18n="top.title1"></span>
+				<a4j:outputPanel ajaxRendered="true" >
+					<ui:repeat var="te" value="#{MenuHeadBean.thisPosition}">
+						<span class="top-info-head-crumb-a"><h:outputText value="> " /><h:outputText value="#{te}" /></span>
+					</ui:repeat>
 				</a4j:outputPanel>
 			</div>
-		<div class="top_info_foot_menu">
-			<ul class="top_info_foot_menu_ul">
-				<c:forEach items="#{MenuHeadBean.menuList}" var="menu">
-			
-
-					<c:if test="#{menu.label=='工厂建模'}">
-						<li class="top_info_foot_menu_ul_li" onclick="headHavigation(3)">
-							<h:outputLabel value="工厂建模" id="top_info_foot_menui_ul_li_a3" 
-								styleClass="#{('工厂建模'==MenuHeadBean.position)?'top_info_foot_menui_ul_li_a3_click':'top_info_foot_menui_ul_li_a3'}">
-								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":myform:leftiframe :top_info_head_left_path" />
-							</h:outputLabel>
-							<div class="top-nav-split"></div>
-						</li>
-					</c:if>
-
-					
-				</c:forEach>
-			</ul>
+		</div>
+		<!-- Timer -->
+		<div class="top-info-head-time">
+			<span id="thisTime"></span>
+		</div>
+		<!-- User Info & Control Btn -->
+		<div class="top-info-head-user">
+			<span class="top-info-head-user-content"><span data-i18n="top.welcome"></span>&nbsp;&nbsp;<h:outputText value="#{MenuHeadBean.userName}"/></span> 
+			<a href="../authority/index.jasmine" class="top-info-head-user-content" data-i18n="top.role"></a>
+			<h:commandLink id="exit" value="top.exit" class="top-info-head-user-content">
+				<a4j:ajax event="click" listener="#{MenuHeadBean.LogOut}" oncomplete="location.reload()"/>
+			</h:commandLink>
 		</div>
 	</div>
-	<div class="div-top-nav-shadow">
-		<img src="../images/demo/top_nav_shadow.png" />
+	<!--start top menu-->
+	<div class="top-info-foot">
+		<a4j:outputPanel ajaxRendered="true">
+			<div class="top-info-foot-list btn-top act" id="top_info_foot_down_list" onclick="toggleMenu()">
+				<h:outputText id="nodeName" value="#{MenuHeadBean.thisNodeName}" />
+				<div class="transparent-down"></div>
+			</div>
+		</a4j:outputPanel>
+		<div id="DropdownMenuBackground" >
+			<p:tree value="#{MenuHeadBean.root}" var="node" selectionMode="single"  id="tree2" styleClass="tree" >
+				<a4j:ajax event="select" render=":myform:rightiframe :myform:footiframe :top_info_foot_down_list" 
+					listener="#{MenuHeadBean.onNodeSelect}" />
+				<p:treeNode styleClass="spanhover">
+					<div class="menu-icon"></div>
+					<h:outputText value="#{node.nodeName}" styleClass="#{(MenuHeadBean.thisNodeName == node.nodeName) ? 'usercheck' : 'usernocheck'}" />
+				</p:treeNode>
+			</p:tree>
+			<a4j:outputPanel ajaxRendered="true">
+			<script type="text/javascript" >
+			//<![CDATA[
+				nodeChecked($("#myform\\:tree2"));
+				$("#myform\\:tree2 li").click(function(){
+					$(this).find(".usernocheck").attr("class", "usercheck");
+					$(this).siblings("li").removeClass("act").find(".usercheck").attr("class", "usernocheck");
+					$(this).find(".usercheck")[0].click();
+					hideMenu();
+				});
+			//]]>
+			</script>
+			</a4j:outputPanel>
+		</div>
+		<a4j:outputPanel ajaxRendered="true">
+			<div class="top-info-foot-menu" id="top_info_foot_menu">
+				<c:forEach items="#{MenuHeadBean.menuList}" var="menu">
+					<c:if test="#{menu.label == '工厂建模' || menu.label == '仓库管理'}">
+						<div class="top-info-foot-menu-btn btn-top" onclick="headNavigation(this)">
+							<i class="fa fa-laptop fa-fw top-info-foot-menu-btn-icon"></i>
+							<h:outputLabel value="#{menu.label}" styleClass="top-info-foot-menu-btn-text #{(menu.label == MenuHeadBean.position) ? 'act' : ''}">
+								<a4j:ajax listener="#{MenuHeadBean.clickMenuList(menu.label)}" event="click" render=":top_info_foot_menu :leftiframe :top_info_head_left_path" />
+							</h:outputLabel>
+						</div>
+					</c:if>
+				</c:forEach>
+			</div>
+			<script type="text/javascript" >
+			//<![CDATA[
+				menuListChecked($("#top_info_foot_menu"));
+			//]]>
+			</script>
+		</a4j:outputPanel>
 	</div>
 </div>
-<script language="javascript">
-	for(i in document.images)document.images[i].ondragstart=imgdragstart;
+<script>
+//<![CDATA[
+	$(document).ready(function() {
+		//国际化
+		dataTranslate("index", function(t) {
+			//按钮替换
+			$("#myform\\:exit").attr("data-i18n", function(){return $(this).text()});
+			$("*[data-i18n]").i18n();
+		}, "../static/i18nAdmin");
+	});
+//]]>
 </script>
 </ui:composition>

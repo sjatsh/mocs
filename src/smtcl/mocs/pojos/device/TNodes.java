@@ -66,7 +66,7 @@ public class TNodes implements java.io.Serializable {
 	}
 
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "P_NODEID")
 	public TNodes getTNodes() {
 		return this.TNodes;
@@ -90,7 +90,7 @@ public class TNodes implements java.io.Serializable {
 	}
 	
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "TNodes")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "TNodes")
 	@OrderBy(clause = "nodeId desc")  
 	public Set<TNodes> getTNodeses() {
 		return this.TNodeses;
@@ -180,7 +180,7 @@ public class TNodes implements java.io.Serializable {
 		this.nodeStatus = nodeStatus;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NODECLASS")
 	public TNodeType getTNodeType() {
 		return this.TNodeType;

@@ -7,549 +7,208 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-
-	<h:head>
-	<link rel="stylesheet" href="/mocs/css/jobplan_add.css" type="text/css"></link>
-	
-	</h:head>		
-
-	<h:body>
-		<h:form id="myform">
-<div id="maskw" style=" position:absolute; z-index:1000000; top:0px; left:0px; background-color:white; "></div>
-<script type="text/javascript">	
-var wjb51 = 0;
-var hjb51 = 0;
-hjb51 = document.body.clientHeight;
-wjb51 = document.body.clientWidth;
-if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
-		hjb51 = wjb51*1080/1920; 
-	}
-if(600>hjb51){  //高小于600，赋值为600，设滚动条为滚动 
-	   hjb51 = 600; 
-	   wjb51 = 800;
-	   document.body.style.overflow="scroll";
-   }
-if(800>wjb51){
-	   hjb51 = 600;
-	   wjb51 = 800;
-	   document.body.style.overflow="scroll";
-}
-	document.getElementById("maskw").style.height = hjb51 + "px";
-	document.getElementById("maskw").style.width = wjb51 + "px";
-</script>	
-<div style="width: 100%;" align="center">
-<table id="addcontains" >
-<tr>
-	<td id="addcenter" style="text-align: center;" align="center">
-          
-            <h:inputHidden value="#{JobPlanUpdata.isSuccess}" id="isSuccess"></h:inputHidden>
-            <h:inputHidden value="#{JobPlanUpdata.id}" id="jobplanid"></h:inputHidden>
-            <c:if test="${JobPlanUpdata.addboolqian}">
-			</c:if>
-			<table id="addcentertb" border="0" cellspacing="0" cellpadding="0" >
-				<tr>
-					<td id="addcentertd1"  colspan="2"  align="center"><h:outputText
-							value="作业计划编辑"   />
-					</td>
-				</tr>
-				<tr>
-					<td id="addcentertd2" >
-						<table id="addcentertd2tb" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td id="addcentertd2tbtd20" >
-									<h:outputText id="titletext1" value="零件名称" />
-								</td>
-								<td id="addcentertd2tbtd24" >
-									<h:outputText id="titletext24" value="计划类型" />
-								</td>
-								<td>
-									<h:outputText id="titletext25" value="父作业计划" />
-								</td>
-							</tr>
-							<tr>
-								<td id="addcentertd2tbtd21" >
-									<div id="addcentertd2tbtd5div" >
-									     <h:selectOneMenu id="partTypeId" 
-											value="#{JobPlanUpdata.partTypeId}" style="color:#595959;">
-											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-											<f:selectItems value="#{JobPlanUpdata.partMap}"></f:selectItems>
-											<f:ajax event="change" listener="#{JobPlanUpdata.getPartInfo}"
-												execute="@this" />
-										</h:selectOneMenu> <h:message for="partTypeId" style="color:red" />
-									</div>	
-								</td>
-								<td>
-									<h:selectOneMenu style="color:#595959;" id="jobplanType" value="#{JobPlanUpdata.planType}" >
-										<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-										<f:selectItem itemLabel="作业计划" itemValue="1"></f:selectItem>
-										<f:selectItem itemLabel="批次计划" itemValue="2"></f:selectItem>
-										<f:ajax event="change" listener="#{JobPlanUpdata.getPTJobPlanInfo}"
-											render=":myform:pidpanegrid :myform:addbools" execute="@this" />
-									</h:selectOneMenu>
-									<br/>
-									<h:message for="jobplanType" style="color:red"></h:message>
-								</td>
-								<td>
-									<h:panelGrid id="pidpanegrid">
-										<h:selectOneMenu style="color:#595959;" id="pjobplan" value="#{JobPlanUpdata.pJobPlanId}">
-											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-											<f:selectItems value="#{JobPlanUpdata.pJobPlan}" var="pjob" itemLabel="#{pjob.name}"
-												itemValue="#{pjob.id}">
-											</f:selectItems>
-										</h:selectOneMenu>
-										<script type="text/javascript">
-											document.getElementById("myform:pjobplan").style.width = wjb51*228/1500+"px";  //是270和36大小 
-											document.getElementById("myform:pjobplan").style.height = hjb51*37/900+"px";
-											document.getElementById("myform:pjobplan").style.marginLeft = "0px"; //离左边为左边图片的宽度 
-											document.getElementById("myform:pjobplan").style.fontSize = hjb51*20/900+"px";
-										</script>
-									</h:panelGrid>
-								</td>
-							</tr>
-							<tr id="addcentertd2tbtr1" >
-								
-								<td>
-									<h:outputText id="titletext2" value="计划编号" /> 
-								</td>
-								<td>
-									<h:outputText id="titletext3" value="计划名称" />
-								</td>
-								<td id="addcentertd2tbtd4" >
-									<h:outputText id="titletext6" value="计划状态" />
-								</td>
-							</tr>
-							<tr>
-								
-								<td>	
-									<div id="addcentertd2tbtd6div" >
-										<h:inputText id="no" value="#{JobPlanUpdata.no}" />
-									</div>
-								</td>
-								<td>
-									<div id="addcentertd2tbtd7div" >
-									<h:inputText id="name" value="#{JobPlanUpdata.name}"
-											class="input_style" required="true" requiredMessage="不能为空" />
-										<h:message for="name" style="color:red" />
-									</div>
-								</td>
-								<td id="addcentertd2tbtd5" >
-									<h:inputText id="status" value="#{JobPlanUpdata.status}"
-										class="input_style"  readonly="true" style="color:#595959"/>
-								</td>
-							</tr>
-							<tr>
-								
-								<td>
-									<h:outputText id="titletext7" value="优先级" />
-								</td>
-								<td>
-									<h:outputText id="titletext8" value="计划开始时间" />
-								</td>
-								<td id="addcentertd2tbtd10" >
-									<h:outputText id="titletext9" value="计划结束时间" />
-								</td>
-							</tr>
-							<tr>
-								
-								<td>
-									<h:selectOneMenu id="priority" value="#{JobPlanUpdata.priority}" style="color:#595959;">
-									    <f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-										<f:selectItem itemLabel="1" itemValue="1"></f:selectItem>
-										<f:selectItem itemLabel="2" itemValue="2"></f:selectItem>
-									</h:selectOneMenu> 
-									<h:message for="priority" style="color:red" />
-								</td>
-								<td>
-									<rich:calendar id="startTime" popup="true" locale="en"
-										value="#{JobPlanUpdata.planStarttime}" datePattern="yyyy-MM-dd"
-										cellWidth="10px" cellHeight="20px" required="true"
-										requiredMessage="不能为空" /> 
-										<h:message for="startTime" style="color:red" />
-								</td>
-								<td id="addcentertd2tbtd11" >
-									<rich:calendar id="endTime" popup="true"
-										required="true" requiredMessage="不能为空"
-										locale="en"
-										value="#{JobPlanUpdata.planEndtime}" datePattern="yyyy-MM-dd"
-										cellWidth="10px" cellHeight="20px" /> 
-									<h:message for="endTime" style="color:red" />
-								
-										
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h:outputText id="titletext20" value="交货时间" />
-								</td>
-								<td>
-									<h:outputText id="titletext4" value="计划数量" />
-								</td>
-								<td id="addcentertd2tbtd14" >
-									<h:outputText id="titletext5" value="待分配任务数量" />
-								</td>
-							</tr>
-							<tr>
-								
-								<td>
-									<rich:calendar id="submitTime" popup="true"
-										locale="en"						
-										value="#{JobPlanUpdata.submitTime}" datePattern="yyyy-MM-dd"
-										cellWidth="10px" cellHeight="20px" required="true"
-										requiredMessage="不能为空" />	
-									<h:message for="submitTime" style="color:red" />	
-								</td>
-								<td>
-									<h:inputText id="planNum" value="#{JobPlanUpdata.planNum}" class="input_style" required="true" 
-										requiredMessage="不能为空" >
-										<f:ajax event="change" listener="#{JobPlanUpdata.getProPlanNoValue}" render=":myform:proPlanNos" 
-											execute="planNum" />
-									</h:inputText> <br/>
-									<h:message for="planNum" style="color:red" />
-								</td>
-								<td id="addcentertd2tbtd15" >
-									<h:panelGrid id="proPlanNos">
-									<h:inputText id="proPlanNo" readonly="true"
-										value="#{JobPlanUpdata.allocatedNum}" class="input_style" style="color:#595959"/> 
-									<script type="text/javascript">
-										document.getElementById("myform:proPlanNo").style.width=wjb51*228/1500+"px";	
-										document.getElementById("myform:proPlanNo").style.height=hjb51*37/900+"px";
-										document.getElementById("myform:proPlanNo").style.fontSize=hjb51*20/900+"px";
-									</script>
-									</h:panelGrid>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td id="addtablecontent" style="width: 100%;">
-						<div style="width: 95%;height:100%;border:0px solid red;">
-							<h:panelGrid id="addbools">
-								<c:if test="${JobPlanUpdata.addbool}">
-									<h:graphicImage url="../images/plus_small.png" width="20px" height="20px" onclick="addTask.show()"  style="cursor: pointer;">
-									</h:graphicImage>
-								</c:if>
-								<h:inputHidden value="#{JobPlanUpdata.addbool}" id="addboolvalue"></h:inputHidden>
-							</h:panelGrid>
-							<div style="width: 100%;height: 100%;border:0px;overflow: auto;">
-							 <p:dataTable id="taskData" var="task" value="#{JobPlanUpdata.addTask}" editable="true" style="margin-bottom:20px"
-							 	  rowKey="#{task.id}">
-						       <p:ajax event="rowEdit" listener="#{JobPlanUpdata.updateTaskData}" update=":myform:taskData :myform:proPlanNos :myform:messages" />
-						       <p:ajax event="rowEditCancel" listener="#{JobPlanUpdata.onRowCancel}" update=":myform:taskData :myform:proPlanNos" />
-		               		  <p:column headerText="ERP任务号">
-		               		    <p:cellEditor>
-					               	<f:facet name="output">
-					              	 	<h:outputText value="#{task.addTaskNo}" />
-					                </f:facet>
-			               		 	<f:facet name="input">
-		               				 	<p:inputText value="#{task.addTaskNo}" rendered="#{not empty task.edit}"/>
-		               				 	<h:outputText value="#{task.addTaskNo}" rendered="#{empty task.edit}"/>
-			               			</f:facet>
-		               		     </p:cellEditor>
-		               		   </p:column>
-			               		<p:column headerText="任务分配数量">
-			               		  <p:cellEditor>
-			               			<f:facet name="output">
-			               				<h:outputText value="#{task.addTaskNum}" />
-			               			</f:facet>
-			               			 <f:facet name="input">
-			               					<p:inputText value="#{task.addTaskNum}" rendered="#{not empty task.edit}"/>
-			               					<h:outputText value="#{task.addTaskNum}" rendered="#{empty task.edit}"/>
-			               			 </f:facet>
-			               		   </p:cellEditor>
-			               		 </p:column>
-						        <p:column headerText="已上报数量">
-						           <p:cellEditor>
-						               <f:facet name="output">
-						               		<h:outputText value="#{task.reportNum}" />
-						               </f:facet>
-						               <f:facet name="input">
-						               		<h:outputText value="#{task.reportNum}" />
-						               </f:facet>
-						           </p:cellEditor>
-						       </p:column>
-						       <p:column  headerText="操作">
-						           <p:rowEditor />
-						           <h:panelGroup rendered="#{not empty task.xs}">
-						           		<p:commandLink actionListener="#{JobPlanUpdata.delTaskData(task)}" update=":myform:taskData :myform:proPlanNos" 
-						            	styleClass="ui-icon ui-icon-closethick" style="margin-left:20"></p:commandLink>
-						           </h:panelGroup>
-						       </p:column>
-						       
-						   </p:dataTable>
-						   </div>
-						   <p:dialog widgetVar="addTask" id="addTask">
-						   		<table>
-						   			<tr>
-						   				<td>
-						   					<h:outputText value="ERP任务号"></h:outputText>
-						   				</td>
-						   				<td>
-						   					<h:panelGrid id="addTaskNos">
-						   					<h:inputText value="#{JobPlanUpdata.addTaskNo}" id="addTaskNo">
-						   					</h:inputText>
-						   					<script type="text/javascript">
-												document.getElementById("myform:addTaskNo").style.width=wjb51*228/1500+"px";	
-												document.getElementById("myform:addTaskNo").style.height=hjb51*37/900+"px";
-												document.getElementById("myform:addTaskNo").style.fontSize=hjb51*20/900+"px";
-											</script>
-											</h:panelGrid>
-						   				</td>
-						   			</tr>
-						   			<tr>
-						   				<td>
-						   					<h:outputText value="任务分配数量"></h:outputText>
-						   				</td>
-						   				<td>
-						   					<h:panelGrid id="addTaskNums">
-						   					<h:inputText value="#{JobPlanUpdata.addTaskNum}" 
-						   						onkeyup="this.value=this.value.replace(/\D/g,'')" 
-						   						onafterpaste="this.value=this.value.replace(/\D/g,'')" id="addTaskNum"></h:inputText>
-						   						<script type="text/javascript">
-													document.getElementById("myform:addTaskNum").style.width=wjb51*228/1500+"px";	
-													document.getElementById("myform:addTaskNum").style.height=hjb51*37/900+"px";
-													document.getElementById("myform:addTaskNum").style.fontSize=hjb51*20/900+"px";
-												</script>
-						   					</h:panelGrid>
-						   				</td>
-						   			</tr>
-						   			<tr>
-						   				<td colspan="2" align="center">
-						   					<p:commandButton actionListener="#{JobPlanUpdata.addTaskData}" value="添加"  
-						   						update=":myform:addTask :myform:taskData :myform:proPlanNos :myform:messages " 
-						   						oncomplete="addTask.hide()" style="background-image: url('');background-color: #088B00;
-						   						cursor: pointer;color:#FFFFFF;border:0px;text-shadow:none;"/>
-						   				</td>
-						   			</tr>
-						   		</table>
-						   </p:dialog>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td id="addcentertd3td5" colspan="2"  align="center">
-						<p:commandButton id="addcentertd3td5com"  value="修改"  
-							style="float:left;border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;" 
-							onclick="onYZ()"/>
-							
-						<p:commandLink id="addcentertd3td5comhiddle" style="display:none;" actionListener="#{JobPlanUpdata.updataJobPlan}" oncomplete="yzisclose()">
-							<f:ajax listener="#{JobPlanUpdata.updataJobPlan}" event="click" execute="@this" render=":myform" oncomplete="yzisclose()"></f:ajax>
-						</p:commandLink>						
-						<div id="addcentertd3td5div" style="float:left;"></div>
-						<p:commandButton  value="取消"  id="addcentertd3td5com2"
-						style="float:left;border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;" 
-						onclick="window.close();"/>	
-					</td>
-				</tr>
-			</table>
-</td></tr>
-</table>	
+<h:head>
+<!-- <link href="../css/general.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="../css/autosize.css" type="text/css"></link>
+<link href="../css/jobplan_update.css" rel="stylesheet"	type="text/css" /> -->
+<link rel="stylesheet" href="../css/publish/JobPlanUpdate.min.css" type="text/css"></link>
+</h:head>
+<h:body>
+<h:form id="myform">
+<div class="jobplan-update-in">
+<h:inputHidden value="#{JobPlanUpdata.isSuccess}" id="isSuccess"></h:inputHidden>
+<h:inputHidden value="#{JobPlanUpdata.id}" id="jobplanid"></h:inputHidden>
+<c:if test="${JobPlanUpdata.addboolqian}">
+</c:if>
+<div class="jobplan-update-tou">
+    <img class="jobplan-update-image" src="../images/toubiaoti.png" />
+    <div class="jobplan-update-title">
+    <span data-i18n="top.title1"></span>
+</div>
+</div>
+<img class="middle_xian" src="../images/middle.png"/>
+<div class="zhongjian_shuju">
+       <div class="jobplanupdate-content-label" >
+       <span data-i18n="top.ljmc"></span>
+        </div>
+        <div class=" zl-select jobplanupdate-select-lt">
+			<img class="zl-select-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-select-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-select-bg-right" src="../images/input/box_right_select.png" />
+            <h:selectOneMenu id="partTypeId" value="#{JobPlanUpdata.partTypeId}">
+					<f:selectItems value="#{JobPlanUpdata.partMap}"></f:selectItems>
+						<f:ajax event="change" listener="#{JobPlanUpdata.getPartInfo}" execute="@this" />
+	         </h:selectOneMenu> 
+	         <h:message for="partTypeId" style="color:red" />
+        </div>
+        <div class="jobplanupdate-content-label" >
+            <span data-i18n="top.jhlx"></span>
+        </div>
+         <div class="zl-select jobplanupdate-select-lt" id="">
+			<img class="zl-select-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-select-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-select-bg-right" src="../images/input/box_right_select.png" />
+            <h:selectOneMenu  id="jobplanType" value="#{JobPlanUpdata.planType}" >
+                <f:selectItems value="#{JobPlanUpdata.jobplanType}" var="var" itemLabel="#{var.label}" itemValue="#{var.value}"/>
+				<f:ajax event="change" listener="#{JobPlanUpdata.getPTJobPlanInfo}"
+					render=":myform:pidpanegrid " execute="@this" />
+			 </h:selectOneMenu>
+        </div>
+        <div class="jobplanupdate-content-label" >
+           <span data-i18n="top.fzyjh"></span>
+        </div>
+        <div class="zl-select jobplanupdate-select-lt">
+			<img class="zl-select-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-select-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-select-bg-right" src="../images/input/box_right_select.png" />
+			<h:panelGrid id="pidpanegrid">	
+                 <h:selectOneMenu  id="pjobplan" value="#{JobPlanUpdata.pJobPlanId}">
+					<!--<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>-->
+					<f:selectItems value="#{JobPlanUpdata.pJobPlan}" var="pjob" itemLabel="#{pjob.name}" itemValue="#{pjob.id}">
+				   </f:selectItems>
+				 </h:selectOneMenu>
+            </h:panelGrid>
+           </div>
+   </div>
+       <div class="zhongjian_shuju1">
+        <div class="jobplanupdate-content-label" >
+             <span data-i18n="top.jhbh"></span>
+        </div>
+        <div class="zl-textbox zl-text jobplanupdate-text-lt">
+			<img class="zl-text-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-text-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-text-bg-right" src="../images/input/box_right.png" />
+           <h:inputText id="no" value="#{JobPlanUpdata.no}" disabled="true" />
+        </div>
+        <div class="jobplanupdate-content-label" >
+             <span data-i18n="top.jhmc"></span>
+        </div>
+        <div class="zl-textbox zl-text jobplanupdate-text-lt">
+			<img class="zl-text-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-text-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-text-bg-right" src="../images/input/box_right.png" />
+            <h:inputText id="name" value="#{JobPlanUpdata.name}" required="true" requiredMessage="不能为空" />
+			<h:message for="name" style="color:red" />
+        </div>
+        <div class="jobplanupdate-content-label" >
+            <span data-i18n="top.jhzt"></span>
+        </div>
+        <div class="zl-textbox zl-text jobplanupdate-text-lt">
+			<img class="zl-text-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-text-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-text-bg-right" src="../images/input/box_right.png" />
+            <h:inputText id="status" value="#{JobPlanUpdata.status}" readonly="true"/>
+			<h:inputHidden id="statusHidden" value="#{JobPlanUpdata.statusHidden}"></h:inputHidden>
+        </div>
+        
+        </div>
+       <div class="zhongjian_shuju2">
+	   <div class="jobplanupdate-content-label" >		
+		    <span data-i18n="top.yxj"></span>
+	    </div>	
+	      <div class="zl-select jobplanupdate-text-lt">
+			<img class="zl-select-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-select-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-select-bg-right" src="../images/input/box_right_select.png" /> 
+             <h:selectOneMenu id="priority" value="#{JobPlanUpdata.priority}" >
+					<f:selectItem itemLabel="1" itemValue="1"></f:selectItem>
+					<f:selectItem itemLabel="2" itemValue="2"></f:selectItem>
+					</h:selectOneMenu> 
+			<h:message for="priority" style="color:red" />
+        </div>
+        <div class="jobplanupdate-content-label" >		
+		   <span data-i18n="top.jhkssj"></span>
+	   </div>	
+	   <div class="jobplanupdate-content-select zl-dateBox">
+	       <img class="zl-dateBox-bg-left" src="../images/input/box_left.png" />
+	       <img class="zl-dateBox-bg-center" src="../images/input/box_center.png" />
+	       <img class="zl-dateBox-bg-right" src="../images/input/box_right_date.png" />
+	       <rich:calendar id="startTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				value="#{JobPlanUpdata.planStarttime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+	       <h:message for="startTime" style="color:red" />
+	   </div>
+        <div class="jobplanupdate-content-label" >		
+		   <span data-i18n="top.jhjssj"></span>
+	   </div>	
+	   <div class="jobplanupdate-content-select zl-dateBox">
+	       <img class="zl-dateBox-bg-left" src="../images/input/box_left.png" />
+	       <img class="zl-dateBox-bg-center" src="../images/input/box_center.png" />
+	       <img class="zl-dateBox-bg-right" src="../images/input/box_right_date.png" />
+	       <rich:calendar id="endTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				value="#{JobPlanUpdata.planEndtime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+	       <h:message for="endTime" style="color:red" />
+	   </div>
+       </div>
+  <div class="zhongjian_shuju3">
+      <div class="jobplanupdate-content-label" >		
+		 <span data-i18n="top.jhsj"></span>
+	</div>	
+	<div class="jobplanupdate-content-select zl-dateBox">
+	<img class="zl-dateBox-bg-left" src="../images/input/box_left.png" />
+	<img class="zl-dateBox-bg-center" src="../images/input/box_center.png" />
+	<img class="zl-dateBox-bg-right" src="../images/input/box_right_date.png" />
+	<rich:calendar id="submitTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				value="#{JobPlanUpdata.submitTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+	  <h:message for="submitTime" style="color:red" />
+	  </div>
+      <div class="jobplanupdate-content-label" >		
+		 <span data-i18n="top.jhsl"></span>
+	</div>	
+	<div class="zl-textbox zl-text jobplanupdate-text-lt">
+			<img class="zl-text-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-text-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-text-bg-right" src="../images/input/box_right.png" />	
+	<h:inputText id="planNum" value="#{JobPlanUpdata.planNum}"  required="true" requiredMessage="不能为空" >
+		<f:ajax event="change" listener="#{JobPlanUpdata.getProPlanNoValue}"
+				render=":myform:proPlanNos" execute="planNum" />
+	</h:inputText> 
+	 <h:message for="planNum" style="color:red" />
+	</div>  
+	<div class="jobplanupdate-content-label" >		
+		 <span data-i18n="top.dfprwsl"></span>
+	</div>	
+	<div class="zl-textbox zl-text jobplanupdate-text-lt">
+			<img class="zl-text-bg-left" src="../images/input/box_left.png" />
+			<img class="zl-text-bg-center" src="../images/input/box_center.png" />
+			<img class="zl-text-bg-right" src="../images/input/box_right.png" />	
+	<h:panelGrid id="proPlanNos">
+		<h:inputText id="proPlanNo" readonly="true" value="#{JobPlanUpdata.allocatedNum}"/> 
+	</h:panelGrid>
+	</div>
+	</div>     
+  <div class="wei_xian">
+  <div class="import">
+  <img class="import_image" src="../images/guanbi.png"/>
+  <h:graphicImage id="btn_search2" alt="search2" url="" style="display:none;">
+          <f:ajax  event="click" oncomplete="parent.window.close();"></f:ajax>
+  </h:graphicImage>
+  <div class="jobplanupdate-content-btn3 jobplanupdate-button1" id="button3" onclick="cxbtn2()">
+  <div class="jobplanupdate-button-text1">
+			  <span data-i18n="top.qx"></span>
+  </div>
+  </div>
+ </div>
+<div class="import1">
+<img class="import_image" src="../images/import.png"/>
+<h:graphicImage id="btn_search1" alt="search1" url="" style="display:none;">
+          <a4j:ajax listener="#{JobPlanUpdata.updataJobPlan}"  event="click"  
+          execute="partTypeId jobplanType pjobplan no name status priority startTime endTime submitTime proPlanNo"          
+          oncomplete="yzisclose1()" render=":myform:isSuccess"></a4j:ajax>
+</h:graphicImage>
+<div class="jobplanupdate-content-btn3 jobplanupdate-button1" id="button2" onclick="onYZ()">
+<div class="jobplanupdate-button-text1">
+			<span data-i18n="top.bc"></span>
+</div>
+</div>
+</div>
+</div>      
 <p:growl id="messages" showDetail="true"/> 
 </div>
-<script type="text/javascript">
-
-var imgPercent = hjb51/900; //比例 	
-//宽高 
-document.getElementById("addcontains").style.width=+"px";
-document.getElementById("addcontains").style.height=hjb51*800/900+"px";
-document.getElementById("addcenter").style.width=+"px";
-document.getElementById("addcenter").style.height=hjb51*800/900+"px";
-
-document.getElementById("addcenter").style.marginLeft=wjb51*200/1500+"px";
-//中间 
-document.getElementById("addcentertb").style.width=wjb51*850/1500+"px";	
-document.getElementById("addcentertb").style.height=hjb51*664/900+"px";
-document.getElementById("addcentertb").style.marginLeft=wjb51*135/1500+"px";
-
-document.getElementById("addcentertd1").style.height=hjb51*130/900+"px";
-document.getElementById("addcentertd1").style.fontSize=hjb51*40/900+"px";
-
-document.getElementById("addcentertd2").style.width=wjb51*756/1500+"px";
-document.getElementById("addcentertd2tbtr1").style.height=hjb51*37/900+"px";
-document.getElementById("addcentertd2tbtd4").style.height=hjb51*37/900+"px";
-document.getElementById("addcentertd2tbtd5").style.height=hjb51*37/900+"px";
-document.getElementById("addcentertd2tbtd5div").style.width=wjb51*250/1500+"px";
-document.getElementById("addcentertd2tbtd6div").style.width=wjb51*250/1500+"px";
-document.getElementById("addcentertd2tbtd7div").style.width=wjb51*250/1500+"px";
-
-document.getElementById("addcentertd2tbtd10").style.height=hjb51*37/900+"px";
-document.getElementById("addcentertd2tbtd11").style.height=hjb51*37/900+"px";
-document.getElementById("addcentertd2tbtd14").style.height=hjb51*37/900+"px";
-document.getElementById("addcentertd2tbtd15").style.height=hjb51*37/900+"px";
-
-document.getElementById("addcentertd3td5").style.height=hjb51*90/900+"px";
-document.getElementById("myform:addcentertd3td5com").style.marginLeft=wjb51*260/1500+"px";
-document.getElementById("myform:addcentertd3td5com").style.width=wjb51*110/1500+"px";
-document.getElementById("myform:addcentertd3td5com").style.height=hjb51*50/900+"px";
-document.getElementById("addcentertd3td5div").style.width=wjb51*110/1500+"px";
-document.getElementById("addcentertd3td5div").style.height=hjb51*50/900+"px"
-document.getElementById("myform:addcentertd3td5com2").style.width=wjb51*110/1500+"px";
-document.getElementById("myform:addcentertd3td5com2").style.height=hjb51*50/900+"px";
-
-//下拉列表 
-document.getElementById("myform:partTypeId").style.width = wjb51*228/1500+"px";  //是270和36大小 
-document.getElementById("myform:partTypeId").style.height = hjb51*37/900+"px";
-document.getElementById("myform:partTypeId").style.marginLeft = "0px"; //离左边为左边图片的宽度 
-document.getElementById("myform:partTypeId").style.fontSize = hjb51*20/900+"px";
-
-document.getElementById("myform:jobplanType").style.width = wjb51*228/1500+"px";  //是270和36大小 
-document.getElementById("myform:jobplanType").style.height = hjb51*37/900+"px";
-document.getElementById("myform:jobplanType").style.marginLeft = "0px"; //离左边为左边图片的宽度 
-document.getElementById("myform:jobplanType").style.fontSize = hjb51*20/900+"px";
-
-document.getElementById("myform:pjobplan").style.width = wjb51*228/1500+"px";  //是270和36大小 
-document.getElementById("myform:pjobplan").style.height = hjb51*37/900+"px";
-document.getElementById("myform:pjobplan").style.marginLeft = "0px"; //离左边为左边图片的宽度 
-document.getElementById("myform:pjobplan").style.fontSize = hjb51*20/900+"px";
-
-document.getElementById("myform:status").style.width = wjb51*228/1500+"px";  //是270和36大小 
-document.getElementById("myform:status").style.height = hjb51*37/900+"px";
-document.getElementById("myform:status").style.marginLeft = "0px"; //离左边为左边图片的宽度 
-document.getElementById("myform:status").style.fontSize = hjb51*20/900+"px";
-
-document.getElementById("myform:priority").style.width = wjb51*228/1500+"px";  //是270和36大小 
-document.getElementById("myform:priority").style.height = hjb51*37/900+"px";
-document.getElementById("myform:priority").style.marginLeft = "0px"; //离左边为左边图片的宽度 
-document.getElementById("myform:priority").style.fontSize = hjb51*20/900+"px";
-
-document.getElementById("myform:startTimeInputDate").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:startTimeInputDate").style.height=hjb51*37/900+"px";
-document.getElementById("myform:startTimeInputDate").style.fontSize=hjb51*20/900+"px";	
-document.getElementById("myform:endTimeInputDate").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:endTimeInputDate").style.height=hjb51*37/900+"px";
-document.getElementById("myform:endTimeInputDate").style.fontSize=hjb51*20/900+"px";	
-
-//输入框 
-document.getElementById("myform:no").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:no").style.height=hjb51*37/900+"px";
-document.getElementById("myform:no").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:name").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:name").style.height=hjb51*37/900+"px";
-document.getElementById("myform:name").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:planNum").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:planNum").style.height=hjb51*37/900+"px";
-document.getElementById("myform:planNum").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:proPlanNo").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:proPlanNo").style.height=hjb51*37/900+"px";
-document.getElementById("myform:proPlanNo").style.fontSize=hjb51*20/900+"px";
-
-document.getElementById("myform:startTime").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:startTime").style.height=hjb51*37/900+"px";
-document.getElementById("myform:startTime").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:endTime").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:endTime").style.height=hjb51*37/900+"px";
-document.getElementById("myform:endTime").style.fontSize=hjb51*20/900+"px";
-
-document.getElementById("myform:titletext1").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext2").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext3").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext4").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext5").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext6").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext7").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext8").style.fontSize=hjb51*20/900+"px";
-document.getElementById("myform:titletext9").style.fontSize=hjb51*20/900+"px";
-
-document.getElementById("myform:titletext20").style.fontSize=hjb51*20/900+"px";	
-document.getElementById("myform:titletext24").style.fontSize=hjb51*20/900+"px";	
-document.getElementById("myform:titletext25").style.fontSize=hjb51*20/900+"px";	
-document.getElementById("addcentertd2tbtd20").style.height=hjb51*37/900+"px";
-document.getElementById("addcentertd2tbtd21").style.height=hjb51*37/900+"px";
-
-document.getElementById("addtablecontent").style.height=hjb51*300/900+"px";
-
-document.getElementById("myform:submitTimeInputDate").style.width=wjb51*228/1500+"px";	
-document.getElementById("myform:submitTimeInputDate").style.height=hjb51*37/900+"px";
-document.getElementById("myform:submitTimeInputDate").style.fontSize=hjb51*20/900+"px";
-
-</script>	
-<script type="text/javascript" src="../js/ext-base.js"></script>
-<script type="text/javascript" src="../js/ext-all.js"></script>		
-<script type="text/javascript">
-initPages();//根据状态，对页面的原始进行可用，和不可用设置
-function initPages(){
-	var status = document.getElementById("myform:status").value;
-	if(status == 60 || status == 70){
-		document.getElementById("myform:partTypeId").disabled=true;
-		document.getElementById("myform:jobplanType").disabled=true;
-		document.getElementById("myform:pjobplan").disabled=true;
-		document.getElementById("myform:priority").disabled=true;
-		document.getElementById("myform:no").disabled=true;
-		document.getElementById("myform:name").disabled=true;
-		document.getElementById("myform:proPlanNo").disabled=true;
-		document.getElementById("myform:startTime").disabled=true;
-		document.getElementById("myform:endTime").disabled=true;
-	}
-}
-</script>	
-<script type="text/javascript">
-//<![CDATA[ 
-  
-  document.getElementById("myform:startTimePopupButton").style.display="none";
-  document.getElementById("myform:endTimePopupButton").style.display="none";
-  document.getElementById("myform:submitTimePopupButton").style.display="none";
-  function yzisclose(){//验证是否添加成功 是否关闭
-// 	  alert(1);
-	  var isSuccess=document.getElementById("myform:isSuccess").value;
-//   	//alert(isSuccess);
-//   	if(null!=isSuccess&&isSuccess=="修改成功"){
-  		alert("修改成功");
-  		window.opener.location.href=window.opener.location.href;
-  		window.close();
-//   	}
-  }
-  function onYZ(){
-	  var startTime=document.getElementById("myform:startTimeInputDate").value;
-	  var endTime=document.getElementById("myform:endTimeInputDate").value;
-	  var tt=dateCompare(startTime,endTime);
-	  var jobplanType=document.getElementById("myform:jobplanType").value;
-	  if(null==startTime||""==startTime){
-		  alert("请选择计划开始时间！");
-	  }else if(null==endTime||""==endTime){
-		  alert("请选择计划结束时间！");
-	  }else if(!tt){
-		alert("开始时间不能大于结束时间!");  
-	  }else if(null==jobplanType||""==jobplanType){
-		  alert("请选择计划类型!");
-	  }else if(jobplanType=="2"){
-		  var pjobplan=document.getElementById("myform:pjobplan").value;
-		  if(null==pjobplan||""==pjobplan){
-			  alert("请选择父作业计划");
-		  }else{
-			  document.getElementById("myform:addcentertd3td5comhiddle").click();
-		  }
-	  }else{
-		  document.getElementById("myform:addcentertd3td5comhiddle").click();
-	  }
-  }
-  function dateCompare(startdate,enddate)   
-  {   
-  var arr=startdate.split("-");    
-  var starttime=new Date(arr[0],arr[1],arr[2]);    
-  var starttimes=starttime.getTime();   
-    
-  var arrs=enddate.split("-");    
-  var lktime=new Date(arrs[0],arrs[1],arrs[2]);    
-  var lktimes=lktime.getTime();   
-    
-  if(starttimes>lktimes)    
-  {   
-  return false;   
-  }   
-  else  
-  return true;   
-    
-  }  
-  
-      
-//]]> 
-</script>
-		<script type="text/javascript">
-				setTimeout(function(){
-				$("#maskw").fadeOut(500);
-				},100);
-     	</script>	
-		</h:form>
-	</h:body>
-	
+<script src="../js/publish/i18next-1.7.4.min.js.gzjs" type="text/javascript"></script>
+<!-- <h:outputScript library="js" name="common.js"></h:outputScript>
+<h:outputScript library="js" name="autosize.js"></h:outputScript>
+<h:outputScript library="js/page" name="jobplan_update.js"></h:outputScript> -->		
+<h:outputScript library="js/publish" name="JobPlanUpdate.min.js"></h:outputScript>
+    </h:form>
+  </h:body>
 </ui:composition>

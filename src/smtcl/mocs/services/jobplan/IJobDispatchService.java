@@ -3,6 +3,8 @@ package smtcl.mocs.services.jobplan;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import smtcl.mocs.beans.jobplan.JobdispatchAddBean;
 import smtcl.mocs.beans.jobplan.JobdispatchUpdataBean;
 import smtcl.mocs.pojos.job.TEquJobDispatch;
@@ -207,7 +209,7 @@ public interface IJobDispatchService {
 	/**
 	 * 查询TEquJobDispatch实体类表中所有信息
 	 */
-	public List<Map<String, Object>> getEquJobDispatchList(String jobdispatchName);
+	public List<Map<String, Object>> getEquJobDispatchList(String jobdispatchName,HttpSession session);
 	/**
 	 * 通过工id称查询patchNO
 	 * @return

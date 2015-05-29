@@ -1,11 +1,6 @@
 package smtcl.mocs.services.device.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.dreamwork.persistence.GenericServiceSpringImpl;
 import org.dreamwork.persistence.Parameter;
@@ -16,7 +11,10 @@ import org.primefaces.model.TreeNode;
 import smtcl.mocs.pojos.device.TNodes;
 import smtcl.mocs.services.device.IAuthorizeService;
 import smtcl.mocs.services.device.IOrganizationService;
+import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.StringUtils;
+
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -43,9 +41,9 @@ public class OrganizationServiceImpl extends
 	public TreeNode returnTree(String userid, String pageid) {		
 		TreeNode root = null;		
 		List list = authorizeService.getAuthorizedNodeTree(userid, pageid);
-		if (null != list & list.size() > 0) {
+		if (null != list && list.size() > 0) {
 			smtcl.mocs.beans.authority.cache.TreeNode tnodes = (smtcl.mocs.beans.authority.cache.TreeNode) list.get(0);
-			root = newNodeChildren(tnodes, root);
+			root = newNodeChildren(tnodes, null);
 		}
 		return root;
 	}
@@ -55,7 +53,7 @@ public class OrganizationServiceImpl extends
 	 * 
 	 * @param ttParent 节点树
 	 * @param parent 返回页面的树
-	 * @return
+	 * @return 返回treenode
 	 */
 	public TreeNode newNodeChildren(smtcl.mocs.beans.authority.cache.TreeNode ttParent,
 			TreeNode parent) {
@@ -74,26 +72,29 @@ public class OrganizationServiceImpl extends
 	/**
 	 * 根据节点名字返回该节点下的所有节点id，包括子节点的id
 	 * 并封装成 '1','2','3' 这种形式
-	 * @param nodeName 节点
-	 * @return
+	 * @param currentNode 节点
+	 * @return 节点信息
 	 */
 	public String getAllTNodesId(smtcl.mocs.beans.authority.cache.TreeNode currentNode) {
-		List nodeIdList = new ArrayList();// 当前节点包括子节点的id
+		List<String> nodeIdList = new ArrayList<String>();// 当前节点包括子节点的id
 		getNodesAllId(currentNode, nodeIdList);// 递归获取前节点id和子节点的id
-		String nodeid = StringUtils.returnHqlIN(nodeIdList);
-		return nodeid;
+        return StringUtils.returnHqlIN(nodeIdList);
 	}
 	/**
 	 * 根据节点名字返回该节点下的所有节点id，包括子节点的id
 	 * 并封装成 '1','2','3' 这种形式
-	 * @param nodeName 节点
-	 * @return
+	 * @param tnodes 节点
+	 * @return 节点信息
 	 */
 	public String getAllTNodesId(TNodes tnodes) {
-		List nodeIdList = new ArrayList();// 当前节点包括子节点的id
-		getNodesAllId(tnodes, nodeIdList);// 递归获取前节点id和子节点的id
-		String nodeid = StringUtils.returnHqlIN(nodeIdList);
-		return nodeid;
+		String sql="select tf.node_id as nodeId from t_nodesflat tf where tf.ancestor_id='"+tnodes.getNodeId()+"'";
+		List<Map<String,Object>> list=dao.executeNativeQuery(sql);
+		String ns="";
+		for(Map<String,Object> map:list){
+			ns=ns+"'"+map.get("nodeId")+"',";
+		}
+		ns=ns.length()>0?ns.substring(0,ns.length()-1):ns;
+		return ns;
 	}
 
 
@@ -104,14 +105,14 @@ public class OrganizationServiceImpl extends
 	 * @return List
 	 */
 	public List getNodesAllId(smtcl.mocs.beans.authority.cache.TreeNode tnodes,
-			List nodeIdList) {
+			List<String> nodeIdList) {
 		nodeIdList.add(tnodes.getNodeId());
 		for (smtcl.mocs.beans.authority.cache.TreeNode tt : tnodes.getChildNodes()) {
 			getNodesAllId(tt, nodeIdList);
 		}
 		return nodeIdList;
 	}
-	public List getNodesAllId(TNodes tnodes,List nodeIdList) {
+	public List getNodesAllId(TNodes tnodes,List<String> nodeIdList) {
 		nodeIdList.add(tnodes.getNodeId());
 		for (TNodes tt : tnodes.getTNodeses()) {
 			getNodesAllId(tt, nodeIdList);
@@ -144,13 +145,15 @@ public class OrganizationServiceImpl extends
 	/*--------------------------WebService start-----------------------------------*/
 	/**
 	 * 获取节点下的所有子节点
-	 * @param nodeId 节点id
+     * @param session httpsession
+	 * @param nodeID 节点id
 	 * @param userId 用户id
-	 * @return List<Map<String, Object>>
+	 * @return 返回节点信息列表
 	 */
 	@Override
-	public List<Map<String, Object>> getAllNodesByParentNodeId(String nodeID,
+	public List<Map<String, Object>> getAllNodesByParentNodeId(HttpSession session, String nodeID,
 			String userId) {
+        Locale locale = SessionHelper.getCurrentLocale(session);
 		List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		try {
@@ -161,7 +164,11 @@ public class OrganizationServiceImpl extends
 					if(!t.getNodeType().equals("13")){
 						Map<String, Object> nodesMap = new HashMap<String, Object>();
 						nodesMap.put("nodeId", t.getNodeId());
-						nodesMap.put("name", t.getNodeName());
+                        if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+                            nodesMap.put("name", t.getEnNodeName());
+                        }else {
+                            nodesMap.put("name", t.getNodeName());
+                        }
 						nodesMap.put("nodeType", t.getNodeType());
 						nodesMap.put("parentId", t.getParentId());
 						nodesMap.put("checked", !t.isNocheck());
@@ -189,10 +196,11 @@ public class OrganizationServiceImpl extends
 
 	/**
 	 * 根据nodeclass获取节点
-	 * @param nodeClass 节点nodeClass
-	 * @return List<Map<String, Object>>
+	 * @param parameters 节点nodeClass
+	 * @return 返回节点名称和节点ID
 	 */
 	@Override
+    @SuppressWarnings("unchecked")
 	public List<Map<String, Object>> get_All_Node_By_nodeClass(Collection<Parameter> parameters){
 		String hql ="SELECT new Map(" +
 				"t.nodeName as nodeName ," +
@@ -212,6 +220,7 @@ public class OrganizationServiceImpl extends
 	 * @param nodeId 节点id
 	 * @return List<String>
 	 */
+    @SuppressWarnings("unchecked")
 	public List<TNodes> getNodesAllId(String nodeId) {
 		String hql="from TNodes" +
 				  " where nodeId in("+nodeId+")" +
@@ -229,7 +238,7 @@ public class OrganizationServiceImpl extends
 		List<TNodes> rslist =new ArrayList<TNodes>();
 		List list = authorizeService.getAuthorizedNodeTree(userid, pageid);
 		
-		if (null != list & list.size() > 0) {
+		if (null != list && list.size() > 0) {
 			smtcl.mocs.beans.authority.cache.TreeNode tnodes = (smtcl.mocs.beans.authority.cache.TreeNode) list.get(0);
 			rslist=getNodesAllId(getAllTNodesId(tnodes)); 
 		}
@@ -240,9 +249,10 @@ public class OrganizationServiceImpl extends
 	
 	/**
 	 * 根据节点id 获取节点对象
-	 * @param Id
-	 * @return
+	 * @param Id 节点ID
+	 * @return 返回节点信息
 	 */
+    @SuppressWarnings("unchecked")
 	public List<TNodes> getTNodesById(String Id){
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String hql="from TNodes where id='"+Id+"'";

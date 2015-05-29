@@ -1,11 +1,7 @@
 package smtcl.mocs.web.ext;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
@@ -14,21 +10,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import smtcl.mocs.pojos.device.TUserProdctionPlan;
 import smtcl.mocs.pojos.job.TJobplanInfo;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
 import smtcl.mocs.services.authority.ICommonService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
+import smtcl.mocs.utils.authority.SessionHelper;
+import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.StringUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @Controller
 public class JobPlanWeb {
 
-	private  Gson gson = new GsonBuilder().serializeNulls().create();
-	
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	/**
 	 * 设备接口实例
@@ -41,63 +34,52 @@ public class JobPlanWeb {
 	
 	/**
 	 * 获取产品名称信息
-	 * @param request
-	 * @param partName
-	 * @param planStatus
-	 * @param startTime
-	 * @param endTime
-	 * @return
+	 * @param request request
+	 * @param partid 零件ID
+	 * @param planStatus 作业（批次）计划状态
+	 * @param startTime 开始时间
+	 * @param endTime 结束时间
+	 * @return 产品名称信息
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobplan/getjobplanName.action")
-	public @ResponseBody Map<String, ? extends Object> getTestsExtData(HttpServletRequest request,String partid,String planStatus,String startTime,String endTime,String isexpand) throws Exception{
+	public @ResponseBody Map<String, Object> getTestsExtData(HttpServletRequest request,String partid,String planStatus,String startTime,String endTime,String isexpand) throws Exception{
 		String nodeid=(String)request.getSession().getAttribute("nodeid");
-		
-		Map<String, Object> tempData2 = jobPlanService.getAllJobPlanAndPartInfo(nodeid,partid,planStatus,startTime,endTime,isexpand);
-		return tempData2;
+        Locale locale = SessionHelper.getCurrentLocale(request.getSession());
+        return jobPlanService.getAllJobPlanAndPartInfo(nodeid,partid,planStatus,startTime,endTime,isexpand,locale.toString());
 	}
 
-	/**
-	 * 获取作业计划信息
-	 * @return
-	 * @throws Exception
-	 */
+    /**
+     * 获取作业计划信息
+     * @param request request
+     * @param ishighlight 是否高亮
+     * @param partid 零件ID
+     * @param planStatus 作业（批次）计划状态
+     * @param startTime 作业（批次）计划开始时间
+     * @param endTime 作业（批次）计划结束时间
+     * @return 返回查询的作业计划和批次计划
+     * @throws Exception
+     */
 	@RequestMapping(value ="/jobplan/getjobEvent.action")
 	@ResponseBody
-	public Map<String, ? extends Object> getTestsEvent(HttpServletRequest request,
+	public Map<String, Object> getTestsEvent(HttpServletRequest request,
 			String ishighlight, String partid, String planStatus,String startTime, String endTime) throws Exception {
-		
+        Locale locale = SessionHelper.getCurrentLocale(request.getSession());
 		List<Map<String, Object>> tempData = new ArrayList<Map<String, Object>>();
 		// 临时数据
 		String nodeid = (String) request.getSession().getAttribute("nodeid");
-		List<Map<String, Object>> temp = (List<Map<String, Object>>) jobPlanService
+		List<Map<String, Object>> temp = jobPlanService
 				.findAllJobPlan(nodeid, partid, planStatus, startTime, endTime);
-		long maxId = 0;
-		if (temp.size() > 0 && temp != null) {
-			String newplanid = "";//新建批准所属作业的id,通过批次定位到作业信息
+		if (temp != null && temp.size() > 0) {
+            Map<String,String> statusMap = Constants.statusMap;
 			for (Map<String, Object> map : temp) {
+                if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+                    String key = map.get("statusName").toString();
+                    map.put("statusName",statusMap.get(key));
+                }
 				Integer start = Integer.parseInt(map.get("Status").toString());
-				if (maxId == 0){
-					maxId = Long.parseLong(map.get("Id").toString()); // 获取最大值
-					if(map.get("pid") != null && !map.get("pid").equals(""))
-						newplanid = map.get("pid").toString();//定位到作业的id
-				}
 				map.remove("Start");
-
-				// 作业计划暂时统一为白色
-				String planType = map.get("planType").toString();
-				if ("1".equals(planType)) {
-					if(!StringUtils.isEmpty(newplanid) && map.get("Id").toString().equals(newplanid)){
-						if(ishighlight!=null){
-							map.put("Cls", "ext_jobplan_maxId");//定位到作业计划，添加高亮显示
-						}else{
-							map.put("Cls", "ext_jobplan");
-						}
-					}else{
-						map.put("Cls", "ext_jobplan");
-					}
-				} else {
-					switch (start) {
+                switch (start) {
 					case 10:// 创建(点击作业计划，作业计划的初始状态为新建)
 						map.put("Cls", "ext_chuangjian");
 						break;
@@ -119,10 +101,12 @@ public class JobPlanWeb {
 					case 70:// 完成
 						map.put("Cls", "ext_wancheng");
 						break;
+                    case 80://暂停/恢复
+                        map.put("Cls", "ext_pause");
+                        break;
 					default:
-						map.put("Cls", "ext_defult");
+						map.put("Cls", "ext_default");
 						break;
-					}
 				}
 				tempData.add(map);
 			}
@@ -132,34 +116,31 @@ public class JobPlanWeb {
 	
 	/**
 	 * 获取作业计划详细
-	 * @param p
-	 * @return
+	 * @param p 不用
+	 * @return 返回详细信息
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobplan/jobDetail.action")
-	public @ResponseBody Map<String, ? extends Object> getJobDetail(String p) throws Exception{
-		Map<String, Object> tempData= jobPlanService.findJobPlanDetail(p);
-		return tempData;
+	public @ResponseBody Map<String, Object> getJobDetail(String p) throws Exception{
+        return jobPlanService.findJobPlanDetail(p);
 	}
 	
 	/**
 	 * 获取作业计划详细（默认取t_jobplan_info中的ID最大的记录）
-	 * @param 
-	 * @return Map<String, Object>
+	 * @param p 不用
+	 * @return 返回详细信息
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobplan/findJobPlanDetailDefault.action")
-	public @ResponseBody Map<String, ? extends Object> findJobPlanDetailDefault(String p) throws Exception{
-		Map<String, Object> tempData= jobPlanService.findJobPlanDetailDefault();
-		return tempData;
+	public @ResponseBody Map<String, Object> findJobPlanDetailDefault(String p) throws Exception{
+        return jobPlanService.findJobPlanDetailDefault();
 	}
 	
 	/**
 	 * 添加作业计划
-	 * @return
 	 */
 	@RequestMapping(value="/jobplan/save.action")
-	public @ResponseBody Map<String, ? extends Object> saveJobplan(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String planId,String planNum,String priority,String planNo,HttpServletRequest request){
+	public @ResponseBody Map<String, Object> saveJobplan(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String planId,String planNum,String priority,String planNo,HttpServletRequest request){
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
 			String nodeid=(String)request.getSession().getAttribute("nodeid");
@@ -180,11 +161,8 @@ public class JobPlanWeb {
 			Date endDate = new Date(end);
 			
 			TPartTypeInfo tPartTypeInfo=commonService.get(TPartTypeInfo.class,Long.parseLong(resourceId));
-			if(StringUtils.isEmpty(planId)) planId="-1";
-			TUserProdctionPlan tUserProdctionPlan=commonService.get(TUserProdctionPlan.class,Long.parseLong(planId));
-			TJobplanInfo jobplanInfo=new TJobplanInfo();			
+			TJobplanInfo jobplanInfo=new TJobplanInfo();
 			jobplanInfo.setTPartTypeInfo(tPartTypeInfo);
-//			jobplanInfo.setTUserProdctionPlan(tUserProdctionPlan);
 			jobplanInfo.setNo(no);
 			jobplanInfo.setName(name);
 			jobplanInfo.setStatus(10);//创建状态
@@ -209,36 +187,29 @@ public class JobPlanWeb {
 	
 	/**
 	 * 修改作业计划
-	 * @return
 	 */
 	@RequestMapping(value="/jobplan/updateBasicJobPlanInfo.action")
-	public @ResponseBody Map<String, ? extends Object> updateBasicJobPlanInfo(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String planNum,String planNo,String priority,HttpServletRequest request){
+	public @ResponseBody Map<String, Object> updateBasicJobPlanInfo(String startTime,String startDate,String durationTime,String id,String resourceId,String name,String no,String planNum,String planNo,String priority,HttpServletRequest request){
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
 			String nodeid=(String)request.getSession().getAttribute("nodeid");
 		    //获取时间
 			Date str = formatDate.parse(startTime);
-			
-			//获取日期	
+			//获取日期
 			Date sDate = formatDate.parse(startDate);
-			
 			//拼装日期跟时间
 			String temp = StringUtils.formatDate(sDate, 2)+" "+StringUtils.formatDate(str, 5);
-			
 			//开始时间
 			SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date tempDate = format1.parse(temp);			
 			Long end = tempDate.getTime()+(Long.parseLong(durationTime)*3600000);			
 			Date endDate = new Date(end);			
-			//TPartTypeInfo tPartTypeInfo=commonService.get(TPartTypeInfo.class,Long.parseLong(resourceId)); //没有垂直拖动			
-			Long planId=new Long(0);
+			Long planId= (long) 0;
 			if(!StringUtils.isEmpty(id)) planId=Long.parseLong(id);			
 			TJobplanInfo jobplanInfo=commonService.get(TJobplanInfo.class,planId);//更新和添加的最大的区别
 			
-//			jobplanInfo.setTPartTypeInfo(tPartTypeInfo);
 			jobplanInfo.setNo(no);
 			jobplanInfo.setName(name);
-//			jobplanInfo.setStatus(10);//创建状态
 			jobplanInfo.setPlanEndtime(endDate);
 			jobplanInfo.setPlanStarttime(tempDate);
 			if(StringUtils.isEmpty(planNum)) planNum="-1";
@@ -258,18 +229,17 @@ public class JobPlanWeb {
 	
 	/**
 	 * 修改作业计划
-	 * @param startTime
-	 * @param endTime
-	 * @param id
-	 * @param resourceId
-	 * @return
+	 * @param startTime 开始时间
+	 * @param endTime 结束时间
+	 * @param id 作业（批次）计划ID
+	 * @param resourceId resourceID
 	 */
 	@RequestMapping(value="/jobplan/update.action")
-	public @ResponseBody Map<String, ? extends Object> updateJobplan(String startTime ,String endTime , String id,String resourceId,String statusFlag){
+	public @ResponseBody Map<String, Object> updateJobplan(String startTime ,String endTime , String id,String resourceId,String statusFlag){
 		try {
 			if(startTime!=null && endTime!=null && id!=null){
 				TJobplanInfo tJobplanInfo = jobPlanService.geTJobplanInfoById(Long.parseLong(id));
-				if(statusFlag=="40"||statusFlag=="50")
+				if(statusFlag.equals("40") || statusFlag.equals("50"))
 				{
 					tJobplanInfo.setPlanEndtime(format.parse(endTime));
 				}
@@ -293,12 +263,11 @@ public class JobPlanWeb {
 	
 	/**
 	 * 拆分预留方法
-	 * @param id
-	 * @param time
-	 * @return
+	 * @param id 作业计划ID
+	 * @param time 结束时间
 	 */
 	@RequestMapping(value="/jobplan/split.action")
-	public @ResponseBody Map<String, Object> SplitJobPlan(String id,String time){
+	public void SplitJobPlan(String id,String time){
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		try {
 			TJobplanInfo tJobplanInfo = jobPlanService.geTJobplanInfoById(Long.parseLong(id));
@@ -323,16 +292,15 @@ public class JobPlanWeb {
 			e.printStackTrace();
 		}
 		
-		return null;
 	}
 	
 	/**
 	 * 删除作业计划
-	 * @param id
-	 * @return
+	 * @param id 作业(批次)计划ID
+	 * @return 返回操作信息
 	 */
 	@RequestMapping(value="/jobplan/delete.action")
-	public @ResponseBody Map<String, ? extends Object> deleteJobplan(String id){
+	public @ResponseBody Map<String, Object> deleteJobplan(String id){
 		Map<String,Object> modelMap = new HashMap<String,Object>();
 		try {
 			TJobplanInfo tJobplanInfo = jobPlanService.geTJobplanInfoById1(Long.parseLong(id));
@@ -353,14 +321,12 @@ public class JobPlanWeb {
 	
 	/**
 	 * 获取作业计划表中当前最大的ID
-	 * @return
 	 */
 	@RequestMapping(value="/jobplan/getMaxJobPlanInfoId.action")
 	public @ResponseBody String getMaxJobPlanInfoId(){
 		try{
-			String mID=jobPlanService.getMaxJobPlanInfoId();
-			return mID;
-		} catch (Exception e) {
+            return jobPlanService.getMaxJobPlanInfoId();
+		} catch (Exception ignored) {
 			
 		}
 		
@@ -383,13 +349,6 @@ public class JobPlanWeb {
 	}
 	
 	private Map<String,Object> getMap(Map<String, Object> tempMap){
-		Map<String,Object> modelMap = new HashMap<String,Object>();
-		modelMap.put("data", tempMap);
-		modelMap.put("success", true);
-		return modelMap;
-	}
-	
-	private Map<String,Object> getMap1(String tempMap){
 		Map<String,Object> modelMap = new HashMap<String,Object>();
 		modelMap.put("data", tempMap);
 		modelMap.put("success", true);
@@ -434,7 +393,6 @@ public class JobPlanWeb {
 	
 	/**
 	 * 获取设备资源信息
-	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value ="/jobplan/updateJobPlanInfoStatus.action")
@@ -453,7 +411,6 @@ public class JobPlanWeb {
 	
 	/**
 	 * 得到作业计划编号
-	 * @return
 	 */
 	@RequestMapping(value ="/jobplan/getJobplanNo.action")
 	public @ResponseBody String getJobplanNo(String partTypeId){
@@ -464,7 +421,7 @@ public class JobPlanWeb {
 			Map<String,Object> m = partlst.get(0);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			String dd  = sdf.format(new Date());
-			no ="WP_"+(String)m.get("bno")+"_"+dd+"_"+maxId;
+			no ="WP_"+m.get("bno")+"_"+dd+"_"+maxId;
 		}
 		return no;
 	}

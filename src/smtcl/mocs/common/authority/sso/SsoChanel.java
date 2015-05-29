@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * 对应servlet的url:/sso/sso-chanel
+ * 瀵瑰簲servlet鐨剈rl:/sso/sso-chanel
  * Created by IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-9-29
- * Time: 下午2:23
+ * Time: 涓嬪崍2:23
  */
 public class SsoChanel extends HttpServlet {
     @Override

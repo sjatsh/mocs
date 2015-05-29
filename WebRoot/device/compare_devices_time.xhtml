@@ -12,105 +12,84 @@
 <h:outputScript library="js" name="exporting.js"></h:outputScript>
 <h:outputScript library="js" name="compare_devices_time.js" />
 <h:outputScript library="js" name="common_page.js"></h:outputScript>
-
-<link rel="stylesheet" href="css/common.css" type="text/css"></link>
-<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
-
-<style type="text/css">
-*{margin:0px;}
-</style>
+<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="css/compare_devices_time.css" type="text/css"></link>
 
 <h:inputHidden id="nodeStr" value="#{CompareDevicesTimeBean.nodeStr}" />
-<div class="title-bar">
-	<div class="logo-img">
-		<img src="images/profile_top_logo.png" />
+<div class="zl-content-top" >
+	<!--头部背景 -->
+	<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+	<!--标题 -->
+	<div class="zl-content-top-title">
+		<span data-i18n="top.title1" />
 	</div>
-	<div class="title-text">时间比较</div>
-	<div class="filter-frame">
-		<div class="filter-bar">
-			<div class="filter-label">开始时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="start" tabindex="3" popup="true" inputClass="inputText" locale="en" value="#{CompareDevicesTimeBean.start}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
-			</div>
+	<div class="zl-content-top-info-up">
+		<!--开始时间 -->
+		<div class="zl-content-label">
+			<span data-i18n="top.title2" />
 		</div>
-		<div class="filter-bar">
-			<div class="filter-label">结束时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="end"   tabindex="3"  popup="true" inputClass="inputText"	locale="en" value="#{CompareDevicesTimeBean.end}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" />
-			</div>
+		<div class="zl-content-select zl-dateBox">
+			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+				value="#{CompareDevicesTimeBean.start}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			<h:message for="start" style="color:red" />
+		</div>
+		<!--结束时间 -->
+		<div class="zl-content-label">
+			<span data-i18n="top.title3" />
+		</div>
+		<div class="zl-content-select zl-dateBox">
+			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en" 
+				value="#{CompareDevicesTimeBean.end}" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+			<h:message for="end" style="color:red" />
 		</div>
 	</div>
-	<div class="filter-submit">
-		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png">
-			<a4j:ajax event="click" listener="#{CompareDevicesTimeBean.queryAction}" render=":myform:rightiframe" execute="serName start end"></a4j:ajax>
+	<!--查询按钮 -->
+	<div class="auto-size zl-content-top-info-search">
+		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png" style="display:none;">
+			<a4j:ajax event="click" listener="#{CompareDevicesTimeBean.queryAction}" render=":myform:rightiframe" execute="start end"
+			oncomplete="resizeListFrame()"></a4j:ajax>
 		</h:graphicImage>
+		<!-- 查找按钮 -->
+		<div class="zl-content-btn zl-button" id="button1" onclick="querybtn()">
+			<img class="zl-buttonBG" src="images/input/button.png"/>
+			<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+			<div class="zl-button-text">
+				<img class="zl-button-icon" src="images/input/icon_search.png" />
+				<span data-i18n="top.title4"></span>
+			</div>
+		</div>
 	</div>
 </div>
-<script language="javascript">
-	$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
-	$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080 + "px");
-	$(".title-text").css("left", wjb51 * 500 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
-	$(".filter-frame").css("left", wjb51 * 968 / 1920 + "px").css("top", hjb51 * 30 / 1080 + "px");
-	$(".filter-bar").css("width", wjb51 * 484 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 40 / 1080 + "px");
-	$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
-	$(".filter-input").css("width", wjb51 * 246 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-	$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
-	$(".filter-input .rf-cal-extr").css("width", wjb51 * 246 / 1920 + "px");
-	$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 47 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
-</script>
-<div class="content-frame">
-	<div id="list-frame">
+
+<div class="zl-content-info">
+	<div class="content-info-top"></div>
+	<div class="content-info-tubiao" id="list-frame">
 		<h:panelGroup id="rightiframe"> 
 			<h:inputHidden value="#{CompareDevicesTimeBean.jsonData}"  id="beanvalue" />
-			<div id="highchartChart"  style="height: 100%;"/>	
+			<div id="highchartChart"  class="content-info-tbwh"/>	
 			<script type="text/javascript">
 				loadData();
 			</script>
 		</h:panelGroup>
 	</div>
-	<div class="select-frame">
-		<div class="select-title">比较对象(机床序列号)</div>
+	<div class="content-info-bottom">
+		<span data-i18n="content.bjdx" />
+	</div>
+	<div class="content-info-serialNo">
 		<div class="select-list">
-			<h:selectManyCheckbox id="serName" value="#{CompareDevicesTimeBean.serNames}">
+			<h:selectManyCheckbox id="serName" value="#{CompareDevicesTimeBean.serNames}" >
 				<f:selectItems value="#{CompareDevicesTimeBean.serNamesList}" />
-				<a4j:ajax listener="#{CompareDevicesTimeBean.itemSelect}" render="myform:rightiframe" oncomplete="selectCheck()" />
+				<a4j:ajax listener="#{CompareDevicesTimeBean.itemSelect}" render="myform:rightiframe"  
+				onbeforesubmit="return selectCheck(this);" oncomplete="resizeListFrame()"/>
 			</h:selectManyCheckbox>
 		</div>
 	</div>
 </div>
+
+
 <script language="javascript">
-	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 711 / 1080 + "px");
-	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
-	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
-	$("#list-frame").css("top", "0px").css("width", wjb51 + "px").css("height", hjb51 * 611 / 1080 + "px");
-	$(".select-frame").css("top", hjb51 * 611 / 1080 + "px").css("height", hjb51 * 30 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px").css("line-height", hjb51 * 30 / 1080 + "px");
-	$(".select-list").css("top", hjb51 * 641 / 1080 + "px").css("height", hjb51* 75 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-	
-	var smallWidth = wjb51 * 168 / 1920;
-	var smallHeight = hjb51 * 56 / 1080;
-	var bigTop = hjb51 * 60 / 1080;
-	var bigWidth = wjb51;
-	var bigHeight = hjb51 * 656 / 1080;
-	$("#tab-list").click(function() {
-		if($("#tab-list").attr("class") == "tab-btn active") {return;}
-		
-		$("#tab-list").addClass("active");
-		$("#tab-chart").removeClass("active");
-
-		$("#list-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
-		$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 200);
-	});
-	$("#tab-chart").click(function() {
-		if($("#tab-chart").attr("class") == "tab-btn active") {return;}
-		
-		$("#tab-list").removeClass("active");
-		$("#tab-chart").addClass("active");
-		
-		$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 200);
-		$("#chart-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
-	});
-
 	//选项分栏
 	$(document).ready(function() {
 		if($(".select-list td").length > 10 ) {
@@ -122,14 +101,36 @@
 				}
 			});
 			$(".select-list tbody").html(trStr);
+			$(".select-list td").addClass("auto-size-exclude");
 		}
 	});
 	
 	//最多选择5项
-	function selectCheck() {
+	function selectCheck(event) {
 		if($(".select-list :checkbox:checked").length > 5) {
-			alert("最多选择5台机床");
+			$(event).removeAttr("checked");
+			var textStr = "content.tsxx";
+			dataTranslate("compare_devices_time", function(t) { textStr = t(textStr);});
+			jAlert(textStr);
+			return false;
 		}
+		return true;
+	}
+	
+	 $(document).ready(function() {
+		 $.autosizeElement($("#highchartChart"), false);
+		 $.autosizeExclude($("#highchartChart>div")[0], true);
+	 })
+	 	
+	 var option = {resGetPath:"static/i18n/__lng__/compare_devices_time.json"};
+ 	 i18n.init(option, function(t) { $("span").i18n();}); 	
+	 
+ 	 function querybtn(){
+ 		document.getElementById("myform:btn_search").click();
+ 	 }
+ 	 
+ 	function resizeListFrame(){
+ 		$.autosizeElement($("#highchartChart"), false);
 	}
 </script>
 

@@ -1,0 +1,106 @@
+/* home icon */
+.zl-icon-home {
+	float: left;
+	margin-top: 8px;
+	margin-left: 82px;
+	width: 23px;
+	height: 21px;
+	cursor: pointer; 
+	transition: transform .5s;
+}
+.zl-icon-home.active {
+	transform: scale(0.5);
+}
+/* 节点显示区域 */
+.zl-top-menu-left {
+	position: absolute;
+	left: 0;
+	top: 42px;
+	width: 14px;
+	height: 38px;
+}
+.zl-top-menu-right {
+	position: absolute;
+	left: 946px;
+	top: 42px;
+	width: 14px;
+	height: 38px;
+}
+.zl-top-menu-left>img,.zl-top-menu-right>img {
+	position: absolute;
+	left: 0;
+	top: 1px;
+	width: 14px;
+	height: 38px;
+	cursor: pointer;
+	visibility: visible;
+}
+.zl-top-menu-left.disable>img,.zl-top-menu-right.disable>img {
+	visibility: hidden;
+	cursor: default;
+}
+.zl-top-menu-center {
+	position: absolute;
+	left: 20px;
+	top: 42px;
+	width: 920px;
+	height: 38px;
+	font-weight: bold;
+	
+}
+#parent_node span,#top_node span {
+	font-size: 21px;
+	line-height: 38px;
+}
+/* 子集节点 */
+.zl-top-menu-sub-frame {
+	position: relative;
+	float: left;
+	width: 0;
+	height: 38px;
+	overflow: hidden;
+}
+.zl-top-menu-sub-content {
+	position: relative;
+	float: left;
+	width: auto;
+	height: 38px;
+	white-space: nowrap;
+}
+/* 分割线 */
+.zl-top-split {
+	position: relative;
+	float: right;
+	width: 1px;
+	height: 38px;
+	background: #4E4E4E;
+}
+/* 单个节点 */
+.zl-top-menu {
+	position: relative;
+	float: left;
+	width: auto;
+	height: 38px;
+	text-align: center;
+	font-size: 21px;
+	line-height: 38px;
+	color: #5A5A5A;
+	overflow: hidden;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.zl-top-menu>span {
+	padding: 0 10px;
+}
+.zl-top-menu.menu-home {
+	width: 184px;
+}
+#top_node.sub .zl-top-menu {
+	background: rgba(230,240,232,1);
+}
+#top_node .zl-top-menu:hover {
+	background: rgba(180,209,186,.5);
+}
+#top_node .zl-top-menu.cur:hover,#top_node .zl-top-menu.cur {
+	background: rgba(180,209,186,1);
+}

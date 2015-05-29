@@ -86,7 +86,7 @@ public class LoginVerifyFilter extends HttpServlet implements Filter {
 		System.out.println("页面URL" + nowURL);
 		System.out.println("当前的SessionId:filter-" + session.getId());
 		if (checkUser == null || "".equals(checkUser)) {
-			resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+nowURL);
+			resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+"/a3-mocs/map/map.faces");
 			return;
 //			String requestFlag = req.getHeader("X-Requested-With");//判断是否是异步提交 X-Requested-With
 //			if(requestFlag!=null&&requestFlag.equalsIgnoreCase("XMLHttpRequest")){

@@ -11,7 +11,7 @@ import javax.persistence.Transient;
 import com.google.gson.annotations.Expose;
 
 /**
- * 设备信息;
+ * 璁惧淇℃伅;
  * @author gaokun
  * @create Jan 28, 2013 11:33:08 AM
  */
@@ -62,7 +62,7 @@ public class Device implements java.io.Serializable {
 	private Integer symgEquId;
 	
 	/**
-	 * 组成 equSerialno + "@symg_swg@" + symgEquId
+	 * 缁勬垚鍊? equSerialno + "@symg_swg@" + symgEquId
 	 */
 	@Transient
 	@Expose

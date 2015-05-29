@@ -5,12 +5,13 @@ var imgPercent = hjb51/1080;
 function loadData() {
 var jsonData = document.getElementById("myform:beanvalue").value;
 //alert(jsonData);
+//jsonData=null;
 if(null !=jsonData && ""!=jsonData ){
 	var barModel = eval('(' + jsonData + ')');
 	generateChart(barModel);
 }else{
 	document.getElementById("highchartChart").innerHTML += "<div style=\"font-size:"+hjb51*30/1080+"px;text-align:center;" +
-	"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\">没有数据，<BR/>请更换节点或查询条件<br/></div>";
+	"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
 }
 }
 
@@ -24,7 +25,7 @@ function generateChart(barModel) {
             chart: {
                 renderTo: 'highchartChart',
                 type: 'bar',
-                width:wjb51-20,
+                width:wjb51-wjb51*(460/1920),
                 height:hjb51*500/1080,
                 backgroundColor: 'rgba(255, 255, 255, 0)',
                 plotBorderColor : null,
@@ -35,10 +36,9 @@ function generateChart(barModel) {
             },
             title: {
                 text: barModel.title,
-                margin:50,
-                style:{
-    				fontWeight:700,
-    			}
+                style:{  		
+            		color:'#7A7A7A'
+            	 }
             },
             xAxis: {
                 categories: barModel.columnKeys
@@ -53,7 +53,6 @@ function generateChart(barModel) {
             legend: {
             	 backgroundColor: '#FFFFFF',
                  reversed: true,
-                 width:500,
                  borderWidth: 0,
             },
             tooltip: {
@@ -73,41 +72,26 @@ function generateChart(barModel) {
                     stacking: 'normal'
                 }
             },
-                series: [{
+            series: [{
                 name: barModel.rowKeys[4],
                 data: barModel.data4,
-                color:{
-                	linearGradient: [0, 0,800, 400],
-                	stops: [[0, 'rgba(200,0,0,1)'],[1, 'rgba(220,40,40,0.8)']]
-                	}
+                color:'rgba(251,117,0,1)'
             },{
                 name: barModel.rowKeys[3],
                 data: barModel.data0,
-                color:{
-                	linearGradient: [0, 0,800, 400],
-                	stops: [[0, 'rgba(169,169,169,1)'],[1, 'rgba(20,20,20,0.9)']]
-                	}
+                color:'rgba(160,160,160,1)'
             },{
                 name: barModel.rowKeys[2],
                 data: barModel.data3,
-                color:{
-                	linearGradient: [0, 0,800, 400],
-                	stops: [[0, 'rgba(255,215,0,1)'],[1, 'rgba(240,230,40,0.8)']]
-            }
+                color:'rgba(244,221,12,1)'
             },{
                 name: barModel.rowKeys[1],
                 data: barModel.data2,
-                color:{
-                	linearGradient: [0, 0,800, 400],
-                	stops: [[0, 'rgba(127,255,0,1)'],[1, 'rgba(52,170,0,0.8)']]
-                	}
+                color:'rgba(108,204,71,0.4)'
             },{
                 name: barModel.rowKeys[0],
                 data: barModel.data1,
-                color:{
-                	linearGradient: [0, 0,800, 400],
-                	stops: [[0, 'rgba(148,0,211,1)'],[1, 'rgba(170,0,229,0.8)']]
-                	}
+                color:'rgba(0,129,206,0.4)'
             }]
         });
 };

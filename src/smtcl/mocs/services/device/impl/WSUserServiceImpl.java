@@ -168,9 +168,9 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 		if(null!=tjlist&&tjlist.size()>0){
 			TJobdispatchlistInfo tj=tjlist.get(0);
 			if(tj.getFinishNum()>0){
-				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
+//				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
 			}else{
-				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
+//				tj.setOnlineNumber((null==tj.getOnlineNumber()?0:tj.getOnlineNumber())+1);
 				tj.setStatus(50); //状态从上线(40) 到 加工(50)
 				Date da=new Date();
 				tj.setRealStarttime(da);
@@ -325,5 +325,36 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 		}
 		
 		return loginRes;
+	}
+
+	@Override
+	public int JobOnlineCheck(String equSerialNo, String jobDispatchNo) {
+		String hql = "select new Map(jobdis.id as Id,jobdis.onlineNumber as onlineNumber,jobdis.processNum as planNum) "
+				+ " from TJobdispatchlistInfo jobdis,TEquJobDispatch equ_job"
+				+ " where equ_job.jobdispatchNo=jobdis.no"
+				+ " and equ_job.jobdispatchNo='"+jobDispatchNo+"'"
+				+ " and equ_job.equSerialNo='"+equSerialNo+"'";
+		List<Map<String,Object>> list = dao.executeQuery(hql);
+		if(list != null && list.size()>0){
+			Map<String,Object> map = list.get(0);
+			int onlineNumber=0;
+			int planNum=0;
+			if(map.get("onlineNumber")!=null && map.get("onlineNumber").toString()!=""){
+				onlineNumber = Integer.parseInt(map.get("onlineNumber").toString());
+			}
+			if(map.get("planNum")!=null && map.get("planNum").toString()!=""){
+				planNum = Integer.parseInt(map.get("planNum").toString());
+			}
+			
+			Long id = Long.parseLong(map.get("Id").toString());
+			TJobdispatchlistInfo jobdis = dao.get(TJobdispatchlistInfo.class, id);
+			jobdis.setOnlineNumber(jobdis.getOnlineNumber()==null?0:jobdis.getOnlineNumber()+1);
+			dao.save(TJobdispatchlistInfo.class,jobdis);
+			
+			if(onlineNumber>planNum){
+				return 2;
+			}
+		}
+		return 1;
 	}
 }

@@ -10,7 +10,7 @@ import java.util.Locale;
  * Created with IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-11-1
- * Time: ÏÂÎç8:00
+ * Time: ä¸‹åˆ8:00
  */
 public class DatabaseWebResourceManagerFactory implements IWebResourceManagerFactory {
     private static DatabaseResourceManager manager;

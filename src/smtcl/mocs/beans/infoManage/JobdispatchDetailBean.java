@@ -4,14 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -28,14 +22,9 @@ import jxl.write.WritableWorkbook;
 import org.apache.http.impl.cookie.DateUtils;
 import org.dreamwork.persistence.ServiceFactory;
 
-
-
-
-
-import smtcl.mocs.pojos.job.TPartTypeInfo;
-import smtcl.mocs.services.device.IPartService;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
 import smtcl.mocs.services.report.IReportService;
+import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.StringUtils;
 
 /**
@@ -51,9 +40,7 @@ public class JobdispatchDetailBean implements Serializable{
 	private IReportService reportService = (IReportService)ServiceFactory.getBean("reportService");
 	//工单实例接口
 	private IJobDispatchService jobDispatchService = (IJobDispatchService)ServiceFactory.getBean("jobDispatchService");
-	//零件实例接口
-	private IPartService partService=(IPartService)ServiceFactory.getBean("partService");
-	
+
 	//报表数据集
 	private List<Map<String,Object>> outData = new ArrayList<Map<String,Object>>();
 	//批次状态
@@ -91,31 +78,58 @@ public class JobdispatchDetailBean implements Serializable{
 		jobCreateDateEnd = dates[1];
 		jobStartTime = dates[0];
 		jobStartTimeEnd = dates[1];
-		//加载状态数据集
-		statusList.clear();
-		statusList = (List<Map<String,Object>>) jobDispatchService.getJobStatus();
 		//加载零件编号数据集
-		partList.clear();
-		List<Map<String,Object>> list = jobDispatchService.getPartTypeMap(this.getnodeid());//map中是id，name
-		for(Map<String,Object> map : list ){
-			if(map.get("id")!=null && map.get("id").toString()!="" && map.get("name")!=null && map.get("name").toString()!=""){
-				map.put("Id", map.get("id").toString());
-				map.put("partName", map.get("name").toString());
-				partList.add(map);
-			}
-		}
-		equSerialNoList.clear();
-		equSerialNoList = jobDispatchService.getDevicesInfo(this.getnodeid());
-		personList.clear();
-		personList = reportService.getPersonList();
+        partList.clear();
+        equSerialNoList.clear();
+        personList.clear();
+        if(this.getLocale().toString().equals("en") || this.getLocale().toString().equals("en_US")){
+            Map<String,Object> newMap = new HashMap<String, Object>();
+            newMap.put("Id", "");
+            newMap.put("partName", "Select");
+            partList.add(newMap);
+            Map<String,Object> newMap1 = new HashMap<String, Object>();
+            newMap1.put("Id", "");
+            newMap1.put("Name", "Select");
+            newMap1.put("equName","Select");
+            equSerialNoList.add(newMap1);
+            Map<String,Object> newMap2 = new HashMap<String, Object>();
+            newMap2.put("personName", "Select");
+            newMap2.put("personValue", "Select");
+            personList.add(newMap2);
+        }else {
+            Map<String,Object> newMap = new HashMap<String, Object>();
+            newMap.put("Id", "");
+            newMap.put("partName", "请选择");
+            partList.add(newMap);
+            Map<String,Object> newMap1 = new HashMap<String, Object>();
+            newMap1.put("Id", "");
+            newMap1.put("Name", "请选择");
+            newMap1.put("equName","请选择");
+            equSerialNoList.add(newMap1);
+            Map<String,Object> newMap2 = new HashMap<String, Object>();
+            newMap2.put("personName", "请选择");
+            newMap2.put("personValue", "请选择");
+            personList.add(newMap2);
+        }
+        List<Map<String, Object>> list = jobDispatchService.getPartTypeMap(this.getnodeid());//map中是id，name
+        for (Map<String, Object> map : list) {
+            if (map.get("id") != null && !map.get("id").toString().equals("") && map.get("name") != null && !map.get("name").toString().equals("")) {
+                map.put("Id", map.get("id").toString());
+                map.put("partName", map.get("name").toString());
+                partList.add(map);
+            }
+        }
+		equSerialNoList.addAll(jobDispatchService.getDevicesInfo(this.getnodeid()));
+		personList.addAll(reportService.getPersonList(this.getnodeid()));
 		this.SubmitSearch();
 	}
 
 	//查询报表数据
 	public void SubmitSearch(){
-		outData.clear();
-		outData = reportService.dispatchDetailData(this.getnodeid(),jobplanStatus,partName,jobCreateDate,jobCreateDateEnd,jobStartTime,jobStartTimeEnd,equSerialNo,person);
-	}
+        outData.clear();
+        outData = reportService.dispatchDetailData(this.getnodeid(), jobplanStatus, partName, jobCreateDate,
+                jobCreateDateEnd, jobStartTime, jobStartTimeEnd, equSerialNo, person, this.getLocale());
+    }
 	
 	//将数据导出Excel到本地
 	public void downloadFile(){
@@ -168,34 +182,34 @@ public class JobdispatchDetailBean implements Serializable{
 	}
 	
 	//将数据写入到Excel文件中,存放到服务器上
+    @SuppressWarnings("unchecked")
 	public void writeDataToExcel(String filePath){
-		File exportFile = null;
+		File exportFile;
 		 try {
 			 exportFile = new File(filePath);
 			 //新建一个excel文件
-			 exportFile.createNewFile();
+			 boolean falg = exportFile.createNewFile();
 			 //新建excel文件
 			 WritableWorkbook book = Workbook.createWorkbook(exportFile);
 			 WritableSheet sheet = book.createSheet("加工工单明细", 0); //新建一个sheet
 			 //3.添加数据
 			 int rowNum = 1;
-			 int colNum = 0;
+			 int colNum;
 			 
 			 //将数据循环写入到Excel文件中
 			 for(Map<String,Object> map: outData){
 				 colNum=0;
 				 int count = ch_title.length;
 				 if(rowNum==1){//第一行写入的是title
-					 for(int i=0;i<count;i++){
-						 String value = ch_title[i];
-						 try{
-							 Label rowDataLabel = new Label(colNum, rowNum-1, value);
-							 sheet.addCell(rowDataLabel);
-						 }catch(Exception e){
-							 e.printStackTrace();
-						 }
-						 colNum++;
-					 }
+                     for (String value : ch_title) {
+                         try {
+                             Label rowDataLabel = new Label(colNum, rowNum - 1, value);
+                             sheet.addCell(rowDataLabel);
+                         } catch (Exception e) {
+                             e.printStackTrace();
+                         }
+                         colNum++;
+                     }
 					 colNum = 0;
 				 }
 				 for(int i=0;i<count;i++){//第二行开始正式写入数据
@@ -203,7 +217,7 @@ public class JobdispatchDetailBean implements Serializable{
 						 String key = en_title[i];
 						 Object value = map.get(key);
 						 try{
-							 Label rowDataLabel = null;
+							 Label rowDataLabel;
 							 if(value!=null){
 								 rowDataLabel = new Label(colNum, rowNum, value.toString());
 							 }else{
@@ -232,6 +246,11 @@ public class JobdispatchDetailBean implements Serializable{
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		return (String)session.getAttribute("nodeid");
 	}
+
+    private Locale getLocale(){
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return SessionHelper.getCurrentLocale(request.getSession());
+    }
 	
 	//----------------------------set-------get------------------------------------
 	
@@ -276,6 +295,53 @@ public class JobdispatchDetailBean implements Serializable{
 	}
 
 	public List<Map<String, Object>> getStatusList() {
+        if(this.getLocale().toString().equals("en") || this.getLocale().toString().equals("en_US")){
+            statusList.clear();
+            Map<String,Object> statusMap0 = new HashMap<String,Object>();
+            statusMap0.put("Id", 0);
+            statusMap0.put("Name", "Select");
+            statusList.add(statusMap0);
+            Map<String,Object> statusMap = new HashMap<String,Object>();
+            statusMap.put("Id", 10);
+            statusMap.put("Name", "Created");
+            statusList.add(statusMap);
+            Map<String,Object> statusMap11 = new HashMap<String,Object>();
+            statusMap11.put("Id", 20);
+            statusMap11.put("Name", "to be Dispatched");
+            statusList.add(statusMap11);
+            Map<String,Object> statusMap13 = new HashMap<String,Object>();
+            statusMap13.put("Id", 30);
+            statusMap13.put("Name", "Dispatched");
+            statusList.add(statusMap13);
+            Map<String,Object> statusMap1 = new HashMap<String,Object>();
+            statusMap1.put("Id", 40);
+            statusMap1.put("Name", "Forwarded");
+            statusList.add(statusMap1);
+            Map<String,Object> statusMap5 = new HashMap<String,Object>();
+            statusMap5.put("Id", 50);
+            statusMap5.put("Name", "Processing");
+            statusList.add(statusMap5);
+            Map<String,Object> statusMap2 = new HashMap<String,Object>();
+            statusMap2.put("Id", 70);
+            statusMap2.put("Name", "Finished");
+            statusList.add(statusMap2);
+            Map<String,Object> statusMap3 = new HashMap<String,Object>();
+            statusMap3.put("Id", 60);
+            statusMap3.put("Name", "Closed");
+            statusList.add(statusMap3);
+            Map<String,Object> statusMap8 = new HashMap<String,Object>();
+            statusMap8.put("Id", 80);
+            statusMap8.put("Name", "Pause");
+            statusList.add(statusMap8);
+        }else{
+            //状态
+            statusList.clear();
+            Map<String,Object> statusMap0 = new HashMap<String,Object>();
+            statusMap0.put("Id", 0);
+            statusMap0.put("Name", "请选择");
+            statusList.add(statusMap0);
+            statusList.addAll(jobDispatchService.getJobStatus());
+        }
 		return statusList;
 	}
 

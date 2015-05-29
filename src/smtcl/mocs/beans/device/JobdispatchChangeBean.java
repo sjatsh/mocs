@@ -29,6 +29,10 @@ import smtcl.mocs.utils.device.FaceContextUtil;
 @ViewScoped
 public class JobdispatchChangeBean implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<Map<String, Object>> results;
 	private List<Map<String, Object>> dispatcheRsults=new ArrayList<Map<String,Object>>();
 	/**
@@ -165,9 +169,49 @@ public class JobdispatchChangeBean implements Serializable {
 	 * 事件编号
 	 */
 	private String eventNo;
-	private IDeviceService baogongService=(IDeviceService)ServiceFactory.getBean("deviceService");
 	
-	private IOrganizationService organizationService = (IOrganizationService) ServiceFactory.getBean("organizationService");
+	/**
+	 * 400序是否合格
+	 */
+	private String isGood;
+	/**
+	 * 400序检验部门
+	 */
+	private String checkDep;
+	/**
+	 * 400序加工检查员
+	 */
+	private String jgCheckUser;
+	/**
+	 * 400序装配检查员
+	 */
+	private String zpCheckUser;
+	/**
+	 * 400序商检检查员
+	 */
+	private String sjCheckUser;
+	/**
+	 * 400序报工人员
+	 */
+	private String fhUserName;
+	/**
+	 * 400序报工数量
+	 */
+	private int fhNum;
+	/**
+	 * 400序开始时间
+	 */
+	private Date fhStartTime;
+	/**
+	 * 400序完成时间
+	 */
+	private Date fhFinishTime;
+	/**
+	 * 400序报工人员id
+	 */
+	private String fhUserId;
+	
+	private IDeviceService baogongService=(IDeviceService)ServiceFactory.getBean("deviceService");
 	
 	public JobdispatchChangeBean() {
 		//获取节点ID
@@ -176,23 +220,33 @@ public class JobdispatchChangeBean implements Serializable {
 				
 		results = baogongService.queryEquipmentList("","",noteId);
 		data =new TableDataModel(results);
-        TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
+        //TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
 		//root = organizationService.returnTree(user.getUserId(), pageId);  
 		num =1;
+		fhNum =1;
 		finishTime = new Date();
+		fhFinishTime = new Date();
 		//startTime =new Date();
 		
 		//获取条件下拉框集合
 		equTypeList =baogongService.getEquTypeMap();
 		dispatchNoList =baogongService.getDispatchNoMap();
-		partTypeList = baogongService.getPartTypeMap("","");
+		partTypeList = baogongService.getPartTypeMap("",noteId);
 		equTypeNameList = baogongService.getEquTypeNameMap();
 	}
 	
 	public void getUserInfo(){
-		List<Map<String, Object>> list = baogongService.getUserList(userId);
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		if(processOrder =="400"){
+			list = baogongService.getUserList(fhUserId,noteId);
+		}else
+		{
+			list = baogongService.getUserList(userId,noteId);
+		}
+		
 		if(list!=null&&list.size()>0){
 			   userName = list.get(0).get("name").toString();
+			   fhUserName = list.get(0).get("name").toString(); //400序模块修改 20141020 FW
 			 }
 	}
 	
@@ -205,7 +259,8 @@ public class JobdispatchChangeBean implements Serializable {
 		 dispatcheRsults = baogongService.queryJobDispatchList(equId,serachDispatchId);
 	}
 	
-	 public void onRowSelect(SelectEvent event) {
+	 @SuppressWarnings("unchecked")
+	public void onRowSelect(SelectEvent event) {
 		 selectedUser =(Map<String,Object>) event.getObject();
 		 
 		 equId = selectedUser.get("equId").toString();
@@ -232,20 +287,22 @@ public class JobdispatchChangeBean implements Serializable {
 		if(jobdispatchId.isEmpty()){
 			return isSuccess;
 		}
-		if(userId.isEmpty()){
-			return isSuccess;
+//		if(num ==0){
+//			return isSuccess;
+//		}
+//		if(null ==startTime){
+//			return isSuccess;
+//		}
+//		if(null ==finishTime){
+//			return isSuccess;
+//		}
+		if(processOrder =="400"){
+			isSuccess = baogongService.saveInfo(fhNum,fhUserId,equId,jobdispatchId,fhStartTime,fhFinishTime,partNo,loginUserNo,
+					isGood,checkDep,jgCheckUser,zpCheckUser,sjCheckUser);
+		}else{
+			isSuccess = baogongService.saveInfo(num,userId,equId,jobdispatchId,startTime,finishTime,partNo,loginUserNo,
+					isGood,checkDep,jgCheckUser,zpCheckUser,sjCheckUser);
 		}
-		if(num ==0){
-			return isSuccess;
-		}
-		if(null ==startTime){
-			return isSuccess;
-		}
-		if(null ==finishTime){
-			return isSuccess;
-		}
-		
-		isSuccess = baogongService.saveInfo(num,userId,equId,jobdispatchId,startTime,finishTime,partNo,loginUserNo);
 		List<Map<String, Object>> info = baogongService.getJobDispatch(jobdispatchId);
 		if(null != info && info.size() >0){
             finishNum = info.get(0).get("finishNum").toString();
@@ -272,6 +329,15 @@ public class JobdispatchChangeBean implements Serializable {
 		 return isSuccess;
 	 }
 	 
+	 /**
+	  * 400序验证报工数量
+	  */
+	 public String checkNum2(){
+		 isSuccess ="不符合要求";
+		 isSuccess = baogongService.checkNum(jobdispatchId,fhNum);
+		 return isSuccess;
+	 }
+	 
 	 
 	 public void getJobdispatchIdValue(){
 		 if(null!=selectValue&&null!=selectValue.get("jobdispatchid")){
@@ -285,19 +351,34 @@ public class JobdispatchChangeBean implements Serializable {
 			 wisScrapNum = selectValue.get("wisScrapNum").toString();
 			 int i = Integer.parseInt(planNum)-Integer.parseInt(finishNum)-Integer.parseInt(wisScrapNum)+1;
 			 maxNum ="<"+i;
+			
 		 }else
 		 {
 			 jobdispatchId="";
 		 }
+		 userMap = baogongService.getUserList("",noteId);
 		 TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
 		 String id= user.getUserId();
-		 List<Map<String, Object>> list = baogongService.getMemberInfo(id);
+		 List<Map<String, Object>> list = baogongService.getMemberInfo(id,noteId);
 		 if(list!=null&&list.size()>0){
 		   userId = list.get(0).get("id").toString();
 		   userName = list.get(0).get("name").toString();
+		   
+		   fhUserId = list.get(0).get("id").toString(); //400序模块修改 20141020 FW
+		   fhUserName = list.get(0).get("name").toString(); //400序模块修改 20141020 FW
+		   
 		   loginUserNo = list.get(0).get("no").toString();
+		 }else{
+		   if(userMap!=null&&userMap.size()>0){
+			   userName = userMap.get(0).get("name").toString();
+			   userId = userMap.get(0).get("id").toString();
+			   
+			   fhUserId = userMap.get(0).get("id").toString(); //400序模块修改 20141020 FW
+			   fhUserName = userMap.get(0).get("name").toString(); //400序模块修改 20141020 FW
+		   }
 		 }
-		 userMap = baogongService.getUserList("");
+		
+		
 	 }
 	
 	public Map<String, Object> getSelectedUserId() {
@@ -596,6 +677,85 @@ public class JobdispatchChangeBean implements Serializable {
 	public void setEventNo(String eventNo) {
 		this.eventNo = eventNo;
 	}
-	
+
+	public String getIsGood() {
+		return isGood;
+	}
+
+	public void setIsGood(String isGood) {
+		this.isGood = isGood;
+	}
+
+	public String getCheckDep() {
+		return checkDep;
+	}
+
+	public void setCheckDep(String checkDep) {
+		this.checkDep = checkDep;
+	}
+
+	public String getJgCheckUser() {
+		return jgCheckUser;
+	}
+
+	public void setJgCheckUser(String jgCheckUser) {
+		this.jgCheckUser = jgCheckUser;
+	}
+
+	public String getZpCheckUser() {
+		return zpCheckUser;
+	}
+
+	public void setZpCheckUser(String zpCheckUser) {
+		this.zpCheckUser = zpCheckUser;
+	}
+
+	public String getSjCheckUser() {
+		return sjCheckUser;
+	}
+
+	public void setSjCheckUser(String sjCheckUser) {
+		this.sjCheckUser = sjCheckUser;
+	}
+
+	public String getFhUserName() {
+		return fhUserName;
+	}
+
+	public void setFhUserName(String fhUserName) {
+		this.fhUserName = fhUserName;
+	}
+
+	public int getFhNum() {
+		return fhNum;
+	}
+
+	public void setFhNum(int fhNum) {
+		this.fhNum = fhNum;
+	}
+
+	public Date getFhStartTime() {
+		return fhStartTime;
+	}
+
+	public void setFhStartTime(Date fhStartTime) {
+		this.fhStartTime = fhStartTime;
+	}
+
+	public Date getFhFinishTime() {
+		return fhFinishTime;
+	}
+
+	public void setFhFinishTime(Date fhFinishTime) {
+		this.fhFinishTime = fhFinishTime;
+	}
+
+	public String getFhUserId() {
+		return fhUserId;
+	}
+
+	public void setFhUserId(String fhUserId) {
+		this.fhUserId = fhUserId;
+	}
 	
 }

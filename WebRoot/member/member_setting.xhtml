@@ -5,347 +5,342 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-	<link rel="stylesheet" href="../css/b21.css" type="text/css" />
-	<link rel="stylesheet" href="../css/b22.css" type="text/css" />
-	<h:outputScript library="js" name="tree.js"></h:outputScript>
-		<div style="width:100%; height: 100%; position: relative;">
-			<!-- 功能按钮 -->
-			<div class="manage_top_left headDiv">
-				<div id='tre00' class="area-select" onclick="showMenu0('DropdownMenuBackground0','tre00');">
-					<span class="selecttext">区域:</span>
-					<h:outputText  class="select" id="nodeName0" value="#{MemberManagementBean.thisNodeName}" /> 
-				</div>
-				<div  id="DropdownMenuBackground0" onclick="closeTreeDiv0('DropdownMenuBackground0');" style="display:none;">
-					<p:tree value="#{MemberManagementBean.root}" var="node" selectionMode="single"  styleClass="" >
-						<p:treeNode styleClass="spanhover">
-							<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
-						</p:treeNode>
-						<a4j:ajax event="select" render=":myform:nodeName0 :myform:tb" 
-							listener="#{MemberManagementBean.onNodeSelect}" />
-					</p:tree>
-					<a4j:outputPanel ajaxRendered="true"  >
-					</a4j:outputPanel>
-			     </div>
-			     <h:inputText id="txt" styleClass="textBg" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"   value="#{MemberManagementBean.searchType}"/>
-	    		 <p:commandButton style="" value="查询"  styleClass="delete" action="#{MemberManagementBean.searchList}" update=":myform:tb">
-	    		 </p:commandButton>
-	    		 <div class="button-split"></div> 
-	    		 <p:commandButton style="" value="新建"  styleClass="delete" oncomplete="adddate.show()"/>
-	    		 <p:commandButton style="" value="更新"  styleClass="delete" update=":myform" oncomplete="update.show()"/>
-	    		 <p:commandButton style="" value="删除"  styleClass="delete"  onclick="return del();" action="#{MemberManagementBean.deleteRecord}"></p:commandButton>
-	    	</div>
-			<div class="div-content-top-shadow">
-				<img src="../images/demo/right_top_shadow.png" />
-			</div>
-	    	<!-- 数据表格 -->
-			<div class="table">
-				<p:dataTable id="tb" style="width:1500px;" value="#{MemberManagementBean.data}" var="record"
-	                selection="#{MemberManagementBean.selectedData}"  rows="10"  paginator="true" paginatorPosition="bottom">
-					<p:column selectionMode="multiple" />  
-					<p:column headerText="人员名称" style="width:6%" >  
-			            #{record.name}  
-			        </p:column>  
-					<p:column headerText="工号ID"  style="width:6%">  
-			            #{record.no}  
-			        </p:column>  
-					<p:column headerText="年龄" style="width:6%">  
-			            #{record.age}  
-			        </p:column>  			        					
-					<p:column headerText="性别" style="width:6%">  
-			            #{record.sex}  
-			        </p:column>  					
-					<p:column headerText="出生年月" style="width:6%">  
-			            #{record.birthday}  
-			        </p:column>  					
-					<p:column headerText="身份证" style="width:10%">  
-			            #{record.idcard}  
-			        </p:column>  					
-					<p:column headerText="学历" style="width:6%">  
-			            #{record.education}  
-			        </p:column>  
-					<p:column headerText="联系方式" style="width:10%">  
-			            #{record.phoneNumber}  
-			        </p:column>  							
-					<p:column headerText="居住地" style="width:6%">  
-			            #{record.address}  
-			        </p:column>  							
-					<p:column headerText="电邮地址" style="width:14%">  
-			            #{record.email}  
-			        </p:column>  		
-			        <p:column headerText="职位" style="width:6%">  
-			            #{record.positionName}  
-			        </p:column> 				
-					<p:column headerText="所属部门" style="width:8%">  
-			            #{record.nodeName}  
-			        </p:column>  							
-					<p:column headerText="所属班组">  
-			            #{record.teamName}  
-			        </p:column>  	
-						       						
-				</p:dataTable>
-			</div>
+	
+	<link rel="stylesheet" href="../css/admin/member_setting.css" type="text/css"></link>
+	
+	<div class="toolbar">
+		<div id='tre00' class="nodeSelect-toolbar" onclick="showMenu0('DropdownMenuBackground0','tre00');">
+			<span class="txt-toolbar"><span data-i18n="page1.top.title1"></span>:</span>
+			<h:outputText  class="txt-toolbar" id="nodeName0" value="#{MemberManagementBean.thisNodeName}" /> 
 		</div>
-				
-		<!-- 数据更新 -->
-		<p:dialog id="update" widgetVar="update" width="727" height="450">
-		<div id="divUpdate" style="background-image:url(../images/equ/divbg.png);width:727px;height:366px;">	          
-		    <h2 align="center" style="padding-top: 7px;">人员更新</h2>
-			<table  style="font-size:18px;width:700px;height:330px;">
+		<div id="DropdownMenuBackground0" onclick="closeTreeDiv0('DropdownMenuBackground0');" style="display:none;">
+			<p:tree value="#{MemberManagementBean.root}" var="node" selectionMode="single"  styleClass="" >
+				<p:treeNode styleClass="spanhover">
+					<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+				</p:treeNode>
+				<a4j:ajax event="select" render=":myform:nodeName0 :myform:tb" 
+					listener="#{MemberManagementBean.onNodeSelect}" oncomplete="transElementId('myform:tb');" />
+			</p:tree>
+			<a4j:outputPanel ajaxRendered="true"  >
+			</a4j:outputPanel>
+	     </div>
+	     <input type="hidden" id="txt_placeholder" data-i18n="[value]page1.top.input1" value=""></input>
+	     
+	     <h:inputText id="txt" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');" value="#{MemberManagementBean.searchType}"/>
+   		 <p:commandLink id="btn1" style="" value="page1.top.btn1"  styleClass="iconBtn-toolbar iconBtn-search" action="#{MemberManagementBean.searchList}" update=":myform:tb" oncomplete="transElementId('myform:tb')">
+   		 </p:commandLink>
+   		 
+   		 <p:commandLink style="" value="page1.top.btn2"  styleClass="iconBtn-toolbar iconBtn-add" oncomplete="adddate.show()"></p:commandLink>
+   		 <p:commandLink style="" value="page1.top.btn3"  styleClass="iconBtn-toolbar iconBtn-edit" update=":myform" oncomplete="update.show()"></p:commandLink>
+   		 <p:commandLink style="" value="page1.top.btn4"  styleClass="iconBtn-toolbar iconBtn-del"  onclick="return del();" action="#{MemberManagementBean.deleteRecord}"></p:commandLink>
+	</div>
+	<div class="table-p-bg"></div>
+	<p:dataTable id="tb" value="#{MemberManagementBean.data}" var="record"
+              selection="#{MemberManagementBean.selectedData}"  rows="22"  paginator="true" 
+              paginatorPosition="bottom" styleClass="table-p">
+		<p:column selectionMode="multiple" />  
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title1"></span>
+			</f:facet>
+			<h:outputText value="#{record.name}" />
+		</p:column>  
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title2"></span>
+			</f:facet>
+			<h:outputText value="#{record.no}" />
+		</p:column>
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title3"></span>
+			</f:facet>
+			<h:outputText value="#{record.age}" />
+		</p:column>
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title4"></span>
+			</f:facet>
+			<h:outputText value="#{record.sex}" />
+		</p:column>
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title5"></span>
+			</f:facet>
+			<h:outputText value="#{record.birthday}" />
+		</p:column>
+		<p:column style="width:10%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title6"></span>
+			</f:facet>
+			<h:outputText value="#{record.idcard}" />
+		</p:column>
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title7"></span>
+			</f:facet>
+			<h:outputText value="#{record.education}" />
+		</p:column>
+		<p:column style="width:10%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title8"></span>
+			</f:facet>
+			<h:outputText value="#{record.phoneNumber}" />
+		</p:column>
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title9"></span>
+			</f:facet>
+			<h:outputText value="#{record.address}" />
+		</p:column>
+		<p:column style="width:14%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title10"></span>
+			</f:facet>
+			<h:outputText value="#{record.email}" />
+		</p:column>
+		<p:column style="width:6%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title11"></span>
+			</f:facet>
+			<h:outputText value="#{record.positionName}" />
+		</p:column>
+		<p:column style="width:8%">
+			<f:facet name="header">
+				<span data-i18n="page1.user.title12"></span>
+			</f:facet>
+			<h:outputText value="#{record.nodeName}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<span data-i18n="page1.user.title13"></span>
+			</f:facet>
+			<h:outputText value="#{record.teamName}" />
+		</p:column>
+	</p:dataTable>	
+	<!-- 插入数据 -->
+	<p:dialog id="adddate" widgetVar="adddate" styleClass="div-dialog"> 
+		<div id="divInsert">
+			<h2 align="center"><span data-i18n="page1.add.main_title"></span></h2>
+			<table>
 				<tr>
-					<td width="15%">人员名称 <span style="color:red;font-weight:bold;">*</span></td>
-					<td width="35%"><h:inputText id="name2" styleClass="new_input_style"  value="#{MemberManagementBean.newData.name}" /></td>
-					<td width="15%">工号ID <span style="color:red;font-weight:bold;">*</span></td>
-					<td width="35%"><h:inputText id="no2" styleClass="new_input_style"  value="#{MemberManagementBean.newData.no}"/></td>
-				</tr>
-				<tr>
-					<td>联系方式：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.newData.phoneNumber}"/></td>				
-					<td>备注</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.newData.memo}"/></td>
-					<ui:remove><td>所属部门：</td>
-					<td>
-					<h:selectOneMenu styleClass="new_select_style" value="#{MemberManagementBean.nodeNameUp}">
-						<f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-						<f:selectItems value="#{MemberManagementBean.nodeMap}"></f:selectItems>
-					</h:selectOneMenu> 
-					</td></ui:remove>
-				</tr>
-				<ui:remove><tr>
-					<td>职位：</td>
-					<td>
-						<h:selectOneMenu styleClass="new_select_style" value="#{MemberManagementBean.positionNameUp}">
-							<f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-							<f:selectItems value="#{MemberManagementBean.positionMap}"></f:selectItems>
-						</h:selectOneMenu> 
-					</td>	
-					<td>所属班组：</td>
-					<td>
-					<h:selectOneMenu styleClass="new_select_style" value="#{MemberManagementBean.teamNameUp}">
-						<f:selectItem itemLabel="请选择" itemValue="" ></f:selectItem>
-						<f:selectItems value="#{MemberManagementBean.teamMap}"></f:selectItems>
-					</h:selectOneMenu> 
-					</td>
-				</tr></ui:remove>
-				<tr>
-					<td>性别：</td>
-					<td><h:selectOneMenu styleClass="new_select_style"
-							value="#{MemberManagementBean.newData.sex}">
-							<f:selectItem itemLabel="男" itemValue="男" ></f:selectItem>
-							<f:selectItem itemLabel="女" itemValue="女" ></f:selectItem>
-						</h:selectOneMenu>
-					</td>
-					<td>身份证 <span style="color:red;font-weight:bold;">*</span></td>
-					<td>
-						<h:inputText id="idcard2" styleClass="new_input_style"  value="#{MemberManagementBean.newData.idcard}" />
-						<!-- <h:selectOneMenu styleClass="new_select_style" 
-							value="#{MemberManagementBean.newData.idcard}">
-							<f:selectItem itemLabel="未婚" itemValue="未婚" ></f:selectItem>
-							<f:selectItem itemLabel="已婚" itemValue="已婚" ></f:selectItem>
-						</h:selectOneMenu>  -->
-					</td>					
-				</tr>
-				<tr>		
-					<td>出生年月：</td>
-					<td><rich:calendar id="startTime" popup="true"
-										styleClass="new_input_style" locale="en" 
-										inputClass="new_input_style"
-										value="#{MemberManagementBean.newData.birthday}" datePattern="yyyy-MM-dd"
-										cellWidth="10px" cellHeight="20px"  />
-					</td>
-					<td>学历：</td>
-					<td><h:selectOneMenu styleClass="new_select_style"
-						value="#{MemberManagementBean.newData.education}">
-						<f:selectItem itemLabel="小学" itemValue="小学" ></f:selectItem>
-						<f:selectItem itemLabel="初中" itemValue="初中" ></f:selectItem>
-						<f:selectItem itemLabel="中专" itemValue="中专" ></f:selectItem>
-						<f:selectItem itemLabel="高中" itemValue="高中" ></f:selectItem>
-						<f:selectItem itemLabel="大专" itemValue="大专" ></f:selectItem>
-						<f:selectItem itemLabel="本科" itemValue="本科" ></f:selectItem>
-						<f:selectItem itemLabel="硕士" itemValue="硕士" ></f:selectItem>
-						<f:selectItem itemLabel="博士" itemValue="博士" ></f:selectItem>
-						<f:selectItem itemLabel="博士后" itemValue="博士后" ></f:selectItem>
-						<f:selectItem itemLabel="其他" itemValue="其他" ></f:selectItem>
-					</h:selectOneMenu> </td>
-				</tr>
-				<tr>
-					<td>电邮地址：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.newData.email}"/></td>
-					<td>居住地：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.newData.address}"/></td>
-				</tr>
-				<tr>
-					<td>政治面貌：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.newData.partyAffiliation}"/></td>
-					<td>薪酬：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.newData.salary}"/></td>
-				</tr>
-				<tr>
-					<td>备注：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.newData.memo}"/></td>
-					<td>关联账号</td>
-					<td>
-						<h:selectOneMenu  style="color:#595959;" value="#{MemberManagementBean.updateUserId}" styleClass="inputText">
-							<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-							<f:selectItems value="#{MemberManagementBean.scrapUserList}" var="user" itemLabel="#{user.name}" 
-								itemValue="#{user.userId}"></f:selectItems>
-						</h:selectOneMenu>
-					</td>		
-				</tr>
-			</table>
-			<div align="center" style="margin-top:10px;">
-				<p:commandButton styleClass="delete" value="保存"  action="#{MemberManagementBean.updateRecord}"  update="myform:tb" onclick="return checkEmpty('name2','no2','idcard2');" oncomplete="$('#divUpdate').hide();"></p:commandButton>
-				<p:commandButton styleClass="delete" value="取消"  oncomplete="update.hide()"></p:commandButton>
-			</div>
-		</div>
-		</p:dialog>		
-		<!-- 插入数据 -->
-		<p:dialog id="adddate" widgetVar="adddate"  width="727" height="550"> 
-		<div id="divInsert" style="background-image:url(../images/equ/divbg.png);width:727px;height:466px;">
-			<h2 align="center" style="padding-top: 7px;">人员新建</h2>
-			<table style="font-size:18px;width:700px;height:430px;">
-				<tr>
-					<td width="15%">人员名称 <span style="color:red;font-weight:bold;">*</span></td>
-					<td width="35%"><h:inputText id="name"  styleClass="new_input_style"  value="#{MemberManagementBean.insertData.name}"/></td>
-					<td width="15%">工号ID <span style="color:red;font-weight:bold;">*</span></td>
+					<td width="15%"><span class="txt-toolbar" data-i18n="page1.user.title1"></span><span style="color:red;font-weight:bold;">*</span></td>
+					<td width="35%"><h:inputText id="name" styleClass="input-toolbar"  value="#{MemberManagementBean.insertData.name}"/></td>
+					<td width="15%"><span class="txt-toolbar" data-i18n="page1.user.title2"></span><span style="color:red;font-weight:bold;">*</span></td>
 					<td width="35%">
-						<h:inputText id="no"  styleClass="new_input_style"  value="#{MemberManagementBean.insertData.no}"/>
+						<h:inputText id="no"  styleClass="input-toolbar"  value="#{MemberManagementBean.insertData.no}"/>
 						<br />#{MemberManagementBean.msg}
 					</td>
 				</tr>
 				<tr>
-					<td>联系方式：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.insertData.phoneNumber}"/></td>
-					<td>所属部门：</td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title8"></span></td>
+					<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.insertData.phoneNumber}"/></td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title12"></span></td>
 					<td>
-						<ui:remove><h:selectOneMenu styleClass="new_select_style" value="#{MemberManagementBean.nodeName}">
-							<f:selectItem itemLabel="请选择" itemValue="0" ></f:selectItem>
-							<f:selectItems value="#{MemberManagementBean.nodeMap}"></f:selectItems>
-							<a4j:ajax event="change" listener="#{MemberManagementBean.changePositionTeam}" render="myform:posit myform:team"></a4j:ajax>
-						</h:selectOneMenu>
-						<div id='tre2' style="float:left;margin-top:10px;margin-left:20px;" onclick="showMenu0('DropdownMenuBackground2','tre2');">
-							<h:outputText  styleClass="" id="nodeName2" value="#{MemberManagementBean.thisNodeName}" /> 
-						</div></ui:remove>
-						
-
-						
-						<div id='tre2' style="float:left;margin-top:0px;margin-left:0px;" onclick="$('#DropdownMenuBackground2').show();">
-							<h:inputText id="nodeName2"  styleClass="new_input_style" value="#{MemberManagementBean.thisNodeName}"/>
+						<div id='tre2' onclick="$('#DropdownMenuBackground2').show();">
+							<h:inputText id="nodeName2"  styleClass="input-toolbar" value="#{MemberManagementBean.thisNodeName}"/>
 						</div>
-						<div  id="DropdownMenuBackground2" onclick="closeTreeDiv0('DropdownMenuBackground2');$('#DropdownMenuBackground2').hide();" style="backgroundcolor:black;display:none;position:absolute;left:480px;top:170px;z-index:10000;">
-								<p:tree value="#{MemberManagementBean.root}" var="node" selectionMode="single"  styleClass="materail_class_treeDiv" >
-			
-									<p:treeNode styleClass="spanhover">
-										<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
-									</p:treeNode>
-									<a4j:ajax event="select" render=":myform:nodeName2 myform:posit myform:team" 
-										listener="#{MemberManagementBean.onNodeSelect}" />
-								</p:tree>
-								<a4j:outputPanel ajaxRendered="true"  >
-								</a4j:outputPanel>
-					     </div>
+						<div id="DropdownMenuBackground2" onclick="closeTreeDiv0('DropdownMenuBackground2');$('#DropdownMenuBackground2').hide();">
+							<p:tree value="#{MemberManagementBean.root}" var="node" selectionMode="single">
+								<p:treeNode styleClass="spanhover">
+									<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
+								</p:treeNode>
+								<a4j:ajax event="select" render=":myform:nodeName2 myform:posit myform:team" 
+									listener="#{MemberManagementBean.onNodeSelect}" oncomplete="transElementId('divInsert');"/>
+							</p:tree>
+					    </div>
 					</td>			
 				</tr>
 				<tr>	
-					<td>职位：</td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title11"></span></td>
 					<td>
-						<h:selectOneMenu id="posit" styleClass="new_select_style" value="#{MemberManagementBean.positionName}">
-							<f:selectItem itemLabel="请选择" itemValue="0" ></f:selectItem>
+						<h:selectOneMenu id="posit" styleClass="select-toolbar" value="#{MemberManagementBean.positionName}">
+							<f:selectItem itemLabel="page1.btn.pls_select" itemValue="0" ></f:selectItem>
 							<f:selectItems value="#{MemberManagementBean.positionMap}"></f:selectItems>
 						</h:selectOneMenu> 
 					</td>
-					<td>所属班组：</td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title13"></span></td>
 					<td>
-						<h:selectOneMenu id="team" styleClass="new_select_style" value="#{MemberManagementBean.teamName}">
-							<f:selectItem itemLabel="请选择" itemValue="0" ></f:selectItem>
+						<h:selectOneMenu id="team" styleClass="select-toolbar" value="#{MemberManagementBean.teamName}">
+							<f:selectItem itemLabel="page1.btn.pls_select" itemValue="0" ></f:selectItem>
 							<f:selectItems value="#{MemberManagementBean.teamMap}"></f:selectItems>
 						</h:selectOneMenu> 
 					</td>
 				</tr>
 				<tr>	
-					<td>性别：</td>
-					<td><h:selectOneMenu styleClass="new_select_style" 
+					<td><span class="txt-toolbar" data-i18n="page1.user.title4"></span></td>
+					<td><h:selectOneMenu styleClass="select-toolbar" 
 							value="#{MemberManagementBean.insertData.sex}">
-							<f:selectItem itemLabel="男" itemValue="男" ></f:selectItem>
-							<f:selectItem itemLabel="女" itemValue="女" ></f:selectItem>
+							<f:selectItem itemLabel="page1.sex.male" itemValue="男" ></f:selectItem>
+							<f:selectItem itemLabel="page1.sex.female" itemValue="女" ></f:selectItem>
 						</h:selectOneMenu>
 					</td>
-					<td>身份证 <span style="color:red;font-weight:bold;">*</span></td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title6"></span><span style="color:red;font-weight:bold;">*</span></td>
 					<td>
-						<h:inputText id="idcard" styleClass="new_input_style"  value="#{MemberManagementBean.insertData.idcard}" />
-						<!--<input type="button" value="验证" onclick="checkIdcard();"/>
-						 <h:selectOneMenu styleClass="new_select_style" 
-							value="#{MemberManagementBean.insertData.idcard}">
-							<f:selectItem itemLabel="未婚" itemValue="未婚" ></f:selectItem>
-							<f:selectItem itemLabel="已婚" itemValue="已婚" ></f:selectItem>
-						</h:selectOneMenu>-->
+						<h:inputText id="idcard" styleClass="input-toolbar"  value="#{MemberManagementBean.insertData.idcard}" />
 					</td>
 				</tr>
 				<tr>
-					<td>出生年月：</td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title5"></span></td>
 					<td><rich:calendar id="startTime0" popup="true" 
-											styleClass="new_select_style" locale="en" 
-											inputClass="new_select_style"
+											styleClass="input-toolbar" locale="en" 
+											inputClass="input-toolbar"
 											value="#{MemberManagementBean.insertData.birthday}" datePattern="yyyy-MM-dd"
 											cellWidth="10px" cellHeight="20px"  />
 					</td>
-					<td>学历：</td>
-					<td><h:selectOneMenu styleClass="new_select_style"  
+					<td><span class="txt-toolbar" data-i18n="page1.user.title7"></span></td>
+					<td><h:selectOneMenu styleClass="select-toolbar"  
 						value="#{MemberManagementBean.insertData.education}">
-						<f:selectItem itemLabel="小学" itemValue="小学" ></f:selectItem>
-						<f:selectItem itemLabel="初中" itemValue="初中" ></f:selectItem>
-						<f:selectItem itemLabel="中专" itemValue="中专" ></f:selectItem>
-						<f:selectItem itemLabel="高中" itemValue="高中" ></f:selectItem>
-						<f:selectItem itemLabel="大专" itemValue="大专" ></f:selectItem>
-						<f:selectItem itemLabel="本科" itemValue="本科" ></f:selectItem>
-						<f:selectItem itemLabel="硕士" itemValue="硕士" ></f:selectItem>
-						<f:selectItem itemLabel="博士" itemValue="博士" ></f:selectItem>
-						<f:selectItem itemLabel="博士后" itemValue="博士后" ></f:selectItem>
-						<f:selectItem itemLabel="其他" itemValue="其他" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item1" itemValue="小学" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item2" itemValue="初中" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item3" itemValue="中专" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item4" itemValue="高中" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item5" itemValue="大专" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item6" itemValue="本科" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item7" itemValue="硕士" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item8" itemValue="博士" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item9" itemValue="博士后" ></f:selectItem>
+						<f:selectItem itemLabel="page1.education.item10" itemValue="其他" ></f:selectItem>
 					</h:selectOneMenu> </td>
 				</tr>
 				<tr>
-					<td>电邮地址：</td>
-					<td><h:inputText styleClass="new_input_style"  value="#{MemberManagementBean.insertData.email}"/></td>
-					<td>居住地：</td>
-					<td><h:inputText styleClass="new_input_style"  value="#{MemberManagementBean.insertData.address}"/></td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title10"></span></td>
+					<td><h:inputText styleClass="input-toolbar"  value="#{MemberManagementBean.insertData.email}"/></td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title9"></span></td>
+					<td><h:inputText styleClass="input-toolbar"  value="#{MemberManagementBean.insertData.address}"/></td>
 				</tr>
 				<tr>
-					<td>政治面貌：</td>
-					<td><h:inputText styleClass="new_input_style"  value="#{MemberManagementBean.insertData.partyAffiliation}"/></td>
-					<td>薪酬</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.insertData.salary}"/></td>	
+					<td><span class="txt-toolbar" data-i18n="page1.user.title15"></span></td>
+					<td><h:inputText styleClass="input-toolbar"  value="#{MemberManagementBean.insertData.partyAffiliation}"/></td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title16"></span></td>
+					<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.insertData.salary}"/></td>	
 				</tr>
 				<tr>
-					<td>备注：</td>
-					<td><h:inputText styleClass="new_input_style" value="#{MemberManagementBean.insertData.memo}"/></td>
-					<td>关联账号</td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title14"></span></td>
+					<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.insertData.memo}"/></td>
+					<td><span class="txt-toolbar" data-i18n="page1.user.title17"></span></td>
 					<td>
-						<h:selectOneMenu  style="color:#595959;" value="#{MemberManagementBean.selectUserId}" styleClass="inputText">
-							<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<h:selectOneMenu  style="color:#595959;" value="#{MemberManagementBean.selectUserId}" styleClass="select-toolbar">
+							<f:selectItem itemLabel="page1.btn.pls_select" itemValue=""></f:selectItem>
 							<f:selectItems value="#{MemberManagementBean.scrapUserList}" var="user" itemLabel="#{user.name}" 
 								itemValue="#{user.userId}"></f:selectItems>
 						</h:selectOneMenu>
 					</td>		
 				</tr>
-
+	
 			</table>
 			
-			<div align="center" style="margin-top:10px;">
+			<div class="dialog-bottomBar">
 				<h:inputHidden id="hvalue" value="#{MemberManagementBean.msg}"/>
-				<p:commandButton id="inbtn" styleClass="delete" value="保存" action="#{MemberManagementBean.insertRecord}"  update="myform" onclick="return checkEmpty('name','no','idcard');"></p:commandButton>
-				<p:commandButton styleClass="delete" value="取消" oncomplete="adddate.hide()"></p:commandButton>			
+				<p:commandButton id="inbtn" styleClass="btn-toolbar" value="page1.btn.save" action="#{MemberManagementBean.insertRecord}"  update=":myform" onclick="return checkEmpty('name','no','idcard');"></p:commandButton>
+				<p:commandButton styleClass="btn-toolbar" value="page1.btn.cancel" oncomplete="adddate.hide()"></p:commandButton>			
 			</div>
 		</div>
 	</p:dialog>
-
-	
+	<!-- 数据更新 -->
+	<p:dialog id="update" widgetVar="update" styleClass="div-dialog">
+	<div id="divUpdate">	          
+	    <h2 align="center"><span data-i18n="page1.edit.main_title"></span></h2>
+		<table>
+			<tr>
+				<td width="15%"><span class="txt-toolbar" data-i18n="page1.user.title1"></span><span style="color:red;font-weight:bold;">*</span></td>
+				<td width="35%"><h:inputText id="name2" styleClass="input-toolbar"  value="#{MemberManagementBean.newData.name}" /></td>
+				<td width="15%"><span class="txt-toolbar" data-i18n="page1.user.title2"></span><span style="color:red;font-weight:bold;">*</span></td>
+				<td width="35%"><h:inputText id="no2" styleClass="input-toolbar"  value="#{MemberManagementBean.newData.no}"/></td>
+			</tr>
+			<tr>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title8"></span></td>
+				<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.newData.phoneNumber}"/></td>				
+				<td><span class="txt-toolbar" data-i18n="page1.user.title14"></span></td>
+				<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.newData.memo}"/></td>
+			</tr>
+			<tr>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title4"></span></td>
+				<td><h:selectOneMenu styleClass="select-toolbar"
+						value="#{MemberManagementBean.newData.sex}">
+						<f:selectItem itemLabel="page1.sex.male" itemValue="男" ></f:selectItem>
+						<f:selectItem itemLabel="page1.sex.female" itemValue="女" ></f:selectItem>
+					</h:selectOneMenu>
+				</td>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title6"></span><span style="color:red;font-weight:bold;">*</span></td>
+				<td>
+					<h:inputText id="idcard2" styleClass="input-toolbar"  value="#{MemberManagementBean.newData.idcard}" />
+				</td>					
+			</tr>
+			<tr>		
+				<td><span class="txt-toolbar" data-i18n="page1.user.title5"></span></td>
+				<td><rich:calendar id="startTime" popup="true"
+									styleClass="input-toolbar" locale="en" 
+									inputClass="input-toolbar"
+									value="#{MemberManagementBean.newData.birthday}" datePattern="yyyy-MM-dd"
+									cellWidth="10px" cellHeight="20px"  />
+				</td>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title7"></span></td>
+				<td><h:selectOneMenu styleClass="select-toolbar"
+					value="#{MemberManagementBean.newData.education}">
+					<f:selectItem itemLabel="page1.education.item1" itemValue="小学" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item2" itemValue="初中" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item3" itemValue="中专" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item4" itemValue="高中" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item5" itemValue="大专" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item6" itemValue="本科" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item7" itemValue="硕士" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item8" itemValue="博士" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item9" itemValue="博士后" ></f:selectItem>
+					<f:selectItem itemLabel="page1.education.item10" itemValue="其他" ></f:selectItem>
+				</h:selectOneMenu> </td>
+			</tr>
+			<tr>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title10"></span></td>
+				<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.newData.email}"/></td>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title9"></span></td>
+				<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.newData.address}"/></td>
+			</tr>
+			<tr>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title15"></span></td>
+				<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.newData.partyAffiliation}"/></td>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title16"></span></td>
+				<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.newData.salary}"/></td>
+			</tr>
+			<tr>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title14"></span></td>
+				<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.newData.memo}"/></td>
+				<td><span class="txt-toolbar" data-i18n="page1.user.title17"></span></td>
+				<td>
+					<h:selectOneMenu style="color:#595959;" value="#{MemberManagementBean.updateUserId}" styleClass="select-toolbar">
+						<f:selectItem itemLabel="page1.btn.pls_select" itemValue=""></f:selectItem>
+						<f:selectItems value="#{MemberManagementBean.scrapUserList}" var="user" itemLabel="#{user.name}" 
+							itemValue="#{user.userId}"></f:selectItems>
+					</h:selectOneMenu>
+				</td>		
+			</tr>
+		</table>
+		<div class="dialog-bottomBar">
+			<p:commandButton styleClass="btn-toolbar" value="page1.btn.save"  action="#{MemberManagementBean.updateRecord}"  update="myform:tb" onclick="return checkEmpty('name2','no2','idcard2');" oncomplete="$('#divUpdate').hide();transElementId('myform:tb');"></p:commandButton>
+			<p:commandButton styleClass="btn-toolbar" value="page1.btn.cancel"  oncomplete="update.hide()"></p:commandButton>
+		</div>
+	</div>
+	</p:dialog>
 	<script type="text/javascript">
 	//<![CDATA[
 		$(document).ready(function(){
-			
+			//国际化
+		    $(".iconBtn-toolbar,.btn-toolbar>span,option").attr("data-i18n", function() {return $(this).text();});
+		    dataTranslate("member_setting", function(t) {
+		    	$(document).i18n();
+		    }, "../static/i18nAdmin");
+		    
 		});	
+		
+		/* 局部翻译 */
+		function transElementId(selector) {
+		    $(".ui-button-text,option").each(function() {
+		    	$(this).attr("data-i18n", $(this).text());
+		    });
+			var obj = document.getElementById(selector);
+			$(obj).i18n();
+		}
 		
 		function checkEmpty(v1,v2,v3){
 			var a=document.getElementById("myform:"+v1).value;
@@ -386,13 +381,15 @@
 		}
 		
 		function searchFocus(id){
-			if(document.getElementById(id).value=="输入名称/工号")
+			var valueStr = document.getElementById('txt_placeholder').value;
+			if(document.getElementById(id).value==valueStr)
 				document.getElementById(id).value=""
 		}
 		
 		function searchBlur(id){
+			var valueStr = document.getElementById('txt_placeholder').value;
 			if(document.getElementById(id).value=="")
-				document.getElementById(id).value="输入名称/工号"
+				document.getElementById(id).value=valueStr
 		}
 		
 		function checkIdcard(){
@@ -404,7 +401,5 @@
 
 	//]]>	
 	</script>
-	<ui:remove>
-		<h:outputScript library="js" name="table_tree.js"></h:outputScript> 
-	</ui:remove>
+	<h:outputScript library="js" name="tree.js"></h:outputScript>
 </ui:composition>

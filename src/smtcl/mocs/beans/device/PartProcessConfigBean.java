@@ -433,6 +433,8 @@ public class PartProcessConfigBean {
 	 * 工艺方案模糊查询
 	 */
 	public void searchTProcessplanInfo(){
+        if("输入ID/编号/名称".equals(processPlanSearch))
+        	processPlanSearch=null;
 		List<TProcessplanInfo> rs=partService.getTProcessplanInfo(selectProcess,processPlanSearch);
 		processPlanModel=new TProcessplanInfoModel(rs);
 	}

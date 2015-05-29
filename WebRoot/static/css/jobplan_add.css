@@ -1,173 +1,259 @@
-* {
-	padding: 0px;
-	margin: 0px;
-	font-family:"΢���ź�";
+.jobplan-add-shadow
+{
+	position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,.8);
+    z-index: 9;
+ }
+.jobplan-add-out{
+position: relative;		
+float:left;
+width: 1331px;
+height: 580px;
+margin-top:110px;
+margin-left:350px;
+z-index:10;
+background-color:white; 
+visibility:hidden; 
+}
+.jobplan-add-in{
+position: absolute;	
+width: 1315px;
+height: 480px;
+margin-left: auto;
+margin-right: auto; 
+top:0px;
+left: 0px;
+border: #689976 solid 5px; 
+}
+.jobplan-add-tou{
+     width: 1315px;
+     height: 90px;
+     position: absolute;
+     
+}
+.jobplan-add-image{
+     position:absolute;
+     width: 1315px;
+     height: 90px;
+}
+.jobplan-add-title{
+    width: 100%;
+    height: 45px;
+    position:absolute;
+    font-size: 36px;
+    color: #828282;
+    left: 460px;
+    top: 20px;
+}
+.middle_xian{
+position: relative;
+width:1315px; 
+height:6px;
+top: 90px;
+}
+.zhongjian_shuju{
+position: relative;
+width:1315px; 
+height:75px;
+top: 91px;
+background-color: #E3E8E4
+}
+.zhongjian_shuju1{
+position: relative;
+width:1314px; 
+height:75px;
+top: 89px;
+background-color: #E3E8E4
+}
+.zhongjian_shuju2{
+position: relative;
+width:1315px; 
+height:75px;
+top: 87px;
+background-color: #E3E8E4
+}
+.zhongjian_shuju3{
+position: relative;
+width:1315px; 
+height:75px;
+top: 85px;
+background-color: #E3E8E4
+}
+.jobplanadd-content-label {
+	float: left;
+	margin-left:85px;
+	margin-top: 23px;
+	width: 120px;
+	font-size: 18px;
+	line-height: 18px;
+	color: #828282;
+	text-align:right;
+	white-space: nowrap;
+	
+}
+
+.jobplanadd-content-select {
+	float: left;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+.jobplanadd-select-lt{
+	float: left;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+
+.jobplanadd-text-lt{
+    float: left;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+.zl-textbox1 {
+	position: relative;
+	width: 188px;
+	height: 34px;
+	overflow: hidden;
+}
+.zl-text-bg-left1 {
+	float: left;
+	width: 18px;
+	height: 34px;
+}
+.zl-text-bg-center1 {
+	float: left;
+	width: 139px;
+	height: 34px;
+}
+.zl-text-bg-right1{
+	position:relative;
+	float: left;
+	width: 31px;
+	height: 34px;
+	z-index: 2;
+	
+}
+.zl-text1 input {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	border: none 0px;
+    padding-left: 18px;
+    width: 139px;
+	height: 34px;
+	font-family: "微软雅黑";
+	font-size: 18px;
+	line-height: 34px;
+	color: rgb(89, 89, 89);
+	background: none;
+    cursor: pointer;
+    z-index: 1;
+    white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.zl-select input[type='text'] {
+	display: block;
+	position: absolute;
+	left: 18px;
+	top: 4px;
+	border: none 0px;
+    padding-left: 0;
+    padding-right: 0;
+	width: 123px;
+	height: 28px;
+	font-family: "微软雅黑";
+	font-size: 19px;
 	color: #595959;
-	font-weight:bold;
-	font-size:20px;
+	line-height: 28px;
+	background: #ffffff;
+    z-index: 1;
+    
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
-
-
-input[type="text"]{
-    border-top: 2px solid #D3D3D3;
-	border-left: 2px solid #D3D3D3;
-	border-bottom: 1px solid #D3D3D3;
-	border-right: 1px solid #D3D3D3;
-    color:#BFBFBF;
-}
-
-.inputtext{
-	border-top: 2px solid #D3D3D3;
-	border-left: 2px solid #D3D3D3;
-	border-bottom: 1px solid #D3D3D3;
-	border-right: 1px solid #D3D3D3;
-    color:#BFBFBF;
-}
-
-
-.rf-p{
- border-width: 0px;
-
-}
-
-.rf-p-b{
-
- color:#444444;
-}
-
-.input_button_style{
-
-}
-
-.select_style{
-   border: 0px solid white;
-   background-image: url("../images/jobplan/add/select.png");
-   height:37px;
-   width:228px;
- 
-}
-
-
-.input_time_style{
-   border: 0px solid white;
-   background-image: url("../images/jobplan/add/time.png")!important;
-   height:37px;
-   width:228px;
-   
-}
-
-
-.selectWen2{
-	font-size:30px;
-	color:#444444;
-	background-repeat:repeat-x;
-	font-family:"΢���ź�";
-	height: 200px;
-	line-height:40px;
-	margin-top:30px;
+.zl-select select {
+	display: block;
 	position: absolute;
-	margin-left:0px;
-	width: 258px;
-	border: 0px;
-	z-index: 100;
-	display: none;
+	left: 0;
+	top: 0;
+	border: none 0px;
+    padding-left: 17px;
+    padding-right: 0;
+	width: 240px;
+	height: 34px;
+	font-family: "微软雅黑";
+	font-size: 18px;
+	color: #595959;
+	line-height: 24px;
+	background: none;
+    z-index: 1;
 }
-.selectWen2t{
-	font-size:30px;
-	color:#444444;
-	background-repeat:repeat-x;
-	font-family:"΢���ź�";
-	height: 530px;
-	line-height:40px;
-	margin-top:30px;
-	position: absolute;
-	margin-left:0px;
-	width: 258px;
-	border: 0px;
-	z-index: 100;
-	display: none;
+.zl-select option {
+	position:absolute;
+	left: 0;
+	top: 0;
+	width: 140px;
+	height: 34px;
+	font-family: "微软雅黑";
+	font-size: 18px;
+	color: #595959;
+	line-height: 34px;
 }
-.selectWen3{
-	height: 53px;
-	line-height:40px;
-	margin-top:-9px;
+.wei_xian{
+position: absolute;
+width:1314px; 
+height:100px;
+bottom:0px;
+background-color: #E3E8E4;
+z-index: 0;
+
+}
+.import{
+position: relative;
+width:141px; 
+height:34px;
+top:25px;
+left:450px;
+z-index: 1;
+}
+.import1{
+position: absolute;
+width:141px; 
+height:34px;
+top:45px;
+left:700px;
+z-index: 1;
+}
+.import_image{
+
+width:141px; 
+height:34px;
+
+}
+.jobplanadd-button1 {
+float: left;
+width: 141px;
+height: 34px;
+position: absolute;
+}
+.jobplanadd-content-btn3{
+float: left;
+left:2px;
+top: 0px;
+}
+.jobplanadd-button-text1 {
 	position: absolute;
-	width: 258px;
-	border:0px;
+	left: 0;
+	top: 0;
+	width: 141px;
+	height: 34px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 34px;
+	color: #5B5B5B;
+	cursor: pointer;
 }
 
-.selectWen21{
-	font-size:30px;
-	color:#444444;
-	background-repeat:repeat-x;
-	font-family:"΢���ź�";
-	height: 530px;
-	line-height:40px;
-	margin-top:30px;
-	position: absolute;
-	margin-left:0px;
-	width: 258px;
-	border: 0px;
-	z-index: 100;
-	display: none;
-}
-.selectWen31{
-	height: 53px;
-	line-height:40px;
-	margin-top:-9px;
-	position: absolute;
-	width: 258px;
-	border:0px;
-}
-
-.selectWen22{
-	font-size:30px;
-	color:#444444;
-	background-repeat:repeat-x;
-	font-family:"΢���ź�";
-	height: 50px;
-	line-height:40px;
-	margin-top:21px;
-	position: absolute;
-	margin-left:0px;
-	width: 258px;
-	border: 0px;
-	z-index: 100;
-	display: none;
-}
-.selectWen32{
-	height: 53px;
-	line-height:40px;
-	margin-top:-18px;
-	position: absolute;
-	width: 258px;
-	border:0px;
-}
-
-.selectWen23{
-	font-size:30px;
-	color:#444444;
-	background-repeat:repeat-x;
-	font-family:"΢���ź�";
-	height: 100px;
-	line-height:40px;
-	margin-top:30px;
-	position: absolute;
-	margin-left:0px;
-	width: 258px;
-	border: 0px;
-	z-index: 100;
-	display: none;
-}
-.selectWen33{
-	height: 53px;
-	line-height:40px;
-	margin-top:-9px;
-	position: absolute;
-	width: 258px;
-	border:0px;
-}
-
-.ui-state-hover{
- color:white;
-}

@@ -1,0 +1,48 @@
+/* 工具栏按钮 */
+.toolbar>.input-toolbar {
+	margin-left: 0.25rem;
+}
+.toolbar>.iconBtn-toolbar,.toolbar>.select-toolbar {
+	margin-left: 0.57rem;
+}
+.toolbar>.split-toolbar {
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 0.57rem;
+}
+
+/* 表格文字矫正 */
+.ui-dt-c a {
+	font-size: inherit;
+	font-family: inherit;
+}
+
+/* 图片预览框 */
+.div-imageShow {
+	
+}
+
+/* 图片上传 */
+.div-upload {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 4rem;
+	height: 1.6rem;
+	margin-left: -2rem;
+	margin-top: -2rem;
+	border: solid 1px #666;
+	background-color: #fff;
+	z-index: 10;
+	display: none;
+}
+.div-upload>.rf-fu  {
+	margin: 0;
+	padding: 0;
+	width: 3.98rem !important;
+	border: none 0px;
+}
+.div-upload>.btn-toolbar {
+	margin-top: 0.25rem;
+	margin-left: 0.1rem;
+}

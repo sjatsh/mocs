@@ -1,0 +1,51 @@
+{
+	"page1": {
+		"top": {
+			"btn1": "查询",
+			"btn2": "新建",
+			"btn3": "删除"
+		},
+		"content": {
+			"title1": "库房编号",
+			"title2": "库房名称",
+			"title3": "库房状态",
+			"title4": "可静得",
+			"title5": "失效日期",
+			"title6": "计划方式",
+			"title7": "库位控制",
+			"title8": "库房位置",
+			"title9": "保管员",
+			"title10": "操作",
+			"option": "请选择",
+			"option1": "活动",
+			"option2": "禁止",
+			"option3": "是",
+			"option4": "否",
+			"option5": "最小-最大",
+			"option6": "在订购点",
+			"option7": "看板补充",
+			"option8": "盘点补充",
+			"option9": "无",
+			"option10": "预指定",
+			"option11": "动态输入",
+			"option12": "物料层"
+		}
+	},
+	"page2": {
+		"content": {
+			"title1": "库位编号",
+			"title2": "库位名称",
+			"title3": "库房",
+			"title4": "状态",
+			"title5": "能力-数量",
+			"title6": "数量单位",
+			"title7": "能力-体积",
+			"title8": "体积单位",
+			"title9": "能力-重量",
+			"title10": "重量单位",
+			"title11": "维度",
+			"title12": "维度单位",
+			"title13": "操作"
+		}
+	}
+}

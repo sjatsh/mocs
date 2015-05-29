@@ -1,21 +1,31 @@
 package smtcl.mocs.utils.device;
-import java.beans.IntrospectionException;  
-import java.beans.Introspector;  
-import java.beans.PropertyDescriptor;  
-import java.math.BigDecimal;  
-import java.math.BigInteger;  
-import java.util.List;  
-import java.util.Map;  
-import java.util.Set;  
-import org.apache.commons.logging.Log;  
-import org.apache.commons.logging.LogFactory; 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dreamwork.util.IDataCollection;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 public class JsonUtil {
 	 private static Log log = LogFactory.getLog(JsonUtil.class);  
 	    public static String object2json(Object obj) {  
 	        StringBuilder json = new StringBuilder();  
 	        if (obj == null) {  
 	            json.append("\"\"");  
-	        } else if (obj instanceof String || obj instanceof Integer || obj instanceof Float || obj instanceof Boolean || obj instanceof Short || obj instanceof Double || obj instanceof Long || obj instanceof BigDecimal || obj instanceof BigInteger || obj instanceof Byte) {  
+	        } else if (obj instanceof String || obj instanceof Integer || obj instanceof Float || obj instanceof Boolean || obj instanceof Short || obj instanceof Double || obj instanceof Long || obj instanceof Long || obj instanceof BigInteger || obj instanceof Byte) {  
 	            json.append("\"").append(string2json(obj.toString())).append("\"");  
 	        } else if (obj instanceof Object[]) {  
 	            json.append(array2json((Object[]) obj));  
@@ -160,4 +170,40 @@ public class JsonUtil {
 	        }  
 	        return sb.toString();  
 	    }  
+	    
+	    public static Object transJson_To_Class(String returnType, String jsonStr)throws Exception{
+			JSONObject jsonObj = JSONObject.fromObject(jsonStr);
+			
+			
+			Gson gson = new Gson();
+			if(returnType.equals("Map<String,Object>"))
+			{
+				Map<String,Object> result = (Map<String,Object>)jsonObj.get("content");
+				return result;
+			}
+			else if(returnType.equals("List<Map<String,Object>>"))
+			{	
+				
+				if(!jsonObj.has("content")){
+					return null;
+				}
+				
+				try {
+					JSONArray jsonArray = jsonObj.getJSONArray("content");
+					String jsonContent = jsonArray.toString();
+					List<Map<String,Object>> list = gson.fromJson(jsonContent,  
+			                new TypeToken<List<Map<String,Object>>>() {  
+			                }.getType()); 
+					return list;
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+					throw new Exception();
+				}
+			}
+			else{
+				return null;
+			}
+		}
+
 }

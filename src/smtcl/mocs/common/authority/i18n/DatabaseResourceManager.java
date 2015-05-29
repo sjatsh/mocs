@@ -12,7 +12,7 @@ import java.util.SortedSet;
  * Created with IntelliJ IDEA.
  * User: seth.yang
  * Date: 12-11-1
- * Time: 下午7:59
+ * Time: 涓嬪崍7:59
  */
 public class DatabaseResourceManager extends AbstractResourceManager {
     private Locale defaultLocale;
@@ -27,10 +27,10 @@ public class DatabaseResourceManager extends AbstractResourceManager {
     }
 
     /**
-     * 根据给定的资源名称，返回特定IResourceAdapter 实现
+     * 鏍规嵁缁欏畾鐨勮祫婧愬悕绉帮紝杩斿洖鐗瑰畾鐨?IResourceAdapter 瀹炵幇
      *
-     * @param baseName 资源名称
-     * @return 资源适配
+     * @param baseName 璧勬簮鍚嶇О
+     * @return 璧勬簮閫傞厤鍣?
      */
     @Override
     protected IResourceAdapter createResourceAdapter (String baseName) {
@@ -38,12 +38,12 @@ public class DatabaseResourceManager extends AbstractResourceManager {
     }
 
     /**
-     * 获取资源绑定器的工厂方法.
-     * <p>根据给定的基名和默认的区域设置，以某种方式返回资源绑定器.
-     * code>defaultLocale</code>无法载入，实现类应该抛出异常
+     * 鑾峰彇璧勬簮缁戝畾鍣ㄧ殑宸ュ巶鏂规硶.
+     * <p>鏍规嵁缁欏畾鐨勫熀纭?寘鍚嶅拰榛樿鐨勫尯鍩熻缃紝浠ユ煇绉嶆柟寮忚繑鍥炶祫婧愮粦瀹氬櫒.
+     * 鑻?code>defaultLocale</code>鏃犳硶杞藉叆锛屽疄鐜扮被搴旇鎶涘嚭寮傚父
      *
-     * @param baseName 基础语言
-     * @return IResourceBundle 实例
+     * @param baseName 鍩虹璇█鍖?
+     * @return IResourceBundle 瀹炰緥
      */
     @Override
     public IResourceAdapter getResourceAdapter (String baseName) {
@@ -67,9 +67,9 @@ public class DatabaseResourceManager extends AbstractResourceManager {
     }
 
     /**
-     * 获取当前资源管理器所有支持的区域设置
+     * 鑾峰彇褰撳墠璧勬簮绠＄悊鍣ㄦ墍鏈夋敮鎸佺殑鍖哄煙璁剧疆
      *
-     * @return 支持的区域设
+     * @return 鎵?湁鏀寔鐨勫尯鍩熻缃?
      */
     @Override
     public Collection<LocaleWarp> getSupportedLocales () {

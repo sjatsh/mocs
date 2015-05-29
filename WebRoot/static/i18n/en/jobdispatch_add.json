@@ -1,0 +1,37 @@
+{	
+	"top": {
+		"title1":"Create A new Job",
+		"ljmc":"Part Name",
+		"tlsl":"Quantity",
+		"pcmc":"Batch Name" ,
+		"kssj":"Start Time",
+		"jssj":"Finish Time",
+		"pch":"Batch No.",
+		"gyqd":"Process",
+		"gdlb":"Work Order"
+	},
+	"content": {
+		"gxbm":"Operation Code",
+		"gxmc":"Process",
+		"jpsj":"TAKT Time",
+		"gdbm":"Job Order",
+		"gxbm1":"Operation Code",
+		"gxmc1":"Process",
+		"sblx":"Resource",
+		"sl":"Qty",
+		"sc":"Generate",
+		"qx":"Undo",
+		"bc":"Create",
+		"qx1":"Cancel",
+		"msg":"Please select a part!",
+		"msg1":"The quantity cannot be empty!",
+		"msg2":"Batch No. cannot be empty!",
+		"msg3":"Start time cannot be empty!",
+		"msg4":"The Finish time cannot be empty!",
+		"msg5":"The start time cannot be greater than the end time!",
+		"msg6":"The quantity must be a number!",
+		"msg7":"Create successfully!",
+		"msg8":"Please generate job orders first."
+	}
+	
+}

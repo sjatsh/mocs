@@ -8,110 +8,119 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:form id="myform">
-<link rel="stylesheet" href="css/common.css" type="text/css"></link>
-<link rel="stylesheet" href="css/stat.css" type="text/css"></link>
-<link rel="stylesheet" href="css/rich_table_ds.css" type="text/css"></link>
-<style type="text/css">
-*{margin:0px;}
-</style>
-<link rel="stylesheet" href="css/product_in_progress_composite.css" type="text/css"></link>
+<!-- <link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet"	type="text/css" />
+<link rel="stylesheet" href="./css/product_in_progress_composite.css" type="text/css"></link> -->
+<link href="./css/publish/productInProgressComposite.min.css" rel="stylesheet" type="text/css" />
+
 <h:inputHidden value="#{pIpCompositeBean.load}" id="loadtab"></h:inputHidden>
-<div class="title-bar">
-	<div class="logo-img">
-		<img src="images/profile_top_logo.png" />
+<div class="zl-content-top" >
+	<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+	<div class="zl-content-top-title">
+		<div class="title-text" data-i18n="top.main_title"></div>
 	</div>
-	<div class="title-text">在制品报表</div>
-	<div class="filter-frame">
-		<div class="filter-bar">
-			<div class="filter-label">开始时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="startTime" popup="true" locale="en" cellWidth="10px" cellHeight="20px" value="#{pIpCompositeBean.startTime}" datePattern="yyyy-MM-dd" />
-			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">结束时间:</div>
-			<div class="filter-input">
-				<rich:calendar id="finishTime" popup="true" locale="en" cellWidth="10px" cellHeight="20px" value="#{pIpCompositeBean.endTime}" datePattern="yyyy-MM-dd" />
-			</div>
-		</div>
-	</div>
-	<div class="filter-frame2">
-		<div class="filter-bar">
-			<div class="filter-label">零件名称:</div>
-			<div class="filter-input">
-				<h:selectOneMenu id="productName" value="#{pIpCompositeBean.procuctSelected}" styleClass="filter-select">
-					<f:selectItem itemLabel="--请选择--" itemValue=""></f:selectItem>
-					<f:selectItems value="#{pIpCompositeBean.procuctlist}" 
-					 var="part"  itemLabel="#{part.name}"  itemValue="#{part.id}"> </f:selectItems>
-					<f:ajax event="valueChange" render="batchNo" listener="#{pIpCompositeBean.selectOnChange}" />
-				</h:selectOneMenu>
-			</div>
-		</div>
-		<div class="filter-bar">
-			<div class="filter-label">批次号:</div>
-			<div class="filter-input">
-				<h:selectOneMenu id="batchNo" value="#{pIpCompositeBean.batchNoSelected}" styleClass="filter-select">
-					<f:selectItem itemLabel="--请选择--" itemValue=""></f:selectItem>
-					<f:selectItems value="#{pIpCompositeBean.batchNolist}"
-					  var="map"  itemLabel="#{map.batchNo}"  itemValue="#{map.batchNo}" > </f:selectItems>
-				</h:selectOneMenu>
-			</div>
-		</div>
-		<div class="filter-bar" id="ctx_group" style="display:none;">
-			<div class="filter-label">统计类型</div>
-			<div class="filter-input">
-				<h:selectOneMenu id="group" disabled="true" onchange="change()" styleClass="filter-select">
-					<f:selectItem itemLabel="按零件名" itemValue="1"></f:selectItem>
-					<f:selectItem itemLabel="按设备" itemValue="2"></f:selectItem>
-				</h:selectOneMenu>
-			</div>
-		</div>
-	</div>
-	<div class="filter-submit">
-		<h:graphicImage id="submt" alt="search" url="images/jobplan/list/jobpaln_button.png">
-			<a4j:ajax listener="#{pIpCompositeBean.SubmitSearch}" event="click" execute="startTime finishTime productName batchNo group" render=":myform:tableTree" oncomplete="searchBtn()"></a4j:ajax>
+	<div class="zl-content-top-info-up2">
+		 <div class="zl-content-label"><span data-i18n="top.select_title1"></span></div>
+		 <div class="zl-content-select zl-dateBox">
+		    <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<rich:calendar id="startTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+			    value="#{pIpCompositeBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+		    <h:message for="startTime" style="color:red" />
+		 </div>
+	
+		 <div class="zl-content-label"><span data-i18n="top.select_title2" /></div>
+		 <div class="zl-content-select zl-dateBox">
+	        <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<rich:calendar id="finishTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+		    value="#{pIpCompositeBean.endTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+	        <h:message for="finishTime" style="color:red" />
+		 </div>
+		 
+		 <div class="zl-content-label"><span data-i18n="top.select_title3"></span></div>
+		 <div class="zl-select3 zl-select-lt">
+			<img class="zl-select-bg-left3" src="images/input/box_left.png" />
+			<img class="zl-select-bg-center3" src="images/input/box_center.png" />
+			<img class="zl-select-bg-right3" src="images/input/box_right_select.png" />
+			<h:selectOneMenu id="productName" value="#{pIpCompositeBean.procuctSelected}">
+				<f:selectItem itemValue="请选择" itemLabel="top.select_title7"></f:selectItem>
+				<f:selectItems  value="#{pIpCompositeBean.procuctlist}" var="part"  itemLabel="#{part.name}"  itemValue="#{part.id}">
+				</f:selectItems>
+				<a4j:ajax event="valueChange" render="batchNo" listener="#{pIpCompositeBean.selectOnChange}" oncomplete="selectChage()"/>
+			</h:selectOneMenu>
+		  </div>
+		  
+		  <div style="clear: left"></div>
+		 <div class="zl-content-label"><span data-i18n="top.select_title4"></span></div>
+		 <div class="zl-select2 zl-select-lt">
+			<img class="zl-select-bg-left2" src="images/input/box_left.png" />
+			<img class="zl-select-bg-center2" src="images/input/box_center.png" />
+			<img class="zl-select-bg-right2" src="images/input/box_right_select.png" />
+			<h:selectOneMenu id="batchNo" value="#{pIpCompositeBean.batchNoSelected}" >
+				<f:selectItems value="#{pIpCompositeBean.batchNolist}"
+				  var="map"  itemLabel="#{map.batchNo}"  itemValue="#{map.batchNo}" > </f:selectItems>
+			</h:selectOneMenu>
+		 </div>
+		  <ui:remove>
+		 <div class="zl-content-label"><span data-i18n="top.select_title5"></span></div>
+		 <div class="zl-content-top-selectInfo zl-select zl-select-lt">
+			<img class="zl-select-bg-left" src="images/input/box_left.png" />
+			<img class="zl-select-bg-center" src="images/input/box_center.png" />
+			<img class="zl-select-b	g-right" src="images/input/box_right_select.png" />
+			<h:selectOneMenu id="group" disabled="true" onchange="change()" styleClass="filter-select">
+				<f:selectItem itemLabel="按零件名" itemValue="1"></f:selectItem>
+				<f:selectItem itemLabel="按设备" itemValue="2"></f:selectItem>
+			</h:selectOneMenu>
+		  </div>
+		  </ui:remove>
+	 </div>	
+	 
+	 <div class="auto-size zl-content-top-info-search2">
+	    <h:graphicImage id="btn_search" alt="search" url="" style="display:none;">
+			<a4j:ajax event="click" listener="#{pIpCompositeBean.SubmitSearch}"  
+			execute="startTime finishTime productName batchNo group" render=":myform:tableTree" oncomplete="searchBtn();resizeTable();"></a4j:ajax>
 		</h:graphicImage>
+	    <div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
+	     <img class="zl-buttonBG" src="images/input/button.png"/>
+	     <img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+	     <div class="zl-button-text">
+		   <img class="zl-button-icon" src="images/input/icon_search.png" />
+		   <span data-i18n="top.select_title6"></span>
+	     </div>
+		</div>
 	</div>
 </div>
-<script language="javascript">
-$(".title-bar").css("width", wjb51 + "px").css("height", hjb51 * 280 / 1080 + "px");
-$(".logo-img").css("left", wjb51 * 25 / 1920 + "px").css("top", hjb51 * 33 / 1080 + "px").css("width", wjb51 * 229 / 1920 + "px").css("height", hjb51 * 180 / 1080);
-$(".title-text").css("left", wjb51 * 300 / 1920 + "px").css("top", hjb51 * 100 / 1080 + "px").css("font-size", hjb51 * 52 / 1080 + "px").css("line-height", hjb51 * 52 / 1080 + "px");
-$(".filter-frame").css("left", wjb51 * 650 / 1920 + "px").css("top", hjb51 * 50 / 1080 + "px");
-$(".filter-frame2").css("left", wjb51 * 1100 / 1920 + "px").css("top", hjb51 * 50 / 1080 + "px");
-$(".filter-bar").css("width", wjb51 * 400 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("margin-top", hjb51 * 24 / 1080 + "px");
-$(".filter-label").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 38 / 1080 + "px");
-$(".filter-input").css("width", wjb51 * 150 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px").css("line-height", hjb51 * 42 / 1080 + "px").css("font-size", hjb51 * 20 / 1080 + "px");
-$(".filter-input img.rf-cal-btn").css("margin-left", -wjb51 * 45 / 1920 + "px").css("width", wjb51 * 42 / 1920 + "px").css("height", hjb51 * 42 / 1080 + "px");
-$(".filter-input .rf-cal-extr").css("width", wjb51 * 150 / 1920 + "px");
-$(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 27 / 1080 + "px").css("width", wjb51 * 164 / 1920 + "px").css("height", hjb51 * 164 / 1080 + "px");
-</script>
 
-<div class="content-frame">
-	<div class="tab-bar">
-		<div id="tab-list" class="tab-btn active" onclick="sub('tab1')">批次统计</div>
-		<div id="tab-chart" class="tab-btn" onclick="sub('tab2')">工序统计</div>
+<div class="zl-content-info">
+	<div class="content-info-top">
+		<div id="tab-list" class="tab-btn active" data-i18n="content.tab1"></div>
+		<ui:remove>
+		<div id="tab-chart" class="tab-btn" data-i18n="content.tab2"></div>
+		</ui:remove>
 	</div>
-	<div id="list-frame">
+	<div class="content-info-tubiao" id="list-frame">
 		<div class="ui-treetable ui-widget table-title">
 			<table style="width: 100%; height: 100%;">
 				<tr>
-					<th class="ui-state-default" width="25%"><div class="ui-tt-c">零件名称</div></th>
-					<th class="ui-state-default" width="15%"><div class="ui-tt-c">批次号</div></th>
-					<th class="ui-state-default" width="11%"><div class="ui-tt-c">计划数量</div></th>
-					<th class="ui-state-default" width="11%"><div class="ui-tt-c">完成数量</div></th>
-					<th class="ui-state-default" width="11%"><div class="ui-tt-c">在制品数量</div></th>
-					<th class="ui-state-default" width="10%"><div class="ui-tt-c">开始时间</div></th>
-					<th class="ui-state-default" width="10%"><div class="ui-tt-c">结束时间</div></th>
-					<th class="ui-state-default" width="7%"><div class="ui-tt-c">操作</div></th>
+					<th class="ui-state-default" width="25%"><div class="ui-tt-c" data-i18n="content.table_title1"></div></th>
+					<th class="ui-state-default" width="15%"><div class="ui-tt-c" data-i18n="content.table_title2"></div></th>
+					<th class="ui-state-default" width="11%"><div class="ui-tt-c" data-i18n="content.table_title3"></div></th>
+					<th class="ui-state-default" width="11%"><div class="ui-tt-c" data-i18n="content.table_title4"></div></th>
+					<th class="ui-state-default" width="11%"><div class="ui-tt-c" data-i18n="content.table_title5"></div></th>
+					<th class="ui-state-default" width="14%"><div class="ui-tt-c" data-i18n="content.table_title6"></div></th>
+					<th class="ui-state-default" width="13%"><div class="ui-tt-c" data-i18n="content.table_title7"></div></th>
+					<ui:remove>
+					<th class="ui-state-default" width="7%"><div class="ui-tt-c" data-i18n="content.table_title8"></div></th>
+					</ui:remove>
 				</tr>
 			</table>
 		</div>
 		<div class="table-body">
 			<p:treeTable value="#{pIpCompositeBean.root}" var="pip" id="tableTree" >
+				<p:ajax event="expand" oncomplete="updateScroll();" />
+	        	<p:ajax event="collapse" oncomplete="updateScroll();" />
 				<p:column style="width:25%;word-break: break-all;">
 					<f:facet name="header">
-					零件名称
+					.
 					</f:facet>
 					<h:outputText value="#{pip.productName}" />
 				</p:column>
@@ -139,44 +148,46 @@ $(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 2
 					</f:facet>
 					<h:outputText value="#{pip.pipNumber}" />
 				</p:column>
-					<p:column style="width:10%;word-break: break-all;">
+					<p:column style="width:14%;word-break: break-all;">
 					<f:facet name="header">
 						
 					</f:facet>
 					<h:outputText value="#{pip.planStarttime}" />
 				</p:column>
-					<p:column style="width:10%;word-break: break-all;">
+					<p:column style="width:13%;word-break: break-all;">
 					<f:facet name="header">
 						
 					</f:facet>
 					<h:outputText value="#{pip.planEndtime}" />
 				</p:column>
-			
+				<ui:remove>
 				<p:column style="width:7%;word-break: break-all;">
 					<f:facet name="header">
 						
 					</f:facet>
-						<p:commandLink value="详细" onclick="getData('#{pip.productName}')"
+						<p:commandLink value="content.table_content1" onclick="getData('#{pip.productName}')"
 							update=":myform:tableTree"  oncomplete="tabChartClick()"></p:commandLink>
 				</p:column>
+				</ui:remove>
 			</p:treeTable>
 		</div>
 	</div>
-	<div id="chart-frame">
+	<ui:remove>
+	<div  id="chart-frame" class="content-info-tubiao">
 		<div id="tab2" style="height: 100%;display: none;">
 			<div class="ui-datatable ui-treetable ui-widget table-title">
 				<table style="width: 100%; height: 100%;">
 					<tr>
 						<th class="ui-state-default" width="6%"></th>
-						<th class="ui-state-default" width="22%">零件名称</th>
-						<th class="ui-state-default" width="15%">批次号</th>
-						<th class="ui-state-default" width="15%">工序</th>
-						<th class="ui-state-default" width="7%">计划数量</th>
-						<th class="ui-state-default" width="7%">完成数量</th>
-						<th class="ui-state-default" width="7%">设备</th>
-						<th class="ui-state-default" width="7%">人员</th>
-						<th class="ui-state-default" width="7%">产量</th>
-						<th class="ui-state-default" width="7%">在制品数</th>
+						<th class="ui-state-default" width="22%" data-i18n="content.table_title1"></th>
+						<th class="ui-state-default" width="15%" data-i18n="content.table_title2"></th>
+						<th class="ui-state-default" width="15%" data-i18n="content.table_title9"></th>
+						<th class="ui-state-default" width="7%" data-i18n="content.table_title3"></th>
+						<th class="ui-state-default" width="7%" data-i18n="content.table_title4"></th>
+						<th class="ui-state-default" width="7%" data-i18n="content.table_title10"></th>
+						<th class="ui-state-default" width="7%" data-i18n="content.table_title11"></th>
+						<th class="ui-state-default" width="7%" data-i18n="content.table_title12"></th>
+						<th class="ui-state-default" width="7%" data-i18n="content.table_title5"></th>
 					</tr>
 				</table>
 			</div>
@@ -188,13 +199,13 @@ $(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 2
 				<table style="width: 100%; height: 100%;">
 					<tr>
 						<th class="ui-state-default" width="6%"></th>
-						<th class="ui-state-default" width="22%">设备</th>
-						<th class="ui-state-default" width="17%">零件名称</th>
-						<th class="ui-state-default" width="15%">工序</th>
-						<th class="ui-state-default" width="10%">计划数量</th>
-						<th class="ui-state-default" width="10%">完成数量</th>
-						<th class="ui-state-default" width="10%">人员</th>
-						<th class="ui-state-default" width="10%">产量</th>
+						<th class="ui-state-default" width="22%" data-i18n="content.table_title10"></th>
+						<th class="ui-state-default" width="17%" data-i18n="content.table_title1"></th>
+						<th class="ui-state-default" width="15%" data-i18n="content.table_title9"></th>
+						<th class="ui-state-default" width="10%" data-i18n="content.table_title3"></th>
+						<th class="ui-state-default" width="10%" data-i18n="content.table_title4"></th>
+						<th class="ui-state-default" width="10%" data-i18n="content.table_title11"></th>
+						<th class="ui-state-default" width="10%" data-i18n="content.table_title12"></th>
 					</tr>
 				</table>
 			</div>
@@ -202,311 +213,12 @@ $(".filter-submit").css("left", wjb51 * 1613 / 1920 + "px").css("top", hjb51 * 2
 			</div>
 		</div>
 	</div>
+	</ui:remove>
 </div>
-<script language="javascript">
-//<![CDATA[	
-	$(".content-frame").css("width", wjb51 + "px").css("height", hjb51 * 716 / 1080 + "px");
-	$(".tab-bar").css("height", hjb51 * 56 / 1080 + "px");
-	$(".tab-btn").css("width", wjb51 * 168 / 1920 + "px").css("font-size", hjb51 * 30 / 1080 + "px").css("line-height", hjb51 * 56 / 1080 + "px");
-	$("#list-frame").css("top", hjb51 * 60 / 1080 + "px").css("width", wjb51 + "px").css("height", hjb51 * 656 / 1080 + "px").css("font-size", hjb51 * 30 / 1080 + "px");
-	$("#chart-frame").css("left", wjb51 * 168 / 1920 + "px").css("top", "0px").css("width", wjb51 * 168 / 1920 + "px").css("height", hjb51 * 56 / 1080 + "px").css("font-size", hjb51 * 24 / 1080 + "px");
-	
-	var smallWidth = wjb51 * 168 / 1920;
-	var smallHeight = hjb51 * 56 / 1080;
-	var bigTop = hjb51 * 60 / 1080;
-	var bigWidth = wjb51;
-	var bigHeight = hjb51 * 656 / 1080;
-	function tabListClick() {
-		if($("#tab-list").attr("class") == "tab-btn active") {return;}
-		
-		$("#tab-list").addClass("active");
-		$("#tab-chart").removeClass("active");
-	
-		$("#list-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
-		$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 200);
-	}
-	function tabChartClick() {
-		if($("#tab-chart").attr("class") == "tab-btn active") {return;}
-		
-		$("#tab-list").removeClass("active");
-		$("#tab-chart").addClass("active");
-		
-		$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 200);
-		$("#chart-frame").animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 200);
-		document.getElementById("tab2").style.display = "block";
-		document.getElementById("tab3").style.display = "block";
-	}
-	$("#tab-list").click(function() {
-		tabListClick();
-	});
-	$("#tab-chart").click(function() {
-		tabChartClick();
-	});
 
-	searchBtn();
-	
-	//获取工序统计数据
-	function loadAjaxData(){
-		$.ajax({ 
-			url: "./productInProgress/getReportData.action", 
-			dataType: "json",//返回json格式的数据
-			success: function(responseText){
-				var obj = responseText;
-				$('#divtab2').html(drawTable(obj));
-		  	},
-		  	complete:function(){
-		  		loadClickEvent();
-		  	}
-		});
-	}
-	
-	//工序统计零件生成 
-	function drawTable(obj){
-		var trs="";
-		var beginTable = "<div class='ui-datatable ui-treetable ui-widget' style='margin-top: 6px;'><table id='detail_table' class='detail' border='0' cellspacing='0' cellpadding='0' width='100%'>"
-		+"<thead>"
-		+"<tr>"
-				+"<th class='ui-state-default' width='6%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='22%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='15%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='15%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='7%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='7%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='7%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='7%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='7%'>&nbsp;</th>"
-				+"<th class='ui-state-default' width='7%'>&nbsp;</th>"
-			+"</tr>"
-		+"</thead>"
-		+"<tbody id='tbody' class='ui-treetable-data ui-widget-content'>";
-		var data = obj.data;
-		var size = data.length;
-		var rowid = 0;
-		for(var i=0;i<size;i++){
-			var info = data[i];
-			if(info.partName != ""){
-		 	  	if(i>0){
-				 	if(info.partName == data[i-1].partName){
-				 		if(info.taskNum != data[i-1].taskNum){
-				 			rowid = i;
-				 			start="<tr class='parent ui-widget-content default' id='row"+i+"' title='点击这里展开/关闭' style='cursor: pointer;'>"
-			 				+"<td style='width:6%;word-break: break-all;'><div class='ui-tt-c'>+/-</div></td>"
-			 				part ="<td style='vertical-align:top;border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-				 		}else{
-					 		start="<tr class='child-row"+rowid+" ui-widget-content default' style='display: none;'>"
-						 	  	+"<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'></div></td>";
-					 		part="<td style='vertical-align:top;border:none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-				 		}
-				 	}else{
-				 		rowid = i;
-				 		start="<tr class='parent ui-widget-content default' id='row"+i+"' title='点击这里展开/关闭' style='cursor: pointer;'>"
-			 				+"<td style='width:6%;word-break: break-all;'><div class='ui-tt-c'>+/-</div></td>"
-				 		part ="<td style='vertical-align:top;width:22%;word-break: break-all;'><div class='ui-tt-c'>"+info.partName+"</div></td>";
-				 	}
-				 	if(info.taskNum == data[i-1].taskNum){
-				 		taskNum="<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-		 	  		}else{
-		 	  			taskNum="<td style='width:15%;word-break: break-all;'><div class='ui-tt-c'>"+info.taskNum+"</div></td>";
-		 	  		}
-				 	if(info.processName == data[i-1].processName){
-				 		process="<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-				 		planNum = "<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-				 		finish = "<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</dvi></td>";
-				 	}else{
-				 		process="<td><div class='ui-tt-c'>"+info.processName+"</div></td>";
-				 		planNum = "<td><div class='ui-tt-c'>"+info.planNum+"</div></td>";
-				 		finish = "<td><div class='ui-tt-c'>"+info.finishNum+"</div></td>";
-				 	}
-		 	  	}else{
-		 	  		start = "<tr class='parent ui-widget-content default' id='row"+i+"' style='cursor: pointer;'>"
-		 				+"<td style='width:6%;word-break: break-all;'><div class='ui-tt-c'>+/-</div></td>"
-		 	  		part ="<td style='vertical-align:top;width:22%;word-break: break-all;'><div class='ui-tt-c'>"+info.partName+"</div></td>";
-		 	  		taskNum = "<td style='width:15%;word-break: break-all;'><div class='ui-tt-c'>"+info.taskNum+"</div></td>";
-		 	  		process="<td style='width:15%;word-break: break-all;'><div class='ui-tt-c'>"+info.processName+"</div></td>";
-		 	  		planNum = "<td style='width:7%;word-break: break-all;'><div class='ui-tt-c'>"+info.planNum+"</div></td>";
-		 	  		finish = "<td style='width:7%;word-break: break-all;'><div class='ui-tt-c'>"+info.finishNum+"</div></td>";
-		 	  	}
-		 		end ="<td style='width:7%;word-break: break-all;'><div class='ui-tt-c'>"+info.equSerialNo+"</div></td>"
-	 				+"<td style='width:7%;word-break: break-all;'><div class='ui-tt-c'></div></td>"
-	 				+"<td style='width:7%;word-break: break-all;'><div class='ui-tt-c'></div></td>";
-	 			if(info.processName=="")
-	 				workInNum = "<td style='width:7%;word-break: break-all;'><div class='ui-tt-c'>"+info.workInNum+"</div></td>"
-	 			else
-	 				workInNum = "<td style='width:7%;word-break: break-all;'><div class='ui-tt-c'>/</div></td>"
-		 		trend = "</tr>";
-		 		trs += start+part+taskNum+process+planNum+finish+end+workInNum+trend;
-			}
-		}
-		
-		var tbody = trs;
-		var endTable = "</tbody>"
-					+"</table></div>";
-		return beginTable+tbody+endTable;
-	}
-	
-	//伸缩表格动作事件
-	function loadClickEvent(){
-		$('tr.parent')
-		.css("cursor","pointer")
-		.attr("title","点击这里展开/关闭")
-		.click(function(){
-			$(this).siblings('.child-'+this.id).toggle();
-		});
-	}
-	
-	//tab标签点击事件
-	function sub(tt){
-		if("tab1"==tt){
-			document.getElementById("myform:loadtab").value="tab1";
-			document.getElementById("tab2").style.display = "none";
-			document.getElementById("tab3").style.display = "none";
-			document.getElementById("myform:group").disabled=true;
-			document.getElementById("ctx_group").style.display="none";
-		}else{
-			document.getElementById("myform:loadtab").value="tab2";
-			document.getElementById("tab2").style.display = "block";
-			document.getElementById("tab3").style.display = "block";
-			document.getElementById("myform:group").value=1;
-			document.getElementById("myform:group").disabled=false;
-			document.getElementById("ctx_group").style.display="block";
-			loadAjaxData();
-		}
-		document.getElementById("myform:submt").click();
-	}
-	
-	//获取批次统计详细内容
-	function getData(productName){
-		$.ajax({
-			url: "./productInProgress/getDataByproductName.action", 
-			type:"post",
-			data:{partName:productName},
-			dataType: "json",//返回json格式的数据
-			success: function(responseText){
-				var obj = responseText;
-				$('#divtab2').html(drawTable(obj));
-		  	},
-		  	complete:function(){
-		  		loadClickEvent();
-		  	}
-		});
-	}
-	
-	//切换工序统计类型
-	function change(){
-		var loadtab=document.getElementById("myform:loadtab").value;
-		
-		var group = document.getElementById("myform:group").value;
-		if(group == 1){
-			document.getElementById("tab3").style.display="none";
-			document.getElementById("tab2").style.display="block";
-			var sTime = document.getElementById("myform:startTimeInputDate").value;
-			var eTime = document.getElementById("myform:finishTimeInputDate").value;
-			var partName = document.getElementById("myform:productName").value;
-			var batchNo = document.getElementById("myform:batchNo").value;
-			$.ajax({ 
-				url: "./productInProgress/getReportData.action", 
-				data:{descParam:"",startTime:sTime,endTime:eTime,partName:partName,batchNo:batchNo},
-				dataType: "json",//返回json格式的数据
-				success: function(responseText){
-					var obj = responseText;
-					$('#divtab2').html(drawTable(obj));
-			  	},
-			  	complete:function(){
-			  		loadClickEvent();
-			  	}
-			});
-		}else{
-			document.getElementById("tab2").style.display="none";
-			document.getElementById("tab3").style.display="block";
-			$.ajax({ 
-				url: "./productInProgress/getReportData.action", 
-				data:{descParam:"",startTime:sTime,endTime:eTime,partName:partName,batchNo:batchNo},
-				data:{descParam:"equ_job.equSerialNo"},
-				dataType: "json",//返回json格式的数据
-				contentType: 'application/json;charset=utf-8',
-				success: function(responseText){
-					var obj = responseText;
-					$('#divtab3').html(drawTable1(obj));
-				
-			  	},
-			  	complete:function(){
-			  		loadClickEvent();
-			  	}
-			});
-		}
-	}
+<h:outputScript library="js" name="jquery.mCustomScrollbar.concat.min.js"></h:outputScript>
 
-	//工序统计设备生成 
-	function drawTable1(obj){
-		var trs="";
-		var beginTable = "<div class='ui-datatable ui-treetable ui-widget' style='margin-top: 6px;'><table id='detail_table_equ' class='detail' border='0' cellspacing='0' cellpadding='0' width='100%'>"
-		+"<thead>"
-		+"<tr>"
-			+"<th class='ui-state-default' width='6%'>&nbsp;</th>"
-			+"<th class='ui-state-default' width='22%'>&nbsp;</th>"
-			+"<th class='ui-state-default' width='17%'>&nbsp;</th>"
-			+"<th class='ui-state-default' width='15%'>&nbsp;</th>"
-			+"<th class='ui-state-default' width='10%'>&nbsp;</th>"
-			+"<th class='ui-state-default' width='10%'>&nbsp;</th>"
-			+"<th class='ui-state-default' width='10%'>&nbsp;</th>"
-			+"<th class='ui-state-default' width='10%'>&nbsp;</th>"
-		+"</tr>"
-		+"</thead>"
-		+"<tbody id='tbody' class='ui-treetable-data ui-widget-content'>";
-		var data = obj.data;
-		var size = data.length;
-		var rowid = 0;
-		for(var i=0;i<size;i++){
-			var info = data[i];
-		 	  	if(i>0){
-		 	  		if(info.equSerialNo == data[i-1].equSerialNo){
-		 	  			start="<tr class='child-row"+rowid+" ui-widget-content default' style='display: none;'>"
-			 				+"<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'></div></td>";
-		 				equSerialNo ="<td style='vertical-align:top;border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-		 	  		}else{
-		 	  			rowid=i;
-		 	  			start = "<tr class='parent ui-widget-content default' id='row"+i+"' title='点击这里展开/关闭' style='cursor: pointer;'>"
-			 				+"<td style='width:6%;word-break: break-all;'><div class='ui-tt-c'>+/-</div></td>";
-			 			equSerialNo = "<td style='vertical-align:top;'><div class='ui-tt-c'>"+info.equSerialNo+"</div></td>";
-		 	  		}
-		 	  		if(info.partName == data[i-1].partName && info.equSerialNo == data[i-1].equSerialNo){
-		 	  			part ="<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-		 	  		}else{
-		 	  			part="<td><div class='ui-tt-c'>"+info.partName+"</div></td>";
-		 	  		}
-		 	  		if(info.equSerialNo == data[i-1].equSerialNo && info.partName == data[i-1].partName && info.processName == data[i-1].processName){
-// 		 	  		if(info.equSerialNo == data[i-1].equSerialNo && info.processName == data[i-1].processName){
-		 	  			processName = "<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>";
-		 	  			plan_finish="<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>"
-			 			+"<td style='border-top: none; border-bottom: none;'><div class='ui-tt-c'>&nbsp;</div></td>"
-		 	  		}else{
-		 	  			processName="<td><div class='ui-tt-c'>"+info.processName+"</div></td>";
-		 	  			plan_finish="<td><div class='ui-tt-c'>"+info.planNum+"</div></td>"
-			 			+"  <td><div class='ui-tt-c'>"+info.finishNum+"</div></td>"
-		 	  		}
-		 	  	}else{
-		 	  		rowid=i;
-		 	  		start = "<tr class='parent ui-widget-content default' id='row"+i+"' title='点击这里展开/关闭' style='cursor: pointer;'>"
-		 				+"<td style='width:6%;word-break: break-all;'><div class='ui-tt-c'>+/-</div></td>";
-	 				equSerialNo = "<td style='width:22%;word-break: break-all;'><div class='ui-tt-c'>"+info.equSerialNo+"</div></td>";
-		 	  		part ="	<td style='width:17%;word-break: break-all;'><div class='ui-tt-c'>"+info.partName+"</div></td>";
-		 	  		processName="<td style='width:15%;word-break: break-all;'><div class='ui-tt-c'>"+info.processName+"</div></td>";
-		 	  		plan_finish="<td style='width:10%;word-break: break-all;'><div class='ui-tt-c'>"+info.planNum+"</div></td>"
-		 			+"<td style='width:10%;word-break: break-all;'><div class='ui-tt-c'>"+info.finishNum+"</div></td>"
-		 	  	}
-		 		end ="<td style='width:10%;word-break: break-all;'><div class='ui-tt-c'></div></td>"
-		 			+"<td style='width:10%;word-break: break-all;'><div class='ui-tt-c'></div></td>"
-		 		+"</tr>";
-		 		trs += start+equSerialNo+part+processName+plan_finish+end;
-		}
-		
-		var tbody = trs;
-		var endTable = "</tbody>"
-					+"</table></div>";
-		return beginTable+tbody+endTable;
-	}
-//]]>
-</script>
-	
+<!-- <h:outputScript library="js/page" name="product_in_progress_composite.js"></h:outputScript> -->
+<h:outputScript library="js/publish" name="productInProgressComposite.min.js"></h:outputScript>
 </h:form>
 </ui:composition>

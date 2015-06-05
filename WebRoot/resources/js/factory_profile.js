@@ -387,7 +387,7 @@ function send(equSerialNo) {
 	var infoTemp = "";
 
 	$.ajax({
-				url : 'http://192.168.2.19:8080/a3-mocs/WSBZService/Portal.json?method=DiagnosticMessage',
+				url : 'http://192.168.2.19:8080/mocs/WSBZService/Portal.json?method=DiagnosticMessage',
 				data : 'parms=' + macTemp,
 				cache : false,
 				dataType : 'text',

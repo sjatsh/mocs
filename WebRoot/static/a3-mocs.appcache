@@ -1,10 +1,10 @@
 CACHE MANIFEST
 #2015-02-27 ver6
-/a3-mocs/javax.faces.resource/jquery.js.faces
-/a3-mocs/javax.faces.resource/jquery/jquery.js.faces?ln=primefaces
-/a3-mocs/javax.faces.resource/jquery-1.9.1.min.js.faces?ln=js
-/a3-mocs/javax.faces.resource/i18next-1.7.4.min.js.faces?ln=js
-/a3-mocs/ext/js/base/ext-all.js
-/a3-mocs/ext/js/base/sch-all-debug.js
+/mocs/javax.faces.resource/jquery.js.faces
+/mocs/javax.faces.resource/jquery/jquery.js.faces?ln=primefaces
+/mocs/javax.faces.resource/jquery-1.9.1.min.js.faces?ln=js
+/mocs/javax.faces.resource/i18next-1.7.4.min.js.faces?ln=js
+/mocs/ext/js/base/ext-all.js
+/mocs/ext/js/base/sch-all-debug.js
 NETWORK:
 *

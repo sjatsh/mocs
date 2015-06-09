@@ -36,7 +36,7 @@
 									<table id="table_materielNo_storage_id">
 										<c:forEach items="#{storageMaterielBean.materiellist}" var="materiel">
 											<tr>
-												<td>                                 
+												<td>                                
 										        	<label>
 										        		<input type="checkbox" name="materielNo_storage_id_div" 
 										        			onclick="s.changeSelected(this,event);" value="#{materiel.id}" 
@@ -344,8 +344,7 @@
 									<table id="table_storageNo_Seq">
 										<c:forEach items="#{storageMaterielBean.storageNoList}" var="storageNos">
 											<tr>
-												<td>                                 
-										        	<label>
+												<td>                                 					        	<label>
 											        	<input type="checkbox" name="table_storageNo_Seq" 
 											        		onclick="s.changeSelected(this,event);" value="#{storageNos.id}" 
 											        		onblur="s.hiddenList()"/>
@@ -363,8 +362,7 @@
 									<table id="table_positonId_Seq">
 										<c:forEach items="#{storageMaterielBean.positionNolist}" var="position">
 											<tr>
-												<td>                                 
-										        	<label>
+												<td>                                 					        	<label>
 											        	<input type="checkbox" name="positonId_Seq_div" 
 											        		onclick="s.changeSelected(this,event);" value="#{position.id}" 
 											        		onblur="s.hiddenList()"/>

@@ -57,6 +57,7 @@ public class TJobplanInfo implements java.io.Serializable {
 	private Date createDate;//创建时间
 	private Integer allocatedNum;//待分配任务数量
 	private Integer scrapNum;//批次计划报废数量
+	private Integer instockNum;//已入库数量
 	private Set<TJobInfo> TJobInfos = new HashSet<TJobInfo>(0);
 	private Set<TJobplanInfo> TJobplanInfos = new HashSet<TJobplanInfo>(0);
 	// Constructors
@@ -77,7 +78,7 @@ public class TJobplanInfo implements java.io.Serializable {
 			Date planEndtime, Integer priority, Integer status,
 			Double process, Date realStarttime,
 			Date finishDate, Integer childrenTotalNum,
-			Set<TJobInfo> TJobInfos) {
+			Set<TJobInfo> TJobInfos,Integer instockNum) {
 		this.id = id;
 		this.planNo = planNo;
 		this.TPartTypeInfo = TPartTypeInfo;
@@ -94,6 +95,7 @@ public class TJobplanInfo implements java.io.Serializable {
 		this.finishDate = finishDate;
 		this.childrenTotalNum = childrenTotalNum;
 		this.TJobInfos = TJobInfos;
+		this.instockNum = instockNum;
 	}
 
 	// Property accessors
@@ -327,6 +329,15 @@ public class TJobplanInfo implements java.io.Serializable {
 
 	public void setScrapNum(Integer scrapNum) {
 		this.scrapNum = scrapNum;
+	}
+	
+	@Column(name = "instockNum")
+	public Integer getInstockNum() {
+		return instockNum;
+	}
+
+	public void setInstockNum(Integer instockNum) {
+		this.instockNum = instockNum;
 	}
 	
 	

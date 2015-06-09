@@ -32,6 +32,8 @@ public class TMaterialStorage implements java.io.Serializable {
 	private Integer positonId;//货位ID
 	private String batchNo;//批次编号
 	private String seqNo;//序列号
+	private Integer batchId;//批次Id
+	private Integer seqId;//序列ID
 	private Double availableNum;//现有量
 	private Double retainNum;//保留量
 	private String unitName;//单位
@@ -49,7 +51,8 @@ public class TMaterialStorage implements java.io.Serializable {
 	/** full constructor */
 	public TMaterialStorage(TStorageInfo TStorageInfo,
 			TMaterailTypeInfo TMaterailTypeInfo, String versionNo,
-			Integer positonId, String batchNo, String seqNo,
+			String batchNo, String seqNo,
+			Integer positonId, Integer batchId, Integer seqId,
 			Double availableNum, Double retainNum, String unitName,
 			Date batchDate, Double moneyNum, String storageFrom,
 			Date processDate) {
@@ -59,6 +62,8 @@ public class TMaterialStorage implements java.io.Serializable {
 		this.positonId = positonId;
 		this.batchNo = batchNo;
 		this.seqNo = seqNo;
+		this.batchId = batchId;
+		this.seqId = seqId;
 		this.availableNum = availableNum;
 		this.retainNum = retainNum;
 		this.unitName = unitName;
@@ -134,6 +139,24 @@ public class TMaterialStorage implements java.io.Serializable {
 
 	public void setSeqNo(String seqNo) {
 		this.seqNo = seqNo;
+	}
+	
+	@Column(name = "batch_id")
+	public Integer getBatchId() {
+		return this.batchId;
+	}
+
+	public void setBatchId(Integer batchId) {
+		this.batchId = batchId;
+	}
+
+	@Column(name = "seq_id")
+	public Integer getSeqId() {
+		return this.seqId;
+	}
+
+	public void setSeqId(Integer seqId) {
+		this.seqId = seqId;
 	}
 
 	@Column(name = "available_num", precision = 5)

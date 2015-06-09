@@ -3,6 +3,7 @@ package smtcl.mocs.beans.jobplan;
 import java.io.Serializable;
 import java.util.*;
 
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -25,7 +26,6 @@ import smtcl.mocs.utils.device.Constants;
  * @创建时间 2013-7-2 下午13:05:16
  * @修改者 songkaiang
  * @修改日期
- * @修改说明
  * @version V1.0
  */
 @ManagedBean(name="JobPlanDetail")
@@ -248,5 +248,5 @@ public class JobPlanDetailBean implements Serializable {
 	public void setPlanId(String planId) {
 		this.planId = planId;
 	}
-    
+
 }

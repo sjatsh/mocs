@@ -7,7 +7,6 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-	
 	<link rel="stylesheet" href="../css/admin/storage_manage.css" type="text/css"></link>
 	
 	<div class="toolbar">
@@ -66,6 +65,7 @@
             </p:cellEditor>
         </p:column>
        <p:column headerText="page2.content.title6"   style="width:8%;">
+
             <p:cellEditor>
                 <f:facet name="output">
                     <h:outputText value="#{info.quantityUnit}" />
@@ -78,7 +78,6 @@
                 </f:facet>
             </p:cellEditor>
         </p:column>
-        
         <p:column headerText="page2.content.title7"   style="width:8%;">
             <p:cellEditor>
                 <f:facet name="output">
@@ -140,6 +139,7 @@
             </p:cellEditor>
         </p:column>
        <p:column headerText="page2.content.title12"   style="width:8%;">
+
             <p:cellEditor>
                 <f:facet name="output">
                     <h:outputText value="#{info.dimensionUnit}" />
@@ -296,6 +296,7 @@
 				$("*[data-i18n]").i18n();
 			}, "../static/i18nAdmin");
 		}
+
 	       function result(){
 	    	   var str = document.getElementById("myform:isSuccess").value;
 	    	   if(str =="成功"){

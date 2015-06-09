@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link rel="stylesheet" href="./css/jobplan_add.css" type="text/css"></link>
+		<style type="text/css">   
+		/* 保存按钮 */
+		.btn-save {
+			width: 53px;
+			height: 53px;
+			cursor: pointer;
+		}
+		.imagebtn {
+			cursor: pointer;
+       }
+       *{
+       font-weight: normal;
+       font-size:inherit;
+       font-family: "微软雅黑" !important;
+       }
+       .inputText{
+		width:100%;
+		height:100%;
+		line_height:100%;
+		font-size:100% !important;
+		color: #595959 !important;
+		font-family: "微软雅黑" !important;
+		font-weight: normal;
+	   }
+	    .ui-state-default{
+	      background:#00a040;
+	      
+	    }
+        .ui-dt-c{
+		   font-weight: normal;
+		   color:#333333;
+		}
+		.ui-state-default .ui-dt-c span{
+		   text-shadow:none;
+		   color:white;
+		   font-weight: bold;
+		}
+		.ui-button-text{
+		   color: white;
+		}
+		.dd .ui-state-default{
+	      background:#00a040;
+	      
+	    }
+       </style>
+
+	</h:head>
+
+	<h:body>
+		<h:form id="myform">
+			<div id="maskw"
+				style="position: absolute; z-index: 1000000; top: 0px; left: 0px; background-color: white;"></div>
+
+			<div style="width: 100%;" align="center" id ="content">
+
+				<table style="width: 100%">
+					    <tr>
+					         <td id="title" align="center">
+					         <div><h:outputText value="工单发料"/></div>
+					         
+					         </td>
+					    </tr>
+					    <tr>
+					    <td>
+					    <div id="divTransNo" style="position: relative;float: right;">
+					    <div id="transNo3" style="top:0;float: right;"><h:outputText value="#{JobDispatchMaterialOutStorage.transNo}"/></div>
+					    <div id="transNo2" style="float: right;"><h:outputText value="事务代码:"/></div>
+					    </div>
+					    </td>
+					    </tr>
+					    <tr>
+					    <td align="center">
+					    <table style="font-weight: normal;">
+						     
+							  <tr>
+							          <td style="padding-top: 10px" >
+										<h:outputText id="txtJobPlanNo" value="来源" />
+									 </td>
+									 <td>
+							          <div id ="divJobPlanId">
+										<h:selectOneMenu id="jobPlanId" styleClass="inputText"
+											value="#{JobDispatchMaterialOutStorage.jobPlanId}"
+										    style="color:#595959;">
+											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+											<f:selectItems value="#{JobDispatchMaterialOutStorage.jobPlanList}" var="part" itemLabel="#{part.no}" itemValue="#{part.id}"></f:selectItems>
+											<f:ajax event="change" listener="#{JobDispatchMaterialOutStorage.getMaterialInfo}" execute="@this" render=":myform:tb"/>
+										</h:selectOneMenu><br/>
+									  </div> 
+							       </td>
+							  </tr>
+						    </table>
+					    </td>
+					    </tr>
+					    <tr>
+					      <td>
+								<div id="material" style="overflow:auto;padding-top: 20px">
+								    <p:dataTable id="tb" style="width:100%;" editable="true"
+								value="#{JobDispatchMaterialOutStorage.materialInfoList}" var="record"
+								paginator="true" paginatorPosition="bottom" rows="5"
+								selectionMode="single" rowKey="#{record.index}">
+											<p:column headerText="物料编号"
+												style="width:17%;word-break:break-all;text-align: center;">  
+						            #{record.no}  
+						        </p:column>
+											<p:column headerText="物料名称"
+												style="width:20%;word-break:break-all;text-align: center;">  
+						            #{record.name}  
+						        </p:column>
+						        <p:column headerText="工单编号"
+												style="width:25%;word-break:break-all;text-align: center;">  
+						            #{record.jobdispatchNo}  
+						        </p:column>
+						          <p:column headerText="需求数" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.requirementNum}  
+						        </p:column>
+						        <p:column headerText="接收数" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.receivedNum}  
+						        </p:column>
+								<p:column headerText="工序序号"
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.processOrder}  
+						        </p:column>
+						         <p:column headerText="操作" style="width:8%;word-break:break-all" >
+						           <p:commandButton value="操作" action="#{JobDispatchMaterialOutStorage.getStorageInfo(record.id,record.processOrder,record.jobdispatchNo,record.price,record.index)}"
+						            style="border:0;background-color: #00A040;text-shadow:none;"  update=":myform:success :myform:tb2" oncomplete="check()">
+						             
+						           </p:commandButton>
+							       </p:column> 
+							    </p:dataTable>
+								</div>
+					      </td> 
+					    </tr>
+					    <tr>
+					    <td align="center">
+					    <div id="button">
+						 <p:commandButton value="确认" style="border:0;background-color: #00A040;background-image: url('');color:white;
+							text-shadow:none;" action="#{JobDispatchMaterialOutStorage.saveInfo}" update=":myform:tb :myform:success" oncomplete="onXZ()">
+						</p:commandButton>
+						</div>
+					     </td>
+					    </tr>
+			   </table>
+				<p:commandButton id="show" style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
+									text-shadow:none;" onclick="dlg1.show()">
+								</p:commandButton>
+				<h:inputHidden value="#{JobDispatchMaterialOutStorage.success}" id="success"></h:inputHidden>
+				<p:dialog header="库房选择" widgetVar="dlg1" id="dlg1" modal="true" resizable="false">
+				  <table width="100%">
+				 
+				  
+				   <tr>
+				   <td><div id="materialStorage" style="overflow:auto;padding-top: 20px">
+								    <p:dataTable styleClass="dd" id="tb2" style="width:100%;" editable="true"
+								value="#{JobDispatchMaterialOutStorage.materialStorageList}" var="record"
+								paginator="true" paginatorPosition="bottom" rows="5"
+								selectionMode="single" rowKey="#{record.id}">
+								 <p:ajax event="rowEdit" listener="#{JobDispatchMaterialOutStorage.onEdit}" update=":myform:messages" />
+											<p:column headerText="版本号"
+												style="width:20%;word-break:break-all;text-align: center;">  
+						            #{record.versionNo}  
+						        </p:column>
+											<p:column headerText="库房编号"
+												style="width:20%;word-break:break-all;text-align: center;">  
+						            #{record.storageNo}  
+						        </p:column>
+											<p:column headerText="货位编号"
+												style="width:20%;word-break:break-all;text-align: center;">  
+						            #{record.positionNo}  
+						        </p:column>
+						          <p:column headerText="现有量" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						            #{record.availableNum}  
+						        </p:column>
+						        <p:column headerText="接收数" 
+												style="width:10%;word-break:break-all;text-align: center;">  
+						             <p:cellEditor>
+						                <f:facet name="output">
+						                    <h:outputText value="#{record.num}" />
+						                </f:facet>
+						                <f:facet name="input">
+						                	  <p:inputText value="#{record.num}" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+														onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
+						                </f:facet>
+						            </p:cellEditor>
+						        </p:column>
+						         <p:column headerText="批次号" 
+												style="width:15%;word-break:break-all;text-align: center;">  
+						            #{record.batchNo}  
+						        </p:column>
+						         <p:column headerText="序列号" 
+												style="width:15%;word-break:break-all;text-align: center;">  
+						            #{record.seqNo}  
+						        </p:column>
+						        <p:column headerText="操作" style="width:10%;word-break: break-all;">
+						            <p:rowEditor />
+						        </p:column>
+							    </p:dataTable>
+								</div></td>
+				  </tr>
+				  
+				    <tr><td colspan="2" align="center">
+				     <p:commandButton value="保存" style="border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;" action="#{JobDispatchMaterialOutStorage.editDataListInfo}" update=":myform:tb" oncomplete="onYZ()">
+				</p:commandButton>
+				 <h:commandButton id="result" value="result" style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;" onclick="dlg1.hide()">
+				</h:commandButton>
+				 <p:commandButton value="关闭" style="border:0;background-color: #00A040;background-image: url('');color:white;
+					text-shadow:none;" onclick="dlg1.hide()" >
+				</p:commandButton>
+				     </td>
+				    </tr>
+				  </table>
+				</p:dialog>
+				<p:growl id="messages" showDetail="true" />
+			</div>
+			<script type="text/javascript">
+				//<![CDATA[ 
+				 var wjb51 = 0;
+				 var hjb51 = 0;
+				 hjb51 = document.body.clientHeight;
+				 wjb51 = document.body.clientWidth;
+				//内容高度
+				document.getElementById("title").style.height=hjb51*200/900+"px";
+                document.getElementById("title").style.fontSize=hjb51*45/900+"px";
+              
+                
+                document.getElementById("material").style.width = "100%";
+                document.getElementById("material").style.height = hjb51*400/900+"px";
+                document.getElementById("material").style.align = "center";
+                document.getElementById("material").style.fontSize = hjb51*20/900+"px";
+                
+                document.getElementById("button").style.fontSize = hjb51*20/900+"px";
+              
+                document.getElementById("myform:txtJobPlanNo").style.fontSize=hjb51*23/900+"px";
+                
+                //输入DIV控件 
+                document.getElementById("divTransNo").style.marginRight = wjb51*350/1500+"px"; 
+                //输入控件 
+               
+                
+                document.getElementById("divJobPlanId").style.width = wjb51*228/1500+"px";  //是270和36大小 
+                document.getElementById("divJobPlanId").style.height = hjb51*40/900+"px";
+                document.getElementById("divJobPlanId").style.marginLeft = "30px"; 
+                document.getElementById("divJobPlanId").style.fontSize = hjb51*20/900+"px";
+                document.getElementById("divJobplanId").style.align = "center";
+               
+                document.getElementById("myform:dlg1").style.fontSize = hjb51*25/900+"px";
+
+				function onXZ()  {
+					var msg = document.getElementById("myform:success").value;
+					
+					if(msg =="保存成功"){
+						 window.close();
+					}else{
+						alert(msg);
+					}
+					
+				}
+				function onYZ(){
+					document.getElementById("myform:result").click();
+				}
+				
+				function onZZ()  {
+					var msg = document.getElementById("myform:success").value;
+					alert(msg);
+				}
+				function check(){
+					var msg = document.getElementById("myform:success").value;
+					if(msg =="允许"){
+						document.getElementById("myform:show").click();
+					}else {
+						document.getElementById("myform:show").click();
+					}
+				}
+
+				//]]>
+			</script>
+		</h:form>
+	</h:body>
+</ui:composition>

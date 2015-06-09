@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.dreamwork.persistence.ServiceFactory;
 
-import smtcl.mocs.services.device.IOrganizationService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.utils.device.StringUtils;
 
@@ -35,14 +34,12 @@ import com.google.gson.GsonBuilder;
 @ViewScoped
 public class JobPlanStatisticsBean implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * 作业计划接口实例
 	 */
 	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
-	/**
-	 * 权限接口实例
-	 */
-	private IOrganizationService organizationService=(IOrganizationService)ServiceFactory.getBean("organizationService");
     /**
      * 数据结构集
      */
@@ -181,14 +178,6 @@ public class JobPlanStatisticsBean implements Serializable {
 
 	public void setJobPlanService(IJobPlanService jobPlanService) {
 		this.jobPlanService = jobPlanService;
-	}
-
-	public IOrganizationService getOrganizationService() {
-		return organizationService;
-	}
-
-	public void setOrganizationService(IOrganizationService organizationService) {
-		this.organizationService = organizationService;
 	}
 
 	public List<Map<String, Object>> getJobPlanResults() {

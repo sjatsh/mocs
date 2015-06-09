@@ -17,6 +17,7 @@ public class TJobDispatchDataModel extends ListDataModel<Map<String,Object>> imp
 		super(data);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String,Object> getRowData(String Id) {
 		List<Map<String,Object>> process = (List<Map<String,Object>>) getWrappedData();

@@ -33,6 +33,7 @@ import smtcl.mocs.utils.authority.SessionHelper;
 @ViewScoped
 public class JobdispatchUpdataBean implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 工单接口实例
 	 */
@@ -105,6 +106,7 @@ public class JobdispatchUpdataBean implements Serializable {
 	/**
 	 * 构造函数 
 	 */
+	@SuppressWarnings("unchecked")
 	public JobdispatchUpdataBean(){
 		//获取节点ID
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -254,10 +256,6 @@ public class JobdispatchUpdataBean implements Serializable {
 		return null;
 	}
 	/******************************set,get方法**********************************************/
-	
-	public IJobDispatchService getJobDispatchService() {
-		return jobDispatchService;
-	}
 
 	public String getSerailNo() {
 		return serailNo;
@@ -265,10 +263,6 @@ public class JobdispatchUpdataBean implements Serializable {
 
 	public void setSerailNo(String serailNo) {
 		this.serailNo = serailNo;
-	}
-
-	public void setJobDispatchService(IJobDispatchService jobDispatchService) {
-		this.jobDispatchService = jobDispatchService;
 	}
 
 	public IJobPlanService getJobPlanService() {
@@ -382,7 +376,6 @@ public class JobdispatchUpdataBean implements Serializable {
 		this.jobStatus = jobStatus;
 	}
 
-
 	public String getMsg() {
 		return msg;
 	}
@@ -390,5 +383,4 @@ public class JobdispatchUpdataBean implements Serializable {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-    
 }

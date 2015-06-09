@@ -83,7 +83,6 @@
 					 	render=" :myform:tree2 :myform:rightiframe" />
 				</rich:panelMenuGroup> 
 				</ui:remove>
-				<ui:remove>
 				<rich:panelMenuGroup label="静态数据导入">
 					<rich:panelMenuItem label="零件数据导入" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/erp/static_data_import_part.faces','静态数据导入,零件数据导入')}"
@@ -92,7 +91,7 @@
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/erp/static_data_import.faces','静态数据导入,工序数据导入')}"
 					 	render=" :myform:tree2 :myform:rightiframe" />
 				</rich:panelMenuGroup> 
-				
+				<ui:remove>
 					<rich:panelMenuItem label="零件数据导入" onclick="openUrl('../erp/static_data_import_part.faces')"/>
 					<rich:panelMenuItem label="工序数据导入" onclick="openUrl('../erp/static_data_import.faces')" />
 				</ui:remove>

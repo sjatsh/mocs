@@ -18,7 +18,6 @@ import org.primefaces.model.TreeNode;
 import smtcl.mocs.model.TableDataModel;
 import smtcl.mocs.pojos.device.TUser;
 import smtcl.mocs.services.device.IDeviceService;
-import smtcl.mocs.services.device.IOrganizationService;
 import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.FaceContextUtil;
 
@@ -229,10 +228,10 @@ public class JobdispatchChangeBean implements Serializable {
 		//startTime =new Date();
 		
 		//获取条件下拉框集合
-		equTypeList =baogongService.getEquTypeMap();
+		equTypeList =baogongService.getEquTypeMap(noteId);
 		dispatchNoList =baogongService.getDispatchNoMap();
 		partTypeList = baogongService.getPartTypeMap("",noteId);
-		equTypeNameList = baogongService.getEquTypeNameMap();
+		equTypeNameList = baogongService.getEquTypeNameMap(checkDep);
 	}
 	
 	public void getUserInfo(){
@@ -287,6 +286,7 @@ public class JobdispatchChangeBean implements Serializable {
 		if(jobdispatchId.isEmpty()){
 			return isSuccess;
 		}
+
 //		if(num ==0){
 //			return isSuccess;
 //		}
@@ -297,6 +297,7 @@ public class JobdispatchChangeBean implements Serializable {
 //			return isSuccess;
 //		}
 		if(processOrder =="400"){
+
 			isSuccess = baogongService.saveInfo(fhNum,fhUserId,equId,jobdispatchId,fhStartTime,fhFinishTime,partNo,loginUserNo,
 					isGood,checkDep,jgCheckUser,zpCheckUser,sjCheckUser);
 		}else{

@@ -1,7 +1,6 @@
 package smtcl.mocs.web.ext;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +31,7 @@ import smtcl.mocs.utils.device.StringUtils;
 @ViewScoped
 public class JobDispathStatisticsWeb implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 作业计划接口实例
 	 */
@@ -81,7 +81,6 @@ public class JobDispathStatisticsWeb implements Serializable {
 			}
 		}
 		dispatchResults = jobPlanService.getJobdispatchlistByIdAndTime(nodeid,null,null,null);
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		for(Map<String,Object> map : dispatchResults){
 		    if(map.get("dispatchno")!=null && !"".equals(map.get("dispatchno"))){
 		    	map.put("dispatchno", StringUtils.getSubString((String)map.get("dispatchno"),"1"));   //截取字段
@@ -108,7 +107,6 @@ public class JobDispathStatisticsWeb implements Serializable {
 	 */
 	public void dispathByPlanId(){
 		dispatchResults = jobPlanService.getJobdispatchlistByIdAndTime(nodeid,taskNum,startTime,endTime);	
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		for(Map<String,Object> map : dispatchResults){
 		    if(map.get("dispatchno")!=null && !"".equals(map.get("dispatchno"))){
 		    	map.put("dispatchno", StringUtils.getSubString((String)map.get("dispatchno"),"1"));   //截取字段

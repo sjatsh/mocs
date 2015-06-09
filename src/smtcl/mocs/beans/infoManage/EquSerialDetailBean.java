@@ -28,6 +28,8 @@ import smtcl.mocs.utils.device.StringUtils;
 @ViewScoped
 public class EquSerialDetailBean implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	//报表数据集
 	private List<Map<String,Object>> outData = new ArrayList<Map<String,Object>>();
 	

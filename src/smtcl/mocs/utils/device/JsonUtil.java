@@ -19,6 +19,7 @@ import org.dreamwork.util.IDataCollection;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 public class JsonUtil {
 	 private static Log log = LogFactory.getLog(JsonUtil.class);  
 	    public static String object2json(Object obj) {  
@@ -196,7 +197,6 @@ public class JsonUtil {
 			                }.getType()); 
 					return list;
 				} catch (Exception e) {
-					// TODO: handle exception
 					e.printStackTrace();
 					throw new Exception();
 				}

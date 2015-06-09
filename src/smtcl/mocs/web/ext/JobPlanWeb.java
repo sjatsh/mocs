@@ -6,6 +6,7 @@ import java.util.*;
 import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
 
+import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +19,6 @@ import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.Constants;
 import smtcl.mocs.utils.device.StringUtils;
 
-
 @Controller
 public class JobPlanWeb {
 
@@ -26,8 +26,7 @@ public class JobPlanWeb {
 	/**
 	 * 设备接口实例
 	 */
-	@ManagedProperty("#{deviceService}")
-	private IJobPlanService jobPlanService;
+	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
 	
 	@ManagedProperty("#{commonService1}")
 	private ICommonService commonService;
@@ -308,7 +307,7 @@ public class JobPlanWeb {
 				modelMap.put("data", "");
 				modelMap.put("success", false);
 			}else{
-			jobPlanService.deleteJobPlanInfoById(tJobplanInfo);
+				jobPlanService.deleteJobPlanInfoById(tJobplanInfo);
 				modelMap.put("data", "");
 				modelMap.put("success", true);
 			}
@@ -427,9 +426,9 @@ public class JobPlanWeb {
 	}
 	
 /*-----------------------------------------------------------------------------------------------------*/
-	public IJobPlanService getJobPlanService() {
-		return jobPlanService;
-	}
+//	public IJobPlanService getJobPlanService() {
+//		return jobPlanService;
+//	}
 
 	public ICommonService getCommonService() {
 		return commonService;
@@ -438,10 +437,10 @@ public class JobPlanWeb {
 	public void setCommonService(ICommonService commonService) {
 		this.commonService = commonService;
 	}
-
-	public void setJobPlanService(IJobPlanService jobPlanService) {
-		this.jobPlanService = jobPlanService;
-	}
+//
+//	public void setJobPlanService(IJobPlanService jobPlanService) {
+//		this.jobPlanService = jobPlanService;
+//	}
 	
 	
 }

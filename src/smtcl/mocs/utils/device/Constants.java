@@ -23,6 +23,7 @@ public class Constants {
 //	 */
 //	public static final String LOGIN_LOCATION = "authority.login.location";
 
+
 	/**
 	 * 登录SESSION标识
 	 */
@@ -33,6 +34,7 @@ public class Constants {
 	 */
 	public static String LOGIN_PWD="123456";  
 	
+
 	/**
 	 * 分页大小
 	 */

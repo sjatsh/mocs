@@ -18,6 +18,7 @@ import smtcl.mocs.pojos.job.TEquJobDispatch;
 import smtcl.mocs.pojos.job.TEquipmenttypeInfo;
 import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TProcessInfo;
+import smtcl.mocs.pojos.storage.TJobdispatchMaterial;
 import smtcl.mocs.services.jobplan.IJobDispatchService;
 import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.StringUtils;
@@ -373,14 +374,12 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 
 	@Override
 	public void updateJobDispatchInfo(TJobdispatchlistInfo jobdispatchInfo) {
-		// TODO Auto-generated method stub
 		dao.update(jobdispatchInfo);
 
 	}
 
 	@Override
 	public void deleteJobDispatchInfo(TJobdispatchlistInfo jobdispatchInfo) {
-		// TODO Auto-generated method stub
 		dao.delete(jobdispatchInfo);
 		String sql="delete from t_equ_jobdispatch where jobdispatchNo='"+jobdispatchInfo.getNo()+"'";
 		dao.executeNativeUpdate(sql);
@@ -415,7 +414,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	 * 更新工单状态
 	 */
 	public Boolean updateJobdispatchStatus(String dispatchId, String status,String nowDate,String flag) {
-		// TODO Auto-generated method stub
 		try{
 			if("0".equals(flag))  //只启动选中工单
 			{
@@ -437,7 +435,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	
 	@Override
 	public Boolean updateJobInfoStatusWhenAddJobPlan(String jobId,String status) {
-		// TODO Auto-generated method stub
 		try{
 			String sql = "update t_job_info t set t.status="+Integer.valueOf(status) + " where t.id="+Long.valueOf(jobId);
 			dao.executeNativeUpdate(sql);
@@ -458,7 +455,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	
 	@Override
 	public List<Map<String,Object>> getStatusByJobPlanIdWhenStop(long jobPlanId) {
-		// TODO Auto-generated method stub
 		String hql = "SELECT NEW MAP(t.status as status)"
 				+" FROM TJobInfo t"
 				+" WHERE t.TJobplanInfo.id="+jobPlanId+" and t.status=40 or t.status=50 ";
@@ -501,193 +497,232 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			e.printStackTrace();
 		}
 		return false;
-	}
-	
-	
-	@Override
-	/**
-	 * 更新工单计划状态当为工单为结束状态时
-	 */
-	public Boolean updateJobPlanInfoStatusByjobStatusWhenStop(String jobPlanId,String nowDate,String status) {
-		try{
-			String sql=null;
-			String hql=null;
-			if(status=="50")
-			{
-				 sql = "update t_jobplan_info t set t.status="+Integer.valueOf(status) +" where t.id="+Integer.valueOf(jobPlanId);
-				 dao.executeNativeUpdate(sql);
-			}
-			else if(status=="60")
-			{
-				 hql="select new MAP(jobPlan.realStarttime as rtime) " +
-							"from TJobplanInfo jobPlan where jobPlan.id="+Integer.valueOf(jobPlanId)+" and jobPlan.realStarttime is NULL";
-					List<Map<String,Object>> realStartTimeList=dao.executeQuery(hql);
-					if(realStartTimeList!=null&&realStartTimeList.size()>0) {
-						 sql = "update t_jobplan_info t set t.status="+Integer.valueOf(status) + ",t.real_endtime='"+nowDate+"' where t.id="+Integer.valueOf(jobPlanId);
-						 dao.executeNativeUpdate(sql);
-					}
-			}
-		  return true;
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	@Override
-	/**
-	 * 更新工单状态当为结束状态时
-	 */
-	public Boolean updateJobDispatchWhenStop(String jobdispatchId,String nowDate,String status,String flag) {
-		try{
-			if("0".equals(flag)){
-				String hql = "update t_jobdispatchlist_info t set t.status="+Integer.valueOf(status) + ",t.real_endtime='"+nowDate+"' where t.id="+Long.valueOf(jobdispatchId);
-				dao.executeNativeUpdate(hql);	
-			}else if("1".equals(flag)){
-				TJobdispatchlistInfo tJobdispatchlistInfo=dao.get(TJobdispatchlistInfo.class,Long.valueOf(jobdispatchId));
-				String hql = "update t_jobdispatchlist_info t set t.status="+Integer.valueOf(status) + ",t.real_endtime='"+nowDate+"' where batchNo='"+tJobdispatchlistInfo.getBatchNo()+"'";
-				dao.executeNativeUpdate(hql);
-			}
-		    return true;
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return false;
-		
-	}
-	
-	@Override
-	/**
-	 * 工单启动时查找对应设备下有无其它已启动的工单
-	 */
-	public boolean getDispatchStatusByEquId(String equId) {
-		String hql = "SELECT NEW MAP(jobdispatch.id AS Id)"
-				+" FROM TJobdispatchlistInfo jobdispatch"
-				+" WHERE jobdispatch.TEquipmentInfo.equId="+Integer.valueOf(equId)+" and (jobdispatch.status=40 or jobdispatch.status=50)";
-		List<Map<String, Object>> rs=dao.executeQuery(hql);
-		if(null!=rs&&rs.size()>0)
-		{
-			return false;
-		}else{
-			return true;
-		}
-	}
-	
-	
-	/**
-	 * 工单暂停
-	 */
-	public Boolean setStatusToOldstatus(String dispatchId,String status,String flag){
-			try{
-				if("0".equals(flag)){
-					String hql1 = "update t_jobdispatchlist_info t set t.oldStatus = t.status where t.id="+Long.valueOf(dispatchId);
-					dao.executeNativeUpdate(hql1);
-					String hql2 = "update t_jobdispatchlist_info t set t.status = 80 where t.id="+Long.valueOf(dispatchId);
-					dao.executeNativeUpdate(hql2);	
-				}
-				else if("1".equals(flag)){
-					TJobdispatchlistInfo tJobdispatchlistInfo=dao.get(TJobdispatchlistInfo.class,Long.valueOf(dispatchId));
-						String hql1 = "update t_jobdispatchlist_info t set t.oldStatus = t.status where t.status != 80 and batchNo='"+tJobdispatchlistInfo.getBatchNo()+"'";
-						dao.executeNativeUpdate(hql1);
-						String hql2 = "update t_jobdispatchlist_info t set t.status = 80 where  batchNo='"+tJobdispatchlistInfo.getBatchNo()+"'";
-						dao.executeNativeUpdate(hql2);	
-				}
-				return true;
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		return false;
-	}
-	
-	/**
-	 *	工单恢复
-	 */
-	public Boolean updateJobdispatchWhenRecover(String dispatchId,String status,String flag){
-			try{
-				String hql1="";
-				if("0".equals(flag)){
-					hql1 = "update t_jobdispatchlist_info t set t.status = t.oldStatus where t.id="+Long.valueOf(dispatchId);
-				}else if("1".equals(flag))
-				{
-					TJobdispatchlistInfo tJobdispatchlistInfo=dao.get(TJobdispatchlistInfo.class,Long.valueOf(dispatchId));
-					hql1 = "update t_jobdispatchlist_info t set t.status = t.oldStatus where t.oldStatus is not null and batchNo='"+tJobdispatchlistInfo.getBatchNo()+"'";
-				}
-				dao.executeNativeUpdate(hql1);
-				return true;
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		return false;
-	}
-	
-	
-	/**
-	 * 工单新建 --通过零件名称得到工艺方案ID得到工序清单
-	 */
-	public List<Map<String,Object>> getProcessByProcessPlanId(String nodeid,String processPlanId){
-		String hql = "SELECT NEW MAP(" 
-				+" c.id as id,"            //工序ID ===>
-				+" c.no as no,"            //工序编码
-				+" c.name as cname,"       //工序名称
-				+" c.theoryWorktime as theoryWorktime,"   //节拍时间
-				+" c.processDuration as processDuration," //工序连续
-				+" c.TProcessplanInfo.id as pid,"     //工艺方案ID
-				+" c.TProcessplanInfo.name as pname,"  //工艺方案名称
-				+" b.id as bid "             //工艺方案ID
-				+")"
-				+" FROM TProcessplanInfo b ,TProcessInfo c "
-				+" WHERE  b.id=c.TProcessplanInfo.id "
-				+ "AND  c.status = 0  "
-				+ "AND b.id = '"+processPlanId+"' ";
-		List<Map<String,Object>> lst = dao.executeQuery(hql);
-		
-		return lst;
-		
-	}
-	
-	/**
-	 * 工单新建 -- 通过设备类型ID得到设备类型名称
-	 */
-	public String getPartTypeNameById(String eduTypeId){
-		String hql = "SELECT NEW MAP(" 
-				+" t.id as id,"            
-				+" t.equipmentType as name)"
-				+" FROM TEquipmenttypeInfo t "
-				+" WHERE  t.id = '"+eduTypeId+"' ";
-		List<Map<String,Object>> lst = dao.executeQuery(hql);
-		String name = "";
-		if(lst.size()>0){
-			Map<String,Object> map = lst.get(0);
-            name  = (String)map.get("name");
-		}
-		return name;			
-	}
-	
-	/**
-	 * 工单新建 -- 工单保存 --工序直接生成的工单
-	 */
-	public void saveDispatch(JobdispatchAddBean jobdispatchAddBean){
-		List<Map<String,Object>> jobdispatchlist = jobdispatchAddBean.getJobdispatchlist();
-		for(Map<String, Object> gg : jobdispatchlist){
-			TJobdispatchlistInfo tjp = new TJobdispatchlistInfo();
-			tjp.setNo((String)gg.get("dno"));
-			tjp.setName((String)gg.get("dname"));
-			tjp.setBatchNo((String)gg.get("batchNo"));
-			tjp.setTaskNum((String)gg.get("taskNum"));
-			tjp.setProcessNum(Integer.parseInt((String)gg.get("num")));
+    }
+
+
+
+
+   
+
+
+
+
+
+
+
+
+   
+
+    @Override
+    /**
+     * 更新工单计划状态当为工单为结束状态时
+     */
+    public Boolean updateJobPlanInfoStatusByjobStatusWhenStop(String jobPlanId, String nowDate, String status) {
+        try {
+            String sql = "update t_jobplan_info t set t.status=" + Integer.valueOf(status) + " where t.id=" + Integer.valueOf(jobPlanId);
+            if (status.equals("50")) {
+                dao.executeNativeUpdate(sql);
+            } else if (status.equals("60")) {
+                String hql = "select new MAP(jobPlan.realStarttime as rtime) " +
+                        "from TJobplanInfo jobPlan where jobPlan.id=" + Integer.valueOf(jobPlanId) + " and jobPlan.realStarttime is NULL";
+                List<Map<String, Object>> realStartTimeList = dao.executeQuery(hql);
+                if (realStartTimeList != null && realStartTimeList.size() > 0) {
+                    sql = "update t_jobplan_info t set t.status=" + Integer.valueOf(status) + ",t.real_endtime='" + nowDate + "' where t.id=" + Integer.valueOf(jobPlanId);
+                    dao.executeNativeUpdate(sql);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    /**
+     * 更新工单状态当为结束状态时
+     */
+    public Boolean updateJobDispatchWhenStop(String jobdispatchId, String nowDate, String status, String flag) {
+        try {
+            if ("0".equals(flag)) {
+                String hql = "update t_jobdispatchlist_info t set t.status=" + Integer.valueOf(status) + ",t.real_endtime='" + nowDate + "' where t.id=" + Long.valueOf(jobdispatchId);
+                dao.executeNativeUpdate(hql);
+            } else if ("1".equals(flag)) {
+                TJobdispatchlistInfo tJobdispatchlistInfo = dao.get(TJobdispatchlistInfo.class, Long.valueOf(jobdispatchId));
+                String hql = "update t_jobdispatchlist_info t set t.status=" + Integer.valueOf(status) + ",t.real_endtime='" + nowDate + "' where batchNo='" + tJobdispatchlistInfo.getBatchNo() + "'";
+                dao.executeNativeUpdate(hql);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+    @Override
+    /**
+     * 工单启动时查找对应设备下有无其它已启动的工单
+     */
+    public boolean getDispatchStatusByEquId(String equId) {
+        String hql = "SELECT NEW MAP(jobdispatch.id AS Id)"
+                + " FROM TJobdispatchlistInfo jobdispatch"
+                + " WHERE jobdispatch.TEquipmentInfo.equId=" + Integer.valueOf(equId) + " and (jobdispatch.status=40 or jobdispatch.status=50)";
+        List<Map<String, Object>> rs = dao.executeQuery(hql);
+//		if(rs != null && rs.size()>0) return false;
+//        else return true;
+        return !(rs != null && rs.size() > 0);
+
+    }
+
+
+    /**
+     * 工单暂停
+     */
+    public Boolean setStatusToOldstatus(String dispatchId, String status, String flag) {
+        try {
+            if ("0".equals(flag)) {
+                String hql1 = "update t_jobdispatchlist_info t set t.oldStatus = t.status where t.id=" + Long.valueOf(dispatchId);
+                dao.executeNativeUpdate(hql1);
+                String hql2 = "update t_jobdispatchlist_info t set t.status = 80 where t.id=" + Long.valueOf(dispatchId);
+                dao.executeNativeUpdate(hql2);
+            } else if ("1".equals(flag)) {
+                TJobdispatchlistInfo tJobdispatchlistInfo = dao.get(TJobdispatchlistInfo.class, Long.valueOf(dispatchId));
+                String hql1 = "update t_jobdispatchlist_info t set t.oldStatus = t.status where t.status != 80 and batchNo='" + tJobdispatchlistInfo.getBatchNo() + "'";
+                dao.executeNativeUpdate(hql1);
+                String hql2 = "update t_jobdispatchlist_info t set t.status = 80 where  batchNo='" + tJobdispatchlistInfo.getBatchNo() + "'";
+                dao.executeNativeUpdate(hql2);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 工单恢复
+     */
+    public Boolean updateJobdispatchWhenRecover(String dispatchId, String status, String flag) {
+        try {
+            String hql1 = "";
+            if ("0".equals(flag)) {
+                hql1 = "update t_jobdispatchlist_info t set t.status = t.oldStatus where t.id=" + Long.valueOf(dispatchId);
+            } else if ("1".equals(flag)) {
+                TJobdispatchlistInfo tJobdispatchlistInfo = dao.get(TJobdispatchlistInfo.class, Long.valueOf(dispatchId));
+                hql1 = "update t_jobdispatchlist_info t set t.status = t.oldStatus where t.oldStatus is not null and batchNo='" + tJobdispatchlistInfo.getBatchNo() + "'";
+            }
+            dao.executeNativeUpdate(hql1);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    /**
+     * 工单新建 --通过零件名称得到工艺方案ID得到工序清单
+     */
+    public List<Map<String, Object>> getProcessByProcessPlanId(String nodeid, String processPlanId) {
+        String hql = "SELECT NEW MAP("
+                + " c.id as id,"            //工序ID ===>
+                + " c.no as no,"            //工序编码
+                + " c.name as cname,"       //工序名称
+                + " c.theoryWorktime as theoryWorktime,"   //节拍时间
+                + " c.processDuration as processDuration," //工序连续
+                + " c.TProcessplanInfo.id as pid,"     //工艺方案ID
+                + " c.TProcessplanInfo.name as pname,"  //工艺方案名称
+                + " b.id as bid "             //工艺方案ID
+                + ")"
+                + " FROM TProcessplanInfo b ,TProcessInfo c "
+                + " WHERE  b.id=c.TProcessplanInfo.id "
+                + "AND  c.status = 0  "
+                + "AND b.id = '" + processPlanId + "' ";
+        return dao.executeQuery(hql);
+
+
+    }
+
+    /**
+     * 工单新建 -- 通过设备类型ID得到设备类型名称
+     */
+    public String getPartTypeNameById(String eduTypeId) {
+        String hql = "SELECT NEW MAP("
+                + " t.id as id,"
+                + " t.equipmentType as name)"
+                + " FROM TEquipmenttypeInfo t "
+                + " WHERE  t.id = '" + eduTypeId + "' ";
+        List<Map<String, Object>> lst = dao.executeQuery(hql);
+        String name = "";
+        if (lst.size() > 0) {
+            Map<String, Object> map = lst.get(0);
+            name = (String) map.get("name");
+        }
+        return name;
+    }
+
+    /**
+     * 工单新建 -- 工单保存 --工序直接生成的工单
+     */
+    public void saveDispatch(JobdispatchAddBean jobdispatchAddBean) {
+        List<Map<String, Object>> jobdispatchlist = jobdispatchAddBean.getJobdispatchlist();
+        for (Map<String, Object> gg : jobdispatchlist) {
+            TJobdispatchlistInfo tjp = new TJobdispatchlistInfo();
+            tjp.setNo((String) gg.get("dno"));
+            tjp.setName((String) gg.get("dname"));
+            tjp.setBatchNo((String) gg.get("batchNo"));
+            tjp.setTaskNum((String) gg.get("taskNum"));
+            tjp.setProcessNum(Integer.parseInt((String) gg.get("num")));
 			TProcessInfo tProcessInfo=null;    //工序
-			if(!StringUtils.isEmpty(gg.get("id").toString())){
-				tProcessInfo=dao.get(TProcessInfo.class, Long.valueOf(gg.get("id").toString()));
-			}
-			tjp.setTheoryWorktime(tProcessInfo.getTheoryWorktime());
-			tjp.setTProcessInfo(tProcessInfo);
-			tjp.setCreateDate(new Date());
-			TEquipmenttypeInfo tEquipmenttypeInfo=null; //设备类型ID
-			if(!StringUtils.isEmpty((String)gg.get("equTypeId"))){
-				tEquipmenttypeInfo=dao.get(TEquipmenttypeInfo.class, Long.valueOf((String)gg.get("equTypeId")));
+            if (!StringUtils.isEmpty(gg.get("id").toString())) {
+                tProcessInfo = dao.get(TProcessInfo.class, Long.valueOf(gg.get("id").toString()));
+                tjp.setTheoryWorktime(tProcessInfo.getTheoryWorktime());
+                tjp.setTProcessInfo(tProcessInfo);
+            }
+
+            tjp.setCreateDate(new Date());
+            TEquipmenttypeInfo tEquipmenttypeInfo = null; //设备类型ID
+            if (!StringUtils.isEmpty((String) gg.get("equTypeId"))) {
+                tEquipmenttypeInfo = dao.get(TEquipmenttypeInfo.class, Long.valueOf((String) gg.get("equTypeId")));
+            }
+            tjp.setTEquipmenttypeInfo(tEquipmenttypeInfo);
+            String nodeid = jobdispatchAddBean.getNodeid();
+            tjp.setNodeid(nodeid);
+            tjp.setFinishNum(0);    //完成数量
+            tjp.setOnlineNumber(0);  //上线数量
+            tjp.setPlanStarttime(jobdispatchAddBean.getStartDate()); //计划开始时间
+            tjp.setPlanEndtime(jobdispatchAddBean.getEndDate());     //计划结束时间
+            tjp.setBadQuantity(0);
+            tjp.setGoodQuantity(0);
+            if (!StringUtils.isEmpty(jobdispatchAddBean.getPlanjobId()))
+                tjp.setJobplanId(Long.parseLong(jobdispatchAddBean.getPlanjobId()));//工单计划id
+            //工单新建时为待派工状态
+            tjp.setStatus(20);                                       //状态
+            tjp.setErpScrapNum(0);
+            tjp.setWisScrapNum(0);
+            tjp.setDutyScrapNum(0);
+            dao.save(tjp);
+            
+            /*********************增加工单物料信息 ADD BY FW 20141121********************/
+			String hql2=" select new Map(r.requirementNum as reqNum,"
+					+ " t.id as materialId)"
+					+ " from"
+					+ " TProcessmaterialInfo r,TMaterailTypeInfo t"
+					+ " where r.TMaterailTypeInfo.id = t.id"
+					+ " and r.TProcessInfo.id ="+tProcessInfo.getId()+"";
+			List<Map<String,Object>> materialList=dao.executeQuery(hql2);
+			for(Map<String,Object> tt:materialList){
+				TJobdispatchMaterial tj =new TJobdispatchMaterial();
+				tj.setJobdispatchId(Integer.parseInt(tjp.getId().toString()));
+				tj.setMaterialId(Integer.parseInt(tt.get("materialId").toString()));
+				tj.setReqNum(Double.parseDouble(tt.get("reqNum").toString()));
+				tj.setRecNum(0.0);
+				tj.setPrice(0.00);
+				dao.save(TJobdispatchMaterial.class,tj);
 			}
 			tjp.setTEquipmenttypeInfo(tEquipmenttypeInfo);
-			String nodeid  = jobdispatchAddBean.getNodeid();
+			nodeid  = jobdispatchAddBean.getNodeid();
 			tjp.setNodeid(nodeid);
 			tjp.setFinishNum(0);    //完成数量
 			tjp.setOnlineNumber(0);  //上线数量
@@ -780,6 +815,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单修改  --通过设备类型ID得到物料
 	 */
+
 //	public List<Map<String,Object>> getMaterialInfo(String eduTypeId){
 //	//通过设备类型ID得到物料
 //	String hql1 = "SELECT NEW MAP(" 

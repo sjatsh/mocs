@@ -2,7 +2,6 @@ package smtcl.mocs.beans.infoManage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import java.util.Date;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-
 
 import org.dreamwork.persistence.ServiceFactory;
 import org.dreamwork.util.IDataCollection;
@@ -28,7 +26,6 @@ import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.services.report.IReportService;
 
 
-
 /**
  * 产品生产事件查询
  * @author liguoqiang
@@ -38,9 +35,14 @@ import smtcl.mocs.services.report.IReportService;
 @ManagedBean(name="productionEventSearchBean")
 @ViewScoped
 public class ProductionEventSearchBean  extends PageListBaseBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
 	//报表服务接口实例
 	private IReportService reportService = (IReportService)ServiceFactory.getBean("reportService");
+	
 	private IPartService partService=(IPartService)ServiceFactory.getBean("partService");
+	
 	private IJobPlanService jobPlanService = (IJobPlanService)ServiceFactory.getBean("jobPlanService");
 	//报表时间
 	private Date startTime;
@@ -57,6 +59,7 @@ public class ProductionEventSearchBean  extends PageListBaseBean implements Seri
 	private TreeNode jobroot;//工单显示
 	private TreeNode jobselectroot;//工单选中
 	
+	@SuppressWarnings("unused")
 	public ProductionEventSearchBean(){
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		nodeid=session.getAttribute("nodeid")+"";
@@ -85,6 +88,7 @@ public class ProductionEventSearchBean  extends PageListBaseBean implements Seri
 	/**
 	 * 批次下拉框改变事件
 	 */
+	@SuppressWarnings("unused")
 	public void selectJobPlanChange(){
 		jobdispatchList=jobPlanService.getJobdispatchList(nodeid,null,jobPlanId);
 		jobroot = new DefaultTreeNode("Root", null);
@@ -95,6 +99,7 @@ public class ProductionEventSearchBean  extends PageListBaseBean implements Seri
 	/**
 	 * 工单键盘按下事件
 	 */
+	@SuppressWarnings("unused")
 	public void onkeyupJobList() {//工单编号按下查询事件
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		String nodeid=session.getAttribute("nodeid")+"";
@@ -109,6 +114,7 @@ public class ProductionEventSearchBean  extends PageListBaseBean implements Seri
 	 * 工单下拉选择事件
 	 * @param event
 	 */
+	@SuppressWarnings("unchecked")
 	public void OnTreeNodeSelect(NodeSelectEvent event){//工单编号选择事件
 		Map<String,Object> map=(Map<String,Object>)event.getTreeNode().getData();
 		String jobdisplatNoselect=map.get("no").toString();//获取工单编号
@@ -121,6 +127,7 @@ public class ProductionEventSearchBean  extends PageListBaseBean implements Seri
 	/**
 	 * 加工事件分析重写的分页方法
 	 */
+	@SuppressWarnings("serial")
 	@Override
 	public PageListDataModel getDefaultDataModel() {
 			if (defaultDataModel == null) {
@@ -138,7 +145,6 @@ public class ProductionEventSearchBean  extends PageListBaseBean implements Seri
 
 	@Override
 	public PageListDataModel getExtendDataModel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	public Date getStartTime() {

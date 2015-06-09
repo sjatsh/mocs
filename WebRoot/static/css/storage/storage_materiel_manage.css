@@ -46,6 +46,7 @@
 	text-indent: 0.5em;
 	border: solid 1px #000000;
 	border-radius: 5px;
+
 }
 
 @-moz-document url-prefix() {

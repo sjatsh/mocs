@@ -1,7 +1,5 @@
 var imgPercent = hjb51/1080; 
-/**
- * 加载图表数据
- */
+
 function loadData() {
 var jsonData = document.getElementById("myform:beanvalue").value;
 //alert(jsonData);
@@ -15,10 +13,7 @@ if(null !=jsonData && ""!=jsonData ){
 }
 }
 
-/**
- * 创建柱状图
- * @param barModel
- */
+
 function generateChart(barModel) {
     var chart;
         chart = new Highcharts.Chart({

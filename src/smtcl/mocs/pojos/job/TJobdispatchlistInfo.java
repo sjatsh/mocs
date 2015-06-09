@@ -371,7 +371,7 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 		this.taskNum = taskNum;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "processID")
 	public TProcessInfo getTProcessInfo() {
 		return TProcessInfo;

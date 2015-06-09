@@ -143,6 +143,7 @@ public class DESUtil {
       
     public static void main(String[] args) {       
          
+
         String strEnc = DESUtil.getEncString("b21info");// 加密字符串,返回String的密文       
         String strEnc2 = DESUtil.getEncString("a3infosql");// 加密字符串,返回String的密文       
         System.out.println(strEnc); 
@@ -150,5 +151,6 @@ public class DESUtil {
       
         /*String strDes = DESUtil.getDesString("lOc7rwa3kloI6T3xxCeWHw==");// 把String 类型的密文解密        
         System.out.println(strDes);   */    
+
     }       
 } 

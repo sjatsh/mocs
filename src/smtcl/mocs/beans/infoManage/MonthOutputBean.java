@@ -22,6 +22,8 @@ import smtcl.mocs.utils.authority.DateUtil;
 @ViewScoped
 public class MonthOutputBean implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
 	//报表数据集
 	private List<Map<String,Object>> outData = new ArrayList<Map<String,Object>>();
 	

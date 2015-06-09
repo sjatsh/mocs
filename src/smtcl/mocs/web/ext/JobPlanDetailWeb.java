@@ -21,8 +21,9 @@ import smtcl.mocs.services.storage.ISetUnitServcie;
 
 /**
  * 作业计划-查询条件-ajax方法
- * @author songkaiang
- *
+ * @文件：JobPlanDetailWeb.java
+ * @作者： songkaiang
+ * @创建日期：2014年10月28日
  */
 @Controller
 public class JobPlanDetailWeb {
@@ -37,6 +38,7 @@ public class JobPlanDetailWeb {
 	private IJobDispatchService jobDispatchService = (IJobDispatchService)ServiceFactory.getBean("jobDispatchService");
 	
 	private IDeviceService baogongService=(IDeviceService)ServiceFactory.getBean("deviceService");
+	
 	/**
 	 * 单位设置接口
 	 */

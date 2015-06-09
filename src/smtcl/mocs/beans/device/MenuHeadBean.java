@@ -3,6 +3,7 @@ package smtcl.mocs.beans.device;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -311,6 +312,7 @@ public class MenuHeadBean implements Serializable {
 		StringUtils.saveCookie(request, response, "defNode", "");
 //		StringUtils.delCookie(request, response, "menuActive");
 //		StringUtils.delCookie(request, response, "defNode");
+
 	}
 	
 	/**

@@ -7,168 +7,165 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-
-<link rel="stylesheet" href="../css/admin/program_info.css" type="text/css"></link>
+	<style type="text/css">
+		td{
+			word-break: break-all;
+		}
+	</style>
+	<link rel="stylesheet" href="../css/b21.css" type="text/css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/porgram_info.css" />
+	<link rel="stylesheet" href="../css/b22.css" type="text/css"></link>
 	
-
-<div class="toolbar" id="equipment_type_center_right_top">
-	<h:inputText id="txt" value="#{ProgramInfoBean.searchStr}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" 
-	onblur="searchBlur('myform:txt');" /> 		
-	<h:commandLink value="查询" render=":myform:carList" styleClass="iconBtn-toolbar iconBtn-search" action="#{ProgramInfoBean.query}" />
-	<div class="split-toolbar"></div>	
-	<p:commandLink value="新建" update=":myform:addTpr" styleClass="iconBtn-toolbar iconBtn-search" onclick="addProgram.show()" />
-	<div class="split-toolbar"></div>
-	<p:commandLink value="删除" update=":myform:set" styleClass="iconBtn-toolbar iconBtn-search" oncomplete="ondelete();" 
-		actionListener="#{ProgramInfoBean.onSelected}" />
-	<p:commandButton id="delete" value="删除" update=":myform:carList :myform:displayMulti"  actionListener="#{ProgramInfoBean.deleteTprogramInfo}"  style="display: none;"/>
-	<div class="split-toolbar"></div> 
-</div>
-<div class="table-p-bg"></div>
-<p:dataTable var="tpro" value="#{ProgramInfoBean.mediumTprogramModel}" id="carList" editable="true" 
-   	  sortMode="multiple" dynamic="true" selection="#{ProgramInfoBean.selectedProgram}" paginator="true" rows="22" 
-   	  paginatorPosition="bottom" styleClass="table-p">
-   	  
-   	<p:ajax event="rowEdit" listener="#{ProgramInfoBean.updateTprogramInfo}" update=":myform:carList :myform:messages" />
-       <p:ajax event="rowEditCancel" listener="#{ProgramInfoBean.onCancel}" update=":myform:carList" />
-   	  
-   	<p:column selectionMode="multiple" />
-   	<p:column headerText="流水号" >
-           <p:cellEditor >
-               <f:facet name="output" >
-                   <h:outputText value="#{tpro.id}" />
-               </f:facet>
-               <f:facet name="input" >
-                   <h:outputText value="#{tpro.id}" />
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-   	 <p:column headerText="程序编号" >
-           <p:cellEditor >
-               <f:facet name="output" >
-                   <h:outputText value="#{tpro.progNo}" />
-               </f:facet>
-               <f:facet name="input" >
-                   <p:inputText value="#{tpro.progNo}" styleClass="input"/>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-
-       <p:column headerText="程序名称">
-           <p:cellEditor>
-               <f:facet name="output">
-                   <h:outputText value="#{tpro.progName}" />
-               </f:facet>
-               <f:facet name="input">
-               	<p:inputText value="#{tpro.progName}" styleClass="input"/>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-       <p:column headerText="创建人">
-           <p:cellEditor>
-               <f:facet name="output">
-                   <h:outputText value="#{tpro.creator}"/>
-               </f:facet>
-               <f:facet name="input">
-               	<p:inputText value="#{tpro.creator}" styleClass="input"  readonly="true"/>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-       <p:column headerText="创建时间">
-           <p:cellEditor>
-               <f:facet name="output">
-                   <h:outputText value="#{tpro.createTime}" readonly="true">
-                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
-                   </h:outputText>
-               </f:facet>
-               <f:facet name="input">
-               	<p:inputText value="#{tpro.createTime}" styleClass="input" readonly="true"/>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-      <p:column headerText="更新人">
-           <p:cellEditor>
-               <f:facet name="output">
-                   <h:outputText value="#{tpro.updator}"/>
-               </f:facet>
-               <f:facet name="input">
-               	<p:inputText value="#{tpro.updator}" styleClass="input" readonly="true"/>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-        <p:column headerText="更新时间">
-           <p:cellEditor>
-               <f:facet name="output">
-                   <h:outputText value="#{tpro.updateTime}">
-                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"></f:convertDateTime>
-                    </h:outputText>
-               </f:facet>
-               <f:facet name="input">
-              	 	<p:inputText value="#{tpro.updateTime}" styleClass="input" readonly="true"/>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-       <p:column headerText="程序内容">
-           <p:cellEditor>
-               <f:facet name="output">
-                   <h:outputText value="#{tpro.content}"/>
-               </f:facet>
-               <f:facet name="input">
-               	<p:inputText value="#{tpro.content}" styleClass="input" />
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-
-       <p:column headerText="操作">
-           <p:rowEditor />
-       </p:column>	
-</p:dataTable>  
+	<!-- 上部  增删改 -->
+<div style="position:relative; width: 100%;height: 100%;">
+	<div class="headDiv" id="equipment_type_center_right_top">
+		<h:inputText id="txt" value="#{ProgramInfoBean.searchStr}" styleClass="border" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 		
+		<p:commandButton value="查询" update=":myform:carList" styleClass="delete" actionListener="#{ProgramInfoBean.query}" oncomplete="bgReposition($('.table'));"></p:commandButton>
+		<div class="button-split"></div>  	
+	    <p:commandButton value="新增" update=":myform:addTpr" styleClass="delete" oncomplete="addProgram.show();bgReposition($('.table'));"></p:commandButton>
+	</div>
+	<div class="div-content-top-shadow">
+		<img src="../images/demo/right_top_shadow.png" />
+	</div>
+     
+     <!-- 下部  程序配置列表 -->
+     <div class="table">
+	     <p:dataTable var="tpro" value="#{ProgramInfoBean.programList}" id="carList" editable="true" 
+	    	  dynamic="true" paginator="true" rows="17" 
+	    	  paginatorPosition="bottom">
+	    	
+	        <p:column headerText="程序名称">#{tpro.name}</p:column>
+	        <p:column headerText="程序版本">#{tpro.versionNo}</p:column>
+	        <p:column headerText="是否激活">#{tpro.status}</p:column>
+	        <p:column headerText="创建人">#{tpro.creator}</p:column>
+	        <p:column headerText="零件编号">#{tpro.partNo}</p:column>
+	        <p:column headerText="工序名称">#{tpro.processName}</p:column>  
+	        <p:column headerText="是否主程序">#{tpro.isMainProgram}</p:column>  
+	        <p:column headerText="程序说明">#{tpro.des}</p:column>    
+	        <p:column headerText="操作">
+	        
+	        <a onclick="setId(#{tpro.id})" style="color:#3A5FCD">修改</a>
+	        <a onclick="setDeleteId(#{tpro.id})" style="color:#3A5FCD">删除</a>
+	        
+	        <a onclick="setActivityId(#{tpro.id})" style="color:#3A5FCD;display: #{tpro.activityFlag}">激活</a>
+	      
+	        <a onclick="setNotActivityId(#{tpro.id})" style="color:#3A5FCD;display: #{tpro.notActivityFlag}">取消激活</a>
+	      
+	        </p:column>
+	    </p:dataTable>  
+	</div>
  
     <!-- 添加 -->
-<p:dialog widgetVar="addProgram" resizable="false">
-	<h:panelGroup id="addTpr">
-		<table>
-			<tr>
-				<td>程序编号：<font style="color:red;">*</font></td>
-				<td><h:inputText value="#{ProgramInfoBean.addTpro.progNo}" id="progNo" styleClass="input-toolbar"></h:inputText></td>
-				<td><div style="color: gray;">例：BZLP-SETUP01</div></td>
-			</tr>
-			<tr>
-				<td>程序名称：<font style="color:red;">*</font></td>
-				<td><h:inputText value="#{ProgramInfoBean.addTpro.progName}" id="progName" styleClass="input-toolbar"></h:inputText></td>
-				<td><div style="color: gray;">例：BZLP-SETUP01</div></td>
-			</tr>
-			<tr>
-				<td>内容：</td>
-				<td colspan="2">
-					<h:inputText value="#{ProgramInfoBean.addTpro.content}" styleClass="input-toolbar" />
-				</td>
-			</tr>
-		</table>
-	 	<div class="headDivduan">
-			<p:commandLink value="新增" onclick="onsubbtn()" styleClass="iconBtn-toolbar iconBtn-search" style="margin-left:1.8rem"/>
-			<p:commandButton actionListener="#{ProgramInfoBean.addTprogramInfo}"  value="增加" id="addcxbtn"
-				update=":myform:carList :myform:addTpr :myform:messages" oncomplete="addProgram.hide()" style="display:none;">
-			</p:commandButton>	    				
-			<p:growl id="messages" showDetail="true"/>	
-	 	</div>
-	</h:panelGroup>
-</p:dialog>
+      <p:dialog widgetVar="addProgram" resizable="false">
+    	<h:panelGroup id="addTpr">
+    		<table>
+    			<tr>
+    				<td>选择程序：<font style="color:red;">*</font></td>
+    				<td><rich:fileUpload doneLabel="上传成功" noDuplicate="true" serverErrorLabel="文件过大，导致上传失败" fileUploadListener="#{ProgramInfoBean.listener}"
+    				   id="upLoad" addLabel="添加文件" deleteLabel="删除文件" uploadLabel="上传文件" maxFilesQuantity="1" style="height:150px"  >
+    				   <a4j:ajax event="uploadcomplete" render=":myform:progName :myform:progVersion" ></a4j:ajax>
+    				   </rich:fileUpload>
+    				   </td>
+    			</tr>
+    			<tr>
+    				<td>程序名称：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{ProgramInfoBean.addTpro.progName}" id="progName" disabled="true"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>程序版本：<font style="color:red;">*</font></td>
+    				<td><h:inputText value="#{ProgramInfoBean.addTpro.versionNo}" id="progVersion" disabled="true"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>程序说明：</td>
+    				<td>
+    					<h:inputTextarea value="#{ProgramInfoBean.addTpro.describe2}" style="height:150px"></h:inputTextarea>
+    				</td>
+    			</tr>
+    		</table>
+	    	<div class="headDivduan">
+				<p:commandButton  value="增加" styleClass="delete" onclick="onsubbtn()"></p:commandButton>
+				<p:commandButton actionListener="#{ProgramInfoBean.addTprogramInfo}"  value="增加" id="addcxbtn"
+					update=":myform:carList :myform:addTpr :myform:messages" oncomplete="addProgram.hide()" style="display:none;">
+				</p:commandButton>	    				
+				<p:growl id="messages" showDetail="true"/>	
+	    	</div>
+    	</h:panelGroup>
+    </p:dialog>
     
-<!-- 删除 -->
-<p:dialog id="multiDialog" height="200" showEffect="fade" hideEffect="explode"  widgetVar="multiCarDialog">
-    <p:dataList id="displayMulti" value="#{ProgramInfoBean.selectedProgram}" var="tpro"></p:dataList>  
-</p:dialog>    
+    <!-- 删除 -->
+    <p:dialog id="multiDialog" height="200" showEffect="fade" hideEffect="explode"  widgetVar="multiCarDialog">
+        <p:dataList id="displayMulti" value="#{ProgramInfoBean.selectedProgram}" var="tpro"></p:dataList>  
+    </p:dialog>  
+    <!-- 修改 --> 
+    <p:dialog widgetVar="editProgram" resizable="false">
+    	<h:panelGroup id="editTpr">
+    		<table>
+    			<tr>
+    				<td>程序名称：</td>
+    				<td><h:inputText value="#{ProgramInfoBean.progName}" id="editProgName" disabled="true"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>程序版本：</td>
+    				<td><h:inputText value="#{ProgramInfoBean.versionNo}" id="editProgVersion" disabled="true"></h:inputText></td>
+    			</tr>
+    			<tr>
+    				<td>程序说明：</td>
+    				<td>
+    					<h:inputTextarea value="#{ProgramInfoBean.des}" id="editProgDes" style="height:110px"></h:inputTextarea>
+    				</td>
+    			</tr>
+    			<tr>
+    			    <td>零件编码：</td>
+    				<td><h:inputText value="#{ProgramInfoBean.materialNo}" id="materialNo" disabled="true"></h:inputText></td>
+    			</tr>
+    			
+    			<tr>
+    			    <td>工序名称：</td>
+    				<td><h:inputText value="#{ProgramInfoBean.processName}" id="processName" disabled="true"></h:inputText></td>
+    			</tr>
+    			<tr><td>关联程序</td>
+    			    <td>
+    			        <p:dataTable var="pro" value="#{ProgramInfoBean.bingProgramList}" id="proList"  
+	    	  					dynamic="true" paginator="true" rows="20" 
+	    	 				 paginatorPosition="bottom">
+					        <p:column headerText="程序名称">#{pro.progName}</p:column>
+					        <p:column headerText="程序版本">#{pro.versionNo}</p:column>
+					        <p:column headerText="是否激活">#{pro.status}</p:column>  
+	                    </p:dataTable>  
+    			    </td>
+    			</tr>
+    		</table>
+	    	<div class="headDivduan">
+				<p:commandButton actionListener="#{ProgramInfoBean.editProgramInfo}"  value="保存" id="addcxbtn2"
+					update=":myform:carList :myform:messages2" oncomplete="editProgram.hide()" styleClass="delete" >
+				</p:commandButton>	    				
+				<p:growl id="messages2" showDetail="true"/>	
+	    	</div>
+    	</h:panelGroup>
+    </p:dialog>  
+    <h:inputHidden value="#{ProgramInfoBean.success}" id="success"></h:inputHidden> 
+    <h:inputHidden value="#{ProgramInfoBean.selected}" id="set"></h:inputHidden>
+    <h:inputHidden value="#{ProgramInfoBean.selectProgramId}" id="selectProgramId"></h:inputHidden>
+     <p:commandButton id="editProgram" update=":myform:editProgName :myform:editProgVersion :myform:editProgDes :myform:materialNo :myform:processName :myform:proList" 
+     styleClass="delete" action="#{ProgramInfoBean.getProgramInfo}"  oncomplete="editProgram.show()"></p:commandButton>
+     
+      <p:commandButton id="deleteProgramCheck" style="display:none;" update=":myform:success"
+       action="#{ProgramInfoBean.checkDeleteProgram}"  oncomplete="deleteProgram()"></p:commandButton>
+      <p:commandButton id="deleteProgram" style="display:none;" update=":myform:carList :myform:success"
+       action="#{ProgramInfoBean.deleteProgramInfo}"  oncomplete="deleteProgramResult()"></p:commandButton>
        
-<h:inputHidden value="#{ProgramInfoBean.selected}" id="set"></h:inputHidden>
-
+        <p:commandButton id="activityProgramCheck" style="display:none;" update=":myform:success"
+       action="#{ProgramInfoBean.checkActivityProgram}"  oncomplete="activityProgram()"></p:commandButton>
+      <p:commandButton id="activityProgram" style="display:none;" update=":myform:carList :myform:success"
+       action="#{ProgramInfoBean.activityProgramInfo}"  oncomplete="activityProgramResult()"></p:commandButton>
+       
+       
+      <p:commandButton id="notActivityProgram" style="display:none;" update=":myform:carList :myform:success"
+       action="#{ProgramInfoBean.notActivityProgramInfo}"  oncomplete="notActivityProgramResult()"></p:commandButton>
+</div>
     <script type="text/javascript">
 	 	//<![CDATA[
-	 		document.getElementById("myform:txt").value="输入编号/名称";
+	 		document.getElementById("myform:txt").value="输入名称/版本";
 	 	     //删除
 		 	 function ondelete(){
 		  	   var temp = document.getElementById("myform:set").value;
@@ -181,7 +178,7 @@
 		  	   }
 		     }
 			 function onsubbtn(){
-	    	   var progNo =document.getElementById("myform:progNo").value;
+	    	   var progNo =document.getElementById("myform:progName").value;
 	    	   var progName =document.getElementById("myform:progName").value;
 	    	   if(null==progNo||""==progNo){
 	    		   alert("请输入程序编号！");
@@ -192,14 +189,72 @@
 	    	   }
 			 }
 		 	 function searchFocus(id){
-	 				if(document.getElementById(id).value=="输入编号/名称/创建人")
+	 				if(document.getElementById(id).value=="输入名称/版本")
 	 					document.getElementById(id).value=""
 	 			}
 	 			
 	 			function searchBlur(id){
 	 				if(document.getElementById(id).value=="")
-	 					document.getElementById(id).value="输入编号/名称/创建人"
+	 					document.getElementById(id).value="输入名称/版本"
 	 			}
+	 			
+	 		function setId(id){
+	 			document.getElementById("myform:selectProgramId").value=id;
+	 			document.getElementById("myform:editProgram").click();   
+	 		}
+	 		
+	 		function setDeleteId(id){
+	 			document.getElementById("myform:selectProgramId").value=id;
+	 			document.getElementById("myform:deleteProgramCheck").click();   
+	 		}
+	 		
+	 		function deleteProgram(){
+	 			var result = document.getElementById("myform:success").value;
+	 			if(result ==""){
+	 				document.getElementById("myform:deleteProgram").click();   
+	 			}else{
+	 				alert(result);
+	 			}
+	 		}
+	 		
+	 		function deleteProgramResult(){
+	 			var result = document.getElementById("myform:success").value;
+	 			if(result =="删除失败"){
+	 				alert(result);
+	 			}
+	 		}
+	 		
+	 		function setActivityId(id){
+	 			document.getElementById("myform:selectProgramId").value=id;
+	 			document.getElementById("myform:activityProgramCheck").click();   
+	 		}
+	 		
+	 		function setNotActivityId(id){
+	 			document.getElementById("myform:selectProgramId").value=id;
+	 			document.getElementById("myform:notActivityProgram").click();  
+	 		}
+	 		
+	 		function activityProgram(){
+	 			var result = document.getElementById("myform:success").value;
+	 			if(result ==""){
+	 				document.getElementById("myform:activityProgram").click();   
+	 			}else{
+	 				alert(result);
+	 			}
+	 		}
+	 		
+	 		function activityProgramResult(){
+	 			var result = document.getElementById("myform:success").value;
+	 			if(result =="激活失败"){
+	 				alert(result);
+	 			}
+	 		}
+	 		function notActivityProgramResult(){
+	 			var result = document.getElementById("myform:success").value;
+	 			if(result =="激活失败"){
+	 				alert("取消激活失败！");
+	 			}
+	 		}
 	    	   
 		//]]>
    </script>   

@@ -102,7 +102,7 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	 * @param equSerialNos 设备序列号
 	 * @return List
 	 */
-	public List getAllEquName(String equSerialNos);
+	public List<TEquipmentInfo> getAllEquName(String equSerialNos);
 	
 	/**
 	 * 获取当前节点下所有设备和运行状态（包括子节点）
@@ -363,7 +363,12 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取设备序列号集合
 	 */
-	public List<Map<String,Object>> getEquTypeMap();
+	public List<Map<String,Object>> getEquTypeMap(String nodeId);
+
+    /**
+     * 获取设备序列号集合
+     */
+    public List<Map<String,Object>> getEquTypeMap();
 	
 	/**
 	 * 获取设备序列号集合(下拉框)
@@ -373,7 +378,7 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	/**
 	 * 获取设备名称集合
 	 */
-	public List<Map<String,Object>> getEquTypeNameMap();
+	public List<Map<String,Object>> getEquTypeNameMapByNodeId(String nodeId);
 	
 	/**
 	 * 获取设备名称集合(下拉框)

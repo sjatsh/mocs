@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.*;
 
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -29,18 +30,19 @@ import smtcl.mocs.utils.device.StringUtils;
 
 /**
  * 信息管理-加工工单明细
- * @author songkaiang
- *
+ * @文件：JobdispatchDetailBean.java
+ * @作者： songkaiang
+ * @创建日期：2014年10月28日
  */
 @ManagedBean(name="jobdispatchDetailBean")
 @ViewScoped
 public class JobdispatchDetailBean implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	//报表服务接口实例
 	private IReportService reportService = (IReportService)ServiceFactory.getBean("reportService");
 	//工单实例接口
 	private IJobDispatchService jobDispatchService = (IJobDispatchService)ServiceFactory.getBean("jobDispatchService");
-
 	//报表数据集
 	private List<Map<String,Object>> outData = new ArrayList<Map<String,Object>>();
 	//批次状态

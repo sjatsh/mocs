@@ -19,6 +19,7 @@ import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.utils.authority.SessionHelper;
 
 /**
+
  * 
  * 作业计划添加Bean
  * @作者 yyh
@@ -687,128 +688,103 @@ public class JobPlanAddBean implements Serializable {
 		return productPlanStatus;
 	}
 
-	public void setProductPlanStatus(String productPlanStatus) {
-		this.productPlanStatus = productPlanStatus;
-	}
 
-	public String getProductPlanName() {
-		return productPlanName;
-	}
+    public String getShow() {
+        return show;
+    }
 
-	public void setProductPlanName(String productPlanName) {
-		this.productPlanName = productPlanName;
-	}
+    public void setShow(String show) {
+        this.show = show;
+    }
 
-	public String getShow() {
-		return show;
-	}
+    public String getProPlanNo() {
+        return proPlanNo;
+    }
 
-	public void setShow(String show) {
-		this.show = show;
-	}
+    public Date getSubmitTime() {
+        return submitTime;
+    }
 
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
+    }
 
-	public String getProPlanNo() {
-		return proPlanNo;
-	}
+    public String getPlanType() {
+        return planType;
+    }
 
+    public void setPlanType(String planType) {
+        this.planType = planType;
+    }
 
-	public void setProPlanNo(String proPlanNo) {
-		this.proPlanNo = proPlanNo;
-	}
+    public List<TJobplanInfo> getpJobPlan() {
+        return pJobPlan;
+    }
 
-	public Date getSubmitTime() {
-		return submitTime;
-	}
+    public void setpJobPlan(List<TJobplanInfo> pJobPlan) {
+        this.pJobPlan = pJobPlan;
+    }
 
-	public void setSubmitTime(Date submitTime) {
-		this.submitTime = submitTime;
-	}
+    public String getpJobPlanId() {
+        return pJobPlanId;
+    }
 
-	public String getPlanType() {
-		return planType;
-	}
+    public void setpJobPlanId(String pJobPlanId) {
+        this.pJobPlanId = pJobPlanId;
+    }
 
-	public void setPlanType(String planType) {
-		this.planType = planType;
-	}
+    public String getIsSuccess() {
+        return isSuccess;
+    }
 
-	public List<TJobplanInfo> getpJobPlan() {
-		return pJobPlan;
-	}
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
 
-	public void setpJobPlan(List<TJobplanInfo> pJobPlan) {
-		this.pJobPlan = pJobPlan;
-	}
+    public List<Map<String, Object>> getAddTask() {
+        return addTask;
+    }
 
-	public String getpJobPlanId() {
-		return pJobPlanId;
-	}
+    public void setAddTask(List<Map<String, Object>> addTask) {
+        this.addTask = addTask;
+    }
 
-	public void setpJobPlanId(String pJobPlanId) {
-		this.pJobPlanId = pJobPlanId;
-	}
+    public String getAddTaskNo() {
+        return addTaskNo;
+    }
 
-	public String getIsSuccess() {
-		return isSuccess;
-	}
+    public void setAddTaskNo(String addTaskNo) {
+        this.addTaskNo = addTaskNo;
+    }
 
-	public void setIsSuccess(String isSuccess) {
-		this.isSuccess = isSuccess;
-	}
+    public String getAddTaskNum() {
+        return addTaskNum;
+    }
 
-	public List<Map<String, Object>> getAddTask() {
-		return addTask;
-	}
+    public void setAddTaskNum(String addTaskNum) {
+        this.addTaskNum = addTaskNum;
+    }
 
-	public void setAddTask(List<Map<String, Object>> addTask) {
-		this.addTask = addTask;
-	}
+    public String getAllocatedNum() {
+        return allocatedNum;
+    }
 
-	public String getAddTaskNo() {
-		return addTaskNo;
-	}
+    public void setAllocatedNum(String allocatedNum) {
+        this.allocatedNum = allocatedNum;
+    }
 
-	public void setAddTaskNo(String addTaskNo) {
-		this.addTaskNo = addTaskNo;
-	}
+    public boolean isAddbool() {
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        if (request.getParameter("planId") != null
+                && !"".equals(request.getParameter("planId"))
+                && !request.getParameter("planId").equals("undefined")) {
+            addbool=true;
+        }
+        return addbool;
+    }
 
-	public String getAddTaskNum() {
-		return addTaskNum;
-	}
-
-	public void setAddTaskNum(String addTaskNum) {
-		this.addTaskNum = addTaskNum;
-	}
-
-	public String getAllocatedNum() {
-		return allocatedNum;
-	}
-
-	public void setAllocatedNum(String allocatedNum) {
-		this.allocatedNum = allocatedNum;
-	}
-
-	public boolean isAddbool() {
-    	HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		if (request.getParameter("planId") != null
-				&& !"".equals(request.getParameter("planId"))
-				&& !request.getParameter("planId").equals("undefined")) {
-			addbool=true;
-		}
-		return addbool;
-	}
-
-	public void setAddbool(boolean addbool) {
-		this.addbool = addbool;
-	}
-
-	public List<Map<String, Object>> getRealaddTask() {
-		return realaddTask;
-	}
-
-	public void setRealaddTask(List<Map<String, Object>> realaddTask) {
-		this.realaddTask = realaddTask;
-	}
+    public List<Map<String, Object>> getRealaddTask() {
+        return realaddTask;
+    }
 
 }

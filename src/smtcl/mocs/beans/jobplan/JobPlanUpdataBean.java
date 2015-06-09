@@ -33,6 +33,8 @@ import smtcl.mocs.utils.device.Constants;
 @ViewScoped
 public class JobPlanUpdataBean implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * 作业计划接口实例
 	 */
@@ -218,6 +220,7 @@ public class JobPlanUpdataBean implements Serializable {
                         }else{
                             status = map.get("statusName").toString();
                         }
+
 					}
 					if(map.get("name")!=null){
 						name = (String)map.get("name");

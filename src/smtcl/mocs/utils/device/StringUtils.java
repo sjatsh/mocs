@@ -12,8 +12,10 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.*;
 import java.util.Map.Entry;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -226,13 +228,11 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 			try {
 				timeSearch[0] = sdf.parse(exp[0]);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
 				timeSearch[1] = sdf.parse(nowTime);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -243,13 +243,11 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 			try {
 				timeSearch[0] = sdf.parse(exp[0]);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
 				timeSearch[1] = sdf.parse(nowTime);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -260,13 +258,11 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 			try {
 				timeSearch[0] = sdf.parse(exp[0]);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
 				timeSearch[1] = sdf.parse(nowTime);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -277,13 +273,11 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 			try {
 				timeSearch[0] = sdf.parse(exp[0]);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
 				timeSearch[1] = sdf.parse(nowTime);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -316,13 +310,11 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 			try {
 				timeSearch[0] = sdf.parse(exp[0]);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
 				timeSearch[1] = sdf.parse(nowTime);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;

@@ -28,8 +28,13 @@ public class TProgramInfo implements Serializable{
 	private Date createTime;//创建时间
 	private String updator;//更新人
 	private Date updateTime;//更新时间
-	private String content;//内容
+	private byte[] content;//内容
 	private String nodeid;
+	private String versionNo;
+	private String programPath;
+	private String status;
+	private String md5;
+	private String describe2;
 
 	// Constructors
 
@@ -41,7 +46,7 @@ public class TProgramInfo implements Serializable{
 	/** full constructor */
 	public TProgramInfo(Long id, String progNo, String progName,
 			String creator, Date createTime, String updator, Date updateTime,
-			String content) {
+			byte[] content) {
 		super();
 		this.id = id;
 		this.progNo = progNo;
@@ -118,12 +123,12 @@ public class TProgramInfo implements Serializable{
 		this.updateTime = updateTime;
 	}
 
-	public void setContent(String content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
 	
-	@Column(name = "content", length = 50)
-	public String getContent() {
+	@Column(name = "content")
+	public byte[] getContent() {
 		return this.content;
 	}
 	@Column(name = "nodeid")
@@ -134,5 +139,54 @@ public class TProgramInfo implements Serializable{
 	public void setNodeid(String nodeid) {
 		this.nodeid = nodeid;
 	}
+    
+	@Column(name = "versionNo")
+	public String getVersionNo() {
+		return versionNo;
+	}
+
+	public void setVersionNo(String versionNo) {
+		this.versionNo = versionNo;
+	}
+    
+	@Column(name = "programPath")
+	public String getProgramPath() {
+		return programPath;
+	}
+
+	public void setProgramPath(String programPath) {
+		this.programPath = programPath;
+	}
+    
+	@Column(name = "status")
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+    
+	@Column(name = "md5")
+	public String getMd5() {
+		return md5;
+	}
+
+	public void setMd5(String md5) {
+		this.md5 = md5;
+	}
+    
+	@Column(name = "describe2")
+	public String getDescribe2() {
+		return describe2;
+	}
+
+	public void setDescribe2(String describe2) {
+		this.describe2 = describe2;
+	}
+	
+	
+	
+	
 	
 }

@@ -1,6 +1,5 @@
 package smtcl.mocs.services.device.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,14 +42,20 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 	 * 注入通用service
 	 */
 	private ICommonService commonService;
-	 
-	public ICommonService getCommonService() {
-		return commonService;
-	}
 
-	public void setCommonService(ICommonService commonService) {
-		this.commonService = commonService;
-	}
+    /**
+     * remote 远程数据源服务接口
+     */
+
+    public ICommonService getCommonService() {
+        return commonService;
+    }
+
+    public void setCommonService(ICommonService commonService) {
+        this.commonService = commonService;
+    }
+
+   
 
 	/**
 	 * 用户登录
@@ -162,9 +167,10 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 	 * @param jobDispatchNo 工单编号
 	 * @return
 	 */
+    @SuppressWarnings("unchecked")
 	public boolean updateProduceTask(String equSerialNo,String jobDispatchNo){
 		String hql="from TJobdispatchlistInfo t where no='"+jobDispatchNo+"'";
-		List<TJobdispatchlistInfo> tjlist=dao.executeQuery(hql);
+        List<TJobdispatchlistInfo> tjlist = commonService.executeQuery(hql);
 		if(null!=tjlist&&tjlist.size()>0){
 			TJobdispatchlistInfo tj=tjlist.get(0);
 			if(tj.getFinishNum()>0){
@@ -202,7 +208,7 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 				e.printStackTrace();
 				return false;
 			}
-			
+
 			return true;
 		}else{
 			return false;
@@ -211,41 +217,35 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 	
 	/**
 	 * 切换工单
-	 * @param equSerialNo
+	 * @param equSerialNo 机床序列号
 	 * @param jobDispatchNo 工单编号
 	 * @return
 	 */
+    @SuppressWarnings("unchecked")
 	public Map<String,Object> changeProduceTask(String equSerialNo,String jobDispatchNo){
-		Map<String, Object> res = new HashMap<String, Object>();
-		try {
-			
-			String sql="update  t_equ_jobdispatch set status=1 where status!=0 and equ_SerialNo='"+equSerialNo+"'";
-			dao.executeNativeUpdate(sql);         
-			
-			String hql="from TEquJobDispatch where equSerialNo='"+equSerialNo+"' and jobdispatchNo='"+jobDispatchNo+"'";
-			List<TEquJobDispatch> rs=dao.executeQuery(hql);
-			TEquJobDispatch ejd=new TEquJobDispatch();
-			if(null!=rs&&rs.size()>0){
-				ejd=rs.get(0);
-				//ejd.setJobdispatchNo(tj.getNo());
-				ejd.setStatus(2);					
-				dao.update(TEquJobDispatch.class, ejd);
-			}
-			
-			hql=" from TJobdispatchlistInfo where no='"+jobDispatchNo+"'";
-			List<TJobdispatchlistInfo> jobdispatch=dao.executeQuery(hql);
-			if(null!=jobdispatch&&jobdispatch.size()>0){
-				TJobdispatchlistInfo rec=jobdispatch.get(0);
-				res.put("planNum", rec.getProcessNum());
-				res.put("finishNum",rec.getFinishNum());
-				res.put("jobDispatchNo",rec.getNo());
-			  }
-			return res;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+        Map<String, Object> res = new HashMap<String, Object>();
+
+        String sql = "update  t_equ_jobdispatch set status=1 where status!=0 and equ_SerialNo='" + equSerialNo + "'";
+        commonService.executeNativeUpdate(sql);
+
+        String hql = "from TEquJobDispatch where equSerialNo='" + equSerialNo + "' and jobdispatchNo='" + jobDispatchNo + "'";
+        List<TEquJobDispatch> rs = commonService.executeQuery(hql);
+        if (null != rs && rs.size() > 0) {
+            TEquJobDispatch ejd = rs.get(0);
+            ejd.setStatus(2);
+            commonService.update(TEquJobDispatch.class, ejd);
+        }
+
+        hql = " from TJobdispatchlistInfo where no='" + jobDispatchNo + "'";
+        List<TJobdispatchlistInfo> jobdispatch = commonService.executeQuery(hql);
+        if (null != jobdispatch && jobdispatch.size() > 0) {
+            TJobdispatchlistInfo rec = jobdispatch.get(0);
+            res.put("planNum", rec.getProcessNum());
+            res.put("finishNum", rec.getFinishNum());
+            res.put("jobDispatchNo", rec.getNo());
+        }
+        return res;
+
 	}
 	
 	public Boolean switchMode(String equSerialNo,String type)
@@ -260,26 +260,22 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 		}
 		return false;
 	}
-	
+
+    @SuppressWarnings("unchecked")
 	public Boolean jobFinished(String equSerialNo,String jobDispatchNo){
-		try{
-		String hql=" from TJobdispatchlistInfo t where no='"+jobDispatchNo+"'";
-		List<TJobdispatchlistInfo> tjlist=dao.executeQuery(hql);
-		if(null!=tjlist&&tjlist.size()>0){
-			TJobdispatchlistInfo tj=tjlist.get(0);
-			if(tj.getStatus().intValue()==60 || tj.getStatus().intValue()==70)
-			return true;
-		  }	
-		}catch(Exception e){
-			
-		}
-		return false;
-	}
+        String hql = " from TJobdispatchlistInfo t where no='" + jobDispatchNo + "'";
+        List<TJobdispatchlistInfo> tjlist = commonService.executeQuery(hql);
+        if (null != tjlist && tjlist.size() > 0) {
+            TJobdispatchlistInfo tj = tjlist.get(0);
+            if (tj.getStatus() == 60 || tj.getStatus() == 70)
+                return true;
+        }
+        return false;
+    }
 	
 	@Override
 	public Map<String,Object> memberLogin(String memID, String memPass,
 			String equSerialNo) {
-		// TODO Auto-generated method stub
 		//暂时不验证密码，后续完善
 		//添加验证密码:密码先固定123456
 		Map<String, Object> loginRes = new HashMap<String, Object>();
@@ -350,6 +346,7 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 			TJobdispatchlistInfo jobdis = dao.get(TJobdispatchlistInfo.class, id);
 			jobdis.setOnlineNumber(jobdis.getOnlineNumber()==null?0:jobdis.getOnlineNumber()+1);
 			dao.save(TJobdispatchlistInfo.class,jobdis);
+
 			
 			if(onlineNumber>planNum){
 				return 2;

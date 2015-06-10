@@ -364,11 +364,11 @@ public class StorageManageImpl extends GenericServiceSpringImpl<Object, String> 
 	public List<Map<String, Object>> storgeList(String nodeId) {
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String hql ="select new Map( "
-				+ "s.id as id, "
-				+ "s.storageName as name) "
-				+ "s.storageNo as no,"
-				+ "s.positionType as positionType) "
-				+ "from TStorageInfo s where s.nodeId ='"+nodeId+"' and s.storageStatus ='活动'";
+				+ " s.id as id, "
+				+ " s.storageName as name,"
+				+ " s.storageNo as no,"
+				+ " s.positionType as positionType) "
+				+ " from TStorageInfo s where s.nodeId ='"+nodeId+"' and s.storageStatus ='活动'";
 		List<Map<String,Object>> dataList = dao.executeQuery(hql,parameters);
 		return dataList;
 	}

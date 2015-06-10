@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -18,10 +17,10 @@ import org.dreamwork.persistence.ServiceFactory;
 import smtcl.mocs.services.device.IResourceService;
 
 /**
- * @锟斤拷锟斤拷锟斤拷锟斤拷
- * @锟斤拷锟斤拷锟剿ｏ拷 FW
- * @锟斤拷锟斤拷锟斤拷锟节ｏ拷 2015-03-03
- * @version锟斤拷 V1.0
+ * @��������
+ * @�����ˣ� FW
+ * @�������ڣ� 2015-03-03
+ * @version�� V1.0
  */
 @SuppressWarnings("serial")
 @ManagedBean(name="ProgramDownLoadBean")
@@ -29,43 +28,43 @@ import smtcl.mocs.services.device.IResourceService;
 public class ProgramDownLoadBean implements Serializable{
 
 	/**
-	 * 锟斤拷源锟接匡拷实锟斤拷
+	 * ��Դ�ӿ�ʵ��
 	 */
 	private IResourceService resourceService=(IResourceService)ServiceFactory.getBean("resourceService");
     /**
-     * 锟斤拷锟较硷拷锟斤拷List
+     * ���ϼ���List
      */
 	 List<Map<String,Object>> materialList = new ArrayList<Map<String,Object>>();
 	/**
-     * 锟斤拷锟津集猴拷List
+     * ���򼯺�List
      */
 	 List<Map<String,Object>> processList = new ArrayList<Map<String,Object>>();
 	/**
-     * 锟斤拷锟津集猴拷List
+     * ���򼯺�List
      */
 	 List<Map<String,Object>> programList = new ArrayList<Map<String,Object>>();
 	/**
-     * 锟斤拷锟斤拷Id
+     * ����Id
      */
 	String materialId;
 	/**
-	 * 锟斤拷锟斤拷No
+	 * ����No
 	 */
 	String materialNo;
 	/**
-	 * 锟斤拷锟斤拷锟斤拷锟�
+	 * ��������
 	 */
 	String materialName;
 	/**
-	 * 锟斤拷锟斤拷Id
+	 * ����Id
 	 */
 	String processId;
 	/**
-	 * 锟斤拷锟斤拷锟斤拷锟�
+	 * ��������
 	 */
 	String processName;
 	/**
-	 * 锟节碉拷
+	 * �ڵ�
 	 */
 	String nodeId;
 	/**
@@ -74,7 +73,7 @@ public class ProgramDownLoadBean implements Serializable{
 	String success;
 	
 	/**
-	 * 锟斤拷锟届方锟斤拷
+	 * ���췽��
 	 */
 	public ProgramDownLoadBean(){
 		
@@ -85,10 +84,10 @@ public class ProgramDownLoadBean implements Serializable{
 	}
 	
 	/**
-	 * 锟斤拷锟斤拷谋锟�
+	 * ����ı�
 	 */
 	public void materialChange(){
-		if(null==materialId){
+		if(null==materialId ||materialId.equals("")){
 			return;
 		}
 		
@@ -98,7 +97,7 @@ public class ProgramDownLoadBean implements Serializable{
 	
 	
 	/**
-	 * 锟斤拷锟斤拷谋锟�
+	 * ����ı�
 	 */
 	public void processChange(){
 		if(null==processId ||processId.equals("")){
@@ -108,12 +107,12 @@ public class ProgramDownLoadBean implements Serializable{
 	}
 	
 	/**
-	 * 锟斤拷取锟襟定筹拷锟斤拷
+	 * ��ȡ�󶨳���
 	 */
 	private void getBingProgramList(){
         programList.clear();
 		
-		//锟窖绑定筹拷锟斤拷(锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
+		//�Ѱ󶨳���(������������)
 		programList =resourceService.getBingProgramInfo(materialId,processId,nodeId);
 		
 		for(Map<String,Object> map:programList){
@@ -122,7 +121,7 @@ public class ProgramDownLoadBean implements Serializable{
 	}
 	
 	/**
-	 * 锟襟定筹拷锟斤拷前check
+	 * �󶨳���ǰcheck
 	 */
 	public void checkData(){
 		success ="";
@@ -135,16 +134,16 @@ public class ProgramDownLoadBean implements Serializable{
 		
 		if(dataList.size()>0){
 			if(dataList.size()>1){
-				success ="锟斤拷选锟斤拷一锟斤拷锟斤拷录锟斤拷锟斤拷锟斤拷锟截ｏ拷";
+				success ="��ѡ��һ����¼�������أ�";
 			}
 		}else{
-			success ="锟斤拷选锟斤拷要锟斤拷锟截的筹拷锟斤拷";
+			success ="��ѡ��Ҫ���صĳ���";
 		}
 		
 	}
 	
 	/**
-	 * 锟斤拷锟斤拷锟斤拷
+	 * ������
 	 * @return
 	 */
 	public void downLoadProgram(){
@@ -158,15 +157,11 @@ public class ProgramDownLoadBean implements Serializable{
 		
 		if(dataList.size()>0){
 			if(dataList.size()>1){
-				success ="锟斤拷选锟斤拷一锟斤拷锟斤拷录锟斤拷锟斤拷锟斤拷锟截ｏ拷";
-//				FacesMessage msg = new FacesMessage("程序下载","请选择一个文件进行下载！");
-//				FacesContext.getCurrentInstance().addMessage(null, msg);
+				success ="��ѡ��һ����¼�������أ�";
 				return;
 			}
 		}else{
-			success ="锟斤拷选锟斤拷要锟斤拷锟截的筹拷锟斤拷";
-//			FacesMessage msg = new FacesMessage("程序下载","文件不存在！");
-//			FacesContext.getCurrentInstance().addMessage(null, msg);
+			success ="��ѡ��Ҫ���صĳ���";
 			return;
 		}
 		

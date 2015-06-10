@@ -41,8 +41,14 @@
 				 	<rich:panelMenuItem label="刀具类型配置" 
 				    	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/cutter_class_config.faces','资源配置,刀具类型配置')}"
 						render="  :myform:tree2 :myform:rightiframe" />
-					 <rich:panelMenuItem label="程序配置" 
+				 	 <rich:panelMenuItem label="程序配置" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_info.faces','资源配置,程序配置')}"
+					 	render="  :myform:tree2 :myform:rightiframe" />
+					  <rich:panelMenuItem label="程序绑定" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_binding.faces','资源配置,程序绑定')}"
+					 	render="  :myform:tree2 :myform:rightiframe" />
+					 <rich:panelMenuItem label="程序下载" 
+				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_downLoad.faces','资源配置,程序下载')}"
 					 	render="  :myform:tree2 :myform:rightiframe" />
 				</rich:panelMenuGroup>
 				

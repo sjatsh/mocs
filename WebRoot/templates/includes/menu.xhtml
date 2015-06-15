@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<!-- <link rel="stylesheet" href="css/bottom_menu.css" type="text/css"></link> -->
+<link rel="stylesheet" href="css/publish/bottom_menu.min.css" type="text/css"></link>
+<h:form id="menuform">
+	<h:inputHidden id="nowSelectMenuItem" value="#{menuBean.nowSelectMenuItem}" />
+	<div class="line-689976"></div>
+	<div id="bottom-bar" class="zl-bottom-bar">
+		<div class="zl-bottom-bar-left">
+			<img src="./images/menu/btn_arrow_left.png" />
+		</div>
+		<div class="zl-bottom-bar-center">
+			<div id="bottom_menus"></div>
+		</div>
+		<div class="zl-bottom-bar-right">
+			<img src="./images/menu/btn_arrow_right.png" />
+		</div>
+	</div>
+	
+	<!-- <h:outputScript library="js/page" name="bottom_menu.js"></h:outputScript> -->
+	<h:outputScript library="js/publish" name="bottom_menu.min.js"></h:outputScript>
+	
+</h:form>
+</ui:composition>
+ 

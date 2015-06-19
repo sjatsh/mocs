@@ -1,143 +1,124 @@
+html {
+	font-size: 100px;
+}
+
 body {
 	overflow: hidden;
+	font-size: 0.16rem;
 }
 
 /* frame */
 .zl-wrapper {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 1920px;
-	height: 1080px;
-	overflow: hidden;
+	position: relative;
+	margin: 0 auto;
+	width: 100%;
+	height: 100%;
+	min-width: 1280px;
+	min-height: 720px;
+	background-color: #ddd;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 /* 顶部栏 */
 .zl-top {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 1920px;
-	height: 124px;
+	position: relative;
+	width: 100%;
+	height: 1.24rem;
+	background-color: #fff;
 	z-index: 1;
 }
 /* 顶部栏底条 */
 .zl-top-line {
 	position: absolute;
 	left:0;
-	top: 115px;
-	width: 1920px;
-	height: 5px;
+	top: 1.15rem;
+	width: 100%;
+	height: 0.05rem;
+}
+/* 顶部栏内容部分 */
+.zl-top-frame {
+	position: relative;
+	margin: 0 auto;
+	width: 19.20rem;
+	height: 100%;
 }
 .zl-top-logo {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 480px;
-	height: 115px;
+	width: 4.80rem;
+	height: 1.15rem;
 }
 .zl-top-logo-img {
 	position: absolute;
-	left: 68px;
-	top: 34px;
-	height: 48px;
+	left: 0.68rem;
+	top: 0.34rem;
+	height: 0.48rem;
 }
 .zl-top-logo-img>img {
 	height: 100%;
 }
 .zl-top-content {
 	position: absolute;
-	left: 480px;
+	left: 4.80rem;
 	top: 0;
-	width: 960px;
-	height: 115px;
+	width: 9.60rem;
+	height: 1.15rem;
 }
 .zl-top-user {
 	position: absolute;
-	left: 1440px;
+	left: 14.40rem;
 	top: 0;
-	width: 480px;
-	height: 115px;
+	width: 4.80rem;
+	height: 1.15rem;
 }
 
+/* 中间内容区域 */
 .zl-content {
-	position: absolute;
-	left: 0;
-	top: 124px;
-	width: 1920px;
-	height: 880px;
+	position: relative;
+	margin: 0 auto;
+	width: 19.20rem;
+	height: 8.80rem;
+	overflow: hidden;
 	z-index: 1;
 }
+/* 底部菜单区域 */
 .zl-bottom {
 	position: absolute;
-	left: 0;
-	top: 1004px;
-	width: 1920px;
-	height: 76px;
+	bottom: 0;
+	width: 100%;
+	height: 0.76rem;
 	background: #FFF;
 	z-index: 10;
-}
-
-/* 国际化弹出框 */
-.top-right-frame {
-	position: absolute;
-	top: 0; 
-	left: 1920px;
-	width: 200px;
-	height: 50px;
-	text-align: center;
-	background-color: rgba(0,0,0,.2);
-	z-index: 20;
-}
-.top-right-frame .more-btn {
-	position: absolute;
-	top: 0;
-	left: -50px;
-	width: 50px;
-	height: 50px;
-	text-align: center;
-	font-size: 25px;
-	line-height: 50px;
-	color: #333;
-	background-color: rgba(0,0,0,.3);
-	cursor: pointer;
-}
-.top-right-frame>select {
-	margin-top: 10px;
-	width: 150px;
-	height: 30px;
-	font-size: 20px;
-	line-height: 30px;
-	text-align: left;
-	text-indent: .5em;
 }
 
 /* 用户登出区域 */
 .zl-top-user-btn {
 	position: relative;
 	float: right;
-	margin-left: 10px;
-	margin-right: 50px;
-	margin-top: 36px;
-	width: 120px;
-	height: 47px;
+	margin-left: 0.10rem;
+	margin-right: 0.50rem;
+	margin-top: 0.36rem;
+	width: 1.20rem;
+	height: 0.47rem;
 }
 .zl-top-user-btn>img {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 120px;
-	height: 47px;
+	width: 1.20rem;
+	height: 0.47rem;
 }
 .zl-top-user-btn-text {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 120px;
-	height: 47px;
+	width: 1.20rem;
+	height: 0.47rem;
 	text-align: center;
-	font-size: 18px;
+	font-size: 0.18rem;
 	font-weight: bold;
-	line-height: 47px;
+	line-height: 0.47rem;
 	color: #5B5B5B;
 	cursor: pointer;
 }
@@ -146,51 +127,50 @@ body {
 	position: relative;
 	float: right;
 	width: auto !important;
-	height: 115px;
+	height: 1.15rem;
 	overflow: hidden;
 }
 
 .zl-top-user-frame>span {
 	float: right;
-	margin-top: 50px;
-	margin-right: 10px;
-	font-size: 20px;
-	line-height: 20px;
+	margin-top: 0.50rem;
+	margin-right: 0.10rem;
+	font-size: 0.20rem;
+	line-height: 0.20rem;
 	white-space: nowrap;
 	color: #5A5A5A;
 }
 
 .zl-top-user-frame>span:last-of-type {
-	margin-left: 10px;
+	margin-left: 0.10rem;
 }
 .zl-top-user-icon {
 	display: block;
 	position: relative;
 	float: right;
-	margin-top: 50px;
-	width: 17px;
-	height: 20px;
+	margin-top: 0.50rem;
+	width: 0.17rem;
+	height: 0.20rem;
 }
 
 /* 国际化切换区域 */
 .zl-top-translate {
 	position: absolute;
-	right: 190px;
-	top: 70px;
-	width: 290px;
-	height: 45px;
+	right: 1.90rem;
+	top: 0.70rem;
+	width: 2.90rem;
+	height: 0.45rem;
 	text-align: right;
+	font-size: 0.16rem
 }
 .zl-top-translate>a {
-	font-size: 14px;
-	line-height: 45px;
+	font-size: 0.14rem;
+	line-height: 0.45rem;
 	text-decoration: none;
 	color: #5A5A5A;
 }
 .zl-top-translate>a:hover,.zl-top-translate>a.active {
-	font-size: 14px;
-	text-weight: bold;
-	line-height: 45px;
+	font-weight: bold;
 	text-decoration: none;
 	color: #008080;
 }

@@ -110,8 +110,7 @@ function bottomMouseEnter(_this) {
 	var upVal = hjb51 * 142 / 1080;
 	//位置调整
 	$(_this).animate({
-		height: "+=" + upVal + "px",
-		top: "-=" + upVal + "px"
+		height: "+=" + upVal + "px"
 	}, 100);
 	//高度增加
 	$(".zl-bottom-bar,.zl-bottom-bar>div,.zl-bottom-bar>div>img,.zl-bottom-bar-center>div").animate({
@@ -141,8 +140,7 @@ function bottomMouseLeave(_this) {
 	var upVal = hjb51 * 142 / 1080;
 	//位置调整
 	$(_this).animate({
-		height: "-=" + upVal + "px",
-		top: "+=" + upVal + "px"
+		height: "-=" + upVal + "px"
 	}, 100);
 	//高度增加
 	$(".zl-bottom-bar,.zl-bottom-bar>div,.zl-bottom-bar>div>img,.zl-bottom-bar-center>div").animate({

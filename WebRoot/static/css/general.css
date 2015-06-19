@@ -36,14 +36,10 @@ abbr,acronym {
     border: 0;
 }
 
-body {
-	overflow: hidden;
-}
-
 /* font face */
 @font-face {
    font-family: 'Arial Black';
-   src: url('../font/Arial Black.TTF');
+   src: url('../font/ArialBlack.TTF');
    font-weidth: normal;
    font-style: normal;
  }
@@ -601,50 +597,114 @@ body {
 }
 
 /*  內容区域头部4格布局*/
-.zl-content-top{width: 1920px;height: 160px;left: 0px;top: 0px;position: absolute;overflow: visible;}
-.zl-content-top>.txt-wh{width: 477px;height: 155px;position: absolute;overflow: hidden;font-size: 50px;font-family:"微软雅黑","Microsoft YaHei","simhei";line-height: 155px;color: #6F8474;text-align: center;}
-.zl-content-top>.space-wh{width: 4px;height: 155px;position: absolute;overflow: hidden;background-color: white;line-height: normal;}
-.zl-content-top>.txt1-lt{left: 0px;top: 0px;}
-.zl-content-top>.space1-lt{left: 477px;top: 0px;}
-.zl-content-top>.txt2-lt{left: 481px;top: 0px;}
-.zl-content-top>.space2-lt{left: 958px;top: 0px;}
-.zl-content-top>.txt3-lt{left: 962px;top: 0px;}
-.zl-content-top>.space3-lt{left: 1439px;top: 0px;}
-.zl-content-top>.txt4-lt{left: 1443px;top: 0px;} 
-.zl-content-top>.vertical-line{width: 1920px;height: 5px;left: 0px;position: absolute;top: 155px;background-color: #689976;}
+.zl-content-top {
+	position: absolute;
+	width: 19.20rem;
+	height: 1.60rem;
+	left: 0;
+	top: 0;
+	overflow: visible;
+}
+.zl-content-top>.txt-wh {
+	position: absolute;
+	width: 4.77rem;
+	height: 1.55rem;
+	text-align: center;
+	font-family:"微软雅黑","Microsoft YaHei","simhei";
+	font-size: 0.50rem;
+	line-height: 1.55rem;
+	color: #6F8474;
+	overflow: hidden;
+}
+.zl-content-top>.space-wh {
+	width: 0.04rem;
+	height: 1.55rem;
+	position: absolute;
+	overflow: hidden;
+	background-color: white;
+	line-height: normal;
+}
+.zl-content-top>.txt1-lt {
+	left: 0;
+	top: 0;
+}
+.zl-content-top>.space1-lt {
+	left: 4.77rem;
+	top: 0;
+}
+.zl-content-top>.txt2-lt {
+	left: 4.81rem;
+	top: 0;
+}
+.zl-content-top>.space2-lt {
+	left: 9.58rem;
+	top: 0;
+}
+.zl-content-top>.txt3-lt {
+	left: 9.62rem;
+	top: 0;
+}
+.zl-content-top>.space3-lt {
+	left: 14.39rem;
+	top: 0;
+}
+.zl-content-top>.txt4-lt {
+	left: 14.43rem;
+	top: 0;
+} 
+.zl-content-top>.vertical-line {
+	width: 19.20rem;
+	height: 0.05rem;
+	left: 0;
+	position: absolute;
+	top: 1.55rem;
+	background-color: #689976;
+}
+
 /*内容主体头部背景图片样式*/
-.zl-content-top-bg {position: absolute;width: 100%;height: 100%;}
+.zl-content-top-bg {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
 /* 内容区域主体信息 */
-.zl-content-info{position: absolute;width: 1920px;height: 720px;left: 0px;top: 160px;overflow: visible;}
+.zl-content-info {
+	position: absolute;
+	width: 19.20rem;
+	height: 7.20rem;
+	left: 0;
+	top: 1.60rem;
+	overflow: visible;
+}
 
 /* 内容区域加长版 */
 .zl-content-top-241 {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 1920px;
-	height: 237px;
+	width: 19.20rem;
+	height: 2.37rem;
 	overflow: visible;
 }
 /* 内容区域主体信息加长版 */
 .zl-content-info-241 {
 	position: absolute;
 	left: 0px;
-	top: 237px;
-	width: 1920px;
-	height: 642px;
+	top: 2.37rem;
+	width: 19.20rem;
+	height: 6.42rem;
 	overflow: visible;
 }
 
 /* 自定义弹出层 */
 #popup_container {
-	padding: 25px 0 14px;
-	min-width: 300px;
-	border: none 0px !important;
+	padding: 0.25rem 0 0.14rem;
+	min-width: 3.00rem;
+	border: none 0 !important;
 	background: #ffffff !important;
-	-webkit-box-shadow: 5px 5px 25px #666 !important;
-	-moz-box-shadow: 5px 5px 25px #666 !important;
-	box-shadow: 5px 5px 25px #666 !important;
+	-webkit-box-shadow: 0.05rem 0.05rem 0.25rem #666 !important;
+	-moz-box-shadow: 0.05rem 0.05rem 0.25rem #666 !important;
+	box-shadow: 0.05rem 0.05rem 0.25rem #666 !important;
 }
 #popup_container #popup_title {
 	display: none !important;
@@ -652,17 +712,17 @@ body {
 #popup_container #popup_message {
 	padding: 0;
 	text-align: center;
-	font-size: 18px;
+	font-size: 0.18rem;
 	color: #666 !important;
 }
 #popup_container #popup_panel {
 	margin: 1em 0 0 0;
 }
 #popup_container input[type="button"] {
-	border: solid 1px #e0ece2 !important;
+	border: solid 0.01rem #e0ece2 !important;
 	background: #e0ece2 !important;
 	text-align: center;
-	font-size: 12px;
+	font-size: 0.12rem;
 	color: #666;
 	padding: .2em 1em !important;
 }

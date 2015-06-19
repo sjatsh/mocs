@@ -12,7 +12,6 @@ $(document).ready(function(){
 	if(menuLoadFlag) {
 		getNodeInfo(parentId);
 	}
-	//$.autosizeReturn(moveCurrentNode);
 	
 	//回到根节点按钮
 	$(".zl-icon-home").mousedown(function() {
@@ -122,58 +121,37 @@ function getNodeInfo(nodeId) {
 				$("#parent_node .zl-top-menu:eq(0)>span").click(function() {
 					nodeClick($(this).attr("node_id"));
 				});
-				//调整父节点大小
-				$.autosizeElement($("#parent_node")[0], true);
 				
 				//加载子节点
 				getNodeInfo($(this).attr("node_id"));
 				
-				//将父节点选中插入子节点列表中——移除
-				//$("#parent_node .zl-top-menu:eq(1)").insertBefore("#top_node .zl-top-menu:eq(0)");
 				//调整子节点大小位置
 				$("#top_node .zl-top-menu-sub-content").width(function() {
 					var widthAll = 0;
 					$(this).find(".zl-top-menu").each(function() {
-						widthAll += $(this).width() + 1;
+						widthAll += $(this).width();
 					});
-					return widthAll;
+					return widthAll + 1;
 				});
-				$("#top_node .zl-top-menu-sub-frame").width($(".zl-top-menu-center").width() - $("#top_node .zl-top-menu-sub-frame").position().left);
+				$("#top_node .zl-top-menu-sub-frame").width($(".zl-top-menu-center").width() - $(".zl-top-menu.menu-home").width() - $("#parent_node>.zl-top-menu").width() - 1);
 				
 				//重置父节点ID
 				parentId = $(this).attr("node_id");
 			}
 			else {
-				if($(this).text() == "沈阳") {
-					//仅供沈阳车间展示使用
-					location.href="http://10.10.140.58:8080/mocs/index.faces";
-				}
-				else {
-					nodeClick($(this).attr("node_id"));	
-				}
+				nodeClick($(this).attr("node_id"));	
 			}
 		});
 
 		//调整内容大小、位置
-		//节点字体大小调整
-		$(".zl-top-menu>span").each(function() {
-			if($(this).text().length > 8) {
-				//$(this).text($(this).text().substr(0, 8) + "…");
-				//$(this).css("font-size", parseFloat($(this).css("font-size").replace("px","")) - ($(this).text().length - 8));
-				$(this).parent().css("width", "auto");
-			}
-		});
 		$(objDataContent).width(function() {
 			//调整子节点大小位置
 			var widthAll = 0;
 			$(this).find(".zl-top-menu").each(function() {
-				widthAll += $(this).width() + 1;
+				widthAll += $(this).width();
 			});
-			return widthAll;
+			return widthAll + 1;
 		});
-		$(objDataFrame).width($(".zl-top-menu-center").width() - $(objDataFrame).position().left - 1);
-		$.autosizeElement($("#top_node>div")[0], true);
-		
 		moveCurrentNode();
 	}
 }
@@ -237,37 +215,4 @@ function moveCurrentNode() {
 	if(currentLeft + $(".zl-top-menu-sub-content").width() <= $(".zl-top-menu-sub-frame").width()) {
 		$(".zl-top-menu-right").addClass("disable");
 	}
-	
-	/*var PAGE_SIZE = 4;
-	if(parentId != "" && parentId != "-999") {
-		PAGE_SIZE = 3;
-	}
-	var menuCount = $("#top_node .zl-top-menu").length; 
-    var index = $("#top_node .zl-top-menu.cur").index();
-    if(index < 0) {
-    	index = 0;
-    }
-	//var moveStep = $(".zl-top-menu").width();\
-    var moveStep = $(".zl-top-menu-sub-frame").width() / 2;
-	var minLeft = $(".zl-top-menu-sub-frame").width() - $(".zl-top-menu-sub-content").width();
-	//判断是否只有一页
-	if(menuCount <= PAGE_SIZE) {
-		$(".zl-top-menu-left,.zl-top-menu-right").addClass("disable");
-	}
-	else {
-	    //判断是否最后一页
-		if($("#top_node .zl-top-menu").length - index <= PAGE_SIZE) {
-	    	currentLeft = minLeft;
-			$(".zl-top-menu-right").addClass("disable");
-	    }
-	    else {
-	    	if(index == 0) {
-	    		$(".zl-top-menu-left").addClass("disable");
-	    	}
-	    	currentLeft = -1 * moveStep * index;
-	    }
-	}
-    
-    //移动
-	$(".zl-top-menu-sub-content").css("margin-left", currentLeft);*/
 }

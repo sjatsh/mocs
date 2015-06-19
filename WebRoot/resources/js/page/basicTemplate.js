@@ -1,22 +1,16 @@
-
-
 //禁止图片拖拽方法
 function imgdragstart() {return false;}
 
-//页面大小,国际化
+//页面加载后处理
 $(document).ready(function() {
 	//禁止图片拖拽
 	for(i in document.images) document.images[i].ondragstart=imgdragstart;
 	
-	//大小调整
-	$.autosizeInit(1920,1080,800,500);
-	$.autosizeExclude($(".zl-bottom>*")[0], true);
-	$.autosizeExclude($(".zl-top-logo-img>img")[0], false);
-	$.autosizeAll();
-	$.autosizeMore();
-	
 	//国际化处理
 	dataTranslate("basicTemplate", function(t) { $("*[data-i18n]").i18n();});
+	
+	//BODY撑满
+	document.body.style.height = hjb51 + "px";
 	
 	//隐藏遮罩层
 	$(".show-frame").hide();
@@ -37,19 +31,4 @@ $(document).ready(function() {
 		
 		$("#logform\\:logout").click();
 	});
-	
-	/*
-	 * 废除代码，转为文字连接式
-	//显示/隐藏语言选择框
-	$(".top-right-frame .more-btn").click(function() {
-		if($(".more-btn").text() == "<") {
-			$(".top-right-frame").animate({"left": $(window).width() - $(".top-right-frame").width()}, 200);
-			$(".more-btn").text(">");
-		}
-		else {
-			$(".top-right-frame").animate({"left": $(window).width()}, 200);
-			$(".more-btn").text("<");
-		}
-	});
-	 */
 });

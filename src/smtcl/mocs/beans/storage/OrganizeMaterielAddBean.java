@@ -119,7 +119,9 @@ public class OrganizeMaterielAddBean {
 		nodeid=session.getAttribute("nodeid2")+"";
 		//nodeid="8a8abc8d44d361fd0144d3c76dd60001";
 		tti.setNodeId(nodeid);
+		tti.setUnitConversion("0");
 		nodeName="测试";
+		isKuCun.add("库存物料");
 		tmv.setVersionNo("0");
 		baseUnitList=resourceService.getUnitInfo("1");//基准单位
 		typelist=Constants.MATERIELTYPE;//物料类型

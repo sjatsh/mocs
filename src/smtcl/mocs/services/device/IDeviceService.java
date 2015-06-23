@@ -393,6 +393,13 @@ public interface IDeviceService extends IGenericService<TNodes, String> {
 	 */
 	public List<Map<String, Object>> getRCLData(String equSerialNo,int type);
 	/**
+	 * 获取当日 或者当月设备加载的程序加工的个数
+	 * @param equSerialNo
+	 * @param type
+	 * @return
+	 */
+	public List<Map<String, Object>> getWorkEvent(String equSerialNo,int type);
+	/**
 	 * 获取member信息
 	 */
 	public List<Map<String, Object>> getMemberInfo(String userId,String nodeId);

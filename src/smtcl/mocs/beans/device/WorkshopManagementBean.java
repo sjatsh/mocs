@@ -184,9 +184,14 @@ public class WorkshopManagementBean {
 			}
 			ee=deviceService.getEquipmentEfficiency(equSerialNo);
 			pie=loadPieData(mts);
+			if(null!=mt&&null!=mt.get("jobDispatchListNo")&&!"".equals(mt.get("jobDispatchListNo").toString())){
+				piecbtwo=loadRCLData(equSerialNo,1);//日产量
+				piecb=loadRCLData(equSerialNo,2);//月产量
+			}else{
+				piecbtwo=loadRCLData2(equSerialNo,1);//日产量
+				piecb=loadRCLData2(equSerialNo,2);//月产量
+			}
 			
-			piecbtwo=loadRCLData(equSerialNo,1);//日产量
-			piecb=loadRCLData(equSerialNo,2);//月产量
 		}else{
 			ipAddress=null;
 			mts=null;
@@ -334,6 +339,7 @@ public class WorkshopManagementBean {
 	        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	        return SessionHelper.getCurrentLocale(request.getSession());
 	 }
+	 
 	 public String loadRCLData(String equSerialNo,int type){
 		 Locale locale = this.getLocale();
 		 //var abc="[{name:'Chrome',y:12.8},{name:'test1',y:12.8},{name:'test2',y:12.8}]";
@@ -361,6 +367,35 @@ public class WorkshopManagementBean {
 			 
 		 }
 		 //result=result.substring(0, result.length()-1);
+		 result+="]";
+		 return result;
+	 }
+	 
+	 public String loadRCLData2(String equSerialNo,int type){
+		 Locale locale = this.getLocale();
+		 List<Map<String,Object>> rs=deviceService.getWorkEvent(equSerialNo,type);
+		 String[] color={"rgba(108,204,71,1)","rgba(108,204,71,0.4)","rgba(0,129,206,1)","rgba(0,129,206,0.4)","rgba(160,160,160,1)"};
+		 int i=0;
+		 String result="[";
+		 int other=0;
+		 for(Map<String,Object> map:rs){
+			 if(i<4){
+				 String name=null==map.get("NCprogramm")?"test":map.get("NCprogramm").toString()+","+map.get("partName");
+				 String y=null==map.get("total")?"0":map.get("total").toString();
+				 result+="{name:'"+name+"',y:"+y+",color:'"+color[i]+"'},";
+			 }else{
+				 other=other+Integer.parseInt(map.get("total").toString());
+			 }
+			 i++;
+		 }
+		 if(other>0){
+			 if(locale.toString().equals("en") || locale.toString().equals("en_US")){
+				 result+="{name:'Other Part,Other Process',y:"+other+",color:'"+color[4]+"'}";
+			 }else{
+				 result+="{name:'其他零件,其他工序',y:"+other+",color:'"+color[4]+"'}";
+			 }
+			 
+		 }
 		 result+="]";
 		 return result;
 	 }

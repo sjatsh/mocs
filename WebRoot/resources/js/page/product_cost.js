@@ -2,14 +2,16 @@ $(document).ready(function() {
 	//国际化处理
 	dataTranslate("product_cost", function(t) { $("*[data-i18n]").i18n();});
     
+	loadData_machine();
+	loadData();
 	//页面大小调整
 	//$.autosizeExclude($(".zl-iconSelect>select")[0], false);
-	$.autosizeExclude($(".zl-content-info-left-tableHead")[0], true);
-	$.autosizeExclude($(".zl-content-info-left-tableInner")[0], true);
-	$.autosizeAll();
-	
-	$.autosizeReturn(loadData_machine);
-	$.autosizeReturn(loadData);
+//	$.autosizeExclude($(".zl-content-info-left-tableHead")[0], true);
+//	$.autosizeExclude($(".zl-content-info-left-tableInner")[0], true);
+//	$.autosizeAll();
+//	
+//	$.autosizeReturn(loadData_machine);
+//	$.autosizeReturn(loadData);
 })
 
 /* 刷新前遮罩 */

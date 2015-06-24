@@ -1,16 +1,18 @@
 $(document).ready(function() {
+	document.documentElement.style.fontSize = 100 / 850 * $("body").height() + "px";
+	
 	parent.document.getElementById("jobdispatchupdate2").style.visibility="visible";
 	//选择框省略方法
 	$(".zl-select select").selectAutoHide(10);	
 	$("table>tbody>tr>td>div>a").attr("data-i18n", function() {
 		return $(this).text();
 	}); 	
-	$.autosizeExclude($(".jobdispatch-content-info-tubiao1>*")[0], true);
+//	$.autosizeExclude($(".jobdispatch-content-info-tubiao1>*")[0], true);
 	//国际化翻译
 	dataTranslate("jobdispatch_update", function(t) { $("*[data-i18n]").i18n();},"../static/i18n");
-	$.autosizeInit(1325,760,800,458);
-	$.autosizeAll();
-	$.autosizeMore();  	
+//	$.autosizeInit(1325,760,800,458);
+//	$.autosizeAll();
+//	$.autosizeMore();  	
 });   
 function tishi(){
 	var msg = "content.msg";

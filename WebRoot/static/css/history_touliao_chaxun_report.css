@@ -1,43 +1,45 @@
 .zl-content-label {
 	float: left;
-	margin-left: 200px;
-	margin-top: 70px;
-	width: 75px;
-	font-size: 18px;
-	line-height: 18px;
+	margin-left: 2rem;
+	margin-top: 0.7rem;
+	width: 0.75rem;
+	font-size: 0.18rem;
+	line-height: 0.18rem;
 	color: #828282;
 	white-space: nowrap;
 	text-align: right;
 }
+
 .zl-content-select {
 	float: left;
-	margin-left: 30px;
-	margin-top: 62px;
-}
-/* 表头 */
+	margin-left: 0.3rem;
+	margin-top: 0.62rem;
+} 
+/* 表头 */ 
 .zl-content-info {
-	font-size: 18px;
+	font-size: 0.18rem;
 }
-.table-title
-{
+
+.table-title {
 	position: absolute;
-	left: 0px;
-	right: 0px;
-	width:1920px;
+	left: 0;
+	right: 0;
+	width: 19.2rem;
 	font-size: 100%;
 	z-index: 1;
-}
-/*表格*/
+} 
+/*表格*/ 
 .table-body {
 	position: absolute;
 	left: 0;
-	top: 40px;
-	width: 1920px;
-	height: 678px;
+	top: 0.4rem;
+	width: 19.2rem;
+	height: 6.78rem;
 	font-size: 100%;
 	overflow: auto;
 	z-index: 0;
 }
+
 .table-body .ui-widget {
 	font-size: 100%;
-}
+} 

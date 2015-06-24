@@ -1,6 +1,8 @@
 $(document).ready(function() {
-	$.autosizeExclude($(".jobdispatch-content-info-tubiao>*")[0], true);
-	$.autosizeExclude($(".jobdispatch-content-info-tubiao1>*")[0], true);
+	document.documentElement.style.fontSize = 100 / 870 * $("body").height() + "px";
+	
+//	$.autosizeExclude($(".jobdispatch-content-info-tubiao>*")[0], true);
+//	$.autosizeExclude($(".jobdispatch-content-info-tubiao1>*")[0], true);
 	parent.document.getElementById("jobdispatchadd2").style.visibility="visible";
 	//选择框省略方法
 	$(".zl-select select").selectAutoHide(10);	
@@ -9,9 +11,9 @@ $(document).ready(function() {
 	});
 	//国际化翻译
 	dataTranslate("jobdispatch_add", function(t) { $("*[data-i18n]").i18n();},"../static/i18n");
-  	$.autosizeInit(1325,760,800,458);
-  	$.autosizeAll();
-  	$.autosizeMore();
+//  	$.autosizeInit(1325,760,800,458);
+//  	$.autosizeAll();
+//  	$.autosizeMore();
  }); 
 
 function guojihua(){

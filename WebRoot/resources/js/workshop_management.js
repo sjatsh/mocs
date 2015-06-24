@@ -86,7 +86,7 @@ function loadData() {
 					
 			 }
 		    tb.innerHTML=tbstr;
-		    $.autosizeElement(tb,true);
+//		    $.autosizeElement(tb,true);
 		}
 	}
 	//加载日产量
@@ -395,9 +395,9 @@ function reloadEqu(){
 		document.getElementById("xyzabc").innerHTML="<span data-i18n='zwxxinfo'></span>";
 	}
 	
-	$("#xyzabc>div").each(function() {
-		$.autosizeElement(this,true);
-	});
+//	$("#xyzabc>div").each(function() {
+//		$.autosizeElement(this,true);
+//	});
 	partUpdateBg();//零件背景图加载
 	
 	if(null!=f&&""!=f){
@@ -552,12 +552,12 @@ $(document).ready(function() {
 	
 	//页面尺寸调整
 	
-	$.autosizeExclude($("#fzi"), true);
-	$.autosizeExclude($("#piethree>div")[0], true);
-	$.autosizeExclude($("#pieTureal>div")[0], true);
-	$.autosizeExclude($("#pietwo>div")[0], true);
-	$.autosizeExclude($(".circle>img")[0], true);
-	$.autosizeExclude($("#oeeline>img")[0], true);
-	
-	$.autosizeFrame(false);
+//	$.autosizeExclude($("#fzi"), true);
+//	$.autosizeExclude($("#piethree>div")[0], true);
+//	$.autosizeExclude($("#pieTureal>div")[0], true);
+//	$.autosizeExclude($("#pietwo>div")[0], true);
+//	$.autosizeExclude($(".circle>img")[0], true);
+//	$.autosizeExclude($("#oeeline>img")[0], true);
+//	
+//	$.autosizeFrame(false);
 });

@@ -290,3 +290,16 @@ color:#333333;
 .ui-datatable th div.ui-dt-c {
 	padding: 0;
 } 
+
+.div-dialog {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -2.1rem 0 0 -3.5rem;
+	width: 7rem;
+	height: 4.2rem;
+	border: solid 1px #ccc;
+	border-radius: 0.08rem;
+	z-index: 30;
+}
+

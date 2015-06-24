@@ -14,10 +14,10 @@ var priId;
 var planType;
 
 //控制长宽的大小
-var createWidth = wjb51*1920/1920;
-var createHeight = hjb51*720/1080;
-var createRowHeight = hjb51*40/1080;
-var createColumnWidth = wjb51*480/1920;
+var createWidth = $("#jobplan_content").width();
+var createHeight = $("#jobplan_content").height();
+var createRowHeight = createHeight * 0.06;
+var createColumnWidth = createWidth * 0.25;
 /*
  * 未知代码
  * var fieldStyle = "font-size:"+wjb51*25/1920+"px;";
@@ -149,7 +149,7 @@ Ext.onReady(function () {
 	            {
 	                xtype       : 'treecolumn', //this is so we know which column will show the tree
 	                text        : '<span data-i18n="content.tree_title"></span>',
-	                width		: createColumnWidth - 2,
+	                width		: createColumnWidth,
 	                sortable    : false,
 	                dataIndex   : 'Name'
 	            }

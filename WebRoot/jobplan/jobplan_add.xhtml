@@ -7,12 +7,10 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-
 <h:head>
-<!-- <link href="../css/general.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="../css/autosize.css" type="text/css"></link>
-<link href="../css/jobplan_add.css" rel="stylesheet" type="text/css" /> -->
-<link rel="stylesheet" href="../css/publish/JobPlanAdd.min.css" type="text/css"></link>
+<link href="../css/general.css" rel="stylesheet" type="text/css" />
+<link href="../css/jobplan_add.css" rel="stylesheet" type="text/css" />
+<!-- <link rel="stylesheet" href="../css/publish/JobPlanAdd.min.css" type="text/css"></link> -->
 </h:head>		
 <h:body>
 <h:form id="myform">
@@ -186,8 +184,8 @@
 	</div>
 	</div>
 <div class="wei_xian">
-   <div style="width:300px;height: 20px;margin-left: 500px; ">
-  <h:outputText id="show" style="margin-top:60px;width:100px;color:red;" value="#{JobPlanAdd.show}" />
+  <div class="wei_xian-infoText">
+  	<h:outputText id="show" value="#{JobPlanAdd.show}" />
   </div>
   <div class="import">
   <img class="import_image" src="../images/guanbi.png"/>
@@ -216,10 +214,11 @@
 <p:growl id="messages" showDetail="true"/> 
 </div>	
 <script src="../js/publish/i18next-1.7.4.min.js.gzjs" type="text/javascript"></script>
-<!-- <h:outputScript library="js" name="common.js"></h:outputScript>
+<h:outputScript library="js" name="common.js"></h:outputScript>
+<h:outputScript library="js" name="jquery.alerts.js"></h:outputScript>
 <h:outputScript library="js" name="autosize.js"></h:outputScript>
-<h:outputScript library="js/page" name="jobplan_add.js"></h:outputScript> -->		
-<h:outputScript library="js/publish" name="JobPlanAdd.min.js"></h:outputScript>
+<h:outputScript library="js/page" name="jobplan_add.js"></h:outputScript>		
+<!-- <h:outputScript library="js/publish" name="JobPlanAdd.min.js"></h:outputScript> -->
 </h:form>
 </h:body>
 </ui:composition>

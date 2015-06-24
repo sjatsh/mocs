@@ -688,7 +688,7 @@
 			<h:inputHidden value="#{JobdispatchChange.isSuccess}" id="isSuccess"></h:inputHidden>
 			<h:inputHidden value="#{JobdispatchChange.serachEquId}" id="serachEquId"></h:inputHidden>
 			<h:inputHidden value="#{JobdispatchChange.serachEquId2}" id="serachEquId2"></h:inputHidden>
-			<p:dialog header="提示信息" widgetVar="dlg1" id="dlg1" modal="true" onHide="location.reload();" height="240" width="700" resizable="false">
+			<div class="div-dialog">
 				<table width="100%">
 					<tr>
 						<td width="20%" align="right"><span data-i18n="content.result_title1"></span>:</td>
@@ -724,7 +724,7 @@
 						</td>
 					</tr>
 				</table>
-			</p:dialog>
+			</div>
 			<p:growl id="messages" showDetail="true" />
 			
 			<script>
@@ -740,11 +740,11 @@
 					
 	
 					//页面大小调整
-					$.autosizeExclude($(".filter-submit>img")[0], false);
+					/* $.autosizeExclude($(".filter-submit>img")[0], false);
 					$.autosizeExclude($("#myform\\:tb")[0], false);
 					$.autosizeExclude($("#myform\\:tb2")[0], false);
 					$.autosizeExclude($("#comfirm")[0], true);
-					$.autosizeExclude($("#comfirm2")[0], true);
+					$.autosizeExclude($("#comfirm2")[0], true); */
 					//$.autosizeAll();
 					
 					//显示页面
@@ -942,17 +942,17 @@
 					document.getElementById("step4_2").style.visibility = "hidden";
 					if (type == 1) {	//step1
 						document.getElementById("step1").style.visibility = "visible";
-						$.autosizeElement($("#myform\\:tb")[0], false);
+						//$.autosizeElement($("#myform\\:tb")[0], false);
 					} else if (type == 2) {	//step2
 						document.getElementById("step2").style.visibility = "visible";
-						$.autosizeElement($("#myform\\:tb2")[0], false);
+						//$.autosizeElement($("#myform\\:tb2")[0], false);
 					} else if (type == 3) {	//step3-1
 						document.getElementById("step3_1").style.visibility = "visible";
-						$.autosizeElement($("#myform\\:user")[0], false);
-						$.autosizeElement($("#myform\\:maxNum")[0], false);
+						//$.autosizeElement($("#myform\\:user")[0], false);
+						//$.autosizeElement($("#myform\\:maxNum")[0], false);
 					}else if(type ==4){	//step3-2
 						document.getElementById("step3_2").style.visibility = "visible";
-						$.autosizeElement($("#myform\\:user2")[0], false);
+						//$.autosizeElement($("#myform\\:user2")[0], false);
 					}else if(type ==5){	//step4-1
 						document.getElementById("step4_1").style.visibility = "visible";
 						//$.autosizeElement($("#step4_1")[0], true);

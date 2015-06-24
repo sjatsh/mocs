@@ -25,8 +25,9 @@ function resizeTable() {
 	}
 }
 $(document).ready(function() {
-	$.autosizeExclude($(".table-title")[0], true);
-	$.autosizeExclude($(".table-body>div")[0], true);
-    $.autosizeReturn(resizeTable);
+//	$.autosizeExclude($(".table-title")[0], true);
+//	$.autosizeExclude($(".table-body>div")[0], true);
+//    $.autosizeReturn(resizeTable);
     dataTranslate("output_gather_report", function(t) { $("span").i18n();});
+    resizeTable();
 });

@@ -1,7 +1,7 @@
 $(document).ready(function() {
-	$.autosizeExclude($(".table-title")[0], true);
-	$.autosizeExclude($(".table-body>div")[0], true);
-	$.autosizeFrame(false);
+//	$.autosizeExclude($(".table-title")[0], true);
+//	$.autosizeExclude($(".table-body>div")[0], true);
+//	$.autosizeFrame(false);
 	
 	$("option").attr("data-i18n", function() {
 		return $(this).text();
@@ -9,14 +9,14 @@ $(document).ready(function() {
 	
 	//国际化
 	dataTranslate("product_in_progress_composite", function(t) { $("*[data-i18n]").i18n();});
-    
-    $.autosizeReturn(resizeTable);
+	resizeTable();
+//    $.autosizeReturn(resizeTable);
     
 });
 function selectChage(){
-	$("#myform\\:batchNo").each(function() {
-		$.autosizeElement(this,true);
-	});
+//	$("#myform\\:batchNo").each(function() {
+//		$.autosizeElement(this,true);
+//	});
 }
 function querybtn(){
 	document.getElementById("myform:btn_search").click();

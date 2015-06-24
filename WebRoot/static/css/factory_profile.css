@@ -1,46 +1,193 @@
-.equstatus{width:440px;height:80px;font-size: 14px;left: 20px;top: 780px;z-index: 10;color: #505050;}
-.yanse_WH{width: 60px;height: 32px;line-height: normal;} 
-.font_WH{width: 140px;height: 32px;line-height: normal;} 
-.yanse_LT1{left:0px;top: 10px;background-color: #37A338;}
-.yanse_LT2{left:200px;top:10px;background-color: #FED400;}
-.yanse_LT3{left:0px;top: 52px;background-color: #FF0000;}
-.yanse_LT4{left:200px;top:52px;background-color: #626262;}
-.font_LT1{left: 80px;top: 10px;}
-.font_LT2{left: 280px;top:10px;}
-.font_LT3{left: 80px;top: 52px;}
-.font_LT4{left: 280px;top:52px;}
+.equstatus {
+	width: 4.40rem;
+	height: 0.80rem;
+	font-size: 0.14rem;
+	left: 0.20rem;
+	top: 7.80rem;
+	z-index: 10;
+	color: #505050;
+}
 
-.equstatus2{width:700px;height:50px;font-size: 14px;left: 20px;top: 780px;z-index: 10;color: #505050;position: absolute;}
-.yanse_WH2{width: 18px;height: 50px;line-height: 50px;float: left;margin-left: 30px;}
-.yanse_LT11{left: 0px;top: 0px;}
-.yanse_LT22{left: 100px;top: 0px;}
-.yanse_LT33{left: 240px;top: 0px;}
-.yanse_LT44{left: 380px;top: 0px;}
-.font_WH2{height:50px;line-height: 50px;float: left;margin-left: 20px;white-space: nowrap;}
-.font_LT11{left: 30px;top: 0px;}
-.font_LT22{left: 130px;top: 0px;}
-.font_LT33{left: 270px;top: 0px;}
-.font_LT44{left: 410px;top: 0px;}
+.yanse_WH {
+	width: 0.60rem;
+	height: 0.32rem;
+	line-height: normal;
+}
 
+.font_WH {
+	width: 1.40rem;
+	height: 0.32rem;
+	line-height: normal;
+}
 
-.next-page{position: absolute;z-index: 100;width: 50px; height: 124px;top: 400px;left: 1870px;display: none;}
-.zl-content-top>.txt-wh>.titletxt{font-size: 24px;line-height: 25px;height: 25px;left: 20px;width: 370px;top: 15px;text-align: left;}
-.zl-content-top>.txt-wh>.titleconten{
-	font-size: 100px;
-	line-height: 100px;
-	height: 100px;
-	left: 180px;
-	width: 255px;
-	top:40px;
+.yanse_LT1 {
+	left: 0;
+	top: 0.10rem;
+	background-color: #37A338;
+}
+
+.yanse_LT2 {
+	left: 2.00rem;
+	top: 0.10rem;
+	background-color: #FED400;
+}
+
+.yanse_LT3 {
+	left: 0;
+	top: 0.52rem;
+	background-color: #FF0000;
+}
+
+.yanse_LT4 {
+	left: 2.00rem;
+	top: 0.52rem;
+	background-color: #626262;
+}
+
+.font_LT1 {
+	left: 0.80rem;
+	top: 0.10rem;
+}
+
+.font_LT2 {
+	left: 2.80rem;
+	top: 0.10rem;
+}
+
+.font_LT3 {
+	left: 0.80rem;
+	top: 0.52rem;
+}
+
+.font_LT4 {
+	left: 2.80rem;
+	top: 0.52rem;
+}
+
+.equstatus2 {
+	width: 7.00rem;
+	height: 0.50rem;
+	font-size: 0.14rem;
+	left: 0.20rem;
+	top: 7.80rem;
+	z-index: 10;
+	color: #505050;
+	position: absolute;
+}
+
+.yanse_WH2 {
+	width: 0.18rem;
+	height: 0.50rem;
+	line-height: 0.50rem;
+	float: left;
+	margin-left: 0.30rem;
+}
+
+.yanse_LT11 {
+	left: 0;
+	top: 0;
+}
+
+.yanse_LT22 {
+	left: 1.00rem;
+	top: 0;
+}
+
+.yanse_LT33 {
+	left: 2.40rem;
+	top: 0;
+}
+
+.yanse_LT44 {
+	left: 3.80rem;
+	top: 0;
+}
+
+.font_WH2 {
+	height: 0.50rem;
+	line-height: 0.50rem;
+	float: left;
+	margin-left: 0.20rem;
+	white-space: nowrap;
+}
+
+.font_LT11 {
+	left: 0.30rem;
+	top: 0;
+}
+
+.font_LT22 {
+	left: 1.30rem;
+	top: 0;
+}
+
+.font_LT33 {
+	left: 2.70rem;
+	top: 0;
+}
+
+.font_LT44 {
+	left: 4.10rem;
+	top: 0;
+}
+
+.next-page {
+	position: absolute;
+	z-index: 100;
+	width: 0.50rem;
+	height: 1.24rem;
+	top: 4.00rem;
+	left: 18.70rem;
+	display: none;
+}
+
+.zl-content-top>.txt-wh>.titletxt {
+	position: absolute;
+	font-size: 0.24rem;
+	line-height: 0.25rem;
+	height: 0.25rem;
+	left: 0.20rem;
+	width: 3.70rem;
+	top: 0.15rem;
 	text-align: left;
-	font-family:"Arial Black";
-}
-.titlecontenspan{
-	font-size: 72px;
-	font-family:"Arial Black" !important;
 }
 
+.zl-content-top>.txt-wh>.titleconten {
+	position: absolute;
+	font-size: 1.00rem;
+	line-height: 1.00rem;
+	height: 1.00rem;
+	left: 1.80rem;
+	width: 2.55rem;
+	top: 0.40rem;
+	text-align: left;
+	font-family: "Arial Black";
+}
 
-.content-info-bg{position: absolute;width: 1920px;height: 720px;left: 0px;top:0px;z-index: -1;}
-.content-info-qy{position: absolute;width: 1920px;height: 720px;left: 125px;top:0px;}
-.content-info-doubleClick{background-color: white;position: relative;background-repeat: no-repeat;display: none;}
+.titlecontenspan {
+	font-size: 0.72rem;
+	font-family: "Arial Black" !important;
+}
+
+.content-info-bg {
+	position: absolute;
+	width: 19.20rem;
+	height: 7.20rem;
+	left: 0;
+	top: 0;
+	z-index: -1;
+}
+
+.content-info-qy {
+	position: absolute;
+	width: 19.20rem;
+	height: 7.20rem;
+	top: 0;
+}
+
+.content-info-doubleClick {
+	background-color: white;
+	position: relative;
+	background-repeat: no-repeat;
+	display: none;
+}

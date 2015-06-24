@@ -33,7 +33,7 @@ $(document).ready(function() {
 		$(this).find(".main-menu").each(function() {
 			sumWidth += $(this).width() + parseFloat($(this).css("margin-right").replace("px", ""));	//8是padding-right的值
 		});
-		return sumWidth;
+		return sumWidth + 1;
 	});
 	
 	//指向当前menu

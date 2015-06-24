@@ -35,10 +35,9 @@ $(document).ready(function() {
 	dataTranslate("production_scrap_report", function(t) {
 		$("*[data-i18n]").i18n();
 	});
-	
+	resizeTable();
 	//样式调整
-	$.autosizeExclude($(".table-title")[0], true);
-	$.autosizeExclude($(".table-body>div")[0], true);
-	
-	$.autosizeReturn(resizeTable);
+//	$.autosizeExclude($(".table-title")[0], true);
+//	$.autosizeExclude($(".table-body>div")[0], true);
+//	$.autosizeReturn(resizeTable);
 }); 

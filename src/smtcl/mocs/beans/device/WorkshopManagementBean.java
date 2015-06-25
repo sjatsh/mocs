@@ -380,7 +380,7 @@ public class WorkshopManagementBean {
 		 int other=0;
 		 for(Map<String,Object> map:rs){
 			 if(i<4){
-				 String name=null==map.get("NCprogramm")?"test":map.get("NCprogramm").toString()+","+map.get("partName");
+				 String name=null==map.get("NCprogramm")?"test":map.get("NCprogramm").toString()+",Î´¶¨Òå";
 				 String y=null==map.get("total")?"0":map.get("total").toString();
 				 result+="{name:'"+name+"',y:"+y+",color:'"+color[i]+"'},";
 			 }else{

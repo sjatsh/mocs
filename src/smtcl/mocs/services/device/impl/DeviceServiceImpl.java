@@ -2271,17 +2271,19 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 	 */
 	public List<Map<String, Object>> getWorkEvent(String equSerialNo,int type){
 		Date date=new Date();
-		String sql="SELECT COUNT(tu.cuttingTask) as total,"
-				 + "	   tu.equ_serialNo as equSerialNo,tu.NCprogramm AS NCprogramm,tp.no as partName "
-				 + " FROM t_userequworkevents tu ,t_part_type_info tp"
-				 + " WHERE tu.partNo = tp.no and tu.equ_serialNo = '"+equSerialNo+"'";
+		String sql="SELECT COUNT(tu.equ_serialNo) as total,"
+				 + "	   tu.equ_serialNo as equSerialNo,tu.NCprogramm AS NCprogramm "
+				 + " FROM t_userequworkevents tu "
+				 + " WHERE tu.equ_serialNo = '"+equSerialNo+"'";
 		//如果是当日
 		 if(type==1){
 			 sql+=" and DATE_FORMAT(tu.finishtime,'%Y-%m-%d')='"+StringUtils.formatDate(date, 2)+"' "
-			 	+ " GROUP BY tu.NCprogramm";
+			 	+ " GROUP BY tu.NCprogramm "
+			 	+ " order by total desc";
 		 }else{
 			 sql+=" and DATE_FORMAT(tu.finishtime,'%Y-%m')='"+StringUtils.formatDate(DateUtils.getCurrentMonthStartTime(), 6)+"' "
-			    + " GROUP BY tu.NCprogramm"; 
+			    + " GROUP BY tu.NCprogramm" 
+			    + " order by total desc";
 		 }
 		 return dao.executeNativeQuery(sql);
 	}

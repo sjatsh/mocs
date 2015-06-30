@@ -25,8 +25,10 @@ function querybtn(){
    document.getElementById("myform:btn_search").click();
 }
  $(document).ready(function() {
-     $.autosizeExclude($(".table-title")[0], true);
-     $.autosizeExclude($(".table-body>div")[0], true);
-	 $.autosizeReturn(resizeTable);
+//     $.autosizeExclude($(".table-title")[0], true);
+//     $.autosizeExclude($(".table-body>div")[0], true);
+//	 $.autosizeReturn(resizeTable);
 	 dataTranslate("month_output_report", function(t) { $("span").i18n();});
+	 
+	 resizeTable();
 }); 

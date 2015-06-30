@@ -7,8 +7,8 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
-	<!-- <link rel="stylesheet" href="css/workshop_management.css" type="text/css"></link> -->
-	<link rel="stylesheet" href="css/publish/workshopManagement.min.css" type="text/css"></link>
+	<link rel="stylesheet" href="css/workshop_management.css" type="text/css"></link>
+	<!-- <link rel="stylesheet" href="css/publish/workshopManagement.min.css" type="text/css"></link> -->
 <h:form id="myform" >
 <h:inputHidden value="#{workshopManagementBean.nodeSwitchLoad}" />
 <!-- 内容头部  -->
@@ -257,10 +257,10 @@
 	<h:inputHidden value="#{workshopManagementBean.mt.path}" id="partbg"></h:inputHidden>
 	<h:inputHidden value="#{workshopManagementBean.mt.processNum}" id="processNumValue"></h:inputHidden>
 </a4j:outputPanel>
-<!-- <h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
 <h:outputScript library="js" name="exporting.js"></h:outputScript>
 <h:outputScript library="js" name="highcharts-more.js"></h:outputScript>
-<h:outputScript library="js" name="workshop_management.js"></h:outputScript> -->
-<h:outputScript library="js/publish" name="workshopManagement.min.js"></h:outputScript>
+<h:outputScript library="js" name="workshop_management.js"></h:outputScript>
+<!-- <h:outputScript library="js/publish" name="workshopManagement.min.js"></h:outputScript> -->
 </h:form>
 </ui:composition>

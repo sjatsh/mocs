@@ -10,13 +10,13 @@
 	<!-- Mimic Internet Explorer 8 -->
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"  />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width = device-width, initial-scale = 1， minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
 	<title>车间管理</title>
-	<!-- <link rel="stylesheet" href="css/general.css" type="text/css"></link>
-	<link rel="stylesheet" href="css/autosize.css" type="text/css"></link>
+	<link rel="stylesheet" href="css/general.css" type="text/css"></link>
 	<link rel="stylesheet" href="css/basicTemplate.css" type="text/css"></link>
 	<link rel="stylesheet" href="css/top_node.css" type="text/css"></link>
-	<link rel="stylesheet" href="css/jquery.alerts.css" type="text/css"></link> -->
-	<link rel="stylesheet" href="css/publish/basicTemplate_head.min.css" type="text/css"></link>
+	<link rel="stylesheet" href="css/jquery.alerts.css" type="text/css"></link>
+	<!-- <link rel="stylesheet" href="css/publish/basicTemplate_head.min.css" type="text/css"></link> -->
 	
 	<!-- <h:outputScript library="js" name="jquery-1.9.1.min.js"></h:outputScript>
 	<h:outputScript library="js" name="jquery-migrate-1.2.1.min.js"></h:outputScript> -->
@@ -25,12 +25,11 @@
 	<!-- <h:outputScript library="js" name="i18next-1.7.4.min.js"></h:outputScript> -->
     <script src="./js/publish/i18next-1.7.4.min.js.gzjs" type="text/javascript"></script>
     
-	<!-- <h:outputScript library="js" name="frame_size.js"></h:outputScript>
+	<h:outputScript library="js" name="frame_size.js"></h:outputScript>
 	<h:outputScript library="js" name="common.js"></h:outputScript>
-	<h:outputScript library="js" name="autosize.js"></h:outputScript>
 	<h:outputScript library="js" name="ReTranslate.js"></h:outputScript>
-	<h:outputScript library="js" name="jquery.alerts.js"></h:outputScript> -->
-	<h:outputScript library="js/publish" name="BasicTemplate_head.min.js"></h:outputScript>
+	<h:outputScript library="js" name="jquery.alerts.js"></h:outputScript>
+	<!-- <h:outputScript library="js/publish" name="BasicTemplate_head.min.js"></h:outputScript> -->
 	
 </h:head>
 <h:body>
@@ -39,34 +38,36 @@
 	<div class="show-frame"></div>
 	<div class="zl-wrapper">
 		<div class="zl-top">
-			<div class="zl-top-logo">
-				<div class="zl-top-logo-img">
-					<img src="images/basicTemplate/main_logo_v2.png" />
+			<div class="zl-top-frame">
+				<div class="zl-top-logo">
+					<div class="zl-top-logo-img">
+						<img src="images/basicTemplate/main_logo_v2.png" />
+					</div>
 				</div>
-			</div>
-			<div class="zl-top-content">
-				<ui:include src="/templates/includes/node.xhtml" />
-			</div>
-			<div class="zl-top-user">
-				<div class="zl-top-user-btn">
-					<img alt="logout" src="images/basicTemplate/btn_logout.png" />
-					<div class="zl-top-user-btn-text" data-i18n="logout"></div>
+				<div class="zl-top-content">
+					<ui:include src="/templates/includes/node.xhtml" />
 				</div>
-				<h:form id="logform">
-					<p:commandButton id="logout" actionListener="#{menuBean.LogOut}" oncomplete="location.reload()" style="display: none;"></p:commandButton>
-				</h:form>
-				<div class="zl-top-user-frame">
-					<span class="zl-top-user-name">
-						<h:outputText value="#{menuBean.userName}"/>
-					</span>
-					<span data-i18n="welcome"></span>
-					<img class="zl-top-user-icon" src="images/basicTemplate/icon_user.png" />
+				<div class="zl-top-user">
+					<div class="zl-top-user-btn">
+						<img alt="logout" src="images/basicTemplate/btn_logout.png" />
+						<div class="zl-top-user-btn-text" data-i18n="logout"></div>
+					</div>
+					<h:form id="logform">
+						<p:commandButton id="logout" actionListener="#{menuBean.LogOut}" oncomplete="location.reload()" style="display: none;"></p:commandButton>
+					</h:form>
+					<div class="zl-top-user-frame">
+						<span class="zl-top-user-name">
+							<h:outputText value="#{menuBean.userName}"/>
+						</span>
+						<span data-i18n="welcome"></span>
+						<img class="zl-top-user-icon" src="images/basicTemplate/icon_user.png" />
+					</div>
 				</div>
-			</div>
-			<div class="zl-top-translate">
-				<a id="lng_zh" href="javascript:void(0)">中文</a>
-				|
-				<a id="lng_en" href="javascript:void(0)">English</a>
+				<div class="zl-top-translate">
+					<a id="lng_zh" href="javascript:void(0)">中文</a>
+					|
+					<a id="lng_en" href="javascript:void(0)">English</a>
+				</div>
 			</div>
 			<img class="zl-top-line" src="images/basicTemplate/top_line.png" />
 		</div>
@@ -78,8 +79,8 @@
 		</div>
 		<div class="zl-wrapper-more">
 		</div>
-		<!-- <h:outputScript library="js/page" name="basicTemplate.js"></h:outputScript> -->
-		<h:outputScript library="js/publish" name="basicTemplate.min.js"></h:outputScript>
+		<h:outputScript library="js/page" name="basicTemplate.js"></h:outputScript>
+		<!-- <h:outputScript library="js/publish" name="basicTemplate.min.js"></h:outputScript> -->
 	</div>
 </h:body>
 </html>

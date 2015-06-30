@@ -71,7 +71,7 @@ $(document).ready(function(){
     })
 
 	//页面大小调整
-	$.autosizeExclude($("#example-container")[0], true);
+	//$.autosizeExclude($("#example-container")[0], true);
     
 });
 		

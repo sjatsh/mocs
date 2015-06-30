@@ -357,8 +357,4 @@
         	hideType = false;	
     	}
     }
-
-    $(window).resize(function() {
-        $.autosizeMore();
-    });
 }));

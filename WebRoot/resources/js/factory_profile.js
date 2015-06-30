@@ -3,8 +3,8 @@ var contentName="content1";
 var imgCount=0;
 var imgFinishCount=0;
 function insertElement(x,y,imgUrl,equSerialNo,pathThree,ipAddress){
-	 var xPercent = wjb51/2050;
-	 var yPercent = hjb51/1080;
+	 var xPercent = $(".content-info-bg").width()/1920;
+	 var yPercent = $(".content-info-bg").height()/720;
 	
 	 x=parseInt(x*xPercent);
 	 y=parseInt(y*yPercent);
@@ -44,7 +44,7 @@ function insertElement(x,y,imgUrl,equSerialNo,pathThree,ipAddress){
 	  imgReady('./images/device/'+imgUrl, function () { //ready
 		  var imgwjb51=this.width;
 	   	  var imghjb51=this.height;
-	   	  var imgPercent = wjb51/2150; //缩小比例为浏览器宽度/1920. 用高的比例来缩小
+	   	  var imgPercent = $(".content-info-bg").height()/720; //缩小比例为浏览器宽度/1920. 用高的比例来缩小
 	   	  equSerialNo = equSerialNo.replace(".", "\\.");
 	   	  var tsts="#"+contentName+ ">div>#" + equSerialNo;
 	   	  $(tsts).css({
@@ -473,5 +473,5 @@ if(null!=bgpath&&""!=bgpath){
 $(document).ready(function() {
 	//国际化翻译
 	dataTranslate("factory_profile", function(t) { $("*[data-i18n]").i18n();});
-    $.autosizeReturn(reloadEqu);
+	reloadEqu();
 });

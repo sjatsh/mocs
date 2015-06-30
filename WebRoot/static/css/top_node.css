@@ -1,10 +1,10 @@
 /* home icon */
 .zl-icon-home {
 	float: left;
-	margin-top: 8px;
-	margin-left: 82px;
-	width: 23px;
-	height: 21px;
+	margin-top: 0.08rem;
+	margin-left: 0.82rem;
+	width: 0.23rem;
+	height: 0.21rem;
 	cursor: pointer; 
 	transition: transform .5s;
 }
@@ -15,23 +15,23 @@
 .zl-top-menu-left {
 	position: absolute;
 	left: 0;
-	top: 42px;
-	width: 14px;
-	height: 38px;
+	top: 0.42rem;
+	width: 0.14rem;
+	height: 0.38rem;
 }
 .zl-top-menu-right {
 	position: absolute;
-	left: 946px;
-	top: 42px;
-	width: 14px;
-	height: 38px;
+	left: 9.46rem;
+	top: 0.42rem;
+	width: 0.14rem;
+	height: 0.38rem;
 }
 .zl-top-menu-left>img,.zl-top-menu-right>img {
 	position: absolute;
 	left: 0;
-	top: 1px;
-	width: 14px;
-	height: 38px;
+	top: 0.01rem;
+	width: 0.14rem;
+	height: 0.38rem;
 	cursor: pointer;
 	visibility: visible;
 }
@@ -41,38 +41,38 @@
 }
 .zl-top-menu-center {
 	position: absolute;
-	left: 20px;
-	top: 42px;
-	width: 920px;
-	height: 38px;
+	left: 0.20rem;
+	top: 0.42rem;
+	width: 9.20rem;
+	height: 0.38rem;
 	font-weight: bold;
 	
 }
 #parent_node span,#top_node span {
-	font-size: 21px;
-	line-height: 38px;
+	font-size: 0.21rem;
+	line-height: 0.38rem;
 }
 /* 子集节点 */
 .zl-top-menu-sub-frame {
 	position: relative;
 	float: left;
-	width: 0;
-	height: 38px;
+	width: 7.36rem;
+	height: 0.38rem;
 	overflow: hidden;
 }
 .zl-top-menu-sub-content {
 	position: relative;
 	float: left;
 	width: auto;
-	height: 38px;
+	height: 0.38rem;
 	white-space: nowrap;
 }
 /* 分割线 */
 .zl-top-split {
 	position: relative;
 	float: right;
-	width: 1px;
-	height: 38px;
+	width: 0.01rem;
+	height: 0.38rem;
 	background: #4E4E4E;
 }
 /* 单个节点 */
@@ -80,20 +80,20 @@
 	position: relative;
 	float: left;
 	width: auto;
-	height: 38px;
+	height: 0.38rem;
 	text-align: center;
-	font-size: 21px;
-	line-height: 38px;
+	font-size: 0.21rem;
+	line-height: 0.38rem;
 	color: #5A5A5A;
 	overflow: hidden;
 	white-space: nowrap;
 	cursor: pointer;
 }
 .zl-top-menu>span {
-	padding: 0 10px;
+	padding: 0 0.10rem;
 }
 .zl-top-menu.menu-home {
-	width: 184px;
+	width: 1.84rem;
 }
 #top_node.sub .zl-top-menu {
 	background: rgba(230,240,232,1);

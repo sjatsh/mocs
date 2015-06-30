@@ -1,292 +1,201 @@
-* {
-	color: #595959;
-	font-weight: bold;
-	font-size:inherit;
-}
-
-.data {
-	height: 37px;
-	font-weight: normal;
-	width: 80%
-}
-
-.toptab {
-	display: block !important;
-}
-.rf-cal-extr{
-    font-weight: normal;
-}
-.rf-cal-tl-ftr{
-    font-weight: normal;
-}
-.rf-cal-tl-btn{
-    font-weight: normal;
-}
-
-.btn-next {
-	width: 59px;
-	height: 59px;
-	cursor: pointer;
-}
-
-.ui-dt-c{
-   font-weight: normal;
-   color:#333333;
-}
-.ui-state-default .ui-dt-c span{
-   text-shadow:none;
-   color:white;
-}
- .mybutton .ui-button-text{
-   color:white;
-}
-button:hover{
-	background-image: url('');
-}
-.t_select_list_table{
-   width: 230px;
-}
-
-textarea, input[type="text"], input[type="password"], select{
-font-size:20px;
-color:#333333;
-}
-
-.ui-state-default{background:#00a040;}
-
-.t_selected {
+.zl-content-label {
 	float: left;
-	overflow: hidden;
-	width: 384px;
-	height: 40px;
-	line-height: 40px;
-	color: #000;
-	text-align: left;
-	position: relative;
-	z-index: 1;
-	cursor: pointer;
-	display: block;
+	margin-left: 0.5rem;
+	margin-top: 0.4rem;
+	width: 1.5rem;
+	font-size: 0.24rem;
+	line-height: 0.34rem;
+	color: #828282;
+	white-space: nowrap;
+	text-align: right;
+}
+/* 选择框自定义 */
+.zl-content-select {
+	float: left;
+	margin-left: 0.3rem;
+	margin-top: 0.4rem;
+	width: 2.55rem;
+}
+.zl-content-select .zl-dateBox-bg-center,.zl-content-select.zl-dateBox input[type='text'],.zl-content-select .zl-selectMoreBox-bg-center,.zl-content-select.zl-selectMoreBox input[type='text'] {
+	width: 2.06rem;
+}
+.zl-content-select.zl-selectMoreBox .t_select_list_table {
+	width: 2.55rem;
+	z-index: 4;
+}
+.zl-content-select.zl-selectMoreBox .t_select_list_table table, .zl-content-select.zl-selectMoreBox .t_select_list_table td {
+	width: 2.55rem;
 }
 
-
-/* 保存按钮 */
-.btn-save {
-	width: 53px;
-	height: 53px;
-	cursor: pointer;
-}
-
-/* 上一步按钮 */
-.btn-prev {
-	width: 59px;
-	height: 59px;
-	cursor: pointer;
-}
-
-.imagebtn {
-	cursor: pointer;
-}
-
-/* 标题 */
-.title-text {
+/* 搜索按钮区域 */
+.zl-content-top-info-search {
 	position: absolute;
-	left: 0;
-	top: 114px;
-	line-height: 52px;
-	font-size: 52px;
-	font-weight: bold;
-	color: #595959;
-}
-
-.header-filter-title {
-	position: relative;
-	margin-top: 65px;
-	width: 384px;
-	height: 42px;
-	font-size: 36px;
-	line-height: 42px;
-	text-align: left;
-}
-
-.header-filter-select {
-	position: relative;
-	margin-top: 65px;
-	margin-left: -140px;
-	width: 384px;
-	height: 42px;
-}
-
-/* 搜索按钮 */
-.filter-submit {
-	position: absolute;
-	left: 110px;
-	top: 58px;
-	width: 164px;
-	height: 164px;
-	cursor: pointer;
-}
-
-.filter-submit img {
-	position: absolute;
+	left: 17.35rem;
 	top: 0;
-	left: 0;
-	height: 100%;
+	width: 1.85rem;
+	height: 1.56rem;
+	border-left: solid 1px #828282;
+}
+.zl-content-top-info-search .zl-content-btn {
+	position: absolute;
+	left: 0.22rem;
+	top: 0.61rem;
 }
 
-.filter-submit>.active {
+.zl-content-info {
 	display: none;
 }
 
-.filter-submit:active>.active {
-	display: block;
-}
-
-/* 上一步 */
-.prevBtn {
+.table-title {
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 288px;
-	height: 726px;
-	text-align: center;
-}
-
-/* 下一步 */
-.nextBtn {
-	position: absolute;
-	top: 0;
-	left: 1632px;
-	width: 288px;
-	height: 726px;
-	text-align: center;
-}
-
-.prevBtn>img, .nextBtn>img {
-	margin-top: 333px;
-}
-
-/* 主要内容 */
-.content-center {
-	position: absolute;
-	top: 0;
-	left: 288px;
-	width: 1344px;
-	height: 726px;
-	text-align: center;
-}
-
-/* 设备列表 */
-.table-frame {
-	position: relative; 
-	overflow: hidden;
-	width: 1344px;
-	height: 726px;
-}
-.table-frame .table-title {
-	position:absolute;
 	left: 0;
 	top: 0;
-	right: 0;
+	width: 100%;
 	z-index: 1;
+	
 }
-
-.table-frame .table-body {
+.table-body {
 	position:absolute;
 	left: 0;
 	top: 0;
 	overflow-x: hidden;
 	overflow-y: auto;
-	width: 1361px;
-	height: 726px;
+	width: 100%;
+	height: 100%;
 }
 
-.table-body>div {
-	width: 1344px;
+.content-control {
+	position: absolute;
+	top: -0.44rem;
+	left: 5rem;
+}
+.content-control>.content-control-btn {
+	float: left;
+	margin-left: 0.55rem;
 }
 
 .info-line {
 	position: relative;
-	width: 1344px;
-	height: 70px;
+	width: 100%;
+	height: 0.5rem;
+}
+.info-line:first-child {
+	margin-top: 1rem;
 }
 
 .info-title {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 400px;
-	height: 70px;
-	font-size: 24px;
-	line-height: 70px;
-	text-align: right;
+	float: left;
+	margin-left: 5.5rem;
+	width: 2rem;
+	height: 0.5rem;
+	font-size: 0.24rem;
+	line-height: 0.5rem;
+	color: #5a5a5a;
 }
+
 .info-value {
-	position: absolute;
-	left: 400px;
-	top: 0;
-	width: 944px;
-	height: 70px;
-	text-align: left;
+	float: left;
+	margin-left: 2rem;
+	height: 0.5rem;
 }
-.info-value>select {
-	position: relative;
-	top: 20px;
-	left: 20px;
-	width: 800px;
-	height: 30px;
-}
- .info-value input {
-	position: relative;
-	top: 20px;
-	left: 20px;
-	width: 800px;
-	height: 30px;
-}
-.info-value span>img.rf-cal-btn {
-	display: none;
-}
-.info-value .data-require {
-	position: relative;
-	left: 30px;
-	top: 20px;
-	color: red;
+.info-value>div {
+	float: left;
+	margin-top: 0.08rem;
 }
 
 .btn-plus {
- 	position: absolute;
- 	left: 806px;
- 	top: 20px;
- 	width: 15px;
- 	height: 15px;
- 	cursor: pointer;
+	position: absolute;
+	left: 11.17rem;
+	top: 0.09rem;
+	height: 0.16rem;
+	z-index: 1;
+	cursor: pointer;
 }
+
 .btn-minus {
- 	position: absolute;
- 	left: 806px;
- 	top: 36px;
- 	width: 15px;
- 	height: 15px;
- 	cursor: pointer;
+	position: absolute;
+	left: 11.17rem;
+	top: 0.25rem;
+	height: 0.16rem;
+	z-index: 1;
+	cursor: pointer;
 }
 
-.number-btn {
-	border: 0;
-	background-color: #00A040;
-	background-image: url('');
-	color: white;
-	text-shadow: none;
-	margin: 0 20px;
+.info-value.onlyValue {
+	margin-left: 9.5rem;
 }
 
-.comfirm-table {
+/* 按钮悬浮样式 */
+.info-value button:hover {
+	background: #e3e8e4;
+}
+
+.data-require {
+	float: left;
+	font-size: 0.2rem;
+	line-height: 0.5rem;
+	color: red;
+}
+
+.table-frame,.comfirm-table {
 	width: 100%;
 	height: 100%;
 }
+
 .comfirm-table>table {
 	width: 100%;
-	height: 70%;
+	height: 90%;
+	font-size: 0.24rem;
+	line-height: 0.24rem;
+	color: #5a5a5a;
+}
+.comfirm-table td {
+	text-indent: 1em;
+}
+.comfirm-title {
+	font-size: 0.28rem;
+	line-height: 0.28rem;
 }
 
-.ui-datatable th div.ui-dt-c {
-	padding: 0;
-} 
+.div-dialog {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -2.1rem 0 0 -3.5rem;
+	width: 7rem;
+	height: 4.2rem;
+	border: solid 1px #ccc;
+	border-radius: 0.08rem;
+	background-color: #eee;
+	box-shadow: 0.05rem 0.04rem 0.05rem 0 #999;
+	color: #5a5a5a;
+	z-index: 30;
+	display: none;
+}
+
+.result-title {
+	float: left;
+	clear: left;
+	font-size: 0.26rem;
+	line-height: 0.5rem;
+	width: 30%;
+	height: 0.5rem;
+	text-align: right;
+}
+.result-content {
+	float: left;
+	font-size: 0.22rem;
+	line-height: 0.5rem;
+	width: 70%;
+	height: 0.5rem;
+	text-align: left;
+	text-indent: 1em;
+	white-space:nowrap; 
+	overflow:hidden; 
+	text-overflow:ellipsis;
+}
+.div-dialog .zl-button {
+	float: left;
+	margin-left: 0.5rem;
+	margin-top: 0.1rem;
+}

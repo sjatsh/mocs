@@ -8,8 +8,6 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:form id="myform">
-<style type="text/css">
-</style>
 <link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
 <link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet"	type="text/css" />
 <link rel="stylesheet" href="css/person_detail_report.css" type="text/css"></link>
@@ -41,16 +39,20 @@
 			<span data-i18n="top.title2" />
 		</div>
 		<div class="zl-content-select zl-dateBox">
-			      <img class="zl-dateBox-bg" src="images/input/datebox.png" />
-			     <rich:calendar id="startTime" dayDisableFunction="disablementFunction" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
-				    value="#{personDetailBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
-			      <h:message for="startTime" style="color:red" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
+		    <rich:calendar id="startTime" dayDisableFunction="disablementFunction" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
+			    value="#{personDetailBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+		      <h:message for="startTime" style="color:red" />
 		</div>
 		<div class="zl-content-label">
 			<span data-i18n="top.title3" />
 		</div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="endTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{personDetailBean.endTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="endTime" style="color:red" />

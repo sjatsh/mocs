@@ -1,4 +1,6 @@
  $(document).ready(function() {
+	document.documentElement.style.fontSize = 100 / 580 * $("body").height() + "px";
+	
 	parent.document.getElementById("jobplanadd2").style.visibility="visible";
 	$("option").attr("data-i18n", function() {
 		return $(this).text();
@@ -7,9 +9,9 @@
 	$(".zl-select select").selectAutoHide(10);
 	//国际化翻译
 	dataTranslate("jobplan_add", function(t) { $("*[data-i18n]").i18n();},"../static/i18n");	
-	$.autosizeInit(1325,490,800,295);
-	$.autosizeAll();
-	$.autosizeMore();
+//	$.autosizeInit(1325,490,800,295);
+//	$.autosizeAll();
+//	$.autosizeMore();
 	   
 });          
   document.getElementById("myform:startTimePopupButton").style.display="none";

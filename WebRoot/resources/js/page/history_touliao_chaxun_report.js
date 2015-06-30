@@ -25,8 +25,9 @@ function resizeTable() {
 	}
 }
 $(document).ready(function() {
-	$.autosizeExclude($(".table-title")[0], true);
-	$.autosizeExclude($(".table-body>div")[0], true);
+//	$.autosizeExclude($(".table-title")[0], true);
+//	$.autosizeExclude($(".table-body>div")[0], true);
+//	$.autosizeReturn(resizeTable);
 	dataTranslate("history_touliao_chaxun_report", function(t) { $("span").i18n();});
-	$.autosizeReturn(resizeTable);
+	resizeTable();
 });

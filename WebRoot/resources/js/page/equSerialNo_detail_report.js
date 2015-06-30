@@ -26,8 +26,9 @@ function querybtn(){
 	document.getElementById("myform:btn_search").click();
 }
 $(document).ready(function() {
-	$.autosizeExclude($(".table-title")[0], true);
-	$.autosizeExclude($(".table-body>div")[0], true);
+//	$.autosizeExclude($(".table-title")[0], true);
+//	$.autosizeExclude($(".table-body>div")[0], true);
+//	$.autosizeReturn(resizeTable);
 	dataTranslate("equSerialNo_detail_report", function(t) { $("span").i18n();});
-	$.autosizeReturn(resizeTable);
+	resizeTable();
 });

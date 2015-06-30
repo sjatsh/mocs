@@ -2,7 +2,8 @@
 	"top": {
 		"main_title": "手动报工",
 		"title1":"设备序列号",
-		"title2":"设备名称"
+		"title2":"设备名称",
+		"btn1":"查询"
 	},
 	"content": {
 		"prev_btn":"上一步",

@@ -1,14 +1,16 @@
 $(document).ready(function() {
-         parent.document.getElementById("jobplanupdate2").style.visibility="visible";
-     	 initPages();//根据状态，对页面的原始进行可用，和不可用设置
-     	//选择框省略方法
-     	$(".zl-select select").selectAutoHide(10);	
-    	//国际化翻译
-        dataTranslate("jobplan_update", function(t) { $("span").i18n();},"../static/i18n");	
-        $.autosizeInit(1325,490,800,295);
-        $.autosizeAll();
-        $.autosizeMore();
-     });         
+	document.documentElement.style.fontSize = 100 / 580 * $("body").height() + "px";
+	
+     parent.document.getElementById("jobplanupdate2").style.visibility="visible";
+ 	 initPages();//根据状态，对页面的原始进行可用，和不可用设置
+ 	//选择框省略方法
+ 	$(".zl-select select").selectAutoHide(10);	
+	//国际化翻译
+    dataTranslate("jobplan_update", function(t) { $("span").i18n();},"../static/i18n");	
+//    $.autosizeInit(1325,490,800,295);
+//    $.autosizeAll();
+//    $.autosizeMore();
+});         
 function initPages(){
 	var status = document.getElementById("myform:statusHidden").value;
 	

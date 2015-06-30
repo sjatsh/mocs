@@ -8,256 +8,234 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 
-	<h:head>
-    	<link href="./css/general.css" rel="stylesheet" type="text/css" />  
-		<link rel="stylesheet" href="./css/productToStock.css" type="text/css"></link>
-	</h:head>
-
-	<h:body>
-		<h:form id="myform">
-			<div class="show-frame"></div>
-			<div class="header-bar">
-				<div class="logo-img"><img src="./images/profile_top_logo.png" /></div>
-				<div class="header-content">
-					<div class="main-title" data-i18n="top.main_title"></div>
-				</div>
-			</div>
-			<div class="main-content">
-				<div class="content-wrapper">
-					<div class="input-line-1">
-						<div class="input-title">
-							<span data-i18n="content.main_title"></span>:
-							<h:outputText id="instockNo" value="#{ProductToStock.instockNo}"></h:outputText>
-						</div>
-					</div>
-					<div class="input-line-2">
-						<div class="input-title" data-i18n="content.title1"></div>
-						<div class="input-content">
-							<h:selectOneMenu id="partTypeId" styleClass="inputText"
-								value="#{ProductToStock.partTpyeId}">
-								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-								<f:selectItems value="#{ProductToStock.partTypeList}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"></f:selectItems>
-								<a4j:ajax event="change" listener="#{ProductToStock.getJobPlanInfo}" execute="@this" render=":myform:tb :myform:instockNum" oncomplete="tableTranslate();btnTranslate();"/>
-							</h:selectOneMenu>
-							<br/>
-							<h:message for="partTypeId" style="color:red" />
-						</div>
-					</div>
-					<div class="input-line-2">
-						<div class="input-title" data-i18n="content.title2"></div>
-						<div class="input-content">
-							<h:selectOneMenu id="inventoryId" styleClass="inputText"
-								value="#{ProductToStock.inventoryId}">
-								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-								<f:selectItems value="#{ProductToStock.inventoryNoList}" var="part" itemLabel="#{part.no}" itemValue="#{part.id}"></f:selectItems>
-							    <f:ajax event="change" listener="#{ProductToStock.getMaterialPositionList}" render=":myform:materialPositionId"></f:ajax>
-							</h:selectOneMenu>
-							<br/>
-							<h:message for="inventoryId" style="color:red" />
-						</div>
-					</div>
-					<div style="clear: both"></div>
-					<div class="input-line-2">
-						<div class="input-title" data-i18n="content.title3"></div>
-						<div class="input-content">
-							<h:inputText id="instockNum" styleClass="inputText2" 
-								onkeyup="this.value=this.value.replace(/\D/g,'')" 
-								onafterpaste="this.value=this.value.replace(/\D/g,'')"
-								value="#{ProductToStock.instockNum}"/>
-							<p:commandButton id="js" value="content.btn_auto" action="#{ProductToStock.maxInStockNum}" update=":myform:instockNum" >
-							</p:commandButton>
-						</div>
-					</div>
-					<div class="input-line-2">
-						<div class="input-title" data-i18n="content.title4"></div>
-						<div class="input-content">
-							<h:selectOneMenu id="materialPositionId" styleClass="inputText"
-								value="#{ProductToStock.materialPositionId}">
-								<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-								<f:selectItems value="#{ProductToStock.materialPositionNoList}" var="part" itemLabel="#{part.no}" itemValue="#{part.id}"></f:selectItems>
-							</h:selectOneMenu>
-							<br/>
-							<h:message for="materialPositionId" style="color:red" />
-						</div>
-					</div>
-					<div style="clear: both"></div>
-					<div class="content-table">
-						<p:dataTable id="tb" style="width:100%;" editable="true"
-							value="#{ProductToStock.dataList}" var="record"
-							paginator="true" paginatorPosition="bottom" rows="3"
-							selectionMode="single" rowKey="#{record.id}">
-							<p:column headerText="content.table_title1" style="width:15%;word-break:break-all;text-align: center;">  
-								#{record.materailNo}  
-							</p:column>
-							<p:column headerText="content.table_title2" style="width:15%;word-break:break-all;text-align: center;">  
-								#{record.materailName}  
-							</p:column>
-							<p:column headerText="content.table_title3" style="width:10%;word-break:break-all;text-align: center;">  
-								#{record.type}  
-							</p:column>
-							<p:column headerText="content.table_title4" style="width:7%;word-break:break-all;text-align: center;">  
-								#{record.num}  
-							</p:column>
-							<p:column headerText="content.table_title5" style="width:7%;word-break:break-all;text-align: center;">  
-								#{record.processOrder}  
-							</p:column>
-							<p:column headerText="content.table_title6" style="width:12%;word-break:break-all;text-align: center;">  
-								#{record.jobplanNo}  
-							</p:column>
-							<p:column headerText="content.table_title7" style="width:12%;word-break:break-all;text-align: center;">  
-								#{record.storageNo}  
-							</p:column>
-							<p:column headerText="content.table_title8" style="width:8%;word-break:break-all;text-align: center;">  
-								#{record.leftNum}  
-							</p:column>
-							<p:column headerText="content.table_title9" style="width:8%;word-break:break-all;text-align: center;">  
-								#{record.instockNum}  
-							</p:column>
-							<p:column headerText="content.table_title10" style="width:10%;word-break:break-all" >
-								<p:commandButton value="content.table_title10" action="#{ProductToStock.getInfo(record.materailNo,record.type)}"
-									style="border:0;background-color: #00A040;text-shadow:none;"  
-									update=":myform:isSuccess :myform:jobplanId :myform:jobplanFinishNum :myform:jobplanInStockNum :myform:storageNo" oncomplete="check()">
-								</p:commandButton>
-							</p:column> 
-						</p:dataTable>
-					</div>
-					<div class="input-line-1">
-					    <p:commandButton value="content.btn_into" style="border:0;background-color: #00A040;background-image: url('');color:white;
-							text-shadow:none;" onclick="onYZ()" 
-							>
-						</p:commandButton>
-						<p:commandButton id="submit" value="确认 " style="display:none;" action="#{ProductToStock.saveDataInfo}" oncomplete="onZZ();tableTranslate();btnTranslate();" update=":myform:isSuccess :myform:tb :myform:instockNo">
-						</p:commandButton>
-					</div>
-				</div>
-			</div>
-			<p:commandButton id="show" style="display:none;" onclick="dlg1.show()">
-			</p:commandButton>
-			<h:inputHidden value="#{ProductToStock.isSuccess}" id="isSuccess"></h:inputHidden>
-			<p:dialog header="content.dlg_main_title" widgetVar="dlg1" id="dlg1" modal="true" resizable="false">
-				<table width="100%">
-					<tr>
-						<td width="40%" align="right"><span data-i18n="content.dlg_title1"></span>:</td>
-						<td>
-							<div id="divJobplanId">
-								<h:selectOneMenu id="jobplanId" styleClass="inputText"
-									value="#{ProductToStock.jobplanId}" 
-									style="color:#595959;">
-									<f:selectItem itemLabel="请选择" itemValue="-1"></f:selectItem>
-									<f:selectItems value="#{ProductToStock.jobPlanNoList}" var="jobplan" itemLabel="#{jobplan.no}" itemValue="#{jobplan.id}"></f:selectItems>
-									<f:ajax event="change" listener="#{ProductToStock.showInfo}" execute="@this" render=":myform:jobplanFinishNum :myform:jobplanInStockNum :myform:storageNo"/>
-								</h:selectOneMenu><br/>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td width="40%" align="right"><span data-i18n="content.dlg_title2"></span>:</td>
-						<td><h:inputText id="storageNo" value ="#{ProductToStock.storageNo}" style="font-weight:normal;color: #595959"></h:inputText></td>
-					</tr>
-					<tr>
-						<td width="40%" align="right"><span data-i18n="content.dlg_title3"></span>:</td>
-						<td><h:outputLabel id="jobplanFinishNum" value ="#{ProductToStock.jobplanFinishNum}" style="font-weight:normal"></h:outputLabel></td>
-					</tr>
-					<tr >
-						<td width="40%" align="right"><span data-i18n="content.dlg_title4"></span>:</td>
-						<td><h:outputLabel id="jobplanInStockNum" value ="#{ProductToStock.jobplanInStockNum}" style="font-weight:normal"></h:outputLabel></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="center">
-							<p:commandButton value="content.btn_ok" style="border:0;background-color: #00A040;background-image: url('');color:white;
-								text-shadow:none;" action="#{ProductToStock.editDataListInfo}" update=":myform:tb" oncomplete="onXZ();tableTranslate();btnTranslate();">
-							</p:commandButton>
-							<h:commandButton id="result" value="result" style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
-								text-shadow:none;" onclick="dlg1.hide()">
-							</h:commandButton>
-							<p:commandButton value="content.btn_close" style="border:0;background-color: #00A040;background-image: url('');color:white;
-								text-shadow:none;" onclick="dlg1.hide()" >
-							</p:commandButton>
-						</td>
-					</tr>
-				</table>
-			</p:dialog>
-			<p:growl id="messages" showDetail="true" />
-			
-			<script type="text/javascript">
-			//<![CDATA[ 
-				$(document).ready(function(){
-					//国际化
-					var option = {resGetPath:"static/i18n/__lng__/productToStock.json"};
-				    i18n.init(option, function(t) { $("*[data-i18n]").i18n();});
-				    tableTranslate();
-				    btnTranslate();
-				    dlgTranslate();
-				    
-					//页面大小调整
-					$.autosizeExclude($("#myform\\:dlg1")[0], true);
-					$.autosizeExclude($("#myform\\:tb")[0], true);
-					$.autosizeAll();
-					
-					//显示页面
-					$(".show-frame").hide();
-				});
-				
-				function onYZ() {
-					
-					var partTypeId = document.getElementById("myform:partTypeId").value;
-					var num = document.getElementById("myform:instockNum").value;
-					var code = document.getElementById("myform:inventoryId").value;
-					var materialPositionId = document.getElementById("myform:materialPositionId").value;
-					if(null == partTypeId || "" == partTypeId) {
-						alert("请选择产品名称！");
-					}
-					else if(null == code || "" == code){
-						alert("请选择库房号！");
-					}
-					else if(null == num || "" == num){
-						alert("请输入本次入库数量！");
-					}
-					else if(null == materialPositionId || "" == materialPositionId){
-						alert("请选择库位号！");
-					}
-					else{
-						document.getElementById("myform:submit").click();
-					}
-				}
+<h:form id="myform">
+	<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="./css/productToStock.css" type="text/css"></link>
 	
-				function onXZ()  {
-					
-				    document.getElementById("myform:result").click();
-					
-				}
-				function onZZ()  {
-					var msg = document.getElementById("myform:isSuccess").value;
-					alert(msg);
-				}
-				function check(){
-					var msg = document.getElementById("myform:isSuccess").value;
-					if(msg =="允许"){
-						document.getElementById("myform:show").click();
-					}else {
-					}
-				}
-				
-				//表格翻译
-				function tableTranslate() {
-					$(".ui-datatable th span").each(function() {
-						$(this).attr("data-i18n", $(this).text()).i18n();
-					});
-				}
-				//弹出框翻译
-				function dlgTranslate() {
-					$(".ui-dialog span.ui-dialog-title").each(function() {
-						$(this).attr("data-i18n", $(this).text()).i18n();
-					});
-				}
-				//按钮翻译
-				function btnTranslate() {
-					$(".ui-button span.ui-button-text").each(function() {
-						$(this).attr("data-i18n", $(this).text()).i18n();
-					});
-				}
-			//]]>
-			</script>
-		</h:form>
-	</h:body>
+	<div class="zl-content-top" >
+		<!--头部背景 -->
+		<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+		<!--标题 -->
+		<div class="zl-content-top-title">
+			<span data-i18n="top.main_title" />
+		</div>
+		<div class="zl-content-top-info-up">
+			<div class="zl-content-label">
+				<span data-i18n="content.title1" />
+			</div>
+			<div class="zl-content-select zl-select">
+				<img class="zl-select-bg-left" src="images/input/box_left.png" />
+				<img class="zl-select-bg-center" src="images/input/box_center.png" />
+				<img class="zl-select-bg-right" src="images/input/box_right_select.png" />
+				<h:selectOneMenu id="partTypeId" value="#{ProductToStock.partTpyeId}">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{ProductToStock.partTypeList}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"></f:selectItems>
+					<a4j:ajax event="change" listener="#{ProductToStock.getJobPlanInfo}" execute="@this" 
+						render=":myform:tb :myform:instockNum" oncomplete="tableTranslate();"/>
+				</h:selectOneMenu>
+			</div>
+			<h:message for="partTypeId" style="color:red" />
+			
+			<div class="zl-content-label">
+				<span data-i18n="content.title2" />
+			</div>
+			<div class="zl-content-select zl-select">
+				<img class="zl-select-bg-left" src="images/input/box_left.png" />
+				<img class="zl-select-bg-center" src="images/input/box_center.png" />
+				<img class="zl-select-bg-right" src="images/input/box_right_select.png" />
+				<h:selectOneMenu id="inventoryId" value="#{ProductToStock.inventoryId}">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{ProductToStock.inventoryNoList}" var="part" itemLabel="#{part.no}" itemValue="#{part.id}"></f:selectItems>
+				    <f:ajax event="change" listener="#{ProductToStock.getMaterialPositionList}" render=":myform:materialPositionId"></f:ajax>
+				</h:selectOneMenu>
+			</div>
+			<h:message for="inventoryId" style="color:red" />
+			
+			<div class="zl-content-label">
+				<span data-i18n="content.title3" />
+			</div>
+			<div class="zl-content-select zl-text">
+				<img class="zl-text-bg-left" src="images/input/box_left.png" />
+				<img class="zl-text-bg-center" src="images/input/box_center.png" />
+				<img class="zl-text-bg-right" src="images/input/box_right.png" />
+				<h:inputText id="instockNum" onkeyup="this.value=this.value.replace(/\D/g,'')" 
+					onafterpaste="this.value=this.value.replace(/\D/g,'')"
+					value="#{ProductToStock.instockNum}"/>
+				<div class="zl-button" onclick="jsClick();">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<span data-i18n="content.btn_auto"></span>
+					</div>
+				</div>
+				<p:commandButton id="js" style="display: none;" value="" action="#{ProductToStock.maxInStockNum}" update=":myform:instockNum" >
+				</p:commandButton>
+			</div>
+			
+			<div class="zl-content-label">
+				<span data-i18n="content.title4" />
+			</div>
+			<div class="zl-content-select zl-select">
+				<img class="zl-select-bg-left" src="images/input/box_left.png" />
+				<img class="zl-select-bg-center" src="images/input/box_center.png" />
+				<img class="zl-select-bg-right" src="images/input/box_right_select.png" />
+				<h:selectOneMenu id="materialPositionId" styleClass="inputText"
+					value="#{ProductToStock.materialPositionId}">
+					<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+					<f:selectItems value="#{ProductToStock.materialPositionNoList}" var="part" itemLabel="#{part.no}" itemValue="#{part.id}"></f:selectItems>
+				</h:selectOneMenu>
+			</div>
+			<h:message for="materialPositionId" style="color:red" />
+		</div>
+		<div class="zl-content-top-info-search">
+			<div class="zl-content-label">
+				<span data-i18n="content.main_title" />
+			</div>
+			<div class="zl-content-select zl-text">
+				<img class="zl-text-bg-left" src="images/input/box_left.png" />
+				<img class="zl-text-bg-center" src="images/input/box_center.png" />
+				<img class="zl-text-bg-right" src="images/input/box_right.png" />
+				<h:inputText id="instockNo" readonly="true" value="#{ProductToStock.instockNo}"/>
+			</div>
+			
+			<div class="zl-content-btn zl-button" onclick="onYZ();">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<span data-i18n="content.btn_into"></span>
+				</div>
+			</div>
+			<p:commandButton id="submit" value="确认 " style="display:none;" action="#{ProductToStock.saveDataInfo}" 
+				oncomplete="onZZ();tableTranslate();" update=":myform:isSuccess :myform:tb :myform:instockNo">
+			</p:commandButton>
+		</div>
+	</div>
+	<div class="zl-content-info">
+		<p:dataTable id="tb" styleClass="table-p" editable="true"
+			value="#{ProductToStock.dataList}" var="record"
+			paginator="true" paginatorPosition="bottom" rows="11"
+			selectionMode="single" rowKey="#{record.id}">
+			<p:column style="width:15%;"> 
+				<f:facet name="header">
+					<span data-i18n="content.table_title1"></span>
+				</f:facet> 
+				#{record.materailNo}  
+			</p:column>
+			<p:column style="width:15%;">
+				<f:facet name="header">
+					<span data-i18n="content.table_title2"></span>
+				</f:facet>   
+				#{record.materailName}  
+			</p:column>
+			<p:column style="width:10%;"> 
+				<f:facet name="header">
+					<span data-i18n="content.table_title3"></span>
+				</f:facet>  
+				#{record.type}  
+			</p:column>
+			<p:column style="width:7%;">  
+				<f:facet name="header">
+					<span data-i18n="content.table_title4"></span>
+				</f:facet> 
+				#{record.num}  
+			</p:column>
+			<p:column style="width:7%;">  
+				<f:facet name="header">
+					<span data-i18n="content.table_title5"></span>
+				</f:facet> 
+				#{record.processOrder}  
+			</p:column>
+			<p:column style="width:12%;">  
+				<f:facet name="header">
+					<span data-i18n="content.table_title6"></span>
+				</f:facet> 
+				#{record.jobplanNo}  
+			</p:column>
+			<p:column style="width:12%;">  
+				<f:facet name="header">
+					<span data-i18n="content.table_title7"></span>
+				</f:facet> 
+				#{record.storageNo}  
+			</p:column>
+			<p:column style="width:8%;">
+				<f:facet name="header">
+					<span data-i18n="content.table_title8"></span>
+				</f:facet>   
+				#{record.leftNum}  
+			</p:column>
+			<p:column style="width:8%;"> 
+				<f:facet name="header">
+					<span data-i18n="content.table_title9"></span>
+				</f:facet>  
+				#{record.instockNum}  
+			</p:column>
+			<p:column style="width:10%;" >
+				<f:facet name="header">
+					<span data-i18n="content.table_title10"></span>
+				</f:facet> 
+				<p:commandButton value="content.table_title10" action="#{ProductToStock.getInfo(record.materailNo,record.type)}"
+					style="border:0;background-color: #00A040;text-shadow:none;"  
+					update=":myform:isSuccess :myform:jobplanId :myform:jobplanFinishNum :myform:jobplanInStockNum :myform:storageNo" oncomplete="check()">
+				</p:commandButton>
+			</p:column> 
+		</p:dataTable>
+	</div>
+	<h:inputHidden value="#{ProductToStock.isSuccess}" id="isSuccess"></h:inputHidden>
+	<div class="div-dialog">
+		<div class="result-title"><span data-i18n="content.dlg_title1"></span>:</div>
+		<div class="result-content">
+			<div class="zl-select">
+				<img class="zl-select-bg-left" src="images/input/box_left.png" />
+				<img class="zl-select-bg-center" src="images/input/box_center.png" />
+				<img class="zl-select-bg-right" src="images/input/box_right_select.png" />
+				<h:selectOneMenu id="jobplanId" value="#{ProductToStock.jobplanId}">
+					<f:selectItem itemLabel="请选择" itemValue="-1"></f:selectItem>
+					<f:selectItems value="#{ProductToStock.jobPlanNoList}" var="jobplan" itemLabel="#{jobplan.no}" itemValue="#{jobplan.id}"></f:selectItems>
+					<f:ajax event="change" listener="#{ProductToStock.showInfo}" execute="@this" render=":myform:jobplanFinishNum :myform:jobplanInStockNum :myform:storageNo"/>
+				</h:selectOneMenu>
+			</div>
+		</div>
+		
+		<div class="result-title"><span data-i18n="content.dlg_title2"></span>:</div>
+		<div class="result-content">
+			<div class="zl-text">
+				<img class="zl-text-bg-left" src="images/input/box_left.png" />
+				<img class="zl-text-bg-center" src="images/input/box_center.png" />
+				<img class="zl-text-bg-right" src="images/input/box_right.png" />
+				<h:inputText id="storageNo" value ="#{ProductToStock.storageNo}"></h:inputText>
+			</div>
+		</div>
+		
+		<div class="result-title"><span data-i18n="content.dlg_title3"></span>:</div>
+		<div class="result-content">
+			<h:outputLabel id="jobplanFinishNum" value ="#{ProductToStock.jobplanFinishNum}"></h:outputLabel>
+		</div>
+		
+		<div class="result-title"><span data-i18n="content.dlg_title4"></span>:</div>
+		<div class="result-content">
+			<h:outputLabel id="jobplanInStockNum" value ="#{ProductToStock.jobplanInStockNum}"></h:outputLabel>
+		</div>
+		
+		<div class="zl-button" onclick="clickOk();">
+			<img class="zl-buttonBG" src="images/input/button.png"/>
+			<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+			<div class="zl-button-text">
+				<span data-i18n="content.btn_ok"></span>
+			</div>
+		</div>
+		<p:commandButton id="btnOk" style="display: none;" 
+			action="#{ProductToStock.editDataListInfo}" update=":myform:tb" oncomplete="tableTranslate();closeDlg();">
+		</p:commandButton>
+		<div class="zl-button" onclick="closeDlg();">
+			<img class="zl-buttonBG" src="images/input/button.png"/>
+			<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+			<div class="zl-button-text">
+				<span data-i18n="content.btn_close"></span>
+			</div>
+		</div>
+	</div>
+	<p:growl id="messages" showDetail="true" />
+	
+	<h:outputScript library="js/page" name="productToStock.js"></h:outputScript>
+</h:form>
 </ui:composition>

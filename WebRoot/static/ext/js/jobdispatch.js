@@ -17,13 +17,13 @@ var goodQuantity;
 var dispatchNo;
 
 //控制长宽的大小
-var createWidth = wjb51*1920/1920;
-var createHeight = hjb51*642/1080;
-var createRowHeight = hjb51*40/1080;
-var createColumnWidth = wjb51*480/1920;
-var fieldWidth = wjb51*200/1920;
-var defineWidth = wjb51*395/1920;
-var defineHeight = hjb51*350/1080;
+var createWidth = $("#jobplan_content").width();
+var createHeight = $("#jobplan_content").height();
+var createRowHeight = createHeight * 0.06;
+var createColumnWidth = createWidth * 0.25;
+var fieldWidth = createWidth * 0.104;
+var defineWidth = createWidth * 0.206;
+var defineHeight = createHeight * 0.545;
 var fsize = 5;
 var resourceStore;
 var eventStore;
@@ -160,7 +160,7 @@ Ext.onReady(function () {
 	columns: [
 		{
             text        : '<span data-i18n="content.tree_title"></span>',
-            width		: createColumnWidth - 2,
+            width		: createColumnWidth,
             sortable    : false,
             menuDisabled:true,
             dataIndex   : 'Name'

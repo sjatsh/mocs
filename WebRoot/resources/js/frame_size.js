@@ -1,19 +1,15 @@
 var wjb51 = 0;
-var hjb51 = 0;
+var hjb51 = 0, hWindow = 0;
 wjb51 = document.documentElement.clientWidth;
 hjb51 = document.documentElement.clientHeight;
-if(hjb51>wjb51){ //高大于宽 ，高等比缩小 
-	hjb51 = wjb51*1080/1920; 
+hWindow = hjb51;
+if(wjb51 / hjb51 < 1920 / 1080) {
+	hWindow = 1080 / 1920 * wjb51;
 }
-if(500>hjb51){  //高小于500，赋值为500，设滚动条为滚动 
-	   hjb51 = 600; 
-	   wjb51 = 800;
-	   document.body.style.overflow="auto";
-   }
-if(800>wjb51){
-	   hjb51 = 600;
-	   wjb51 = 800;
-	   document.body.style.overflow="auto";
-}	
+if(hWindow < 576) {
+	hWindow = 576;
+}
 var fadeouttime = 500;
 var settimeout = 100;
+//大小调整
+document.documentElement.style.fontSize = 100 / 1080 * hWindow + "px";

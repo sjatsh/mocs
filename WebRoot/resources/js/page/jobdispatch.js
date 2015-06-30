@@ -627,10 +627,10 @@ $(document).ready(function(){
     }
     
 	//页面大小调整
-	$.autosizeExclude($("#img4")[0], false);
-	$.autosizeExclude($("#img5")[0], false);
-	$.autosizeExclude($("#img6")[0], false);
-	$.autosizeExclude($("#example-container")[0], true);
+//	$.autosizeExclude($("#img4")[0], false);
+//	$.autosizeExclude($("#img5")[0], false);
+//	$.autosizeExclude($("#img6")[0], false);
+//	$.autosizeExclude($("#example-container")[0], true);
 	//$.autosizeExclude($("#divtab2")[0], true);
 	 
 });

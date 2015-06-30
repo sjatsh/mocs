@@ -104,28 +104,36 @@
 			</div>
 		<div class="zl-content-label" ><span data-i18n="top.title3" /></div>
 		<div class="zl-content-select1 zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="jobCreateDate" dayClassFunction="disabledClassesProv" boundaryDatesMode="scroll" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{jobdispatchDetailBean.jobCreateDate}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="jobCreateDate" style="color:red" />
 		 </div>	
-	      <div style="float:left; margin-top: 30px;margin-left:30px;"><h:outputText value="~" /></div>
+	      <div class="splitLine">~</div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="jobCreateDateEnd" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{jobdispatchDetailBean.jobCreateDateEnd}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="jobCreateDateEnd" style="color:red" />
 		 </div>	
 		<div class="zl-content-label" ><span data-i18n="top.title4" /></div>
 		<div class="zl-content-select1 zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="jobStartTime"  dayClassFunction="disabledClassesProv" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{jobdispatchDetailBean.jobStartTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="jobStartTime" style="color:red" />
 		 </div>	
-	      <div style="float:left; margin-top: 30px;margin-left:30px;"><h:outputText value="~" /></div>
+	      <div class="splitLine">~</div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="jobStartTimeEnd" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{jobdispatchDetailBean.jobStartTimeEnd}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="jobStartTimeEnd" style="color:red" />

@@ -191,9 +191,29 @@ function menuto(index, url) {
 			}
 		}
 		else {
-			//非同根按钮，是否有根页面
-			if(url != "/" && url != "") {
-				//有根页面
+			//非同根按钮
+			//是否点根按钮
+			if(index.split("-").length == 1) {
+				//根按钮
+				//是否有根页面
+				if(url != "/" && url != "") {
+					//有根页面
+				    if(clickAble) {
+				        act(index);
+				        jumpto(url);
+				    }
+				    else {
+				        clickAble = true;
+				    }
+				}
+				else {
+					//无根页面，显示二级菜单
+					$("#bottom_menus>.main-menu:not(:eq(" + index + "))>.child-menus").hide();
+					$("#bottom_menus>.main-menu:eq(" + rootIndex + ")").addClass("show").find(".child-menus").toggle();
+				}
+			}
+			else {
+				//非根按钮
 			    if(clickAble) {
 			        act(index);
 			        jumpto(url);
@@ -201,12 +221,6 @@ function menuto(index, url) {
 			    else {
 			        clickAble = true;
 			    }
-			}
-			else {
-				//无根页面，显示二级菜单
-				$("#bottom_menus>.main-menu:not(:eq(" + index + "))>.child-menus").hide();
-				$("#bottom_menus>.main-menu:eq(" + rootIndex + ")").addClass("show").find(".child-menus").toggle();
-				
 			}
 		}
 		//收回弹出层

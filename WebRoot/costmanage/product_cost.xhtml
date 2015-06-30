@@ -7,6 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
+	<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet"	type="text/css" />
 	<link rel="stylesheet" href="./css/product_cost.css" type="text/css"></link>
 	<!-- <link rel="stylesheet" href="./css/publish/productCost.min.css" type="text/css"></link> -->
 	
@@ -77,7 +78,7 @@
 							</thead>
 						</table>
 					</div>
-					<p:dataTable var="record" id="cost_bar" value="#{ProductCost.results}" styleClass="zl-content-info-left-tableInner">
+					<p:dataTable var="record" id="cost_bar" value="#{ProductCost.results}" styleClass="table-body zl-content-info-left-tableInner">
 						<p:column style="width: 45%">
 							<f:facet name="header">
 								<span data-i18n="content.table.title1">
@@ -160,6 +161,7 @@
 	</h:form>
 
 	<!-- hightChart JS加载 -->
+	<h:outputScript library="js" name="jquery.mCustomScrollbar.concat.min.js"></h:outputScript>
 	<h:outputScript library="js" name="highcharts.js"></h:outputScript>
 	<h:outputScript library="js" name="highcharts-more.js"></h:outputScript>
 	<h:outputScript library="js" name="exporting.js"></h:outputScript>

@@ -178,8 +178,8 @@
 		$(".zl-select select").selectAutoHide();
 		
 		$("#chart-frame").hide();
-		$.autosizeExclude($("#tableData"), true);
-		$.autosizeExclude($("#highchartChart>div")[0], true);
+		//$.autosizeExclude($("#tableData"), true);
+		//$.autosizeExclude($("#highchartChart>div")[0], true);
 		dataTranslate("stat_device_time", function(t) { $("*[data-i18n]").i18n();});
 	})
 	
@@ -189,8 +189,8 @@
 
 		dataTranslate("stat_device_time", function(t) { $("*[data-i18n]").i18n();});
 		
-		$.autosizeElement($(".content-info-tab-area"),false);
-		$.autosizeElement($("#highchartChart"), false);
+		//$.autosizeElement($(".content-info-tab-area"),false);
+		//$.autosizeElement($("#highchartChart"), false);
 	}
 	resizeListFrame();
  </script>

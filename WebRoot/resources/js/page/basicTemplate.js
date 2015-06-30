@@ -9,8 +9,12 @@ $(document).ready(function() {
 	//国际化处理
 	dataTranslate("basicTemplate", function(t) { $("*[data-i18n]").i18n();});
 	
-	//BODY撑满
-	document.body.style.height = hjb51 + "px";
+	//大小调整
+	$("body").height(hjb51);
+	var paddingHeight = ($("body").height() - $(".zl-top").height() - $(".zl-bottom").height() - $(".zl-content").height()) / 2;
+	$(".zl-content").css({
+		"marginTop": paddingHeight
+	});
 	
 	//隐藏遮罩层
 	$(".show-frame").hide();

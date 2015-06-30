@@ -2,7 +2,8 @@
 	"top": {
 		"main_title": "Manual Work",
 		"title1":"Device No",
-		"title2":"Device Name"
+		"title2":"Device Name",
+		"btn1":"Search"
 	},
 	"content": {
 		"prev_btn":"Previous",

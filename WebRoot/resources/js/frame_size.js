@@ -6,6 +6,9 @@ hWindow = hjb51;
 if(wjb51 / hjb51 < 1920 / 1080) {
 	hWindow = 1080 / 1920 * wjb51;
 }
+if(hWindow < 576) {
+	hWindow = 576;
+}
 var fadeouttime = 500;
 var settimeout = 100;
 //大小调整

@@ -250,8 +250,7 @@ td.sch-timetd .x-grid-cell-inner {
 }
 /* 已完成 */
 .sch-event-inner {
-	margin-left: 0;
-	margin-right: 0;
+	margin: 0;
 }
 .sch-percent-allocated-bar {
     background-color: rgba(108,204,71,1);
@@ -298,19 +297,17 @@ td.sch-timetd .x-grid-cell-inner {
 /* 内容文字 */
 .sch-percent-allocated-text
 {
-    display:block;
-    position: absolute;
-    left: 0;
-    top: 32%;
+	display: block;
     width: 100%;
     text-align: center;
+    line-height: 0.3rem;
     font-weight: bold;
     color: #000;
 }
-
+/* 
 /*window PAD微调*/
 @media screen and (min-width: 981px) and (max-width: 1280px) {
-	/* 左标题字体 */
+	左标题字体
 	.x-grid-inner-locked>.x-grid-header-ct .x-column-header {
 		text-indent: 14%;
 	}
@@ -318,46 +315,46 @@ td.sch-timetd .x-grid-cell-inner {
 	  padding-left: 0px;
 		
 	}
-	/* 树状图左侧留白区域 */
+	树状图左侧留白区域
 	.x-grid-inner-locked .x-grid-cell-inner {
 		margin-left: 16%;
 	}
-	/* 创建 */
+	创建
 	.ext_chuangjian,.ext_daipaigong, .ext_yipaigong {
 		height:0.22rem !important;
 		margin-top:0px;
 	}
-	/* 上线 加工 */
+	上线 加工
 	.ext_shangxian, .ext_jiagong {
 		height:0.22rem !important;
 		margin-top:0px;
 	}
-	/* 结束 */
+	结束
 	.ext_jieshu{
 		height:0.22rem !important;
 		margin-top:0px;
 	}
-	/* 完成 */
+	完成
 	.ext_wancheng{
 		height:0.22rem !important;
 		margin-top:0px;
 	}
-	/* 暂停 */
+	暂停
 	.ext_pause{
 		background-color:rgb(255,0,0);
 		height:0.22rem !important;
 		margin-top:0;
 	}
-	/* 内容文字 */
+	内容文字
 	.sch-percent-allocated-text
 	{
 	    top: 20%;
 	}
 }
 
-/*i PAD微调*/
+i PAD微调
 @media screen and (min-width: 0px) and (max-width: 980px) {
-	/* 左标题字体 */
+	左标题字体
 	.x-grid-inner-locked>.x-grid-header-ct .x-column-header {
 		text-indent: 12%;
 	}
@@ -365,41 +362,41 @@ td.sch-timetd .x-grid-cell-inner {
 	  padding-left: 0;
 		
 	}
-	/* 树状图左侧留白区域 */
+	树状图左侧留白区域
 	.x-grid-inner-locked .x-grid-cell-inner {
 		margin-left: 15%;
 	}
-	/* 创建 */
+	创建
 	.ext_chuangjian,.ext_daipaigong, .ext_yipaigong {
 		height:0.18rem !important;
 		margin-top:0;
 	}
-	/* 上线 加工 */
+	上线 加工
 	.ext_shangxian, .ext_jiagong {
 		height:0.18rem !important;
 		margin-top:0;
 	}
-	/* 结束 */
+	结束
 	.ext_jieshu{
 		height:0.18rem !important;
 		margin-top:0;
 	}
-	/* 完成 */
+	完成
 	.ext_wancheng{
 		height:0.18rem !important;
 		margin-top:0;
 	}
-	/* 暂停 */
+	暂停
 	.ext_pause{
 		height:0.18rem !important;
 		margin-top:0;
 	}
-	/* 内容文字 */
+	内容文字
 	.sch-percent-allocated-text
 	{
 	    top: 10%;
 	}
-}
+} */
 
 /* 选中状态 */
 div.sch-event-selected {

@@ -22,7 +22,9 @@
 	<div class="zl-content-top-info-up2">
 		 <div class="zl-content-label"><span data-i18n="top.select_title1"></span></div>
 		 <div class="zl-content-select zl-dateBox">
-		    <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="startTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 			    value="#{pIpCompositeBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 		    <h:message for="startTime" style="color:red" />
@@ -30,7 +32,9 @@
 	
 		 <div class="zl-content-label"><span data-i18n="top.select_title2" /></div>
 		 <div class="zl-content-select zl-dateBox">
-	        <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="finishTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 		    value="#{pIpCompositeBean.endTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 	        <h:message for="finishTime" style="color:red" />

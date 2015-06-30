@@ -6,7 +6,8 @@
 		"title3":"批次计划",
 		"title4":"结束时间",
 		"title5":"产品名称",
-		"title6":"工单号"
+		"title6":"工单号",
+		"btn1":"查询"
 	},
 	"content": {
 		"table_title1":"事件编号",

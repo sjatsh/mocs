@@ -6,7 +6,8 @@
 		"title3":"Batch Plan",
 		"title4":"Finish Time",
 		"title5":"Product Name",
-		"title6":"Job No"
+		"title6":"Job No",
+		"btn1":"Search"
 	},
 	"content": {
 		"table_title1":"Event No",

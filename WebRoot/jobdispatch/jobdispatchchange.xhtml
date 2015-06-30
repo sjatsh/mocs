@@ -8,1017 +8,798 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 
-	<h:head>
-		<link href="./ext/css/jquery-selectbox.css" rel="stylesheet" type="text/css" />
-		
-    	<link href="./css/general.css" rel="stylesheet" type="text/css" />  
-		<link rel="stylesheet" href="./css/jobdispatchchange.css" type="text/css"></link>
-		
-		<script src="./ext/js/jquery-selectbox.js" type="text/javascript"></script>
-		<h:outputScript library="js" name="common.js"></h:outputScript>
-	</h:head>
+<h:form id="myform">
+	<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+	<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet"	type="text/css" />
+	<link href="./ext/css/jquery-selectbox.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="./css/jobdispatchchange.css" type="text/css"></link>
+	
+	<div class="zl-content-top" >
+		<!--头部背景 -->
+		<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+		<!--标题 -->
+		<div class="zl-content-top-title">
+			<span data-i18n="top.main_title" />
+		</div>
+		<div class="zl-content-top-info-up2">
+			<!--开始时间 -->
+			<div class="zl-content-label">
+				<span data-i18n="top.title1" />
+			</div>
+			<div class="zl-content-select zl-selectMoreBox">
+				<img class="zl-selectMoreBox-bg-left" src="images/input/box_left.png" />
+				<img class="zl-selectMoreBox-bg-center" src="images/input/box_center.png" />
+				<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
+				<div id="select_box_No">
+	    			<table id="table_No">
+						<c:forEach items="#{JobdispatchChange.equTypeList}" var="equ">
+							<tr>
+								<td style="width: 230px; text-align: left;">
+									<label><input
+										type="checkbox" name="select_box_No"
+										onclick="s.changeSelected(this,event);"
+										value="#{equ.id}" onblur="s.hiddenList()" /><span>#{equ.no}</span></label>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+    			</div>
+			</div>
+			<div class="zl-content-label">
+				<span data-i18n="top.title2" />
+			</div>
+			<div class="zl-content-select zl-selectMoreBox">
+				<img class="zl-selectMoreBox-bg-left" src="images/input/box_left.png" />
+				<img class="zl-selectMoreBox-bg-center" src="images/input/box_center.png" />
+				<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
+				<div id="select_box_Name">
+	    			<table id="table_Name">
+						<c:forEach items="#{JobdispatchChange.equTypeNameList}" var="equName">
+							<tr>
+								<td style="width: 230px;">
+									<label><input
+										type="checkbox" name="select_box_Name"
+										onclick="s.changeSelected(this,event);"
+										value="#{equName.id}" onblur="s.hiddenList()" /><span>#{equName.name}</span></label>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+    			</div>
+			</div>
+		</div>
+		<div class="zl-content-top-info-search">
+			<div class="zl-content-btn zl-button" onclick="subClick('myform:chaxun_one')">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<img class="zl-button-icon" src="images/input/icon_search.png" />
+					<span data-i18n="top.btn1"></span>
+				</div>
+			</div>
+			<h:commandButton id="chaxun_one" value="查询"
+				style="display:none;" onclick="setValueforHidd()">
+				<f:ajax listener="#{JobdispatchChange.serachEqu}"
+					execute="serachEquId serachEquId2" event="click"
+					render=":myform:tb :myform:hiddenequID" />
+			</h:commandButton>
+		</div>
+	</div>
+	
+	<!-- 设备列表 -->
+	<div class="zl-content-info" id="step1">
+		<div class="table-frame">
+			<div class="table-title" id="title">
+				<div class="ui-datatable ui-widget">
+					<table width="100%">
+						<tr>
+							<th class="ui-state-default" stgyle="width: 33%"
+								><div class="ui-dt-c">
+									<span data-i18n="content.table_title1"></span>
+								</div></th>
+							<th class="ui-state-default" style="width: 33%"
+								><div class="ui-dt-c">
+									<span data-i18n="content.table_title2"></span>
+								</div></th>
+							<th class="ui-state-default" style="width: 34%"
+								><div class="ui-dt-c">
+									<span data-i18n="content.table_title3"></span>
+								</div></th>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="table-body" id="equipment">
+				<h:inputHidden id="hiddenequID" value="#{JobdispatchChange.equId}"></h:inputHidden>
+				<h:inputHidden value="#{JobdispatchChange.jobdispatchId}" id="jobdispatchId"></h:inputHidden>
+				<p:dataTable id="tb"
+					value="#{JobdispatchChange.data}" var="record"
+					paginator="true" paginatorPosition="bottom" rows="11"
+					selectionMode="single" rowKey="#{record.equId}">
+					<p:ajax event="rowSelect"
+						listener="#{JobdispatchChange.onRowSelect}"
+						update=":myform:hiddenequID" />
+					<p:column headerText="序号"
+						style="width:33%;word-break:break-all ">  
+			            #{JobdispatchChange.data.rowIndex+1}  
+			        </p:column>
+					<p:column headerText="设备序列号"
+						style="width:33%;word-break:break-all;">  
+			            #{record.no}  
+			        </p:column>
+					<p:column headerText="设备名称"
+						style="width:34%;word-break:break-all">  
+			            #{record.name}  
+			        </p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<div class="content-control">
+			<div class="content-control-btn nextBtn" id="divNext1">
+				<div class="zl-button" onclick="onYZ()">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_next.png" />
+						<span data-i18n="content.next_btn"></span>
+					</div>
+				</div>
+				<p:commandButton id="addcentertd3td5comhiddle"
+					actionListener="#{JobdispatchChange.getjobdispatch}"
+					style="display:none;" update=":myform:tb2 " oncomplete="controlScreen(2)" />
+			</div>
+		</div>
+	</div>
+	
+	<!-- 工单列表 -->
+	<div class="zl-content-info" id="step2">
+		<div class="table-frame">
+			<div class="table-title" id="title2">
+				<div class="ui-datatable ui-widget">
+					<table width="100%">
+						<tr>
+							<th class="ui-state-default" style="width:32%;word-break:break-all">
+							 <div class="ui-dt-c">
+									<span data-i18n="content.table_title4"></span>
+								</div></th>
+							<th class="ui-state-default" style="width:25%;word-break:break-all">
+							<div class="ui-dt-c">
+									<span data-i18n="content.table_title5"></span>
+								</div></th>
+							<th class="ui-state-default" style="width:16%;word-break:break-all">
+							<div class="ui-dt-c">
+									<span data-i18n="content.table_title6"></span>
+								</div></th>
+							<th class="ui-state-default" style="width:5%;word-break:break-all">
+							<div class="ui-dt-c">
+									<span data-i18n="content.table_title7"></span>
+								</div></th>
+							<th class="ui-state-default" style="width:10%;word-break:break-all">
+							<div class="ui-dt-c">
+									<span data-i18n="content.table_title8"></span>
+								</div></th>
+							<th class="ui-state-default" style="width:7%;word-break:break-all">
+							<div class="ui-dt-c">
+									<span data-i18n="content.table_title9"></span>
+								</div></th>
+							<th class="ui-state-default" style="width:5%;word-break:break-all">
+							<div class="ui-dt-c">
+									<span data-i18n="content.table_title10"></span>
+								</div></th>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="table-body" id="getjobdispatch">
+				<p:dataTable id="tb2"
+					value="#{JobdispatchChange.dispatcheRsults}" var="info"
+					selectionMode="single" paginator="false"
+					paginatorPosition="bottom" rowKey="#{info.jobdispatchid}"
+					selection="#{JobdispatchChange.selectValue}">
 
-	<h:body>
-		<h:form id="myform">
-			<div class="show-frame"></div>
-			<div class="header-bar">
-				<div class="logo-img"><img src="./images/profile_top_logo.png" /></div>
-				<div class="header-content">
-					<div class="header-content-4sub">
-						<div class="title-text" data-i18n="top.main_title"></div>
+					<p:column headerText="工单号"
+						style="width:32%;word-break:break-all">  
+			            #{info.no}  
+			        </p:column>
+					<p:column headerText="零件名称" style="width:25%;word-break:break-all">  
+			            #{info.partname}  
+			        </p:column>
+					<p:column headerText="零件编号" style="width:16%;word-break:break-all">  
+			            #{info.partNo}  
+			        </p:column>
+                    <p:column headerText="工序号" style="width:5%;word-break:break-all">  
+			            #{info.processorder}  
+			        </p:column>
+					<p:column headerText="工序名称" style="width:10%;word-break:break-all">  
+			            #{info.processname}  
+			        </p:column>
+					<p:column headerText="投料数量" style="width:7%;word-break:break-all">  
+			            #{info.plannum}  
+			        </p:column>
+					<p:column headerText="已报工" style="width:5%;word-break:break-all">  
+			            #{info.finishNum}  
+			        </p:column>
+				</p:dataTable>
+			</div>
+			<div id="selectedInfo" style="display: none">
+				<h:outputText id="selectEquName" value ="#{JobdispatchChange.selectedEquName}"></h:outputText>
+				<h:outputText id="selectDispatchNo" value ="#{JobdispatchChange.selectedDispatchNo}"></h:outputText>
+            </div>
+        </div>
+		<div class="content-control">
+			<div class="content-control-btn prevBtn" id="divPrev1">
+				<div class="zl-button" onclick="controlScreen(1)">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_prev.png" />
+						<span data-i18n="content.prev_btn"></span>
 					</div>
-					<div class="header-content-4sub">
-						<div class="header-filter-title">
-							<span data-i18n="top.title1"></span>:
+				</div>
+			</div>
+			<div class="content-control-btn nextBtn" id="divNext2">
+				<div class="zl-button" onclick="subClick('myform:btn_next2')">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_next.png" />
+						<span data-i18n="content.next_btn"></span>
+					</div>
+				</div>
+				<p:commandButton id="btn_next2" value="下一步"
+					actionListener="#{JobdispatchChange.getJobdispatchIdValue}"
+					style="display: none;" update=":myform:jobdispatchId :myform:user :myform:selectDispatchNo 
+					:myform:selectEquName :myform:maxNum :myform:selectedprocessOrder 
+					:myform:user2" oncomplete="onXZ()" />
+			</div>
+		</div>
+	</div>
+	
+	<!-- 报工信息1 -->
+	<div class="zl-content-info" id="step3_1">
+		<div class="table-frame">
+			<div class="table-body" id="editInfo">
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info1"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-select">
+							<img class="zl-select-bg-left" src="images/input/box_left.png" />
+							<img class="zl-select-bg-center" src="images/input/box_center.png" />
+							<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+							<h:selectOneMenu id="user" value="#{JobdispatchChange.userId}">
+								<f:selectItems value="#{JobdispatchChange.userMap}"
+									var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
+									<f:ajax event="change" listener="#{JobdispatchChange.getUserInfo}" execute="@this" />
+							</h:selectOneMenu>					
 						</div>
-						<div class="header-filter-title">
-							<span data-i18n="top.title2"></span>:
+						<h:message for="user" style="color:red" />
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info2"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-text">
+							<img class="zl-text-bg-left" src="images/input/box_left.png" />
+							<img class="zl-text-bg-center" src="images/input/box_center.png" />
+							<img class="zl-text-bg-right" src="images/input/box_right.png" />	
+							<h:inputText id="txtNum" value="#{JobdispatchChange.num}"
+								required="true"
+								onkeyup="this.value=this.value.replace(/\D/g,'')"
+								onafterpaste="this.value=this.value.replace(/\D/g,'')"
+								requiredMessage="不能为空">
+								<a4j:ajax event="change"
+									listener="#{JobdispatchChange.checkNum}" execute="@this"
+									render=":myform:isSuccess" oncomplete="checkNum()"></a4j:ajax>
+							</h:inputText>
+						</div>
+						<h:outputText styleClass="data-require" id="maxNum" value="#{JobdispatchChange.maxNum}"></h:outputText>
+						<h:graphicImage styleClass="btn-plus" alt="plus" id ="plus"
+							url="./images/demo/icons/plus.png" onclick="controlNum(1)"></h:graphicImage>
+						<h:graphicImage styleClass="btn-minus" alt="minus" id="minus"
+							url="./images/demo/icons/minus.png"
+							onclick="controlNum(2)"></h:graphicImage>
+						<h:message for="txtNum" style="color:red" />
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-value onlyValue">
+						<p:commandButton value="10" styleClass="number-btn" onclick="onSetNum(10)" />
+						<p:commandButton value="20" styleClass="number-btn" onclick="onSetNum(20)" />
+						<p:commandButton value="30" styleClass="number-btn" onclick="onSetNum(30)" />
+						<p:commandButton value="40" styleClass="number-btn" onclick="onSetNum(40)" />
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info3"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-dateBox">
+							<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+							<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+							<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />	
+							<rich:calendar id="startTime" popup="true"
+								inputClass="data" locale="en" 
+								value="#{JobdispatchChange.startTime}"
+								datePattern="yyyy-MM-dd HH:mm:ss"/>
+						</div>
+						<h:message for="startTime" style="color:red" />
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info4"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-dateBox">
+							<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+							<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+							<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />	
+							<rich:calendar id="finishTime" popup="true"
+								inputClass="data" locale="en"
+								value="#{JobdispatchChange.finishTime}"
+								datePattern="yyyy-MM-dd HH:mm:ss"/>
+						</div>
+						<h:message for="finishTime" style="color:red" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-control">
+			<div class="content-control-btn prevBtn" id="divPrev2">
+				<div class="zl-button" onclick="controlScreen(2)">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_prev.png" />
+						<span data-i18n="content.prev_btn"></span>
+					</div>
+				</div>
+			</div>
+			<div class="content-control-btn nextBtn" id="divSave">
+				<div class="zl-button" onclick="subClick('myform:btn_save')">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_next.png" />
+						<span data-i18n="content.next_btn"></span>
+					</div>
+				</div>
+				<p:commandButton value="确定" id="btn_save"
+					style="display:none;" onclick="onZZ()" 
+					update=":myform:bgdispatchNo :myform:bgEquSerial :myform:bgPartNo :myform:bgProcessName :myform:bgProcessOrder 
+					 :myform:bgPlanNum :myform:bgfinishNum :myform:bgNum :myform:bgUser :myform:bgStartTime :myform:bgFinishTime"/>
+				<p:commandButton id="submitButton"
+					actionListener="#{JobdispatchChange.checkNum}"
+					style="display:none;"
+					update=":myform:isSuccess" oncomplete="WZ()" />
+			</div>
+		</div>
+	</div>
+	
+	<!-- 报工信息2 -->
+	<div class="zl-content-info" id="step3_2">
+		<div class="table-frame">
+			<div class="table-body" id="editInfo2">
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info1"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-select">
+							<img class="zl-select-bg-left" src="images/input/box_left.png" />
+							<img class="zl-select-bg-center" src="images/input/box_center.png" />
+							<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+							<h:selectOneMenu id="user2" value="#{JobdispatchChange.fhUserId}">
+								<f:selectItems value="#{JobdispatchChange.userMap}"
+									var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
+									<f:ajax event="change" listener="#{JobdispatchChange.getUserInfo}" execute="@this" />
+							</h:selectOneMenu>
 						</div>
 					</div>
-					<div class="header-content-4sub">
-						<div class="header-filter-select" id="select_box_No">
-							<table id="table_No" >
-								<c:forEach items="#{JobdispatchChange.equTypeList}"
-									var="equ">
-									<tr>
-										<td style="width: 230px; text-align: left;"><label><input
-												type="checkbox" name="select_box_No"
-												onclick="s.changeSelected(this,event);"
-												value="#{equ.id}" onblur="s.hiddenList()" /><span>#{equ.no}</span></label>
-										</td>
-									</tr>
-								</c:forEach>
-							</table>
-						</div>
-						<div class="header-filter-select" id="select_box_Name">
-							<table id="table_Name">
-								<c:forEach
-									items="#{JobdispatchChange.equTypeNameList}"
-									var="equName">
-									<tr>
-										<td style="width: 230px;"><label><input
-												type="checkbox" name="select_box_Name"
-												onclick="s.changeSelected(this,event);"
-												value="#{equName.id}" onblur="s.hiddenList()" /><span>#{equName.name}</span></label>
-										</td>
-									</tr>
-								</c:forEach>
-							</table>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info2"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-text">
+							<img class="zl-text-bg-left" src="images/input/box_left.png" />
+							<img class="zl-text-bg-center" src="images/input/box_center.png" />
+							<img class="zl-text-bg-right" src="images/input/box_right.png" />	
+							<h:inputText id="txtNum2" value="#{JobdispatchChange.fhNum}"
+								required="true"
+								onkeyup="this.value=this.value.replace(/\D/g,'')"
+								onafterpaste="this.value=this.value.replace(/\D/g,'')"
+								requiredMessage="不能为空">
+								<a4j:ajax event="change"
+									listener="#{JobdispatchChange.checkNum2}" execute="@this"
+									render=":myform:isSuccess" oncomplete="checkNum2()"></a4j:ajax>
+							</h:inputText>
 						</div>
 					</div>
-					<div class="header-content-4sub">
-						<div class="filter-submit">
-							<h:graphicImage
-								alt="search" url="./images/jobplan/list/jobpaln_button.png"
-								onclick="subClick('myform:chaxun_one')">
-							</h:graphicImage>
-							<h:commandButton id="chaxun_one" value="查询"
-								style="display:none;" onclick="setValueforHidd()">
-								<f:ajax listener="#{JobdispatchChange.serachEqu}"
-									execute="serachEquId serachEquId2" event="click"
-									render=":myform:tb :myform:hiddenequID" />
-							</h:commandButton>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info3"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-dateBox">
+							<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+							<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+							<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />	
+							<rich:calendar id="startTime2" popup="true"
+								inputClass="data" locale="en" 
+								value="#{JobdispatchChange.fhStartTime}"
+								datePattern="yyyy-MM-dd HH:mm:ss"/>
+						</div>
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info4"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-dateBox">
+							<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+							<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+							<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />	
+							<rich:calendar id="finishTime2" popup="true"
+								inputClass="data" locale="en" 
+								value="#{JobdispatchChange.fhFinishTime}"
+								datePattern="yyyy-MM-dd HH:mm:ss"/>
+						</div>
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info5"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-select">
+							<img class="zl-select-bg-left" src="images/input/box_left.png" />
+							<img class="zl-select-bg-center" src="images/input/box_center.png" />
+							<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+							<h:selectOneMenu id="good"
+								value="#{JobdispatchChange.isGood}">
+								<f:selectItem itemLabel="是" itemValue="是"></f:selectItem>
+								<f:selectItem itemLabel="否" itemValue="否"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info6"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-select">
+							<img class="zl-select-bg-left" src="images/input/box_left.png" />
+							<img class="zl-select-bg-center" src="images/input/box_center.png" />
+							<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+							<h:selectOneMenu id="checkDep"
+								value="#{JobdispatchChange.checkDep}">
+								<f:selectItem itemLabel="CAK运营部" itemValue="CAK运营部"></f:selectItem>
+								<f:selectItem itemLabel="ETC运营部 " itemValue="ETC运营部 "></f:selectItem>
+								<f:selectItem itemLabel="加工运营部 " itemValue="加工运营部 "></f:selectItem>
+								<f:selectItem itemLabel="普车运营部 " itemValue="普车运营部 "></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info7"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-select">
+							<img class="zl-select-bg-left" src="images/input/box_left.png" />
+							<img class="zl-select-bg-center" src="images/input/box_center.png" />
+							<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+							<h:selectOneMenu id="jgcheckUser"
+								value="#{JobdispatchChange.jgCheckUser}">
+								<f:selectItem itemLabel="加检01" itemValue="加检01"></f:selectItem>
+								<f:selectItem itemLabel="加检02" itemValue="加检02"></f:selectItem>
+								<f:selectItem itemLabel="加检03" itemValue="加检03"></f:selectItem>
+								<f:selectItem itemLabel="加检09" itemValue="加检09"></f:selectItem>
+								<f:selectItem itemLabel="加检10" itemValue="加检10"></f:selectItem>
+								<f:selectItem itemLabel="加检12" itemValue="加检12"></f:selectItem>
+								<f:selectItem itemLabel="加检15" itemValue="加检15"></f:selectItem>
+								<f:selectItem itemLabel="加检16" itemValue="加检16"></f:selectItem>
+								<f:selectItem itemLabel="加检17" itemValue="加检17"></f:selectItem>
+								<f:selectItem itemLabel="加检18" itemValue="加检18"></f:selectItem>
+								<f:selectItem itemLabel="加检20" itemValue="加检20"></f:selectItem>
+								<f:selectItem itemLabel="加检24" itemValue="加检24"></f:selectItem>
+								<f:selectItem itemLabel="加检25" itemValue="加检25"></f:selectItem>
+								<f:selectItem itemLabel="加检29" itemValue="加检29"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info8"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-select">
+							<img class="zl-select-bg-left" src="images/input/box_left.png" />
+							<img class="zl-select-bg-center" src="images/input/box_center.png" />
+							<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+							<h:selectOneMenu id="zpcheckUser"
+								value="#{JobdispatchChange.zpCheckUser}">
+								<f:selectItem itemLabel="CAK检01" itemValue="CAK检01"></f:selectItem>
+								<f:selectItem itemLabel="CAK检06" itemValue="CAK检06"></f:selectItem>
+								<f:selectItem itemLabel="CAK检08" itemValue="CAK检08"></f:selectItem>
+								<f:selectItem itemLabel="CAK检10" itemValue="CAK检10"></f:selectItem>
+								<f:selectItem itemLabel="CAK检15" itemValue="CAK检15"></f:selectItem>
+								<f:selectItem itemLabel="CAK检32" itemValue="CAK检32"></f:selectItem>
+								<f:selectItem itemLabel="CAK检39" itemValue="CAK检39"></f:selectItem>
+								<f:selectItem itemLabel="CAK检40" itemValue="CAK检40"></f:selectItem>
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="info-line">
+					<div class="info-title">
+						<span data-i18n="content.info9"></span>:
+					</div>
+					<div class="info-value">
+						<div class="zl-select">
+							<img class="zl-select-bg-left" src="images/input/box_left.png" />
+							<img class="zl-select-bg-center" src="images/input/box_center.png" />
+							<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+							<h:selectOneMenu id="sjCheckUser"
+								value="#{JobdispatchChange.sjCheckUser}">
+								<f:selectItem itemLabel="商检06" itemValue="商检06"></f:selectItem>
+								<f:selectItem itemLabel="商检08" itemValue="商检08"></f:selectItem>
+								<f:selectItem itemLabel="商检10" itemValue="商检10"></f:selectItem>
+								<f:selectItem itemLabel="商检11" itemValue="商检11"></f:selectItem>
+							</h:selectOneMenu>
 						</div>
 					</div>
 				</div>
 			</div>
-			
-			<!-- 设备列表 -->
-			<div class="main-content" id="step1">
-				<div class="content-left"></div>
-				<div class="content-center">
-					<div class="table-frame">
-						<div class="table-title" id="title">
-							<div class="ui-datatable ui-widget">
-								<table width="100%">
-									<tr>
-										<th class="ui-state-default" stgyle="width: 33%"
-											><div class="ui-dt-c">
-												<span data-i18n="content.table_title1"></span>
-											</div></th>
-										<th class="ui-state-default" style="width: 33%"
-											><div class="ui-dt-c">
-												<span data-i18n="content.table_title2"></span>
-											</div></th>
-										<th class="ui-state-default" style="width: 34%"
-											><div class="ui-dt-c">
-												<span data-i18n="content.table_title3"></span>
-											</div></th>
-									</tr>
-								</table>
-							</div>
-						</div>
-						<div class="table-body" id="equipment">
-							<h:inputHidden id="hiddenequID" value="#{JobdispatchChange.equId}"></h:inputHidden>
-							<h:inputHidden value="#{JobdispatchChange.jobdispatchId}" id="jobdispatchId"></h:inputHidden>
-							<p:dataTable id="tb"
-								value="#{JobdispatchChange.data}" var="record"
-								paginator="false" paginatorPosition="bottom"
-								selectionMode="single" rowKey="#{record.equId}">
-								<p:ajax event="rowSelect"
-									listener="#{JobdispatchChange.onRowSelect}"
-									update=":myform:hiddenequID" />
-								<p:column headerText="序号"
-									style="width:33%;word-break:break-all ">  
-						            #{JobdispatchChange.data.rowIndex+1}  
-						        </p:column>
-								<p:column headerText="设备序列号"
-									style="width:33%;word-break:break-all;">  
-						            #{record.no}  
-						        </p:column>
-								<p:column headerText="设备名称"
-									style="width:34%;word-break:break-all">  
-						            #{record.name}  
-						        </p:column>
-							</p:dataTable>
-						</div>
-					</div>
-				</div>
-				<div class="content-right">
-					<div class="nextBtn" id="divNext1">
-						<h:graphicImage alt="next" url="./images/demo/icons/right.png"
-							onclick="onYZ()" styleClass="btn-next"
-							></h:graphicImage>
-						<p:commandButton id="addcentertd3td5comhiddle"
-							actionListener="#{JobdispatchChange.getjobdispatch}"
-							style="display:none;" update=":myform:tb2 " oncomplete="controlScreen(2)" />
-						<div data-i18n="content.next_btn"></div>
+		</div>
+		<div class="content-control">
+			<div class="content-control-btn prevBtn" id="divPrev3">
+				<div class="zl-button" onclick="controlScreen(2)">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_prev.png" />
+						<span data-i18n="content.prev_btn"></span>
 					</div>
 				</div>
 			</div>
-			
-			<!-- 工单列表 -->
-			<div class="main-content" id="step2" style="visibility: hidden;">
-				<div class="content-left">
-					<div class="prevBtn" id="divPrev1">
-						<h:graphicImage alt="prev" url="./images/demo/icons/left.png"
-							onclick="controlScreen(1)" styleClass="btn-next"
-							></h:graphicImage>
-						<div data-i18n="content.prev_btn"></div>
+			<div class="content-control-btn nextBtn" id="divSave2">
+				<div class="zl-button" onclick="subClick('myform:btn_save2')">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_next.png" />
+						<span data-i18n="content.next_btn"></span>
 					</div>
 				</div>
-				<div class="content-center">
-					<div class="table-frame">
-						<div class="table-title" id="title2">
-							<div class="ui-datatable ui-widget">
-								<table width="100%">
-									<tr>
-										<th class="ui-state-default" style="width:32%;word-break:break-all">
-										 <div class="ui-dt-c">
-												<span data-i18n="content.table_title4"></span>
-											</div></th>
-										<th class="ui-state-default" style="width:25%;word-break:break-all">
-										<div class="ui-dt-c">
-												<span data-i18n="content.table_title5"></span>
-											</div></th>
-										<th class="ui-state-default" style="width:16%;word-break:break-all">
-										<div class="ui-dt-c">
-												<span data-i18n="content.table_title6"></span>
-											</div></th>
-										<th class="ui-state-default" style="width:5%;word-break:break-all">
-										<div class="ui-dt-c">
-												<span data-i18n="content.table_title7"></span>
-											</div></th>
-										<th class="ui-state-default" style="width:10%;word-break:break-all">
-										<div class="ui-dt-c">
-												<span data-i18n="content.table_title8"></span>
-											</div></th>
-										<th class="ui-state-default" style="width:7%;word-break:break-all">
-										<div class="ui-dt-c">
-												<span data-i18n="content.table_title9"></span>
-											</div></th>
-										<th class="ui-state-default" style="width:5%;word-break:break-all">
-										<div class="ui-dt-c">
-												<span data-i18n="content.table_title10"></span>
-											</div></th>
-									</tr>
-								</table>
-							</div>
-						</div>
-						<div class="table-body" id="getjobdispatch">
-							<p:dataTable id="tb2"
-								value="#{JobdispatchChange.dispatcheRsults}" var="info"
-								selectionMode="single" paginator="false"
-								paginatorPosition="bottom" rowKey="#{info.jobdispatchid}"
-								selection="#{JobdispatchChange.selectValue}">
-
-								<p:column headerText="工单号"
-									style="width:32%;word-break:break-all">  
-						            #{info.no}  
-						        </p:column>
-								<p:column headerText="零件名称" style="width:25%;word-break:break-all">  
-						            #{info.partname}  
-						        </p:column>
-								<p:column headerText="零件编号" style="width:16%;word-break:break-all">  
-						            #{info.partNo}  
-						        </p:column>
-			                    <p:column headerText="工序号" style="width:5%;word-break:break-all">  
-						            #{info.processorder}  
-						        </p:column>
-								<p:column headerText="工序名称" style="width:10%;word-break:break-all">  
-						            #{info.processname}  
-						        </p:column>
-								<p:column headerText="投料数量" style="width:7%;word-break:break-all">  
-						            #{info.plannum}  
-						        </p:column>
-								<p:column headerText="已报工" style="width:5%;word-break:break-all">  
-						            #{info.finishNum}  
-						        </p:column>
-							</p:dataTable>
-						</div>
-						<div id="selectedInfo" style="display: none">
-							<h:outputText id="selectEquName" value ="#{JobdispatchChange.selectedEquName}"></h:outputText>
-							<h:outputText id="selectDispatchNo" value ="#{JobdispatchChange.selectedDispatchNo}"></h:outputText>
-                        </div>
-                    </div>
-                </div>
-				<div class="content-right">
-					<div class="nextBtn" id="divNext2">
-						<h:graphicImage alt="next" url="./images/demo/icons/right.png"
-							onclick="subClick('myform:btn_next2')" styleClass="btn-next"
-							></h:graphicImage>
-						<p:commandButton id="btn_next2" value="下一步"
-							actionListener="#{JobdispatchChange.getJobdispatchIdValue}"
-							style="display: none;" update=":myform:jobdispatchId :myform:user :myform:selectDispatchNo 
-							:myform:selectEquName :myform:maxNum :myform:selectedprocessOrder 
-							:myform:user2" oncomplete="onXZ()" />
-						<div data-i18n="content.next_btn"></div>
-					</div>
-				</div>
+				<p:commandButton id="btn_save2"
+					style="display:none;" onclick="onZZ2()" 
+					update=":myform:bgdispatchNo2 :myform:bgEquSerial2 :myform:bgPartNo2 :myform:bgProcessName2 :myform:bgProcessOrder2 
+					 :myform:bgPlanNum2 :myform:bgfinishNum2 :myform:bgNum2 :myform:bgUser2 :myform:bgStartTime2 :myform:bgFinishTime2 :myform:bgGood :myform:bgCheckDep 
+					 :myform:bgJgCheckUser :myform:bgZpCheckUser :myform:bgSjCheckUser"/>
+				<p:commandButton id="submitButton2"
+					actionListener="#{JobdispatchChange.checkNum2}"
+					style="display:none;" update=":myform:isSuccess " oncomplete="WZ2()" />
 			</div>
-			
-			<!-- 报工信息1 -->
-			<div class="main-content" id="step3_1" style="visibility: hidden;">
-				<div class="content-left">
-					<div class="prevBtn" id="divPrev2">
-						<h:graphicImage alt="prev"
-							url="./images/demo/icons/left.png"
-							onclick="controlScreen(2)" styleClass="btn-next">
-						</h:graphicImage>
-						<div data-i18n="content.prev_btn"></div>
-					</div>
-				</div>
-				<div class="content-center">
-					<div class="table-frame">
-						<div class="table-body" id="editInfo">
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info1"></span>:
-								</div>
-								<div class="info-value">
-									<h:selectOneMenu id="user" value="#{JobdispatchChange.userId}">
-										<f:selectItems value="#{JobdispatchChange.userMap}"
-											var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
-											<f:ajax event="change" listener="#{JobdispatchChange.getUserInfo}" execute="@this" />
-									</h:selectOneMenu>
-									<h:message for="user" style="color:red" />
-									<span class="data-require">*</span>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info2"></span>:
-								</div>
-								<div class="info-value">
-									<h:inputText id="txtNum" value="#{JobdispatchChange.num}"
-										required="true"
-										onkeyup="this.value=this.value.replace(/\D/g,'')"
-										onafterpaste="this.value=this.value.replace(/\D/g,'')"
-										requiredMessage="不能为空">
-										<a4j:ajax event="change"
-											listener="#{JobdispatchChange.checkNum}" execute="@this"
-											render=":myform:isSuccess" oncomplete="checkNum()"></a4j:ajax>
-									</h:inputText>
-									<h:outputText styleClass="data-require" id="maxNum" value="#{JobdispatchChange.maxNum}"></h:outputText>
-									<h:graphicImage styleClass="btn-plus" alt="plus" id ="plus"
-										url="./images/demo/icons/plus.png" onclick="controlNum(1)"></h:graphicImage>
-									<h:graphicImage styleClass="btn-minus" alt="minus" id="minus"
-										url="./images/demo/icons/minus.png"
-										onclick="controlNum(2)"></h:graphicImage>
-									<h:message for="txtNum" style="color:red" />
-									<span class="data-require">*</span>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-value">
-									<p:commandButton value="10" styleClass="number-btn" onclick="onSetNum(10)" />
-									<p:commandButton value="20" styleClass="number-btn" onclick="onSetNum(20)" />
-									<p:commandButton value="30" styleClass="number-btn" onclick="onSetNum(30)" />
-									<p:commandButton value="40" styleClass="number-btn" onclick="onSetNum(40)" />
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info3"></span>:
-								</div>
-								<div class="info-value">
-									<rich:calendar id="startTime" popup="true"
-										inputClass="data" locale="en" 
-										value="#{JobdispatchChange.startTime}"
-										datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
-										cellHeight="20px" />
-									<h:message for="startTime" style="color:red" />
-									<span class="data-require">*</span>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info4"></span>:
-								</div>
-								<div class="info-value">
-									<rich:calendar id="finishTime" popup="true"
-										inputClass="data" locale="en"
-										value="#{JobdispatchChange.finishTime}"
-										datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
-										cellHeight="20px" />
-									<h:message for="finishTime" style="color:red" />
-									<span class="data-require">*</span>
-								</div>
-							</div>
-						</div>
-                    </div>
-                </div>
-				<div class="content-right">
-					<div class="nextBtn" id="divSave">
-						<h:graphicImage alt="save"
-							url="./images/demo/icons/right.png"
-							onclick="subClick('myform:btn_save')"
-							styleClass="btn-save"
-							></h:graphicImage>
-						<p:commandButton value="确定" id="btn_save"
-							style="display:none;" onclick="onZZ()" 
-							update=":myform:bgdispatchNo :myform:bgEquSerial :myform:bgPartNo :myform:bgProcessName :myform:bgProcessOrder 
-							 :myform:bgPlanNum :myform:bgfinishNum :myform:bgNum :myform:bgUser :myform:bgStartTime :myform:bgFinishTime"/>
-						<p:commandButton id="submitButton"
-							actionListener="#{JobdispatchChange.checkNum}"
-							style="display:none;"
-							update=":myform:isSuccess" oncomplete="WZ()" />
-						<div data-i18n="content.next_btn"></div>
-					</div>
-				</div>
-			</div>
-			
-			<!-- 报工信息2 -->
-			<div class="main-content" id="step3_2" style="visibility: hidden;">
-				<div class="content-left">
-					<div class="prevBtn" id="divPrev3">
-						<h:graphicImage alt="prev"
-							url="./images/demo/icons/left.png"
-							onclick="controlScreen(2)" styleClass="btn-next">
-						</h:graphicImage>
-						<div data-i18n="content.prev_btn"></div>
-					</div>
-				</div>
-				<div class="content-center">
-					<div class="table-frame">
-						<div class="table-body" id="editInfo2">
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info1"></span>:
-								</div>
-								<div class="info-value">
-									<h:selectOneMenu id="user2" value="#{JobdispatchChange.fhUserId}">
-										<f:selectItems value="#{JobdispatchChange.userMap}"
-											var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
-											<f:ajax event="change" listener="#{JobdispatchChange.getUserInfo}" execute="@this" />
-									</h:selectOneMenu>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info2"></span>:
-								</div>
-								<div class="info-value">
-									<h:inputText id="txtNum2" value="#{JobdispatchChange.fhNum}"
-										required="true"
-										onkeyup="this.value=this.value.replace(/\D/g,'')"
-										onafterpaste="this.value=this.value.replace(/\D/g,'')"
-										requiredMessage="不能为空">
-										<a4j:ajax event="change"
-											listener="#{JobdispatchChange.checkNum2}" execute="@this"
-											render=":myform:isSuccess" oncomplete="checkNum2()"></a4j:ajax>
-									</h:inputText>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info3"></span>:
-								</div>
-								<div class="info-value">
-									<rich:calendar id="startTime2" popup="true"
-										inputClass="data" locale="en" 
-										value="#{JobdispatchChange.fhStartTime}"
-										datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
-										cellHeight="20px" />
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info4"></span>:
-								</div>
-								<div class="info-value">
-									<rich:calendar id="finishTime2" popup="true"
-										inputClass="data" locale="en" 
-										value="#{JobdispatchChange.fhFinishTime}"
-										datePattern="yyyy-MM-dd HH:mm:ss" cellWidth="10px"
-										cellHeight="20px" />
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info5"></span>:
-								</div>
-								<div class="info-value">
-									<h:selectOneMenu id="good"
-										value="#{JobdispatchChange.isGood}">
-										<f:selectItem itemLabel="是" itemValue="是"></f:selectItem>
-										<f:selectItem itemLabel="否" itemValue="否"></f:selectItem>
-									</h:selectOneMenu>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info6"></span>:
-								</div>
-								<div class="info-value">
-									<h:selectOneMenu id="checkDep"
-										value="#{JobdispatchChange.checkDep}">
-										<f:selectItem itemLabel="CAK运营部" itemValue="CAK运营部"></f:selectItem>
-										<f:selectItem itemLabel="ETC运营部 " itemValue="ETC运营部 "></f:selectItem>
-										<f:selectItem itemLabel="加工运营部 " itemValue="加工运营部 "></f:selectItem>
-										<f:selectItem itemLabel="普车运营部 " itemValue="普车运营部 "></f:selectItem>
-									</h:selectOneMenu>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info7"></span>:
-								</div>
-								<div class="info-value">
-									<h:selectOneMenu id="jgcheckUser"
-										value="#{JobdispatchChange.jgCheckUser}">
-										<f:selectItem itemLabel="加检01" itemValue="加检01"></f:selectItem>
-										<f:selectItem itemLabel="加检02" itemValue="加检02"></f:selectItem>
-										<f:selectItem itemLabel="加检03" itemValue="加检03"></f:selectItem>
-										<f:selectItem itemLabel="加检09" itemValue="加检09"></f:selectItem>
-										<f:selectItem itemLabel="加检10" itemValue="加检10"></f:selectItem>
-										<f:selectItem itemLabel="加检12" itemValue="加检12"></f:selectItem>
-										<f:selectItem itemLabel="加检15" itemValue="加检15"></f:selectItem>
-										<f:selectItem itemLabel="加检16" itemValue="加检16"></f:selectItem>
-										<f:selectItem itemLabel="加检17" itemValue="加检17"></f:selectItem>
-										<f:selectItem itemLabel="加检18" itemValue="加检18"></f:selectItem>
-										<f:selectItem itemLabel="加检20" itemValue="加检20"></f:selectItem>
-										<f:selectItem itemLabel="加检24" itemValue="加检24"></f:selectItem>
-										<f:selectItem itemLabel="加检25" itemValue="加检25"></f:selectItem>
-										<f:selectItem itemLabel="加检29" itemValue="加检29"></f:selectItem>
-									</h:selectOneMenu>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info8"></span>:
-								</div>
-								<div class="info-value">
-									<h:selectOneMenu id="zpcheckUser"
-										value="#{JobdispatchChange.zpCheckUser}">
-										<f:selectItem itemLabel="CAK检01" itemValue="CAK检01"></f:selectItem>
-										<f:selectItem itemLabel="CAK检06" itemValue="CAK检06"></f:selectItem>
-										<f:selectItem itemLabel="CAK检08" itemValue="CAK检08"></f:selectItem>
-										<f:selectItem itemLabel="CAK检10" itemValue="CAK检10"></f:selectItem>
-										<f:selectItem itemLabel="CAK检15" itemValue="CAK检15"></f:selectItem>
-										<f:selectItem itemLabel="CAK检32" itemValue="CAK检32"></f:selectItem>
-										<f:selectItem itemLabel="CAK检39" itemValue="CAK检39"></f:selectItem>
-										<f:selectItem itemLabel="CAK检40" itemValue="CAK检40"></f:selectItem>
-									</h:selectOneMenu>
-								</div>
-							</div>
-							<div class="info-line">
-								<div class="info-title">
-									<span data-i18n="content.info9"></span>:
-								</div>
-								<div class="info-value">
-									<h:selectOneMenu id="sjCheckUser"
-										value="#{JobdispatchChange.sjCheckUser}">
-										<f:selectItem itemLabel="商检06" itemValue="商检06"></f:selectItem>
-										<f:selectItem itemLabel="商检08" itemValue="商检08"></f:selectItem>
-										<f:selectItem itemLabel="商检10" itemValue="商检10"></f:selectItem>
-										<f:selectItem itemLabel="商检11" itemValue="商检11"></f:selectItem>
-									</h:selectOneMenu>
-								</div>
-							</div>
-						</div>
-                    </div>
-                </div>
-				<div class="content-right">
-					<div class="nextBtn" id="divSave2">
-						<h:graphicImage alt="save"
-							url="./images/demo/icons/right.png"
-							onclick="subClick('myform:btn_save2')"
-							styleClass="btn-save"
-							></h:graphicImage>
-						<p:commandButton id="btn_save2"
-							style="display:none;" onclick="onZZ2()" 
-							update=":myform:bgdispatchNo2 :myform:bgEquSerial2 :myform:bgPartNo2 :myform:bgProcessName2 :myform:bgProcessOrder2 
-							 :myform:bgPlanNum2 :myform:bgfinishNum2 :myform:bgNum2 :myform:bgUser2 :myform:bgStartTime2 :myform:bgFinishTime2 :myform:bgGood :myform:bgCheckDep 
-							 :myform:bgJgCheckUser :myform:bgZpCheckUser :myform:bgSjCheckUser"/>
-						<p:commandButton id="submitButton2"
-							actionListener="#{JobdispatchChange.checkNum2}"
-							style="display:none;" update=":myform:isSuccess " oncomplete="WZ2()" />
-						<div data-i18n="content.next_btn"></div>
-					</div>
-				</div>
-			</div>
-			
-			<!-- 确认1 -->
-			<div class="main-content" id="step4_1" style="visibility: hidden;">
-				<div class="content-left"></div>
-				<div class="content-center">
-					<div class="table-frame">
-						<div class="comfirm-table" id="comfirm">
-							<table id="tab3" cellspacing="15px">
-								<tr>
-									<td colspan="4" align="center"><div id="title3" style="font-weight:normal;" data-i18n="content.confirm_main_title"></div></td>
-								</tr>
-								<tr height="10px"></tr>
-								<tr>
-									<td width="20%" align="right"><span data-i18n="content.confirm_title1"></span>:</td>
-									<td colspan="3">
-										<h:outputLabel id ="bgdispatchNo" value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel>
-									</td>
-								</tr>
-								<tr style="margin-top: 40px">
-									<td width="20%" align="right"><span data-i18n="content.confirm_title2"></span>:</td>
-									<td width="30%"><h:outputLabel id ="bgEquSerial" value ="#{JobdispatchChange.equSerialNo}" style="font-weight:normal"></h:outputLabel></td>
-									<td width="20%" align="right"><span data-i18n="content.confirm_title3"></span>:</td>
-									<td width="30%"><h:outputLabel id ="bgPartNo" value ="#{JobdispatchChange.partNo}" style="font-weight:normal"></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title4"></span>:</td>
-									<td><h:outputLabel id ="bgProcessName" value ="#{JobdispatchChange.processName}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title5"></span>:</td>
-									<td><h:outputLabel id ="bgProcessOrder" value ="#{JobdispatchChange.processOrder}" style="font-weight:normal"></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title6"></span>:</td>
-									<td><h:outputLabel id ="bgPlanNum" value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title7"></span>:</td>
-									<td><h:outputLabel id ="bgfinishNum" value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title8"></span>:</td>
-									<td><h:outputLabel id ="bgNum" value ="#{JobdispatchChange.num}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title9"></span>:</td>
-									<td><h:outputLabel id ="bgUser" value ="#{JobdispatchChange.userName}" style="font-weight:normal"></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title10"></span>:</td>
-									<td><h:outputLabel id ="bgStartTime" value ="#{JobdispatchChange.startTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd HH-mm-ss" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title11"></span>:</td>
-									<td><h:outputLabel id ="bgFinishTime" value ="#{JobdispatchChange.finishTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd HH-mm-ss" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td colspan="4">
-										<div style="position: relative; float: left;margin-left:30%">
-										<h:graphicImage alt="commit" url="./images/demo/icons/commit.png" onclick="subClick('myform:btn_commit')" styleClass="btn-save">
-										</h:graphicImage>
-										<h:commandButton style="display:none;" id="btn_commit">
-											<a4j:ajax event="click"
-												listener="#{JobdispatchChange.saveData}" execute="@form"
-												oncomplete="dlgTranslate();dlg1.show()" render=":myform:isSuccess myform:dlg1"></a4j:ajax>
-										</h:commandButton>  
-										</div>
-										<div style="float: left;font-weight: normal;position: relative; top:20px;left: 3%" data-i18n="content.confirm_ok"></div>
-										<div style="font-weight: normal;float: right;position: relative;margin-right: 30%;margin-top: 20px" data-i18n="content.confirm_cancel"></div>
-										<div style="float: right;position: relative;margin-right: 3%">
-											<h:graphicImage alt="close" url="./images/demo/icons/close.png" onclick ="btnclose()" styleClass="btn-save"></h:graphicImage>
-										</div>
-									</td>
-								</tr>
-						    </table>
-					    </div>
-					</div>
-				</div>
-				<div class="content-right"></div>
-			</div>
-			
-			<!-- 确认2 -->
-			<div class="main-content" id="step4_2" style="visibility: hidden;">
-				<div class="content-left"></div>
-				<div class="content-center">
-					<div class="table-frame">
-						<div class="comfirm-table" id="comfirm2">
-							<table id="tab5" cellspacing="15px">
-								<tr><td colspan="6" align="center"><div id="title4" style="font-weight:normal;" data-i18n="content.confirm_main_title"></div></td>
-								</tr>
-								<tr height="10px"></tr>
-								<tr>
-									<td width="10%" align="right"><span data-i18n="content.confirm_title1"></span>:</td>
-									<td colspan="5">
-										<h:outputLabel id ="bgdispatchNo2" value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel>
-									</td>
-								</tr>
-								<tr style="margin-top: 40px">
-									<td width="13%" align="right"><span data-i18n="content.confirm_title2"></span>:</td>
-									<td width="20%"><h:outputLabel id ="bgEquSerial2" value ="#{JobdispatchChange.equSerialNo}" style="font-weight:normal"></h:outputLabel></td>
-									<td width="13%" align="right"><span data-i18n="content.confirm_title3"></span>:</td>
-									<td width="20%"><h:outputLabel id ="bgPartNo2" value ="#{JobdispatchChange.partNo}" style="font-weight:normal"></h:outputLabel></td>
-									<td width="13%" align="right"><span data-i18n="content.confirm_title4"></span>:</td>
-									<td width="20%"><h:outputLabel id ="bgProcessName2" value ="#{JobdispatchChange.processName}" style="font-weight:normal"></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title5"></span>:</td>
-									<td><h:outputLabel id ="bgProcessOrder2" value ="#{JobdispatchChange.processOrder}" style="font-weight:normal"></h:outputLabel></td>	
-									<td align="right"><span data-i18n="content.confirm_title6"></span>:</td>
-									<td><h:outputLabel id ="bgPlanNum2" value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title7"></span>:</td>
-									<td><h:outputLabel id ="bgfinishNum2" value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title8"></span>:</td>
-									<td><h:outputLabel id ="bgNum2" value ="#{JobdispatchChange.fhNum}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title9"></span>:</td>
-									<td><h:outputLabel id ="bgUser2" value ="#{JobdispatchChange.fhUserName}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title10"></span>:</td>
-									<td><h:outputLabel id ="bgStartTime2" value ="#{JobdispatchChange.fhStartTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title11"></span>:</td>
-									<td><h:outputLabel id ="bgFinishTime2" value ="#{JobdispatchChange.fhFinishTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title12"></span>:</td>
-									<td><h:outputLabel id ="bgGood" value ="#{JobdispatchChange.isGood}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title13"></span>:</td>
-									<td><h:outputLabel id ="bgCheckDep" value ="#{JobdispatchChange.checkDep}" style="font-weight:normal"></h:outputLabel></td>
-								</tr>
-								<tr>
-									<td align="right"><span data-i18n="content.confirm_title14"></span>:</td>
-									<td><h:outputLabel id ="bgJgCheckUser" value ="#{JobdispatchChange.jgCheckUser}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title15"></span>:</td>
-									<td><h:outputLabel id ="bgZpCheckUser" value ="#{JobdispatchChange.zpCheckUser}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"><span data-i18n="content.confirm_title16"></span>:</td>
-									<td><h:outputLabel id ="bgSjCheckUser" value ="#{JobdispatchChange.sjCheckUser}" style="font-weight:normal"></h:outputLabel></td>
-									<td align="right"></td>
-									<td></td>
-								</tr>
-								<tr>
-									<td colspan="6">
-										<div style="position: relative; float: left;margin-left:30%">
-											<h:graphicImage url="./images/demo/icons/commit.png" onclick="subClick('myform:btn_commit_400')" styleClass="btn-save">
-											</h:graphicImage>
-											<h:commandButton style="display:none;" id="btn_commit_400">
-												<a4j:ajax event="click"
-													listener="#{JobdispatchChange.saveData}" execute="@form"
-													oncomplete="dlgTranslate();dlg1.show()" render=":myform:isSuccess myform:dlg1"></a4j:ajax>
-											</h:commandButton>  
-										</div>
-										<div style="float: left;font-weight: normal;position: relative; top:20px;left: 3%" data-i18n="content.confirm_ok"></div>
-										<div style="font-weight: normal;float: right;position: relative;margin-right: 30%;margin-top: 20px" data-i18n="content.confirm_cancel"></div>
-										<div style="float: right;position: relative;margin-right: 3%">
-										<h:graphicImage alt="close" url="./images/demo/icons/close.png" onclick ="btnclose()" styleClass="btn-save">
-										</h:graphicImage>
-										</div>
-									</td>
-								</tr>
-						    </table>
-					    </div>
-					</div>
-				</div>
-				<div class="content-right"></div>
-			</div>
-			<h:inputHidden value="#{JobdispatchChange.processOrder}" id="selectedprocessOrder"></h:inputHidden>
-			<h:inputHidden value="#{JobdispatchChange.isSuccess}" id="isSuccess"></h:inputHidden>
-			<h:inputHidden value="#{JobdispatchChange.serachEquId}" id="serachEquId"></h:inputHidden>
-			<h:inputHidden value="#{JobdispatchChange.serachEquId2}" id="serachEquId2"></h:inputHidden>
-			<div class="div-dialog">
-				<table width="100%">
+		</div>
+	</div>
+	
+	<!-- 确认1 -->
+	<div class="zl-content-info" id="step4_1">
+		<div class="table-frame">
+			<div class="comfirm-table" id="comfirm">
+				<table id="tab3">
 					<tr>
-						<td width="20%" align="right"><span data-i18n="content.result_title1"></span>:</td>
-						<td><h:outputLabel value ="#{JobdispatchChange.isSuccess}" style="font-weight:normal"></h:outputLabel></td>
+						<td colspan="4" align="center"><div class="comfirm-title" id="title3" data-i18n="content.confirm_main_title"></div></td>
 					</tr>
+					<tr height="10px"></tr>
 					<tr>
-						<td width="20%" align="right"><span data-i18n="content.result_title2"></span>:</td>
-						<td><h:outputLabel value ="#{JobdispatchChange.eventNo}" style="font-weight:normal"></h:outputLabel></td>
-					</tr>
-					<tr>
-						<td width="20%" align="right"><span data-i18n="content.result_title3"></span>:</td>
-						<td><h:outputLabel value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel></td>
-					</tr>
-					<tr>
-						<td width="20%" align="right"><span data-i18n="content.result_title4"></span>:</td>
-						<td><h:outputLabel value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
-					</tr> 
-					<tr>
-						<td width="20%" align="right"><span data-i18n="content.result_title5"></span>:</td>
-						<td><h:outputLabel value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
-					</tr>
-					<tr>
-						<td width="20%" align="right"><span data-i18n="content.result_title6"></span>:</td>
-						<td><h:outputLabel value ="#{JobdispatchChange.wisScrapNum}" style="font-weight:normal"></h:outputLabel></td>
-					</tr>
-					<tr>
-						<td width="20%" align="right"><span data-i18n="content.result_title7"></span>:</td>
-						<td><h:outputLabel value ="#{JobdispatchChange.status}" style="font-weight:normal"></h:outputLabel></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="center">
-							<h:button id="dlgClose" value=" " onclick="location.reload();"><span data-i18n="content.result_close" style="display: none;"></span></h:button>
+						<td width="20%" align="right"><span data-i18n="content.confirm_title1"></span>:</td>
+						<td colspan="3">
+							<h:outputLabel id ="bgdispatchNo" value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel>
 						</td>
 					</tr>
-				</table>
+					<tr style="margin-top: 40px">
+						<td width="20%" align="right"><span data-i18n="content.confirm_title2"></span>:</td>
+						<td width="30%"><h:outputLabel id ="bgEquSerial" value ="#{JobdispatchChange.equSerialNo}" style="font-weight:normal"></h:outputLabel></td>
+						<td width="20%" align="right"><span data-i18n="content.confirm_title3"></span>:</td>
+						<td width="30%"><h:outputLabel id ="bgPartNo" value ="#{JobdispatchChange.partNo}" style="font-weight:normal"></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title4"></span>:</td>
+						<td><h:outputLabel id ="bgProcessName" value ="#{JobdispatchChange.processName}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title5"></span>:</td>
+						<td><h:outputLabel id ="bgProcessOrder" value ="#{JobdispatchChange.processOrder}" style="font-weight:normal"></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title6"></span>:</td>
+						<td><h:outputLabel id ="bgPlanNum" value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title7"></span>:</td>
+						<td><h:outputLabel id ="bgfinishNum" value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title8"></span>:</td>
+						<td><h:outputLabel id ="bgNum" value ="#{JobdispatchChange.num}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title9"></span>:</td>
+						<td><h:outputLabel id ="bgUser" value ="#{JobdispatchChange.userName}" style="font-weight:normal"></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title10"></span>:</td>
+						<td><h:outputLabel id ="bgStartTime" value ="#{JobdispatchChange.startTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd HH-mm-ss" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title11"></span>:</td>
+						<td><h:outputLabel id ="bgFinishTime" value ="#{JobdispatchChange.finishTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd HH-mm-ss" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+					</tr>
+			    </table>
+		    </div>
+		</div>
+		<div class="content-control">
+			<div class="content-control-btn prevBtn" id="divPrev3">
+				<div class="zl-button" onclick="btnclose()">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_prev.png" />
+						<span data-i18n="content.confirm_cancel"></span>
+					</div>
+				</div>
 			</div>
-			<p:growl id="messages" showDetail="true" />
-			
-			<script>
-				//<![CDATA[ 
-				$(document).ready(function(){
-					//国际化
-					var option = {resGetPath:"static/i18n/__lng__/jobdispatchchange.json"};
-				    i18n.init(option, function(t) { $("*[data-i18n]").i18n();});
-				    
-					//页面选择器加载
-					$("#select_box_No").selectboxs();
-					$("#select_box_Name").selectboxs();
-					
+			<div class="content-control-btn nextBtn" id="divSave2">
+				<div class="zl-button" onclick="subClick('myform:btn_commit')">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_next.png" />
+						<span data-i18n="content.confirm_ok"></span>
+					</div>
+				</div>
+				<h:commandButton style="display:none;" id="btn_commit">
+					<a4j:ajax event="click"
+						listener="#{JobdispatchChange.saveData}" execute="@form"
+						oncomplete="dlgTranslate();showDlg();" render=":myform:isSuccess myform:dlg1"></a4j:ajax>
+				</h:commandButton>  
+			</div>
+		</div>
+	</div>
 	
-					//页面大小调整
-					/* $.autosizeExclude($(".filter-submit>img")[0], false);
-					$.autosizeExclude($("#myform\\:tb")[0], false);
-					$.autosizeExclude($("#myform\\:tb2")[0], false);
-					$.autosizeExclude($("#comfirm")[0], true);
-					$.autosizeExclude($("#comfirm2")[0], true); */
-					//$.autosizeAll();
-					
-					//显示页面
-					$(".show-frame").hide();
-				});
-				
-				//第一步验证
-				function onYZ() {
-					var equId = document.getElementById("myform:hiddenequID").value;
-
-					if (null == equId || "" == equId) {
-						alert("请选择设备！");
-					} else {
-						document.getElementById("myform:addcentertd3td5comhiddle").click();
-					}
-				}
-
-				//第二步验证
-				function onXZ() {
-					var dispatchId = document.getElementById("myform:jobdispatchId").value;
-					var flag = document.getElementById("myform:selectedprocessOrder").value;
-					if (null == dispatchId || "" == dispatchId) {
-						alert("请选择工单！");
-					} else {
-						if(flag =="400"){
-							//报工信息2
-							controlScreen(4);
-						}else{
-							//报工信息
-							controlScreen(3);
-						}
-					}
-				}
-
-				//第三步1 验证
-				function onZZ() {
-					var user = document.getElementById("myform:user").value;
-					var num = document.getElementById("myform:txtNum").value;
-					var startTime = document.getElementById("myform:startTimeInputDate").value;
-					var finishTime = document.getElementById("myform:finishTimeInputDate").value;
-					var tt = dateCompare(startTime, finishTime);
-					//alert(startTime);
-					if (null == user || "" == user) {
-						alert("请选择报工人员！");
-					} else if (null == num || "" == num) {
-						alert("请填写报工数量！");
-					} else if (num == 0) {
-						alert("报工数量不能为0!");
-					} else if (null == startTime || "" == startTime) {
-						alert("请选择开始时间！");
-					} else if (null == finishTime || "" == finishTime) {
-						alert("请选择结束时间！");
-					} else if (!tt) {
-						alert("开始时间不能大于结束时间!");
-					} else {
-						document.getElementById("myform:submitButton").click();
-						
-					}
-				}
-				//第三步2 验证
-				function onZZ2(){
-					var user = document.getElementById("myform:user2").value;
-					var num = document.getElementById("myform:txtNum2").value;
-					var startTime = document
-							.getElementById("myform:startTime2InputDate").value;
-					var finishTime = document
-							.getElementById("myform:finishTime2InputDate").value;
-					var tt = dateCompare(startTime, finishTime);
-					if (null == user || "" == user) {
-						alert("请选择报工人员！");
-					} else if (null == num || "" == num) {
-						alert("请填写报工数量！");
-					} else if (num == 0) {
-						alert("报工数量不能为0!");
-					} else if (null == startTime || "" == startTime) {
-						alert("请选择开始时间！");
-					} else if (null == finishTime || "" == finishTime) {
-						alert("请选择结束时间！");
-					} else if (!tt) {
-						alert("开始时间不能大于结束时间!");
-					} else {
-						document.getElementById("myform:submitButton2").click();
-						
-					}
-				}
-				
-				//第三步1 验证2
-				function WZ(){
-					var isSuccess = document.getElementById("myform:isSuccess").value;
-
-					if (null != isSuccess && isSuccess != "符合要求") {
-
-						//alert(isSuccess);
-						document.getElementById("myform:txtNum").value = 1;
-						document.getElementById("myform:txtNum").focus();
-					}else{
-						controlScreen(5);
-					}
-				}
-
-				//第三步2 验证2
-				function WZ2(){
-					var isSuccess = document.getElementById("myform:isSuccess").value;
-
-					if (null != isSuccess && isSuccess != "符合要求") {
-
-						alert(isSuccess);
-						document.getElementById("myform:txtNum2").value = 1;
-						document.getElementById("myform:txtNum2").focus();
-					}else{
-						controlScreen(6);
-					}
-				}
-
-				//日期先后验证
-				function dateCompare(startDate, endDate) {
-					//yyyy-mm-dd hh:mi:ss
-					var beginTimes = startDate.substring(0, 10).split('-');
-					var hour = startDate.substring(11, 13);
-					var min = startDate.substring(14, 16);
-					var seconde = startDate.substring(17, 19);
-					var starttime = new Date(beginTimes[0], beginTimes[1],
-							beginTimes[2], hour, min, seconde);
-					var starttimes = starttime.getTime();
-					//alert(starttimes);
-					var endTimes = endDate.substring(0, 10).split('-');
-					var endhour = endDate.substring(11, 13);
-					var endmin = endDate.substring(14, 16);
-					var endseconde = endDate.substring(17, 19);
-					var endtime = new Date(endTimes[0], endTimes[1],
-							endTimes[2], endhour, endmin, endseconde);
-					var end = endtime.getTime();
-
-					if (starttimes > end) {
-						return false;
-					} else {
-						return true;
-					}
-				}
-
-				function reslut() {//验证是否添加成功
-					var isSuccess = document.getElementById("myform:isSuccess").value;
-
-					if (null != isSuccess && isSuccess == "添加成功") {
-						document.getElementById("dlg1").show();
-						//alert(isSuccess);
-						location.reload();
-						//document.getElementById("editInfo").style.display = "none";
-						//document.getElementById("comfirm").style.display = "block";
-
-					} else {
-						alert(isSuccess);
-					}
-				}
-
-				function checkNum() {//验证报工数量
-					var isSuccess = document.getElementById("myform:isSuccess").value;
-
-					if (null != isSuccess && isSuccess != "符合要求") {
-
-						alert(isSuccess);
-						document.getElementById("myform:txtNum").value = 1;
-						document.getElementById("myform:txtNum").focus();
-					}
-					//else{
-					//	alert(isSuccess);
-					//}
-				}
-				function checkNum2() {//验证报工数量
-					var isSuccess = document.getElementById("myform:isSuccess").value;
-
-					if (null != isSuccess && isSuccess != "符合要求") {
-
-						alert(isSuccess);
-						document.getElementById("myform:txtNum2").value = 1;
-						document.getElementById("myform:txtNum2").focus();
-					}
-					
-				}
-				
-				//dlg 国际化
-				function dlgTranslate() {
-					$("#myform\\:dlg1 *[data-i18n]").i18n();
-					//close btn
-					$("#myform\\:dlgClose").attr("value", $("#myform\\:dlgClose").next("span").text());
-				}
-				
-				//控制画面
-				function controlScreen(type) {
-					document.getElementById("step1").style.visibility = "hidden";
-					document.getElementById("step2").style.visibility = "hidden";
-					document.getElementById("step3_1").style.visibility = "hidden";
-					document.getElementById("step3_2").style.visibility = "hidden";
-					document.getElementById("step4_1").style.visibility = "hidden";
-					document.getElementById("step4_2").style.visibility = "hidden";
-					if (type == 1) {	//step1
-						document.getElementById("step1").style.visibility = "visible";
-						//$.autosizeElement($("#myform\\:tb")[0], false);
-					} else if (type == 2) {	//step2
-						document.getElementById("step2").style.visibility = "visible";
-						//$.autosizeElement($("#myform\\:tb2")[0], false);
-					} else if (type == 3) {	//step3-1
-						document.getElementById("step3_1").style.visibility = "visible";
-						//$.autosizeElement($("#myform\\:user")[0], false);
-						//$.autosizeElement($("#myform\\:maxNum")[0], false);
-					}else if(type ==4){	//step3-2
-						document.getElementById("step3_2").style.visibility = "visible";
-						//$.autosizeElement($("#myform\\:user2")[0], false);
-					}else if(type ==5){	//step4-1
-						document.getElementById("step4_1").style.visibility = "visible";
-						//$.autosizeElement($("#step4_1")[0], true);
-					}else if(type ==6){	//step4-2
-						document.getElementById("step4_2").style.visibility = "visible";
-						//$.autosizeElement($("#step4_2")[0], true);
-					}
-				}
-
-				function subClick(id) {
-					document.getElementById(id).click();
-				}
-
-				function onSetNum(num) {
-					document.getElementById("myform:txtNum").value = num;
-				}
-
-				function controlNum(s) {
-
-					if (s == 1) {
-						var txtNum = document.getElementById("myform:txtNum");
-						var currentNum = parseInt(txtNum.value);
-
-						txtNum.value = currentNum + 1;
-					} else if (s == 2) {
-
-						var txtNum = document.getElementById("myform:txtNum");
-						var currentNum = parseInt(txtNum.value);
-						if (currentNum != 1) {
-							txtNum.value = currentNum - 1;
-						}
-					}
-				}
-
-				function setValueforHidd() {//对隐藏域进行赋值，以便jsf的ajax向控制bean传人参数
-
-					var d = document.getElementById("equipment").style.visibility;
-					//alert(d);
-					if (d == "" || d =="visible") {
-						var equId = document
-								.getElementById("select_box_No_hdn").value;
-						var equId2 = document
-						       .getElementById("select_box_Name_hdn").value;
-						document.getElementById("myform:serachEquId").value = equId;
-						document.getElementById("myform:serachEquId2").value = equId2;
-					} else {
-						return false;
-					}
-				}
-				
-				function setTitle(){
-					var obj=document.getElementById("equipment");
-					if(obj.scrollHeight>obj.clientHeight||obj.offsetHeight>obj.clientHeight){ 
-						document.getElementById("title").style.visibility = "visible";
-					}
-				}
-				
-				function btnclose(){
-					location.reload();
-				}
-				function openUrl(url) {
-					var features = "height=900,width=1500,top:200,left:200,status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no";
-					winId = window.open(url, 'addpage', features);
-				}
-				//]]>
-			</script>
-		</h:form>
-	</h:body>
+	<!-- 确认2 -->
+	<div class="zl-content-info" id="step4_2">
+		<div class="table-frame">
+			<div class="comfirm-table" id="comfirm2">
+				<table id="tab5" cellspacing="15px">
+					<tr><td colspan="6" align="center"><div class="comfirm-title" id="title4" data-i18n="content.confirm_main_title"></div></td>
+					</tr>
+					<tr height="10px"></tr>
+					<tr>
+						<td width="10%" align="right"><span data-i18n="content.confirm_title1"></span>:</td>
+						<td colspan="5">
+							<h:outputLabel id ="bgdispatchNo2" value ="#{JobdispatchChange.selectedDispatchNo}" style="font-weight:normal"></h:outputLabel>
+						</td>
+					</tr>
+					<tr style="margin-top: 40px">
+						<td width="13%" align="right"><span data-i18n="content.confirm_title2"></span>:</td>
+						<td width="20%"><h:outputLabel id ="bgEquSerial2" value ="#{JobdispatchChange.equSerialNo}" style="font-weight:normal"></h:outputLabel></td>
+						<td width="13%" align="right"><span data-i18n="content.confirm_title3"></span>:</td>
+						<td width="20%"><h:outputLabel id ="bgPartNo2" value ="#{JobdispatchChange.partNo}" style="font-weight:normal"></h:outputLabel></td>
+						<td width="13%" align="right"><span data-i18n="content.confirm_title4"></span>:</td>
+						<td width="20%"><h:outputLabel id ="bgProcessName2" value ="#{JobdispatchChange.processName}" style="font-weight:normal"></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title5"></span>:</td>
+						<td><h:outputLabel id ="bgProcessOrder2" value ="#{JobdispatchChange.processOrder}" style="font-weight:normal"></h:outputLabel></td>	
+						<td align="right"><span data-i18n="content.confirm_title6"></span>:</td>
+						<td><h:outputLabel id ="bgPlanNum2" value ="#{JobdispatchChange.planNum}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title7"></span>:</td>
+						<td><h:outputLabel id ="bgfinishNum2" value ="#{JobdispatchChange.finishNum}" style="font-weight:normal"></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title8"></span>:</td>
+						<td><h:outputLabel id ="bgNum2" value ="#{JobdispatchChange.fhNum}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title9"></span>:</td>
+						<td><h:outputLabel id ="bgUser2" value ="#{JobdispatchChange.fhUserName}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title10"></span>:</td>
+						<td><h:outputLabel id ="bgStartTime2" value ="#{JobdispatchChange.fhStartTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title11"></span>:</td>
+						<td><h:outputLabel id ="bgFinishTime2" value ="#{JobdispatchChange.fhFinishTime}" style="font-weight:normal"><f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"></f:convertDateTime></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title12"></span>:</td>
+						<td><h:outputLabel id ="bgGood" value ="#{JobdispatchChange.isGood}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title13"></span>:</td>
+						<td><h:outputLabel id ="bgCheckDep" value ="#{JobdispatchChange.checkDep}" style="font-weight:normal"></h:outputLabel></td>
+					</tr>
+					<tr>
+						<td align="right"><span data-i18n="content.confirm_title14"></span>:</td>
+						<td><h:outputLabel id ="bgJgCheckUser" value ="#{JobdispatchChange.jgCheckUser}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title15"></span>:</td>
+						<td><h:outputLabel id ="bgZpCheckUser" value ="#{JobdispatchChange.zpCheckUser}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"><span data-i18n="content.confirm_title16"></span>:</td>
+						<td><h:outputLabel id ="bgSjCheckUser" value ="#{JobdispatchChange.sjCheckUser}" style="font-weight:normal"></h:outputLabel></td>
+						<td align="right"></td>
+						<td></td>
+					</tr>
+			    </table>
+		    </div>
+		</div>
+		<div class="content-control">
+			<div class="content-control-btn prevBtn" id="divPrev3">
+				<div class="zl-button" onclick="btnclose()">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_prev.png" />
+						<span data-i18n="content.confirm_cancel"></span>
+					</div>
+				</div>
+			</div>
+			<div class="content-control-btn nextBtn" id="divSave2">
+				<div class="zl-button" onclick="subClick('myform:btn_commit_400')">
+					<img class="zl-buttonBG" src="images/input/button.png"/>
+					<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+					<div class="zl-button-text">
+						<img class="zl-button-icon" src="images/input/icon_next.png" />
+						<span data-i18n="content.confirm_ok"></span>
+					</div>
+				</div>
+				<h:commandButton style="display:none;" id="btn_commit_400">
+					<a4j:ajax event="click"
+						listener="#{JobdispatchChange.saveData}" execute="@form"
+						oncomplete="dlgTranslate();showDlg();" render=":myform:isSuccess :myform:dlg1"></a4j:ajax>
+				</h:commandButton>  
+			</div>
+		</div>
+	</div>
+	<h:inputHidden value="#{JobdispatchChange.processOrder}" id="selectedprocessOrder"></h:inputHidden>
+	<h:inputHidden value="#{JobdispatchChange.isSuccess}" id="isSuccess"></h:inputHidden>
+	<h:inputHidden value="#{JobdispatchChange.serachEquId}" id="serachEquId"></h:inputHidden>
+	<h:inputHidden value="#{JobdispatchChange.serachEquId2}" id="serachEquId2"></h:inputHidden>
+	<div class="div-dialog">
+		<h:panelGroup id="dlg1">
+			<div class="result-title"><span data-i18n="content.result_title1"></span>:</div>
+			<div class="result-content"><h:outputText value ="#{JobdispatchChange.isSuccess}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.result_title2"></span>:</div>
+			<div class="result-content"><h:outputText value ="#{JobdispatchChange.eventNo}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.result_title3"></span>:</div>
+			<div class="result-content"><h:outputText value ="#{JobdispatchChange.selectedDispatchNo}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.result_title4"></span>:</div>
+			<div class="result-content"><h:outputText value ="#{JobdispatchChange.planNum}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.result_title5"></span>:</div>
+			<div class="result-content"><h:outputText value ="#{JobdispatchChange.finishNum}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.result_title6"></span>:</div>
+			<div class="result-content"><h:outputText value ="#{JobdispatchChange.wisScrapNum}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.result_title7"></span>:</div>
+			<div class="result-content"><h:outputText value ="#{JobdispatchChange.status}"></h:outputText></div>
+			
+			<div class="zl-button" onclick="location.reload();">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<span data-i18n="content.result_close"></span>
+				</div>
+			</div>
+		</h:panelGroup>
+	</div>
+	<p:growl id="messages" showDetail="true" />
+			
+	<h:outputScript library="js" name="jquery.mCustomScrollbar.concat.min.js"></h:outputScript>
+	<script src="./ext/js/jquery-selectbox.js" type="text/javascript"></script>
+	<h:outputScript library="js/page" name="jobdispatchchange.js"></h:outputScript>
+</h:form>
 </ui:composition>

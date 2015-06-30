@@ -77,7 +77,7 @@
 .tab-btn {
 	height: 0.4rem;
 	width: 1.3rem;
-	font-size: 0.18rem;
+	font-size: 0.23rem;
 	line-height: 0.4rem;
 	vertical-align: middle;
 	text-align: center;
@@ -89,7 +89,7 @@
 .tab-btn:hover {
 	height: 0.4rem;
 	width: 1.3rem;
-	font-size: 0.18rem;
+	font-size: 0.23rem;
 	line-height: 0.4rem;
 	vertical-align: middle;
 	text-align: center;
@@ -117,7 +117,7 @@
 	display: block;
 	width: 19.2rem;
 	height: 6.83rem;
-	font-size: 0.14rem;
+	font-size: 0.23rem;
 	position: relative;
 }
 
@@ -191,7 +191,7 @@
 	vertical-align: top;
 	text-decoration: none;
 	font-family: '微软雅黑', Verdana, sans-serif;
-	font-size: 0.18rem;
+	font-size: 0.23rem;
 	line-height: 0.56rem;
 	border: none;
 	background: rgba(0,0,0,0);
@@ -217,7 +217,7 @@
 }
 
 .tab-table>span {
-	font-size: 0.18rem;
+	font-size: 0.23rem;
 	line-height: 0.39rem;
 } 
 

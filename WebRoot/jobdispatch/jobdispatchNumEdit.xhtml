@@ -8,407 +8,274 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 
-	<h:head>
-		<link rel="stylesheet" href="../css/jobdispatchNumEdit.css" type="text/css"></link>
-
-	</h:head>
-
-	<h:body>
-		<h:form id="myform">
-			<div id="maskw"
-				style="position: absolute; z-index: 1000000; top: 0px; left: 0px; background-color: white;"></div>
-
-			<div style="width: 100%;" align="center" id ="content">
-
-				<table id="jobdispatchNumEdit" style="width: 40%" >
-					    <tr>
-					         <td id="title" align="center"><h:outputText value="报工数据修改"/></td>
-					    </tr>
-					    <tr>
-					    <td>
-					    <table align="center" style="font-weight: normal;">
-						      <tr>
-						           <td colspan="2">
-										<h:outputText id="txteventNo" value="报工修改单号" />
-									</td>
-						      </tr>
-						      <tr>
-						          <td colspan="2">
-						           <div id="divEventNo">
-										<h:inputText id="eventNo" styleClass="inputText"
-										 value="#{JobdispatchNumEdit.eventNo}" style="color:#595959" />
-									</div>
-						          </td>
-						      </tr>
-							  <tr>
-							         <td >
-										<h:outputText id="txtpartName" value="产品名称" />
-									</td>
-									<td >
-										<h:outputText id="txtjobplanNo" value="批次计划号" />
-									</td>
-							  </tr>
-							  <tr>
-							       <td>
-							          <div id ="divPartTypeId">
-										<h:selectOneMenu id="partTypeId" styleClass="inputText" disabled="#{JobdispatchNumEdit.flag}"
-											value="#{JobdispatchNumEdit.partTpyeId}" required="true" 
-											requiredMessage="不能为空" style="color:#595959;">
-											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-											<f:selectItems value="#{JobdispatchNumEdit.partTypeList}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"></f:selectItems>
-											<f:ajax event="change" listener="#{JobdispatchNumEdit.getJobPlanInfo}" execute="@this" render=":myform:jobplanId"/>
-										</h:selectOneMenu><br/>
-										<h:message for="partTypeId" style="color:red" />
-									  </div> 
-							       </td>
-							       <td>
-							           <div id="divJobplanId">
-											<h:selectOneMenu id="jobplanId" styleClass="inputText" disabled="#{JobdispatchNumEdit.flag}"
-												value="#{JobdispatchNumEdit.jobplanNo}" required="true" 
-												requiredMessage="不能为空" style="color:#595959;">
-												<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-												<f:selectItems value="#{JobdispatchNumEdit.jobPlanNoList}" var="jobplan" itemLabel="#{jobplan.no}" itemValue="#{jobplan.no}"></f:selectItems>
-												<f:ajax event="change" listener="#{JobdispatchNumEdit.getJobdispatchInfo}" execute="@this" render=":myform:jobdispatchId :myform:planNum"/>
-											</h:selectOneMenu><br/>
-											<h:message for="jobplanId" style="color:red" />
-										</div>
-							       </td>
-							  </tr>
-							  <tr>
-									<td colspan="2">
-										<h:outputText id="txtjobdispatchNo" value="工单编号" />
-									</td>
-							  </tr>
-							  <tr>
-							       <td colspan="2">
-							       <div id="divJobdispatchId">
-										<h:selectOneMenu id="jobdispatchId" styleClass="inputText" disabled="#{JobdispatchNumEdit.flag}"
-											value="#{JobdispatchNumEdit.jobdispatchId}" required="true" 
-											requiredMessage="不能为空" style="color:#595959;">
-											<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
-											<f:selectItems value="#{JobdispatchNumEdit.jobdispatchNoList}" var="jobdispatch" itemLabel="#{jobdispatch.no}" itemValue="#{jobdispatch.id}"></f:selectItems>
-											<f:ajax event="change" listener="#{JobdispatchNumEdit.getInfo}" execute="@this" render=":myform:planNum :myform:processNo :myform:tb" />
-										</h:selectOneMenu><br/>
-										<h:message for="jobdispatchId" style="color:red" />
-									</div>
-						       </td>
-							  </tr>
-							  <tr>
-							       <td >
-										<h:outputText id="txtplanNum" value="投料数" />
-									</td>
-									<td >
-										<h:outputText id="txtprocessNo" value="工序号" />
-									</td>
-									
-							  </tr>
-							   <tr>
-							       <td > <div id="divPlanNum">
-										<h:inputText id="planNum" styleClass="inputTextNoChange"
-										 readonly="true" value="#{JobdispatchNumEdit.jobplanNum}" style="color:#595959" />
-									</div></td>
-									<td ><div id="divProcessNo">
-										<h:inputText id="processNo" styleClass="inputTextNoChange"
-										 value="#{JobdispatchNumEdit.processOrder}"  readonly="true" style="color:#595959"/>
-									</div></td>
-							  </tr>
-							  <tr>
-							        <td >
-										<h:outputText id="txtuserName" value="报工人员" />
-									</td>
-									<td >
-										<h:outputText id="txtbgDate" value="报工日期" />
-									</td>
-							  </tr>
-							  <tr>
-							        <td>
-							        <div id="divUser">
-							        <h:selectOneMenu id="user"
-													value="#{JobdispatchNumEdit.userId}" styleClass="inputText"
-													>
-													<f:selectItems value="#{JobdispatchNumEdit.userMap}"
-														var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
-														<f:ajax event="change" listener="#{JobdispatchNumEdit.getUserInfo}" execute="@this" />
-												</h:selectOneMenu><h:message for="user" style="color:red" />
-							        </div>
-							        </td>
-							        <td><div id="divBgTime">
-							           <rich:calendar id="bgTime" popup="true"
-													inputClass="inputText" locale="en" 
-													value="#{JobdispatchNumEdit.changeDateTime}"
-													datePattern="yyyy-MM-dd" cellWidth="10px"
-													cellHeight="20px" >
-													<f:ajax event="change" listener="#{JobdispatchNumEdit.getAllInfo}" execute="@this" render=":myform:tb"></f:ajax>
-													</rich:calendar><br />
-							        </div></td>
-							  </tr>
-							  <tr>
-							        <td >
-										<h:outputText id="txtCount" value="更改数量" />
-									</td>
-									<td >
-										<h:outputText id="txtReason" value="处理原因" />
-									</td>
-							  </tr>
-							  <tr>
-							        <td ><div id="divCount">
-										<h:inputText id="count" styleClass="inputText" value="#{JobdispatchNumEdit.changeNum}"
-										  style="color:#595959"/>
-									</div></td>
-									<td ><div id="divReason">
-										<h:inputText id="Reason" styleClass="inputText" value="#{JobdispatchNumEdit.reason}"
-										 style="color:#595959"/>
-									</div></td>
-							  </tr>
-						    </table>
-					    </td>
-					    </tr>
-					    <tr>
-					      <td>
-										<div id="equipment" style="overflow:auto;;margin-left: 4px;">
-										    <p:dataTable id="tb" style="width:100%;"
-										value="#{JobdispatchNumEdit.dataList}" var="record"
-										paginator="true" paginatorPosition="bottom" rows="3"
-										selectionMode="single" rowKey="#{record.equId}">
-										<p:ajax event="rowSelect"
-											listener="#{JobdispatchNumEdit.onRowSelect}"
-											update=":myform:equId"/>
-										<p:column headerText="序号"
-											style="width:10%;word-break:break-all ">  
-								            #{record.rowIndex}  
-								        </p:column>
-													<p:column headerText="设备序列号"
-														style="width:40%;word-break:break-all;">  
-								            #{record.no}  
-								        </p:column>
-													<p:column headerText="设备名称"
-														style="width:40%;word-break:break-all">  
-								            #{record.name}  
-								        </p:column>
-								        <p:column headerText="已报工数量" 
-														style="width:10%;word-break:break-all">  
-								            #{record.processNum}  
-								        </p:column>
-									    </p:dataTable>
-										</div>
-					      </td>  
-					    </tr>
-					    <tr>
-					    <td colspan="2" align="center">
-					    <div id="divPrev2" style="position: relative;">
-							    <p:commandButton id="btn1" value="确认 " style="border:0;background-color: #00A040;background-image: url('');color:white;
-									text-shadow:none;" onclick="onYZ()" 
-									update=":myform:partTpyeName :myform:jobplanNo :myform:jobDispatchNo :myform:userName :myform:changeDateTime :myform:changeNum :myform:eventNoData :myform:reason2 :myform:equNo">
-								</p:commandButton>
-								<p:commandButton id="submit" value="确认 " style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
-									text-shadow:none;" onclick="dlg1.show()">
-								</p:commandButton>
-								
-								<p:commandButton id="btn2" value="取消"
-									style="border:0;background-color: #00A040;background-image: url('');color:white;text-shadow:none;margin-left:50px;" 
-										onclick="window.close();"/>		
-												</div>
-					    </td>
-					    </tr>
-			   </table>
-				<h:inputHidden value="#{JobdispatchNumEdit.isSuccess}" id="isSuccess"></h:inputHidden>
-				<h:inputHidden value="#{JobdispatchNumEdit.equId}" id="equId"></h:inputHidden>
-				<p:dialog header="确认信息" widgetVar="dlg1" id="dlg1" modal="true" height="300" width="700" resizable="false">
-				  <table width="100%">
-				  <tr>
-				  <td width="20%" align="right">报工单号：</td>
-				  <td><h:outputLabel id="eventNoData" value ="#{JobdispatchNumEdit.eventNo}" style="font-weight:normal"></h:outputLabel></td>
-				  </tr>
-				   <tr>
-				  <td width="20%" align="right">产品名称：</td>
-				  <td><h:outputLabel id="partTpyeName" value ="#{JobdispatchNumEdit.partTpyeName}" style="font-weight:normal"></h:outputLabel></td>
-				  </tr>
-				   <tr>
-				  <td width="20%" align="right">批次计划号：</td>
-				  <td><h:outputLabel id="jobplanNo" value ="#{JobdispatchNumEdit.jobplanNo}" style="font-weight:normal"></h:outputLabel></td>
-				  </tr>
-				  <tr>
-				  <td width="20%" align="right">工单号：</td>
-				  <td><h:outputLabel id="jobDispatchNo" value ="#{JobdispatchNumEdit.jobDispatchNo}" style="font-weight:normal"></h:outputLabel></td>
-				  </tr>
-				   <tr>
-				   <td width="20%" align="right">设备编号：</td>
-				  <td><h:outputLabel id="equNo" value ="#{JobdispatchNumEdit.equNo}" style="font-weight:normal"></h:outputLabel></td>
-				  </tr>
-				  <tr>
-				  <td width="20%" align="right">报工人员：</td>
-				  <td><h:outputLabel id="userName" value ="#{JobdispatchNumEdit.userName}" style="font-weight:normal"></h:outputLabel></td>
-				  </tr> 
-				  <tr>
-				   <td width="20%" align="right">报工日期：</td>
-				  <td><h:outputLabel id="changeDateTime" value ="#{JobdispatchNumEdit.changeDateTime}" style="font-weight:normal">
-				  <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" ></f:convertDateTime></h:outputLabel></td>
-				  </tr>
-				   <tr>
-				    <td width="20%" align="right">更改数量：</td>
-				  <td><h:outputLabel id="changeNum" value ="#{JobdispatchNumEdit.changeNum}" style="font-weight:normal"></h:outputLabel></td>
-				   </tr>
-				    <tr>
-				     <td width="20%" align="right">处理原因：</td>
-				  <td><h:outputLabel id="reason2" value ="#{JobdispatchNumEdit.reason}" style="font-weight:normal"></h:outputLabel></td>
-				    </tr>
-				    <tr><td colspan="2" align="center">
-				     <p:commandButton value="确认" style="border:0;background-color: #00A040;background-image: url('');color:white;
-					text-shadow:none;"  action="#{JobdispatchNumEdit.checkDataInfo}" update=":myform:isSuccess" oncomplete="onXZ()">
-				</p:commandButton>
-				 <p:commandButton id="save" value="save" style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
-					text-shadow:none;"  action="#{JobdispatchNumEdit.saveDataInfo}" oncomplete="onZZ()" update=":myform:isSuccess">
-				</p:commandButton>
-				 <h:commandButton id="result" value="result" style="display:none;border:0;background-color: #00A040;background-image: url('');color:white;
-					text-shadow:none;" onclick="dlg1.hide()">
-				</h:commandButton>
-				 <p:commandButton value="关闭" style="border:0;background-color: #00A040;background-image: url('');color:white;
-					text-shadow:none;" onclick="dlg1.hide()" >
-				</p:commandButton>
-				     </td>
-				    </tr>
-				  </table>
-				</p:dialog>
-				<p:growl id="messages" showDetail="true" />
+<h:form id="myform">
+	<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="./css/jobdispatchNumEdit.css" type="text/css"></link>
+	
+	<div class="zl-content-top" >
+		<!--头部背景 -->
+		<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+		<!--标题 -->
+		<div class="zl-content-top-title">
+			<span data-i18n="top.main_title"></span>
+		</div>
+	</div>
+	<div class="zl-content-info" id="content">
+		<div class="info-line">
+			<div class="info-title">
+				<span data-i18n="content.title1"></span>:
 			</div>
-			<script type="text/javascript">
-				//<![CDATA[ 
-				 var wjb51 = 0;
-				 var hjb51 = 0;
-				 hjb51 = document.body.clientHeight;
-				 wjb51 = document.body.clientWidth;
-				
-				//内容高度
-				document.getElementById("title").style.height=hjb51*100/900+"px";
-                document.getElementById("title").style.fontSize=hjb51*40/900+"px";
-                
-                document.getElementById("equipment").style.width = wjb51*554/1500+"px";
-                document.getElementById("equipment").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("equipment").style.align = "center";
-                
-                document.getElementById("myform:txtjobdispatchNo").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtpartName").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtjobplanNo").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtjobplanNo").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("myform:txtplanNum").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtprocessNo").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtprocessNo").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("myform:txtCount").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtReason").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtReason").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("myform:txtuserName").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtbgDate").style.fontSize=hjb51*20/900+"px";
-                document.getElementById("myform:txtbgDate").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("myform:txteventNo").style.fontSize=hjb51*20/900+"px";
-                //左边控件 
-                document.getElementById("divEventNo").style.width = wjb51*300/1500+"px";  //是270和36大小 
-                document.getElementById("divEventNo").style.height = hjb51*40/900+"px";
-                document.getElementById("divEventNo").style.marginLeft = "0px"; 
-                document.getElementById("divEventNo").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("divJobdispatchId").style.width = wjb51*554/1500+"px";  //是270和36大小 
-                document.getElementById("divJobdispatchId").style.height = hjb51*45/900+"px";
-                document.getElementById("divJobdispatchId").style.marginLeft = "0px"; 
-                document.getElementById("divJobdispatchId").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("divPartTypeId").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("divPartTypeId").style.height = hjb51*45/900+"px";
-                document.getElementById("divPartTypeId").style.marginLeft = "0px"; 
-                document.getElementById("divPartTypeId").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("divUser").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("divUser").style.height = hjb51*45/900+"px";
-                document.getElementById("divUser").style.marginLeft = "0px"; 
-                document.getElementById("divUser").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("divPlanNum").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("divPlanNum").style.height = hjb51*40/900+"px";
-                document.getElementById("divPlanNum").style.marginLeft = "0px"; 
-                document.getElementById("divPlanNum").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("divCount").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("divCount").style.height = hjb51*40/900+"px";
-                document.getElementById("divCount").style.marginLeft = "0px"; 
-                document.getElementById("divCount").style.fontSize = hjb51*20/900+"px";
-                
-                //右边控件
-                document.getElementById("divProcessNo").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("divProcessNo").style.height = hjb51*40/900+"px";
-                document.getElementById("divProcessNo").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("divProcessNo").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("divJobplanId").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("divJobplanId").style.height = hjb51*45/900+"px";
-                document.getElementById("divJobplanId").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("divJobplanId").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("myform:bgTimeInputDate").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("myform:bgTimeInputDate").style.height = hjb51*40/900+"px";
-                document.getElementById("myform:bgTimeInputDate").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("myform:bgTimeInputDate").style.fontSize = hjb51*20/900+"px";
-                
-                document.getElementById("divReason").style.width = wjb51*228/1500+"px";  //是270和36大小 
-                document.getElementById("divReason").style.height = hjb51*40/900+"px";
-                document.getElementById("divReason").style.marginLeft = wjb51*90/1500+"px"; 
-                document.getElementById("divReason").style.fontSize = hjb51*20/900+"px";
-				
-                document.getElementById("myform:tb").style.fontSize = hjb51*20/900+"px";
-                document.getElementById("myform:btn1").style.fontSize = hjb51*20/900+"px";
-                document.getElementById("myform:btn2").style.fontSize = hjb51*20/900+"px";
-                function onYZ() {
-					var eventNo = document.getElementById("myform:eventNo").value;
-					var partTypeId = document.getElementById("myform:partTypeId").value;
-					var jobdispatchId = document.getElementById("myform:jobdispatchId").value;
-					var jobplanId = document.getElementById("myform:jobplanId").value;
-					var bgTimeInputDate = document.getElementById("myform:bgTimeInputDate").value;
-					var user = document.getElementById("myform:user").value;
-					var count = document.getElementById("myform:count").value;
-					var equId = document.getElementById("myform:equId").value;
-					
-					if (null == eventNo || "" == eventNo) {
-						alert("请输入报工修改单号！");
-					}else if (null == partTypeId || "" == partTypeId) {
-						alert("请选择产品名称！");
-					}else if(null == jobdispatchId || "" == jobdispatchId){
-						alert("请选择工单号！");
-					}else if(null == jobplanId || "" == jobplanId){
-						alert("请选择批次计划号！");
-					}else if(null == bgTimeInputDate || "" == bgTimeInputDate){
-						alert("请选择报工日期！");
-					}else if(null == user || "" == user){
-						alert("请选择报工人员！");
-					}else if(null == count || "" == count){
-						alert("请输入修改数量！");
-					}else if(isNaN(count)){
-						alert("请输入正确的修改数量！");
-					}
-					else if(null == equId || "" == equId){
-						alert("请选择设备！");
-					}else{
-						document.getElementById("myform:submit").click();
-					}
-				}
-
-				function onXZ()  {
-					var msg = document.getElementById("myform:isSuccess").value;
-					if (null != msg && msg == "符合要求") {
-						document.getElementById("myform:save").click();
-					}else{
-						alert(msg);
-					};
-				}
-				function onZZ()  {
-					var msg = document.getElementById("myform:isSuccess").value;
-					if (null != msg && msg == "添加成功") {
-						alert(msg);
-						document.getElementById("myform:result").click();
-					}else{
-						alert(msg);
-					};
-				}
-
-				//]]>
-			</script>
-		</h:form>
-	</h:body>
+			<div class="info-value">
+				<div class="zl-text long">
+					<img class="zl-text-bg-left" src="images/input/box_left.png" />
+					<img class="zl-text-bg-center" src="images/input/box_center.png" />
+					<img class="zl-text-bg-right" src="images/input/box_right.png" />	
+					<h:inputText id="eventNo" value="#{JobdispatchNumEdit.eventNo}"/>
+				</div>
+			</div>
+		</div>
+		<div class="info-line">
+			<div class="info-title">
+				<span data-i18n="content.title2"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-select long">
+					<img class="zl-select-bg-left" src="images/input/box_left.png" />
+					<img class="zl-select-bg-center" src="images/input/box_center.png" />
+					<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+					<h:selectOneMenu id="partTypeId" disabled="#{JobdispatchNumEdit.flag}"
+						value="#{JobdispatchNumEdit.partTpyeId}" required="true" requiredMessage="不能为空">
+						<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<f:selectItems value="#{JobdispatchNumEdit.partTypeList}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"></f:selectItems>
+						<f:ajax event="change" listener="#{JobdispatchNumEdit.getJobPlanInfo}" execute="@this" render=":myform:jobplanId"/>
+					</h:selectOneMenu>
+				</div>
+				<h:message for="partTypeId" style="color:red" />
+			</div>
+		</div>
+		<div class="info-line">
+			<div class="info-title">
+				<span data-i18n="content.title3"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-select long">
+					<img class="zl-select-bg-left" src="images/input/box_left.png" />
+					<img class="zl-select-bg-center" src="images/input/box_center.png" />
+					<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+					<h:selectOneMenu id="jobplanId" disabled="#{JobdispatchNumEdit.flag}"
+						value="#{JobdispatchNumEdit.jobplanNo}" required="true" requiredMessage="不能为空">
+						<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<f:selectItems value="#{JobdispatchNumEdit.jobPlanNoList}" var="jobplan" itemLabel="#{jobplan.no}" itemValue="#{jobplan.no}"></f:selectItems>
+						<f:ajax event="change" listener="#{JobdispatchNumEdit.getJobdispatchInfo}" execute="@this" render=":myform:jobdispatchId :myform:planNum"/>
+					</h:selectOneMenu>
+				</div>
+				<h:message for="jobplanId" style="color:red" />
+			</div>
+			<div class="info-title">
+				<span data-i18n="content.title4"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-select long">
+					<img class="zl-select-bg-left" src="images/input/box_left.png" />
+					<img class="zl-select-bg-center" src="images/input/box_center.png" />
+					<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+					<h:selectOneMenu id="jobdispatchId" disabled="#{JobdispatchNumEdit.flag}"
+						value="#{JobdispatchNumEdit.jobdispatchId}" required="true" requiredMessage="不能为空">
+						<f:selectItem itemLabel="请选择" itemValue=""></f:selectItem>
+						<f:selectItems value="#{JobdispatchNumEdit.jobdispatchNoList}" var="jobdispatch" itemLabel="#{jobdispatch.no}" itemValue="#{jobdispatch.id}"></f:selectItems>
+						<a4j:ajax event="change" listener="#{JobdispatchNumEdit.getInfo}" execute="@this" render=":myform:planNum :myform:processNo :myform:tb" oncomplete="tableTranslate();" />
+					</h:selectOneMenu>
+				</div>
+				<h:message for="jobdispatchId" style="color:red" />
+			</div>
+		</div>
+		<div class="info-line">
+			<div class="info-title">
+				<span data-i18n="content.title5"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-text">
+					<img class="zl-text-bg-left" src="images/input/box_left.png" />
+					<img class="zl-text-bg-center" src="images/input/box_center.png" />
+					<img class="zl-text-bg-right" src="images/input/box_right.png" />	
+					<h:inputText id="planNum" readonly="true" value="#{JobdispatchNumEdit.jobplanNum}"/>
+				</div>
+			</div>
+			<div class="info-title">
+				<span data-i18n="content.title6"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-text">
+					<img class="zl-text-bg-left" src="images/input/box_left.png" />
+					<img class="zl-text-bg-center" src="images/input/box_center.png" />
+					<img class="zl-text-bg-right" src="images/input/box_right.png" />
+					<h:inputText id="processNo" value="#{JobdispatchNumEdit.processOrder}"  readonly="true"/>
+				</div>
+			</div>
+			<div class="info-title">
+				<span data-i18n="content.title7"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-select">
+					<img class="zl-select-bg-left" src="images/input/box_left.png" />
+					<img class="zl-select-bg-center" src="images/input/box_center.png" />
+					<img class="zl-select-bg-right" src="images/input/box_right_select.png" />	
+			        <h:selectOneMenu id="user" value="#{JobdispatchNumEdit.userId}">
+						<f:selectItems value="#{JobdispatchNumEdit.userMap}"
+							var="tt" itemLabel="#{tt.name}" itemValue="#{tt.id}"></f:selectItems>
+						<f:ajax event="change" listener="#{JobdispatchNumEdit.getUserInfo}" execute="@this" />
+					</h:selectOneMenu>
+				</div>
+				<h:message for="user" style="color:red" />
+			</div>
+		</div>
+		<div class="info-line">
+			<div class="info-title">
+				<span data-i18n="content.title8"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-dateBox">
+					<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+					<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+					<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
+		           <rich:calendar id="bgTime" popup="true" locale="en" 
+						value="#{JobdispatchNumEdit.changeDateTime}"
+						datePattern="yyyy-MM-dd">
+						<a4j:ajax event="change" listener="#{JobdispatchNumEdit.getAllInfo}" execute="@this" render=":myform:tb" oncomplete="tableTranslate();" />
+					</rich:calendar>
+				</div>
+			</div>
+			<div class="info-title">
+				<span data-i18n="content.title9"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-text">
+					<img class="zl-text-bg-left" src="images/input/box_left.png" />
+					<img class="zl-text-bg-center" src="images/input/box_center.png" />
+					<img class="zl-text-bg-right" src="images/input/box_right.png" />	
+					<h:inputText id="count" value="#{JobdispatchNumEdit.changeNum}"/>
+				</div>
+			</div>
+			<div class="info-title">
+				<span data-i18n="content.title10"></span>:
+			</div>
+			<div class="info-value">
+				<div class="zl-text">
+					<img class="zl-text-bg-left" src="images/input/box_left.png" />
+					<img class="zl-text-bg-center" src="images/input/box_center.png" />
+					<img class="zl-text-bg-right" src="images/input/box_right.png" />
+					<h:inputText id="Reason" value="#{JobdispatchNumEdit.reason}"/>
+				</div>
+			</div>
+		</div>
+	    <p:dataTable id="tb" styleClass="table-p" value="#{JobdispatchNumEdit.dataList}" var="record"
+			paginator="true" paginatorPosition="bottom" rows="6" selectionMode="single" rowKey="#{record.equId}">
+			<p:ajax event="rowSelect" listener="#{JobdispatchNumEdit.onRowSelect}" update=":myform:equId"/>
+			<p:column style="width:10%;word-break:break-all ">
+				<f:facet name="header">
+					<span data-i18n="content.table_title1"></span>
+				</f:facet>
+				#{record.rowIndex}
+			</p:column>
+			<p:column tyle="width:40%;word-break:break-all;">  
+				<f:facet name="header">
+					<span data-i18n="content.table_title2"></span>
+				</f:facet>
+				#{record.no}
+			</p:column>
+			<p:column style="width:40%;word-break:break-all">  
+				<f:facet name="header">
+					<span data-i18n="content.table_title3"></span>
+				</f:facet>
+				#{record.name}  
+			</p:column>
+			<p:column style="width:10%;word-break:break-all">  
+				<f:facet name="header">
+					<span data-i18n="content.table_title4"></span>
+				</f:facet>
+				#{record.processNum}  
+			</p:column>
+		</p:dataTable>
+		<h:inputHidden value="#{JobdispatchNumEdit.isSuccess}" id="isSuccess"></h:inputHidden>
+		<h:inputHidden value="#{JobdispatchNumEdit.equId}" id="equId"></h:inputHidden>
+		<div class="btn-bottom">
+			<div class="zl-button" onclick="onYZ()">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<span data-i18n="content.confirm_ok"></span>
+				</div>
+			</div>
+		    <p:commandButton id="submit" value="确认 " style="display: none;"
+				update=":myform:partTpyeName :myform:jobplanNo :myform:jobDispatchNo 
+				:myform:userName :myform:changeDateTime :myform:changeNum :myform:eventNoData 
+				:myform:reason2 :myform:equNo" oncomplete="showDialog();">
+			</p:commandButton>
+			
+			<div class="zl-button" onclick="location.reload();">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<span data-i18n="content.confirm_cancel"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="div-dialog">
+		<h:panelGroup>
+			<div class="result-title"><span data-i18n="content.title11"></span>:</div>
+			<div class="result-content"><h:outputText id="eventNoData" value ="#{JobdispatchNumEdit.eventNo}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.title2"></span>:</div>
+			<div class="result-content"><h:outputText id="partTpyeName" value ="#{JobdispatchNumEdit.partTpyeName}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.title3"></span>:</div>
+			<div class="result-content"><h:outputText id="jobplanNo" value ="#{JobdispatchNumEdit.jobplanNo}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.title4"></span>:</div>
+			<div class="result-content"><h:outputText id="jobDispatchNo" value ="#{JobdispatchNumEdit.jobDispatchNo}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.title12"></span>:</div>
+			<div class="result-content"><h:outputText id="equNo" value ="#{JobdispatchNumEdit.equNo}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.title7"></span>:</div>
+			<div class="result-content"><h:outputText id="userName" value ="#{JobdispatchNumEdit.userName}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.title8"></span>:</div>
+			<div class="result-content">
+				<h:outputText id="changeDateTime" value ="#{JobdispatchNumEdit.changeDateTime}">
+					<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" ></f:convertDateTime>
+				</h:outputText>
+			</div>
+			
+			<div class="result-title"><span data-i18n="content.title9"></span>:</div>
+			<div class="result-content"><h:outputText id="changeNum" value ="#{JobdispatchNumEdit.changeNum}"></h:outputText></div>
+			
+			<div class="result-title"><span data-i18n="content.title10"></span>:</div>
+			<div class="result-content"><h:outputText id="reason2" value ="#{JobdispatchNumEdit.reason}"></h:outputText></div>
+			
+			<div class="zl-button" onclick="clickOk();">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<span data-i18n="content.confirm_ok"></span>
+				</div>
+			</div>
+			<p:commandButton id="ok" value="确认" style="display:none;" action="#{JobdispatchNumEdit.checkDataInfo}" update=":myform:isSuccess" oncomplete="onXZ()">
+			</p:commandButton>
+			<p:commandButton id="save" value="save" style="display:none;" action="#{JobdispatchNumEdit.saveDataInfo}" oncomplete="onZZ()" update=":myform:isSuccess">
+			</p:commandButton>
+			<div class="zl-button" onclick="closeDialog();">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<span data-i18n="content.confirm_cancel"></span>
+				</div>
+			</div>
+		</h:panelGroup>
+	</div>
+	<p:growl id="messages" showDetail="true" />
+	
+	<h:outputScript library="js/page" name="jobdispatchNumEdit.js"></h:outputScript>
+</h:form>
 </ui:composition>

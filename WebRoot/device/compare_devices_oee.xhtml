@@ -9,12 +9,13 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	xmlns:f="http://java.sun.com/jsf/core">
 <h:form id="myform">	
-<h:outputScript library="js" name="compare_devices_oee.js"></h:outputScript>
-<h:outputScript library="js" name="highcharts.js"></h:outputScript>
-<h:outputScript library="js" name="exporting.js"></h:outputScript>
-<h:outputScript library="js" name="common_page.js"></h:outputScript>
 <link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="css/compare_devices_oee.css" type="text/css"></link>
+
+<h:outputScript library="js" name="highcharts.js"></h:outputScript>
+<h:outputScript library="js" name="exporting.js"></h:outputScript>
+<h:outputScript library="js" name="compare_devices_oee.js"></h:outputScript>
+<h:outputScript library="js" name="common_page.js"></h:outputScript>
 
 <h:inputHidden id="nodeStr" value="#{CompareDevicesOEEBean.nodeStr}" />
 <div class="zl-content-top" >
@@ -37,7 +38,9 @@
 
 		<div class="zl-content-label"><span data-i18n="top.title4" /></div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="startTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{CompareDevicesOEEBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="startTime" style="color:red" />
@@ -45,7 +48,9 @@
 		
 		<div class="zl-content-label"><span data-i18n="top.title5" /></div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="endTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{CompareDevicesOEEBean.endTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="endTime" style="color:red" />
@@ -67,7 +72,7 @@
 	<div class="auto-size zl-content-top-info-search2">
 		<h:graphicImage id="btn_search" alt="search"  style="display:none;">
 			<a4j:ajax event="click" listener="#{CompareDevicesOEEBean.getDevicesCompareAction}" render=":myform:rightiframe" 
-				execute="dateTime startTime endTime r" oncomplete="resizeListFrame()"></a4j:ajax>
+				execute="dateTime startTime endTime r"></a4j:ajax>
 		</h:graphicImage>
 		<!-- 查找按钮 -->
 		<div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
@@ -99,7 +104,7 @@
 			<h:selectManyCheckbox id="serName" value="#{CompareDevicesOEEBean.serNames}" >
 				<f:selectItems value="#{CompareDevicesOEEBean.serNamesList}"/>
 				<a4j:ajax listener="#{CompareDevicesOEEBean.selectNo}" render="myform:rightiframe" 
-				onbeforesubmit="return selectCheck(this);" oncomplete="resizeListFrame()"/>
+				onbeforesubmit="return selectCheck(this);"/>
 			</h:selectManyCheckbox>
 		</div>
 	</div>
@@ -118,6 +123,12 @@
 			$(".select-list tbody").html(trStr);
 			$(".select-list td").addClass("auto-size-exclude");
 		}
+		
+		dataTranslate("compare_devices_oee", function(t) {
+			$("*[data-i18n]").i18n();
+		});
+		
+		$(".show-frame").hide();
 	});
 	
 	//最多选择5项
@@ -131,22 +142,10 @@
 		}
 		return true;
 	}
-	$(document).ready(function() {
-		//选择框过长省略
-		$(".zl-select select").selectAutoHide();
-		
-		$(".show-frame").hide();
-		 $.autosizeElement($("#chart"), false);
-		 $.autosizeExclude($("#chart>div")[0], true);
- 	})
- 	function resizeListFrame(){
- 		$.autosizeElement($("#chart"), false);
+	
+	function querybtn(){
+		document.getElementById("myform:btn_search").click();
 	}
- 	 var option = {resGetPath:"static/i18n/__lng__/compare_devices_oee.json"};
-	 i18n.init(option, function(t) { $("span").i18n();}); 	
-	 function querybtn(){
-	 		document.getElementById("myform:btn_search").click();
-	 }
 </script>
 </h:form>
 </ui:composition>

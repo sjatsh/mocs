@@ -1,5 +1,7 @@
 .jobplan-update-shadow {
 	position: fixed;
+	left: 0;
+	top: 0;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(255,255,255,.8);
@@ -8,11 +10,12 @@
 
 .jobplan-update-out {
 	position: absolute;
-	float: left;
-	width: 13.31rem;
-	height: 5.70rem;
-	margin-top: 1.10rem;
-	margin-left: 3.50rem;
+	left: 50%;
+	top: 50%;
+	width: 13.30rem;
+	height: 4.90rem;
+	margin-left: -6.65rem;
+	margin-top: -2.45rem;
 	background-color: white;
 	visibility: hidden;
 	z-index: 10;
@@ -20,8 +23,9 @@
 
 .jobplan-update-in {
 	position: absolute;
-	width: 13.15rem;
-	height: 4.80rem;
+	box-sizing: border-box !important;
+	width: 100%;
+	height: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;
@@ -30,15 +34,15 @@
 }
 
 .jobplan-update-tou {
-	width: 13.15rem;
+	width: 100%;
 	height: 0.90rem;
 	position: absolute;
 }
 
 .jobplan-update-image {
 	position: absolute;
-	width: 13.15rem;
-	height: 0.90rem;
+	width: 100%;
+	height: 100%;
 }
 
 .jobplan-update-title {
@@ -54,14 +58,14 @@
 
 .middle_xian {
 	position: relative;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.06rem;
 	top: 0.90rem;
 }
 
 .zhongjian_shuju {
 	position: relative;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.75rem;
 	top: 0.91rem;
 	background-color: #E3E8E4
@@ -69,7 +73,7 @@
 
 .zhongjian_shuju1 {
 	position: relative;
-	width: 13.14rem;
+	width: 100%;
 	height: 0.75rem;
 	top: 0.89rem;
 	background-color: #E3E8E4
@@ -77,7 +81,7 @@
 
 .zhongjian_shuju2 {
 	position: relative;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.75rem;
 	top: 0.87rem;
 	background-color: #E3E8E4
@@ -85,7 +89,7 @@
 
 .zhongjian_shuju3 {
 	position: relative;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.75rem;
 	top: 0.85rem;
 	background-color: #E3E8E4
@@ -143,7 +147,7 @@
 
 .wei_xian {
 	position: absolute;
-	width: 13.14rem;
+	width: 100%;
 	height: 0.99rem;
 	bottom: 0;
 	background-color: #E3E8E4;

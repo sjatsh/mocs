@@ -5,16 +5,16 @@ body {
 }
 .wapper {
 	position: absolute;
-	width: 4000px;
-	height: 2250px;
+	width: 100%;
+	height: 10.80rem;
 	overflow: hidden;
 }
 /* LOGO */
 .logo-frame {
 	position: relative;
-	margin-top: 260px;
-	width: 4000px;
-	height: 947px;
+	margin-top: 1.25rem;
+	width: 100%;
+	height: 4.55rem;
 	z-index: 2;
 }
 .logo-frame img {
@@ -23,27 +23,20 @@ body {
 	height: 100%;
 	display: block;
 }
-/* 旋转部分 */
-.logo-frame>img:nth-of-type(2) {
+/* 旋转部分 , 阴影部分 */
+.logo-frame>img:nth-of-type(2),.logo-frame>img:nth-of-type(3) {
 	position: absolute;
-	left: 41%;
-	top: 11.1%;
-	height: 76.5%;
-	display: block;
-}
-/* 阴影部分 */
-.logo-frame>img:nth-of-type(3) {
-	position: absolute;
-	left: 41%;
-	top: 11.1%;
-	height: 76.5%;
+	left: 50%;
+	top: 0.49rem;
+	margin-left: -1.77rem;
+	height: 3.54rem;
 	display: block;
 }
 .logo-frame .logo-face {
 	position: relative;
-	margin: -755px auto 0;
-	width: 947px;
-	height: 554px;
+	margin: -3.62rem auto 0;
+	width: 4.55rem;
+	height: 2.66rem;
 }
 .logo-face>img {
     transform: rotate3d(0,1,0,1deg);
@@ -56,9 +49,9 @@ body {
 .login_line {
 	position: absolute;
 	left: 0;
-	top: 850px;
-	width: 4000px;
-	height: 18px;
+	top: 4.08rem;
+	width: 100%;
+	height: 0.09rem;
 	z-index: 1;
 }
 .login_line img:nth-of-type(1) {
@@ -79,9 +72,9 @@ body {
 .login_login {
 	position: absolute;
 	left: 0;
-	top: 868px;
-	width: 4000px;
-	height: 1382px;
+	top: 4.17rem;
+	width: 100%;
+	height: 6.63rem;
 	text-align: center;
 	background: rgba(237,237,237,.7);
 	z-index: 1;
@@ -89,34 +82,34 @@ body {
 /* 登录表单 */
 .login_info {
 	position: relative;
-	margin-top: 450px;
+	margin-top: 2.16rem;
 }
 
 /* 登录页面控件 */
 /* 输入框 */
 .zl-input-text {
-	width: 776px;
-	height: 120px;
+	width: 3.72rem;
+	height: 0.58rem;
 	background: #fff;
 	border: solid 1px #666;
 	border-radius: .5em;
-	font-size: 40px;
-	line-height: 40px;
+	font-size: 0.19rem;
+	line-height: 0.19rem;
 	text-indent: 1em;
 	color: #666;
 }
 /* 选择框 */
 .zl-checkbox {
-	width: 776px;
-	height: 48px;
+	width: 3.72rem;
+	height: 0.23rem;
 	cursor: pointer;
 	display: inline-block;
 }
 .zl-checkbox>.zl-checkbox-select {
 	position: relative;
 	float: left;
-	width: 48px;
-	height: 48px;
+	width: 0.23rem;
+	height: 0.23rem;
 	background: #fff;
 	border-radius: .5em;
 	font-size: 50%;
@@ -143,8 +136,8 @@ body {
 .zl-checkbox>.zl-checkbox-content {
 	float: left;
 	margin-left: .5em;
-	font-size: 36px;
-	line-height: 36px;
+	font-size: 0.17rem;
+	line-height: 0.17rem;
 	color: #666;
 	white-space: nowrap;
 }
@@ -155,12 +148,12 @@ body {
 .zl-button {
 	display: inline-block;
 	padding: 0;
-	width: 364px;
-	height: 120px;
+	width: 1.75rem;
+	height: 0.58rem;
 	border: solid 1px #666;
 	border-radius: .6em;
-	font-size: 34px;
-	line-height: 120px;
+	font-size: 0.16rem;
+	line-height: 0.58rem;
 	text-align: center;
 	color: #666;
 	background-color: #fff;
@@ -174,10 +167,10 @@ body {
 }
 
 .zl-input-text {
-	margin-bottom: 34px;
+	margin-bottom: 0.16rem;
 }
 
 .zl-checkbox {
-	height: 92px;
-	line-height: 92px;
+	height: 0.44rem;
+	line-height: 0.44rem;
 }

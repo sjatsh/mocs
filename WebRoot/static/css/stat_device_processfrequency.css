@@ -1,35 +1,41 @@
-/* 閺傚洤鐡ф担宥囩枂閸欙拷*/
+/* 文字位置及 */ 
 .zl-content-label {
 	float: left;
-	margin-left: 60px;
-	margin-top: 35px;
-	width: 75px;
-	font-size: 18px;
-	line-height: 18px;
+	margin-left: 0.6rem;
+	margin-top: 0.35rem;
+	width: 0.75rem;
+	font-size: 0.18rem;
+	line-height: 0.18rem;
 	color: #828282;
 	white-space: nowrap;
 	text-align: right;
-}
-/* 閺冨爼妫垮鍡曠秴缂冿拷*/
+} 
+/* 时间框位置 */ 
 .zl-content-select {
 	float: left;
-	margin-left: 30px;
-	margin-top: 27px;
-}
-/* 娑撳濯哄鍡曠秴缂冿拷*/
-.zl-select-lt{
+	margin-left: 0.3rem;
+	margin-top: 0.27rem;
+} 
+/* 下拉框位置 */ 
+.zl-select-lt {
 	float: left;
-	margin-left: 60px;
-	margin-top: 27px;
-}
-.tab-table{
-	width: 1920px;
+	margin-left: 0.6rem;
+	margin-top: 0.27rem;
 }
 
-.tab-hig-bar{
-	width: 1920px;
-	height: 619px;
-	left: 0px;
-	top: 0px;
+.tab-table {
+	width: 19.2rem;
 }
 
+.tab-hig-bar {
+	width: 19.2rem;
+	height: 6.19rem;
+	left: 0;
+	top: 0;
+} 
+
+#lineChart,#barChart {
+	float: left;
+	width: 9.6rem;
+	height: 6.83rem;
+}

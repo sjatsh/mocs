@@ -10,7 +10,6 @@
     <script type="text/javascript" charset="utf-8" src="../js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../authority/javascript/jasmine-ajax.js"></script>
     <script type="text/javascript" charset="utf-8" src="../authority/javascript/i18n/i18n.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../js/autosize.js"></script>
 </head>
 <body>
 <form action="../login?formLoginPage=formLoginPage" method="post">
@@ -19,38 +18,38 @@
 	    <input type="hidden" name="location" value="${location}" />
 	</c:if>
 	
-	<div class="wapper auto-size">
-		<div class="logo-frame auto-size">
+	<div class="wapper">
+		<div class="logo-frame">
 			<img src="../authority/images/logo.png" >
 			<img src="../authority/images/logo_in.png" >
 			<img src="../authority/images/logo_out.png" >
-			<div class="logo-face auto-size">
+			<div class="logo-face">
 				<img class="" src="../authority/images/logo_pic.png" >
 				<img class="hidden" src="../authority/images/logo_text.png" >
 			</div>
 		</div>
-		<div class="auto-size login_line">
+		<div class="login_line">
 			<img src="../authority/images/split_line_1.png" >
 			<img src="../authority/images/split_line_2.png" >
 		</div>
-		<div class="auto-size login_login">
-			<div class="auto-size login_info">
-				<input type="text" name="userName" class="auto-size zl-input-text" value="" placeholder="username"/><br>
-				<input type="password" name="password" class="auto-size zl-input-text" value="" placeholder="password" /><br>
-				<div class="auto-size zl-checkbox">
-					<div class="auto-size zl-checkbox-select">
-						<div class="auto-size zl-checkbox-get"></div>
+		<div class="login_login">
+			<div class="login_info">
+				<input type="text" name="userName" class="zl-input-text" value="" placeholder="username"/><br>
+				<input type="password" name="password" class="zl-input-text" value="" placeholder="password" /><br>
+				<div class="zl-checkbox">
+					<div class="zl-checkbox-select">
+						<div class="zl-checkbox-get"></div>
 					</div>
-					<span class="auto-size zl-checkbox-content">Remember me on this computer.</span>
-					<div class="auto-size zl-checkbox-clear"></div>
+					<span class="zl-checkbox-content">Remember me on this computer.</span>
+					<div class="zl-checkbox-clear"></div>
 				</div><br>
 				<sso:variable var="loginStatus" target="login.status" />
 				<c:if test="${loginStatus != null}">
 				   	<%-- <i18n:i18n expression="message.error.login.fail" /> --%>
 				   	<span>User name or password error</span><br>
 				</c:if>
-				<a class="auto-size zl-button" onclick="loginSubmit()"><span>Login</span></a>
-			    <a class="auto-size zl-button"><span>Cancel</span></a>
+				<a class="zl-button" onclick="loginSubmit()"><span>Login</span></a>
+			    <a class="zl-button"><span>Cancel</span></a>
 				<input type="submit" class="login_btn" value="" style="display: none" id="loginsubmit"/>
 			</div>
 		</div>

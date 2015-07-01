@@ -1,8 +1,8 @@
 $(document).ready(function() {
-	document.documentElement.style.fontSize = 100 / 580 * $("body").height() + "px";
+	document.documentElement.style.fontSize = parent.document.documentElement.style.fontSize;
 	
-     parent.document.getElementById("jobplanupdate2").style.visibility="visible";
- 	 initPages();//根据状态，对页面的原始进行可用，和不可用设置
+    parent.document.getElementById("jobplanupdate2").style.visibility="visible";
+ 	initPages();//根据状态，对页面的原始进行可用，和不可用设置
  	//选择框省略方法
  	$(".zl-select select").selectAutoHide(10);	
 	//国际化翻译

@@ -7,11 +7,12 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
+<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/stat_device_processfrequency.css" type="text/css"></link>
+
 <h:outputScript library="js" name="highcharts.js"></h:outputScript>
 <h:outputScript library="js" name="exporting.js"></h:outputScript>
 <h:outputScript library="js" name="stat_device_processfrequency.js"></h:outputScript>
-<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="css/stat_device_processfrequency.css" type="text/css"></link>
 
 <h:form id="myform">	
 <h:inputHidden value="#{StatDeviceProFrequencyBean.nodeID}" />
@@ -31,13 +32,15 @@
 				<h:selectOneMenu value="#{StatDeviceProFrequencyBean.nameSelected}" id="equipName" >
 					<f:selectItems value="#{StatDeviceProFrequencyBean.nameList}"></f:selectItems>
 					<a4j:ajax event="valueChange" render=":myform:name1" execute="@this" 
-						listener="#{StatDeviceProFrequencyBean.equipmentSelect}" oncomplete="onselectchane()"></a4j:ajax>
+						listener="#{StatDeviceProFrequencyBean.equipmentSelect}"></a4j:ajax>
 				</h:selectOneMenu>
 			</div>
 			
 			<div class="zl-content-label"><span data-i18n="top.startTime"></span></div>
 			<div class="zl-content-select zl-dateBox">
-			    <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 					<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				       value="#{StatDeviceProFrequencyBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			       <h:message for="start" style="color:red" />
@@ -45,7 +48,9 @@
 			
 			<div class="zl-content-label"><span data-i18n="top.endTime" /></div>
 				<div class="zl-content-select zl-dateBox">
-			     <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 					<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				      value="#{StatDeviceProFrequencyBean.endTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			        <h:message for="start" style="color:red" />
@@ -66,7 +71,7 @@
 		<div class="auto-size zl-content-top-info-search2">
 	        <h:graphicImage id="btn_search" style="display:none">
 				<a4j:ajax event="click" listener="#{StatDeviceProFrequencyBean.getDeviceProFrequenceStatAction}" 
-				render=":myform:charPane :myform:tablelist" execute="equipName name1 start end" oncomplete="resizeListFrame()"></a4j:ajax>
+				render=":myform:charPane :myform:tablelist" execute="equipName name1 start end"></a4j:ajax>
 			</h:graphicImage>
 		<div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
 		     <img class="zl-buttonBG" src="images/input/button.png"/>
@@ -86,7 +91,7 @@
 	<div class="content-info-tubiao" id="list-frame">
 		<h:panelGroup id="tablelist" styleClass="content-info-tab-area">
 		<rich:dataTable id="datatable1" value="#{StatDeviceProFrequencyBean.defaultDataModel}" rows="14"
-			 cellpadding="0"  cellspacing="0" border="0" var="record" style="width:100%;">
+			 cellpadding="0"  cellspacing="0" border="0" var="record">
 			<rich:column>
 				<f:facet name="header" >
 					<span data-i18n="content.jgsjid"></span>
@@ -151,7 +156,7 @@
 		
 		<rich:dataScroller for="datatable1" id="ds" maxPages="10"
 				page="#{StatDeviceProFrequencyBean.scrollerPage}" renderIfSinglePage="true"
-				  render=":myform:charPane :myform:tablelist" oncomplete="resizeListFrame()">
+				  render=":myform:charPane :myform:tablelist">
 				<f:facet name="first">
 					<h:graphicImage value="./images/page/icon_page_first.png" ></h:graphicImage>
 				</f:facet>
@@ -178,16 +183,8 @@
 		<h:panelGroup id="charPane"> 
 			<h:inputHidden value="#{StatDeviceProFrequencyBean.lineChartData}" id="beanvalue" />
             <h:inputHidden value="#{StatDeviceProFrequencyBean.barChartData}" id="beanvalue1" />
-			<table style="width: 100%;height: 100%" border="0" cellpadding="0" cellspacing="0"  class="auto-size-exclude">
-				<tr>
-					<td style="width: 50%">
-						<div id="lineChart" />
-					</td>
-					<td style="width: 50%">
-						<div id="barChart"  />
-					</td>
-				</tr>
-			</table>
+			<div id="lineChart" />
+			<div id="barChart"  />
 			<script type="text/javascript">
 				loadData();
 				dataTranslate("stat_device_processfrequency", function(t) { $("span").i18n();});
@@ -198,36 +195,36 @@
 
 
 <script language="javascript">
-var smallWidth = wjb51 * 130/ 1920;
-var smallHeight = hjb51 * 40 / 1080;
-var bigTop = hjb51 * 40 / 1080;
-var bigWidth = wjb51;
-var bigHeight = hjb51 * 683 / 1080;
-
-$("#tab-list").click(function() {
-	if($("#tab-list").attr("class") == "tab-btn active") {return;}
+	var smallWidth = "1.3rem";
+	var smallHeight = "0.4rem";
+	var bigTop = "0.4rem";
+	var bigWidth = "19.20rem";
+	var bigHeight = "6.83rem";
 	
-	$("#tab-list").addClass("active");
-	$("#tab-chart").removeClass("active");
-	$("#chart-frame").css("z-index","1");
-	$("#list-frame").show().animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 300);
-	$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 300, "linear", function() {
-		$(this).hide();
+	$("#tab-list").click(function() {
+		if($("#tab-list").attr("class") == "tab-btn active") {return;}
+		
+		$("#tab-list").addClass("active");
+		$("#tab-chart").removeClass("active");
+		$("#chart-frame").css("z-index","1");
+		$("#list-frame").show().animate({width: bigWidth, height: bigHeight, left: "0", top: bigTop}, 300);
+		$("#chart-frame").animate({width: smallWidth, height: smallHeight, left: smallWidth, top: "0"}, 300, "linear", function() {
+			$(this).hide();
+		});
+		$("#list-frame").css("z-index","2");
 	});
-	$("#list-frame").css("z-index","2");
-});
-$("#tab-chart").click(function() {
-	if($("#tab-chart").attr("class") == "tab-btn active") {return;}
-	$("#tab-list").removeClass("active");
-	$("#tab-chart").addClass("active");
-
-	$("#list-frame").css("z-index","1");
-	$("#chart-frame").show().animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 300);
-	$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 300, "linear", function() {
-		$(this).hide();
+	$("#tab-chart").click(function() {
+		if($("#tab-chart").attr("class") == "tab-btn active") {return;}
+		$("#tab-list").removeClass("active");
+		$("#tab-chart").addClass("active");
+	
+		$("#list-frame").css("z-index","1");
+		$("#chart-frame").show().animate({width: bigWidth, height: bigHeight, left: "0", top: bigTop}, 300);
+		$("#list-frame").animate({width: smallWidth, height: smallHeight, left: "0", top: "0"}, 300, "linear", function() {
+			$(this).hide();
+		});
+		$("#chart-frame").css("z-index","2");
 	});
-	$("#chart-frame").css("z-index","2");
-});
 	
 	$(document).ready(function() {
 		//选择框过长省略
@@ -235,25 +232,11 @@ $("#tab-chart").click(function() {
 		
 		$("#chart-frame").hide();
 		dataTranslate("stat_device_processfrequency", function(t) { $("span").i18n();});
-		
-		$.autosizeExclude($("#myform\\:charPane> *"), true);
-		$.autosizeExclude($("#myform\\:datatable1"),true);
  	})
  	//提交按钮
   	function querybtn(){
    		document.getElementById("myform:btn_search").click();
    	}
-	
-	function onselectchane(){
-		$.autosizeFrame(false);
-		$("#myform\\:name1").each(function() {
-			$.autosizeElement(this,true);
-		});
-	}
-  	function resizeListFrame(){
-  		$.autosizeElement($("#myform\\:ds"),true);
-		$.autosizeElement($(".content-info-tab-area"),false);
-	}
 </script>
 
 </h:form>

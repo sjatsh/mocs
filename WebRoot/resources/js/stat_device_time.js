@@ -25,8 +25,8 @@ function generateChart(barModel) {
     chart = new Highcharts.Chart({
         chart: {
             renderTo: 'highchartChart',
-            width:wjb51-wjb51*(460/1920),
-            height:hjb51*(550/1080),
+            width: $("#highchartChart").width(),
+            height:$("#highchartChart").height(),
             type: 'bar',
             backgroundColor: 'rgba(255, 255, 255, 0)',
             plotBorderColor : null,

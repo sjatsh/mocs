@@ -1,5 +1,7 @@
 .jobdispatch-add-shadow {
 	position: fixed;
+	left: 0;
+	top: 0;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(255,255,255,.8);
@@ -8,20 +10,24 @@
 
 .jobdispatch-add-out {
 	position: absolute;
-	width: 13.31rem;
-	height: 8.7rem;
-	margin-left: 3rem;
+	left: 50%;
+	top: 50%;
+	width: 13.30rem;
+	height: 8.5rem;
+	margin-left: -6.65rem;
+	margin-top: -4.25rem;
 	background-color: white;
-	z-index: 10;
 	visibility: hidden;
+	z-index: 10;
 }
 
 .jobdispatch-add-in {
 	position: absolute;
+	box-sizing: border-box !important;
 	left: 0;
 	top: 0;
-	width: 13.15rem;
-	height: 7.5rem;
+	width: 100%;
+	height: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	border: #689976 solid 0.05rem;
@@ -29,13 +35,13 @@
 
 .jobdispatch-add-tou {
 	position: absolute;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.9rem;
 }
 
 .jobdispatch-add-image {
 	position: absolute;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.9rem;
 }
 
@@ -52,14 +58,14 @@
 
 .middle_xian {
 	position: relative;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.06rem;
 	top: 0.9rem;
 }
 
 .zhongjian_shuju {
 	position: relative;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.75rem;
 	top: 0.91rem;
 	background-color: #E3E8E4;
@@ -67,7 +73,7 @@
 
 .zhongjian_shuju1 {
 	position: relative;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.75rem;
 	top: 0.9rem;
 	background-color: #E3E8E4;
@@ -104,7 +110,7 @@
 
 .jobdispatch-content-info {
 	position: absolute;
-	width: 13.15rem;
+	width: 100%;
 	height: 3.99rem;
 	top: 2.88rem;
 	background-color: white;
@@ -263,7 +269,7 @@
 
 .wei_xian {
 	position: absolute;
-	width: 13.15rem;
+	width: 100%;
 	height: 0.7rem;
 	bottom: 0;
 	background-color: #E3E8E4;

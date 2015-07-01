@@ -1,80 +1,84 @@
-/* 文字位置及 */
+/* 文字位置及 */ 
 .zl-content-label {
 	float: left;
-	margin-left: 50px;
-	margin-top: 40px;
-	width: 75px;
-	font-size: 18px;
-	line-height: 18px;
+	margin-left: 0.5rem;
+	margin-top: 0.4rem;
+	width: 0.75rem;
+	font-size: 0.18rem;
+	line-height: 0.18rem;
 	color: #828282;
 	white-space: nowrap;
 	text-align: right;
-}
+} 
 
-/* 文本框位置 */
+/* 文本框位置 */ 
 .zl-content-select {
 	float: left;
-	margin-left: 55px;
-	margin-top: 32px;
-}
-/* 下拉框位置 */
-.zl-select-lt{
+	margin-left: 0.55rem;
+	margin-top: 0.32rem;
+} 
+/* 下拉框位置 */ 
+.zl-select-lt {
 	float: left;
-	margin-left: 55px;
-	margin-top: 32px;
+	margin-left: 0.55rem;
+	margin-top: 0.32rem;
 }
 
-.content-info-tubiao{
-	width: 1920px;
-	height: 536px;
-	left: 0px;
-	top: 42px;
+.content-info-tubiao {
+	width: 19.2rem;
+	height: 5.36rem;
+	left: 0;
+	top: 0.42rem;
 	position: absolute;
 }
-.content-info-bottom{
-	height: 42px;
-	width: 1920px;
-	left: 0px;
-	top: 578px;
-	position:absolute;
+
+.content-info-bottom {
+	height: 0.42rem;
+	width: 19.2rem;
+	left: 0;
+	top: 5.78rem;
+	position: absolute;
 	background-color: #E4EAE6;
-	font-size: 16px;
-	line-height: 42px;
-	padding-left: 30px;
+	font-size: 0.16rem;
+	line-height: 0.42rem;
+	padding-left: 0.3rem;
 	vertical-align: middle;
 	color: #7A7A7A;
 }
-.content-info-serialNo{
-	height: 100px;
-	width: 1920px;
-	left: 0px;
-	top: 620px;
+
+.content-info-serialNo {
+	height: 1rem;
+	width: 19.2rem;
+	left: 0;
+	top: 6.2rem;
 	position: absolute;
 }
-.content-info-tbwh{
-	height: 500px;
-	width: 1460px;
+
+.content-info-tbwh {
+	height: 5rem;
+	width: 14.6rem;
 	position: absolute;
-	top: 20px;
-	left: 230px;
+	top: 0.2rem;
+	left: 2.3rem;
 }
-.select-list
-{	position:absolute;
+
+.select-list {
+	position: absolute;
 	white-space: nowrap;
 	overflow: auto;
-	font-size: 20px;
-	top:0px;
-	left:0px;
-	width: 1920px;
-	height: 100px;
-	line-height:50px;
-	width: 1920px;
+	font-size: 0.2rem;
+	top: 0;
+	left: 0;
+	width: 19.2rem;
+	height: 1rem;
+	line-height: 0.5rem;
+	width: 19.2rem;
 	color: #7A7A7A;
 }
-.select-list td
-{
-	width: 192px;
+
+.select-list td {
+	width: 1.92rem;
 	height: 50%;
 	text-align: center;
 	overflow: hidden;
-}
+} 

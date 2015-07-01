@@ -36,7 +36,9 @@
 		
 		<div class="zl-content-label" data-i18n="top.startTime"></div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="startTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{StatDeviceTimeBean.start}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="startTime" style="color:red" />
@@ -44,7 +46,9 @@
 		
 		<div class="zl-content-label" data-i18n="top.endTime"></div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="endTime" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{StatDeviceTimeBean.end}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="endTime" style="color:red" />
@@ -138,11 +142,11 @@
 <h:outputScript library="js" name="exporting.js"></h:outputScript>
 <h:outputScript library="js" name="stat_device_time.js"></h:outputScript>
  <script type="text/javascript">
-	var smallWidth = wjb51 * 130/ 1920;
-	var smallHeight = hjb51 * 40 / 1080;
-	var bigTop = hjb51 * 40 / 1080;
-	var bigWidth = wjb51;
-	var bigHeight = hjb51 * 683 / 1080;
+	var smallWidth = "1.3rem";
+	var smallHeight = "0.4rem";
+	var bigTop = "0.4rem";
+	var bigWidth = "19.20rem";
+	var bigHeight = "6.83rem";
 	
 	$("#tab-list").click(function() {
 		if($("#tab-list").attr("class") == "tab-btn active") {return;}
@@ -150,8 +154,8 @@
 		$("#tab-list").addClass("active");
 		$("#tab-chart").removeClass("active");
 		$("#chart-frame").css("z-index","1");
-		$("#list-frame").show().animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 300);
-		$("#chart-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: smallWidth + "px", top: "0px"}, 300, "linear", function() {
+		$("#list-frame").show().animate({width: bigWidth, height: bigHeight, left: "0", top: bigTop}, 300);
+		$("#chart-frame").animate({width: smallWidth, height: smallHeight, left: smallWidth, top: "0"}, 300, "linear", function() {
 			$(this).hide();
 		});
 		$("#list-frame").css("z-index","2");
@@ -162,8 +166,8 @@
 		$("#tab-chart").addClass("active");
 
 		$("#list-frame").css("z-index","1");
-		$("#chart-frame").show().animate({width: bigWidth + "px", height: bigHeight + "px", left: "0px", top: bigTop + "px"}, 300);
-		$("#list-frame").animate({width: smallWidth + "px", height: smallHeight + "px", left: "0px", top: "0px"}, 300, "linear", function() {
+		$("#chart-frame").show().animate({width: bigWidth, height: bigHeight, left: "0", top: bigTop}, 300);
+		$("#list-frame").animate({width: smallWidth, height: smallHeight, left: "0", top: "0"}, 300, "linear", function() {
 			$(this).hide();
 		});
 		$("#chart-frame").css("z-index","2");
@@ -178,19 +182,15 @@
 		$(".zl-select select").selectAutoHide();
 		
 		$("#chart-frame").hide();
-		//$.autosizeExclude($("#tableData"), true);
-		//$.autosizeExclude($("#highchartChart>div")[0], true);
+		
 		dataTranslate("stat_device_time", function(t) { $("*[data-i18n]").i18n();});
-	})
+	});
 	
 	
 	function resizeListFrame(){
 		loadData();
 
 		dataTranslate("stat_device_time", function(t) { $("*[data-i18n]").i18n();});
-		
-		//$.autosizeElement($(".content-info-tab-area"),false);
-		//$.autosizeElement($("#highchartChart"), false);
 	}
 	resizeListFrame();
  </script>

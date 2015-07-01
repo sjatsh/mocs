@@ -1,5 +1,5 @@
  $(document).ready(function() {
-	document.documentElement.style.fontSize = 100 / 580 * $("body").height() + "px";
+	document.documentElement.style.fontSize = parent.document.documentElement.style.fontSize;
 	
 	parent.document.getElementById("jobplanadd2").style.visibility="visible";
 	$("option").attr("data-i18n", function() {

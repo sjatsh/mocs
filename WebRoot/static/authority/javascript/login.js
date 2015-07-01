@@ -7,15 +7,8 @@ $(document).ready(function() {
 		data: {"local": "en"}
 	});
 	
-	//大小调整
-	$.autosizeInit(4000,2250,800,500,1.6,2.0);
-	$.autosizeReturn(function() {
-		//旋转元素位置调整
-		$(".logo-frame>img:eq(1),.logo-frame>img:eq(2)").css("left", function() {
-			return ($(document).width() - $(this).height()) / 2 + "px";
-		});
-	});
-	$.autosizeMore();
+	//高度大小调整
+	document.documentElement.style.fontSize = 100 / 1080 * $(window).height() + "px";
 	
 	//页面动画
 	startAnimate();

@@ -34,7 +34,7 @@ import smtcl.mocs.utils.device.StringUtils;
  */
 @SuppressWarnings("serial")
 public class LoginVerifyFilter extends HttpServlet implements Filter {
-
+	IAuthorizeService authorizeService = (IAuthorizeService) ServiceFactory.getBean("authorizeService");
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
@@ -86,8 +86,8 @@ public class LoginVerifyFilter extends HttpServlet implements Filter {
 		System.out.println("页面URL" + nowURL);
 		System.out.println("当前的SessionId:filter-" + session.getId());
 		if (checkUser == null || "".equals(checkUser)) {
-			//resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+"/mocs/map/map.faces");
-			resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+nowURL);
+			resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+"/mocs/map/map.faces");
+			//resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+nowURL);
 			return;
 //			String requestFlag = req.getHeader("X-Requested-With");//判断是否是异步提交 X-Requested-With
 //			if(requestFlag!=null&&requestFlag.equalsIgnoreCase("XMLHttpRequest")){
@@ -104,15 +104,20 @@ public class LoginVerifyFilter extends HttpServlet implements Filter {
 				// 获取当前登录用户访问的逻辑地址
 				Map<String, String> map = Constants.MOCS_PATH_MAP;
 				// 调用远程权限接口
-				IAuthorizeService authorizeService = (IAuthorizeService) ServiceFactory.getBean("authorizeService");
-				boolean result = (boolean) authorizeService.isAuthorize("100", map.get(nowURL)); 
-//				boolean result = (boolean) authorizeService.isAuthorize(checkUser.getUserId(), map.get(nowURL));
+				
+				//boolean result = (boolean) authorizeService.isAuthorize("100", map.get(nowURL)); 
+				boolean result = (boolean) authorizeService.isAuthorize(checkUser.getUserId(), map.get(nowURL));
 				// 验证用户是否拥有权限访问当前页面
 				if (result) {
 					chain.doFilter(req, resp);
 					return;
 				} else {
-					resp.sendRedirect(contextURL+"/InsufficientPermissions.faces");
+					if(nowURL.equals("/mocs/map/map.faces")){
+						resp.sendRedirect(contextURL+"/index.faces");
+					}else{
+						resp.sendRedirect(contextURL+"/InsufficientPermissions.faces");
+					}
+					
 					return;
 				}
 			}

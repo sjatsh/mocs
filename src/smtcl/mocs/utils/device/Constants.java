@@ -163,6 +163,8 @@ public class Constants {
 			MOCS_PATH_MAP.put("/mocs/storage/storage_manage.xhtml","mocs.ckgl.page.kfgl");
 			MOCS_PATH_MAP.put("/mocs/storage/materiel_position_manage.xhtml","mocs.ckgl.page.kwgl");
 			
+			MOCS_PATH_MAP.put("/mocs/map/map.faces", "mocs.dtgl.page.dtgl");
+			
 			Map<String,Object> typeMap1=new HashMap<String, Object>();
 			typeMap1.put("id", "1");
 			typeMap1.put("value", "Ô­²ÄÁÏ");

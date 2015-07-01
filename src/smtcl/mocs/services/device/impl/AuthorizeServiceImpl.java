@@ -161,6 +161,7 @@ public class AuthorizeServiceImpl extends GenericServiceSpringImpl<TUser, String
 			if("mocs.gcjm".equals(mo.getModuleId())) continue;  //跳过 工厂建模
 			if("mocs.gwgl".equals(mo.getModuleId())) continue;  //跳过 工位管理
 			if("mocs.ckgl".equals(mo.getModuleId())) continue;  //跳过仓库管理
+			if("mocs.dtgl".equals(mo.getModuleId())) continue;  //跳过地图管理
 			module.put("label", mo.getLabel());
 			module.put("url", mo.getUrl());
 			module.put("remark",mo.getRemark());

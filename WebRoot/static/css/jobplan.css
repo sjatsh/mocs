@@ -56,7 +56,7 @@
 	left: 4.80rem;
 	top: 0.78rem;
 	width: 14.40rem;
-	height: 0.81rem;
+	height: 0.82rem;
 }
 .zl-content-top-info-down-split {
 	position: relative;
@@ -287,74 +287,6 @@ td.sch-timetd .x-grid-cell-inner {
     font-weight: bold;
     color: #000;
 }
-/* 
-/*window PAD微调*/
-@media screen and (min-width: 981px) and (max-width: 1280px) {
-	创建
-	.ext_chuangjian,.ext_daipaigong, .ext_yipaigong {
-		height: 0.22rem !important;
-		margin-top:0px;
-	}
-	上线 加工
-	.ext_shangxian, .ext_jiagong {
-		height: 0.22rem !important;
-		margin-top:0px;
-	}
-	结束
-	.ext_jieshu{
-		height: 0.22rem !important;
-		margin-top:0px;
-	}
-	完成
-	.ext_wancheng{
-		height: 0.22rem !important;
-		margin-top:0px;
-	}
-	暂停
-	.ext_pause{
-		height: 0.22rem !important;
-		margin-top:0px;
-	}
-	内容文字
-	.sch-percent-allocated-text
-	{
-	    top: 20%;
-	}
-}
-
-i PAD微调
-@media screen and (min-width: 0px) and (max-width: 980px) {
-	创建
-	.ext_chuangjian,.ext_daipaigong, .ext_yipaigong {
-		height: 0.18rem !important;
-		margin-top:0px;
-	}
-	上线 加工
-	.ext_shangxian, .ext_jiagong {
-		height: 0.18rem !important;
-		margin-top:0px;
-	}
-	结束
-	.ext_jieshu{
-		height: 0.18rem !important;
-		margin-top:0px;
-	}
-	完成
-	.ext_wancheng{
-		height: 0.18rem !important;
-		margin-top:0px;
-	}
-	暂停
-	.ext_pause{
-		height: 0.18rem !important;
-		margin-top:0px;
-	}
-	内容文字
-	.sch-percent-allocated-text
-	{
-	    top: 10%;
-	}
-} */
 
 /* 选中状态 */
 div.sch-event-selected {

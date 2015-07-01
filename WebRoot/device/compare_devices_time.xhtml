@@ -8,12 +8,13 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <h:form id="myform">
+<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/compare_devices_time.css" type="text/css"></link>
+
 <h:outputScript library="js" name="highcharts.js"></h:outputScript>
 <h:outputScript library="js" name="exporting.js"></h:outputScript>
 <h:outputScript library="js" name="compare_devices_time.js" />
 <h:outputScript library="js" name="common_page.js"></h:outputScript>
-<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="css/compare_devices_time.css" type="text/css"></link>
 
 <h:inputHidden id="nodeStr" value="#{CompareDevicesTimeBean.nodeStr}" />
 <div class="zl-content-top" >
@@ -29,7 +30,9 @@
 			<span data-i18n="top.title2" />
 		</div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				value="#{CompareDevicesTimeBean.start}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="start" style="color:red" />
@@ -39,7 +42,9 @@
 			<span data-i18n="top.title3" />
 		</div>
 		<div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 			<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en" 
 				value="#{CompareDevicesTimeBean.end}" datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			<h:message for="end" style="color:red" />
@@ -48,8 +53,7 @@
 	<!--查询按钮 -->
 	<div class="auto-size zl-content-top-info-search">
 		<h:graphicImage id="btn_search" alt="search" url="images/jobplan/list/jobpaln_button.png" style="display:none;">
-			<a4j:ajax event="click" listener="#{CompareDevicesTimeBean.queryAction}" render=":myform:rightiframe" execute="start end"
-			oncomplete="resizeListFrame()"></a4j:ajax>
+			<a4j:ajax event="click" listener="#{CompareDevicesTimeBean.queryAction}" render=":myform:rightiframe" execute="start end"></a4j:ajax>
 		</h:graphicImage>
 		<!-- 查找按钮 -->
 		<div class="zl-content-btn zl-button" id="button1" onclick="querybtn()">
@@ -82,7 +86,7 @@
 			<h:selectManyCheckbox id="serName" value="#{CompareDevicesTimeBean.serNames}" >
 				<f:selectItems value="#{CompareDevicesTimeBean.serNamesList}" />
 				<a4j:ajax listener="#{CompareDevicesTimeBean.itemSelect}" render="myform:rightiframe"  
-				onbeforesubmit="return selectCheck(this);" oncomplete="resizeListFrame()"/>
+				onbeforesubmit="return selectCheck(this);"/>
 			</h:selectManyCheckbox>
 		</div>
 	</div>
@@ -103,6 +107,10 @@
 			$(".select-list tbody").html(trStr);
 			$(".select-list td").addClass("auto-size-exclude");
 		}
+		
+		dataTranslate("compare_devices_time", function(t) {
+			$("*[data-i18n]").i18n();
+		});
 	});
 	
 	//最多选择5项
@@ -115,23 +123,11 @@
 			return false;
 		}
 		return true;
-	}
-	
-	 $(document).ready(function() {
-		 $.autosizeElement($("#highchartChart"), false);
-		 $.autosizeExclude($("#highchartChart>div")[0], true);
-	 })
-	 	
-	 var option = {resGetPath:"static/i18n/__lng__/compare_devices_time.json"};
- 	 i18n.init(option, function(t) { $("span").i18n();}); 	
+	}	
 	 
  	 function querybtn(){
  		document.getElementById("myform:btn_search").click();
  	 }
- 	 
- 	function resizeListFrame(){
- 		$.autosizeElement($("#highchartChart"), false);
-	}
 </script>
 
 </h:form>

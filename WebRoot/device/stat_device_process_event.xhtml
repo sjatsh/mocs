@@ -25,12 +25,14 @@
 				<h:selectOneMenu id="toolName" value="#{StatDeviceProcessEventBean.machineName}" >
 					<f:selectItems value="#{StatDeviceProcessEventBean.machineNameList}" />
 					<a4j:ajax event="valueChange" listener="#{StatDeviceProcessEventBean.machineNameValueChange}" execute="toolName partName"
-					render="partName" oncomplete="onselectchane()"></a4j:ajax>
+					render="partName"></a4j:ajax>
 				</h:selectOneMenu>
 			</div>
 			<div class="zl-content-label"><span data-i18n="top.startTime"></span></div>
 		    <div class="zl-content-select zl-dateBox">
-			<img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 				<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				            value="#{StatDeviceProcessEventBean.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			     <h:message for="start" style="color:red" />
@@ -38,7 +40,9 @@
 			
 			<div class="zl-content-label"><span data-i18n="top.endTime" /></div>
 		     <div class="zl-content-select zl-dateBox">
-			        <img class="zl-dateBox-bg" src="images/input/datebox.png" />
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 					<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
 				       value="#{StatDeviceProcessEventBean.finishTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 			         <h:message for="start" style="color:red" />
@@ -60,7 +64,7 @@
 		<div class="auto-size zl-content-top-info-search2">
 		<h:graphicImage id="btn_search" style="display:none">
 					<a4j:ajax event="click" listener="#{StatDeviceProcessEventBean.getDeviceProcessEeventStartAction}" 
-					render=":myform:tablelist" execute="toolName partName start end" oncomplete="resizeListFrame();"></a4j:ajax>
+					render=":myform:tablelist" execute="toolName partName start end"></a4j:ajax>
 		</h:graphicImage>
 			<div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
 			<img class="zl-buttonBG" src="images/input/button.png"/>
@@ -79,7 +83,7 @@
 	<div class="content-info-tubiao" id="list-frame">
 		<h:panelGroup id="tablelist" styleClass="content-info-tab-area">
 			<rich:dataTable id="stable" value="#{StatDeviceProcessEventBean.defaultDataModel}" rows="14"
-				 cellpadding="0" cellspacing="0"  border="0" var="pro" style="width:100%;">
+				 cellpadding="0" cellspacing="0"  border="0" var="pro">
 				<rich:column>
 					<f:facet name="header" >
 						<span data-i18n="content.sbid" />
@@ -143,7 +147,7 @@
 			</rich:dataTable>
 			<rich:dataScroller for="stable" id="foot" maxPages="10"
 				page="#{StatDeviceProcessEventBean.scrollerPage}" renderIfSinglePage="true"
-				render=":myform:tablelist" oncomplete="resizeListFrame()">
+				render=":myform:tablelist">
 				<f:facet name="first">
 						<h:graphicImage value="./images/page/icon_page_first.png" ></h:graphicImage>
 					</f:facet>
@@ -183,25 +187,12 @@
 			return $(this).text();
 		});
 	 	dataTranslate("stat_device_process_event", function(t) { $("span").i18n();});
-	 	
-	 	$.autosizeExclude($("#myform\\:stable"),true);
-	 	$.autosizeExclude($("#myform\\:partName"), true);
 	})
 	 	
 	//提交按钮
  	function querybtn(){
   		document.getElementById("myform:btn_search").click();
   	}
-	function onselectchane(){
-		$.autosizeFrame(false);
-		$("#myform\\:partName").each(function() {
-			$.autosizeElement(this,true);
-		});
-	}
-	function resizeListFrame(){
-		$.autosizeElement($("#myform\\:foot"),true);
-		$.autosizeElement($(".content-info-tab-area"),false);
-	}
 	 	
 </script>
 </h:form>

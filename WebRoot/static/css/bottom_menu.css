@@ -205,8 +205,8 @@
 #bottom_menus .sub-menus {
 	position: fixed;
 	left: 0;
-	top: 8.84rem;
-	width: 19.20rem;
+	bottom: 1.34rem;
+	width: 100%;
 	height: 0.58rem;
 	background: rgba(255,255,255,.75);
 	border-top: solid 4px #BFBFBF;
@@ -217,7 +217,7 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 19.20rem;
+	width: 100%;
 	height: 0.58rem;
 	background: rgba(131,178,140,.25);
 }
@@ -225,7 +225,7 @@
 #bottom_menus .sub-menu {
 	position: relative;
 	float: left;
-	width: 2.60rem;
+	width: 13.4%;
 	height: 0.58rem;
 	border-left: solid 1px rgba(104,153,118,0.5);
 	cursor: pointer;

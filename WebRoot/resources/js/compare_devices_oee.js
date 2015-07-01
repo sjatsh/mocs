@@ -1,4 +1,3 @@
-var imgPercent = hjb51/1080;
 /**
  * 加载图表数据
  */
@@ -8,8 +7,8 @@ function loadData() {
 		var barModel = eval('(' + jsonData + ')');
 		generateLineChart(barModel);
 	}else{
-		document.getElementById("chart").innerHTML += "<div style=\"font-size:"+hjb51*30/1080+"px;text-align:center;" +
-		"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
+		document.getElementById("chart").innerHTML += "<div style=\"font-size:0.3rem;text-align:center;" +
+		"color:rgb(150,150,150);padding:1.5rem;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
 	}
 }
 
@@ -30,8 +29,8 @@ function generateLineChart(barModel) {
 		chart: {
 			renderTo : 'chart',
 			zoomType : "x",
-			width:wjb51-wjb51*(460/1920),
-			height : hjb51*500/1080,
+            width: $("#chart").width(),
+            height: $("#chart").height(),
 			plotBorderWidth: 1,
 	        plotBackgroundImage: null,
 	        backgroundColor: 'rgba(255, 255, 255, 0)',

@@ -131,9 +131,9 @@
 } 
 /* 表头样式 */ 
 .rf-dt-shdr-c {
-	padding: 0;
-	font-size: 129%;
-	line-height: 232%;
+	padding: 0 0.5em;
+	font-size: 0.2rem;
+	line-height: 0.45rem;
 	color: #7A7A7A;
 	background: #e3e8e4;
 	white-space: nowrap;
@@ -143,9 +143,9 @@
 } 
 /* 表格样式 */ 
 .rf-dt-c {
-	padding: 0;
-	font-size: 100%;
-	line-height: 295%;
+	padding: 0 0.5em;
+	font-size: 0.2rem;
+	line-height: 0.4rem;
 	color: #6D6D6D;
 	white-space: nowrap;
 } 

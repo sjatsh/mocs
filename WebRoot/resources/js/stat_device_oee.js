@@ -9,12 +9,11 @@ if(null !=jsonData && ""!=jsonData ){
 	var barModel = eval('(' + jsonData + ')');
 	generateChart(barModel);
 }else{
-	document.getElementById("highchartChart").innerHTML += "<div style=\"font-size:"+hjb51*30/1080+"px;text-align:center;" +
-	"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
+	document.getElementById("highchartChart").innerHTML += "<div style=\"font-size:0.3rem;text-align:center;" +
+	"color:rgb(150,150,150);padding:1.5rem;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
  }
 }
 
-var imgPercent = hjb51/1080; //比例 
 /**
  * 创建柱状图
  * @param barModel
@@ -27,8 +26,8 @@ function generateChart(barModel) {
             chart: {
                 renderTo: 'highchartChart',
                 type: 'bar',
-                width:wjb51-wjb51*(460/1920),
-                height:hjb51*(550/1080),
+                width: $("#highchartChart").width(),
+                height:$("#highchartChart").height(),
                 backgroundColor: 'rgba(255, 255, 255, 0)',
                 plotBorderColor : null,
                 plotBackgroundColor: null,

@@ -1,4 +1,3 @@
-var imgPercent = hjb51/1080; //比例 
 /**
  * 加载图表所需数据
  */
@@ -7,10 +6,10 @@ function loadData() {
 	var barModel = eval('(' + jsonData + ')');
 	//barModel.size=0;
 	if(barModel.size == 0){
-		document.getElementById("lineChart").innerHTML += "<div style=\"font-size:"+hjb51*30/1080+"px;text-align:center;" +
-		"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
-		document.getElementById("barChart").innerHTML += "<div style=\"font-size:"+hjb51*30/1080+"px;text-align:center;" +
-		"color:rgb(150,150,150);padding:"+hjb51*150/1080+"px;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
+		document.getElementById("lineChart").innerHTML += "<div style=\"font-size:0.3rem;text-align:center;" +
+		"color:rgb(150,150,150);padding:1.5rem;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
+		document.getElementById("barChart").innerHTML += "<div style=\"font-size:0.3rem;text-align:center;" +
+		"color:rgb(150,150,150);padding:1.5rem;\" align=\"center\"><span data-i18n='zwxxts'></span></div>";
 	}else{
 		generateLineChart(barModel);
 		var jsonData1 = document.getElementById("myform:beanvalue1").value;
@@ -28,8 +27,8 @@ function generateLineChart(barModel) {
 		chart : {
 			renderTo : 'lineChart',
 			type : 'line',
-			 width:hjb51*960/1080,
-	         height:hjb51*475/1080,
+            width: $("#lineChart").width(),
+            height:$("#lineChart").height(),
 	         backgroundColor: 'rgba(255, 255, 255, 0)',
 	         plotBorderColor : null,
 	         plotBackgroundColor: null,
@@ -99,14 +98,14 @@ function generateBarChart(barModel) {
 		chart : {
 			renderTo : 'barChart',
 			type : 'bar',
-			 width:hjb51*960/1080,
-	         height:hjb51*475/1080,
-	         backgroundColor: 'rgba(255, 255, 255, 0)',
-	         plotBorderColor : null,
-	         plotBackgroundColor: null,
-	         plotBackgroundImage:null,
-	         plotBorderWidth: null,
-	         plotShadow: false 
+			width: $("#barChart").width(),
+			height:$("#barChart").height(),
+			backgroundColor: 'rgba(255, 255, 255, 0)',
+			plotBorderColor : null,
+			plotBackgroundColor: null,
+			plotBackgroundImage:null,
+			plotBorderWidth: null,
+			plotShadow: false 
 		},
 		title : {
 			text : barModel.title,

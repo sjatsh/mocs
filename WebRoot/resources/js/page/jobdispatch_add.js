@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	document.documentElement.style.fontSize = 100 / 870 * $("body").height() + "px";
+	document.documentElement.style.fontSize = parent.document.documentElement.style.fontSize;
 	
 //	$.autosizeExclude($(".jobdispatch-content-info-tubiao>*")[0], true);
 //	$.autosizeExclude($(".jobdispatch-content-info-tubiao1>*")[0], true);

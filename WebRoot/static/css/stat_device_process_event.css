@@ -1,34 +1,36 @@
-/* ÎÄ×ÖÎ»ÖÃ¼° */
+/* æ–‡å­—ä½ç½®åŠ */ 
 .zl-content-label {
 	float: left;
-	margin-left: 60px;
-	margin-top: 35px;
-	width: 75px;
-	font-size: 18px;
-	line-height: 18px;
+	margin-left: 0.6rem;
+	margin-top: 0.35rem;
+	width: 0.75rem;
+	font-size: 0.18rem;
+	line-height: 0.18rem;
 	color: #828282;
 	white-space: nowrap;
 	text-align: right;
-}
-/* Ê±¼ä¿òÎ»ÖÃ */
+} 
+/* æ—¶é—´æ¡†ä½ç½® */ 
 .zl-content-select {
 	float: left;
-	margin-left: 30px;
-	margin-top: 27px;
-}
-/* ÏÂÀ­¿òÎ»ÖÃ */
-.zl-select-lt{
+	margin-left: 0.3rem;
+	margin-top: 0.27rem;
+} 
+/* ä¸‹æ‹‰æ¡†ä½ç½® */ 
+.zl-select-lt {
 	float: left;
-	margin-left: 60px;
-	margin-top: 27px;
+	margin-left: 0.6rem;
+	margin-top: 0.27rem;
 }
-.tab-hig-bar{
-	width: 1920px;
-	height: 683px;
-	left: 0px;
-	top: 0px;
+
+.tab-hig-bar {
+	width: 19.2rem;
+	height: 6.83rem;
+	left: 0;
+	top: 0;
 }
-.tab-table{
-	width: 1920px;
-}
+
+.tab-table {
+	width: 19.2rem;
+} 
 

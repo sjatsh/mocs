@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	document.documentElement.style.fontSize = 100 / 850 * $("body").height() + "px";
+	document.documentElement.style.fontSize = parent.document.documentElement.style.fontSize;
 	
 	parent.document.getElementById("jobdispatchupdate2").style.visibility="visible";
 	//选择框省略方法

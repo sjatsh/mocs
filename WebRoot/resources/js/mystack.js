@@ -312,8 +312,8 @@ function stackdochart2() {	//绘制图表
     	 
         $('#stachchartcontainer').highcharts({
             chart: {
-            	width:wjb51-wjb51*(460/1920),
-                height:hjb51*(450/1080),
+                width: $("#stachchartcontainer").width(),
+                height: $("#stachchartcontainer").height(),
                 type: 'bar'
             },
             exporting: {

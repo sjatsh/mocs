@@ -1,68 +1,71 @@
-/* Œƒ±æŒª÷√ */
+/* ÊñáÊú¨‰ΩçÁΩÆ */ 
 .zl-content-label {
 	float: left;
-	margin-left:60px;
-	margin-top: 70px;
-	width: 75px;
-	font-size: 18px;
-	line-height: 18px;
+	margin-left: 0.6rem;
+	margin-top: 0.7rem;
+	width: 0.75rem;
+	font-size: 0.18rem;
+	line-height: 0.18rem;
 	color: #828282;
 	white-space: nowrap;
 	text-align: right;
-}
-/*  ±º‰—°‘ÒøÚŒª÷√ */
+} 
+/* Êó∂Èó¥ÈÄâÊã©Ê°Ü‰ΩçÁΩÆ */ 
 .zl-content-select {
 	float: left;
-	margin-left: 30px;
-	margin-top: 62px;
-}
-/* œ¬¿≠øÚŒª÷√ */
-.zl-select-lt{
+	margin-left: 0.3rem;
+	margin-top: 0.62rem;
+} 
+/* ‰∏ãÊãâÊ°Ü‰ΩçÁΩÆ */ 
+.zl-select-lt {
 	float: left;
-	margin-left: 60px;
-	margin-top: 62px;
+	margin-left: 0.6rem;
+	margin-top: 0.62rem;
 }
-.content-info-tbwh{
-	height: 550px;
-	width: 1460px;
+
+.content-info-tbwh {
+	height: 5.5rem;
+	width: 14.6rem;
 	position: absolute;
-	top: 50px;
-	left: 230px;
-}
-/* «–ªª÷˜ÃÂµƒ¥Û–°Œª÷√∂®“Â */
-.content-info-tubiao{
-	height: 619px;
-	width: 1920px;
+	top: 0.5rem;
+	left: 2.3rem;
+} 
+/* ÂàáÊç¢‰∏ª‰ΩìÁöÑÂ§ßÂ∞è‰ΩçÁΩÆÂÆö‰πâ */ 
+.content-info-tubiao {
+	height: 6.19rem;
+	width: 19.2rem;
 	position: absolute;
-	top: 40px;
-	left: 0px;
+	top: 0.4rem;
+	left: 0;
 	background-color: white;
 	z-index: 1;
-}
-/* ±Ì∏Ò¥Û–° */
-.content-info-tab-area>.tab-table{
-	width: 1920px;height: 619px;
-}
-
-
-.tab-table>tbody{
-	width: 1920px;height: 619px;
+} 
+/* Ë°®Ê†ºÂ§ßÂ∞è */ 
+.content-info-tab-area>.tab-table {
+	width: 19.2rem;
+	height: 6.19rem;
 }
 
-/* td—˘ Ω */
-.tab-table-td1{
+.tab-table>tbody {
+	width: 19.2rem;
+	height: 6.19rem;
+} 
+
+/* tdÊ†∑Âºè */ 
+.tab-table-td1 {
 	background-color: white;
 	vertical-align: middle;
 	padding-left: 1%;
 	white-space: nowrap;
 	color: #828282;
-	border-right:1px solid rgba(104,153,118,0.5);
+	border-right: 1px solid rgba(104,153,118,0.5);
 }
-.tab-table-td2{
+
+.tab-table-td2 {
 	color: #828282;
-	background-color:rgba(131,183,148,0.1);
+	background-color: rgba(131,183,148,0.1);
 	padding-left: 1%;
 	vertical-align: middle;
 	white-space: nowrap;
-	border-right:1px solid rgba(104,153,118,0.5);
-}
+	border-right: 1px solid rgba(104,153,118,0.5);
+} 

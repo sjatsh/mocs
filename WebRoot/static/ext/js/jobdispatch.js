@@ -566,8 +566,8 @@ function jobchaxun(){//查询过滤
                 jobstatus: jobState,//工单状态id
                 partid: partid,
                 equid: equid,
-                planStime: start,
-                planEtime: end
+                planStime: startTime,
+                planEtime: endTime
             },
             callback: function (records, options, success) {
                 changetr();

@@ -106,19 +106,24 @@ public class LoginVerifyFilter extends HttpServlet implements Filter {
 				// 调用远程权限接口
 				
 				//boolean result = (boolean) authorizeService.isAuthorize("100", map.get(nowURL)); 
-				boolean result = (boolean) authorizeService.isAuthorize(checkUser.getUserId(), map.get(nowURL));
-				// 验证用户是否拥有权限访问当前页面
-				if (result) {
+				if("/mocs/admin/index.faces".equals(nowURL)){
 					chain.doFilter(req, resp);
 					return;
-				} else {
-					if(nowURL.equals("/mocs/map/map.faces")){
-						resp.sendRedirect(contextURL+"/index.faces");
-					}else{
-						resp.sendRedirect(contextURL+"/InsufficientPermissions.faces");
+				}else{
+					boolean result = (boolean) authorizeService.isAuthorize(checkUser.getUserId(), map.get(nowURL));
+					// 验证用户是否拥有权限访问当前页面
+					if (result) {
+						chain.doFilter(req, resp);
+						return;
+					} else {
+						if(nowURL.equals("/mocs/map/map.faces")){
+							resp.sendRedirect(contextURL+"/index.faces");
+						}else{
+							resp.sendRedirect(contextURL+"/InsufficientPermissions.faces");
+						}
+						
+						return;
 					}
-					
-					return;
 				}
 			}
 		}

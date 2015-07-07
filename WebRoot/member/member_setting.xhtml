@@ -233,7 +233,8 @@
 			
 			<div class="dialog-bottomBar">
 				<h:inputHidden id="hvalue" value="#{MemberManagementBean.msg}"/>
-				<p:commandButton id="inbtn" styleClass="btn-toolbar" value="page1.btn.save" action="#{MemberManagementBean.insertRecord}"  update=":myform" onclick="return checkEmpty('name','no','idcard');"></p:commandButton>
+				<p:commandButton id="inbtn" styleClass="btn-toolbar" value="page1.btn.save" action="#{MemberManagementBean.insertRecord}"  
+				update=":myform" onclick="return checkEmpty('name','no','idcard');"></p:commandButton>
 				<p:commandButton styleClass="btn-toolbar" value="page1.btn.cancel" oncomplete="adddate.hide()"></p:commandButton>			
 			</div>
 		</div>
@@ -346,8 +347,9 @@
 			var a=document.getElementById("myform:"+v1).value;
 			var b=document.getElementById("myform:"+v2).value;
 			var c=document.getElementById("myform:"+v3).value;
-			if(a==""||b==""||c==""){
-				alert("姓名、工号、身份证为必填字段，提交失败！");return false;
+			var d=document.getElementById("myform:selectUserId").value;
+			if(a==""||b==""||c==""||d==""){
+				alert("姓名、工号、身份证、关联账号为必填字段，提交失败！");return false;
 			}
 			else{
 				return true;

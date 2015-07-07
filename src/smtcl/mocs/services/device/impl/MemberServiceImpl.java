@@ -220,11 +220,9 @@ public class MemberServiceImpl extends GenericServiceSpringImpl<TNodes, String> 
 	
 	@Override
 	public void insertRecord(TMemberInfo tm,String userId) {
-		// TODO Auto-generated method stub
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		
 		commonService.save(tm);
-		String hql="from TUser where userId="+userId+"";
+		String hql="from TUser where userId='"+userId+"'";
 		List<TUser> rsuser=dao.executeQuery(hql);
 		if(null!=rsuser&&rsuser.size()>0){
 			TUser tu=rsuser.get(0);

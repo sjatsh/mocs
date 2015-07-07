@@ -44,6 +44,13 @@ public class LoginUser {
 		
 		Locale locale = SessionHelper.getCurrentLocale (session);
         String language = locale == null ? null : locale.toString ();
+         //临时数据处理
+        if(null!=language&&language.equals("en")){
+        	language=language+"_US";
+        }
+        if(null!=language&&language.equals("zh")){
+        	language=language+"_CN";
+        }
         applications = service.getSpecApplications (userId, IConsant.AUTH_APP, language);
         if (application != null && applications.size () > 0) for (Application app : applications) {
             app.setModules (HelperUtil.orderModule(service.getMenu (userId, app.getAppId (), language)));

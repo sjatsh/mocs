@@ -458,13 +458,14 @@ public class FactoryProfileBean implements Serializable{
 //				 String sbimgUrl="equ.png";
 						 
 				 pathThree=pathThree+","+sbimgUrl;
+				 String timeZone=null==tf.get("timeZone")||"".equals(tf.get("timeZone"))?"0":tf.get("timeZone").toString();
 				 Date da=new Date();
 				 if(null==tf.get("updateTime")||"".equals(tf.get("updateTime"))){
  					 
- 				 }else if(da.getTime()-((Date)tf.get("updateTime")).getTime()>Constants.CONTROL_TUOJI_TIME){
- 					//tf.put("status", "脱机");
- 					sta="脱机";
- 				 }
+ 				 }else if(da.getTime()-((Date)tf.get("updateTime")).getTime()-Double.parseDouble(timeZone)>Constants.CONTROL_TUOJI_TIME){
+					sta="脱机";
+				 }
+ 				 
 				 if(sta.equals("运行")||sta.equals("加工")){
 					 sbimgUrl="yx"+sbimgUrl;
     			 }else if(sta.equals("脱机")||sta.equals("关机")){

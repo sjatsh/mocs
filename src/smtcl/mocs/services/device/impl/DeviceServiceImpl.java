@@ -1186,7 +1186,8 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		try {
 			 String sql="select a.equ_SerialNo as equSerialNo," +
 		 				  " a.equ_name as equName," +
-		 				  " a.path as path," +
+		 				  " a.path as path,"+
+		 				  " a.timeZone as timeZone," +
 		 				  " a.x_AXIS as xAxis," +
 		 				  " a.y_Axis as yAxis," +
 		 				  " a.IPAddress as IPAddress," +
@@ -1354,6 +1355,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 		String sql="SELECT a. equ_serialno AS equSerialNo,"+
 			       " a.status as status,"+ 
 			       " a.updateTime as updateTime,"+ 
+			       " a.timeZone as timeZone,"+ 
 			       " ROUND(a.xfeed,3) AS xfeed,"+
 			       " ROUND(a.yfeed,3) AS yfeed,"+
 			       " ROUND(a.zfeed,3) AS zfeed,"+

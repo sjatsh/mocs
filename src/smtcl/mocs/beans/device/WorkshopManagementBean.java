@@ -141,7 +141,8 @@ public class WorkshopManagementBean {
 			if(StringUtils.listIsNull(mtsrs)){
 				Date da=new Date();
 				String status=mts.get("status").toString();
-				if(da.getTime()-((Date)mts.get("updateTime")).getTime()>Constants.CONTROL_TUOJI_TIME){
+				String timeZone=null==mts.get("timeZone")||"".equals(mts.get("timeZone"))?"0":mts.get("timeZone").toString();
+				if(da.getTime()-((Date)mts.get("updateTime")).getTime()-Double.parseDouble(timeZone)>Constants.CONTROL_TUOJI_TIME){
 					status="мя╩З";
 				}
 				

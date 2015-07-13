@@ -41,6 +41,7 @@ public class TUserEquCurStatus implements java.io.Serializable {
 	private String operator;//操作人员
 	private String spindleLoad;//主轴负载
 	private String partCount;//工件计数
+	private Double timeZone;
 
 	// Constructors
 
@@ -300,4 +301,15 @@ public class TUserEquCurStatus implements java.io.Serializable {
 	public void setWfeed(String wfeed) {
 		this.wfeed = wfeed;
 	}
+	
+	@Column(name = "timeZone")
+	public Double getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(Double timeZone) {
+		this.timeZone = timeZone;
+	}
+	
+	
 }

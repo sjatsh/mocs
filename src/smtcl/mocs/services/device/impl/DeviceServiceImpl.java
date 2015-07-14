@@ -1187,7 +1187,7 @@ public class DeviceServiceImpl extends GenericServiceSpringImpl<TNodes, String>
 			 String sql="select a.equ_SerialNo as equSerialNo," +
 		 				  " a.equ_name as equName," +
 		 				  " a.path as path,"+
-		 				  " a.timeZone as timeZone," +
+		 				  " b.timeZone as timeZone," +
 		 				  " a.x_AXIS as xAxis," +
 		 				  " a.y_Axis as yAxis," +
 		 				  " a.IPAddress as IPAddress," +

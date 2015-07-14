@@ -84,6 +84,7 @@ public class Constants {
 	 * 工厂建模，物理地址跟逻辑地址的对应关系
 	 */
 	public static final Map<String,String> MOCS_PATH_MAP = new HashMap<String, String>();
+	public static final Map<String,String> MOCS_KCGL_TMK = new HashMap<String, String>();//TMK (three menu key)
     /**
      * 按钮ID集合
      */
@@ -158,7 +159,7 @@ public class Constants {
 			MOCS_PATH_MAP.put("/mocs/jobplan/jobplan_detail.xhtml","mocs.zyjh.page.zyjh");
 			MOCS_PATH_MAP.put("/mocs/productInProgress/product_in_progress_composite.xhtml","mocs.zzpcx.page.zzpcx");
 			MOCS_PATH_MAP.put("/mocs/device/workshop_management.xhtml","mocs.sbgl.page.sbgl");
-				
+			
 		    
 			MOCS_PATH_MAP.put("/mocs/storage/storage_manage.xhtml","mocs.ckgl.page.kfgl");
 			MOCS_PATH_MAP.put("/mocs/storage/materiel_position_manage.xhtml","mocs.ckgl.page.kwgl");
@@ -186,5 +187,14 @@ public class Constants {
 			typeMap5.put("id", "5");
 			typeMap5.put("value", "后台维护");
 			MATERIELTYPE.add(typeMap5);
+			
+			MOCS_KCGL_TMK.put("工单退料", "物料入库");
+			MOCS_KCGL_TMK.put("完工入库", "物料入库");
+			MOCS_KCGL_TMK.put("物料杂收", "物料入库");
+			MOCS_KCGL_TMK.put("采购入库", "物料入库");
+			MOCS_KCGL_TMK.put("工单发料", "物料出库");
+			MOCS_KCGL_TMK.put("搬运单发料", "物料出库");
+			MOCS_KCGL_TMK.put("子库存转移", "物料出库");
+			MOCS_KCGL_TMK.put("物料杂发", "物料出库");
 		}
 }

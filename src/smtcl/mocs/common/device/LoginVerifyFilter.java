@@ -86,7 +86,7 @@ public class LoginVerifyFilter extends HttpServlet implements Filter {
 		System.out.println("页面URL" + nowURL);
 		System.out.println("当前的SessionId:filter-" + session.getId());
 		if (checkUser == null || "".equals(checkUser)) {
-			resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+"/mocs/map/map.faces");
+			resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+contextURL+"/map/map.faces");
 			//resp.sendRedirect(urlMap.get("authURL")+"/login.jsp?location="+urlMap.get("mocsURL")+nowURL);
 			return;
 //			String requestFlag = req.getHeader("X-Requested-With");//判断是否是异步提交 X-Requested-With
@@ -106,7 +106,7 @@ public class LoginVerifyFilter extends HttpServlet implements Filter {
 				// 调用远程权限接口
 				
 				//boolean result = (boolean) authorizeService.isAuthorize("100", map.get(nowURL)); 
-				if("/mocs/admin/index.faces".equals(nowURL)){
+				if((contextURL+"/admin/index.faces").equals(nowURL)){
 					chain.doFilter(req, resp);
 					return;
 				}else{
@@ -116,7 +116,7 @@ public class LoginVerifyFilter extends HttpServlet implements Filter {
 						chain.doFilter(req, resp);
 						return;
 					} else {
-						if(nowURL.equals("/mocs/map/map.faces")){
+						if(nowURL.equals(contextURL+"/map/map.faces")){
 							resp.sendRedirect(contextURL+"/index.faces");
 						}else{
 							resp.sendRedirect(contextURL+"/InsufficientPermissions.faces");

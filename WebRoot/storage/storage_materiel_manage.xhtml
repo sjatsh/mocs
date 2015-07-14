@@ -17,9 +17,8 @@
 		  
 		<script src="js/storage/jquery-selectbox.js" type="text/javascript"></script>
 		
-		<div class="show-frame"></div>
 		<div class="header-bar">
-			<div class="logo-img"><img src="./images/profile_top_logo.png" /></div>
+			
 			<div class="header-content">
 				<div class="header-content-tab">
 					<div class="tab-nav cur" data-i18n="top.tab1"></div>
@@ -689,14 +688,6 @@
 				$("#seq_materielDesc_id_div").selectboxs();//序列存量-物料描述
 				$("#materielNo_seq_storage_id_div").selectboxs();//序列存量-库房
 				$("#positonId_Seq_div").selectboxs();//序列存量-库位
-				
-	
-				//页面大小调整
-				$(".table-title,.table-body,.filter-submit>img").each(function() {
-					$.autosizeExclude(this, true);
-				})
-				$.autosizeAll();
-				
 				//显示页面
 				$(".show-frame").hide();
 			});

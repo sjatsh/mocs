@@ -179,6 +179,7 @@ public class AuthorizeServiceImpl extends GenericServiceSpringImpl<TUser, String
 					pagem.put("buttons",page.getButtons());
 					pagem.put("seq",page.getSeq());
 
+					//处理设备管理的三级页面
                     if (Constants.P_V_PAGES.containsKey(page.getLabel())) {//匹配是否有虚拟模块
                         boolean status = true;
                         for (Map<String, Object> rec : childModules)//遍历已有的模块
@@ -201,9 +202,44 @@ public class AuthorizeServiceImpl extends GenericServiceSpringImpl<TUser, String
                             childModule.put("pages", childlist);//为虚拟模块添加页面
                             childModules.add(childModule);//把创建的模块存入模块表里面
                         }
-                    } else {
-                        childModules.add(pagem);//添加不属于虚拟模块的物理页面
-                    }
+                    } else if(Constants.MOCS_KCGL_TMK.containsKey(page.getLabel())){
+	                		//1遍历已有的二级模块childModules 是否已经包含物料入库或者出库
+	               		 boolean ist=true;
+	               		 for (Map<String, Object> rec : childModules)//遍历已有的模块
+	                        {
+	               			//如果已经存在物料入库或者物料出库
+	                           if(Constants.MOCS_KCGL_TMK.get(page.getLabel()).equals(rec.get("label"))){
+	                           	 List<Map<String, Object>> childlist = (List<Map<String, Object>>) rec.get("pages");//获取虚拟模块
+	                           	 if(null==childlist)
+	                           		childlist = new ArrayList<Map<String,Object>>();
+	                                childlist.add(pagem);
+	                                rec.put("pages", childlist);//为虚拟模块添加页面
+	                                ist=false;
+	                           }
+	                        }
+	               		//如果不存在物料入库和物料出库
+	               		 if(ist){
+	               			for(Page page2:mo.getPages()){
+	               				//找到物料入库 或者物料出库
+	               				if(page2.getLabel().equals(Constants.MOCS_KCGL_TMK.get(page2.getLabel()))){
+	               					Map<String, Object> childModule = new HashMap<String, Object>();//创建二级模块
+	                                childModule.put("label",page2.getLabel()); //给二级模块赋值
+	                                childModule.put("url",page2.getUrl()); 
+	                                childModule.put("pageId",page2.getPageId());
+	                                childModule.put("pageName",page2.getPageName());
+	                                childModule.put("buttons",page2.getButtons());
+	                                childModule.put("seq",page2.getSeq());
+	                                List<Map<String, Object>> childlist = new ArrayList<Map<String, Object>>();
+	                                childlist.add(pagem);
+	                                childModule.put("pages", childlist);//为虚拟模块添加页面
+	                                childModules.add(childModule);//把创建的模块存入模块表里面
+	               				}
+	               			}
+	               			ist=true;
+	               		 }
+	               	}else{
+	               		childModules.add(pagem);//添加不属于虚拟模块的物理页面
+	               	}
                 }else{
 					addpage=true;
 				}

@@ -13,12 +13,12 @@
 <div class="toolbar">
 	<h:inputText id="txt" value="#{tFixtureConfigBean.query}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" 
 		onblur="searchBlur('myform:txt');"/> 
-	<h:commandLink value="查询" render=":myform:singletree :myform:carList" actionListener="#{tFixtureConfigBean.queryData}" 
+	<p:commandLink value="查询" update=":myform:singletree :myform:carList" action="#{tFixtureConfigBean.queryData}" 
 		styleClass="iconBtn-toolbar iconBtn-search" />
 	<div class="split-toolbar"></div> 
 	<p:commandLink value="新增" oncomplete="addFx.show()" styleClass="iconBtn-toolbar iconBtn-search" />
 	<div class="split-toolbar"></div>
-    <h:commandLink value="删除" actionListener="#{tFixtureConfigBean.deleteDataTable}" update=":myform:carList"  styleClass="iconBtn-toolbar iconBtn-search" />
+    <p:commandLink value="删除" action="#{tFixtureConfigBean.deleteDataTable}" update=":myform:carList"  styleClass="iconBtn-toolbar iconBtn-search" />
     <div class="split-toolbar"></div>
 </div>
 <div class="toolconten">

@@ -10,9 +10,9 @@
 	
 	<div class="toolbar">
 		<h:inputText id="txt" value="#{partClassConfigBean.query}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText>
-       	<h:commandLink id="minus" action="#{partClassConfigBean.queryData}" 
-       		render=":myform:carList" styleClass="iconBtn-toolbar iconBtn-search">
-       		<span data-i18n="page1.top.btn1"></span></h:commandLink>
+       	<p:commandLink id="minus" action="#{partClassConfigBean.queryData}" 
+       		update=":myform:carList" styleClass="iconBtn-toolbar iconBtn-search" oncomplete="retranslate();">
+       		<span data-i18n="page1.top.btn1"></span></p:commandLink>
 	</div>
 	
 	<!-- 表格 -->
@@ -97,13 +97,16 @@
 			}
 		    $(document).ready(function() {
 				document.getElementById("myform:txt").value="输入ID/编号/名称";
+				retranslate();
+		    });
+		    function retranslate() {
 				//国际化
 				dataTranslate("parts_setting", function(t) {
 					//表头替换
 					$(".table-p th .ui-dt-c span").attr("data-i18n", $(this).text());
 					$("*[data-i18n]").i18n();
 				}, "../static/i18nAdmin");
-		    });
+		    }
 		//]]>
 		</script>
     <ui:remove>
@@ -197,6 +200,5 @@
 				
 		//]]>
 		</script>
-		<h:outputScript library="js" name="table_tree.js"></h:outputScript>
 	</ui:remove>
 </ui:composition>

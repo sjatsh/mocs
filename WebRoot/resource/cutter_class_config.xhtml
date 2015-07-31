@@ -12,7 +12,7 @@
 <div class="toolbar">
 	<h:inputText id="txt" value="#{CutterManagementBean.search}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" 
 		onblur="searchBlur('myform:txt');"></h:inputText> 
-	<h:commandLink value="查询" actionListener="#{CutterManagementBean.searchCutterClass}" render=":myform:tree :myform:dataTable" 
+	<p:commandLink value="查询" action="#{CutterManagementBean.searchCutterClass}" update=":myform:tree :myform:dataTable" 
 		styleClass="iconBtn-toolbar iconBtn-search" />															
 	<div class="split-toolbar"></div>
 	<p:commandLink value="新建"  update=":myform:addcut" onclick="addCutter.show();" styleClass="iconBtn-toolbar iconBtn-search" />	

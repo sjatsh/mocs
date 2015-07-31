@@ -82,39 +82,37 @@
 						</p:column>
 		   </p:dataTable>
 	 <p:dialog widgetVar="addUnit" resizable="false">
-	    <div style="width:300px;height: 300px;">
-    	<table>
+    	<table style="width: 4.5rem;">
     		<tr>
     			<td>分类名称：<font style="color:red;">*</font></td>
     			<td>
-    				<h:selectOneMenu value="#{SetUnitInfoBean.unittypename}" id="addunittype" >  
-	                     <f:selectItems value="#{SetUnitInfoBean.unitTypeList}" /> 
-			            </h:selectOneMenu>  
+    				<h:selectOneMenu value="#{SetUnitInfoBean.unittypename}" id="addunittype" styleClass="select-toolbar">  
+                    	<f:selectItems value="#{SetUnitInfoBean.unitTypeList}" /> 
+		            </h:selectOneMenu>  
     			</td>
     		</tr>
     			<tr>
     				<td>单位名称：<font style="color:red;">*</font></td>
-    				<td><h:inputText value="#{SetUnitInfoBean.unitName}" id="addunitName" style="border:1px black solid;"></h:inputText></td>
+    				<td><h:inputText styleClass="input-toolbar" value="#{SetUnitInfoBean.unitName}" id="addunitName"></h:inputText></td>
     				
     			</tr>
     			<tr>
     				<td>单位缩写：</td>
-    				<td><h:inputText value="#{SetUnitInfoBean.unitShort}" id="addunitShort" style="border:1px black solid;"></h:inputText></td>
+    				<td><h:inputText styleClass="input-toolbar" value="#{SetUnitInfoBean.unitShort}" id="addunitShort"></h:inputText></td>
     				
     			</tr>
     			<tr>
     				<td>描述：</td>
     				<td colspan="2">
-    					<h:inputTextarea value="#{SetUnitInfoBean.unitDesc}"></h:inputTextarea>
+    					<h:inputTextarea value="#{SetUnitInfoBean.unitDesc}" styleClass="input-toolbar"></h:inputTextarea>
     				</td>
     			</tr>
     		</table>
-    		</div>
 	    	<div class="headDivduan">
-			<p:commandButton value="新增" styleClass="delete" onclick="yinc()" ></p:commandButton>
-			<p:commandButton value="新增" id="addunit" actionListener="#{SetUnitInfoBean.addTUnitInfo}" 
-				update=":myform:dataTable2 :myform:messages2 "   oncomplete="addUnit.hide()" 
-				style="display:none"/>
+				<p:commandButton value="新增" styleClass="delete" onclick="yinc()" ></p:commandButton>
+				<p:commandButton value="新增" id="addunit" actionListener="#{SetUnitInfoBean.addTUnitInfo}" 
+					update=":myform:dataTable2 :myform:messages2 "   oncomplete="addUnit.hide()" 
+					style="display:none"/>
     	    </div>
     	<p:growl id="messages2" showDetail="true"/> 
      </p:dialog>

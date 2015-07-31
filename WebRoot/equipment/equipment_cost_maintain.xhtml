@@ -29,7 +29,7 @@
 											    
 	<p:commandLink value="查询" actionListener="#{EquipmentCost.searchList}" update=":myform:carList" styleClass="iconBtn-toolbar iconBtn-search" />
 	<div class="split-toolbar"></div> 
-    <h:commandLink id="add" value="新建" render=":myform:apart " onclick="addPartTypelog.show()"   styleClass="iconBtn-toolbar iconBtn-search"/>
+    <p:commandLink id="add" value="新建" update=":myform:apart " onclick="addPartTypelog.show()"   styleClass="iconBtn-toolbar iconBtn-search"/>
     <div class="split-toolbar"></div> 
     <p:commandLink  value="删除" styleClass="iconBtn-toolbar iconBtn-search"  actionListener="#{EquipmentCost.onSelected}" oncomplete="ondelete()" update=":myform:sed"/> 
     <p:commandButton id="delete" value="删除(D)" update=":myform:carList :myform:displayMulti"  actionListener="#{EquipmentCost.onDelete}" style="display:none;"/>

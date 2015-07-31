@@ -14,12 +14,12 @@
 <div class="toolbar"> 
 	<h:inputText id="txt" value="#{materailClassConfigBean.search}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" 
 		onblur="searchBlur('myform:txt');"></h:inputText> 
-	<h:commandLink value="查询" action="#{materailClassConfigBean.MaterailSearch}" render=":myform:treeSingle" 
-		 styleClass="iconBtn-toolbar iconBtn-search"></h:commandLink>
+	<p:commandLink value="查询" action="#{materailClassConfigBean.MaterailSearch}" update=":myform:treeSingle" 
+		 styleClass="iconBtn-toolbar iconBtn-search"></p:commandLink>
 	<div class="split-toolbar"></div>
 	<p:commandLink value="新建" onclick="addMC.show()" styleClass="iconBtn-toolbar iconBtn-search" />
 	<div class="split-toolbar"></div>
-	<h:commandLink value="删除" actionListener="#{materailClassConfigBean.deleteMaterial}" render=":myform:carList  :myform:treeSingle :myform:messages" 
+	<p:commandLink value="删除" action="#{materailClassConfigBean.deleteMaterial}" update=":myform:carList  :myform:treeSingle :myform:messages" 
 	 styleClass="iconBtn-toolbar iconBtn-search" />
 	<div class="split-toolbar"></div>
 </div>

@@ -15,8 +15,8 @@
 <div class="toolbar">
 	<h:inputText id="txt" value="#{materailDetailConfigBean.search}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" 
 		onblur="searchBlur('myform:txt');" /> 
-	<h:commandLink value="查询" action="#{materailDetailConfigBean.MaterailSearch}" 
-	 render=":myform:treeSingle :myform:carList" styleClass="iconBtn-toolbar iconBtn-search" />
+	<p:commandLink value="查询" action="#{materailDetailConfigBean.MaterailSearch}" 
+	 update=":myform:treeSingle :myform:carList" styleClass="iconBtn-toolbar iconBtn-search" />
 	<div class="split-toolbar"></div>
 	
 	<ui:remove>

@@ -11,13 +11,13 @@
 	
 	<div class="toolbar">
 		<h:inputText id="txt" value="#{partTypeConfigBean.query}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 
-		<h:commandLink value="page2.top.btn1" action="#{partTypeConfigBean.queryData}" render=":myform:carList" styleClass="iconBtn-toolbar iconBtn-search"></h:commandLink>
+		<p:commandLink value="page2.top.btn1" action="#{partTypeConfigBean.queryData}" update=":myform:carList" styleClass="iconBtn-toolbar iconBtn-search" oncomplete="retranslate();"></p:commandLink>
 		<div class="split-toolbar"></div>
 		<h:selectOneMenu value="#{partTypeConfigBean.selectOption}" styleClass="select-toolbar">
 		   <f:selectItem itemLabel="page2.top.option1" itemValue="" ></f:selectItem>
 	       <f:selectItems value="#{partTypeConfigBean.options}"  
 	           var="option"  itemLabel="#{option}"  itemValue="#{option}" />  
-	           <a4j:ajax event="valueChange" listener="#{partTypeConfigBean.selectChange}" render=":myform:carList :myform:displayMulti"></a4j:ajax>
+	           <a4j:ajax event="valueChange" listener="#{partTypeConfigBean.selectChange}" render=":myform:carList :myform:displayMulti" oncomplete="retranslate();"></a4j:ajax>
 	    </h:selectOneMenu> 
 	    
 		<ui:remove>
@@ -231,6 +231,9 @@
 	    $(document).ready(function() {
 			document.getElementById("myform:txt").value="输入ID/编号/名称";
 			//国际化
+			retranslate();
+	    });
+	    function retranslate() {
 			dataTranslate("parts_setting", function(t) {
 				//按钮替换
 				$(".iconBtn-toolbar,option").attr("data-i18n", $(this).text());
@@ -240,7 +243,7 @@
 				$(".table-p td .ui-dt-c a").attr("data-i18n", $(this).text());
 				$("*[data-i18n]").i18n();
 			}, "../static/i18nAdmin");
-	    });
+	    }
 	//]]>
 	</script>
 	

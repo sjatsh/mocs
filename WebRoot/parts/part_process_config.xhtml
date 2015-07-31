@@ -23,7 +23,7 @@
 				</p:treeNode>  
 			</p:tree>
 		</div>
-		<h:commandLink value="page3.top.btn1" update=":myform:tree" action="#{partProcessConfigBean.queryData}" styleClass="iconBtn-toolbar iconBtn-search"></h:commandLink>
+		<p:commandLink value="page3.top.btn1" update=":myform:tree" action="#{partProcessConfigBean.queryData}" styleClass="iconBtn-toolbar iconBtn-search"></p:commandLink>
 		<h:selectOneMenu value="#{partProcessConfigBean.selectProcessPlan}" id="selectGY" styleClass="select-toolbar">
 			<f:selectItem itemLabel="page3.top.option1" itemValue="" ></f:selectItem>
 			<f:selectItems value="#{partProcessConfigBean.processPlan}"  

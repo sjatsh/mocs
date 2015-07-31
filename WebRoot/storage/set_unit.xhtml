@@ -80,36 +80,34 @@
 							<p:rowEditor />
 						</p:column>
 		 </p:dataTable>
-		<p:dialog widgetVar="addUnitType" resizable="false"  >
-	     <div style="width:300px;height: 380px;">
-    	<table>
+		<p:dialog widgetVar="addUnitType" resizable="false" styleClass="div-dialog" >
+    		<table style="width: 4.5rem;">
     	       <tr>
     				<td>分类名称：<font style="color:red;">*</font></td>
-    				<td><h:inputText value="#{SetUnitBean.unittypename}" id="unittypename" style="border:1px black solid;"></h:inputText></td>
+    				<td><h:inputText styleClass="input-toolbar" value="#{SetUnitBean.unittypename}" id="unittypename"></h:inputText></td>
     			</tr>
     		    <tr>
     				<td>分类说明：<font style="color:red;">*</font></td>
-    				<td><h:inputText value="#{SetUnitBean.unittypedesc}" id="unittypedesc" style="border:1px black solid;"></h:inputText></td>
+    				<td><h:inputText styleClass="input-toolbar" value="#{SetUnitBean.unittypedesc}" id="unittypedesc"></h:inputText></td>
     			</tr>
     			<tr>
     				<td>基准单位：<font style="color:red;">*</font></td>
-    				<td><h:inputText value="#{SetUnitBean.unit}" id="unit" style="border:1px black solid;"></h:inputText></td>
+    				<td><h:inputText styleClass="input-toolbar" value="#{SetUnitBean.unit}" id="unit"></h:inputText></td>
     			</tr>
     			<tr>
     				<td>单位缩写：<font style="color:red;">*</font></td>
-    				<td><h:inputText value="#{SetUnitBean.unitshort}" id="unitShort" style="border:1px black solid;"></h:inputText></td>
+    				<td><h:inputText styleClass="input-toolbar" value="#{SetUnitBean.unitshort}" id="unitShort"></h:inputText></td>
     			</tr>
     			<tr>
     				<td>失效日期：</td>
-    				<td><rich:calendar id="invadate"  popup="true" locale="en"   value="#{SetUnitBean.invadate}"  inputClass="common_calendar"  cellWidth="118px"  cellHeight="25px" datePattern="yyyy-MM-dd" style="width: 100%;" /></td>
+    				<td><rich:calendar id="invadate"  popup="true" locale="en" value="#{SetUnitBean.invadate}"  inputClass="input-toolbar"  cellWidth="118px"  cellHeight="25px" datePattern="yyyy-MM-dd"/></td>
     			</tr>
     		</table>
-    		</div>
 	    	<div class="headDivduan">
-			<p:commandButton value="新增" styleClass="delete" onclick="yinc()" ></p:commandButton>
-			<p:commandButton value="新增" id="addType" actionListener="#{SetUnitBean.addTUnitType}" 
-				update=":myform:dataTable1 :myform:messages "   oncomplete="addUnitType.hide()" 
-				style="display:none"/>
+				<p:commandButton value="新增" styleClass="delete" onclick="yinc()" ></p:commandButton>
+				<p:commandButton value="新增" id="addType" actionListener="#{SetUnitBean.addTUnitType}" 
+					update=":myform:dataTable1 :myform:messages "   oncomplete="addUnitType.hide()" 
+					style="display:none"/>
     	    </div>
     	<p:growl id="messages" showDetail="true"/> 
      </p:dialog>

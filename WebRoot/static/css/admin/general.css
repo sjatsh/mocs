@@ -173,7 +173,7 @@ a.iconBtn-toolbar {
 }
 
 /* 输入框 */
-input[type="text"].input-toolbar {
+input[type="text"].input-toolbar, textarea.input-toolbar {
 	position: relative;
 	margin-top: 0.12rem;
 	width: 1.82rem;

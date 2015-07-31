@@ -18,7 +18,7 @@
 <input type="hidden" id="add_alert_msg_repaeat" data-i18n="[value]page1.add.alert_msg_repeat" value="" ></input>
 
 <div class="toolbar" id="equipment_type_center_right_top">
-   <p:commandLink id="add" value="新建" update=":myform:apart" onclick="addPartTypelog.show()"  styleClass="iconBtn-toolbar iconBtn-search"/>
+   <p:commandLink id="add" value="新建" update=":myform:apart" onclick="addPartTypelog.show()"  styleClass="iconBtn-toolbar iconBtn-search" oncomplete="retranslate();"/>
    <div class="split-toolbar"></div> 
    <p:commandLink  value="删除" styleClass="iconBtn-toolbar iconBtn-search" action="#{EquipmentType.onSelected}" oncomplete="ondelete();" update=":myform:sed" /> 
    <p:commandButton id="delete" value="del" update=":myform:carList :myform:displayMulti :myform:tree"  action="#{EquipmentType.onDelete}" style="display:none;"/>
@@ -291,6 +291,17 @@
 			}, 200);
 			$(this).toggleClass("btnS").toggleClass("btnE");
 		});
+		
+		//加载国际化
+		$(document).ready(function() {
+			retranslate();
+		});
+		function retranslate() {
+			dataTranslate("equipment_setting", function(t) {
+				$('span.ui-button-text').attr('data-i18n', $(this).text());
+				$('*[data-i18n]').i18n();
+			}, "../static/i18nAdmin");
+		}
 	//]]>
 	</script>
 	</rich:panel>	

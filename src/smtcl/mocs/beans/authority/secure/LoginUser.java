@@ -51,6 +51,7 @@ public class LoginUser {
         if(null!=language&&language.equals("zh")){
         	language=language+"_CN";
         }
+        language="zh_CN";//临时的强制修改为中文
         applications = service.getSpecApplications (userId, IConsant.AUTH_APP, language);
         if (application != null && applications.size () > 0) for (Application app : applications) {
             app.setModules (HelperUtil.orderModule(service.getMenu (userId, app.getAppId (), language)));

@@ -51,7 +51,7 @@ import java.util.Date;
 public class MemberManagementBean implements Serializable {
 	private String pageId="mocs.cjgl.page.cjgl";
 	private Map<String, Object>[] selectedData;
-
+	private String nodeid;
 	/**
 	 * 人员信息列表
 	 */
@@ -128,6 +128,10 @@ public class MemberManagementBean implements Serializable {
 	 * 构造函数
 	 */
 	public MemberManagementBean() {
+		//添加当前节点
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		nodeid=session.getAttribute("nodeid2")+"";
+		
 		IUserService us = (IUserService) ServiceFactory.getBean ("userService");
 		List<User> userlsit=us.getUserbyAll(); 
 		List<Map<String,Object>> userList=new ArrayList<Map<String,Object>>();
@@ -154,7 +158,7 @@ public class MemberManagementBean implements Serializable {
 		}
 		
 		//初始化
-		results = memberService.queryMemberList(null,null);
+		results = memberService.queryMemberList2(nodeid,null);
 		data =new TableDataModel(results);
 				
         TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
@@ -190,7 +194,7 @@ public class MemberManagementBean implements Serializable {
 	public void searchList(){
 		if(null!=results&&results.size()>0) results.clear();  //没有从列表查询到值的话，清空全部数据
 		
-		results = memberService.queryMemberList(null,searchType);
+		results = memberService.queryMemberList2(nodeid,searchType);
 		data =new TableDataModel(results);
 	}
 	
@@ -207,7 +211,7 @@ public class MemberManagementBean implements Serializable {
 			String nodes=organizationService.getAllTNodesId(currentNode);
 			
 			//results = memberService.queryMemberList(nodeStr,null);
-			results = memberService.queryMemberList(nodes,null);
+			results = memberService.queryMemberList2(nodeid,null);
 			data =new TableDataModel(results);
 			
 			changePositionTeam(this.nodeStr);
@@ -240,11 +244,13 @@ public class MemberManagementBean implements Serializable {
 			//thisNodeName=nodeName;
 			nodeStr=insertData.getNodeid();
 		}
-		
+		nodeStr=nodeid;
+				
 		
 		List<Map<String, Object>> memberTemp=memberService.checkMember(insertData.getNo(), nodeStr);	
 		if(memberTemp.size()==0||memberTemp==null)
 		{
+			insertData.setNodeid(nodeid);
 			if(insertData.getBirthday()!=null){
 				Calendar cal = Calendar.getInstance();
 			    int year = cal.get(Calendar.YEAR);
@@ -273,7 +279,7 @@ public class MemberManagementBean implements Serializable {
 			memberService.insertRecord(insertData,selectUserId);
 			
 			msg="";
-			results = memberService.queryMemberList(nodeStr,null);
+			results = memberService.queryMemberList(nodeStr,nodeid);
 			data =new TableDataModel(results);
 			insertData=new TMemberInfo();
 		}

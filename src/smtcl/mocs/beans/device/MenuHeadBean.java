@@ -55,7 +55,7 @@ public class MenuHeadBean implements Serializable {
 	/**
 	 * pageId
 	 */
-	private String pageId="mocs.cjgl.page.cjgl";
+	private String pageId="mocs.sbgl.page.sbgl";
 	/**
 	 * 当前节点名称
 	 */

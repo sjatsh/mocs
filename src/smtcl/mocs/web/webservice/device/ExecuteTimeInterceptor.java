@@ -14,7 +14,7 @@ public class ExecuteTimeInterceptor extends HandlerInterceptorAdapter{
 	
 	private ThreadLocal<Long> startTimethl = new ThreadLocal<Long>(); 
 	
-	private MachineToolUpdateFreq machineToolUpdateFreq=(MachineToolUpdateFreq)ServiceFactory.getBean("machineToolUpdateFreq");
+//	private MachineToolUpdateFreq machineToolUpdateFreq=(MachineToolUpdateFreq)ServiceFactory.getBean("machineToolUpdateFreq");
 	
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
  
@@ -44,7 +44,7 @@ public class ExecuteTimeInterceptor extends HandlerInterceptorAdapter{
  
 	//after the handler is executed
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)throws Exception {
-			machineToolUpdateFreq.addElementFrom((String) request.getAttribute("machineNo"));
+//			machineToolUpdateFreq.addElementFrom((String) request.getAttribute("machineNo"));
 	}
 	
 	

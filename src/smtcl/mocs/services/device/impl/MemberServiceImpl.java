@@ -81,7 +81,31 @@ public class MemberServiceImpl extends GenericServiceSpringImpl<TNodes, String> 
 		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
 		
 		return dataList;
-	}   
+	}
+	
+	public List<Map<String,Object>> queryMemberList2(String nodeid,String name) {		
+		Collection<Parameter> parameters = new HashSet<Parameter>();
+		String sql = "select m.id as id,m.idcard as idcard, m.name as name,m.no as no,m.age as age,m.sex as sex,m.birthday as birthday,m.marriage as marriage,m.education as education," +
+				"m.phone_number as phoneNumber,m.address as address,m.email as email,m.positionid as positionid,m.nodeid as nodeid,m.teamid as teamid,"+
+				"n.nodeName as nodeName,p.position_name as positionName,t.team_name as teamName,m.salary as salary "+
+				" from t_member_info m " +
+				" left join T_Nodes n on m.nodeid=n.nodeID" +
+				" left join t_position_info p on m.positionid=p.position_id "+
+				" left join t_team_info t on m.teamid=t.teamid"+
+				" where 1=1 and m.status=0 ";
+		if(null!=nodeid &&!"".equals(nodeid))
+		{
+			sql+= "and m.nodeid ='"+nodeid+"'";
+		}
+		if(name !=""&&name!=null&&!name.equals("输入名称/工号")){
+			sql+= " and (m.name like '%"+name+"%' or m.no like '%"+name+"%')";
+		}
+			
+		
+		List<Map<String,Object>> dataList = dao.executeNativeQuery(sql, parameters);
+		
+		return dataList;
+	} 
 	//根据menberId获取用户
 	public List<TUser> getUserByMenberId(String MenberId) {	
 		String hql="from TUser where memberId="+MenberId;
@@ -394,6 +418,9 @@ public class MemberServiceImpl extends GenericServiceSpringImpl<TNodes, String> 
 		Collection<Parameter> parameters = new HashSet<Parameter>();
 		String hql="from TMemberInfo where no='"+name+"' and status=0";
 		//String hql="from TMemberInfo where no='"+name+"' and nodeid='"+nodeid+"'";
+		if(null!=nodeid&&!"".equals(nodeid)){
+			hql+=" and nodeid='"+nodeid+"'";
+		}
 		return dao.executeQuery(hql, parameters);
 	}
 	

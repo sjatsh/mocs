@@ -82,7 +82,8 @@
 	                </f:facet>
 	            </p:cellEditor>
 	        </p:column>
-	         <p:column headerText="图纸" style="width:10%" >
+	        <ui:remove>
+	        <p:column headerText="图纸" style="width:10%" >
 	            <p:cellEditor>
 	                <f:facet name="output">
 	                    <h:link>上传</h:link>
@@ -96,6 +97,7 @@
 	                </f:facet>
 	            </p:cellEditor>
 	        </p:column>
+	        </ui:remove>
 	        <p:column headerText="操作" style="width:5%">
 	            <p:rowEditor />
 	        </p:column>

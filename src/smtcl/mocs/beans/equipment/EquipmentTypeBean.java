@@ -42,7 +42,7 @@ public class EquipmentTypeBean implements Serializable {
 	 * 作业计划接口实例
 	 */
 	private IEquipmentService equipmentService = (IEquipmentService)ServiceFactory.getBean("equipmentService");
-	
+	private String pid;
 	/**
 	 * 修改类别
 	 */
@@ -75,7 +75,8 @@ public class EquipmentTypeBean implements Serializable {
 	/**
 	 * 当前选择树节点
 	 */
-	private TreeNode treeSelectedEqu;  
+	private TreeNode treeSelectedEqu; 
+	private String pnodeid;
 	/**
 	 *添加的对象 
 	 */
@@ -90,6 +91,7 @@ public class EquipmentTypeBean implements Serializable {
 	 */
 	public void getTreeNode(TEquipmenttypeInfo te,TreeNode node,String nodeid){
 		TreeNode root = new DefaultTreeNode(te, node);
+		root.setExpanded(true);
 		for(TEquipmenttypeInfo tei:te.getTEquipmenttypeInfos()){
 			if(null!=tei.getNodeid()&&tei.getNodeid().toString().equals(nodeid)&&!tei.getIsdel().equals("1")){
 				getTreeNode(tei, root, nodeid);
@@ -116,6 +118,7 @@ public class EquipmentTypeBean implements Serializable {
 			 }
 		}
         TEquipmenttypeInfo ti = equipmentService.getgetEquTypeIdById("-999"); //最上面1级的上级默认是0
+        pid="-999";
         equTypeObj.setTEquipmenttypeInfo(ti);  ///当前的父节点，添加是用
         
 	}
@@ -133,7 +136,7 @@ public class EquipmentTypeBean implements Serializable {
         }else{
         	typeId = equipmentService.getEquTypeIdByName(typeName);
         }
-        
+        pnodeid=typeId;
         equlist = equipmentService.getEquTypeByClick(typeId);
 		int num1 = equlist.size();
 		num = String.valueOf(num1);
@@ -162,10 +165,19 @@ public class EquipmentTypeBean implements Serializable {
     	List<Map<String, Object>> lst  = equipmentService.getEquTypeRepeat(equTypeObj.getTypecode());
     	if(lst.size()==0){
     	    equipmentService.addEquType(this);
+    	    
     	}else{
     		dialog = "show";
     		System.out.println("已经存在，不要重复添加----------->");  
     	}
+    	 equlist = equipmentService.getEquTypeByClick(pnodeid);
+    	 mediumEquipmentTypeInfoModel = new TEquipmentTypeInfoDataModel(equlist);
+    	 HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+ 		 String nodeid = (String)session.getAttribute("nodeid2");
+ 	
+         root = new DefaultTreeNode(new TEquipmenttypeInfo(), null);   
+         TEquipmenttypeInfo lstx = equipmentService.getgetEquTypeIdById("-999");
+         getTreeNode(lstx, root, nodeid);
     }
     
     /**
@@ -358,6 +370,12 @@ public class EquipmentTypeBean implements Serializable {
 
 	public void setDialogtonul(String dialogtonul) {
 		this.dialogtonul = dialogtonul;
+	}
+	public String getPid() {
+		return pid;
+	}
+	public void setPid(String pid) {
+		this.pid = pid;
 	}
 	
 	

@@ -134,10 +134,17 @@ public class EquipmentServiceImpl extends GenericServiceSpringImpl<TEquipmentCos
 				+ " t.equipmentType as equipmentType,"    // 设备类别名称
 				+ " t.description as description)"         //设备类别描述
 		        + " FROM TEquipmenttypeInfo t  "
-		        + " WHERE  t.equipmentType = '"+ name +"' ";
+		        + " WHERE  t.equipmentType ='"+ name.trim() +"'";
+		String sql ="select "
+				+ " t.id as id,"                           //设备类别ID
+				+ " t.equipmentType as equipmentType,"    // 设备类别名称
+				+ " t.description as description"         //设备类别描述
+		        + " FROM t_equipmenttype_info t  "
+		        + " WHERE  t.equipmentType ='"+ name.trim() +"'";
 		String typeId ="";
 		List<Map<String, Object>> lst = dao.executeQuery(hql);
-		if(lst.size()>0){
+		List<Map<String, Object>> lst2 = dao.executeNativeQuery(sql);
+		if(lst2.size()>0){
 			Map<String, Object> map = lst.get(0);
 			typeId  = map.get("id").toString();
 		}	
@@ -200,10 +207,11 @@ public class EquipmentServiceImpl extends GenericServiceSpringImpl<TEquipmentCos
 
 	public void addEquType(EquipmentTypeBean equipmentTypeBean){
 		equipmentTypeBean.getEquTypeObj().setIsdel("0");
-		Integer parentId = Integer.parseInt((equipmentTypeBean.getEquTypeObj().getTEquipmenttypeInfo().getId().toString()));
+		Integer parentId = Integer.parseInt(equipmentTypeBean.getPid());
 		TEquipmenttypeInfo ec  = null;
 		if(!StringUtils.isEmpty(parentId.toString())){
 			ec=commonService.get(TEquipmenttypeInfo.class, Long.valueOf(parentId.toString()));
+			equipmentTypeBean.getEquTypeObj().setTEquipmenttypeInfo(ec);
 		}
 		Integer level = 0;
 		if(parentId  == 0){

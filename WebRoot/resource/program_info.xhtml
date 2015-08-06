@@ -20,9 +20,9 @@
 <div style="position:relative; width: 100%;height: 100%;">
 	<div class="headDiv" id="equipment_type_center_right_top">
 		<h:inputText id="txt" value="#{ProgramInfoBean.searchStr}" styleClass="border" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');"></h:inputText> 		
-		<p:commandButton value="查询" update=":myform:carList" styleClass="delete" actionListener="#{ProgramInfoBean.query}" oncomplete="bgReposition($('.table'));"></p:commandButton>
+		<p:commandButton value="查询" update=":myform:carList" styleClass="delete" actionListener="#{ProgramInfoBean.query}" ></p:commandButton>
 		<div class="button-split"></div>  	
-	    <p:commandButton value="新增" update=":myform:addTpr" styleClass="delete" oncomplete="addProgram.show();bgReposition($('.table'));"></p:commandButton>
+	    <p:commandButton value="新增" update=":myform:addTpr" styleClass="delete" oncomplete="addProgram.show();"></p:commandButton>
 	</div>
 	<div class="div-content-top-shadow">
 		<img src="../images/demo/right_top_shadow.png" />
@@ -44,12 +44,12 @@
 	        <p:column headerText="程序说明">#{tpro.des}</p:column>    
 	        <p:column headerText="操作">
 	        
-	        <a onclick="setId(#{tpro.id})" style="color:#3A5FCD">修改</a>
-	        <a onclick="setDeleteId(#{tpro.id})" style="color:#3A5FCD">删除</a>
+	        <a onclick="setId(#{tpro.id})" style="color:#3A5FCD;cursor: pointer;">修改</a>
+	        <a onclick="setDeleteId(#{tpro.id})" style="color:#3A5FCDcursor: pointer;">删除</a>
 	        
-	        <a onclick="setActivityId(#{tpro.id})" style="color:#3A5FCD;display: #{tpro.activityFlag}">激活</a>
+	        <a onclick="setActivityId(#{tpro.id})" style="color:#3A5FCD;cursor: pointer;display: #{tpro.activityFlag}">激活</a>
 	      
-	        <a onclick="setNotActivityId(#{tpro.id})" style="color:#3A5FCD;display: #{tpro.notActivityFlag}">取消激活</a>
+	        <a onclick="setNotActivityId(#{tpro.id})" style="color:#3A5FCD;cursor: pointer;display: #{tpro.notActivityFlag}">取消激活</a>
 	      
 	        </p:column>
 	    </p:dataTable>  
@@ -61,19 +61,21 @@
     		<table>
     			<tr>
     				<td>选择程序：<font style="color:red;">*</font></td>
-    				<td><rich:fileUpload doneLabel="上传成功" noDuplicate="true" serverErrorLabel="文件过大，导致上传失败" fileUploadListener="#{ProgramInfoBean.listener}"
-    				   id="upLoad" addLabel="添加文件" deleteLabel="删除文件" uploadLabel="上传文件" maxFilesQuantity="1" style="height:150px"  >
+    				<td><rich:fileUpload doneLabel="上传成功" noDuplicate="true" serverErrorLabel="文件过大，导致上传失败" 
+    					fileUploadListener="#{ProgramInfoBean.listener}"
+    				    id="upLoad" addLabel="添加文件" deleteLabel="删除文件" uploadLabel="上传文件" maxFilesQuantity="1" 
+    				   style="height:150px"  >
     				   <a4j:ajax event="uploadcomplete" render=":myform:progName :myform:progVersion" ></a4j:ajax>
     				   </rich:fileUpload>
     				   </td>
     			</tr>
     			<tr>
     				<td>程序名称：<font style="color:red;">*</font></td>
-    				<td><h:inputText value="#{ProgramInfoBean.addTpro.progName}" id="progName" disabled="true"></h:inputText></td>
+    				<td><h:inputText value="#{ProgramInfoBean.addTpro.progName}" id="progName" readonly="true"></h:inputText></td>
     			</tr>
     			<tr>
     				<td>程序版本：<font style="color:red;">*</font></td>
-    				<td><h:inputText value="#{ProgramInfoBean.addTpro.versionNo}" id="progVersion" disabled="true"></h:inputText></td>
+    				<td><h:inputText value="#{ProgramInfoBean.addTpro.versionNo}" id="progVersion" readonly="true"></h:inputText></td>
     			</tr>
     			<tr>
     				<td>程序说明：</td>

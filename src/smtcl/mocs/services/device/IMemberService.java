@@ -30,6 +30,7 @@ public interface IMemberService extends IGenericService<TNodes, String>{
 	 */
 	public List<TMemberInfo> queryMemberList(int pageNo, int pageSize, String area);
 	public List<Map<String,Object>> queryMemberList(String area,String name); 
+	public List<Map<String,Object>> queryMemberList2(String nodeid,String name);
 	public List<TMemberInfo> queryList(String search);
 	public List<TUser> getUserByMenberId(String MenberId); 
 	/**

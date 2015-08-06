@@ -44,12 +44,14 @@
 				 	 <rich:panelMenuItem label="程序配置" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_info.faces','资源配置,程序配置')}"
 					 	render="  :myform:tree2 :myform:rightiframe" />
+					 <ui:remove>
 					  <rich:panelMenuItem label="程序绑定" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_binding.faces','资源配置,程序绑定')}"
 					 	render="  :myform:tree2 :myform:rightiframe" />
 					 <rich:panelMenuItem label="程序下载" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_downLoad.faces','资源配置,程序下载')}"
 					 	render="  :myform:tree2 :myform:rightiframe" />
+					 </ui:remove>
 				</rich:panelMenuGroup>
 				
 				<rich:panelMenuGroup label="设备配置">
@@ -62,7 +64,9 @@
 					 <rich:panelMenuItem label="设备成本维护" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/equipment/equipment_cost_maintain.faces','设备配置,设备成本维护')}"
 					 	render=" :myform:tree2 :myform:rightiframe" />
+					<ui:remove>
 					 <rich:panelMenuItem label="设备坐标配置" onclick="openUrl('../equipment/equipment_drag_save.faces')" />
+					</ui:remove>
 				</rich:panelMenuGroup>
 				
 				<rich:panelMenuGroup label="零件配置">
@@ -89,6 +93,7 @@
 					 	render=" :myform:tree2 :myform:rightiframe" />
 				</rich:panelMenuGroup> 
 				</ui:remove>
+				<ui:remove>
 				<rich:panelMenuGroup label="静态数据导入">
 					<rich:panelMenuItem label="零件数据导入" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/erp/static_data_import_part.faces','静态数据导入,零件数据导入')}"
@@ -97,7 +102,6 @@
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/erp/static_data_import.faces','静态数据导入,工序数据导入')}"
 					 	render=" :myform:tree2 :myform:rightiframe" />
 				</rich:panelMenuGroup> 
-				<ui:remove>
 					<rich:panelMenuItem label="零件数据导入" onclick="openUrl('../erp/static_data_import_part.faces')"/>
 					<rich:panelMenuItem label="工序数据导入" onclick="openUrl('../erp/static_data_import.faces')" />
 				</ui:remove>

@@ -10,25 +10,12 @@
 	<link rel="stylesheet" href="../css/admin/member_setting.css" type="text/css"></link>
 	
 	<div class="toolbar">
-		<div id='tre00' class="nodeSelect-toolbar" onclick="showMenu0('DropdownMenuBackground0','tre00');">
-			<span class="txt-toolbar"><span data-i18n="page1.top.title1"></span>:</span>
-			<h:outputText  class="txt-toolbar" id="nodeName0" value="#{MemberManagementBean.thisNodeName}" /> 
-		</div>
-		<div id="DropdownMenuBackground0" onclick="closeTreeDiv0('DropdownMenuBackground0');" style="display:none;">
-			<p:tree value="#{MemberManagementBean.root}" var="node" selectionMode="single"  styleClass="" >
-				<p:treeNode styleClass="spanhover">
-					<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
-				</p:treeNode>
-				<a4j:ajax event="select" render=":myform:nodeName0 :myform:tb" 
-					listener="#{MemberManagementBean.onNodeSelect}" oncomplete="transElementId('myform:tb');" />
-			</p:tree>
-			<a4j:outputPanel ajaxRendered="true"  >
-			</a4j:outputPanel>
-	     </div>
 	     <input type="hidden" id="txt_placeholder" data-i18n="[value]page1.top.input1" value=""></input>
 	     
-	     <h:inputText id="txt" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');" value="#{MemberManagementBean.searchType}"/>
-   		 <p:commandLink id="btn1" style="" value="page1.top.btn1"  styleClass="iconBtn-toolbar iconBtn-search" action="#{MemberManagementBean.searchList}" update=":myform:tb" oncomplete="transElementId('myform:tb')">
+	     <h:inputText id="txt" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');" 
+	     	value="#{MemberManagementBean.searchType}"/>
+   		 <p:commandLink id="btn1" style="" value="page1.top.btn1"  styleClass="iconBtn-toolbar iconBtn-search" 
+   		 	action="#{MemberManagementBean.searchList}" update=":myform:tb" oncomplete="transElementId('myform:tb')">
    		 </p:commandLink>
    		 
    		 <p:commandLink style="" value="page1.top.btn2"  styleClass="iconBtn-toolbar iconBtn-add" oncomplete="adddate.show()"></p:commandLink>
@@ -138,18 +125,7 @@
 					<td><h:inputText styleClass="input-toolbar" value="#{MemberManagementBean.insertData.phoneNumber}"/></td>
 					<td><span class="txt-toolbar" data-i18n="page1.user.title12"></span></td>
 					<td>
-						<div id='tre2' onclick="$('#DropdownMenuBackground2').show();">
-							<h:inputText id="nodeName2"  styleClass="input-toolbar" value="#{MemberManagementBean.thisNodeName}"/>
-						</div>
-						<div id="DropdownMenuBackground2" onclick="closeTreeDiv0('DropdownMenuBackground2');$('#DropdownMenuBackground2').hide();">
-							<p:tree value="#{MemberManagementBean.root}" var="node" selectionMode="single">
-								<p:treeNode styleClass="spanhover">
-									<h:outputText value="#{node.nodeName}" styleClass="#{(node.nocheck)?'usercheck':'usernocheck'}" />
-								</p:treeNode>
-								<a4j:ajax event="select" render=":myform:nodeName2 myform:posit myform:team" 
-									listener="#{MemberManagementBean.onNodeSelect}" oncomplete="transElementId('divInsert');"/>
-							</p:tree>
-					    </div>
+						
 					</td>			
 				</tr>
 				<tr>	

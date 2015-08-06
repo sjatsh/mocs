@@ -31,7 +31,7 @@
 	<div class="toolconten-left">
 		 <p:tree value="#{EquipmentType.root}" var="node" id="tree" selectionMode="single"  selection="#{EquipmentType.treeSelectedEqu}"  styleClass="classTree">  
 		 	<p:ajax event="select" update=":myform:carList" listener="#{EquipmentType.onNodeSelect}" execute="@this" 
-		 		oncomplete="bgReposition($('.table'));transElementId('myform:carList');" />
+		 		oncomplete="retranslate()" />
 		    <p:treeNode id="treeNode">  
 		    	<h:outputText value="#{node.equipmentType}" id="lblNode"/>  
 		    </p:treeNode>  
@@ -185,7 +185,7 @@
       			<td><span data-i18n="page1.equip_type.title9"></span>:<h:outputText style="color:red;" value="*" /></td>
       			<td colspan="2">
       				<h:selectOneMenu id="addequId"  
-						value="#{EquipmentType.equTypeObj.TEquipmenttypeInfo.id}" styleClass="">
+						value="#{EquipmentType.pid}" >
 						<f:selectItem itemLabel="page1.btn.pls_select" itemValue=""></f:selectItem>
 						<f:selectItems value="#{EquipmentType.equTypeMap}"></f:selectItems>
 					</h:selectOneMenu>	

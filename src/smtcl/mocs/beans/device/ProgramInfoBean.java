@@ -415,13 +415,14 @@ public class ProgramInfoBean implements Serializable{
 		 }
 		 File imageFile = new File(realPath, fileUrl);  
 		 try {
-			FileOutputStream fops = new FileOutputStream(imageFile);
+			/*FileOutputStream fops = new FileOutputStream(imageFile);
 			   // 将上传的文件信息保存到相应的文件目录里
 			   fops.write(file.getData());
-			   fops.close();
+			   fops.close();*/
 		  } catch (Exception ex){
 			    FacesMessage msg = new FacesMessage("程序文件添加","添加失败！");
 				FacesContext.getCurrentInstance().addMessage(null, msg);
+				ex.printStackTrace();
 				return;
 		  }
 		//获取nodeId

@@ -113,13 +113,13 @@
 		 	<div class="menu-tabbar" id="btnjt"><span data-i18n="page3.tab.tab6"></span></div>
 		 	<div class="menu-tabbar" id="btnzj"><span data-i18n="page3.tab.tab7"></span></div>
 		 	
-			<p:commandButton value="工艺线路" actionListener="#{partProcessConfigBean.getGYXLData}" update=":myform:gyxl" style="display:none;" id="btngyxl"></p:commandButton>
-			<p:commandButton value=" 成 本  " actionListener="#{partProcessConfigBean.getCBData}" update=":myform:cb" style="display:none;" id="btncb"></p:commandButton>
-			<p:commandButton value=" 物 料  " actionListener="#{partProcessConfigBean.getWLData}" update=":myform:wl" style="display:none;" id="btnwl"></p:commandButton>
-			<p:commandButton value=" 夹 具  " actionListener="#{partProcessConfigBean.getJJData}" update=":myform:jj" style="display:none;" id="btnjj"></p:commandButton>
-			<p:commandButton value=" 刀 具  " actionListener="#{partProcessConfigBean.getDJData}" update=":myform:dj" style="display:none;" id="btndj"></p:commandButton>
-			<p:commandButton value=" 机 台  " actionListener="#{partProcessConfigBean.getJTData}" update=":myform:jt" style="display:none;" id="btnjt"></p:commandButton>
-			<p:commandButton value=" 质 检  " actionListener="#{partProcessConfigBean.getZJData}" update=":myform:zj" style="display:none;" id="btnzj"></p:commandButton>
+			<p:commandButton value="工艺线路" actionListener="#{partProcessConfigBean.getGYXLData}" update=":myform:gyxl" style="display:none;" id="btngyxl" oncomplete="translateReady();"></p:commandButton>
+			<p:commandButton value=" 成 本  " actionListener="#{partProcessConfigBean.getCBData}" update=":myform:cb" style="display:none;" id="btncb" oncomplete="translateReady();"></p:commandButton>
+			<p:commandButton value=" 物 料  " actionListener="#{partProcessConfigBean.getWLData}" update=":myform:wl" style="display:none;" id="btnwl" oncomplete="translateReady();"></p:commandButton>
+			<p:commandButton value=" 夹 具  " actionListener="#{partProcessConfigBean.getJJData}" update=":myform:jj" style="display:none;" id="btnjj" oncomplete="translateReady();"></p:commandButton>
+			<p:commandButton value=" 刀 具  " actionListener="#{partProcessConfigBean.getDJData}" update=":myform:dj" style="display:none;" id="btndj" oncomplete="translateReady();"></p:commandButton>
+			<p:commandButton value=" 机 台  " actionListener="#{partProcessConfigBean.getJTData}" update=":myform:jt" style="display:none;" id="btnjt" oncomplete="translateReady();"></p:commandButton>
+			<p:commandButton value=" 质 检  " actionListener="#{partProcessConfigBean.getZJData}" update=":myform:zj" style="display:none;" id="btnzj" oncomplete="translateReady();"></p:commandButton>
 		</div>
 		<!-- 工艺线路 -->
 		<div class="processlist-content" style="display: block;" id="gyxl">

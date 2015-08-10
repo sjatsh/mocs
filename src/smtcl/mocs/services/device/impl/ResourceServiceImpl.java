@@ -1730,7 +1730,9 @@ public class ResourceServiceImpl extends
 	public List<Map<String, Object>> getProgramByJobDispatchNo(
 			String jobDispatchNo, String partId) {
 		String hql = "";
-		if (null != jobDispatchNo) {
+		//优先查找工单编号的程序
+		//查找方式为  工单表(TJobdispatchlistInfo)--》工序表(TProcessInfo)--》程序绑定表（TProgramMappingInfo）--》程序表(TProgramInfo)--》零件表（TPartTypeInfo）
+		if (null != jobDispatchNo&&!"".equals(jobDispatchNo)) {
 			hql = "select new Map("
 					+ " d.id as programId,d.progName as progName,d.versionNo as versionNo,"
 					+ " d.programPath as programPath,d.md5 as md5)"
@@ -1740,18 +1742,9 @@ public class ResourceServiceImpl extends
 					+ " and e.id = c.materailId" + " and d.status ='Y'";
 			hql += " and a.no ='" + jobDispatchNo + "'";
 		} else {
-			// hql="select new Map("
-			// +
-			// " d.id as programId,d.progName as progName,d.versionNo as versionNo,"
-			// + " d.programPath as programPath,d.md5 as md5)"
-			// + " from TProcessInfo as b,"
-			// +
-			// " TProgramMappingInfo as c,TProgramInfo as d,TPartTypeInfo as e"
-			// + " where b.id =c.processId and c.programId = d.id"
-			// + " and e.id = c.materailId"
-			// + " and d.status ='Y'";
-			// hql+=" and e.name ='"+partId+"'";
-
+			//如果工单id为空 则根据零件id查找工序  
+			//程序绑定表（TProgramMappingInfo）--》工序表（TProcessInfo）--》程序表(TProgramInfo)--》零件表（TPartTypeInfo）
+			//以TProgramMappingInfo表为中心
 			hql = "select new Map(pg.id AS programId, pg.progName AS progName, "
 					+ " pg.versionNo as versionNo, pg.programPath "
 					+ " as programPath, pg.md5 as md5, p.name AS stepname,"
@@ -1761,8 +1754,12 @@ public class ResourceServiceImpl extends
 					+ partId
 					+ " AND m.processId = p.id AND m.programId = pg.id AND m.materailId = pt.id";
 		}
-
-		return dao.executeQuery(hql);
+		try {
+			return dao.executeQuery(hql);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -1860,6 +1857,7 @@ public class ResourceServiceImpl extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getParts(String partName) {
+		//根据零件编号和零件名称 模糊匹配零件信息
 		String hql = "select new Map(id as id,name as partName,no as partNo)"
 				+ " from TPartTypeInfo" + " where no like '%" + partName
 				+ "%' or name like '%" + partName + "%'";
@@ -1876,5 +1874,10 @@ public class ResourceServiceImpl extends
 				+ " from TEquipmentInfo as a" + " where a.equSerialNo ='"
 				+ equSerialNo + "'";
 		return dao.executeQuery(hql);
+	}
+	public List<Map<String, Object>> getEquNodeIdBySql(String equSerialNo) {
+		String hql = " SELECT tn.P_NODEID FROM T_EquipmentAddInfo te,T_Nodes tn "
+				+ " WHERE te.nodeID = tn.nodeID AND te.equ_SerialNo = '"+equSerialNo+"'";
+		return dao.executeNativeQuery(hql);
 	}
 }

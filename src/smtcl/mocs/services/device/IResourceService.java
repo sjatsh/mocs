@@ -575,5 +575,6 @@ public interface IResourceService extends
 	 * ªÒ»°nodeId BY equSerialNo
 	 */
 	public List<Map<String, Object>> getEquNodeId(String equSerialNo);
+	public List<Map<String, Object>> getEquNodeIdBySql(String equSerialNo);
 
 }

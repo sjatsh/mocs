@@ -44,14 +44,14 @@
 				 	 <rich:panelMenuItem label="程序配置" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_info.faces','资源配置,程序配置')}"
 					 	render="  :myform:tree2 :myform:rightiframe" />
-					 <ui:remove>
 					  <rich:panelMenuItem label="程序绑定" 
-				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_binding.faces','资源配置,程序绑定')}"
+				 	 		actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_binding.faces','资源配置,程序绑定')}"
 					 	render="  :myform:tree2 :myform:rightiframe" />
+					<ui:remove> </ui:remove>
 					 <rich:panelMenuItem label="程序下载" 
 				 	 	actionListener="#{MenuHeadBean.clickMenu('/mocs/resource/program_downLoad.faces','资源配置,程序下载')}"
 					 	render="  :myform:tree2 :myform:rightiframe" />
-					 </ui:remove>
+					
 				</rich:panelMenuGroup>
 				
 				<rich:panelMenuGroup label="设备配置">

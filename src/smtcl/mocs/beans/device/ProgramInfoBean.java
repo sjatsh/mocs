@@ -1,7 +1,9 @@
 package smtcl.mocs.beans.device;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import org.dreamwork.persistence.ServiceFactory;
 import org.primefaces.event.RowEditEvent;
 import org.richfaces.event.FileUploadEvent;
+import org.richfaces.exception.FileUploadException;
 import org.richfaces.model.UploadedFile;
 
 import smtcl.mocs.common.device.Md5;
@@ -411,14 +414,14 @@ public class ProgramInfoBean implements Serializable{
       	 String realHttpUrl = mmm.get("mocsURL").toString()+"/mocs/program/";
 		 File file1= new File(realHttpUrl);
 		 if(!file1.exists()){
-			file1.mkdir();
+			file1.mkdirs();
 		 }
 		 File imageFile = new File(realPath, fileUrl);  
 		 try {
-			/*FileOutputStream fops = new FileOutputStream(imageFile);
+			FileOutputStream fops = new FileOutputStream(imageFile);
 			   // 将上传的文件信息保存到相应的文件目录里
 			   fops.write(file.getData());
-			   fops.close();*/
+			   fops.close();
 		  } catch (Exception ex){
 			    FacesMessage msg = new FacesMessage("程序文件添加","添加失败！");
 				FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -454,6 +457,36 @@ public class ProgramInfoBean implements Serializable{
 	  
 	}
 	
+	/*public void Upload(FileUploadEvent event){  
+		file=null;
+        file = event.getUploadedFile();
+     
+		String uri = StringUtils.getFileName(file);
+		part.setFile(uri);
+        if(null != file){
+			savaFile(file,uri);
+			listdocStorePath.add("/images/part/"+uri);  
+		}
+	}
+	public void savaFile(UploadedFile file,String uri){
+		   String realPath=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/static/images/part/");
+		   System.out.println("realPath====="+realPath+""+uri);
+		   File imageFile = new File(realPath, uri);   
+		   try {
+			   FileOutputStream fops = new FileOutputStream(imageFile);
+			   fops.write(file.getData());
+			   fops.close();
+			}catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (FileUploadException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			 
+	 }*/
 	
 	/**
 	 * 获取程序信息

@@ -477,22 +477,23 @@ public class WSUserServiceMVC {
 	/**
 	 * 程序查询
 	 * 
-	 * @param
-	 * @param
+	 * @param jobDispatchNo 工单编号
+	 * @param partId 零件id
+	 * @param equSerialNo 设备序列号
 	 * @return
 	 */
-	@RequestMapping(value = "/checkProgramlist", method = RequestMethod.POST)
+	@RequestMapping(value = "/checkProgramlist")
 	public ModelAndView checkProgramlist(HttpServletRequest request,
 			String jobDispatchNo, String partId, String equSerialNo) {
 		Map<String, Object> all = new HashMap<String, Object>();
 		try {
-
-			List<Map<String, Object>> list = resourceService
-					.getProgramByJobDispatchNo(jobDispatchNo, partId);
+			//根据工单编号，或者零件id去查询程序
+			List<Map<String, Object>> list = resourceService.getProgramByJobDispatchNo(jobDispatchNo, partId);
 			for (Map<String, Object> map : list) {
+				//取到程序的id
 				String programId = map.get("programId").toString();
-				List<Map<String, Object>> list2 = resourceService
-						.getProgramLoadDownInfo(programId, equSerialNo);
+				//根据程序id，和设备的序列号查询当前程序所绑定的设备是否有下载记录
+				List<Map<String, Object>> list2 = resourceService.getProgramLoadDownInfo(programId, equSerialNo);
 				if (list2.size() > 0) {
 					map.put("progUpdateMark", "N");
 
@@ -507,8 +508,10 @@ public class WSUserServiceMVC {
 				// String temppath =
 				// this.getClass().getClassLoader().getResource("").getPath();
 				// temppath =request.getServletContext().getRealPath("/");
+				//获取全局路径
 				Map<String, String> mmm = StringUtils.getUrl(request.getServletContext());
 				String realHttpUrl = mmm.get("mocsURL").toString();
+				//拼接当前程序的 据对路径地址
 				realHttpUrl = realHttpUrl + "/mocs/program/" + programPath;
 				map.put("programPath", realHttpUrl);
 
@@ -526,8 +529,9 @@ public class WSUserServiceMVC {
 	/**
 	 * 程序下载
 	 * 
-	 * @param
-	 * @param
+	 * @param programId 程序id
+	 * @param equSerialNo 设备序列号
+	 * @param userID 用户
 	 * @return
 	 */
 	@RequestMapping(value = "/downloadProgram", method = RequestMethod.POST)
@@ -535,8 +539,8 @@ public class WSUserServiceMVC {
 			String userID) {
 		Map<String, Object> all = new HashMap<String, Object>();
 		try {
-			String result = resourceService.saveProgramLoadDownInfo(programId,
-					equSerialNo, userID);
+			//告知服务端有人下载程序，并记录一下
+			String result = resourceService.saveProgramLoadDownInfo(programId,equSerialNo, userID);
 			if (result.equals("更新成功")) {
 				all.put("msg", result);
 				all.put("success", "true");
@@ -555,14 +559,15 @@ public class WSUserServiceMVC {
 	/**
 	 * 查询零件
 	 * 
-	 * @param
-	 * @param
+	 * @param equSerialNo 设备序列号
+	 * @param partName 零件名称
 	 * @return
 	 */
 	@RequestMapping(value = "/queryParts", method = RequestMethod.POST)
 	public ModelAndView queryParts(String equSerialNo, String partName) {
 		Map<String, Object> all = new HashMap<String, Object>();
 		try {
+			//根据零件编号和零件名称 模糊匹配零件信息
 			List<Map<String, Object>> list = resourceService.getParts(partName);
 			all.put("data", list);
 			all.put("msg", "查询成功");
@@ -575,59 +580,66 @@ public class WSUserServiceMVC {
 		return new ModelAndView("/userinfo/show", all);
 	}
 
+
 	/**
 	 * 程序上传
-	 * 
-	 * @param
-	 * @param
+	 * @param request   请求
+	 * @param progName	程序名称
+	 * @param progVersion  程序版本
+	 * @param progContent  程序
+	 * @param userID	 用户
+	 * @param progDesc	程序描述
+	 * @param md5		程序内容加密后的内容
+	 * @param equSerialNo 设备序列号
 	 * @return
 	 */
-	@RequestMapping(value = "/uploadProgram", method = RequestMethod.POST)
+	@RequestMapping(value = "/uploadProgram")
 	public ModelAndView uploadProgram(HttpServletRequest request,
 			String progName, String progVersion, String progContent,
 			String userID, String progDesc, String md5, String equSerialNo) {
 		Map<String, Object> all = new HashMap<String, Object>();
 		try {
-
+			
 			if (null == progContent || progContent.equals("")) {
 				all.put("msg", "内容为空");
 				all.put("success", "false");
 			} else {
-				// 获取nodeId
-				List<Map<String, Object>> equList = resourceService
-						.getEquNodeId(equSerialNo);
+				// 获取nodeId(节点id)T_nodes
+				List<Map<String, Object>> equList = resourceService.getEquNodeIdBySql(equSerialNo);
 				if (equList.size() < 1) {
 					all.put("msg", "机床不存在");
 					all.put("success", "false");
 				} else {
+					//准备验证md5
 					Md5 getMD5 = new Md5();
+					//md5转化 吧程序内容转化成md5字符串
 					String Md5String = getMD5.GetMD5Code(progContent.getBytes()).toUpperCase();
-
+					// 加密之后的比较
 					if (Md5String.equals(md5)) {
-
-						String extension = progName.substring(progName
-								.lastIndexOf(".") + 1);
-						SimpleDateFormat df = new SimpleDateFormat(
-								"yyyyMMddHHmmssss");
+						//获取程序文件的后缀名
+						String extension = progName.substring(progName.lastIndexOf(".") + 1);
+						SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssss");
+						//根据时间戳自动生成程序的名字
 						String fileName = df.format(new Date()) + "." + extension;
-
-						String temppath = this.getClass().getClassLoader()
-								.getResource("").getPath();
+						//获取到项目的地址
+						String temppath = this.getClass().getClassLoader().getResource("").getPath();
 						temppath = request.getServletContext().getRealPath("/");
+						//设定程序存放的目录
 						String realPath = temppath + "/static/program/";
+						//创建文件
 						File file1 = new File(realPath, fileName);
 						if (!file1.exists()) {
 							file1.createNewFile();
 						}
-
-						FileWriter fw = new FileWriter(realPath + "/" + fileName,
-								true);
+						//把文件内容添加到文件中去
+						FileWriter fw = new FileWriter(realPath + "/" + fileName, true);
 						BufferedWriter bw = new BufferedWriter(fw);
 						bw.append(progContent);
 
 						bw.close();
 						fw.close();
-
+						
+						//在数据库中TProgramInfo表 创建新的程序信息
 						TProgramInfo addTpro = new TProgramInfo();
 						addTpro.setProgName(progName);// 程序名称
 						addTpro.setProgNo(progName);// 程序编号
@@ -644,21 +656,21 @@ public class WSUserServiceMVC {
 						if (null != equList.get(0).get("nodeId")) {
 							nodeId = equList.get(0).get("nodeId").toString();
 						}
-						List<Map<String, Object>> list = resourceService
-								.getProgramVersion(progName, nodeId);
+						//获取到程序的版本信息
+						List<Map<String, Object>> list = resourceService.getProgramVersion(progName, nodeId);
 						if (list.size() > 0) {
 							if (null != list.get(0).get("versionNo")) {
-								String str = list.get(0).get("versionNo")
-										.toString();
-								addTpro.setVersionNo("v"
-										+ (Integer.valueOf(str.substring(1)) + 1));
+								String str = list.get(0).get("versionNo").toString();
+								addTpro.setVersionNo("v"+ (Integer.valueOf(str.substring(1)) + 1));
 							} else {
 								addTpro.setVersionNo("v1");
 							}
 						} else {
 							addTpro.setVersionNo("v1");
 						}
+						//设置节点信息
 						addTpro.setNodeid(nodeId);
+						//保存程序
 						String success = resourceService.saveTprogramInfo(addTpro);
 
 						if (success.equals("添加成功")) {

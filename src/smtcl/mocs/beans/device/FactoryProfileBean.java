@@ -157,7 +157,7 @@ public class FactoryProfileBean implements Serializable{
 		//获取用户的权限验证 
 		 TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
 		 workshop=organizationService.returnWorkshop(user.getUserId(),Constants.SBZL_PAGE_ID);
-		 //初始化数据
+		 //初始化数据  工单准时率等数据
 	   	 ppcr="totle:0";
 	   	 nodp="totle:0";
 	   	 equday="totle:0";
@@ -167,20 +167,24 @@ public class FactoryProfileBean implements Serializable{
 	     HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();		
       	 Map<String, String> mmm = StringUtils.getUrl(request.getServletContext());
 //      defnodeid = (String)mmm.get("defaultNode");
-      	
+      	//获取默认节点
       	 String defaultNode=(String)mmm.get("defaultNode");
         
 		 HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
       	 
 	   	for (int i=0;i<workshop.size();i++) {
 	   		TNodes t=(TNodes)workshop.get(i);
-	   		String name = t.getNodeName();	
+	   		String name = t.getNodeName();
+	   		//把默认节点跟当前用户的权限节点做比较  
+	   		//1.如果有权限的话 设置当前节点为默认节点
+	   		//2.设置当前背景图名称 
+	   		//3.设置节点id到session
 	   		if(name!=null && name.equals(defaultNode)){  //得到默认的节点
-	   		selectName=t.getNodeName();
-	   		bgpath=t.getPath();//获取节点背景图
-	   		String nodeid = t.getNodeId();
-	   		session.setAttribute("nodeid", nodeid);
-	   		break;
+		   		selectName=t.getNodeName();
+		   		bgpath=t.getPath();//获取节点背景图
+		   		String nodeid = t.getNodeId();
+		   		session.setAttribute("nodeid", nodeid);
+		   		break;
 	   		}
 	   	}
 	    	 
@@ -188,25 +192,30 @@ public class FactoryProfileBean implements Serializable{
    		 //TNodes t=(TNodes)workshop.get(0);
    		 String nodeid=(String)session.getAttribute("nodeid"); //替换上一行
    		 if(!StringUtils.isEmpty(nodeid))
-   		 {
+   		 {		 //查询当前节点下面的所有子节点
 	        	 String nodeids=deviceService.getNodeAllId(nodeid);
+	        	 //加载工单准时率等数据
 	        	 ppcr=getpper(nodeid);
 	        	 nodp=getDayNumber(nodeid);
 	        	 equday=getEquEfficiency(nodeids);
 	        	// rcr=df.format(Double.parseDouble(costManageService.getRCR(nodeid))*100);
 	        	 selectTNodesId=nodeid;
 	    		if(nodeids.length()>0){
+	    		//查询出当前节点下的所有设备以及设备的状态
 	        	 List<Map<String, Object>> list=deviceService.getNodesAllEquNameStruts(nodeids);
 	        	 if(null!=list&&list.size()>0){
+	        		 //组装前端所需要的数据
 	        		 setDate(list);
 	        	 }
 	    		}
    		}
    	 }
+   	//factory_inventory.xhtml 页面数据加载
    	 equInventory=deviceService.getEquInventoryInfo(selectTNodesId);
    	 userId = user.getUserId(); //返回前端
    	 parentId = deviceService.getParentIdByNodeid(selectTNodesId);
 	}
+	
 	/**
 	 * 单击节点事件(新的节点样式 jquery)
 	 * @param t
@@ -239,7 +248,7 @@ public class FactoryProfileBean implements Serializable{
 				TNodes td=tnode.get(0);
 				bgpath=td.getPath();
 			}
-			 equInventory=deviceService.getEquInventoryInfo(selectTNodesId);
+			equInventory=deviceService.getEquInventoryInfo(selectTNodesId);
 				//把节点ID存入session
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 			session.setAttribute("nodeid", nodeid);
@@ -461,11 +470,14 @@ public class FactoryProfileBean implements Serializable{
 				 String timeZone=null==tf.get("timeZone")||"".equals(tf.get("timeZone"))?"0":tf.get("timeZone").toString();
 				 Date da=new Date();
 				 if(null==tf.get("updateTime")||"".equals(tf.get("updateTime"))){
- 					 
+ 				
+				 //判断当前设备的更新时间与服务器的时间想比较  如果间隔时间大于设定的值  则将设备的状态设置成脱机状态
+				 //timeZone 代表时差
  				 }else if(da.getTime()-((Date)tf.get("updateTime")).getTime()-Double.parseDouble(timeZone)>Constants.CONTROL_TUOJI_TIME){
 					sta="脱机";
 				 }
  				 
+				 //判断设备状态  设定设备图片
 				 if(sta.equals("运行")||sta.equals("加工")){
 					 sbimgUrl="yx"+sbimgUrl;
     			 }else if(sta.equals("脱机")||sta.equals("关机")){
@@ -504,11 +516,11 @@ public class FactoryProfileBean implements Serializable{
 			 yz=yz+","+tf.get("yAxis");
 	   } 
 		 if(equipmentName.length()>0){
-			 System.out.println(equipmentName);
-			 System.out.println(xz);
-			 System.out.println(yz);
-			 System.out.println(image);
-			 System.out.println(ipAddress);
+//			 System.out.println(equipmentName);
+//			 System.out.println(xz);
+//			 System.out.println(yz);
+//			 System.out.println(image);
+//			 System.out.println(ipAddress);
 			 equipmentName=equipmentName.substring(1,equipmentName.length());
 	   	     xz=xz.substring(1, xz.length());
 			 yz=yz.substring(1, yz.length());

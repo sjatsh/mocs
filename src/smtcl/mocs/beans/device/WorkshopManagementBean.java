@@ -100,11 +100,14 @@ public class WorkshopManagementBean {
 	public void loadData(){
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		//从session中获取节点id
 		String startnodeid=session.getAttribute("nodeid")+"";
+		
 		if(null==nodeSwitchLoad){
 			nodeSwitchLoad=startnodeid;
 		}
-		 if(!startnodeid.equals(nodeSwitchLoad)){
+		//第一次进来时 默认显示当前节点下面的第一台设备的 信息
+		if(!startnodeid.equals(nodeSwitchLoad)){
 			 nodeSwitchLoad=startnodeid;
 			 equSerialNo="";
 			 if(!StringUtils.isEmpty(startnodeid)){
@@ -114,6 +117,7 @@ public class WorkshopManagementBean {
 					}
 				}
 		 }else{
+			 //否则的话 取点击设备的序列号进行查询
 			  String equ=StringUtils.getCookie(request, "equSerialNo");
 				if(null!=equ&&!"".equals(equ)){
 					equSerialNo=equ;
@@ -129,19 +133,23 @@ public class WorkshopManagementBean {
 			
 		
 		if(!StringUtils.isEmpty(equSerialNo)){
+			//获取设备三维仿真的地址
 			List iplist=deviceService.getipAddress(equSerialNo);
 			if(null!=iplist&&iplist.size()>0)
 			ipAddress=(null==iplist.get(0)?"":iplist.get(0)+"");
 			else
 			ipAddress=null;
-			System.out.println(ipAddress);
-			System.out.println("equSerialNo:"+equSerialNo);
+			
+//			System.out.println(ipAddress);
+//			System.out.println("equSerialNo:"+equSerialNo);
+			//查询设备的信息
 			List<Map<String,Object>> mtsrs=deviceService.getMachineToolStatus(equSerialNo);
 			mts=StringUtils.listIsNull(mtsrs)?mtsrs.get(0):null;
 			if(StringUtils.listIsNull(mtsrs)){
 				Date da=new Date();
 				String status=mts.get("status").toString();
 				String timeZone=null==mts.get("timeZone")||"".equals(mts.get("timeZone"))?"0":mts.get("timeZone").toString();
+				
 				if(da.getTime()-((Date)mts.get("updateTime")).getTime()-Double.parseDouble(timeZone)>Constants.CONTROL_TUOJI_TIME){
 					status="脱机";
 				}
@@ -151,6 +159,7 @@ public class WorkshopManagementBean {
 						ipAddress=null;
 					}*/
 				}
+				
 				mts.put("cuttingTime", df.format(Double.parseDouble(mts.get("cuttingTime")+"")/3600));
 				mts.put("assistedTime", df.format(Double.parseDouble(mts.get("assistedTime")+"")/3600));
 				mts.put("prepareTime", df.format(Double.parseDouble(mts.get("prepareTime")+"")/3600));
@@ -168,6 +177,7 @@ public class WorkshopManagementBean {
 				mts =new HashMap<String,Object>();
 				mts.put("equSerialNo", equSerialNo);
 			}
+			//获取加工任务 对应页面的第二列的数据
 			List<Map<String,Object>> mtrs=deviceService.getMachiningTask(equSerialNo);
 			mt=StringUtils.listIsNull(mtrs)?mtrs.get(0):null;
 			if(StringUtils.listIsNull(mtrs)){
@@ -183,8 +193,10 @@ public class WorkshopManagementBean {
 				}
 
 			}
+			//OEE数据
 			ee=deviceService.getEquipmentEfficiency(equSerialNo);
 			pie=loadPieData(mts);
+			
 			if(null!=mt&&null!=mt.get("jobDispatchListNo")&&!"".equals(mt.get("jobDispatchListNo").toString())){
 				piecbtwo=loadRCLData(equSerialNo,1);//日产量
 				piecb=loadRCLData(equSerialNo,2);//月产量
@@ -217,10 +229,12 @@ public class WorkshopManagementBean {
 	 */
 	public void refreshData(){
 		if(!StringUtils.isEmpty(equSerialNo)){
+			//加载设备数据
 			List<Map<String,Object>> mtsrs=deviceService.getMachineToolStatus(equSerialNo);
 			mts=StringUtils.listIsNull(mtsrs)?mtsrs.get(0):null;
 			//System.out.println("xfeed:"+mts.get("xfeed")+"     zfeed:"+mts.get("zfeed"));
 			//System.out.println("feedSpeed:"+mts.get("feedSpeed")+"     axisspeed:"+mts.get("axisspeed"));
+			//加载 加工任务
 			List<Map<String,Object>> mtrs=deviceService.getMachiningTask(equSerialNo);
 			mt=StringUtils.listIsNull(mtrs)?mtrs.get(0):null;
 			if(StringUtils.listIsNull(mtrs)){

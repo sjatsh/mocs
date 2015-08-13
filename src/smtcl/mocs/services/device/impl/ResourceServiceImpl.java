@@ -1175,7 +1175,20 @@ public class ResourceServiceImpl extends
 				return "该物料已经存在";
 			}
 			dao.update(TMaterailTypeInfo.class, tti);
-
+			if(tti.getClassName().equals("3")){
+				TPartTypeInfo tpi=new TPartTypeInfo();
+				String hqlpart="from TPartTypeInfo where no='"+tti.getNo()+"'";
+				List<TPartTypeInfo> tpilist=dao.executeQuery(hqlpart);
+				if(null!=tpilist&&tpilist.size()>0){
+					tpi = tpilist.get(0);
+					tpi.setNo(tti.getNo());
+					tpi.setName(tti.getName());
+					tpi.setUpdateDate(new Date());
+					tpi.setNodeid(tti.getNodeId());
+					dao.update(TPartTypeInfo.class,tpi);
+				}
+					
+			}
 			TMaterialExtendStorage tmes = oma.getTmes();// 库存
 			// tmes.setMaterialId(Integer.parseInt(tti.getId().toString()));//设置物料id
 			// 设置是否库存物料 版本控制 可存储 可处理 可保留

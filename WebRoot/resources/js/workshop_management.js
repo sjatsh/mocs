@@ -1,6 +1,6 @@
 var imgPercent = hjb51/1080; //比例 
 function loadData() {
-	
+	//针对三维仿真做出的特殊处理
 	var sbequSerialNo=$("#sbequSerialNo").text();
 	if(null!=sbequSerialNo){
 		sbequSerialNo=sbequSerialNo.trim();
@@ -365,6 +365,7 @@ function reloadEqu(){
 		var tv=value[t];
 		value[t]=parseFloat(tv).toFixed(3);
 	}
+	//显示坐标轴  1.坐标轴有三种   有 两轴  三轴  五轴    实时状态表中有xyz uvw abc 9个字段  总会有  2个有值 或者3个有值  或者5个有值
 	if(label.length==2){
 		document.getElementById("xyzabc").innerHTML=""+
                 "<div class='auto-size fwh flt11'>"+label[0]+"</div>"+
@@ -400,6 +401,7 @@ function reloadEqu(){
 //	});
 	partUpdateBg();//零件背景图加载
 	
+	//F  S  值加载
 	if(null!=f&&""!=f){
 		document.getElementById("fv").innerHTML=f;
 	}else{
@@ -410,6 +412,7 @@ function reloadEqu(){
 	}else{
 		document.getElementById("sv").innerHTML="<span data-i18n='zwxxinfo'></span>";
 	}
+	
 	gdqypd(fu,est,pn,no,name,processName);//工单区域 是否为空判断和字符处理
 	
 	//仪表图数据加载

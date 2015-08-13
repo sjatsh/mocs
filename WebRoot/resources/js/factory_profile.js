@@ -3,14 +3,17 @@ var contentName="content1";
 var imgCount=0;
 var imgFinishCount=0;
 function insertElement(x,y,imgUrl,equSerialNo,pathThree,ipAddress){
+	 //机床图片放大缩小比例
 	 var xPercent = $(".content-info-bg").width()/1920;
 	 var yPercent = $(".content-info-bg").height()/720;
 	
+	 //确定x轴 Y轴
 	 x=parseInt(x*xPercent);
 	 y=parseInt(y*yPercent);
-
+	 
 	equSerialNo=rtrim(equSerialNo);
 	var status=imgUrl.substring(0,2);
+	
 	if(null!=ipAddress&&""!=ipAddress&&"null"!=ipAddress){
 		
 		document.getElementById(contentName).innerHTML+="<div style='left:"+x+"px;top:"+y+"px;background:transparent;position:absolute;' id='"+equSerialNo+"showimg' >" +
@@ -116,6 +119,7 @@ function reloadEqu() {
 	var ft=hjb51*(72/1080)
 	//alert(2);
 	var bfh="<span style='font-family:Arial Black;font-size:"+ft+"px;'>%</span>";
+	//工单准时率等4个数据的加载
 	document.getElementById("ppf").innerHTML = hc[1]+bfh;			
 	document.getElementById("ppf").style.color=returnColor(parseInt(hc[1]));
 	document.getElementById("pit").innerHTML = lc[1];
@@ -132,7 +136,7 @@ function reloadEqu() {
 	
 	//document.getElementById("content").style.height = hjb51* 703 / 1080 + "px";
 	//document.getElementById("content").style.widht = wjb51 + "px";
-	
+	//加载设备
 	if ("" != xc && xc.length > 0) {
 		imgCount = xc.length;
 		imgFinishCount = 0;

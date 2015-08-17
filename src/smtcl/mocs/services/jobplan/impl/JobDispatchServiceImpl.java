@@ -27,40 +27,45 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 
 	@Override
 	public List<Map<String, Object>> getDevicesInfo(String nodeId,String taskNum,String jobstatus, String partid,String equid,String planStime,String planEtime) {
-		String hql = "SELECT DISTINCT NEW MAP(equ.equId AS Id," 
-				+ " equ.equSerialNo AS Name,"
-				+ "	equ.equName as equName) "
-				+ " FROM TEquipmentInfo equ,"
-				+ " TJobdispatchlistInfo job, "
-				+ " TEquJobDispatch equ_job,"
-				+ " TProcessInfo process,"
-				+ " TProcessplanInfo planinfo,"
-				+ " TPartTypeInfo part"
-				+ " WHERE equ.TNodes.TNodes.id='"+nodeId+"'"
-				+ " and equ.equSerialNo = equ_job.equSerialNo"
-				+ " and equ_job.jobdispatchNo = job.no"
-				+ " and equ_job.status <> 0"
-				+ " and job.TProcessInfo.id = process.id"
-				+ " and process.TProcessplanInfo.id = planinfo.id"
-				+ " and planinfo.TPartTypeInfo.id = part.id";
-		if(!StringUtils.isEmpty(taskNum)){
-			hql += " and job.taskNum in ("+taskNum+")";
-		}
-		if(!StringUtils.isEmpty(jobstatus)){
-			hql += " and job.status in("+jobstatus+")"; 
-		}
-		if(!StringUtils.isEmpty(partid)){
-			hql += " and part.id in ("+partid+")";
-		}
-		if(!StringUtils.isEmpty(equid)){
-			hql += " and equ.equId in ("+equid+")";
-		}
-		if(!StringUtils.isEmpty(planStime)){
-			hql += " AND job.planStarttime >= DATE_FORMAT('"+planStime+"','%Y-%m-%d')  "; 
-		}	
-		if(!StringUtils.isEmpty(planEtime)){
-			hql += " AND job.planEndtime <= DATE_FORMAT('"+planEtime+"','%Y-%m-%d')  "; 
-		}
+
+		String hql = "select distinct new Map(equ.equId as Id, equ,equSerialNo as Name,equ.equName as equName) "
+				+ " from TEquipmentInfo equ"
+				+ " where equ.TNodes.TNodes.nodeId = '"+nodeId+"'";
+		
+		//		String hql = "SELECT DISTINCT NEW MAP(equ.equId AS Id," 
+//				+ " equ.equSerialNo AS Name,"
+//				+ "	equ.equName as equName) "
+//				+ " FROM TEquipmentInfo equ,"
+//				+ " TJobdispatchlistInfo job, "
+//				+ " TEquJobDispatch equ_job,"
+//				+ " TProcessInfo process,"
+//				+ " TProcessplanInfo planinfo,"
+//				+ " TPartTypeInfo part"
+//				+ " WHERE equ.TNodes.TNodes.id='"+nodeId+"'"
+//				+ " and equ.equSerialNo = equ_job.equSerialNo"
+//				+ " and equ_job.jobdispatchNo = job.no"
+//				+ " and equ_job.status <> 0"
+//				+ " and job.TProcessInfo.id = process.id"
+//				+ " and process.TProcessplanInfo.id = planinfo.id"
+//				+ " and planinfo.TPartTypeInfo.id = part.id";
+//		if(!StringUtils.isEmpty(taskNum)){
+//			hql += " and job.taskNum in ("+taskNum+")";
+//		}
+//		if(!StringUtils.isEmpty(jobstatus)){
+//			hql += " and job.status in("+jobstatus+")"; 
+//		}
+//		if(!StringUtils.isEmpty(partid)){
+//			hql += " and part.id in ("+partid+")";
+//		}
+//		if(!StringUtils.isEmpty(equid)){
+//			hql += " and equ.equId in ("+equid+")";
+//		}
+//		if(!StringUtils.isEmpty(planStime)){
+//			hql += " AND job.planStarttime >= DATE_FORMAT('"+planStime+"','%Y-%m-%d')  "; 
+//		}	
+//		if(!StringUtils.isEmpty(planEtime)){
+//			hql += " AND job.planEndtime <= DATE_FORMAT('"+planEtime+"','%Y-%m-%d')  "; 
+//		}
 		hql += " ORDER BY equ.equSerialNo ASC";		
 		return dao.executeQuery(hql);		
 	}
@@ -740,7 +745,10 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			dao.save(tjp);
 			
 			/*********************A3增加工单设备后台关联***************************************/
-			String hql=" select new Map(t.equSerialNo as EQUSERIALNO) from TEquipmentInfo t where t.equTypeId="+gg.get("equTypeId");
+//			String hql=" select new Map(t.equSerialNo as EQUSERIALNO) from TEquipmentInfo t where t.equTypeId="+gg.get("equTypeId");
+			String hql=" select new Map(t.equSerialNo as EQUSERIALNO) from TEquipmentInfo t,TProcessEquipment process"
+					+ " where t.equId=process.equipmentId"
+					+ " and process.id="+gg.get("equTypeId");
 			List<Map<String,Object>> equsList=dao.executeQuery(hql);
 			for(Map<String,Object> rec:equsList)
 			{

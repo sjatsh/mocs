@@ -60,10 +60,10 @@ $(document).ready(function(){
 	$("#select_box_part").selectboxs();
 	
     //显示控制按钮权限
-    if($("#myform\\:viewDisabled").val() == "false") {
+//    if($("#myform\\:viewDisabled").val() == "false") {
     	/*$("#viewDisabled").hide();*/
-    	$("#control_add,#control_edit,#control_del,#control_status,#control_week,#control_month,#control_year,#control_big,#control_small,#control_import,.zl-button-text").css("cursor", "default").attr("onclick", "return false;");
-    }
+//    	$("#control_add,#control_edit,#control_del,#control_status,#control_week,#control_month,#control_year,#control_big,#control_small,#control_import,.zl-button-text").css("cursor", "default").attr("onclick", "return false;");
+//    }
     
     //选择框超出显示
     $(".zl-content-select").mouseover(function() {

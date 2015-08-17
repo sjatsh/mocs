@@ -250,9 +250,9 @@ Ext.onReady(function () {
 		//重置按钮状态
 		$(".zl-content-top-info-down-btn").removeClass("active");
 		//控制按钮权限
-	    if($("#myform\\:viewDisabled").val() == "false") {
-	    	return;
-	    }
+//	    if($("#myform\\:viewDisabled").val() == "false") {
+//	    	return;
+//	    }
 	    
 		//常开按钮
 		$("#control_edit,#control_week,#control_month,#control_year,#control_big,#control_small").parent().addClass("active");

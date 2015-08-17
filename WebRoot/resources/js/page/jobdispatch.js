@@ -621,10 +621,10 @@ $(document).ready(function(){
 	$("#select_box_job_equName").selectboxs();
 	
     //显示控制按钮权限
-    if($("#myform\\:viewDisabled").val() == "false") {
+//    if($("#myform\\:viewDisabled").val() == "false") {
     	//$("#viewDisabled").hide();
-    	$("#control_info_edit,#control_scrap,#control_add,#control_edit,#control_delete,#control_ok,#control_start,#control_pause,#control_week,#control_month,#control_year").css("cursor", "default").attr("onclick", "return false;");
-    }
+//    	$("#control_info_edit,#control_scrap,#control_add,#control_edit,#control_delete,#control_ok,#control_start,#control_pause,#control_week,#control_month,#control_year").css("cursor", "default").attr("onclick", "return false;");
+//    }
     
 	//页面大小调整
 //	$.autosizeExclude($("#img4")[0], false);

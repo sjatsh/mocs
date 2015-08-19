@@ -30,7 +30,7 @@ import smtcl.mocs.utils.device.Constants;
  * 修改说明 使用jsf的国际化
  * @version V1.0
  */
-@ManagedBean(name="SubJobdispatchAdd")
+@ManagedBean(name="jobdispatch")
 @ViewScoped
 public class JobdispatchBean implements Serializable{
 	

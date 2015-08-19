@@ -1,15 +1,13 @@
 package smtcl.mocs.web.webservice.device;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import smtcl.mocs.common.device.LogHelper;
-import smtcl.mocs.web.webservice.model.MachineToolUpdateFreq;
+
 public class ExecuteTimeInterceptor extends HandlerInterceptorAdapter{
 	
 	private ThreadLocal<Long> startTimethl = new ThreadLocal<Long>(); 

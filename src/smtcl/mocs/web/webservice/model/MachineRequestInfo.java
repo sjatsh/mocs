@@ -2,7 +2,6 @@ package smtcl.mocs.web.webservice.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class MachineRequestInfo implements Serializable{
 	/**

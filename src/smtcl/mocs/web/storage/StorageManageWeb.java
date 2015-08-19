@@ -3,7 +3,6 @@ package smtcl.mocs.web.storage;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
 
 import org.dreamwork.persistence.ServiceFactory;

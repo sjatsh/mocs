@@ -1,6 +1,5 @@
 package smtcl.mocs.web.webservice.device;
 
-
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,26 +17,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
 import net.sf.json.util.PropertyFilter;
 
 
 
-import org.apache.mina.filter.reqres.Request;
 import org.dreamwork.jasmine2.web.IWebControl;
 import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.stereotype.Controller;
@@ -46,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import smtcl.mocs.beans.authority.cache.TreeNode;
 import smtcl.mocs.common.device.JsonResponseResult;
 import smtcl.mocs.common.device.LogHelper;
 import smtcl.mocs.common.device.Md5;
@@ -60,7 +44,6 @@ import smtcl.mocs.services.device.IResourceService;
 import smtcl.mocs.services.device.IWSUserService;
 import smtcl.mocs.utils.authority.SessionHelper;
 import smtcl.mocs.utils.device.Constants;
-import smtcl.mocs.utils.device.FaceContextUtil;
 import smtcl.mocs.utils.device.MenuColourUtils;
 import smtcl.mocs.utils.device.StringUtils;
 import sun.misc.BASE64Decoder;
@@ -611,9 +594,8 @@ public class WSUserServiceMVC {
 					all.put("success", "false");
 				} else {
 					//准备验证md5
-					Md5 getMD5 = new Md5();
 					//md5转化 吧程序内容转化成md5字符串
-					String Md5String = getMD5.GetMD5Code(progContent.getBytes()).toUpperCase();
+					String Md5String = Md5.GetMD5Code(progContent.getBytes()).toUpperCase();
 					// 加密之后的比较
 					if (Md5String.equals(md5)) {
 						//获取程序文件的后缀名
@@ -724,8 +706,7 @@ public class WSUserServiceMVC {
 					all.put("success", "false");
 				} else {
 					byte[] buffer = new BASE64Decoder().decodeBuffer(progContent); // 对字符串进行解码
-					Md5 getMD5 = new Md5();
-					String _md5Server = getMD5.GetMD5Code(buffer).toUpperCase();
+					String _md5Server = Md5.GetMD5Code(buffer).toUpperCase();
 
 					if (_md5Server.equals(md5)) {
 						String extension = progName.substring(progName.lastIndexOf(".") + 1);

@@ -1,12 +1,9 @@
 package smtcl.mocs.web.webservice.device;
 
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.dreamwork.persistence.ServiceFactory;
 import org.springframework.stereotype.Controller;
@@ -14,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import smtcl.mocs.common.device.LogHelper;
 import smtcl.mocs.services.device.IWSBZService;
 import smtcl.mocs.utils.device.Constants;
-import smtcl.mocs.web.webservice.model.MachineToolUpdateFreq;
 
 @Controller
 @RequestMapping("/WSBZServiceUpdateCurStatus")

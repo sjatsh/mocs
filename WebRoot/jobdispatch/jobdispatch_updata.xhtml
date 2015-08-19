@@ -132,19 +132,19 @@
         <div class="jobdispatch-content-info">
         <div class="jobdispatch-content-info-tubiao1">
             <h:panelGroup id="shebei">
-            <p:dataTable id="dataTable_1" value="#{JobdispatchUpdata.tequJobDispatchList}" var="jobdispatch" 
+            <p:dataTable id="dataTable_1" value="#{JobdispatchUpdata.tequJobDispatchList}" var="list" 
             cellpadding="0" cellspacing="0" >
 			 <p:column  style="width:168px;">
 				<f:facet name="header">
 				  <span data-i18n="content.sbxlh1"></span>
 				 </f:facet>
-				<h:outputText value="#{jobdispatch.SerialNo}"></h:outputText>
+				<h:outputText value="#{list.SerialNo}"></h:outputText>
 			</p:column>
 			<p:column  style="width:156px;">
 		       <f:facet name="header">
 			       <span data-i18n="content.zt"></span>
 			   </f:facet>
-			 <h:outputText value="#{jobdispatch.Status}"></h:outputText>
+			 <h:outputText value="#{list.Status}"></h:outputText>
 			</p:column>
 			<p:column  style="width:262px;">
 			<f:facet name="header">

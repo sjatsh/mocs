@@ -5,14 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import smtcl.mocs.beans.jobplan.JobPlanAddBean;
-import smtcl.mocs.beans.jobplan.JobPlanControlBean;
 import smtcl.mocs.beans.jobplan.JobPlanUpdataBean;
-import smtcl.mocs.beans.jobplan.JobdispatchlistAddBean;
-import smtcl.mocs.beans.jobplan.JobdispatchlistUpdataBean;
 import smtcl.mocs.pojos.job.TJobplanInfo;
-import smtcl.mocs.pojos.job.TJobplanTaskInfo;
-import smtcl.mocs.pojos.job.TProductionScrapInfo;
-
 
 /**
  * Created by Jf
@@ -170,11 +164,6 @@ public interface IJobPlanService {
 	public List<Map<String,Object>> getEquimentByType(String nodeid,String typeId);
 	
 	/**
-	 * 工单添加
-	 */
-	public void addJobdispatchlistInfo(JobdispatchlistAddBean jobdispatchlistAddBean);
-	
-	/**
 	 * 通过名称查询，判断是否多次提交工单
 	 */
 	public List<Map<String,Object>> getJobdispatchlistByName(String name);
@@ -184,11 +173,6 @@ public interface IJobPlanService {
 	 */
 	public List<Map<String,Object>> getJobdispatchlistById(String id);
 	
-	/**
-	 * 工单修改
-	 */
-	public void updataJobdispatchlistInfo(JobdispatchlistUpdataBean jobdispatchlistAddBean);
-
     /**
      * 工单统计，通过任务号和时间
      * @param nodeid 接单ID
@@ -268,11 +252,6 @@ public interface IJobPlanService {
 	 */
 	public List<Map<String,Object>> getBatchList(String processplanId,String jobplabid);
 
-	/**
-	 * 作业计划控制 --保存作业和保存工单
-	 */
-	public void saveJobDispatch(JobPlanControlBean jobPlanControlBean);
-	
 	/**
 	 * 作业计划控制 --通过工艺方案ID得到工序清单
      * @param nodeid 节点ID

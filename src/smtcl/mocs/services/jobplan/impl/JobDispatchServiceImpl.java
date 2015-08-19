@@ -25,6 +25,7 @@ import smtcl.mocs.utils.device.StringUtils;
 
 public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatchlistInfo, String> implements IJobDispatchService {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getDevicesInfo(String nodeId,String taskNum,String jobstatus, String partid,String equid,String planStime,String planEtime) {
 
@@ -70,6 +71,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return dao.executeQuery(hql);		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	/**
 	 * 查找设备对应的工单
@@ -159,7 +161,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("ResourceId",tt.get("ResourceId"));
 					mm.put("planNum",tt.get("planNum"));
 					mm.put("finishNum",tt.get("finishNum"));
-					Date date=new Date();
 					double rr=Double.parseDouble(tt.get("finishNum").toString())/Double.parseDouble(tt.get("planNum").toString())*100;
 				    DecimalFormat df=new DecimalFormat("0.00"); 
 					mm.put("Percentage",df.format(rr));
@@ -201,7 +202,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 						 mm.put("ResourceId",tt.get("ResourceId"));
 						 mm.put("planNum",tt.get("planNum"));
 						 mm.put("finishNum",tt.get("finishNum"));
-						 Date date=new Date();
 						 double rr=Double.parseDouble(tt.get("finishNum").toString())/Double.parseDouble(tt.get("planNum").toString())*100;
 						 DecimalFormat df=new DecimalFormat("0.00"); 
 						 mm.put("Percentage",df.format(rr));
@@ -237,12 +237,13 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	/**
 	 * 选择一条工单记录
 	 */
 	public List<Map<String, Object>> getJobDispatchsInfoOne(String jobplanId) {
-		List<Map<String, Object>> result=new ArrayList();
+		List<Map<String, Object>> result=new ArrayList<Map<String, Object>>();
 		
 		String hql = "SELECT NEW MAP(jobdispatch.id AS Id,jobdispatch.no AS No," 
 				+" jobdispatch.TProcessInfo.name AS Name," 
@@ -265,7 +266,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			for(Map<String, Object> tt:rs){
 				Map<String, Object> mm=new HashMap<String, Object>();
 				//创建  待派工 已派工 
-				//if("10".equals(tt.get("Status").toString())||"20".equals(tt.get("Status").toString())||"30".equals(tt.get("Status").toString())){
 				if("30".equals(tt.get("Status").toString())){
 					mm.put("Id",tt.get("Id"));
 					mm.put("Name",tt.get("Name"));
@@ -277,10 +277,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("planNum",tt.get("planNum"));
 					mm.put("finishNum",tt.get("finishNum"));
 					mm.put("Percentage",0);
-					//mm.put("jobId",tt.get("jobplanId"));
 					mm.put("no",StringUtils.getSubString(tt.get("No").toString(),"4"));
-					//mm.put("jNo",tt.get("jobNo"));
-					//mm.put("jId",tt.get("jobId"));
 					mm.put("rId",tt.get("ResourceId"));
 					mm.put("equName",tt.get("EquType"));
 					mm.put("goodQuantity",tt.get("goodQuantity"));
@@ -295,16 +292,10 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("ResourceId",tt.get("ResourceId"));
 					mm.put("planNum",tt.get("planNum"));
 					mm.put("finishNum",tt.get("finishNum"));
-					Date date=new Date();
-					//long z=StringUtils.dateTimeBetween(tt.get("RealStarttime")+"",StringUtils.formatDate(date, 3));
-					//long m=StringUtils.dateTimeBetween(tt.get("RealStarttime")+"",tt.get("EndDate")+"");
 					double rr=Double.parseDouble(tt.get("finishNum").toString())/Double.parseDouble(tt.get("planNum").toString())*100;
 				    DecimalFormat df=new DecimalFormat("0.00"); 
 					mm.put("Percentage",df.format(rr));
-					//mm.put("jobId",tt.get("jobplanId"));
 					mm.put("no",StringUtils.getSubString(tt.get("No").toString(),"4"));
-					//mm.put("jNo",tt.get("jobNo"));
-					//mm.put("jId",tt.get("jobId"));
 					mm.put("rId",tt.get("ResourceId"));
 					mm.put("equName",tt.get("EquType"));
 					mm.put("goodQuantity",tt.get("goodQuantity"));
@@ -320,10 +311,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("planNum",tt.get("planNum"));
 					mm.put("finishNum",tt.get("finishNum"));
 					mm.put("Percentage",0);
-					//mm.put("jobId",tt.get("jobplanId"));
 					mm.put("no",StringUtils.getSubString(tt.get("No").toString(),"4"));
-					//mm.put("jNo",tt.get("jobNo"));
-					//mm.put("jId",tt.get("jobId"));
 					mm.put("rId",tt.get("ResourceId"));
 					mm.put("equName",tt.get("EquType"));
 					mm.put("goodQuantity",tt.get("goodQuantity"));
@@ -397,6 +385,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	    return mID;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> getJobPlanList(String nodeId) {
 		String hql = "SELECT NEW MAP(jobplan.id as id,jobplan.no as jobNo)"
@@ -406,12 +395,12 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return dao.executeQuery(hql);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getJobInfoMap(String nodeId)
 	{
 		String hql ="select new MAP(job.no as displayfield,job.id as valuefield,job.theoryWorktime as theoryWorktime)" +
 				"from TJobInfo job where status=20 and job.TJobplanInfo.nodeid='"+nodeId+"' order by job.id desc";		
-		List<Map<String, Object>> tempList = dao.executeQuery(hql);		
-		return tempList;
+		return dao.executeQuery(hql);		
 	}
 	
 	@Override
@@ -450,6 +439,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return false;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> getStatusByJobPlanId(long jobPlanId,int status) {
 		String hql = "SELECT NEW MAP(t.status as status)"
@@ -458,6 +448,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return dao.executeQuery(hql);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,Object>> getStatusByJobPlanIdWhenStop(long jobPlanId) {
 		String hql = "SELECT NEW MAP(t.status as status)"
@@ -468,10 +459,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	/**
-	 * 更新作业计划表的status字段状态根据作业表的status字段的情况
-	 */
 	public Boolean updateJobPlanInfoStatusByjobStatus(String jobPlanId,String nowDate,String status,String flag) {
 		try{
 			String sql=null;
@@ -488,7 +477,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 			}
 			else if(flag=="start")
 			{
-				// TODO Auto-generated method stub
 				 hql="select new MAP(jobPlan.realStarttime as rtime) " +
 						"from TJobplanInfo jobPlan where jobPlan.id="+Integer.valueOf(jobPlanId)+" and jobPlan.realStarttime is NULL";
 				List<Map<String,Object>> realStartTimeList=dao.executeQuery(hql);
@@ -504,24 +492,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return false;
     }
 
-
-
-
-   
-
-
-
-
-
-
-
-
-   
-
-    @Override
-    /**
-     * 更新工单计划状态当为工单为结束状态时
-     */
+    @SuppressWarnings("unchecked")
+	@Override
     public Boolean updateJobPlanInfoStatusByjobStatusWhenStop(String jobPlanId, String nowDate, String status) {
         try {
             String sql = "update t_jobplan_info t set t.status=" + Integer.valueOf(status) + " where t.id=" + Integer.valueOf(jobPlanId);
@@ -544,9 +516,6 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     }
 
     @Override
-    /**
-     * 更新工单状态当为结束状态时
-     */
     public Boolean updateJobDispatchWhenStop(String jobdispatchId, String nowDate, String status, String flag) {
         try {
             if ("0".equals(flag)) {
@@ -565,17 +534,13 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 
     }
 
-    @Override
-    /**
-     * 工单启动时查找对应设备下有无其它已启动的工单
-     */
+    @SuppressWarnings("unchecked")
+	@Override
     public boolean getDispatchStatusByEquId(String equId) {
         String hql = "SELECT NEW MAP(jobdispatch.id AS Id)"
                 + " FROM TJobdispatchlistInfo jobdispatch"
                 + " WHERE jobdispatch.TEquipmentInfo.equId=" + Integer.valueOf(equId) + " and (jobdispatch.status=40 or jobdispatch.status=50)";
         List<Map<String, Object>> rs = dao.executeQuery(hql);
-//		if(rs != null && rs.size()>0) return false;
-//        else return true;
         return !(rs != null && rs.size() > 0);
 
     }
@@ -629,7 +594,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单新建 --通过零件名称得到工艺方案ID得到工序清单
      */
-    public List<Map<String, Object>> getProcessByProcessPlanId(String nodeid, String processPlanId) {
+    @SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getProcessByProcessPlanId(String nodeid, String processPlanId) {
         String hql = "SELECT NEW MAP("
                 + " c.id as id,"            //工序ID ===>
                 + " c.no as no,"            //工序编码
@@ -652,7 +618,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单新建 -- 通过设备类型ID得到设备类型名称
      */
-    public String getPartTypeNameById(String eduTypeId) {
+    @SuppressWarnings("unchecked")
+	public String getPartTypeNameById(String eduTypeId) {
         String hql = "SELECT NEW MAP("
                 + " t.id as id,"
                 + " t.equipmentType as name)"
@@ -670,7 +637,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单新建 -- 工单保存 --工序直接生成的工单
      */
-    public void saveDispatch(JobdispatchAddBean jobdispatchAddBean) {
+    @SuppressWarnings("unchecked")
+	public void saveDispatch(JobdispatchAddBean jobdispatchAddBean) {
         List<Map<String, Object>> jobdispatchlist = jobdispatchAddBean.getJobdispatchlist();
         for (Map<String, Object> gg : jobdispatchlist) {
             TJobdispatchlistInfo tjp = new TJobdispatchlistInfo();
@@ -765,6 +733,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单新建-- 获取零件类型集合
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPartTypeMap(String nodeid){
 		String hql = "SELECT NEW MAP(" 
 				+ " c.id as id,"     //零件类型ID
@@ -778,6 +747,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单新建 -- 设备类型 -- 设备类型集合
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getEquTypeMap(String processId){
 		String hql = "SELECT NEW MAP(" 
 				+" c.id as id,"              //设备类型ID
@@ -793,6 +763,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单修改 --通过工单ID获取工单信息
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String,Object> getJobDispatchById(String nodeid,String disPatchId){
 		Map<String,Object> map = new HashMap<String,Object>();
 		//通过工单ID得到工单
@@ -821,28 +792,9 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	}
 	
 	/**
-	 * 工单修改  --通过设备类型ID得到物料
-	 */
-
-//	public List<Map<String,Object>> getMaterialInfo(String eduTypeId){
-//	//通过设备类型ID得到物料
-//	String hql1 = "SELECT NEW MAP(" 
-//		    	+" t.id as tid,"                         //物料ID
-//			    +" t.TMaterailTypeInfo.no as tno,"       //物料编号
-//		    	+" t.TMaterailTypeInfo.name as tname,"   //物料名称
-//		    	+" t.requirementNum as requirementNum"   //物料需求数      
-//				+")"
-//				+" FROM TEquipmenttypeInfo j ,TProcessEquipment pe,TProcessInfo c, TProcessmaterialInfo t  "
-//				+" WHERE j.id = pe.equipmentTypeId AND pe.processId = c.id  AND c.id = t.TProcessInfo.id  "
-//			    +" AND  j.id =  '"+eduTypeId+"'"; 
-//	 List<Map<String,Object>> lst1 =  dao.executeQuery(hql1);
-//	 
-//	  return lst1;	 
-// 	}
-	
-	/**
 	 * 工单修改  --查询名称是否重复
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean getDispatchNameRepeat(String dispatchName){
 	      String hql = "SELECT NEW MAP(" 
 			        +" j.name as name,"                           //工单名称
@@ -889,6 +841,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单修改 -- 设备类型 -- 设备类型集合
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getEquTypeMapByDisPatchId(String dispacthId){
 		String hql = "SELECT NEW MAP(" 
 				+" c.id as id,"              //设备类型ID
@@ -905,6 +858,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 查询工单状态
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getJobStatus() {
 		String hql = "select new Map(t.id as Id, t.name as Name) from TStatusInfo t";
@@ -914,6 +868,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 查询工单表中的批准信息
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getBatchNoList(String nodeId,String query) {
 		String hql = "select new Map(t.taskNum as Name, t.taskNum as value) "
@@ -955,6 +910,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> findEquipmentByPartName(String nodeid, String partName) {
 		String partId = partName.split("@#")[0];
@@ -983,6 +939,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	 * @param batchId
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private List<Map<String, Object>> findTJobdispatch(String nodeId, String jobState, String batchId){
 		
 		String hql = "select new Map(t.no as No,t.status as Status) from TJobdispatchlistInfo t where t.nodeid='"+nodeId+"'";
@@ -1014,6 +971,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 查询设备信息关联的序列号
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getEquJobDispatchList(
 			String id,HttpSession session) {
@@ -1047,6 +1005,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		}
 		return list;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getJobPatchNoByName(String name) {
 		String hql = "select new Map(t.no as no,t.name as Name) from TJobdispatchlistInfo t where t.name='"+name+"'";
@@ -1058,6 +1017,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	 * @param name
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getJobPatchNoById(String id) {
 		String hql = "select new Map(t.no as no,t.name as Name) from TJobdispatchlistInfo t where t.id="+id;
@@ -1069,6 +1029,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	 * @param dispatchNo
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<TEquJobDispatch> getJobDispatchById(String dispatchNo){
 		String hql = "from TEquJobDispatch t where t.status<>0 and t.jobdispatchNo='"+dispatchNo+"'";
@@ -1078,6 +1039,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 通过工单名称查询工单信息
 	 */
+	@SuppressWarnings("unchecked")
 	public List<TJobdispatchlistInfo> getJobDispatchInfo(String id){
 		String hql = "from TJobdispatchlistInfo t where t.id="+id;
 		return dao.executeQuery(hql);
@@ -1113,6 +1075,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 获取报表数据
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getJobDispatchReportData(String nodeid,
 			String descParam, String startTime, String endTime,
 			String partName, String batchNo) {
@@ -1158,6 +1121,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return dao.executeQuery(hql);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> getequNameList(String nodeid, String query) {
 		String hql = "select DISTINCT new MAP(equ.equId AS Id," 
@@ -1169,6 +1133,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return dao.executeQuery(hql);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getDevicesInfo(String nodeId){
 		String hql = "SELECT DISTINCT NEW MAP(equ.equId AS Id," 
 				+ " equ.equSerialNo AS Name,"

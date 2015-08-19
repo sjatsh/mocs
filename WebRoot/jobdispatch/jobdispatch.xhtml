@@ -21,12 +21,12 @@
 </h:head>
 	<h:body>
 		<h:form id="myform">
-			<h:inputHidden value="#{SubJobdispatchAdd.load}" id="loadtab"></h:inputHidden>
-			<h:inputHidden value="#{SubJobdispatchAdd.partTypeId}" id="partTypeId"></h:inputHidden>
-			<h:inputHidden value="#{SubJobdispatchAdd.taskNum}" id="taskNum"></h:inputHidden>
-			<h:inputHidden value="#{SubJobdispatchAdd.eduTypeId}" id="eduTypeId"></h:inputHidden>
-			<h:inputHidden value="#{SubJobdispatchAdd.jobState}" id="jobState"></h:inputHidden>
-			<h:inputHidden value="#{SubJobdispatchAdd.viewDisabled}" id="viewDisabled"></h:inputHidden>
+			<h:inputHidden value="#{jobdispatch.load}" id="loadtab"></h:inputHidden>
+			<h:inputHidden value="#{jobdispatch.partTypeId}" id="partTypeId"></h:inputHidden>
+			<h:inputHidden value="#{jobdispatch.taskNum}" id="taskNum"></h:inputHidden>
+			<h:inputHidden value="#{jobdispatch.eduTypeId}" id="eduTypeId"></h:inputHidden>
+			<h:inputHidden value="#{jobdispatch.jobState}" id="jobState"></h:inputHidden>
+			<h:inputHidden value="#{jobdispatch.viewDisabled}" id="viewDisabled"></h:inputHidden>
 			
 			<div class="zl-content-top-241">
 				<img class="zl-content-top-bg" src="images/content_top_bg_jobdispatch.png" />
@@ -43,7 +43,7 @@
 						<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
 						<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 						<rich:calendar id="start" inputClass="common_calendar" styleClass="common_condition_spacing" popup="true" locale="en"
-								value="#{SubJobdispatchAdd.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
+								value="#{jobdispatch.startTime}"  datePattern="yyyy-MM-dd" required="true" requiredMessage="必须填写时间" />
 						<h:message for="start" style="color:red" />
 					</div>
 					<!-- 结束时间选择 -->
@@ -55,7 +55,7 @@
 						<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
 						<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
 						<rich:calendar id="end" inputClass="common_calendar" styleClass="common_condition_spacing" 
-		    				popup="true" locale="en" value="#{SubJobdispatchAdd.endTime}" datePattern="yyyy-MM-dd" 
+		    				popup="true" locale="en" value="#{jobdispatch.endTime}" datePattern="yyyy-MM-dd" 
 		    				required="true" requiredMessage="必须填写时间" />
 	    				<h:message for="end" style="color:red" />
 					</div>
@@ -69,7 +69,7 @@
 						<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
 						<div id="select_box_job_taskNum">
 			    			<table id="table_job_taskNum">
-								<c:forEach items="#{SubJobdispatchAdd.taskNumMap}" var="value">
+								<c:forEach items="#{jobdispatch.taskNumMap}" var="value">
 									<tr><td style="width:180px;">                                 
 							        	<label><input type="checkbox" name="select_box_job_taskNum" onclick="s.changeSelected(this,event);" value="#{value.value}" onblur="s.hiddenList()"/><span>#{value.Name}</span></label>
 							        </td></tr>
@@ -89,7 +89,7 @@
 						<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
 						<div id="select_box_job_jobStatus">
 			    			<table id="table_job_jobStatus">
-								<c:forEach items="#{SubJobdispatchAdd.jobStatusMap}" var="value">
+								<c:forEach items="#{jobdispatch.jobStatusMap}" var="value">
 									<tr><td style="width:180px;">                                 
 							        	<label><input type="checkbox" name="select_box_job_jobStatus" onclick="s.changeSelected(this,event);" value="#{value.Id}" onblur="s.hiddenList()"/><span>#{value.Name}</span></label>
 							        </td></tr>
@@ -107,7 +107,7 @@
 						<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
 						<div id="select_box_job_equName">
 			    			<table id="table_job_equName">
-								<c:forEach items="#{SubJobdispatchAdd.eduTypeMap}" var="value">
+								<c:forEach items="#{jobdispatch.eduTypeMap}" var="value">
 									<tr><td style="width:180px;">                                 
 							        	<label><input type="checkbox" name="select_box_job_equName" 
 							        		onclick="s.changeSelected(this,event);" value="#{value.Id}" 
@@ -127,7 +127,7 @@
 						<img class="zl-selectMoreBox-bg-right" src="images/input/box_right_select.png" />
 						<div id="select_box_job_part">
 			    			<table id="table_job_part">
-								<c:forEach items="#{SubJobdispatchAdd.partTypeMap}" var="part">
+								<c:forEach items="#{jobdispatch.partTypeMap}" var="part">
 									<tr><td style="width:180px;">                                 
 							        	<label><input type="checkbox" name="select_box_job_part" onclick="s.changeSelected(this,event);" value="#{part.id}" onblur="s.hiddenList()"/><span>#{part.name}</span></label>
 							        </td></tr>
@@ -141,9 +141,9 @@
 					</div>
 					<div class="zl-content-select zl-dateBox hidden">
 						<img class="zl-dateBox-bg" src="images/input/textbox.png" />
-						<h:selectOneMenu id="group" value="#{SubJobdispatchAdd.group}" onchange="select()" 
+						<h:selectOneMenu id="group" value="#{jobdispatch.group}" onchange="select()" 
 		    				style="margin-left:20px;color:#4F4F4F;  border-width: 0px;width: 140px;border: 1px solid #BFBFBF;font-family:微软雅黑;height:30px; font-size:13px;" >
-							<f:selectItems value="#{SubJobdispatchAdd.groups}"></f:selectItems>
+							<f:selectItems value="#{jobdispatch.groups}"></f:selectItems>
 	   					</h:selectOneMenu>
 					</div>
 				</div>
@@ -160,22 +160,22 @@
 					<!-- 各种查找动作 -->
 					<div style="display:none;">
 						<h:commandButton id="chaxun_one" value=" " style="display:none;" onclick="setValueforHidd()">
-							<a4j:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeBybatchNo')}" 
+							<a4j:ajax listener="#{jobdispatch.searchList('treeNodeBybatchNo')}" 
 								execute="start end jobState partTypeId taskNum eduTypeId" event="click"
 								render=":myform:tableTreeJob" oncomplete="transTableContent();" />
 						</h:commandButton>
 						<h:commandButton id="chaxun_two" value=" " style="display:none;" onclick="setValueforHidd()">
-							<a4j:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeByequName')}" 
+							<a4j:ajax listener="#{jobdispatch.searchList('treeNodeByequName')}" 
 								execute="start end jobState partTypeId taskNum eduTypeId" event="click"
 								render=":myform:tableTreeJob_tab3" oncomplete="transTableContent();"  />
 						</h:commandButton>
 						<h:commandButton id="jobQuery" value=" " style="display:none;" onclick="setValueforHidd()">
-							<a4j:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeBybatchNo')}" 
+							<a4j:ajax listener="#{jobdispatch.searchList('treeNodeBybatchNo')}" 
 								execute="start end jobState partTypeId taskNum eduTypeId" event="click"
 								render=":myform:tableTreeJob" />
 						</h:commandButton>
 						<h:commandButton id="jobQueryByEqu" value=" " style="display:none;" onclick="setValueforHidd()">
-							<a4j:ajax listener="#{SubJobdispatchAdd.searchList('treeNodeByequName')}" 
+							<a4j:ajax listener="#{jobdispatch.searchList('treeNodeByequName')}" 
 								execute="start end jobState partTypeId taskNum eduTypeId" event="click"
 								render=":myform:tableTreeJob_tab3" />
 						</h:commandButton>

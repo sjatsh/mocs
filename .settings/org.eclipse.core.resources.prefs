@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//WebRoot/authority/manage/orgList.jasmine=UTF-8
+encoding//WebRoot/authority/page_404.jasmine=UTF-8
 encoding//WebRoot/resources/js/common.js=UTF-8
 encoding//WebRoot/resources/js/common_page.js=UTF-8
 encoding//WebRoot/resources/js/compare_devices_time.js=UTF-8
@@ -9,6 +11,10 @@ encoding//WebRoot/static/css/jobdispatch.css=UTF-8
 encoding//WebRoot/static/ext/js/jobplan_ext.js=UTF-8
 encoding//WebRoot/static/js/pick.js=UTF-8
 encoding//src/com/smtcl/iplatform/onlinefactory/webservice/client/DBHelper02.java=UTF-8
+encoding//src/smtcl/mocs/beans/device/WorkshopManagementBean.java=GBK
+encoding//src/smtcl/mocs/common/authority/i18n/DatabaseResourceBundle.java=UTF-8
+encoding//src/smtcl/mocs/common/authority/i18n/DatabaseResourceManager.java=UTF-8
+encoding//src/smtcl/mocs/common/device/JsonResponseResult.java=GBK
 encoding//src/smtcl/mocs/common/device/LoginVerifyFilter.java=GBK
 encoding//src/smtcl/mocs/common/device/SsoChanelLoginServlet.java=GBK
 encoding//src/smtcl/mocs/pojos/authority/Application.java=UTF-8

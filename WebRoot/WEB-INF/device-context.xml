@@ -226,6 +226,7 @@
 			</bean>
 		</property>
 	</bean>
+	
 
 	<!-- 树Service -->
 	<bean id="organizationService " parent="baseService">
@@ -494,6 +495,39 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<bean id="monthPlanService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.report.impl.MonthPlanServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="java.lang.Object" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="dailyService" parent="baseService">
+		<property name="target">
+			<bean class="smtcl.mocs.services.report.impl.DailyServiceImpl">
+				<property name="dao">
+					<bean parent="genericDao">
+						<property name="target">
+							<bean parent="abstractDaoTarget">
+								<constructor-arg
+									value="java.lang.Object" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
 	<!-- 库存物料查询 -->
 		<bean id="materielManageService" parent="baseService">
 		<property name="target">
@@ -545,6 +579,7 @@
 			</bean>
 		</property>
 	</bean>
+	
 	<!-- 定时器配置start -->
 	 <!--  
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  

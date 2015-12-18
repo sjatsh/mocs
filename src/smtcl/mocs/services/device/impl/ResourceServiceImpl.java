@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,20 +28,17 @@ import smtcl.mocs.beans.storage.OrganizeMaterielUpdateBean;
 import smtcl.mocs.model.CuttertypeModel;
 import smtcl.mocs.model.TFixtureModel;
 import smtcl.mocs.pojos.device.TFixtureClassInfo;
-import smtcl.mocs.pojos.device.TUserFixture;
 import smtcl.mocs.pojos.device.TUserResource;
 import smtcl.mocs.pojos.job.TCutterClassInfo;
 import smtcl.mocs.pojos.job.TCuttertypeInfo;
 import smtcl.mocs.pojos.job.TFixtureTypeInfo;
 import smtcl.mocs.pojos.job.TMaterailTypeInfo;
 import smtcl.mocs.pojos.job.TMaterialClass;
-import smtcl.mocs.pojos.job.TPartClassInfo;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
-import smtcl.mocs.pojos.job.TProgramInfo;
 import smtcl.mocs.pojos.job.TProcessInfo;
+import smtcl.mocs.pojos.job.TProgramInfo;
 import smtcl.mocs.pojos.job.TProgramMappingInfo;
 import smtcl.mocs.pojos.job.TProgramdownloadInfo;
-
 import smtcl.mocs.pojos.storage.TMaterialExtendOrder;
 import smtcl.mocs.pojos.storage.TMaterialExtendPlan;
 import smtcl.mocs.pojos.storage.TMaterialExtendStorage;
@@ -56,8 +54,8 @@ import smtcl.mocs.utils.device.StringUtils;
  * 
  * @作者：LiuChuanzhen
  * @创建时间：2012-11-13 下午13:00:25
- * @修改者：JiangFeng
- * @修改日期：
+ * @修改者：JiangFeng sunjun
+ * @修改日期：2015年12月18日13:26:43
  * @修改说明：
  * @版本：V1.0
  */
@@ -391,12 +389,13 @@ public class ResourceServiceImpl extends
 		return tmclist;
 	}
 
-	public List<Map<String,Object>> getTMaterialClassByAll(){
+	public List<Map<String,Object>> getTMaterialClassByAll(String nodeid){
 		String hql="select new Map("
 				+ " a.MClassid as id,"
 				+ " a.MClassname as name)"
 				+ " from TMaterialClass a"
-				+ " where MStatus=0";
+				+ " where a.MStatus=0 "
+				+ "and a.nodeId='"+nodeid+"'";
 		return dao.executeQuery(hql);
 	}
 
@@ -490,16 +489,22 @@ public class ResourceServiceImpl extends
 	 */
 	public List<TMaterailTypeInfo> getTMaterailTypeInfoByPid(String pid,
 			String nodeid, String search) {
+		
 		Collection<Parameter> parameters = new HashSet<Parameter>();
-		String hql = "from TMaterailTypeInfo " + " where status=0"
-				+ " and nodeId='" + nodeid + "'";
-		if (null != pid && !pid.equals("")) {
-			hql = hql + "and PId=" + pid;
+		String hql = "from TMaterailTypeInfo where "
+				+ " nodeId='" + nodeid + "' ";
+		if(!pid.equals("-999")){
+			
+			if (null != search && !search.equals("")) {
+				hql = hql + " and (name like '%" + search + "%' or no like '%"
+						+ search + "%' or typeno like '%" + search + "%') ";
+			}
+			if (null != pid && !pid.equals("")) {
+				hql = hql + " and PId='" + pid+"' ";
+				
+			}
 		}
-		if (null != search && !search.equals("")) {
-			hql = hql + "and (name like '%" + search + "%' or no like '%"
-					+ search + "%' or typeno like '%" + search + "%')";
-		}
+		hql+=" order by no asc";
 		List<TMaterailTypeInfo> tmclist = dao.executeQuery(hql, parameters);
 		return tmclist;
 	}
@@ -534,7 +539,7 @@ public class ResourceServiceImpl extends
 				+ " end as className ,"
 				+ " a.PId as pid,"
 				+ " b.MClassname as MClassname)"
-				+ " from TMaterailTypeInfo a ,TMaterialClass b"
+				+ " from TMaterailTypeInfo a ,TMaterialClass b  "
 				+ " where a.PId=b.MClassid "
 				+ " and a.nodeId='"+nodeid+"' ";
 		
@@ -573,7 +578,7 @@ public class ResourceServiceImpl extends
 			hql+=" and DATE_FORMAT(a.createTime,'%Y-%m-%d %T')<='"+StringUtils.formatDate(endTime, 2)+"'";
 		}
 		
-		hql+=" order by a.id desc";
+		hql+=" order by a.id asc";
 		List<Map<String,Object>> tmclist=dao.executeQuery(hql);
 		return tmclist;
 	}
@@ -643,8 +648,13 @@ public class ResourceServiceImpl extends
 		}
 	}
 
+	/**
+	 * 删除物料信息
+	 */
 	public void deleteTMaterailTypeInfo(TMaterailTypeInfo tmti) {
-		commonService.update(tmti);
+		
+		String hql="delete from TMaterailTypeInfo tti where tti.id='"+tmti.getId()+"'";
+		dao.executeUpdate(hql);
 	}
 
 	/**
@@ -1892,5 +1902,50 @@ public class ResourceServiceImpl extends
 		String hql = " SELECT tn.P_NODEID FROM T_EquipmentAddInfo te,T_Nodes tn "
 				+ " WHERE te.nodeID = tn.nodeID AND te.equ_SerialNo = '"+equSerialNo+"'";
 		return dao.executeNativeQuery(hql);
+	}
+	
+	/**
+	 * add by yangnenghui
+	 * 通过jobDispatchNo(工单编号)查询对应的相关数据
+	 * maxCutNo		刀具切削次数上限(根据jobDispatchNo从t_jobdispatchlist_info表中查询)
+	 * maxCutTime	刀具切削时间上限(暂无，写死50)
+	 * toolNo		刀具号(暂无,写死1-9)
+	 * value1		预留变量1(空值)
+	 * value2		预留变量2(空值)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> getToolData(String jobDispatchNo) {
+		
+			if(!jobDispatchNo.equals("")){
+				
+				String hql = "select tji.maxiumcut as maxiumcut from t_jobdispatchlist_info tji where tji.no = '"+jobDispatchNo+"'";
+				List<Map<String, Object>> maxCutNo = dao.executeNativeQuery(hql);
+				List<Map<String, Object>> resultlist = new ArrayList<Map<String, Object>>();
+				Object objMaxCutNo = maxCutNo.get(0).get("maxiumcut");
+				if(objMaxCutNo == null){
+					objMaxCutNo = "";
+				}
+				
+				for(int i = 1;i < 10;i++){
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("maxCutNo", objMaxCutNo);
+					map.put("maxCutTime", "50");
+					map.put("toolNo", i);
+					map.put("value1", "");
+					map.put("value2", "");
+					resultlist.add(map);
+				}
+				return resultlist;
+			}else{
+				return null;
+			}
+	}
+
+	@Override
+	public TMaterailTypeInfo getTMaterialTypeInfoById(Long id) {
+		
+		String hql="from TMaterailTypeInfo where id="+id;
+		return (TMaterailTypeInfo)dao.executeQuery(hql).get(0);
 	}
 }

@@ -94,6 +94,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
                 +" jobdispatch.processNum as planNum," 
 			    +" jobdispatch.goodQuantity as goodQuantity,"
 				+" jobdispatch.finishNum as finishNum,"
+				+" jobdispatch.maxiumcut as maxiumcut,"//刀具切削次数上限
 			    +" jobdispatch.taskNum as taskNum)"
 				+" FROM TJobdispatchlistInfo jobdispatch,TEquipmentInfo equ,TEquJobDispatch tjob,"
 				+ "TPartTypeInfo part,TProcessInfo process, TProcessplanInfo plan"
@@ -150,6 +151,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("partName", tt.get("partName"));//零件名称
 					mm.put("equSerialNo", tt.get("equSerialNo"));//设备序列号
 					mm.put("batchNo", tt.get("batchNo"));//工单编号
+					mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 			    //上线  加工	
 				}else if("40".equals(status)||"50".equals(status)){
 					mm.put("Id",tt.get("Id"));
@@ -170,6 +172,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("partName", tt.get("partName"));//零件名称
 					mm.put("equSerialNo", tt.get("equSerialNo"));//设备序列号
 					mm.put("batchNo", tt.get("batchNo"));//工单编号
+					mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 				}
 				//暂停/恢复
 				else if("80".equals(status))
@@ -192,6 +195,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 						mm.put("partName", tt.get("partName"));//零件名称
 						mm.put("equSerialNo", tt.get("equSerialNo"));//设备序列号
 						mm.put("batchNo", tt.get("batchNo"));//工单编号
+						mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 					 }else if("40".equals(tt.get("oldStatus").toString()) || "50".equals(tt.get("oldStatus").toString())){
 						 mm.put("Id",tt.get("Id"));
 						 mm.put("Name",name);
@@ -211,6 +215,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 						 mm.put("partName", tt.get("partName"));//零件名称
 						 mm.put("equSerialNo", tt.get("equSerialNo"));//设备序列号
 						 mm.put("batchNo", tt.get("batchNo"));//工单编号
+						 mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 					 }
 				}
 				//结束  完工
@@ -230,6 +235,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("partName", tt.get("partName"));//零件名称
 					mm.put("equSerialNo", tt.get("equSerialNo"));//设备序列号
 					mm.put("batchNo", tt.get("batchNo"));//工单编号
+					mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 				}
 				result.add(mm);
 			}
@@ -256,6 +262,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
                 +" jobdispatch.processNum as planNum,"
 			    +" jobdispatch.goodQuantity as goodQuantity,"
                 +" jobdispatch.TEquipmenttypeInfo.equipmentType as EquType,"
+			    +" jobdispatch.maxiumcut as maxiumcut "//刀具切削次数上限
 				+" jobdispatch.finishNum as finishNum) "
 				+" FROM TJobdispatchlistInfo jobdispatch"
 				+" WHERE jobdispatch.id="+Long.valueOf(jobplanId)
@@ -281,6 +288,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("rId",tt.get("ResourceId"));
 					mm.put("equName",tt.get("EquType"));
 					mm.put("goodQuantity",tt.get("goodQuantity"));
+					mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 			    //上线  加工	
 				}else if("40".equals(tt.get("Status").toString())||"50".equals(tt.get("Status").toString())){
 					mm.put("Id",tt.get("Id"));
@@ -299,6 +307,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("rId",tt.get("ResourceId"));
 					mm.put("equName",tt.get("EquType"));
 					mm.put("goodQuantity",tt.get("goodQuantity"));
+					mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 				//结束  完工
 				}else{
 					mm.put("Id",tt.get("Id"));
@@ -315,6 +324,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 					mm.put("rId",tt.get("ResourceId"));
 					mm.put("equName",tt.get("EquType"));
 					mm.put("goodQuantity",tt.get("goodQuantity"));
+					mm.put("maxiumcut", tt.get("maxiumcut"));//刀具切削次数上限
 				}
 				result.add(mm);
 			}
@@ -395,6 +405,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return dao.executeQuery(hql);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getJobInfoMap(String nodeId)
 	{
@@ -549,7 +560,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单暂停
      */
-    public Boolean setStatusToOldstatus(String dispatchId, String status, String flag) {
+    @Override
+	public Boolean setStatusToOldstatus(String dispatchId, String status, String flag) {
         try {
             if ("0".equals(flag)) {
                 String hql1 = "update t_jobdispatchlist_info t set t.oldStatus = t.status where t.id=" + Long.valueOf(dispatchId);
@@ -573,7 +585,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单恢复
      */
-    public Boolean updateJobdispatchWhenRecover(String dispatchId, String status, String flag) {
+    @Override
+	public Boolean updateJobdispatchWhenRecover(String dispatchId, String status, String flag) {
         try {
             String hql1 = "";
             if ("0".equals(flag)) {
@@ -594,7 +607,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单新建 --通过零件名称得到工艺方案ID得到工序清单
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getProcessByProcessPlanId(String nodeid, String processPlanId) {
         String hql = "SELECT NEW MAP("
                 + " c.id as id,"            //工序ID ===>
@@ -618,7 +632,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单新建 -- 通过设备类型ID得到设备类型名称
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public String getPartTypeNameById(String eduTypeId) {
         String hql = "SELECT NEW MAP("
                 + " t.id as id,"
@@ -637,7 +652,8 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
     /**
      * 工单新建 -- 工单保存 --工序直接生成的工单
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public void saveDispatch(JobdispatchAddBean jobdispatchAddBean) {
         List<Map<String, Object>> jobdispatchlist = jobdispatchAddBean.getJobdispatchlist();
         for (Map<String, Object> gg : jobdispatchlist) {
@@ -647,6 +663,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
             tjp.setBatchNo((String) gg.get("batchNo"));
             tjp.setTaskNum((String) gg.get("taskNum"));
             tjp.setProcessNum(Integer.parseInt((String) gg.get("num")));
+            tjp.setMaxiumcut((String) gg.get("maxiumcut"));//刀具切削次数上限
 			TProcessInfo tProcessInfo=null;    //工序
             if (!StringUtils.isEmpty(gg.get("id").toString())) {
                 tProcessInfo = dao.get(TProcessInfo.class, Long.valueOf(gg.get("id").toString()));
@@ -733,6 +750,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单新建-- 获取零件类型集合
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPartTypeMap(String nodeid){
 		String hql = "SELECT NEW MAP(" 
@@ -747,6 +765,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单新建 -- 设备类型 -- 设备类型集合
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getEquTypeMap(String processId){
 		String hql = "SELECT NEW MAP(" 
@@ -763,6 +782,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单修改 --通过工单ID获取工单信息
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String,Object> getJobDispatchById(String nodeid,String disPatchId){
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -772,6 +792,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		        +" j.processNum as processNum,"               //工单数量
 		        +" j.status as status,"
 		        +" j.TEquipmenttypeInfo.id as id,"             //设备类型 
+		        +" j.maxiumcut as maxiumcut,"					//刀具切削次数上限
 		        +" part.name as partName,"//零件名称
 				+" DATE_FORMAT(j.planStarttime,'%Y-%m-%d %T') AS planStarttime," //开始时间
 				+" DATE_FORMAT(j.planEndtime,'%Y-%m-%d %T') AS planEndtime,"  //结束时间         
@@ -794,11 +815,13 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单修改  --查询名称是否重复
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public boolean getDispatchNameRepeat(String dispatchName){
 	      String hql = "SELECT NEW MAP(" 
 			        +" j.name as name,"                           //工单名称
-			        +" j.processNum as processNum"               //工单数量
+			        +" j.processNum as processNum,"               //工单数量
+			        +" j.maxiumcut as maxiumcut"					//刀具切削次数上限
 					+")"
 					+" FROM TJobdispatchlistInfo j    "
 			        +" WHERE j.name = '"+dispatchName+"'  ";	
@@ -813,6 +836,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单修改  --修改
 	 */
+	@Override
 	public void updataJobdispatchlist(JobdispatchUpdataBean jobdispatchUpdataBean){
 		TJobdispatchlistInfo tjp = null;
 		if(!StringUtils.isEmpty(jobdispatchUpdataBean.getJobdispatchlistId())){
@@ -821,6 +845,10 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		tjp.setName(jobdispatchUpdataBean.getJobdispatchlistName());
 		if(jobdispatchUpdataBean.getJobdispatchlistNum()!=null){
 			tjp.setProcessNum(Integer.parseInt(jobdispatchUpdataBean.getJobdispatchlistNum()));
+		}
+		//刀具切削次数上限
+		if(jobdispatchUpdataBean.getMaxiumcut()!=null){
+			tjp.setMaxiumcut(jobdispatchUpdataBean.getMaxiumcut());
 		}
 		TEquipmenttypeInfo tEquipmenttypeInfo=null; //设备类型ID
 		if(!StringUtils.isEmpty(jobdispatchUpdataBean.getEquipmentTypeId())){
@@ -841,6 +869,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 工单修改 -- 设备类型 -- 设备类型集合
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getEquTypeMapByDisPatchId(String dispacthId){
 		String hql = "SELECT NEW MAP(" 
@@ -1039,6 +1068,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 通过工单名称查询工单信息
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<TJobdispatchlistInfo> getJobDispatchInfo(String id){
 		String hql = "from TJobdispatchlistInfo t where t.id="+id;
@@ -1048,6 +1078,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 更改工单状态
 	 */
+	@Override
 	public boolean updateDispatch(String jobid,int status){
 		List<TJobdispatchlistInfo> list = this.getJobDispatchInfo(jobid);
 		for(TJobdispatchlistInfo t : list){
@@ -1075,6 +1106,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 	/**
 	 * 获取报表数据
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getJobDispatchReportData(String nodeid,
 			String descParam, String startTime, String endTime,
@@ -1088,6 +1120,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 				+ " (dispatch.onlineNumber-dispatch.finishNum) as workInNum,"
 				+ " dispatch.processNum as processNum,"
 				+ " dispatch.onlineNumber as onlineNumber,"
+				+ " dispatch.maxiumcut as maxiumcut,"//刀具切削次数上限
 				+ " (case when (process.offlineProcess = 1 and process.onlineProcessId is null) then '1' when process.offlineProcess = 1 then '2' when process.onlineProcessId is null then '3' else '4' end) as flag)"
 				+ " from TPartTypeInfo part,"
 				+ " TJobdispatchlistInfo dispatch,"
@@ -1133,6 +1166,7 @@ public class JobDispatchServiceImpl extends GenericServiceSpringImpl<TJobdispatc
 		return dao.executeQuery(hql);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getDevicesInfo(String nodeId){
 		String hql = "SELECT DISTINCT NEW MAP(equ.equId AS Id," 

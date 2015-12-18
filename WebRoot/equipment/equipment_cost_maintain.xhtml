@@ -36,7 +36,7 @@
    
 </div>
 <div class="table-p-bg"></div>
-<p:dataTable id="carList" var="record" value="#{EquipmentCost.mediumEquipmentCostInfoModel}" paginator="true" rows="10"   paginatorPosition="bottom"
+<p:dataTable id="carList" var="record" value="#{EquipmentCost.mediumEquipmentCostInfoModel}" paginator="true" rows="19"   paginatorPosition="bottom"
    editable="true"  selection="#{EquipmentCost.selectedEquipment}" styleClass="table-p">  
        <p:ajax event="rowEdit" listener="#{EquipmentCost.onEdit}" update=":myform:carList :myform:messages" />
        <p:ajax event="rowEditCancel" listener="#{EquipmentCost.onCancel}" update=":myform:carList" />

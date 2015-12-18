@@ -125,7 +125,7 @@ public class OrganizeMaterielAddBean {
 		tmv.setVersionNo("0");
 		baseUnitList=resourceService.getUnitInfo("1");//基准单位
 		typelist=Constants.MATERIELTYPE;//物料类型
-		classList=resourceService.getTMaterialClassByAll();//物料类别
+		classList=resourceService.getTMaterialClassByAll(nodeid);//物料类别
 		buyerList=resourceService.getBuyerList();//人员列表
 		
 		return nodeid;

@@ -9,6 +9,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <link rel="stylesheet" href="../css/admin/equipment_accounting_maintain.css" type="text/css"></link>
 <div class="toolbar" id="equipment_type_center_right_top">
+	<h:inputText value="#{EquipmentAccounting.tree}" style="display:none;"/>
 	<p:commandLink value="导出" oncomplete="onOutput()" styleClass="iconBtn-toolbar iconBtn-search" />
 	<h:commandButton id="output" value="导出" action="#{EquipmentAccounting.downloadExcel}" style="display: none;" />
 	<div class="split-toolbar"></div>
@@ -50,7 +51,7 @@
 	</div>
 	<div class="toolconten-right">
 		<div class="table-p-bg"></div>
-		<p:dataTable id="carList" var="record" value="#{EquipmentAccounting.mediumEquipmentInfoModel}" paginator="true" rows="10"   
+		<p:dataTable id="carList" var="record" value="#{EquipmentAccounting.mediumEquipmentInfoModel}" paginator="true" rows="19"   
 		paginatorPosition="bottom" editable="true" selection="#{EquipmentAccounting.selectedEquipment}" styleClass="table-p" style="width: 2000px;">   
         <p:ajax event="rowEdit" listener="#{EquipmentAccounting.onEdit}" update=":myform:carList :myform:messages" />
         <p:ajax event="rowEditCancel" listener="#{EquipmentAccounting.onCancel}" update=":myform:carList" />

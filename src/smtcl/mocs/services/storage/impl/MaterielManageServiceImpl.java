@@ -27,7 +27,7 @@ public class MaterielManageServiceImpl extends GenericServiceSpringImpl<Object, 
 				   + " from "
 						+ " t_materail_type_info materailType,"
 						+ " t_material_storage materialStorage"
-				   + " where materailType.ID = materialStorage.material_id";		
+				   + " where materailType.ID = materialStorage.material_id ";		
 		if(!StringUtils.isEmpty(nodeid)){
 			sql += " and materailType.nodeID='"+nodeid+"'";
 		}
@@ -49,7 +49,8 @@ public class MaterielManageServiceImpl extends GenericServiceSpringImpl<Object, 
 		if(!StringUtils.isEmpty(status)){
 			sql += " and materailType.status="+Integer.parseInt(status);
 		}
-		sql += " GROUP BY materailType.NO,materailType.NAME";
+		sql += " GROUP BY materailType.NO,materailType.NAME "
+				+ "order by materailType.no asc";
 		List<Map<String,Object>> listMap = dao.executeNativeQuery(sql);
 		for(int i=0;i<listMap.size();i++){
 			Map<String,Object> map = listMap.get(i);
@@ -100,7 +101,8 @@ public class MaterielManageServiceImpl extends GenericServiceSpringImpl<Object, 
 		if(!StringUtils.isEmpty(status)){
 			sql += " and materailType.status="+Integer.parseInt(status);
 		}
-		sql += " GROUP BY materailType. NO,materailType. NAME,storageInfo.storage_no,position.positionNo";
+		sql += " GROUP BY materailType. NO,materailType. NAME,storageInfo.storage_no,position.positionNo "
+				+ "order by materailType.no asc";
 		List<Map<String,Object>> listMap = dao.executeNativeQuery(sql);
 		for(int i=0;i<listMap.size();i++){
 			Map<String,Object> map = listMap.get(i);
@@ -160,7 +162,8 @@ public class MaterielManageServiceImpl extends GenericServiceSpringImpl<Object, 
 			sql += " and materailType.id in ("+materielDesc_id+")";
 		}
 		
-		sql += "GROUP BY materialStorage.batchNo,materailType. NO,materailType. NAME";
+		sql += "GROUP BY materialStorage.batchNo,materailType. NO,materailType. NAME "
+				+ "order by materailType.no";
 		List<Map<String,Object>> listMap = dao.executeNativeQuery(sql);
 		for(int i=0;i<listMap.size();i++){
 			Map<String,Object> map = listMap.get(i);
@@ -212,6 +215,7 @@ public class MaterielManageServiceImpl extends GenericServiceSpringImpl<Object, 
 		if(!StringUtils.isEmpty(materielDesc_id)){
 			sql += " and materailType.id in ("+materielDesc_id+")";
 		}
+		sql+=" order by materailType.no asc";
 		List<Map<String,Object>> listMap = dao.executeNativeQuery(sql);
 		for(int i=0;i<listMap.size();i++){
 			Map<String,Object> map = listMap.get(i);
@@ -244,7 +248,7 @@ public class MaterielManageServiceImpl extends GenericServiceSpringImpl<Object, 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TMaterailTypeInfo> getMaterailTypeInfo(String nodeid) {
-		String hql = " from TMaterailTypeInfo materail where materail.nodeId='"+nodeid+"'";
+		String hql = " from TMaterailTypeInfo materail where materail.nodeId='"+nodeid+"' order by materail.no asc";
 		return dao.executeQuery(hql);
 	}
 
@@ -301,6 +305,7 @@ public class MaterielManageServiceImpl extends GenericServiceSpringImpl<Object, 
 		}else{
 			hql += " and materail.name like '%"+materialValue+"%'";
 		}
+		hql+=" order by materail.no asc";
 		return dao.executeQuery(hql);
 	}
 

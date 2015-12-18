@@ -13,7 +13,7 @@
 	     <input type="hidden" id="txt_placeholder" data-i18n="[value]page1.top.input1" value=""></input>
 	     
 	     <h:inputText id="txt" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');" 
-	     	value="#{MemberManagementBean.searchType}"/>
+	     	value="#{MemberManagementBean.searchType}" update=":myform:tb"/>
    		 <p:commandLink id="btn1" style="" value="page1.top.btn1"  styleClass="iconBtn-toolbar iconBtn-search" 
    		 	action="#{MemberManagementBean.searchList}" update=":myform:tb" oncomplete="transElementId('myform:tb')">
    		 </p:commandLink>

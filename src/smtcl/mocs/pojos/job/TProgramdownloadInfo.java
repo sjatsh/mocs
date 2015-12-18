@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * TProgramdownloadInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "t_programdownload_info", catalog = "a3info")
+@Table(name = "t_programdownload_info")
 public class TProgramdownloadInfo implements java.io.Serializable {
 
 	// Fields

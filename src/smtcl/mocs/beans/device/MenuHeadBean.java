@@ -3,7 +3,6 @@ package smtcl.mocs.beans.device;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +106,11 @@ public class MenuHeadBean implements Serializable {
 	 */
 	private IAuthorizeService authorizeService = (IAuthorizeService) ServiceFactory.getBean("authorizeService");
 	private String userName;
+	/**
+	 * @修改 孙军
+	 * @日期 2015年12月10日
+	 */
+	private TUser tUser;
 
 	public String getUrlPath() {
 		System.out.println(urlPath);
@@ -320,13 +324,14 @@ public class MenuHeadBean implements Serializable {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public MenuHeadBean() {		
-		TUser tUser = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
+		
+		tUser = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);
 		userName=tUser.getLoginName();
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 //		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		
-		menuList = (List<Module>) authorizeService.getMenu(tUser.getUserId(),
+		menuList = authorizeService.getMenu(tUser.getUserId(),
 				Constants.APPLICATION_ID,
 				IWebControl.LOCALE_KEY);
 		clickMenuList("工厂建模");	
@@ -346,7 +351,7 @@ public class MenuHeadBean implements Serializable {
 		List nodeidlist=new ArrayList();//验证默认节点
 		List<smtcl.mocs.beans.authority.cache.TreeNode> list = authorizeService.getAuthorizedNodeTree(tUser.getUserId(), pageId);
 		if (null != list & list.size() > 0) {
-			smtcl.mocs.beans.authority.cache.TreeNode tnodes = (smtcl.mocs.beans.authority.cache.TreeNode) list.get(0);
+			smtcl.mocs.beans.authority.cache.TreeNode tnodes = list.get(0);
 			nodeidlist=this.getNodesAllId(tnodes, nodeidlist); 
 		}
 		Collection<Parameter> parameters = new HashSet<Parameter>();//设置默认节点
@@ -386,6 +391,7 @@ public class MenuHeadBean implements Serializable {
 	}
 
 	public String getOnNodeSelect() {
+		
 		return onNodeSelect;
 	}
 
@@ -457,7 +463,14 @@ public class MenuHeadBean implements Serializable {
 		this.position = position;
 	}
 
+	/**
+	 * @修改 孙军
+	 * @日期 2015年12月10日
+	 * @return
+	 */
 	public TreeNode getRoot() {
+		
+		root = organizationService.returnTree(tUser.getUserId() , pageId );
 		return root;
 	}
 

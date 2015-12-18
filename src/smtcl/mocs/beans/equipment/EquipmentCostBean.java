@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.mina.util.CopyOnWriteMap;
 import org.dreamwork.persistence.ServiceFactory;
 import org.primefaces.event.RowEditEvent;
 
@@ -53,7 +54,7 @@ public class EquipmentCostBean implements Serializable {
 	/**
 	 * 车间集合
 	 */
-	private Map<String, Object> roomMap = new HashMap<String, Object>();
+	private Map<String, Object> roomMap = new CopyOnWriteMap<String, Object>();
 	/**
 	 * 设备类型ID
 	 */
@@ -61,7 +62,7 @@ public class EquipmentCostBean implements Serializable {
 	/**
 	 * 设备类型集合
 	 */
-	private Map<String, Object> equTypeMap = new HashMap<String, Object>();
+	private Map<String, Object> equTypeMap = new CopyOnWriteMap<String, Object>();
 	/**
 	 * 设备ID
 	 */
@@ -69,7 +70,7 @@ public class EquipmentCostBean implements Serializable {
 	/**
 	 * 设备集合
 	 */
-	private Map<String, Object> equMap = new HashMap<String, Object>();
+	private Map<String, Object> equMap = new CopyOnWriteMap<String, Object>();
 	/**
 	 * 设备编码
 	 */
@@ -77,11 +78,11 @@ public class EquipmentCostBean implements Serializable {
 	/**
 	 * 设备Id集合为添加
 	 */
-	private Map<String, Object> equIdMap = new HashMap<String, Object>();
+	private Map<String, Object> equIdMap = new CopyOnWriteMap<String, Object>();
 	/**
 	 * 设备编码集合
 	 */
-	private Map<String, Object> codeMap = new HashMap<String, Object>();
+	private Map<String, Object> codeMap = new CopyOnWriteMap<String, Object>();
 	/**
 	 * 设备成本设定的显示MAP
 	 */

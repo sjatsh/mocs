@@ -618,20 +618,23 @@ public class WSBZServiceImpl extends GenericServiceSpringImpl<TNodes, String> im
 			String hql="from TUserEquOeestore where equSerialNo='"+equSerialNo+"' ";
 			boolean bb=true;
 			if(month.equals("0")&&weekofYear.equals("0")){
-				hql=hql+" and year>='"+year+"' "
-					   +" and month=0 " + " and weekofYear=0 order by year";
+//				hql=hql+" and year>='"+year+"' "
+//					   +" and month=0 " + " and weekofYear=0 order by year";
+				hql += "and month=0 and weekofyear=0 and year = " + year;
 			}else if(weekofYear.equals("0")){
-				hql=hql+" and concat(year,case when length(month)<2 then concat('0',month) "+
-                        "   when  length(month)>1 then concat('',month) end) "+
-						"<='"+(year+(month.length()>1?month:("0"+month)))+"' "+
-						" and weekofYear=0 "+
-						" order by year,month";
+//				hql=hql+" and concat(year,case when length(month)<2 then concat('0',month) "+
+//                        "   when  length(month)>1 then concat('',month) end) "+
+//						"<='"+(year+(month.length()>1?month:("0"+month)))+"' "+
+//						" and weekofYear=0 "+
+//						" order by year,month";
+				hql += "and weekofyear=0 and year = " + year + " and month = " + month;
 			}else if(month.equals("0")){
-				hql=hql	+" and concat(year,case when length(weekofYear)<2 then concat('0',weekofYear) "+
-                        "   when  length(weekofYear)>1 then concat('',weekofYear) end) "+
-						" ='"+(year+(weekofYear.length()>1?weekofYear:("0"+weekofYear)))+"' "+
-						" and month=0"+
-						" order by year,weekofYear";
+//				hql=hql	+" and concat(year,case when length(weekofYear)<2 then concat('0',weekofYear) "+
+//                        "   when  length(weekofYear)>1 then concat('',weekofYear) end) "+
+//						" ='"+(year+(weekofYear.length()>1?weekofYear:("0"+weekofYear)))+"' "+
+//						" and month=0"+
+//						" order by year,weekofYear";
+				hql += "and month=0 and year = " + year + " and weekofyear = " + weekofYear;
 			}else{
 				bb=false;
 			}

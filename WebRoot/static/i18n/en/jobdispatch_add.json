@@ -25,7 +25,7 @@
 		"qx1":"Cancel",
 		"msg":"Please select a part!",
 		"msg1":"The quantity cannot be empty!",
-		"msg2":"Batch No. cannot be empty!",
+		"msg2":"Batch Name. cannot be empty!",
 		"msg3":"Start time cannot be empty!",
 		"msg4":"The Finish time cannot be empty!",
 		"msg5":"The start time cannot be greater than the end time!",

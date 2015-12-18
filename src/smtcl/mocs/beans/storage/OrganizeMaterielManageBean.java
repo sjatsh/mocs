@@ -153,7 +153,7 @@ public class OrganizeMaterielManageBean {
 		//table数据
 		materiellist =resourceService.getTMaterailTypeInfo(pid, nodeid, type, no, desc, status, unit, startTime, endTime);
 		typelist=Constants.MATERIELTYPE;//物料类型
-		classList=resourceService.getTMaterialClassByAll();//物料类别
+		classList=resourceService.getTMaterialClassByAll(nodeid);//物料类别
 		unitList=resourceService.getUnitInfo(null);//物料单位
 		return type;
 	}

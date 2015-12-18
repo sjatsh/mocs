@@ -87,7 +87,7 @@
 	</div>
 	<div class="materail_class_rightDiv hidden">
 		<p:dataTable id="stable" value="#{organizeMaterielManageBean.materiellist}" 
-			  cellpadding="0"  cellspacing="0" rows="16"  paginator="true" paginatorPosition="bottom"
+			  cellpadding="0"  cellspacing="0" rows="15"  paginator="true" paginatorPosition="bottom"
 			style="width:100%;" border="0" var="materiel" styleClass="table">
 			<p:column headerText="物料编码">
 				<h:outputText value="#{materiel.no}"></h:outputText>
@@ -108,11 +108,10 @@
 				<h:outputText value="#{materiel.MClassname}"></h:outputText>
 			</p:column>
 			<p:column headerText="操作">
-				<h:commandLink value="" ></h:commandLink>
 				<h:outputLink value="">
 					<h:outputText value="[编辑]" />
 					<f:ajax listener="#{MenuHeadBean.onClick('bzzzwl',materiel.id)}" event="click" render=":myform:rightiframe" />
-			</h:outputLink>
+				</h:outputLink>
 			</p:column>
 		</p:dataTable>
 	</div>

@@ -23,21 +23,21 @@ public class MachineToolUpdateFreq implements Serializable{
 	public ConcurrentHashMap<String, ConcurrentLinkedDeque<MachineRequestInfo>> getTemp() {
 		return temp;
 	}
-//	private void init(){
-//		if(null == temp){
-//			temp= new ConcurrentHashMap<String, ConcurrentLinkedDeque<MachineRequestInfo>>();
-//		}else{
-//			temp.clear();
-//		}
-//		if(null == requestNumPreMinutes){
-//			requestNumPreMinutes =new AtomicLong(0L);
-//		}else{
-//			requestNumPreMinutes.set(0L);
-//		}
-//	}
-//	private void destory(){
-//		temp=null;
-//	}
+	private void init(){
+		if(null == temp){
+			temp= new ConcurrentHashMap<String, ConcurrentLinkedDeque<MachineRequestInfo>>();
+		}else{
+			temp.clear();
+		}
+		if(null == requestNumPreMinutes){
+			requestNumPreMinutes =new AtomicLong(0L);
+		}else{
+			requestNumPreMinutes.set(0L);
+		}
+	}
+	private void destory(){
+		temp=null;
+	}
 	
 	public boolean addElementFrom(String no){
 		boolean flag=true;

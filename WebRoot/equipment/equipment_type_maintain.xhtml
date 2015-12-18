@@ -18,10 +18,12 @@
 <input type="hidden" id="add_alert_msg_repaeat" data-i18n="[value]page1.add.alert_msg_repeat" value="" ></input>
 
 <div class="toolbar" id="equipment_type_center_right_top">
-   <p:commandLink id="add" value="新建" update=":myform:apart" onclick="addPartTypelog.show()"  styleClass="iconBtn-toolbar iconBtn-search" oncomplete="retranslate();"/>
+  <h:inputText id="txt" value="#{EquipmentType.search}" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" 
+		onblur="searchBlur('myform:txt');" style="display:none;"></h:inputText> 
+   <p:commandLink id="add" value="新建" update=":myform:apart :myform:messages" onclick="addPartTypelog.show()"  styleClass="iconBtn-toolbar iconBtn-search" oncomplete="retranslate();"/>
    <div class="split-toolbar"></div> 
-   <p:commandLink  value="删除" styleClass="iconBtn-toolbar iconBtn-search" action="#{EquipmentType.onSelected}" oncomplete="ondelete();" update=":myform:sed" /> 
-   <p:commandButton id="delete" value="del" update=":myform:carList :myform:displayMulti :myform:tree"  action="#{EquipmentType.onDelete}" style="display:none;"/>
+   <p:commandLink  value="删除" styleClass="iconBtn-toolbar iconBtn-search" action="#{EquipmentType.onSelected}" oncomplete="ondelete();" update=":myform:sed " /> 
+   <p:commandButton id="delete" value="del" update=":myform:carList :myform:displayMulti :myform:tree :myform:messages"  action="#{EquipmentType.onDelete}" style="display:none;"/>
    <div class="split-toolbar"></div>
    <p:commandLink value="导出" onclick="onOutput()" styleClass="iconBtn-toolbar iconBtn-search" />
    <h:commandButton id="output" value="output" action="#{EquipmentType.downloadExcel}" style="display: none;"></h:commandButton>
@@ -40,7 +42,7 @@
 	</div>
 	<div class="toolconten-right">
 		<div class="table-p-bg"></div>
-		<p:dataTable id="carList" var="record" value="#{EquipmentType.mediumEquipmentTypeInfoModel}" paginator="true" rows="10" 
+		<p:dataTable id="carList" var="record" value="#{EquipmentType.mediumEquipmentTypeInfoModel}" paginator="true" rows="19" 
 	 		paginatorPosition="bottom" editable="true" styleClass="table-p" selection="#{EquipmentType.selectedEquipment}">  
 	        <p:ajax event="rowEdit" listener="#{EquipmentType.onEdit}" update=":myform:carList :myform:messages" />
 	        <p:ajax event="rowEditCancel" listener="#{EquipmentType.onCancel}" update=":myform:carList" />
@@ -186,7 +188,7 @@
       			<td colspan="2">
       				<h:selectOneMenu id="addequId"  
 						value="#{EquipmentType.pid}" >
-						<f:selectItem itemLabel="page1.btn.pls_select" itemValue=""></f:selectItem>
+						<!-- <f:selectItem itemLabel="page1.btn.pls_select" itemValue=""></f:selectItem> -->
 						<f:selectItems value="#{EquipmentType.equTypeMap}"></f:selectItems>
 					</h:selectOneMenu>	
       			</td>
@@ -213,7 +215,8 @@
 </p:dialog>
 <p:growl id="messages" showDetail="true"/> 
 <h:inputHidden value="#{EquipmentType.selected}" id="sed"></h:inputHidden>
-       <script type="text/javascript">
+<h:commandButton id="removeSelected" action="#{EquipmentType.removeSelected}" style="display=none;"/>
+<script type="text/javascript">
 	//<![CDATA[
        function ondelete(){
     	   var temp=document.getElementById("myform:sed").value;
@@ -221,7 +224,9 @@
     		   if(temp == "nouse"){
     		      if(confirm($("#del_alert_msg").val())){
 	    		     document.getElementById("myform:delete").click();
+	    		     document.getElementById("myform:removeSelected").click();
 	    	      } 
+    		      document.getElementById("myform:removeSelected").click();
     		   }else{
     			   alert($("#del_alert_msg_not").val());
     		   }

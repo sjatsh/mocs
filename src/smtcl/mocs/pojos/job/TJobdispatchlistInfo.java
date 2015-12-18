@@ -2,10 +2,6 @@ package smtcl.mocs.pojos.job;
 // default package
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -62,6 +57,7 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 	private Integer erpScrapNum;//erp报废数量
 	private Integer wisScrapNum;//wis报废数量
 	private Integer dutyScrapNum;//责任报废数量
+	private String maxiumcut;//刀具切削次数上限
 	
 
 	private Integer oldStatus;//工单的上一个状态，用于恢复
@@ -85,7 +81,7 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 			Integer goodQuantity, Integer badQuantity, Integer isRelation,
 			Integer isBackRepository, Integer relationshipId, Integer status,
 			String creator, Date createDate, String remark,
-			Integer isAutoStart) {
+			Integer isAutoStart,String maxiumcut) {
 		this.id = id;
 		this.TEquipmentInfo = TEquipmentInfo;
 		this.TJobInfo = TJobInfo;
@@ -108,6 +104,7 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 		this.createDate = createDate;
 		this.remark = remark;
 		this.isAutoStart = isAutoStart;
+		this.maxiumcut = maxiumcut;
 	}
 
 	// Property accessors
@@ -414,4 +411,15 @@ public class TJobdispatchlistInfo implements java.io.Serializable {
 	public void setDutyScrapNum(Integer dutyScrapNum) {
 		this.dutyScrapNum = dutyScrapNum;
 	}
+	
+	@Column(name = "maxiumcut")
+	public String getMaxiumcut() {
+		return maxiumcut;
+	}
+
+	public void setMaxiumcut(String maxiumcut) {
+		this.maxiumcut = maxiumcut;
+	}
+	
+	
 }

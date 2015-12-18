@@ -104,6 +104,10 @@ public class JobdispatchUpdataBean implements Serializable {
 	 */
 	private String msg;
 	/**
+	 * 刀具切削次数上限
+	 */
+	private String maxiumcut;
+	/**
 	 * 构造函数 
 	 */
 	@SuppressWarnings("unchecked")
@@ -142,6 +146,10 @@ public class JobdispatchUpdataBean implements Serializable {
 			}
 			if(dismap.get("status")!=null){
 				jobStatus = dismap.get("status").toString();
+			}
+			//刀具切削次数上限
+			if(dismap.get("maxiumcut")!=null){
+				maxiumcut = dismap.get("maxiumcut").toString();
 			}
 			
 			try {
@@ -383,4 +391,13 @@ public class JobdispatchUpdataBean implements Serializable {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+
+	public String getMaxiumcut() {
+		return maxiumcut;
+	}
+
+	public void setMaxiumcut(String maxiumcut) {
+		this.maxiumcut = maxiumcut;
+	}
+	
 }

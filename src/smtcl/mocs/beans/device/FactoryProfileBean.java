@@ -4,6 +4,7 @@ package smtcl.mocs.beans.device;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -292,6 +293,7 @@ public class FactoryProfileBean implements Serializable{
 	 * @param nodeid
 	 */
 	public void refreshData(){
+		 System.out.println("----------------------------------定时刷新方法调用----------------------------------");
 		 if(null!=selectTNodesId){
 			 equipmentName="";
 	    	 xz="";
@@ -308,12 +310,14 @@ public class FactoryProfileBean implements Serializable{
 				 setDate(list);
 	    	 }
 		 }
+		System.out.println("----------------------------------定时刷新方法调用结束----------------------------------");
 	}
 	/**
 	 * 定时刷新调用方法
 	 * @param nodeid
 	 */
 	public void refreshDataTwo(){
+		 System.out.println("-----------------定时刷新方法调用-----------------");
 		 if(null!=selectTNodesId){
 	    	 ppcr=getpper(selectTNodesId);
 	    	 nodp=getDayNumber(selectTNodesId);
@@ -332,6 +336,7 @@ public class FactoryProfileBean implements Serializable{
 	public void getSeveralEquInformation(){
 		Date date=new Date();
 		String[] equ=sef.split(",");
+		System.out.println("-----------双击请求事件调用sef:"+sef+"----------------"+equ[0]);
 		List<Map<String,Object>> list=deviceService.getMachiningTask(equ[0]);
 		if(StringUtils.listIsNull(list)){
 			Map map=list.get(0);
@@ -365,7 +370,9 @@ public class FactoryProfileBean implements Serializable{
 		}else{
 			equInformation=equInformation+",0";
 		}
+			
 		
+       System.out.println("------------------------"+equInformation+"-----------------------");
 	}
 	/**
 	 * 根据节点id 获取当月计划完成率

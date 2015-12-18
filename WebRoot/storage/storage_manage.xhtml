@@ -20,7 +20,7 @@
 			styleClass="iconBtn-toolbar iconBtn-search"></p:commandLink>
 
 		<p:commandLink id="add" value="page1.top.btn2" update=":myform:astorage"
-			oncomplete="addInfo.show();translateReady();" styleClass="iconBtn-toolbar iconBtn-add"></p:commandLink>
+			actionListener="#{StorageManage.updateMember}" oncomplete="addInfo.show();translateReady();" styleClass="iconBtn-toolbar iconBtn-add"></p:commandLink>
 
 		<p:commandLink value="page1.top.btn3" styleClass="iconBtn-toolbar iconBtn-del"
 			update=":myform:sed" actionListener="#{StorageManage.onSelected}"

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import javax.faces.bean.ManagedBean;
@@ -38,55 +39,55 @@ public class MaterialInStorageBean implements Serializable {
 	/**
 	 * 物料集合List
 	 */
-	List<Map<String,Object>> materialList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> materialList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 库房信息
 	 */
-	List<Map<String,Object>> storageInfoList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> storageInfoList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 货位信息
 	 */
-	List<Map<String,Object>> positionInfoList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> positionInfoList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 物料入库信息
 	 */
-	List<Map<String,Object>> materialInStorageInfoList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> materialInStorageInfoList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 生产批次集合
 	 */
-	List<Map<String,Object>> productBatchList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> productBatchList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 生产序列集合
 	 */
-	List<Map<String,Object>> productSeqList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> productSeqList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 生产序列集合
 	 */
-	List<Map<String,Object>> tempProductSeqList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> tempProductSeqList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 设置序列
 	 */
-	List<Map<String,Object>> setSeqList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> setSeqList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 临时设置序列
 	 */
-	List<Map<String,Object>> tempSetSeqList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> tempSetSeqList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 临时设置序列
 	 */
-	List<Map<String,Object>> tempSetSeqList2 = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> tempSetSeqList2 = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 单位集合
 	 */
-	List<Map<String,Object>> unitList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> unitList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 既有物料序列（但未被使用）
 	 */
-	List<Map<String,Object>> materialSeqList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> materialSeqList = new CopyOnWriteArrayList<Map<String,Object>>();
 	/**
 	 * 物料版本集合
 	 */
-	List<Map<String,Object>> versionList = new ArrayList<Map<String,Object>>();
+	List<Map<String,Object>> versionList = new CopyOnWriteArrayList<Map<String,Object>>();
 	
 	/**
 	 * 节点

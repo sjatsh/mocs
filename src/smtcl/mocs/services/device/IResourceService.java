@@ -174,7 +174,7 @@ public interface IResourceService extends
 	 */
 	public List<TMaterialClass> getTMaterialClassByName(String search);
 
-	public List<Map<String,Object>> getTMaterialClassByAll();
+	public List<Map<String,Object>> getTMaterialClassByAll(String nodeid);
 	/**
 	 * 根据id查询物料类别
 	 * 
@@ -231,6 +231,13 @@ public interface IResourceService extends
 	 */
 	public List<Map<String,Object>> getTMaterailTypeInfo(String pid,String nodeid,String type,String no,String desc,
 			String status,String unit,Date startTime,Date endTime);
+	
+	/**
+	 * 根据物料id查询物料信息
+	 * @param id
+	 * @return
+	 */
+	public TMaterailTypeInfo getTMaterialTypeInfoById(Long id);
 	/**
 	 * 保存零件详细
 	 * 
@@ -576,5 +583,12 @@ public interface IResourceService extends
 	 */
 	public List<Map<String, Object>> getEquNodeId(String equSerialNo);
 	public List<Map<String, Object>> getEquNodeIdBySql(String equSerialNo);
+	
+	/**
+	 * 根据工单编号获取最大切削次数上限
+	 * @param jobDispatchNo
+	 * @return
+	 */
+	public List<Map<String,Object>> getToolData(String jobDispatchNo);
 
 }

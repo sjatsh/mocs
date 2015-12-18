@@ -24,12 +24,19 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.ibm.faces.util.StringUtil;
 
 import smtcl.mocs.beans.jobplan.JobPlanAddBean;
+import smtcl.mocs.beans.jobplan.JobPlanControlBean;
 import smtcl.mocs.beans.jobplan.JobPlanUpdataBean;
+import smtcl.mocs.beans.jobplan.JobdispatchlistAddBean;
+import smtcl.mocs.beans.jobplan.JobdispatchlistUpdataBean;
 import smtcl.mocs.dao.device.ICommonDao;
+import smtcl.mocs.pojos.device.TEquipmentInfo;
 import smtcl.mocs.pojos.device.TUser;
+import smtcl.mocs.pojos.job.TJobInfo;
+import smtcl.mocs.pojos.job.TJobdispatchlistInfo;
 import smtcl.mocs.pojos.job.TJobplanInfo;
 import smtcl.mocs.pojos.job.TJobplanTaskInfo;
 import smtcl.mocs.pojos.job.TPartTypeInfo;
+import smtcl.mocs.pojos.job.TProcessInfo;
 import smtcl.mocs.services.device.ICommonService;
 import smtcl.mocs.services.jobplan.IJobPlanService;
 import smtcl.mocs.utils.authority.SessionHelper;
@@ -550,8 +557,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 根据产品id，查询作业计划信息
 	 */
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	public Map<String, Object> findJobPlanDetail(String jobNo) {
 		String hql="select new MAP(jobPlan.id as jobPlanId,jobPlan.no as No," +
 				"jobPlan.name as jobPlanName," +
@@ -577,8 +583,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划详情默认取一条记录
 	 */
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	public Map<String, Object> findJobPlanDetailDefault() {
 		String hql="select new MAP(jobPlan.id as jobPlanId,jobPlan.no as No," +
 				"jobPlan.name as jobPlanName," +
@@ -625,7 +630,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	}
 
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	/**
 	 * 根据id，查询作业计划信息
@@ -640,7 +644,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return null;
 }
 	
-	@SuppressWarnings("unchecked")
 	public TJobplanInfo geTJobplanInfoById1(Long jobPlanId) {
 		//验证是否有工单关联，工单一旦启动，关联的作业计划和批次计划不允许删除
 		String sql=" select jobplan.id from t_jobplan_info jobplan,t_jobdispatchlist_info dispatch " +
@@ -680,7 +683,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 获取跳转到编辑页面的计划表和零件表的信息
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPlanAndPartList(String jobplabid){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"            //作业计划
@@ -718,7 +720,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划页面的生产计划下拉列表
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPlanAndForList(String nodeid){
 		String hql = "SELECT NEW MAP(" 
 		+" c.id as cid,"            //生产计划
@@ -751,7 +752,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		        return dao.executeNativeQuery(sql);
 			}
 
-	@SuppressWarnings("unchecked")
 	public List<String> getTJobplanInfoNo(String no){
 		List<String> lst1  = new ArrayList<String>();
 		Collection<Parameter> parameters = new HashSet<Parameter>();
@@ -778,7 +778,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 获取优先级
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPriority(){
 		String hql = "SELECT distinct NEW MAP(a.priority as displayfield)"
 				+" FROM TJobplanInfo a ";
@@ -904,14 +903,12 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return rs;
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<TJobplanTaskInfo> getTJobplanTaskInfoObject(String jopPlanId){
 		String hql=" from TJobplanTaskInfo a"
 				+ " where a.jobPlanId='"+jopPlanId+"'";
 		return  dao.executeQuery(hql);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPlanByName(String name){ 
 		
 		String hql = "SELECT NEW MAP(" 
@@ -923,7 +920,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeQuery(hql);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPartTypeByIdFor(String partTypeId){
 		
 		String hql = "SELECT NEW MAP(" 
@@ -943,7 +939,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划的最大ID，为作业计划拼装
 	 */
-	@SuppressWarnings("unchecked")
 	public String getMaxJobPlanId(){
 		String hql = "SELECT MAX(b.id) "
 				+" FROM TJobplanInfo b ";
@@ -1008,7 +1003,7 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				if(jpi.getPlanType()==2){
 					List<TJobplanTaskInfo> ttilist=getTJobplanTaskInfoObject(jpi.getId().toString());//根据作业id 获取作业分配任务对象
 					TUser user = (TUser) FaceContextUtil.getContext().getSessionMap().get(Constants.USER_SESSION_KEY);//获取用户
-					List<String> delList=new ArrayList<String>();
+					List delList=new ArrayList();
 					for(Map<String,Object> mm:jobPlanAddBean.getRealaddTask()){
 						if(!jobPlanAddBean.getAddTask().contains(mm)){
 							if(null!=mm.get("realId")){
@@ -1075,7 +1070,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 通过作业计划得到工序清单
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getProcessByJobPlanId(String jobplabid){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"            //作业计划
@@ -1100,7 +1094,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 控制页面--通过零件ID得到作业计划ID下拉
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobPlanMapByPart(String nodeid,String partId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"            //作业计划
@@ -1123,7 +1116,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 控制页面--通过零件ID得到工艺方案ID下拉
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getProcessPlanMapByPart(String nodeid,String partId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"            //作业计划
@@ -1151,7 +1143,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 通过作业计划ID，工艺方案ID，零件ID得到工序清单
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getProcessPlanById(String nodeid,String jobplanid,String processPlanId,String partId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"            //作业计划
@@ -1160,19 +1151,34 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 				+" DATE_FORMAT(a.planStarttime,'%Y-%m-%d %T') AS planStarttime,"   //yao
 				+" DATE_FORMAT(a.planEndtime,'%Y-%m-%d %T') as planEndtime, "      //yao
 				+" a.planNum as planNum,"                                          //yao
+//				+" c.processingTime as processingTime, "//buyao
+//				+" c.theoryWorktime as theoryWorktime, "//yao
 				+" a.priority as priority,"
 				+" a.TPartTypeInfo.id as partid,"    //零件ID
 				+" a.TPartTypeInfo.name as partname,"
+//				+" c.id as cid,"            //工序 ===>
+//				+" c.no as cno,"  
+//				+" c.name as cname,"
+//				+" c.theoryWorktime as theoryWorktime,"   //节拍时间
+//				+" c.processDuration as processDuration," //工序连续
+//				+" c.TEquipmenttypeInfo.equipmentType as equipmentType," //设备类型
+//				+" c.TProcessplanInfo.id as pid,"     //工艺方案ID
+//				+" c.TProcessplanInfo.name as pname,"  //工艺方案名称
 				+" b.id as bid "             //工艺方案ID
 				+")"
 				+" FROM TJobplanInfo a ,  TProcessplanInfo b"
+//				+ " ,TProcessInfo c"
 				+" WHERE a.TPartTypeInfo.id=b.TPartTypeInfo.id";
+//				+ " AND b.id=c.TProcessplanInfo.id AND  c.status = 0  ";
 		if(nodeid!=null && !"".equals(nodeid)){
 			hql += " AND a.nodeid = '"+nodeid+"'  "; 
 		}
 		if(jobplanid!=null && !"".equals(jobplanid)){
 			hql += " AND a.id = '"+jobplanid+"'  "; 
 		}	
+//		if(processPlanId!=null && !"".equals(processPlanId)){
+//			hql += " AND c.TProcessplanInfo.id = '"+processPlanId+"'  "; 
+//		}	
 		if(partId!=null && !"".equals(partId)){
 			hql += " AND a.TPartTypeInfo.id = '"+partId+"'  "; 
 		}	
@@ -1191,7 +1197,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 通过作业计划ID，工艺方案ID，零件ID得到工序清单,--不要关联作业计划表，会是1对多,触发工艺方案按钮时
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getProcessPlanById1(String jobplanid,String processPlanId,String partId){
 		String hql = "SELECT NEW MAP(" 
 				+" c.id as cid,"            //工序 ===>
@@ -1223,7 +1228,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 通过作业计划得到作业列表 --作业计划控制页面
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobByJobPlanId(String jobplanId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.no AS jobNo,"                       //作业ID，其实是作业no
@@ -1239,7 +1243,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划控制-- 通过作业计划ID得到零件ID
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPartIdByJobPlanId(String jobplanId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"                       //作业ID，其实是作业no
@@ -1251,7 +1254,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	}	
 	
 
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPlanListByIdAndTime(String jobplabid,Date startTime,Date endTime){
 		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		String startTime1 = null;
@@ -1299,7 +1301,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 修改工单时得到作业集合
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobIdMap(){
 		//得到作业集合
 		String hql = "SELECT NEW MAP(" 
@@ -1315,7 +1316,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 获取工单添加时的信息
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<String,Object> getJobdispatchlistInfoForAdd(String jobplanId){//通过作业ID
 		Map<String,Object> lst = new HashMap<String,Object>();
 		//得到作业集合
@@ -1434,7 +1434,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 获取工单添加时的信息--设备类型
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getEquimentAndType(String typeId){
 		String hql = "SELECT NEW MAP(" 
                 +" b.id as id,"             //设备类型ID
@@ -1451,7 +1450,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 获取工单添加时的信息--设备名称
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getEquimentByType(String nodeid,String typeId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.equId AS equId,"                //设备ID
@@ -1467,11 +1465,67 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeQuery(hql);	
 	}
 	
+	/**
+	 * 工单添加
+	 */
+	public void addJobdispatchlistInfo(JobdispatchlistAddBean jobdispatchlistAddBean){
+		TJobdispatchlistInfo t  = new TJobdispatchlistInfo();
+		t.setName(jobdispatchlistAddBean.getJobdispatchlistName());
+		
+		TJobInfo tJobInfo=null;	
+		Long jobplanId  = null;
+		if(!StringUtils.isEmpty(jobdispatchlistAddBean.getJobplanId())){
+			tJobInfo=commonService.get(TJobInfo.class, Long.valueOf(jobdispatchlistAddBean.getJobplanId()));
+			tJobInfo.setStatus(30); //新建的工单，和他对应的作业就改为已派工30
+			 jobplanId  = tJobInfo.getTJobplanInfo().getId();  // 得到作业计划ID，为了查所有的计划
+		}
+		t.setTJobInfo(tJobInfo);
+		
+		if(jobdispatchlistAddBean.getJobdispatchlistNum()!=null && !"".equals(jobdispatchlistAddBean.getJobdispatchlistNum())){
+		t.setProcessNum(Integer.parseInt(jobdispatchlistAddBean.getJobdispatchlistNum()));
+		}
+		t.setStatus(Integer.parseInt("10"));
+		t.setCreateDate(new Date());
+		
+		TEquipmentInfo tEquipmentInfo=null;	
+		if(!StringUtils.isEmpty(jobdispatchlistAddBean.getEquipmentId())){
+			tEquipmentInfo=commonService.get(TEquipmentInfo.class, Long.valueOf(jobdispatchlistAddBean.getEquipmentId()));
+		}
+		t.setTEquipmentInfo(tEquipmentInfo);
+		
+		if(jobdispatchlistAddBean.getPlanId()!=null && !"".equals(jobdispatchlistAddBean.getPlanId())){  //作业计划ID
+		t.setJobplanId(Long.valueOf(jobdispatchlistAddBean.getPlanId()));
+		}
+		if(jobdispatchlistAddBean.getTheoryWorktime()!=null && !"".equals(jobdispatchlistAddBean.getTheoryWorktime())){
+		t.setTheoryWorktime(Integer.parseInt(jobdispatchlistAddBean.getTheoryWorktime())); //理论工时 
+		}
+		t.setNo(jobdispatchlistAddBean.getJobdispatchlistNo());
+		t.setPlanStarttime(jobdispatchlistAddBean.getJobdispatchlistStartDate());
+		t.setPlanEndtime(jobdispatchlistAddBean.getJobdispatchlistEndDate());
+		t.setRemark(jobdispatchlistAddBean.getJobdispatchlistDec());
+		t.setFinishNum(0);
+		commonService.saveObject(t);
+		
+		if(jobplanId!=null){ //修改作业计划的状态根据作业
+			String hql = "SELECT concat(MIN(" 
+					+" a.status))"            //作业状态
+					+" FROM TJobInfo a "
+					+" WHERE a.TJobplanInfo.id = '"+jobplanId+"'  ";
+			List<String> str = dao.executeQuery(hql);
+			if(str.size()>0){
+				String no = str.get(0);
+				if(no!=null && !"".equals(no)){
+					TJobplanInfo tJobplanInfo=commonService.get(TJobplanInfo.class, jobplanId);
+					tJobplanInfo.setStatus(Integer.parseInt(no));
+					commonService.updateObject(tJobplanInfo);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * 通过名称查询，判断是否多次提交工单
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobdispatchlistByName(String name){ 
 		
 		String hql = "SELECT NEW MAP(" 
@@ -1486,7 +1540,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 通过ID跳转到工单修改页面
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobdispatchlistById(String id){
 		String hql = "SELECT NEW MAP(" 
 				+" a.name AS name,"                                                //工单名称
@@ -1502,10 +1555,33 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeQuery(hql);
 	}
 	
+	
+	/**
+	 * 工单修改
+	 */
+	public void updataJobdispatchlistInfo(JobdispatchlistUpdataBean jobdispatchlistAddBean){
+		TJobdispatchlistInfo t  = commonService.get(TJobdispatchlistInfo.class, Long.valueOf(jobdispatchlistAddBean.getJobdispatchlistId()));
+		t.setName(jobdispatchlistAddBean.getJobdispatchlistName());
+		
+		TJobInfo tJobInfo=null;	
+		if(!StringUtils.isEmpty(jobdispatchlistAddBean.getJobplanId())){
+			tJobInfo=commonService.get(TJobInfo.class, Long.valueOf(jobdispatchlistAddBean.getJobplanId()));
+		}
+		t.setTJobInfo(tJobInfo);
+		
+		if(jobdispatchlistAddBean.getJobdispatchlistNum()!=null && !"".equals(jobdispatchlistAddBean.getJobdispatchlistNum())){
+		t.setProcessNum(Integer.parseInt(jobdispatchlistAddBean.getJobdispatchlistNum()));
+		}
+		t.setNo(jobdispatchlistAddBean.getJobdispatchlistNo());
+		t.setPlanStarttime(jobdispatchlistAddBean.getJobdispatchlistStartDate());
+		t.setPlanEndtime(jobdispatchlistAddBean.getJobdispatchlistEndDate());
+		t.setRemark(jobdispatchlistAddBean.getJobdispatchlistDec());
+		commonService.updateObject(t);
+	}
+	
 	/**
 	 * 工单统计，通过任务号和时间
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobdispatchlistByIdAndTime(String nodeid,String taskNum,Date startTime,Date endTime){
 		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		String startTime1 = null;
@@ -1547,7 +1623,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	}
 	
 	//工单统计 根据任务号得到
-	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getjobdispatchByTaskNum(){
 		String hql = "select distinct new Map(taskNum as taskNum) from TJobdispatchlistInfo";
 		return dao.executeQuery(hql);
@@ -1556,7 +1631,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 工单队列管理--已分配工单清单
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getAlreadyDispatchList(String nodeid){
 		/*
 		String hql = "SELECT NEW MAP(" 
@@ -1602,7 +1676,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 工单队列管理--作业计划详情
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobPlanDetail(String jobplanId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS jobplanid,"                                             //作业计划ID
@@ -1624,7 +1697,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 工单创建--始末时间的工单开始时间为对应计划的开始时间
 	 */
-	@SuppressWarnings("unchecked")
 	public Date getMaxEndTimeFormDispatchList(String jobid){
 		String hql = " SELECT DATE_FORMAT(a.planStarttime,'%Y-%m-%d %T') as planStarttime FROM  TJobInfo a WHERE a.id ='"+jobid+"'  ";
 		List<String> lst  = dao.executeQuery(hql);
@@ -1646,7 +1718,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 获取从属生产名称
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getSubordinatePlanInfoMap(String nodeid)
 	{
 		//Map<String, Object> map = new HashMap<String, Object>();
@@ -1682,7 +1753,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划控制 -- 获取零件类型集合
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPartTypeMap(){
 		String hql = "SELECT NEW MAP(" 
 				+" c.id as id,"     //零件类型ID
@@ -1695,7 +1765,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划控制 -- 获取作业计划集合
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobPlanMap(){
 		String hql = "SELECT NEW MAP(" 
 				+" c.id as id,"         //作业计划ID
@@ -1709,7 +1778,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划控制 -- 获取工艺方案集合
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getProcessplanMap(String partid){
 		String hql = "SELECT NEW MAP(" 
 				+" c.id as id,"     //工艺ID
@@ -1726,7 +1794,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	/**
 	 * 作业计划控制 -- 通过作业计划Id获取零件类型集合
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getPartTypeMapByJobPlanid(String jobplanid){
 		String hql = "SELECT NEW MAP(" 
 				+" c.TPartTypeInfo.id as id,"         //零件ID
@@ -1743,7 +1810,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
      * 作业计划控制 --投料批次列表
      * @param processplanId 工艺方案ID
      */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getBatchList(String processplanId,String jobplabid){
 		String hql = "SELECT NEW MAP(" 
 				+" a.no as no,"     //工单编号--》首工位工单编号
@@ -1760,9 +1826,129 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 	}
 
 	/**
+	 * 作业计划控制 --保存作业和保存工单
+	 */
+	public void saveJobDispatch(JobPlanControlBean jobPlanControlBean){
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		String nodeid = (String)session.getAttribute("nodeid");	
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	    String time = sdf.format(new Date());
+	    String fristDispath ="";  //得到首工位工单号
+	    if(jobPlanControlBean.getJobMaplst().size()>0){
+	    Map<String, Object> fristDispathMap = jobPlanControlBean.getJobMaplst().get(0);
+	    fristDispath = "WO_"+fristDispathMap.get("bianma")+"_"+time+"_"+fristDispathMap.get("id");
+	    }
+	    for(Map<String, Object> jobmap : jobPlanControlBean.getJobMaplst()){
+			TJobInfo p = new TJobInfo();
+			p.setNo((String)jobmap.get("no"));
+			p.setName((String)jobmap.get("name"));
+			p.setTheoryWorktime(Integer.parseInt(jobmap.get("theoryWorktime").toString()));
+			p.setPlanNum(Integer.parseInt((String)jobmap.get("processNum"))); //计划数量
+			p.setFinishNum(0);  //完成数量
+			p.setNodeid(nodeid);
+			try {
+				p.setPlanStarttime(sdf1.parse(jobmap.get("planStarttime").toString())); //开始时间
+				p.setPlanEndtime(sdf1.parse(jobmap.get("planEndtime").toString()));     //结束时间
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+			TJobplanInfo tJobplanInfo  = null;
+			if(!StringUtils.isEmpty(jobPlanControlBean.getJobplabid())){//不通过查询得到作业计划ID，直接从页面传过来的
+				tJobplanInfo=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid()));
+			}
+			p.setTJobplanInfo(tJobplanInfo);
+			TProcessInfo tProcessInfo  = null;
+			if(!StringUtils.isEmpty(jobmap.get("id").toString())){
+				tProcessInfo=commonService.get(TProcessInfo.class, Long.valueOf(jobmap.get("id").toString()));
+			}
+			p.setTProcessInfo(tProcessInfo);
+			commonService.saveObjects(p);  //先保存,是否已经得到了ID？
+			
+			TJobdispatchlistInfo tp = new TJobdispatchlistInfo();
+			String num = String.valueOf((int)(Math.random()*1000)); //生成随机数
+	   		tp.setNo("WO_"+jobmap.get("bianma")+"_"+time+"_"+jobmap.get("id")+"_"+num); //工单编号
+	   		tp.setName("WO_"+jobmap.get("name")+"_"+time+"_"+num);//工单名称
+	   		tp.setTheoryWorktime(Integer.parseInt(jobmap.get("theoryWorktime").toString()));//理论工时
+	   		tp.setProcessNum(Integer.parseInt((String)jobmap.get("processNum"))); //计划数量
+	   		tp.setFinishNum(0);    //完成数量
+	   		tp.setGoodQuantity(0); //合格数量
+	   		tp.setBadQuantity(0);  //不合格数量
+	   		tp.setOnlineNumber(0); //上线数量
+	   		tp.setNodeid(nodeid);
+	   		try {
+				tp.setPlanStarttime(sdf1.parse(jobmap.get("planStarttime").toString()));  //开始时间
+		   		tp.setPlanEndtime(sdf1.parse(jobmap.get("planEndtime").toString()));                      //结束时间
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}                 
+	   		tp.setCreateDate(new Date());                                            //创建时间
+	   		tp.setJobplanId(new Long(jobPlanControlBean.getJobplabid()));       //作业计划ID 
+	   		tp.setBatchNo(fristDispath);                       //首工位工单号
+	   		if(jobPlanControlBean.isBooleanValue()){ //点击的启动工单
+	   			tp.setStatus(40);                                                   //工单状态
+		   		tp.setRealStarttime(new Date());   //工单启动的实际时间
+	   		}else{
+	   		    tp.setStatus(30);                                                   //工单状态
+	   		}
+	   		tp.setTJobInfo(p); //,是否已经得到了ID？
+	   		TEquipmentInfo te = null;
+			if(!StringUtils.isEmpty(jobmap.get("equId").toString())){
+				te=commonService.get(TEquipmentInfo.class, Long.valueOf(jobmap.get("equId").toString()));
+			}
+			tp.setTEquipmentInfo(te);
+			commonService.saveObject(tp);
+			
+			if(tp.getStatus()==40){ //同时启动工单的话作业和作业计划都要修改状态			
+					p.setStatus(40);   //作业状态
+					if(p.getRealStarttime()==null || "".equals(p.getRealStarttime().toString())){//第一次启动工单的话要添加实际启动时间，其余不要
+					      p.setRealStarttime(new Date());
+					 }
+					commonService.update(p);  //添加完工单后把作业的在台改为30.
+					//作业计划状态也要改，如果是20就改为30，只有这中情况
+					TJobplanInfo tjp = null;
+					if(!StringUtils.isEmpty(jobPlanControlBean.getJobplabid())){
+						tjp=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid()));
+					}
+					if(tjp!=null){
+                    tjp.setStatus(40);
+                    if(tjp.getRealStarttime()==null || "".equals(tjp.getRealStarttime().toString())){//第一次启动工单的话要添加实际启动时间，其余不要
+                        tjp.setRealStarttime(new Date());
+                    }
+                    commonService.update(tjp);  //保存在20的情况下改30
+                }
+			}else{			
+				p.setStatus(30);   //作业状态
+				commonService.update(p);  //添加完工单后把作业的在台改为30.
+				//作业计划状态也要改，如果是20就改为30，只有这中情况
+				TJobplanInfo tjp = null;
+				if(!StringUtils.isEmpty(jobPlanControlBean.getJobplabid())){
+					tjp=commonService.get(TJobplanInfo.class, Long.valueOf(jobPlanControlBean.getJobplabid()));
+				}
+				if(tjp!=null && tjp.getStatus().equals(20)){
+					tjp.setStatus(30);
+					commonService.update(tjp);  //保存在20的情况下改30
+				}
+			}
+			
+			//工序设备中间表
+			/*
+			if(!StringUtils.isEmpty(jobmap.get("id").toString())&&!StringUtils.isEmpty(jobmap.get("equId").toString())){
+			TProcessEquipment tpe = new TProcessEquipment();
+			tpe.setEquipmentId(new Long(jobmap.get("id").toString()));   //工序ID
+			tpe.setEquipmentId(new Long(jobmap.get("equId").toString()));   //设备ID
+			commonService.saveObject(tpe);
+			}
+			*/
+		}
+		
+	}
+	
+
+	/**
 	 * 作业计划控制 --通过工艺方案ID得到工序清单
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getProcessByProcessPlanId(String nodeid,String processPlanId){
 		String hql = "SELECT NEW MAP(" 
 				+" c.id as id,"            //工序ID ===>
@@ -1794,13 +1980,19 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 			m.put("equId", pro1.get("equId"));
 			m.put("equSerialNo", pro1.get("equSerialNo"));
 			m.put("equName", pro1.get("equName"));
+			/*
+			String equN =""; //名称
+			for(Map<String,Object> prom : prolst){ //名称是拼接的
+				equN += (String)prom.get("equName") + ",";
+			}
+			m.put("equName", equN);
+			*/
 		}
 		
 		return lst;
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getSerNoByProcessId(String processNo){//工序ID
 		String hql = "SELECT NEW MAP(" 
 				+" d.equId as equId,"             //设备ID
@@ -1814,7 +2006,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeQuery(hql);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public String getEquNameByEquId(String equId){
 		String hql = "SELECT NEW MAP(" 
 				+" d.equId as equId,"             //设备ID
@@ -1832,7 +2023,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return equName;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobPlanByJobIdAndPartId(String nodeid,String jobplanid,String partId){
 		String hql = "SELECT NEW MAP(" 
 				+" a.id AS id,"            //作业计划
@@ -1859,7 +2049,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
         return dao.executeQuery(hql);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<TJobplanInfo> getTJobplanInfoByBatchNo(String batchNo,String partTypeId){
 		String hql="from TJobplanInfo where 1=1 "
 				+ " and TPartTypeInfo.id='"+partTypeId+"'"
@@ -1872,23 +2061,23 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
      * @param id 作业计划ID
      * @return 返回作业计划信息
      */
-	@SuppressWarnings("unchecked")
 	private List<TJobplanInfo> getTJobplanInfoById(String id){
 		String hql="from TJobplanInfo where id='"+id+"'";
 		return dao.executeQuery(hql);
 	}
 	
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * @时间 2015年12月15日16:40:59
+	 */
 	public List<TJobplanInfo> getJobPlan(String nodeId,String partTypeId){
 		String hql = "FROM TJobplanInfo a "
 				+ " where a.planType = 2 and a.nodeid='"+nodeId
 				+ "' and a.TPartTypeInfo.id=" + partTypeId
-				+ " and a.status = 40";
+				+ " and a.status = 10";
 		return dao.executeQuery(hql);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> getJobdispatchList(String nodeid,String query,String jobplanId){
 		String hql="select new Map("
 				+ " a.id as id,"
@@ -1903,7 +2092,6 @@ public class JobPlanServiceImpl extends GenericServiceSpringImpl<TJobplanInfo, S
 		return dao.executeQuery(hql);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String,Object> getDataByjobdispatchNo(String jobdispatchNo){
 		Map<String,Object> rsmap=new HashMap<String, Object>();
 		String erplisthql="select new Map("

@@ -125,6 +125,16 @@
 		<img class="zl-text-bg-right1" src="../images/input/box_right_plus.png" onclick="addserialno()"/>
 		<h:inputText id="job_dispatch_add" value="#{JobdispatchUpdata.serailNo}"/>
 		</div>
+		<!-- 刀具切削次数上限 -->
+		<div class="jobdispatch-content-label" >
+           <span data-i18n="">刀具切削次数上限</span>
+        </div>
+        <div class="zl-textbox zl-text jobdispatch-text-lt ">
+        <img class="zl-text-bg-left" src="../images/input/box_left.png" />
+		<img class="zl-text-bg-center1" src="../images/input/box_center.png" />
+		<img class="zl-text-bg-right1" src="../images/input/box_right_plus.png" onclick="addserialno()"/>
+		<h:inputText id="job_dispatch_maxiumcut" value="#{JobdispatchUpdata.maxiumcut}"/>
+		</div>
 		<h:graphicImage id="img2" value="../images/input/tianjia.png" style="cursor:pointer;margin-left:5px;margin-top:25px;display:none;" > 
 			<a4j:ajax listener="#{JobdispatchUpdata.save}" execute="job_dispatch_add" event="click" render=":myform:shebei :myform:msg" oncomplete="chongfu()"></a4j:ajax>
 		 </h:graphicImage>

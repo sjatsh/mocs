@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -21,17 +22,14 @@ import smtcl.mocs.model.StorageInfoDataModel;
 import smtcl.mocs.model.TStorageInfoModel;
 import smtcl.mocs.pojos.storage.TStorageInfo;
 import smtcl.mocs.services.storage.IStorageManageService;
+
 /**
- * 库房管理bean
- * 创建时间 2014-08-26
- * 作者 FW
- * 修改者
- * 修改时间
+ * 库房管理bean 创建时间 2014-08-26 作者 FW 修改者 修改时间
  */
-@ManagedBean(name="StorageManage")
+@ManagedBean(name = "StorageManage")
 @ViewScoped
 public class StorageManageBean implements Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -44,8 +42,7 @@ public class StorageManageBean implements Serializable {
 	/**
 	 * 保管员集合List
 	 */
-	List<Map<String,Object>> memberList = new ArrayList<Map<String,Object>>();
-	
+	List<Map<String, Object>> memberList = new CopyOnWriteArrayList<Map<String, Object>>();
 
 	/**
 	 * 多行选择model
@@ -124,49 +121,65 @@ public class StorageManageBean implements Serializable {
 	 * 判断是否选中
 	 */
 	private String selected;
-	
-	private IStorageManageService iStorageManageService=(IStorageManageService)ServiceFactory.getBean("storageManage");
-	
+
+	private IStorageManageService iStorageManageService = (IStorageManageService) ServiceFactory
+			.getBean("storageManage");
+
 	public StorageManageBean() {
-		//获取节点ID
-		//HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-	    //nodeid = (String)session.getAttribute("nodeid");
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-    	nodeid=session.getAttribute("nodeid2")+"";
-		//获取库房信息
-		storageList = iStorageManageService.getStorageList("",nodeid);
-		data =new StorageInfoDataModel(storageList);
-		//获取保管员信息
+		// 获取节点ID
+		// HttpSession session =
+		// (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		// nodeid = (String)session.getAttribute("nodeid");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(true);
+		nodeid = session.getAttribute("nodeid2") + "";
+		// 获取库房信息
+		storageList = iStorageManageService.getStorageList("", nodeid);
+		data = new StorageInfoDataModel(storageList);
+		// 获取保管员信息
 		memberList = iStorageManageService.userList(nodeid);
 	}
-	
+
 	/**
-	 *  查询方法
+	 * 刷新保管员信息
 	 */
-	public void queryData(){
+	public void updateMember() {
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(true);
+		nodeid = session.getAttribute("nodeid2") + "";
+		memberList.clear();
+		// 获取保管员信息
+		memberList = iStorageManageService.userList(nodeid);
+	}
+
+	/**
+	 * 查询方法
+	 */
+	public void queryData() {
 		try {
-			if("输入编号/名称/状态".equals(query))
-				query=null;
-			storageList = iStorageManageService.getStorageList(query,nodeid);
-			data =new StorageInfoDataModel(storageList);
+			if ("输入编号/名称/状态".equals(query))
+				query = null;
+			storageList = iStorageManageService.getStorageList(query, nodeid);
+			data = new StorageInfoDataModel(storageList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 库位信息保存
 	 */
-	public void saveStorageInfo(){
-		//判断信息是否存在
-		List<Map<String,Object>> list = iStorageManageService.getList("select new Map( "
-				+ "s.storageNo as no) "
-				+ "from TStorageInfo s where s.storageNo ='"+no+"'");
-		if(list.size()>0){
-			success ="库房编号已存在，请确认";
+	public void saveStorageInfo() {
+		// 判断信息是否存在
+		List<Map<String, Object>> list = iStorageManageService
+				.getList("select new Map( " + "s.storageNo as no) "
+						+ "from TStorageInfo s where s.storageNo ='" + no + "'");
+		if (list.size() > 0) {
+			success = "库房编号已存在，请确认";
 			return;
 		}
-		//设置值
+		// 设置值
 		TStorageInfo info = new TStorageInfo();
 		info.setStorageNo(no);
 		info.setStorageName(name);
@@ -180,91 +193,90 @@ public class StorageManageBean implements Serializable {
 		info.setCreateDate(new Date());
 		info.setNodeId(nodeid);
 		success = iStorageManageService.updateStorageInfo(info, 1);
-		if(success.equals("成功")){
+		if (success.equals("成功")) {
 			queryData();
 		}
-		
+
 	}
-	
-	
+
 	/**
 	 * 更新方法
+	 * 
 	 * @param event
 	 */
-    public void onEdit(RowEditEvent event) {  
-    	TStorageInfoModel info=(TStorageInfoModel) event.getObject();
-          if("2222".equals("请选择")){
-        	  FacesMessage msg = new FacesMessage("库房更新","更新失败,请选择一个属性！");  
-     	      FacesContext.getCurrentInstance().addMessage(null, msg);  
-          }else{
-        	  
-		    //设置值
-	  		TStorageInfo storageInfo = new TStorageInfo();
-	  		storageInfo.setId(info.getId());
-	  		storageInfo.setStorageNo(info.getStorageNo());
-	  		storageInfo.setStorageName(info.getStorageName());
-	  		storageInfo.setStorageStatus(info.getStorageStatus());
-	  		
-	  		String time1 = info.getInvalidDate();
-			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
-			
-            try {
+	public void onEdit(RowEditEvent event) {
+		TStorageInfoModel info = (TStorageInfoModel) event.getObject();
+		if ("2222".equals("请选择")) {
+			FacesMessage msg = new FacesMessage("库房更新", "更新失败,请选择一个属性！");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		} else {
+
+			// 设置值
+			TStorageInfo storageInfo = new TStorageInfo();
+			storageInfo.setId(info.getId());
+			storageInfo.setStorageNo(info.getStorageNo());
+			storageInfo.setStorageName(info.getStorageName());
+			storageInfo.setStorageStatus(info.getStorageStatus());
+
+			String time1 = info.getInvalidDate();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			try {
 				storageInfo.setInvalidDate(sdf.parse(time1));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-               
-  		    storageInfo.setIsAvailable(info.getIsAvailable());
-  		    storageInfo.setPlanType(info.getPlanType());
-  		    storageInfo.setPositionType(info.getPositionType());
-  		    storageInfo.setAddress(info.getAddress());
-  		    storageInfo.setStorageMan(info.getStorageMan());
-		    storageInfo.setCreateDate(info.getCreateDate());
-			
-	  	    storageInfo.setPreProcessTime(info.getInProcessTime());
-	  	    storageInfo.setInProcessTime(info.getInProcessTime());
-	  	    storageInfo.setSufProcessTime(info.getSufProcessTime());
-	  	    storageInfo.setNodeId(info.getNodeId()); 
-    	    String tt=iStorageManageService.updateStorageInfo(storageInfo,2);
-    	    if(tt.equals("成功")){
-     		  FacesMessage msg = new FacesMessage("库房更新","更新成功");  
-     	      FacesContext.getCurrentInstance().addMessage(null, msg);  
-         	}else{
-         		 FacesMessage msg = new FacesMessage("库房更新","更新失败");  
-         	     FacesContext.getCurrentInstance().addMessage(null, msg); 
-         	}
-          }
-          queryData();
-    }  
-    
-    /**
-     * 取消
-     * @param event
-     */
-    public void onCancel(RowEditEvent event) {  
-    	
-    }
-    
-    public void onSelected(){
-    	for(TStorageInfoModel tt:selectedStorage){
-    		selected=tt.getId().toString();
-    	}
-    }
-    
-    /**
-     * 删除新方法
-     */
-    public void onDelete(){
-    	for(TStorageInfoModel tt:selectedStorage){
-    		//设置值
-	  		TStorageInfo storageInfo = new TStorageInfo();
-	  		storageInfo.setId(tt.getId());
-    		iStorageManageService.delStorageInfo(storageInfo);
-    	}
-    	queryData();
-    }
 
-	
+			storageInfo.setIsAvailable(info.getIsAvailable());
+			storageInfo.setPlanType(info.getPlanType());
+			storageInfo.setPositionType(info.getPositionType());
+			storageInfo.setAddress(info.getAddress());
+			storageInfo.setStorageMan(info.getStorageMan());
+			storageInfo.setCreateDate(info.getCreateDate());
+
+			storageInfo.setPreProcessTime(info.getInProcessTime());
+			storageInfo.setInProcessTime(info.getInProcessTime());
+			storageInfo.setSufProcessTime(info.getSufProcessTime());
+			storageInfo.setNodeId(info.getNodeId());
+			String tt = iStorageManageService.updateStorageInfo(storageInfo, 2);
+			if (tt.equals("成功")) {
+				FacesMessage msg = new FacesMessage("库房更新", "更新成功");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			} else {
+				FacesMessage msg = new FacesMessage("库房更新", "更新失败");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
+		queryData();
+	}
+
+	/**
+	 * 取消
+	 * 
+	 * @param event
+	 */
+	public void onCancel(RowEditEvent event) {
+
+	}
+
+	public void onSelected() {
+		for (TStorageInfoModel tt : selectedStorage) {
+			selected = tt.getId().toString();
+		}
+	}
+
+	/**
+	 * 删除新方法
+	 */
+	public void onDelete() {
+		for (TStorageInfoModel tt : selectedStorage) {
+			// 设置值
+			TStorageInfo storageInfo = new TStorageInfo();
+			storageInfo.setId(tt.getId());
+			iStorageManageService.delStorageInfo(storageInfo);
+		}
+		queryData();
+	}
 
 	public List<TStorageInfo> getStorageNoList() {
 		return storageNoList;
@@ -403,9 +415,11 @@ public class StorageManageBean implements Serializable {
 	}
 
 	public String getQuery() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-    	nodeid=session.getAttribute("nodeid2")+"";
-    	queryData();
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(true);
+		nodeid = session.getAttribute("nodeid2") + "";
+		queryData();
+		this.updateMember();
 		return query;
 	}
 
@@ -421,7 +435,6 @@ public class StorageManageBean implements Serializable {
 		this.selectedStorage = selectedStorage;
 	}
 
-	
 	public String getSelected() {
 		return selected;
 	}
@@ -437,6 +450,7 @@ public class StorageManageBean implements Serializable {
 	public void setData(StorageInfoDataModel data) {
 		this.data = data;
 	}
+
 	public List<TStorageInfoModel> getStorageList() {
 		return storageList;
 	}
@@ -444,6 +458,5 @@ public class StorageManageBean implements Serializable {
 	public void setStorageList(List<TStorageInfoModel> storageList) {
 		this.storageList = storageList;
 	}
-	
-	
+
 }

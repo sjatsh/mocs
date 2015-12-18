@@ -3,6 +3,7 @@
  */
 package smtcl.mocs.beans.authority.cache;
 
+
 import java.io.Serializable;
 
 import com.google.gson.annotations.Expose;

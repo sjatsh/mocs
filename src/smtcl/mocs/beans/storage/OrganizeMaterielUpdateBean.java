@@ -172,7 +172,7 @@ public class OrganizeMaterielUpdateBean {
 		nodeName="测试";
 		baseUnitList=resourceService.getUnitInfo("1");//基准单位
 		typelist=Constants.MATERIELTYPE;//物料类型
-		classList=resourceService.getTMaterialClassByAll();//物料类别
+		classList=resourceService.getTMaterialClassByAll(nodeid);//物料类别
 		buyerList=resourceService.getBuyerList();
 		tti=(TMaterailTypeInfo)resourceService.getObject(organizeMateriel,"id",tti);
 		tmv=(TMaterialVersion )resourceService.getObject(organizeMateriel,"materialId",tmv);

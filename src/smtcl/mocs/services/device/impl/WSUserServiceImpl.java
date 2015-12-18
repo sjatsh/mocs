@@ -150,17 +150,44 @@ public class WSUserServiceImpl extends GenericServiceSpringImpl<TUser, String>
 				 + " DATE_FORMAT(a.realStarttime,'%Y-%m-%d %T') as startTime,"//实际开始时间
 				 + " a.onlineNumber as onlineNumber,"//上线数量
 				 + " c.progName as progName) "//程序名
-				 + " from TJobdispatchlistInfo a,TEquJobDispatch b,TProgramInfo c"
+				 + " from TJobdispatchlistInfo a,TEquJobDispatch b,TProgramInfo c,TProgramMappingInfo d,TPartTypeInfo e"
 				 + " where a.no=b.jobdispatchNo "
 				 + " and a.TProcessInfo.programId=c.id "
 				 + " and b.status<>0 "
 				 + " and (a.status=40 or a.status=50) "
+				 + " and  a.TProcessInfo.id =d.processId "
+				 + " and  c.id =d.programId "
+				 + " and  e.id =d.materailId " 
+ 				 + " and  c.status ='Y' "
 				 + " and b.equSerialNo='"+equSerialNo+"' "
 		 		 + " order by a.realStarttime asc ";
 		List<Map<String,Object>>  rs=dao.executeQuery(hql, parameters);
 		return rs;
 	}
-	
+//	public List<Map<String,Object>> getProduceTask(String equSerialNo){
+//		Collection<Parameter> parameters = new HashSet<Parameter>();
+//		String hql="select new Map("
+//				 + " a.no as no,"                       //工单编号
+//				 + " a.TProcessInfo.name as processName," //工序名称
+//				 + " a.TProcessInfo.no as processNo," //工序编号
+//				 + " a.TProcessInfo.TProcessplanInfo.TPartTypeInfo.name as partName,"//产品名称
+//				 + " a.TProcessInfo.TProcessplanInfo.TPartTypeInfo.no as materialName,"//产品编号
+//				 + " b.equSerialNo as equSerialNo,"//设备序列号
+//				 + " a.processNum as planNum," //计划数量
+//				 + " a.finishNum as finishNum,"//完成数量
+//				 + " DATE_FORMAT(a.realStarttime,'%Y-%m-%d %T') as startTime,"//实际开始时间
+//				 + " a.onlineNumber as onlineNumber,"//上线数量
+//				 + " c.progName as progName) "//程序名
+//				 + " from TJobdispatchlistInfo a,TEquJobDispatch b,TProgramInfo c"
+//				 + " where a.no=b.jobdispatchNo "
+//				 + " and a.TProcessInfo.programId=c.id "
+//				 + " and b.status<>0 "
+//				 + " and (a.status=40 or a.status=50) "
+//				 + " and b.equSerialNo='"+equSerialNo+"' "
+//		 		 + " order by a.realStarttime asc ";
+//		List<Map<String,Object>>  rs=dao.executeQuery(hql, parameters);
+//		return rs;
+//	}
 	/**
 	 * 更新生产任务
 	 * @param equSerialNo

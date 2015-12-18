@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dreamwork.persistence.IGenericService;
+import org.primefaces.model.TreeNode;
 
 import smtcl.mocs.beans.equipment.EquipmentAccountingBean;
 import smtcl.mocs.beans.equipment.EquipmentCostBean;
@@ -24,6 +25,14 @@ import smtcl.mocs.pojos.job.TEquipmenttypeInfo;
  */
 public interface IEquipmentService extends IGenericService<TEquipmentCostInfo, String> {
 	
+	
+	/**
+	 * 根据条件查询相对应的物料节点信息
+	 * 
+	 * @param search
+	 * @return
+	 */
+	public TreeNode getEquTreeNodeOnAll(String search, String nodeid);
 	/**
 	 * 设备类型维护--设备类型信息列表
 	 */
@@ -206,5 +215,11 @@ public interface IEquipmentService extends IGenericService<TEquipmentCostInfo, S
 	 * @return
 	 */
 	public String saveEquData(String equData);
+	/**
+	 * 根据设备类型id获取类型下的所有子类
+	 * @param equid
+	 * @return
+	 */
+	public List<Map<String, Object>> getEquipmentInfoNowList(String equid);
 
 }

@@ -142,7 +142,7 @@ public class OrgGroupServiceImpl extends GenericServiceSpringImpl<OrgGroup, Stri
      * 获取机床设备的类型列表
      */
     public List<TEquipmenttypeInfo> queryTEquipmenttypeInfo(){
-    	String hql = "from TEquipmenttypeInfo";
+    	String hql = "from TEquipmenttypeInfo where isdel = 0";
     	return dao.executeQuery(hql, new Parameter[0]);
     } 
     

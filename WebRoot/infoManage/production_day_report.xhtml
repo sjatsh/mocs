@@ -1,0 +1,519 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+
+	<link href="./css/production_daily_report.css" rel="stylesheet" type="text/css" />
+	
+<!--原样式
+	<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+	<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" /> 
+	<link href="./css/production_scrap_report.css" rel="stylesheet" type="text/css" />
+-->
+	<!-- <h:outputScript>
+        var curDt = new Date();
+        curDt.setFullYear(2014);
+        curDt.setMonth(10);
+        curDt.setDate(30);
+        function disablementFunction(day){
+        if (day.isWeekend) return false;
+        if (curDt==undefined){
+        curDt = day.date.getDate();
+        }
+        var timeLong = curDt.getTime() - day.date.getTime();
+        if ( 0 > timeLong) return true; else return false;
+        }
+    </h:outputScript> -->
+</h:head>
+<h:body>
+<h:form id="myform">
+	<div class="zl-content-top">
+		<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+		<div class="zl-content-top-title">
+			<span data-i18n="top.title">生产日报表</span>
+		</div>
+		<div class="zl-content-top-info-up2">
+			<div class="zl-content-label">
+				<span data-i18n="top.title3">日期</span>
+			</div>
+			<div class="zl-content-select zl-dateBox">
+				<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+				<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+				<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
+				<rich:calendar id="searchTime" tabindex="3" popup="true" inputClass="inputText" locale="en" 
+					value="#{productionDailyReportBean.searchTime}" cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" />
+			</div>
+		</div> 
+		<div class="zl-content-top-info-search2">
+			<!-- 查找按钮 -->
+			<h:graphicImage id="btn_search1" alt="search" url="images/jobplan/list/jobpaln_button.png" style="display: none;">
+				<a4j:ajax listener="#{productionDailyReportBean.Search}" event="click" execute="searchTime" 
+				render="@form "></a4j:ajax>
+			</h:graphicImage>
+			
+			<div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+				<div class="zl-button-text">
+					<img class="zl-button-icon" src="images/input/icon_search.png" />
+					<span data-i18n="top.title3">查询</span>
+				</div>
+			</div>
+			<div class="zl-content-btn2 zl-button" id="button2">
+				<img class="zl-buttonBG" src="images/input/button.png"/>
+				<div class="zl-button-text" onclick="exportbtn()">
+					<span data-i18n="top.title3">导出</span>
+				</div>
+				<h:commandButton id="export" value="export"
+							action="#{Excel.downloadExcel}" style="display: none;">
+							<f:param name="outTime" value="#{productionDailyReportBean.searchTime}" ></f:param>
+				</h:commandButton>
+			</div>
+		</div>  
+	</div>
+	<div class="zl-content-info">
+		<!-- 表头 -->
+		<div class="table-title ui-datatable ui-widget">
+			<table>
+				<thead>
+					<tr>
+						<th class="ui-state-default" style="width:3.2% ;word-break: break-all;" rowspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">序号</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;" rowspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">型号</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;" rowspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">零件</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:5.4%;word-break: break-all;" rowspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">上月结存</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;" rowspan="1">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx"></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" colspan="15">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">月度作业计划</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:6.4% ;word-break: break-all;" rowspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">急需进度</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:5.9%;word-break: break-all;" rowspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">实际完成</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" colspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">品种</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:5.4%;word-break: break-all;" rowspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">提交产值</span>
+							</div>
+						</th>
+					</tr>
+					<!-- 第二行 -->
+					<tr>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx"></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" colspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">毛坯购进</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:5.4%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">投料计划</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx"></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" colspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">投料产量</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">%</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:5.4%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">提交计划</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx"></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" colspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">提交产量</span>
+							</div>
+							
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">%</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" colspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">废品</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">在制</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">计划</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;" rowspan="2">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">完成</span>
+							</div>
+						</th>						
+					</tr>
+					<!-- 第三行 -->
+					<tr>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">当日</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">累计</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">当日</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">累计</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">当日</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.7%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">累计</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">料废</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:3.2%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="content.bfxx">工废</span>
+							</div>
+						</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		
+		<div class="table-body">
+			<div class="table-body-div">
+			 <!-- 按大类合计数据表 -->
+			<p:dataTable id="dailyList1" var="amount"
+						value="#{productionDailyReportBean.amount}" 
+						paginator="false"
+						rows="10" paginatorPosition="bottom">
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{amount.orderNo}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{amount.partClassName}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{amount.partNo}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{amount.lastMonthBalance}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.roughBefore}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.roughToday}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.roughSum}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{amount.sumMonthFeedPlan}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumYieldBefore}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumYieldToday}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumYieldSum}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumFeedPercent}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{amount.sumMonthSubmitPlan}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumSubmitBefore}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumSubmitToday}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumSubmitSum}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{amount.sumSumbitPercent}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.scrapLiao}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.scrapGong}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.making}" />
+					</p:column>
+					<p:column style="width:6.4%;word-break: break-all;">
+						<h:outputText value="#{amount.needProcess}" />
+					</p:column>
+					<p:column style="width:5.9%;word-break: break-all;">
+						<h:outputText value="#{amount.realFinish}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.typePlan}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{amount.typeFinish}" />
+					</p:column>
+					<p:column style="width:4.112%;word-break: break-all;">
+						<h:outputText value="#{amount.submitValue}" />
+					</p:column>
+			</p:dataTable>
+			<!-- 总计 -->
+			<p:dataTable id="dailyList2" var="total"
+						value="#{productionDailyReportBean.totalData}"
+						paginator="false"
+						rows="1" paginatorPosition="bottom">
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{total.orderNo}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{total.total}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{total.partNo}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{total.lastMonthBalance}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.roughBefore}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.roughToday}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.roughSum}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{total.totalMonthFeedPlan}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalYieldBefore}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalYieldToday}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalYieldSum}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalFeedPercent}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{total.totalMonthSubmitPlan}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalSubmitBefore}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalSubmitToday}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalSubmitSum}" />
+					</p:column>
+					<p:column style="width:3.7%;word-break: break-all;">
+						<h:outputText value="#{total.totalSubmitPercent}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.scrapLiao}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.scrapGong}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.making}" />
+					</p:column>
+					<p:column style="width:6.4%;word-break: break-all;">
+						<h:outputText value="#{total.needProcess}" />
+					</p:column>
+					<p:column style="width:5.9%;word-break: break-all;">
+						<h:outputText value="#{total.realFinish}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.typePlan}" />
+					</p:column>
+					<p:column style="width:3.2%;word-break: break-all;">
+						<h:outputText value="#{total.typeFinish}" />
+					</p:column>
+					<p:column style="width:4.112%;word-break: break-all;">
+						<h:outputText value="#{total.submitValue}" />
+					</p:column>
+			</p:dataTable>
+			<!-- 详细数据表 -->
+			<p:dataTable id="dailyList3" var="daily"
+						value="#{productionDailyReportBean.dailyReportData}" paginator="false"
+						>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.orderNo}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.modelNo}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.partNo}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{daily.lastMonthBalance}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.roughBefore}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.roughToday}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.roughSum}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{daily.monthFeedPlan}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.yieldBefore}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.yieldToday}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.yieldSum}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.feedPercent}" />
+					</p:column>
+					<p:column style="width:5.4%;word-break: break-all;">
+						<h:outputText value="#{daily.monthSubmitPlan}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.submitBefore}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.submitToday}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.submitSum}" />
+					</p:column>
+					<p:column style="width:3.7% ;word-break: break-all;">
+						<h:outputText value="#{daily.sumbitPercent}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.scrapLiao}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.scrapGong}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.making}" />
+					</p:column>
+					<p:column style="width:6.4%;word-break: break-all;">
+						<h:outputText value="#{daily.needProcess}" />
+					</p:column>
+					<p:column style="width:5.9%;word-break: break-all;">
+						<h:outputText value="#{daily.realFinish}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.typePlan}" />
+					</p:column>
+					<p:column style="width:3.2% ;word-break: break-all;">
+						<h:outputText value="#{daily.typeFinish}" />
+					</p:column>
+					<p:column style="width:4.112%;word-break: break-all;">
+						<h:outputText value="#{daily.submitValue}" />
+					</p:column>
+			</p:dataTable>
+			</div>
+		</div>
+	</div>	
+</h:form>
+<script type="text/javascript">
+			//<![CDATA[
+
+			function exportbtn() {
+				document.getElementById("myform:export").click();
+			}
+			function querybtn() {
+				document.getElementById("myform:btn_search1").click();
+			}
+
+			//]]>
+		</script>
+</h:body>
+</ui:composition>

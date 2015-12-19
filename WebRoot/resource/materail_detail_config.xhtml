@@ -30,10 +30,8 @@
 			action="#{materailDetailConfigBean.deleteMaterial}"
 			update=":myform:treeSingle :myform:carList :myform:messages"
 			style="display:none;" />
-		
-
-		
 	</div>
+	
 	<div class="toolconten">
 		<div class="toolconten-left">
 			<p:tree id="treeSingle" value="#{materailDetailConfigBean.root}"
@@ -54,7 +52,7 @@
 				value="#{materailDetailConfigBean.mediumMaterialModel}" id="carList"
 				editable="true" sortMode="multiple" dynamic="true"
 				selection="#{materailDetailConfigBean.selectedMaterial}"
-				paginator="true" rows="22" paginatorPosition="bottom"
+				paginator="true" rows="18" paginatorPosition="bottom"
 				styleClass="table-p">
 				<p:ajax event="rowEdit"
 					listener="#{materailDetailConfigBean.onEdit}"
@@ -228,9 +226,12 @@
 			if (null != temp && "" != temp) {
 				if (confirm("是否确认删除物料信息？")) {
 					document.getElementById("myform:deleteMaterial").click();
-					document.getElementById("myform:removeMdSelected").click();
+					/* document.getElementById("myform:removeMdSelected").click(); */
+				}else{
+					
+					/* document.getElementById("myform:removeMdSelected").click(); */
 				}
-				document.getElementById("myform:removeMdSelected").click();
+				
 			} else {
 				alert("请先选择需要删除的物料！");
 			}

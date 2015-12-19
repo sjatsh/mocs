@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<file-systems VERSION="2.0.0" application-name="local_developer"
+ model-entity="FileSystems" workspace-home="./WebRoot/WEB-INF">
+ <file-system NAME="WEB-INF" location="%workspace.home%" model-entity="FileSystemFolder"/>
+ <file-system NAME="WEB-ROOT" info="Content-Type=Web"
+  location="%workspace.home%/.." model-entity="FileSystemFolder"/>
+ <file-system NAME="src" location="%workspace.home%/../../src" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib" location="%workspace.home%/lib" model-entity="FileSystemFolder"/>
+ <file-system NAME="classes" location="%workspace.home%/classes" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib-activation.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\activation.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-antlr-2.7.6.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\antlr-2.7.6.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-antlr-3.0.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\antlr-3.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-aopalliance.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\aopalliance.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-asm.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\asm.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-aspectjrt.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\aspectjrt.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-aspectjweaver.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\aspectjweaver.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-atomikos-util.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\atomikos-util.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-bsf.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\bsf.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-c3p0-0.9.1.2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\c3p0-0.9.1.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cap-runtime.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\cap-runtime.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-castor-1.3-core.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\castor-1.3-core.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-castor-1.3-xml.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\castor-1.3-xml.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cglib-nodep-2.2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\cglib-nodep-2.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-beanutils.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-beanutils.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-codec-1.3.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-codec-1.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-collections.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-collections.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-configuration-1.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-configuration-1.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-dbcp.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-dbcp.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-digester.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-digester.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-fileupload.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-fileupload.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-io.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-io.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-lang-2.3.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-lang-2.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-logging-1.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-logging-1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-net-1.4.0.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-net-1.4.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-pool.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-pool.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-validator.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\commons-validator.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cssparser-0.9.5.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\cssparser-0.9.5.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dbunit-2.4.2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dbunit-2.4.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dom4j-1.6.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dom4j-1.6.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dreamwork-base.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dreamwork-base.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dreamwork-html-editor.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dreamwork-html-editor.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dreamwork-hyacinth.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dreamwork-hyacinth.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dreamwork-jasmine2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dreamwork-jasmine2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dreamwork-peony.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dreamwork-peony.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dreamwork-persistence.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dreamwork-persistence.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dreamwork-seadragon.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\dreamwork-seadragon.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-druid-1.0.9.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\druid-1.0.9.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-ehcache-1.2.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\ehcache-1.2.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-extremecomponents-1.0.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\extremecomponents-1.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-extremecomponentsEXT.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\extremecomponentsEXT.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-ezmorph-1.0.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\ezmorph-1.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-gson-2.0.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\gson-2.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-guava-10.0.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\guava-10.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-guava-r09.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\guava-r09.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate-annotations.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\hibernate-annotations.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate-jpa-2.0-api-1.0.0.Final.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\hibernate-jpa-2.0-api-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\hibernate.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-htmlunit-core-js-2.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\htmlunit-core-js-2.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-httpclient-4.0.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\httpclient-4.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-httpcore-4.0.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\httpcore-4.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-ibatis-3-core-3.0.0.208.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\ibatis-3-core-3.0.0.208.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jackson-core-asl-1.4.3.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jackson-core-asl-1.4.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jackson-core-lgpl-1.2.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jackson-core-lgpl-1.2.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jackson-mapper-asl-1.4.3.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jackson-mapper-asl-1.4.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jackson-mapper-lgpl-1.2.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jackson-mapper-lgpl-1.2.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jakarta-oro.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jakarta-oro.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javassist.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\javassist.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.faces.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\javax.faces.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.servlet.jsp.jstl-1.2.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\javax.servlet.jsp.jstl-1.2.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jaxen-1.1-beta-6.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jaxen-1.1-beta-6.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jdom-1.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jdom-1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jettison-1.0.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jettison-1.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-joda-time-1.6.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\joda-time-1.6.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-api.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jsf-api.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-facelets.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jsf-facelets.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-ibm.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jsf-ibm.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-impl.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jsf-impl.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-json-lib-2.4-jdk15.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\json-lib-2.4-jdk15.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-json.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\json.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsp-api.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jsp-api.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jstl.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jstl.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jta.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jta.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-junit.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\junit.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jxl.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\jxl.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-log4j-1.2.15.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\log4j-1.2.15.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-core-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-core-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-example-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-example-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-filter-compression-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-filter-compression-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-integration-beans-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-integration-beans-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-integration-jmx-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-integration-jmx-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-integration-ognl-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-integration-ognl-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-integration-xbean-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-integration-xbean-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-statemachine-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-statemachine-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mina-transport-apr-2.0.4.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mina-transport-apr-2.0.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mysql-connector-java-5.0.7-bin.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mysql-connector-java-5.0.7-bin.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mysql-connector-java-5.0.8.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\mysql-connector-java-5.0.8.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-ojdbc14.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\ojdbc14.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.aop-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.aop-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.asm-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.asm-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.aspects-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.aspects-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.beans-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.beans-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.context-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.context-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.context.support-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.context.support-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.core-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.core-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.expression-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.expression-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.instrument-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.instrument-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.instrument.tomcat-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.instrument.tomcat-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.jdbc-3.0.1.RELEASE-A.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.jdbc-3.0.1.RELEASE-A.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.jms-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.jms-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.orm-3.0.1.RELEASE-A.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.orm-3.0.1.RELEASE-A.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.oxm-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.oxm-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.test-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.test-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.transaction-3.0.1.RELEASE-A.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.transaction-3.0.1.RELEASE-A.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-org.springframework.web-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.web-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.web.portlet-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.web.portlet-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.web.servlet-3.0.2.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.web.servlet-3.0.2.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system
+  NAME="lib-org.springframework.web.struts-3.0.0.RELEASE.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\org.springframework.web.struts-3.0.0.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-oscache-2.3.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\oscache-2.3.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-poi-2.5.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\poi-2.5.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-primefaces-3.4.2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\primefaces-3.4.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-quartz-1.6.0.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\quartz-1.6.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-rapid-framework-v3.0.0.53.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\rapid-framework-v3.0.0.53.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-components-api-4.2.3.Final.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\richfaces-components-api-4.2.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-components-ui-4.2.3.Final.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\richfaces-components-ui-4.2.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-core-api-4.2.3.Final.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\richfaces-core-api-4.2.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-richfaces-core-impl-4.2.3.Final.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\richfaces-core-impl-4.2.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sac-1.3.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\sac-1.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-servlet-api.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\servlet-api.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-slf4j-api-1.5.2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\slf4j-api-1.5.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-slf4j-log4j12-1.5.2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\slf4j-log4j12-1.5.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-standard.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\standard.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-stax-1.2.0.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\stax-1.2.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-stax-api-1.0.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\stax-api-1.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-api.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-api.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-hibernate2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-hibernate2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-hibernate3.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-hibernate3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-jdbc-deprecated.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-jdbc-deprecated.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-jdbc.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-jdbc.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-jms-deprecated.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-jms-deprecated.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-jms.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-jms.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-jta.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-jta.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions-osgi.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions-osgi.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-transactions.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\transactions.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-urlrewrite-2.6.0.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\urlrewrite-2.6.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-velocity-1.6.3.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\velocity-1.6.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-xml-writer-0.2.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\xml-writer-0.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-xom-1.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\xom-1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-xpp3_min-1.1.4c.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\xpp3_min-1.1.4c.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-xsqlbuilder.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\xsqlbuilder.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-xstream-1.3.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\xstream-1.3.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-xstream-benchmark-1.3.1.jar"
+  location="D:\dev\java\mocs\WebRoot\WEB-INF\lib\xstream-benchmark-1.3.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-bean-validator.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\bean-validator.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.annotation.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.annotation.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.ejb.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.ejb.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.enterprise.deploy.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.enterprise.deploy.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.jms.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.jms.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.management.j2ee.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.management.j2ee.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.persistence.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.persistence.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.resource.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.resource.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.security.auth.message.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.security.auth.message.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.security.jacc.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.security.jacc.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.servlet.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.servlet.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.servlet.jsp.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.servlet.jsp.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.transaction.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\javax.transaction.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jaxb-api-osgi.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\jaxb-api-osgi.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsr311-api.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\jsr311-api.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-mail.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\mail.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-webservices-api-osgi.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\webservices-api-osgi.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-weld-osgi-bundle.jar"
+  location="D:\myeclipse2014 install\plugins\com.genuitec.eclipse.j2eedt.core_11.5.0.me201311281640\data\libraryset\EE_6\weld-osgi-bundle.jar" model-entity="FileSystemJar"/>
+ <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
+  <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
+   model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
+ </web>
+</file-systems>

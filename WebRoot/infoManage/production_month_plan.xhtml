@@ -1,0 +1,507 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<link href="./css/equ-general.css" rel="stylesheet" type="text/css" />
+	<link href="./css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
+	<link href="./css/production_month_plan.css" rel="stylesheet" type="text/css" />
+	
+   
+</h:head>
+<h:body>
+<div >
+<h:form id="myform">
+
+<div class="zl-content-top" >
+	<img class="zl-content-top-bg" src="images/content_top_bg.png" />
+	<div class="zl-content-top-title">
+		<span data-i18n="" >车削分厂#{monthPlanBean.month}月生产计划</span>
+	</div>
+	<div class="zl-content-top-info-up2">
+	    <div class="zl-content-label">
+	    	<span data-i18n="">报表时间</span>
+	    	
+	    </div>
+		<div class="zl-content-select zl-dateBox">
+			<img class="zl-dateBox-bg-left" src="images/input/box_left.png" />
+			<img class="zl-dateBox-bg-center" src="images/input/box_center.png" />
+			<img class="zl-dateBox-bg-right" src="images/input/box_right_date.png" />
+				<rich:calendar id="searchTime" valueChangeListener="#{monthPlanBean.dateChange}"  tabindex="3" popup="true" inputClass="inputText" locale="en"
+			    	value="#{monthPlanBean.searchTime}"  cellWidth="10px" cellHeight="20px" datePattern="yyyy-MM-dd" />
+		    	<h:message for="searchTime" style="color:red" />	    
+		</div>
+	 </div>
+	 
+	 <div class="auto-size zl-content-top-info-search2">
+	    <h:graphicImage id="btn_search" alt="search" url="" style="display:none;">
+			<a4j:ajax event="click" listener="#{monthPlanBean.setInfor}" render="@form" 
+				execute="searchTime" >
+			</a4j:ajax>
+		</h:graphicImage>
+	    <div class="zl-content-btn2 zl-button" id="button1" onclick="querybtn()">
+	     <img class="zl-buttonBG" src="images/input/button.png"/>
+	     <img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+	     <div class="zl-button-text">
+		   <img class="zl-button-icon" src="images/input/icon_search.png" />
+		   <span data-i18n="top.btn1">查询</span>
+	     </div>
+		</div>
+		<div style="padding: 3px 0px;" />
+		<!-- 导出报表 -->
+		<div class="zl-content-btn2 zl-button" id="button2" onclick="onOutput()">
+	     <img class="zl-buttonBG" src="images/input/button.png"/>
+	     <img class="zl-buttonBGActive" src="images/input/button_active.png"/>
+	     <div class="zl-button-text">
+		   <img class="zl-button-icon" src="images/admin/icon_search.png" />
+		   <span data-i18n="top.btn1">报表导出</span>
+
+			<h:commandButton id="output" value="output"
+       				action="#{downloadExcel.downloadExcel}" style="display: none;">
+       			<f:param name="saveTime" value="#{monthPlanBean.searchTime}"/>
+       		</h:commandButton>
+       		
+	     </div>
+		</div>
+	</div>
+</div>
+
+	<div class="zl-content-info">
+	
+		<div class="table-title ui-datatable ui-widget" >
+		<c:forEach items="#{monthPlanBean.totalTableHeadData}" var="totalData">
+			<table>
+				<thead>
+					<tr>
+						<th class="ui-state-default" style="word-break: break-all;" rowspan="2" colspan="1">
+							<div class="ui-dt-c">
+								<span data-i18n="">型号</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" rowspan="2" colspan="1">
+							<div class="ui-dt-c">
+								<span data-i18n="">重要度</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;" rowspan="2" colspan="1">
+							<div class="ui-dt-c">
+								<span data-i18n="">零件</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;"  colspan="3">
+							<div class="ui-dt-c">
+								<span data-i18n="">数量</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;"  colspan="5">
+							<div class="ui-dt-c">
+								<span data-i18n="">交期</span>
+							</div>
+						</th>
+					</tr>
+					<tr>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="">投料</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="">提交</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="">过热</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span>#{totalData.delivery1}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span>#{totalData.delivery2}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span>#{totalData.delivery3}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span>#{totalData.delivery4}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="word-break: break-all;">
+							<div class="ui-dt-c">
+								<span>#{totalData.delivery5}</span>
+							</div>
+						</th>
+					</tr>
+					<tr>
+						<th class="ui-state-default" style="width:20%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="">车削分厂合计：</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span value=""></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span data-i18n=""></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.feedingNum}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.submitNum}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.overHeat}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.deliveryNum1}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.deliveryNum2}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.deliveryNum3}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.deliveryNum4}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.deliveryNum5}</span>
+							</div>
+						</th>
+					</tr>
+					<tr>
+						<th class="ui-state-default" style="width:20%;word-break: break-all;">
+							<div class="ui-dt-c">
+								<span data-i18n="">品种（个）</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span></span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfFeeding}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfSubmit}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfOverHeat}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfDelivery1}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfDelivery2}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfDelivery3}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfDelivery4}</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>#{totalData.typeOfDelivery5}</span>
+							</div>
+						</th>
+					</tr>
+					<tr>
+						<th class="ui-state-default" style="width:20%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+						<th class="ui-state-default" style="width:8%;word-break: break-all;">
+							<div class="ui-dt-h">
+								<span>&nbsp;</span>
+							</div>
+						</th>
+					</tr>
+					
+				</thead>
+			</table>
+			</c:forEach>
+		</div>
+		
+		
+		<div class="table-body" style=" overflow-y:scroll;overflow-x:hidden;x-index:1; ">
+		
+			<c:forEach items="#{monthPlanBean.partClassAndHeadData}" var="partClassAndHeadData"  varStatus="status">
+			
+				<div class="table-title ui-datatable ui-widget" style="position: relative;">
+				
+				<table>
+					<thead>
+						<tr>
+							<th class="ui-state-default" style="width:20%;word-break: break-all;text-align: left;padding-left: 10px;">
+								<div class="ui-dt-c">
+									<span data-i18n="">其中#{partClassAndHeadData.partClass}合计</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span></span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span></span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.feedingNum}</span>								
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.submitNum}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.overHeat}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.deliveryNum1}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.deliveryNum2}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.deliveryNum3}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.deliveryNum4}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.deliveryNum5}</span>
+								</div>
+							</th>
+						</tr>
+						<tr>
+							<th class="ui-state-default" style="width:20%;word-break: break-all;text-align: left;padding-left: 10px;">
+								<div class="ui-dt-c">
+									<span data-i18n="">品种（个）</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span></span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span></span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfFeeding}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfSubmit}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfOverHeat}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfDelivery1}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfDelivery2}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfDelivery3}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfDelivery4}</span>
+								</div>
+							</th>
+							<th class="ui-state-default" style="width:8%;word-break: break-all;">
+								<div class="ui-dt-h">
+									<span>#{partClassAndHeadData.typeOfDelivery5}</span>
+								</div>
+							</th>
+						</tr>
+					</thead>
+				</table>
+				</div> 
+				
+				<div style="position: relative; width: 19.2rem;">
+				<p:dataTable value="#{partClassAndHeadData.partClassData}" var="info" >
+								
+					<p:column style="width:20%;word-break: break-all;text-align: left;">
+						<h:outputText value="#{info.typeNo}"/>
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.part}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeFeeding}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeSubmit}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeOverHeat}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeDelivery1}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeDelivery2}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeDelivery3}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeDelivery4}" />
+					</p:column>
+					<p:column style="width:8%;word-break: break-all;text-align: center;">
+						<h:outputText value="#{info.typeDelivery5}" />
+					</p:column>
+				</p:dataTable>
+				</div>
+				
+			</c:forEach>
+			
+			
+			
+		</div>
+	</div>
+	
+ 	<!-- <h:outputScript library="js" name="jquery.mCustomScrollbar.concat.min.js"></h:outputScript> -->
+    
+	<h:outputScript library="js/page" name="production_month_plan.js"></h:outputScript>
+ 
+</h:form>
+</div>
+
+</h:body>
+</ui:composition>

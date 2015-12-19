@@ -655,6 +655,12 @@ public class ResourceServiceImpl extends
 		
 		String hql="delete from TMaterailTypeInfo tti where tti.id='"+tmti.getId()+"'";
 		dao.executeUpdate(hql);
+		List list=dao.executeQuery("from TPartTypeInfo tpti "
+				+ "where tpti.no='"+tmti.getNo()+"'");	
+		if(list.size()>0){
+			
+			dao.executeUpdate("delete from TPartTypeInfo tpti where tpti.no='"+tmti.getNo()+"'");
+		}
 	}
 
 	/**

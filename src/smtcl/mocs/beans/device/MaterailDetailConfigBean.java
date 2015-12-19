@@ -251,11 +251,15 @@ public class MaterailDetailConfigBean {
 		
 	}
 	public String getSearch() {
+		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		nodeid=session.getAttribute("nodeid2")+"";
 		resourceService=(IResourceService)ServiceFactory.getBean("resourceService");
 		root=resourceService.getMaterailTreeNodeOnAll(null,nodeid);
 		addMaterail.setNodeId(nodeid);
+		//À¢–¬”“≤‡¡–±Ì
+		List<TMaterailTypeInfo> tmti=resourceService.getTMaterailTypeInfoByPid("-999",nodeid,null);
+		mediumMaterialModel=new TMaterialDetailDataModel(tmti);
 		return search;
 		
 	}

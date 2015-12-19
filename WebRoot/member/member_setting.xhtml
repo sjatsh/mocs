@@ -12,7 +12,7 @@
 	<div class="toolbar">
 	     <input type="hidden" id="txt_placeholder" data-i18n="[value]page1.top.input1" value=""></input>
 	     
-	     <h:inputText id="txt" styleClass="input-toolbar" onfocus="searchFocus('myform:txt');" onblur="searchBlur('myform:txt');" 
+	     <h:inputText id="txt" styleClass="input-toolbar"  
 	     	value="#{MemberManagementBean.searchType}" update=":myform:tb"/>
    		 <p:commandLink id="btn1" style="" value="page1.top.btn1"  styleClass="iconBtn-toolbar iconBtn-search" 
    		 	action="#{MemberManagementBean.searchList}" update=":myform:tb" oncomplete="transElementId('myform:tb')">
@@ -20,7 +20,9 @@
    		 
    		 <p:commandLink style="" value="page1.top.btn2"  styleClass="iconBtn-toolbar iconBtn-add" oncomplete="adddate.show()"></p:commandLink>
    		 <p:commandLink style="" value="page1.top.btn3"  styleClass="iconBtn-toolbar iconBtn-edit" update=":myform" oncomplete="update.show()"></p:commandLink>
-   		 <p:commandLink style="" value="page1.top.btn4"  styleClass="iconBtn-toolbar iconBtn-del"  onclick="return del();" action="#{MemberManagementBean.deleteRecord}"></p:commandLink>
+   		 <p:commandLink style="" value="page1.top.btn4"  styleClass="iconBtn-toolbar iconBtn-del" onclick="return del();"></p:commandLink>
+		
+ 		 <h:commandButton id="deleteMember" style="display:none;"  action="#{MemberManagementBean.deleteRecord}"/>
 	</div>
 	<div class="table-p-bg"></div>
 	<p:dataTable id="tb" value="#{MemberManagementBean.data}" var="record"
@@ -301,6 +303,7 @@
 	</p:dialog>
 	<script type="text/javascript">
 	//<![CDATA[
+	           
 		$(document).ready(function(){
 			//国际化
 		    $(".iconBtn-toolbar,.btn-toolbar>span,option").attr("data-i18n", function() {return $(this).text();});
@@ -343,11 +346,11 @@
 		}
 				
 		function del(){
-			if(confirm("确定删除？")){
-				return true;
-			}else{
-				return false;
+			
+			if(confirm("确定删除人员信息？")){
+				document.getElementById("myform:deleteMember").click();
 			}
+
 		}
 		
 		function showInsert(){

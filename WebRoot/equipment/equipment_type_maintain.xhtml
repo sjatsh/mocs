@@ -224,9 +224,12 @@
     		   if(temp == "nouse"){
     		      if(confirm($("#del_alert_msg").val())){
 	    		     document.getElementById("myform:delete").click();
-	    		     document.getElementById("myform:removeSelected").click();
+	    		    /*  document.getElementById("myform:removeSelected").click(); */
+	    	      }else{
+	    	    	  
+	    	    	  /* document.getElementById("myform:removeSelected").click(); */  
 	    	      } 
-    		      document.getElementById("myform:removeSelected").click();
+    		     
     		   }else{
     			   alert($("#del_alert_msg_not").val());
     		   }

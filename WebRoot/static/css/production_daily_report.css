@@ -1,0 +1,104 @@
+.zl-content-top-title {
+	position: relative;
+	width: 4.8rem;
+	height: 1.6rem;
+	border-right: solid 1px #828282;
+	text-align: center;
+	font-size: 0.43rem;
+	line-height: 1.6rem;
+	color: #7A7A7A;
+}
+/* 內容区域头部3格布局 第二种 中间比较宽*/ 
+.zl-content-top-info-up2 {
+	position: absolute;
+	left: 4.8rem;
+	top: 0;
+	width: 12.55rem;
+	height: 1.6rem;
+	font-size: 0.18rem;
+	border-right: solid 1px #828282;
+	line-height: normal;
+	vertical-align: middle;
+}
+/* 筛选栏 */ 
+.zl-content-label {
+	float: left;
+	margin-left: 0.6rem;
+	margin-top: 0.71rem;
+	width: 0.9rem;
+	text-align: right;
+	font-size: 0.18rem;
+	line-height: 0.18rem;
+	color: #828282;
+	white-space: nowrap;
+}
+.zl-content-select {
+	float: left;
+	margin-left: 0.2rem;
+	margin-top: 0.63rem;
+}
+.zl-content-top-info-search2 {
+	position: absolute;
+	left: 17.35rem;
+	top: 0;
+	width: 1.85rem;
+	height: 1.6rem;
+}
+.zl-content-btn2 {
+	left: 0.25rem;
+	top: 0.6rem;
+} 
+.zl-content-info {
+	font-size: 0.18rem;
+}
+
+.table-title {
+	position: relative;
+	left: 0;
+	top: 0;
+	width: 19.2rem;
+	font-size: 100%;
+	z-index: 1;
+} 
+.table-body-div{
+	max-height: 5.85rem;
+	overflow-y:scroll;
+}
+/*表格内容*/ 
+.table-body {
+	position:relative;
+	left: 0;
+	top: 0rem;
+	width: 19.2rem;
+	height:7.5rem;
+	height: 6.78rem; 
+	font-size: 100%;
+	z-index: 0;
+}
+
+/* 表格样式(p:treeTable) */ 
+.ui-widget-content {
+	border-color: rgba(67,147,141,.25);
+} 
+/* 表头样式 */ 
+.ui-state-default {
+	padding: 0;
+	font-size: 100%;
+	line-height: 120%;
+	color: #565656;
+	background: #e3e8e4;
+	border-color: #a1c9c6;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+} 
+
+.ui-datatable th div.ui-dt-c {
+	padding: 0;
+	font-size: 100%;
+	line-height: 200%;
+	color: #565656;
+	background: #e3e8e4;
+}
+.table-body .ui-widget {
+	font-size: 100%;
+}
